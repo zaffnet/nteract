@@ -169,5 +169,9 @@ mock('spawnteract', {
 });
 
 mock('fs', {
-  unlinkSync: sinon.spy(),
+  unlinkSync: function(path) { return true; },
+  existsSync: function(path) { return true; },
+  unlink: function(path, callback) {
+    callback(new Error('Testing... 1, 2, 3'));
+  },
 });

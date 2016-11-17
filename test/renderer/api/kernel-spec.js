@@ -1,10 +1,10 @@
-const chai = require('chai');
+import chai, { expect } from 'chai';
+
+var mock = require('mock-require');
 const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
-const fs = require('fs');
-
+import * as fs from 'fs';
 chai.use(sinonChai);
-const expect = chai.expect;
 
 import {
   shutdownKernel,
@@ -50,8 +50,8 @@ function setupMockKernel() {
 describe('forceShutdownKernel', () => {
   it('fully cleans up the kernel and uses SIGKILL', () => {
     const kernel = setupMockKernel();
-
     forceShutdownKernel(kernel);
+    const unlinkSync= sinon.stub(fs, 'unlinkSync')
 
     expect(kernel.channels.shell.complete).to.have.been.called;
     expect(kernel.channels.iopub.complete).to.have.been.called;
@@ -65,15 +65,15 @@ describe('forceShutdownKernel', () => {
     expect(kernel.spawn.kill).to.have.been.calledWith('SIGKILL');
 
     // TODO: expect kernel.connectionFile to have called out to fs
-    expect(fs.unlinkSync).to.have.been.calledWith(kernel.connectionFile);
+    expect(unlinkSync).to.have.been.calledWith(kernel.connectionFile);
   })
 })
 
 describe('cleanupKernel', () => {
   it('cleans out artifacts from the kernel object', () => {
     const kernel = setupMockKernel();
-
     cleanupKernel(kernel, true);
+    const unlinkSync = sinon.stub(fs, 'unlinkSync')
 
     expect(kernel.channels.shell.complete).to.have.been.called;
     expect(kernel.channels.iopub.complete).to.have.been.called;
@@ -87,7 +87,7 @@ describe('cleanupKernel', () => {
     expect(kernel.spawn.kill).to.not.have.been.called;
 
     // TODO: expect kernel.connectionFile to have called out to fs
-    expect(fs.unlinkSync).to.have.been.calledWith(kernel.connectionFile);
+    expect(unlinkSync).to.have.been.calledWith(kernel.connectionFile);
   })
 })
 
