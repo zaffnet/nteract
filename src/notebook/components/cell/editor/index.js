@@ -272,7 +272,7 @@ export default class Editor extends React.Component {
       .subscribe(callback);
   }
 
-  tabToSpaces(editor: Object) {
+  static tabToSpaces(editor: Object) {
     if (editor.somethingSelected()) {
       editor.indentSelection('add');
     } else {
@@ -300,7 +300,7 @@ export default class Editor extends React.Component {
       },
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
-        'Tab': this.tabToSpaces,
+        Tab: this.tabToSpaces,
       },
       indentUnit: this.props.tabSize,
       tabSize: this.props.tabSize,
