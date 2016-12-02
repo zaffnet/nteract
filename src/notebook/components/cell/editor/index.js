@@ -272,6 +272,15 @@ export default class Editor extends React.Component {
       .subscribe(callback);
   }
 
+  tabToSpaces(editor: Object) {
+    if (editor.somethingSelected()) {
+      editor.indentSelection('add');
+    } else {
+      editor.replaceSelection(editor.getOption('indentWithTabs') ? '\t' :
+        Array(editor.getOption('indentUnit') + 1).join(' '), 'end', '+input');
+    }
+  }
+
   render(): ?React.Element<any> {
     const options = {
       autoCloseBrackets: this.props.autoCloseBrackets,
@@ -291,6 +300,7 @@ export default class Editor extends React.Component {
       },
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
+        'Tab': this.tabToSpaces,
       },
       indentUnit: this.props.tabSize,
       tabSize: this.props.tabSize,
