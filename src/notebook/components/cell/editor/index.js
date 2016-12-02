@@ -272,12 +272,12 @@ export default class Editor extends React.Component {
       .subscribe(callback);
   }
 
-  static tabToSpaces(editor: Object) {
+  tabToSpaces(editor: Object): void {
     if (editor.somethingSelected()) {
       editor.indentSelection('add');
     } else {
       editor.replaceSelection(editor.getOption('indentWithTabs') ? '\t' :
-        Array(editor.getOption('indentUnit') + 1).join(' '), 'end', '+input');
+        Array(this.props.tabSize + 1).join(' '), 'end', '+input');
     }
   }
 
