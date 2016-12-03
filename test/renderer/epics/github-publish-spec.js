@@ -82,7 +82,10 @@ describe('publishNotebookObservable', () => {
       const publishNotebookObs = publishNotebookObservable(github,
         notebook, './test.ipynb', notificationSystem);
       const edit = sinon.spy(github.gists, 'edit');
-      publishNotebookObs.subscribe( () => {
+      publishNotebookObs.subscribe(
+      (x) => { expect.fail() },
+      (err) => { expect.fail() },
+      () => {
         expect(edit).to.be.called;
         done();
       });

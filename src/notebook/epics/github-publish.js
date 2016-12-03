@@ -17,6 +17,7 @@ const Observable = Rx.Observable;
 
 const Github = require('github');
 
+
 /**
  * Notify the notebook user that it has been published as a gist.
  * @param {string} filename - Filename of the notebook.
@@ -39,7 +40,9 @@ export function notifyUser(filename, gistID, notificationSystem) {
     },
   });
 }
-
+// give these module scope to allow overwriting of metadata
+let gistID;
+let gistURL;
 /**
  * Callback function to be used in publishNotebookObservable such that the
  * response from the github API can be used for user notification.
@@ -58,8 +61,8 @@ export function createGistCallback(observer, filename, notificationSystem) {
       observer.complete();
       return;
     }
-    const gistID = response.id;
-    const gistURL = response.html_url;
+    gistID = response.id;
+    gistURL = response.html_url;
 
     notifyUser(filename, gistID, notificationSystem);
   };
@@ -88,7 +91,7 @@ export function publishNotebookObservable(github, notebook, filepath,
       undefined,
       1);
 
-    const filename = filepath ?  path.parse(filepath).base : 'Untitled.ipynb';
+    const filename = filepath ? path.parse(filepath).base : 'Untitled.ipynb';
     const files = {};
     files[filename] = { content: notebookString };
 
@@ -122,9 +125,10 @@ export function publishNotebookObservable(github, notebook, filepath,
         files,
         public: false,
       };
+
       const resp = github.gists.create(gistRequest,
         createGistCallback(observer, filename, notificationSystem));
-      observer.next(overwriteMetadata('gist_id', resp.gistID));
+      observer.next(overwriteMetadata('gist_id', gistID));
       observer.complete();
     }
   });
