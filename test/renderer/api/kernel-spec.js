@@ -3,13 +3,13 @@ import chai, { expect } from 'chai';
 var mock = require('mock-require');
 const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
-import * as fs from 'fs';
 chai.use(sinonChai);
 
 import {
   shutdownKernel,
   forceShutdownKernel,
   cleanupKernel,
+  filesystem
 } from '../../../src/notebook/kernel/shutdown';
 
 import reducers from '../../../src/notebook/reducers';
@@ -31,27 +31,33 @@ const emptyKernel = Object.freeze({
   connectionFile: '/tmp/connection.json',
 })
 
-function setupMockKernel() {
+function setupMockKernel(sandbox) {
   const kernel = Object.assign({}, emptyKernel);
-  kernel.channels.shell.complete = sinon.spy()
-  kernel.channels.iopub.complete = sinon.spy()
-  kernel.channels.control.complete = sinon.spy()
-  kernel.channels.stdin.complete = sinon.spy()
+  kernel.channels.shell.complete = sandbox.spy()
+  kernel.channels.iopub.complete = sandbox.spy()
+  kernel.channels.control.complete = sandbox.spy()
+  kernel.channels.stdin.complete = sandbox.spy()
 
-  kernel.spawn.stdin.destroy = sinon.spy()
-  kernel.spawn.stdout.destroy = sinon.spy()
-  kernel.spawn.stderr.destroy = sinon.spy()
+  kernel.spawn.stdin.destroy = sandbox.spy()
+  kernel.spawn.stdout.destroy = sandbox.spy()
+  kernel.spawn.stderr.destroy = sandbox.spy()
 
-  kernel.spawn.kill = sinon.spy()
-
+  kernel.spawn.kill = sandbox.spy()
   return kernel;
 }
 
 describe('forceShutdownKernel', () => {
+  var sandbox;
+  beforeEach(function() {
+    sandbox = sinon.sandbox.create();
+  });
+  afterEach(function() {
+    sandbox.restore();
+  });
   it('fully cleans up the kernel and uses SIGKILL', () => {
-    const kernel = setupMockKernel();
+    const unlinkSync = sandbox.stub(filesystem, 'unlinkSync', (path) => { return true; });
+    const kernel = setupMockKernel(sandbox);
     forceShutdownKernel(kernel);
-    const unlinkSync= sinon.stub(fs, 'unlinkSync')
 
     expect(kernel.channels.shell.complete).to.have.been.called;
     expect(kernel.channels.iopub.complete).to.have.been.called;
@@ -70,10 +76,17 @@ describe('forceShutdownKernel', () => {
 })
 
 describe('cleanupKernel', () => {
+  var sandbox;
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create();
+  });
+  afterEach(function() {
+    sandbox.restore();
+  });
   it('cleans out artifacts from the kernel object', () => {
-    const kernel = setupMockKernel();
+    const unlinkSync = sandbox.stub(filesystem, 'unlinkSync', (path) => { return true; });
+    const kernel = setupMockKernel(sandbox);
     cleanupKernel(kernel, true);
-    const unlinkSync = sinon.stub(fs, 'unlinkSync')
 
     expect(kernel.channels.shell.complete).to.have.been.called;
     expect(kernel.channels.iopub.complete).to.have.been.called;
