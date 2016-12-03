@@ -51,7 +51,7 @@ export function notifyUser(filename, gistID, notificationSystem) {
  * notification of the user that the gist has been published.
  * @return callbackFunction for use in publishNotebookObservable
  */
-export function createGistCallback(firstTimePublish, observer, filename, notificationSystem) {
+export function createGistCallback(observer, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       observer.error(err);
@@ -62,11 +62,6 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
     const gistURL = response.html_url;
 
     notifyUser(filename, gistID, notificationSystem);
-    if (firstTimePublish) {
-      observer.next(overwriteMetadata('gist_id', gistID));
-    } else {
-      observer.next();
-    }
   };
 }
 
@@ -93,15 +88,10 @@ export function publishNotebookObservable(github, notebook, filepath,
       undefined,
       1);
 
-    let filename;
-
-    if (filepath) {
-      filename = path.parse(filepath).base;
-    } else {
-      filename = 'Untitled.ipynb';
-    }
+    const filename = filepath ?  path.parse(filepath).base : 'Untitled.ipynb';
     const files = {};
     files[filename] = { content: notebookString };
+
     if (publishAsUser) {
       github.users.get({}, (err, res) => {
         if (err) throw err;
@@ -125,14 +115,17 @@ export function publishNotebookObservable(github, notebook, filepath,
         id: notebook.getIn(['metadata', 'gist_id']),
       };
       github.gists.edit(gistRequest,
-        createGistCallback(false, observer, filename, notificationSystem));
+        createGistCallback(observer, filename, notificationSystem));
+      observer.complete();
     } else {
       const gistRequest = {
         files,
         public: false,
       };
-      github.gists.create(gistRequest,
-        createGistCallback(true, observer, filename, notificationSystem));
+      const resp = github.gists.create(gistRequest,
+        createGistCallback(observer, filename, notificationSystem));
+      observer.next(overwriteMetadata('gist_id', resp.gistID));
+      observer.complete();
     }
   });
 }
