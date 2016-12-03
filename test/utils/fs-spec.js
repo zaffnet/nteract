@@ -13,15 +13,16 @@ describe('unlinkObservable', () => {
     sandbox.restore();
   });
   it('it errors on unlink issue', (done) => {
-    const existsSync = sandbox.stub(filesystem, 'existsSync')
-    const unlink = sandbox.stub(filesystem, 'unlink')
+    const mockError = (err) => { throw err };
+    const existsSync = sandbox.stub(filesystem, 'existsSync', (path) => { return true; })
+    const unlink = sandbox.stub(filesystem, 'unlink', (path , mockError) => { return mockError({message:'lol'}); })
     const nextBuffer = [];
     const subscription = unlinkObservable('path').subscribe(
       (x) => nextBuffer.push(x),
-      (err) => { expect(err.message).to.equal('Testing... 1, 2, 3');
+      (err) => { expect(err.message).to.equal('lol');
                  done();
                },
-      () => done(),
+      () => expect.fail(),
     );
     expect(existsSync).to.be.calledWithMatch('path');
     expect(unlink).to.be.called;
