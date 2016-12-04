@@ -167,7 +167,3 @@ mock('spawnteract', {
     });
   },
 });
-
-mock('fs', {
-  unlinkSync: sinon.spy(),
-});

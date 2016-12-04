@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import { shutdownRequest } from 'enchannel';
 import { getUsername, session } from './messaging';
 
+export const filesystem = fs;
+
 export function cleanupKernel(kernel, closeChannels) {
   if (kernel.channels && closeChannels) {
     try {
@@ -28,7 +30,7 @@ export function cleanupKernel(kernel, closeChannels) {
     }
   }
   if (kernel.connectionFile) {
-    fs.unlinkSync(kernel.connectionFile);
+    filesystem.unlinkSync(kernel.connectionFile);
   }
 }
 
