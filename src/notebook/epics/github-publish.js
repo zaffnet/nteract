@@ -40,7 +40,6 @@ export function notifyUser(filename, gistID, notificationSystem) {
     },
   });
 }
-// give these module scope to allow overwriting of metadata
 
 /**
  * Callback function to be used in publishNotebookObservable such that the
