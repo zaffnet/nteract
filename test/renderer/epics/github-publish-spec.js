@@ -83,7 +83,7 @@ describe('publishNotebookObservable', () => {
         notebook, './test.ipynb', notificationSystem);
       const edit = sinon.spy(github.gists, 'edit');
       publishNotebookObs.subscribe(
-      (x) => { expect.fail() },
+      (x) => { expect(x.type).to.deep.equal('OVERWRITE_METADATA_FIELD') },
       (err) => { expect.fail() },
       () => {
         expect(edit).to.be.called;

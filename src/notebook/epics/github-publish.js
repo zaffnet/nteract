@@ -41,8 +41,7 @@ export function notifyUser(filename, gistID, notificationSystem) {
   });
 }
 // give these module scope to allow overwriting of metadata
-let gistID;
-let gistURL;
+
 /**
  * Callback function to be used in publishNotebookObservable such that the
  * response from the github API can be used for user notification.
@@ -61,9 +60,9 @@ export function createGistCallback(observer, filename, notificationSystem) {
       observer.complete();
       return;
     }
-    gistID = response.id;
-    gistURL = response.html_url;
-
+    const gistID = response.id;
+    const gistURL = response.html_url;
+    observer.next(overwriteMetadata('gist_id', gistID));
     notifyUser(filename, gistID, notificationSystem);
   };
 }
@@ -112,25 +111,17 @@ export function publishNotebookObservable(github, notebook, filepath,
     });
 
     // Already in a gist, update the gist
-    if (notebook.hasIn(['metadata', 'gist_id'])) {
-      const gistRequest = {
-        files,
-        id: notebook.getIn(['metadata', 'gist_id']),
-      };
+    const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
+      { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
+      { files, public: false };
+    if (gistRequest.id) {
       github.gists.edit(gistRequest,
         createGistCallback(observer, filename, notificationSystem));
-      observer.complete();
     } else {
-      const gistRequest = {
-        files,
-        public: false,
-      };
-
-      const resp = github.gists.create(gistRequest,
+      github.gists.create(gistRequest,
         createGistCallback(observer, filename, notificationSystem));
-      observer.next(overwriteMetadata('gist_id', gistID));
-      observer.complete();
     }
+    observer.complete();
   });
 }
 
