@@ -60,7 +60,7 @@ export function createGistCallback(store, observer, filename, notificationSystem
       return;
     }
     const gistID = response.id;
-    store.dispatch(overwriteMetadata('gist_id', gistID));
+    observer.next(store.dispatch(overwriteMetadata('gist_id', gistID)));
     notifyUser(filename, gistID, notificationSystem);
   };
 }
@@ -107,13 +107,11 @@ export function publishNotebookObservable(github, notebook, filepath,
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
-    console.log(notebook.hasIn(['metadata', 'gist_id']))
     // Already in a gist, update the gist
     const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
       { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
       { files, public: false };
     if (gistRequest.id) {
-      console.log(gistRequest)
       github.gists.edit(gistRequest,
         createGistCallback(store, observer, filename, notificationSystem));
     } else {
