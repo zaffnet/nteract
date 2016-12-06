@@ -52,7 +52,7 @@ export function notifyUser(filename, gistID, notificationSystem) {
  * notification of the user that the gist has been published.
  * @return callbackFunction for use in publishNotebookObservable
  */
-export function createGistCallback(observer, filename, notificationSystem) {
+export function createGistCallback(store, observer, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       observer.error(err);
@@ -60,8 +60,7 @@ export function createGistCallback(observer, filename, notificationSystem) {
       return;
     }
     const gistID = response.id;
-    const gistURL = response.html_url;
-    observer.next(overwriteMetadata('gist_id', gistID));
+    store.dispatch(overwriteMetadata('gist_id', gistID));
     notifyUser(filename, gistID, notificationSystem);
   };
 }
@@ -77,7 +76,7 @@ export function createGistCallback(observer, filename, notificationSystem) {
  * notification of the user that the gist has been published.
  */
 export function publishNotebookObservable(github, notebook, filepath,
-  notificationSystem, publishAsUser) {
+  notificationSystem, publishAsUser, store) {
   return Rx.Observable.create((observer) => {
     const notebookString = JSON.stringify(
       commutable.toJS(notebook.update('cellMap', cells =>
@@ -108,17 +107,18 @@ export function publishNotebookObservable(github, notebook, filepath,
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
-
+    console.log(notebook.hasIn(['metadata', 'gist_id']))
     // Already in a gist, update the gist
     const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
       { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
       { files, public: false };
     if (gistRequest.id) {
+      console.log(gistRequest)
       github.gists.edit(gistRequest,
-        createGistCallback(observer, filename, notificationSystem));
+        createGistCallback(store, observer, filename, notificationSystem));
     } else {
       github.gists.create(gistRequest,
-        createGistCallback(observer, filename, notificationSystem));
+        createGistCallback(store, observer, filename, notificationSystem));
     }
     observer.complete();
   });
@@ -152,7 +152,7 @@ export function handleGistAction(action, store) {
     publishAsUser = true;
   }
   return publishNotebookObservable(github, notebook, filename,
-                                   notificationSystem, publishAsUser);
+                                   notificationSystem, publishAsUser, store);
 }
 
 /**
