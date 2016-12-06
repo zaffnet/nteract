@@ -17,6 +17,7 @@ const Observable = Rx.Observable;
 
 const Github = require('github');
 
+
 /**
  * Notify the notebook user that it has been published as a gist.
  * @param {string} filename - Filename of the notebook.
@@ -51,7 +52,7 @@ export function notifyUser(filename, gistID, notificationSystem) {
  * notification of the user that the gist has been published.
  * @return callbackFunction for use in publishNotebookObservable
  */
-export function createGistCallback(firstTimePublish, observer, filename, notificationSystem) {
+export function createGistCallback(store, observer, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       observer.error(err);
@@ -59,14 +60,8 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
       return;
     }
     const gistID = response.id;
-    const gistURL = response.html_url;
-
+    observer.next(store.dispatch(overwriteMetadata('gist_id', gistID)));
     notifyUser(filename, gistID, notificationSystem);
-    if (firstTimePublish) {
-      observer.next(overwriteMetadata('gist_id', gistID));
-    } else {
-      observer.next();
-    }
   };
 }
 
@@ -81,7 +76,7 @@ export function createGistCallback(firstTimePublish, observer, filename, notific
  * notification of the user that the gist has been published.
  */
 export function publishNotebookObservable(github, notebook, filepath,
-  notificationSystem, publishAsUser) {
+  notificationSystem, publishAsUser, store) {
   return Rx.Observable.create((observer) => {
     const notebookString = JSON.stringify(
       commutable.toJS(notebook.update('cellMap', cells =>
@@ -93,15 +88,10 @@ export function publishNotebookObservable(github, notebook, filepath,
       undefined,
       1);
 
-    let filename;
-
-    if (filepath) {
-      filename = path.parse(filepath).base;
-    } else {
-      filename = 'Untitled.ipynb';
-    }
+    const filename = filepath ? path.parse(filepath).base : 'Untitled.ipynb';
     const files = {};
     files[filename] = { content: notebookString };
+
     if (publishAsUser) {
       github.users.get({}, (err, res) => {
         if (err) throw err;
@@ -117,23 +107,18 @@ export function publishNotebookObservable(github, notebook, filepath,
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
-
     // Already in a gist, update the gist
-    if (notebook.hasIn(['metadata', 'gist_id'])) {
-      const gistRequest = {
-        files,
-        id: notebook.getIn(['metadata', 'gist_id']),
-      };
+    const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
+      { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
+      { files, public: false };
+    if (gistRequest.id) {
       github.gists.edit(gistRequest,
-        createGistCallback(false, observer, filename, notificationSystem));
+        createGistCallback(store, observer, filename, notificationSystem));
     } else {
-      const gistRequest = {
-        files,
-        public: false,
-      };
       github.gists.create(gistRequest,
-        createGistCallback(true, observer, filename, notificationSystem));
+        createGistCallback(store, observer, filename, notificationSystem));
     }
+    observer.complete();
   });
 }
 
@@ -165,7 +150,7 @@ export function handleGistAction(action, store) {
     publishAsUser = true;
   }
   return publishNotebookObservable(github, notebook, filename,
-                                   notificationSystem, publishAsUser);
+                                   notificationSystem, publishAsUser, store);
 }
 
 /**

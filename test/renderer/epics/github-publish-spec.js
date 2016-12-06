@@ -47,55 +47,70 @@ describe('handleGistAction', () => {
 
 describe('publishNotebookObservable', () => {
     it('returns an observable', () => {
+        const store = dummyStore();
         const notificationSystem = NotificationSystem();
         const publishNotebookObs = publishNotebookObservable(new GitHub(),
-          dummyCommutable, './test.ipynb', notificationSystem);
+          dummyCommutable, './test.ipynb', notificationSystem, false, store);
         expect(publishNotebookObs.subscribe).to.not.be.null;
     });
 
     it('renders a notification popup', (done) => {
+      const store = dummyStore();
       const notificationSystem = NotificationSystem();
       const publishNotebookObs = publishNotebookObservable(new GitHub(),
-        dummyCommutable, './test.ipynb', notificationSystem);
+        dummyCommutable, './test.ipynb', notificationSystem, false, store);
       const addNotification = sinon.spy(notificationSystem, 'addNotification');
-      publishNotebookObs.subscribe( () => {
-        expect(addNotification).to.be.called;
-        done();
+      publishNotebookObs.subscribe(
+        (x) => { },
+        (err) => { expect.fail() },
+        () => {
+          expect(addNotification).to.be.called;
+          done();
       });
     });
 
     it('calls create gist', (done) => {
       const github = new GitHub();
+      const store = dummyStore();
       const notificationSystem = NotificationSystem();
       const publishNotebookObs = publishNotebookObservable(github,
-        dummyCommutable, './test.ipynb', notificationSystem);
+        dummyCommutable, './test.ipynb', notificationSystem, false,store);
       const create = sinon.spy(github.gists, 'create');
-      publishNotebookObs.subscribe( () => {
-        expect(create).to.be.called;
-        done();
+      publishNotebookObs.subscribe(
+        (x) => { },
+        (err) => { expect.fail() },
+        () => {
+          expect(create).to.be.called;
+          done();
       });
     });
     it('edits gist that is already made', (done) => {
       const github = new GitHub();
+      const store = dummyStore();
       const notebook = dummyCommutable.setIn(['metadata', 'gist_id'], 'ID123')
       const notificationSystem = NotificationSystem();
       const publishNotebookObs = publishNotebookObservable(github,
-        notebook, './test.ipynb', notificationSystem);
+        notebook, './test.ipynb', notificationSystem, false, store);
       const edit = sinon.spy(github.gists, 'edit');
-      publishNotebookObs.subscribe( () => {
-        expect(edit).to.be.called;
-        done();
+      const actionBuffer = [];
+      publishNotebookObs.subscribe(
+        (x) => { expect(x.type).to.equal('OVERWRITE_METADATA_FIELD') },
+        (err) => { expect.fail() },
+        () => {
+          expect(edit).to.be.called;
+          done();
       });
     });
 });
 
 describe('createGistCallback', () => {
   it('returns a function', () => {
+    const store = dummyStore();
     const github = new GitHub();
     const notificationSystem = NotificationSystem();
     const publishNotebookObs = publishNotebookObservable(github,
-      dummyCommutable, './test.ipynb', notificationSystem);
-    const callback = createGistCallback(true, publishNotebookObs,
+      dummyCommutable, './test.ipynb', notificationSystem, false, store);
+    const callback = createGistCallback(store, publishNotebookObs,
       './test.ipynb', notificationSystem);
     expect((typeof(callback))).to.equal('function');
   });
