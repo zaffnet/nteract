@@ -78,7 +78,8 @@
     "extraResources": [
       "bin",
       "example-notebooks"
-    ]
+    ],
+    "npmSkipBuildFromSource": true
   },
   "greenkeeper": {
     "ignore": [
