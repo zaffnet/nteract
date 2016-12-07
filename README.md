@@ -59,34 +59,7 @@ python3 -m ipykernel install --user
 
 #### Install `nteract` in dev mode
 
-Requires [node 6.x and npm 3](https://docs.npmjs.com/getting-started/installing-node).
-
-**Prerequisites for Linux**
-- `python` (`v2.7` recommended, `v3.x.x` is not supported)
-- `make`
-- A proper C/C++ compiler toolchain, like [GCC](https://gcc.gnu.org/)
-
-Use your distribution's package manager to install.
-
-**Prerequisites for macOS**
-
-- `python` (`v2.7` recommended, `v3.x.x` is not supported): already installed on Mac OS X
-- `Xcode Command Line Tools`: Can be installed with `xcode-select --install`
-
-**Prerequisites for Windows**
-
-- **Option 1:** Install all the required tools and configurations using Microsoft's [windows-build-tools](https://github.com/felixrieseberg/windows-build-tools) by running `npm install -g windows-build-tools` from an elevated PowerShell (run as Administrator).
-- **Option 2:** Install dependencies and configuration manually
-   1. Visual C++ Build Environment:
-     * **Option 1:** Install [Visual C++ Build Tools](http://go.microsoft.com/fwlink/?LinkId=691126) using the *Default Install* option.
-     * **Option 2:** Install [Visual Studio 2015](https://www.visualstudio.com/products/visual-studio-community-vs) (or modify an existing installation) and select *Common Tools for Visual C++* during setup.  
-
-  > :bulb: [Windows Vista / 7 only] requires [.NET Framework 4.5.1](http://www.microsoft.com/en-us/download/details.aspx?id=40773)
-
-  2. Install [Python 2.7](https://www.python.org/downloads/) or [Miniconda 2.7](http://conda.pydata.org/miniconda.html) (`v3.x.x` is not supported), and run `npm config set python python2.7`
-  3. Launch cmd, `npm config set msvs_version 2015`
-
-##### Now you're ready to build!
+Requires [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node).
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
