@@ -1,18 +1,8 @@
 sudo: false
 language: node_js
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-4.9
-    - g++-4.9
 node_js:
 - '6'
 env:
-  global:
-  - CXX=g++-4.9
-  - CC=gcc-4.9
   matrix:
   - GROUP=coverage
   - GROUP=lint
