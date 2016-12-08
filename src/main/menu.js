@@ -53,6 +53,17 @@ export function authAndPublish(item, focusedWindow) {
   win.loadURL('https://oauth.nteract.io/github');
 }
 
+function exportPDF() {
+  createSender('menu:exportPDF');
+  BrowserWindow.webContents.printToPDF({ printBackground: true }, (error, data) => {
+    if (error) throw error
+    fs.writeFile('/tmp/print.pdf', data, (error) => {
+      if (error) throw error
+      console.log('Write PDF successfully.')
+    });
+  });
+}
+
 export const fileSubMenus = {
   new: {
     label: '&New',
@@ -164,8 +175,11 @@ export const fileSubMenus = {
       },
     ],
   },
+  exportPDF: {
+    label: 'Export &PDF',
+    click: exportPDF,
+  },
 };
-
 export const file = {
   label: '&File',
   submenu: [
@@ -175,9 +189,10 @@ export const file = {
     fileSubMenus.save,
     fileSubMenus.saveAs,
     fileSubMenus.publish,
+    fileSubMenus.exportPDF,
   ],
 };
-
+console.log(file)
 export const edit = {
   label: 'Edit',
   submenu: [
@@ -509,6 +524,7 @@ export function loadFullMenu(kernelSpecs) {
       click: () => launchNewNotebook(kernelSpecs[kernelSpecName]),
     }));
 
+<<<<<<< HEAD
   const languageMenu = {
     label: '&Language',
     submenu: [
@@ -535,7 +551,7 @@ export function loadFullMenu(kernelSpecs) {
       ...kernelMenuItems,
     ],
   };
-
+  
   const template = [];
 
   if (process.platform === 'darwin') {
@@ -554,6 +570,7 @@ export function loadFullMenu(kernelSpecs) {
       fileSubMenus.save,
       fileSubMenus.saveAs,
       fileSubMenus.publish,
+      fileSubMenus.exportPDF,
     ],
   };
 
