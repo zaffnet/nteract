@@ -101,6 +101,10 @@ And then opening `docs/index.html` in your favorite browser.
 
 - Try `npm run reinstall`
 
+> I want to debug redux actions and state changes.
+
+-  Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by spawning the application with `npm run spawn:debug`. 
+
 ## For maintainers: Creating a release
 
 ### Bump the version
