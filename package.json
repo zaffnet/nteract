@@ -26,6 +26,7 @@
     "prestart": "npm run build",
     "start": "npm run spawn",
     "spawn": "cross-env NODE_ENV=development electron .",
+    "spawn:debug": "cross-env DEBUG=true NODE_ENV=development electron .",
     "clean": "rimraf lib dist",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
