@@ -149,6 +149,12 @@ mock('react-notification-system', function () {
   };
 });
 
+mock('kernelspecs', {
+  'find': function(kernelName) {
+    return Promise.resolve({ name: kernelName });
+  }
+})
+
 mock('spawnteract', {
   'launchSpec': function(kernelSpec, config) {
     function writeConnectionFile(config) { return new Promise((resolve, reject) => {
