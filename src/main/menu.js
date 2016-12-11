@@ -491,19 +491,19 @@ export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
 export function loadFullMenu() {
   return kernelspecs.findAll().then((kernelSpecs) => {
-    function generateSubMenu(kernelName) {
+    function generateSubMenu(kernelSpecName) {
       return {
-        label: kernelSpecs[kernelName].spec.display_name,
-        click: createSender('menu:new-kernel', kernelSpecs[kernelName])
+        label: kernelSpecs[kernelSpecName].spec.display_name,
+        click: createSender('menu:new-kernel', kernelSpecs[kernelSpecName])
       };
     }
 
     const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
     const newNotebookItems = Object.keys(kernelSpecs)
-      .map(kernelName => ({
-        label: kernelSpecs[kernelName].spec.display_name,
-        click: () => launchNewNotebook(kernelSpecs[kernelName]),
+      .map(kernelSpecName => ({
+        label: kernelSpecs[kernelSpecName].spec.display_name,
+        click: () => launchNewNotebook(kernelSpecs[kernelSpecName]),
       }));
 
     const languageMenu = {

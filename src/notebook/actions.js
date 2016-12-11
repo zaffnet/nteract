@@ -8,10 +8,10 @@ export function newKernel(kernelSpec, cwd) {
   };
 }
 
-export function newKernelByName(kernelName, cwd) {
+export function newKernelByName(kernelSpecName, cwd) {
   return {
     type: constants.LAUNCH_KERNEL_BY_NAME,
-    kernelName,
+    kernelSpecName,
     cwd,
   };
 }

@@ -138,7 +138,7 @@ describe('newKernelEpic', () => {
   it('calls newKernelObservable if given the correct action', (done) => {
     const input$ = Rx.Observable.of({
       type: constants.LAUNCH_KERNEL,
-      kernelSpecName: 'kernelSpecName',
+      kernelSpec: { spec: 'hokey' },
       cwd: '~',
     });
     let actionBuffer = [];

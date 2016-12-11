@@ -38,13 +38,13 @@ export const notebookLoaded = (filename, notebook) => ({
   */
 export const extractNewKernel = (filename, notebook) => {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-  const kernelName = notebook.getIn(
+  const kernelSpecName = notebook.getIn(
     ['metadata', 'kernelspec', 'name'], notebook.getIn(
       ['metadata', 'language_info', 'name'],
         'python3'));
   return {
     cwd,
-    kernelName,
+    kernelSpecName,
   };
 };
 
@@ -79,13 +79,13 @@ export const loadEpic = actions =>
       readFileObservable(action.filename)
         .map((data) => convertRawNotebook(action.filename, data))
         .flatMap(({ filename, notebook }) => {
-          const { cwd, kernelName } = extractNewKernel(filename, notebook);
+          const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
           return Observable.of(
             notebookLoaded(filename, notebook),
             // Find kernel based on kernel name
             // NOTE: Conda based kernels and remote kernels will need
             // special handling
-            newKernelByName(kernelName, cwd),
+            newKernelByName(kernelSpecName, cwd),
           );
         })
         .catch((err) =>

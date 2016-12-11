@@ -19,6 +19,7 @@ import {
   executeCell,
   clearOutputs,
   newKernel,
+  newKernelByName,
   killKernel,
   interruptKernel,
   copyCell,
@@ -141,13 +142,13 @@ export function dispatchSave(store) {
   }
 }
 
-export function dispatchNewKernel(store, evt, name) {
+export function dispatchNewKernel(store, evt, spec) {
   const state = store.getState();
   let cwd = cwdKernelFallback();
   if (state && state.document && state.metadata.get('filename')) {
     cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
-  store.dispatch(newKernel(name, cwd));
+  store.dispatch(newKernel(spec, cwd));
 }
 
 export function dispatchPublishAnonGist(store) {

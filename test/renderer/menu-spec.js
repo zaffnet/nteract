@@ -307,11 +307,11 @@ describe('menu', () => {
       const store = dummyStore();
       store.dispatch = sinon.spy();
 
-      menu.dispatchNewKernel(store, {}, 'python2');
+      menu.dispatchNewKernel(store, {}, { spec: 'hokey' });
 
       expect(store.dispatch.firstCall).to.be.calledWith({
         type: constants.LAUNCH_KERNEL,
-        kernelSpecName: 'python2',
+        kernelSpec: { spec: 'hokey' },
         cwd: process.cwd(),
       });
     });
@@ -364,10 +364,10 @@ describe('menu', () => {
       const store = dummyStore();
       store.dispatch = sinon.spy();
 
-      menu.dispatchNewNotebook(store, {}, 'perl');
+      menu.dispatchNewNotebook(store, {}, { spec: 'hokey' });
       expect(store.dispatch.firstCall).to.be.calledWith({
         type: 'NEW_NOTEBOOK',
-        kernelSpecName: 'perl',
+        kernelSpec: { spec: 'hokey' },
         cwd: process.cwd(),
       });
     })

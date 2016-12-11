@@ -142,12 +142,12 @@ export const acquireKernelInfoEpic = action$ =>
 export const newKernelByNameEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL_BY_NAME)
     .do(action => {
-      if (!action.kernelName) {
+      if (!action.kernelSpecName) {
         throw new Error('newKernelByNameEpic requires a kernel name');
       }
     })
     .mergeMap(action =>
-      find(action.kernelName)
+      find(action.kernelSpecName)
         .then(spec => newKernel(spec, action.cwd))
     );
 

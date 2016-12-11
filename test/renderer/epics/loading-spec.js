@@ -32,10 +32,10 @@ describe('load', () => {
 
 describe('newNotebook', () => {
   it('creates a new notebook', () => {
-    expect(newNotebook('python3', '/tmp'))
+    expect(newNotebook({ spec: 'hokey' }, '/tmp'))
       .to.deep.equal({
         type: 'NEW_NOTEBOOK',
-        kernelSpecName: 'python3',
+        kernelSpec: { spec: 'hokey' },
         cwd: '/tmp',
       })
   })
@@ -55,7 +55,6 @@ describe('notebookLoaded', () => {
 describe('extractNewKernel', () => {
   it('extracts and launches the kernel from a notebook', () => {
     expect(extractNewKernel('/tmp/test.ipynb', dummyCommutable)).to.deep.equal({
-      type: 'LAUNCH_KERNEL',
       kernelSpecName: 'python3',
       cwd: path.resolve('/tmp'),
     })
