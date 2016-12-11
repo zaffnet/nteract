@@ -12,6 +12,7 @@ import {
   newKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
+  newKernelByNameEpic,
 } from './kernel-launch';
 
 import {
@@ -43,6 +44,7 @@ const epics = [
   executeCellEpic,
   updateDisplayEpic,
   newKernelEpic,
+  newKernelByNameEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   loadConfigEpic,

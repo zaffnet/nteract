@@ -2,6 +2,8 @@ import Rx from 'rxjs/Rx';
 
 import { launchSpec } from 'spawnteract';
 
+import { find } from 'kernelspecs';
+
 import * as uuid from 'uuid';
 
 import {
@@ -22,11 +24,13 @@ import {
 import {
   setExecutionState,
   setNotebookKernelInfo,
+  newKernel,
 } from '../actions';
 
 import {
   NEW_KERNEL,
   LAUNCH_KERNEL,
+  LAUNCH_KERNEL_BY_NAME,
   SET_LANGUAGE_INFO,
   ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
@@ -134,6 +138,18 @@ export const acquireKernelInfoEpic = action$ =>
       }
       return acquireKernelInfo(action.channels);
     });
+
+export const newKernelByNameEpic = action$ =>
+  action$.ofType(LAUNCH_KERNEL_BY_NAME)
+    .do(action => {
+      if (!action.kernelName) {
+        throw new Error('newKernelByNameEpic requires a kernel name');
+      }
+    })
+    .mergeMap(action =>
+      find(action.kernelName)
+        .then(spec => newKernel(spec, action.cwd))
+    );
 
 /**
   * Launches a new kernel.

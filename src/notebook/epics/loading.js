@@ -1,6 +1,6 @@
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
 import { readFileObservable } from '../../utils/fs';
-import { newKernelByName } from '../actions';
+import { newKernelByName, newKernel } from '../actions';
 
 const Rx = require('rxjs/Rx');
 const commutable = require('commutable');
@@ -85,6 +85,7 @@ export const loadEpic = actions =>
             // Find kernel based on kernel name
             // NOTE: Conda based kernels and remote kernels will need
             // special handling
+            newKernelByName(kernelName, cwd),
           );
         })
         .catch((err) =>
