@@ -142,23 +142,12 @@ export function dispatchSave(store) {
 }
 
 export function dispatchNewKernel(store, evt, name) {
-  console.log('dispatch new kernel');
-
   const state = store.getState();
   let cwd = cwdKernelFallback();
   if (state && state.document && state.metadata.get('filename')) {
     cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
   store.dispatch(newKernel(name, cwd));
-}
-
-export function dispatchNewKernelByKernelSpec(store, evt, spec) {
-  const state = store.getState();
-  let cwd = cwdKernelFallback();
-  if (state && state.document && state.metadata.get('filename')) {
-    cwd = path.dirname(path.resolve(state.metadata.get('filename')));
-  }
-  store.dispatch(newKernelByKernelSpec(spec, cwd));
 }
 
 export function dispatchPublishAnonGist(store) {
@@ -313,7 +302,6 @@ export function dispatchLoadConfig(store) {
 export function initMenuHandlers(store) {
   ipc.on('main:new', dispatchNewNotebook.bind(null, store));
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
-  ipc.on('menu:new-kernel-by-kernelspec', dispatchNewKernelByKernelSpec.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:run-all-below', dispatchRunAllBelow.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));

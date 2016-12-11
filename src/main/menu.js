@@ -494,7 +494,7 @@ export function loadFullMenu() {
     function generateSubMenu(kernelName) {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
-        click: createSender('menu:new-kernel-by-kernelspec', kernelSpecs[kernelName])
+        click: createSender('menu:new-kernel', kernelSpecs[kernelName])
       };
     }
 
