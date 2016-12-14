@@ -14,6 +14,8 @@
 
 Edit code cells, write markdown, visualize!
 
+Checkout our [Medium blog post](https://medium.com/nteract/nteract-revolutionizing-the-notebook-experience-d106ca5d2c38) to see what amazing things you can do with nteract.
+
 ![nteract geojson](https://cloud.githubusercontent.com/assets/836375/18421299/d95ad398-783b-11e6-8b23-d54cf7caad1e.png)
 
 Note: There will be :bug:s and quirks. Please come tell us about them!
