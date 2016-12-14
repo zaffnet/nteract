@@ -100,6 +100,11 @@ export function publishNotebookObservable(github, notebook, filepath,
           message: `Authenticated as ${res.login}`,
           level: 'info',
         });
+        if(notebook.getIn(['metadata', 'github_username']) != res.login) {
+          console.log(res.login, notebook.getIn(['metadata', 'github_username']))
+          store.dispatch(overwriteMetadata('github_username', res.login))
+          //delete gistID
+        }
       });
     }
     notificationSystem.addNotification({
@@ -107,7 +112,8 @@ export function publishNotebookObservable(github, notebook, filepath,
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
-    // Already in a gist, update the gist
+    // Already in a gist belonging to the user, update the gist
+
     const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
       { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
       { files, public: false };
