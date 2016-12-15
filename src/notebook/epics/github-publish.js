@@ -166,6 +166,6 @@ export function handleGistAction(action) {
  */
 export const publishEpic = (action$, store) =>
   action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
-    .switchMap((action) => handleGistAction(action))
+    .mergeMap((action) => handleGistAction(action))
     .catch(handleGistError)
     .retry(1);

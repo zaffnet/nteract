@@ -30,6 +30,7 @@ import {
   publishEpic
 } from '../../../src/notebook/epics/github-publish';
 
+
 describe('handleGistAction', () => {
   it('returns an observable from User Action', () => {
     const publishUserAction = { type: 'PUBLISH_USER_GIST' }
