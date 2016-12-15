@@ -136,6 +136,9 @@ mock('github', function () {
         edit: function(request, callback) { callback(null, { id: 123, html_url: 'foo' }) },
         create: function(request, callback) { callback(null, { id: 123, html_url: 'foo' }) },
     },
+    users: {
+      get: function(request, callback) { callback(null, { login: 'jdetle' }) }
+    }
   };
 });
 

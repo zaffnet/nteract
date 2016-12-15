@@ -188,6 +188,13 @@ export function overwriteMetadata(field, value) {
   };
 }
 
+export function deleteMetadata(field) {
+  return {
+    type: constants.DELETE_METADATA_FIELD,
+    field,
+  };
+}
+
 export const killKernel = {
   type: constants.KILL_KERNEL,
 };
