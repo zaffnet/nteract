@@ -35,13 +35,13 @@ describe('handleGistAction', () => {
   it('returns an observable from User Action', () => {
     const publishUserAction = { type: 'PUBLISH_USER_GIST' }
     const store = dummyStore();
-    const handleGist = handleGistAction(publishUserAction, store);
+    const handleGist = handleGistAction(store, publishUserAction);
     expect(handleGist.subscribe).to.not.be.null;
   });
   it('returns an observable from anonymous Action', () => {
     const publishAnonymousAction = { type: 'PUBLISH_ANONYMOUS_GIST' }
     const store = dummyStore();
-    const handleGist = handleGistAction(publishAnonymousAction, store);
+    const handleGist = handleGistAction(store, publishAnonymousAction);
     expect(handleGist.subscribe).to.not.be.null;
   })
 })
