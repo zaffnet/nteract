@@ -63,6 +63,7 @@ export function createGistCallback(observer, filename, notificationSystem) {
     const gistID = response.id;
     observer.next(overwriteMetadata('gist_id', gistID));
     notifyUser(filename, gistID, notificationSystem);
+    observer.complete();
   };
 }
 
@@ -118,15 +119,14 @@ export function publishNotebookObservable(github, notebook, filepath,
       { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
       { files, public: false };
     if (gistRequest.id) {
-      console.log('editing!')
       github.gists.edit(gistRequest,
         createGistCallback(observer, filename, notificationSystem));
     } else {
       github.gists.create(gistRequest,
         createGistCallback(observer, filename, notificationSystem));
     }
-    observer.complete();
   });
+
 }
 
 /**
@@ -144,7 +144,7 @@ export function handleGistError(err) {
  * @param {store} reduxStore - The store containing state data.
  * return {Observable} publishNotebookObservable with appropriate parameters.
 */
-export function handleGistAction(action) {
+export function handleGistAction(store, action) {
   const github = new Github();
   const state = store.getState();
   const notebook = state.document.get('notebook');
@@ -159,13 +159,14 @@ export function handleGistAction(action) {
   return publishNotebookObservable(github, notebook, filename,
                                    notificationSystem, publishAsUser);
 }
-
 /**
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$, store) =>
-  action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
-    .mergeMap((action) => handleGistAction(action))
+export const publishEpic = (action$, store) => {
+  const boundHandleGistAction = handleGistAction.bind(null, store);
+  return action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
+    .mergeMap(action => boundHandleGistAction(action))
     .catch(handleGistError)
     .retry(1);
+}
