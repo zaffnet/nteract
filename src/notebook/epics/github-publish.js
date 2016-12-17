@@ -126,7 +126,6 @@ export function publishNotebookObservable(github, notebook, filepath,
         createGistCallback(observer, filename, notificationSystem));
     }
   });
-
 }
 
 /**
@@ -159,6 +158,7 @@ export function handleGistAction(store, action) {
   return publishNotebookObservable(github, notebook, filename,
                                    notificationSystem, publishAsUser);
 }
+
 /**
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
@@ -167,6 +167,5 @@ export const publishEpic = (action$, store) => {
   const boundHandleGistAction = handleGistAction.bind(null, store);
   return action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
     .mergeMap(action => boundHandleGistAction(action))
-    .catch(handleGistError)
-    .retry(1);
-}
+    .catch(handleGistError);
+};
