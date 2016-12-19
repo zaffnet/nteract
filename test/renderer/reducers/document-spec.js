@@ -490,6 +490,20 @@ describe('overwriteMetadata', () => {
   });
 });
 
+describe('deleteMetadata', () => {
+  it('deletes notebook metadata appropriately', () => {
+    const originalState = {
+      document: monocellDocument.setIn(['notebook', 'metadata', 'name'], 'johnwashere'),
+    };
+    const action = {
+      type: constants.DELETE_METADATA_FIELD,
+      field: 'name',
+    };
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook','metadata', 'name'])).to.equal(undefined);
+  })
+})
+
 describe('splitCell', () => {
   it('splits a notebook cell into two', () => {
     const originalState = {
@@ -762,7 +776,6 @@ describe('toggleOutputExpansion', () => {
     expect(state.document.getIn(['notebook', 'cellMap', id, 'metadata',  'outputExpanded'])).to.be.true;
   });
 });
-
 describe('appendOutput', () => {
   it('appends outputs', () => {
     const originalState = {

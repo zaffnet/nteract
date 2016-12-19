@@ -6,6 +6,7 @@ import {
 
 import {
   overwriteMetadata,
+  deleteMetadata,
 } from '../actions';
 
 const commutable = require('commutable');
@@ -52,7 +53,7 @@ export function notifyUser(filename, gistID, notificationSystem) {
  * notification of the user that the gist has been published.
  * @return callbackFunction for use in publishNotebookObservable
  */
-export function createGistCallback(store, observer, filename, notificationSystem) {
+export function createGistCallback(observer, filename, notificationSystem) {
   return function gistCallback(err, response) {
     if (err) {
       observer.error(err);
@@ -60,8 +61,9 @@ export function createGistCallback(store, observer, filename, notificationSystem
       return;
     }
     const gistID = response.id;
-    observer.next(store.dispatch(overwriteMetadata('gist_id', gistID)));
+    observer.next(overwriteMetadata('gist_id', gistID));
     notifyUser(filename, gistID, notificationSystem);
+    observer.complete();
   };
 }
 
@@ -100,6 +102,10 @@ export function publishNotebookObservable(github, notebook, filepath,
           message: `Authenticated as ${res.login}`,
           level: 'info',
         });
+        if (notebook.getIn(['metadata', 'github_username']) !== (res.login || undefined)) {
+          observer.next(overwriteMetadata('github_username', res.login));
+          observer.next(deleteMetadata('gist_id'));
+        }
       });
     }
     notificationSystem.addNotification({
@@ -107,18 +113,18 @@ export function publishNotebookObservable(github, notebook, filepath,
       message: 'Your notebook is being uploaded as a GitHub gist',
       level: 'info',
     });
-    // Already in a gist, update the gist
+    // Already in a gist belonging to the user, update the gist
+
     const gistRequest = notebook.hasIn(['metadata', 'gist_id']) ?
       { files, id: notebook.getIn(['metadata', 'gist_id']), public: false } :
       { files, public: false };
     if (gistRequest.id) {
       github.gists.edit(gistRequest,
-        createGistCallback(store, observer, filename, notificationSystem));
+        createGistCallback(observer, filename, notificationSystem));
     } else {
       github.gists.create(gistRequest,
-        createGistCallback(store, observer, filename, notificationSystem));
+        createGistCallback(observer, filename, notificationSystem));
     }
-    observer.complete();
   });
 }
 
@@ -137,7 +143,7 @@ export function handleGistError(err) {
  * @param {store} reduxStore - The store containing state data.
  * return {Observable} publishNotebookObservable with appropriate parameters.
 */
-export function handleGistAction(action, store) {
+export function handleGistAction(store, action) {
   const github = new Github();
   const state = store.getState();
   const notebook = state.document.get('notebook');
@@ -150,14 +156,16 @@ export function handleGistAction(action, store) {
     publishAsUser = true;
   }
   return publishNotebookObservable(github, notebook, filename,
-                                   notificationSystem, publishAsUser, store);
+                                   notificationSystem, publishAsUser);
 }
 
 /**
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$, store) =>
-  action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
-    .mergeMap((action) => handleGistAction(action, store))
+export const publishEpic = (action$, store) => {
+  const boundHandleGistAction = handleGistAction.bind(null, store);
+  return action$.ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
+    .mergeMap(action => boundHandleGistAction(action))
     .catch(handleGistError);
+};

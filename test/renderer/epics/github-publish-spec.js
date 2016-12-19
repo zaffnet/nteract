@@ -30,17 +30,18 @@ import {
   publishEpic
 } from '../../../src/notebook/epics/github-publish';
 
+
 describe('handleGistAction', () => {
   it('returns an observable from User Action', () => {
     const publishUserAction = { type: 'PUBLISH_USER_GIST' }
     const store = dummyStore();
-    const handleGist = handleGistAction(publishUserAction, store);
+    const handleGist = handleGistAction(store, publishUserAction);
     expect(handleGist.subscribe).to.not.be.null;
   });
   it('returns an observable from anonymous Action', () => {
     const publishAnonymousAction = { type: 'PUBLISH_ANONYMOUS_GIST' }
     const store = dummyStore();
-    const handleGist = handleGistAction(publishAnonymousAction, store);
+    const handleGist = handleGistAction(store, publishAnonymousAction);
     expect(handleGist.subscribe).to.not.be.null;
   })
 })
@@ -128,6 +129,34 @@ describe('notifyUser', () => {
       dismissible: true,
       position: 'tr',
       level: 'success',
+    });
+  })
+})
+
+describe('publishEpic', () => {
+  it('epics right', (done) => {
+    const store = dummyStore();
+    const action$ = ActionsObservable.of({type: PUBLISH_USER_GIST})
+     publishEpic(action$, store)
+      .toArray()
+      .subscribe(actions => {
+        expect(actions).to.deep.equal([
+          {
+            "field": "github_username",
+            "type": "OVERWRITE_METADATA_FIELD",
+            "value": "jdetle",
+          },
+          {
+            "field": "gist_id",
+            "type": "DELETE_METADATA_FIELD",
+          },
+          {
+            "field": "gist_id",
+            "type": "OVERWRITE_METADATA_FIELD",
+            "value": 123,
+          },
+      ]);
+      done();
     });
   })
 })
