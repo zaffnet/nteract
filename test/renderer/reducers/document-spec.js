@@ -493,14 +493,12 @@ describe('overwriteMetadata', () => {
 describe('deleteMetadata', () => {
   it('deletes notebook metadata appropriately', () => {
     const originalState = {
-      document: monocellDocument,
+      document: monocellDocument.setIn(['notebook', 'metadata', 'name'], 'johnwashere'),
     };
-
     const action = {
       type: constants.DELETE_METADATA_FIELD,
       field: 'name',
     };
-
     const state = reducers(originalState, action);
     expect(state.document.getIn(['notebook','metadata', 'name'])).to.equal(undefined);
   })

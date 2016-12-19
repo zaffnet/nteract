@@ -313,7 +313,7 @@ export default handleActions({
     const { field, value } = action;
     return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
   },
-  [constants.DELETE_METADATA]: function deleteMetadata(state, action) {
+  [constants.DELETE_METADATA_FIELD]: function deleteMetadata(state, action) {
     const { field } = action;
     return state.deleteIn(['notebook', 'metadata', field]);
   },
