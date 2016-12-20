@@ -89,51 +89,35 @@ export const fileSubMenus = {
     submenu: [
       {
         label: '&Intro',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'intro.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'intro.ipynb')),
       },
       {
         label: '&Plotly',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'plotly.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'plotly.ipynb')),
       },
       {
         label: '&Plotlyr',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'plotlyr.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'plotlyr.ipynb')),
       },
       {
         label: '&Altair',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'altair.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'altair.ipynb')),
       },
       {
         label: '&Geojson',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'geojson.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'geojson.ipynb')),
       },
       {
         label: '&Pandas to GeoJSON',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb')),
       },
       {
         label: '&Named display updates',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'display-updates.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'display-updates.ipynb')),
       },
       {
         label: '&Analyze nteract download metrics',
-        click: () => {
-          launch(path.join(exampleNotebooksDirectory, 'download-stats.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'download-stats.ipynb')),
       }
     ]
   },
