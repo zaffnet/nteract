@@ -64,7 +64,7 @@ export const saveConfigOnChangeEpic = actions =>
   * @param  {ActionObservable}  actions ActionObservable containing SAVE_CONFIG action
   * @return {ActionObservable}  ActionObservable for DONE_SAVING action
   */
-export const saveConfigEpic = actions =>
+export const saveConfigEpic = (actions, store) =>
   actions.ofType(SAVE_CONFIG)
     .mergeMap(action =>
       writeFileObservable(CONFIG_FILE_PATH, JSON.stringify(store.getState().config.toJS()))
