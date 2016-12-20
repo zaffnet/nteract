@@ -2,10 +2,9 @@ import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
 import * as commutable from 'commutable';
+import _ from 'lodash';
 
 import * as constants from '../constants';
-
-const _ = require('lodash');
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This

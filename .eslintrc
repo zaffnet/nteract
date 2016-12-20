@@ -42,7 +42,6 @@
         ]
       }
     ],
-    "import/no-extraneous-dependencies": "off"
   },
   "settings": {
     "import/core-modules": ["electron"],

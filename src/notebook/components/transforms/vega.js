@@ -1,9 +1,8 @@
 /* @flow */
 import React from 'react';
+import _ from 'lodash';
 
 const vegaEmbed = require('vega-embed');
-
-const _ = require('lodash');
 
 const MIMETYPE_VEGA = 'application/vnd.vega+json';
 const MIMETYPE_VEGALITE = 'application/vnd.vegalite+json';
