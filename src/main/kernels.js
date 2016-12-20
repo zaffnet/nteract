@@ -16,7 +16,7 @@ export function ipyKernelTryObservable(env) {
   return spawn(executable, ['-m', 'ipykernel', '--version'], { split: true })
     .filter(x => x.source && x.source === 'stdout')
     .mapTo(env)
-    .catch(err => Rx.Observable.empty());
+    .catch(() => Rx.Observable.empty());
 }
 
 /**
@@ -36,7 +36,7 @@ export function condaInfoObservable() {
   * @returns {Observable}  List of envionmental variables
   */
 export function condaEnvsObservable(condaInfo$) {
-  return condaInfo$.map(info => {
+  return condaInfo$.map((info) => {
     const envs = info.envs.map(env => ({ name: path.basename(env), prefix: env }));
     envs.push({ name: 'root', prefix: info.root_prefix });
     return envs;
@@ -58,7 +58,6 @@ export function createKernelSpecsFromEnvs(envs) {
   const languageKey = 'py'; // or r
 
   const languageExe = 'bin/python';
-  const jupyterBin = 'bin/jupyter';
 
   const langEnvs = {};
 

@@ -73,5 +73,5 @@ export function createTitleFeed(state$) {
 export function initNativeHandlers(store) {
   const state$ = Rx.Observable.from(store);
   return createTitleFeed(state$)
-    .subscribe(setTitleFromAttributes, (err) => console.error(err));
+    .subscribe(setTitleFromAttributes, err => console.error(err));
 }

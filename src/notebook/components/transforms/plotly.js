@@ -1,6 +1,6 @@
 /* @flow */
 /* eslint class-methods-use-this: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 type Props = {
   data: string|Object,

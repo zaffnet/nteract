@@ -1,10 +1,8 @@
 /* @flow */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import _ from 'lodash';
 
 const vegaEmbed = require('vega-embed');
-
-const _ = require('lodash');
 
 const MIMETYPE_VEGA = 'application/vnd.vega+json';
 const MIMETYPE_VEGALITE = 'application/vnd.vegalite+json';
@@ -18,7 +16,7 @@ type EmbedProps = {
   renderedCallback: (err: any, result: any) => any,
 };
 
-const defaultCallback = (err: any, result: any): any => {};
+const defaultCallback = (): any => {};
 
 function embed(el: HTMLElement, spec: Object, mode: string, cb: (err: any, result: any) => any) {
   const embedSpec = {

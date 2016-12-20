@@ -11,7 +11,6 @@ import { readFileObservable, writeFileObservable } from '../../utils/fs';
 const path = require('path');
 
 const Rx = require('rxjs/Rx');
-const jupyterPaths = require('jupyter-paths');
 
 const Observable = Rx.Observable;
 
@@ -22,7 +21,7 @@ export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const saveConfig = () => ({ type: SAVE_CONFIG });
 export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
 
-export const configLoaded = (config) => ({
+export const configLoaded = config => ({
   type: MERGE_CONFIG,
   config,
 });
@@ -39,11 +38,11 @@ export const CONFIG_FILE_PATH = path.join(HOME, '.jupyter', 'nteract.json');
   */
 export const loadConfigEpic = actions =>
   actions.ofType(LOAD_CONFIG)
-    .switchMap(action =>
+    .switchMap(() =>
       readFileObservable(CONFIG_FILE_PATH)
         .map(JSON.parse)
         .map(configLoaded)
-        .catch((err) =>
+        .catch(err =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
     );
@@ -66,10 +65,10 @@ export const saveConfigOnChangeEpic = actions =>
   */
 export const saveConfigEpic = (actions, store) =>
   actions.ofType(SAVE_CONFIG)
-    .mergeMap(action =>
+    .mergeMap(() =>
       writeFileObservable(CONFIG_FILE_PATH, JSON.stringify(store.getState().config.toJS()))
       .map(doneSavingConfig)
     )
-    .catch((err) =>
+    .catch(err =>
       Observable.of({ type: 'ERROR', payload: err, error: true })
     );

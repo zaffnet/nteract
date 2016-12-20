@@ -4,7 +4,7 @@ import Rx from 'rxjs/Rx';
 const env$ = Rx.Observable
   .fromPromise(shellEnv())
   .first()
-  .do(env => {
+  .do((env) => {
     Object.assign(process.env, env);
   })
   .publishReplay(1);

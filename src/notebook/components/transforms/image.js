@@ -1,8 +1,6 @@
 /* @flow */
 import React from 'react';
 
-import _ from 'lodash';
-
 type TopProps = {
   data: string,
   mimetype: string,

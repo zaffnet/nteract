@@ -67,7 +67,7 @@ export const installShellCommand = () => {
   installShellCommandsObservable(exe, rootDir, binDir)
     .subscribe(
       () => {},
-      (err) => dialog.showErrorBox('Could not write shell script.', err.message),
+      err => dialog.showErrorBox('Could not write shell script.', err.message),
       () => dialog.showMessageBox({
         title: 'Command installed.',
         message: 'The shell command "nteract" is installed.',

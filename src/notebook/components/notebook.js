@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* @flow */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';

@@ -1,6 +1,5 @@
 /* @flow */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 

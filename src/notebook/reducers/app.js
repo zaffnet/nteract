@@ -6,8 +6,6 @@ import {
   shutdownKernel,
 } from '../kernel/shutdown';
 
-const Github = require('github');
-
 function cleanupKernel(state) {
   const kernel = {
     channels: state.channels,

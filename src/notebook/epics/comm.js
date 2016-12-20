@@ -54,7 +54,7 @@ export function createCommCloseMessage(parent_header, comm_id, data = {}) {
  * @param  {error} error any type of error to pass on
  * @return {Object}       Flux standard error action
  */
-export const createCommErrorAction = (error) =>
+export const createCommErrorAction = error =>
   Rx.Observable.of({
     type: COMM_ERROR,
     payload: error,
@@ -127,7 +127,7 @@ export function commActionObservable(newKernelAction) {
  * @param  {redux.Store} store   the redux store
  * @return {ActionsObservable}         Comm actions
  */
-export const commListenEpic = (action$, store) =>
+export const commListenEpic = action$ =>
   action$.ofType(NEW_KERNEL)
     // We have a new channel
     .switchMap(commActionObservable)

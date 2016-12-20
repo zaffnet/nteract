@@ -89,123 +89,35 @@ export const fileSubMenus = {
     submenu: [
       {
         label: '&Intro',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'intro.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'intro.ipynb')),
       },
       {
         label: '&Plotly',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'plotly.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'plotly.ipynb')),
       },
       {
         label: '&Plotlyr',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'plotlyr.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'plotlyr.ipynb')),
       },
       {
         label: '&Altair',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'altair.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'altair.ipynb')),
       },
       {
         label: '&Geojson',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'geojson.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'geojson.ipynb')),
       },
       {
         label: '&Pandas to GeoJSON',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'pandas-to-geojson.ipynb')),
       },
       {
         label: '&Named display updates',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'display-updates.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'display-updates.ipynb')),
       },
       {
         label: '&Analyze nteract download metrics',
-        click: () => {
-          const opts = {
-            title: 'Open a notebook',
-            filters: [
-              { name: 'Notebooks', extensions: ['ipynb'] },
-            ],
-            properties: [
-              'openFile',
-            ],
-          };
-          launch(path.join(exampleNotebooksDirectory, 'download-stats.ipynb'));
-        },
+        click: launch.bind(null, path.join(exampleNotebooksDirectory, 'download-stats.ipynb')),
       }
     ]
   },
@@ -371,7 +283,6 @@ const blink_menu = [
 ];
 
 const today = new Date();
-const day = today.getDate();
 const month = today.getMonth() + 1;
 if (month === 12) {
   theme_menu.push(

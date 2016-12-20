@@ -1,6 +1,6 @@
 /* @flow */
 /* eslint class-methods-use-this: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 type Props = {
   data: Object,
@@ -63,7 +63,7 @@ export class GeoJSONTransform extends React.Component {
       this.map.removeLayer(this.tileLayer);
       this.tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        id: `mapbox.${this.props.theme}`,
+        id: `mapbox.${theme}`,
       }).addTo(this.map);
     }
 

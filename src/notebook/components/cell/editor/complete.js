@@ -28,7 +28,7 @@ export function codeCompleteObservable(channels, editor, message) {
     .timeout(2000); // 4s
 
   // On subscription, send the message
-  return Rx.Observable.create(observer => {
+  return Rx.Observable.create((observer) => {
     const subscription = completion$.subscribe(observer);
     channels.shell.next(message);
     return subscription;

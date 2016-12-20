@@ -2,10 +2,9 @@ import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
 import * as commutable from 'commutable';
+import _ from 'lodash';
 
 import * as constants from '../constants';
-
-const _ = require('lodash');
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -41,7 +40,7 @@ export function reduceOutputs(outputs, output) {
 
 export function cleanCellTransient(state, id) {
   // Clear out key paths that should no longer be referenced
-  return state.updateIn(['transient', 'keyPathsForDisplays'], (kpfd) =>
+  return state.updateIn(['transient', 'keyPathsForDisplays'], kpfd =>
     kpfd.map(keyPaths =>
       keyPaths.filter(keyPath => keyPath.get(2) !== id)
     )
@@ -51,8 +50,8 @@ export function cleanCellTransient(state, id) {
 export default handleActions({
   [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
     const notebook = action.notebook
-      .update('cellMap', (cells) =>
-        cells.map((value) =>
+      .update('cellMap', cells =>
+        cells.map(value =>
           value.setIn(['metadata', 'inputHidden'], false)
                 .setIn(['metadata', 'outputHidden'], false)
                 .setIn(['metadata', 'outputExpanded'], false)));
@@ -78,7 +77,7 @@ export default handleActions({
 
     if (output.output_type !== 'display_data' || !(_.has(output, 'transient.display_id'))) {
       return state.updateIn(['notebook', 'cellMap', cellID, 'outputs'],
-        (outputs) => reduceOutputs(outputs, output));
+        outputs => reduceOutputs(outputs, output));
     }
 
     // We now have a display_data that includes a transient display_id
@@ -139,7 +138,7 @@ export default handleActions({
       const cell = commutable.emptyCodeCell;
       return state.set('cellFocused', cellID)
         .update('notebook',
-          (notebook) => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
+          notebook => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
         .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
         .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
     }
@@ -182,11 +181,11 @@ export default handleActions({
   [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
     const { id, count } = action;
     return state.update('notebook',
-      (notebook) => commutable.updateExecutionCount(notebook, id, count));
+      notebook => commutable.updateExecutionCount(notebook, id, count));
   },
   [constants.MOVE_CELL]: function moveCell(state, action) {
     return state.updateIn(['notebook', 'cellOrder'],
-      cellOrder => {
+      (cellOrder) => {
         const oldIndex = cellOrder.findIndex(id => id === action.id);
         const newIndex = cellOrder.findIndex(id => id === action.destinationId)
                           + (action.above ? 0 : 1);
@@ -203,7 +202,7 @@ export default handleActions({
     const { id } = action;
     return cleanCellTransient(
       state.update('notebook',
-        (notebook) => commutable.removeCell(notebook, id)
+        notebook => commutable.removeCell(notebook, id)
       ),
       id
     );
@@ -248,7 +247,7 @@ export default handleActions({
       .concat('\n', '\n', cellMap.getIn([nextId, 'source']));
 
     return state.update('notebook',
-      (notebook) => commutable.removeCell(commutable.updateSource(notebook, id, source), nextId)
+      notebook => commutable.removeCell(commutable.updateSource(notebook, id, source), nextId)
     );
   },
   [constants.NEW_CELL_APPEND]: function newCellAppend(state, action) {
@@ -265,13 +264,13 @@ export default handleActions({
   },
   [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
     const { id, source } = action;
-    return state.update('notebook', (notebook) => commutable.updateSource(notebook, id, source));
+    return state.update('notebook', notebook => commutable.updateSource(notebook, id, source));
   },
   [constants.SPLIT_CELL]: function splitCell(state, action) {
     const { id, position } = action;
     const index = state.getIn(['notebook', 'cellOrder']).indexOf(id);
     const updatedState = state.update('notebook',
-        (notebook) => commutable.splitCell(notebook, id, position));
+        notebook => commutable.splitCell(notebook, id, position));
     const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
     return updatedState
       .setIn(['notebook', 'cellMap', newCell, 'metadata', 'outputHidden'], false)
@@ -329,14 +328,14 @@ export default handleActions({
     const cell = cellMap.get(id);
     return state
       .set('copied', new Immutable.Map({ id, cell }))
-      .update('notebook', (notebook) => commutable.removeCell(notebook, id));
+      .update('notebook', notebook => commutable.removeCell(notebook, id));
   },
   [constants.PASTE_CELL]: function pasteCell(state) {
     const copiedCell = state.getIn(['copied', 'cell']);
     const copiedId = state.getIn(['copied', 'id']);
     const id = uuid.v4();
 
-    return state.update('notebook', (notebook) =>
+    return state.update('notebook', notebook =>
         commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
           .setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'], false)
           .setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'], false);
@@ -360,7 +359,7 @@ export default handleActions({
   },
   [constants.TOGGLE_OUTPUT_EXPANSION]: function toggleOutputExpansion(state, action) {
     const { id } = action;
-    return state.updateIn(['notebook', 'cellMap'], (cells) =>
+    return state.updateIn(['notebook', 'cellMap'], cells =>
       cells.setIn([id, 'metadata', 'outputExpanded'],
         !cells.getIn([id, 'metadata', 'outputExpanded'])));
   },

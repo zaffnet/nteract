@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import TextDisplay from './text';
@@ -83,9 +82,9 @@ function richestMimetype(bundle: ImmutableMap<string, any>,
   tf: ImmutableMap<string, any> = transforms): string {
   return bundle.keySeq()
     // we can only use those we have a transform for
-    .filter((mimetype) => tf.has(mimetype) && order.includes(mimetype))
+    .filter(mimetype => tf.has(mimetype) && order.includes(mimetype))
     // the richest is based on the order in displayOrder
-    .sortBy((mimetype) => order.indexOf(mimetype))
+    .sortBy(mimetype => order.indexOf(mimetype))
     .first();
 }
 

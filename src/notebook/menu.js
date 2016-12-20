@@ -6,13 +6,6 @@ import {
 
 import * as path from 'path';
 
-import { tildify } from './native-window';
-
-import {
-  PUBLISH_USER_GIST,
-  PUBLISH_ANONYMOUS_GIST,
-} from './constants';
-
 import {
   load,
   newNotebook,
@@ -32,8 +25,6 @@ import {
   cutCell,
   pasteCell,
   createCellAfter,
-  setAnonGithub,
-  setUserGithub,
   setGithubToken,
   changeInputVisibility,
   setTheme,
@@ -47,8 +38,6 @@ import {
   cwdKernelFallback,
 } from './path';
 
-const BrowserWindow = remote.BrowserWindow;
-
 export function dispatchSaveAs(store, evt, filename) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
@@ -57,7 +46,7 @@ export function dispatchSaveAs(store, evt, filename) {
 
 const dialog = remote.dialog;
 
-export function showSaveAsDialog(defaultPath) {
+export function showSaveAsDialog() {
   return new Promise((resolve) => {
     const opts = Object.assign({
       title: 'Save Notebook',
@@ -78,7 +67,6 @@ export function triggerWindowRefresh(store, filename) {
     return;
   }
   const state = store.getState();
-  const executionState = state.app.get('executionState');
   const notebook = state.document.get('notebook');
   store.dispatch(saveAs(filename, notebook));
 }
@@ -122,7 +110,7 @@ export function triggerKernelRefresh(store) {
 
 export function triggerSaveAs(store) {
   showSaveAsDialog()
-    .then(filename => {
+    .then((filename) => {
       triggerWindowRefresh(store, filename);
       triggerKernelRefresh(store);
     });
@@ -189,9 +177,9 @@ export function dispatchRunAllBelow(store) {
   const cellsBelowFocusedId = notebook.get('cellOrder').skip(indexOfFocusedCell);
   const cells = notebook.get('cellMap');
 
-  cellsBelowFocusedId.filter((cellID) =>
+  cellsBelowFocusedId.filter(cellID =>
     cells.getIn([cellID, 'cell_type']) === 'code')
-      .map((cellID) => store.dispatch(
+      .map(cellID => store.dispatch(
         executeCell(
           cellID,
           cells.getIn([cellID, 'source'])
@@ -203,9 +191,9 @@ export function dispatchRunAll(store) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
-  notebook.get('cellOrder').filter((cellID) =>
+  notebook.get('cellOrder').filter(cellID =>
     cells.getIn([cellID, 'cell_type']) === 'code')
-      .map((cellID) => store.dispatch(
+      .map(cellID => store.dispatch(
         executeCell(
           cellID,
           cells.getIn([cellID, 'source'])
@@ -216,7 +204,7 @@ export function dispatchRunAll(store) {
 export function dispatchClearAll(store) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
-  notebook.get('cellOrder').map((value) => store.dispatch(clearOutputs(value)));
+  notebook.get('cellOrder').map(value => store.dispatch(clearOutputs(value)));
 }
 
 export function dispatchUnhideAll(store) {
@@ -224,8 +212,8 @@ export function dispatchUnhideAll(store) {
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder')
-    .filter((cellID) => cells.getIn([cellID, 'metadata', 'inputHidden']))
-    .map((cellID) => store.dispatch(changeInputVisibility(cellID)));
+    .filter(cellID => cells.getIn([cellID, 'metadata', 'inputHidden']))
+    .map(cellID => store.dispatch(changeInputVisibility(cellID)));
 }
 
 export function dispatchKillKernel(store) {

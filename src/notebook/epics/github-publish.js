@@ -78,7 +78,7 @@ export function createGistCallback(observer, filename, notificationSystem) {
  * notification of the user that the gist has been published.
  */
 export function publishNotebookObservable(github, notebook, filepath,
-  notificationSystem, publishAsUser, store) {
+  notificationSystem, publishAsUser) {
   return Rx.Observable.create((observer) => {
     const notebookString = JSON.stringify(
       commutable.toJS(notebook.update('cellMap', cells =>

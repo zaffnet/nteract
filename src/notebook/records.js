@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-const Github = require('github');
-
 export const AppRecord = new Immutable.Record({
   executionState: 'not connected',
   token: null,
