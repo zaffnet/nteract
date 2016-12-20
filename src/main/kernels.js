@@ -36,7 +36,7 @@ export function condaInfoObservable() {
   * @returns {Observable}  List of envionmental variables
   */
 export function condaEnvsObservable(condaInfo$) {
-  return condaInfo$.map(info => {
+  return condaInfo$.map((info) => {
     const envs = info.envs.map(env => ({ name: path.basename(env), prefix: env }));
     envs.push({ name: 'root', prefix: info.root_prefix });
     return envs;

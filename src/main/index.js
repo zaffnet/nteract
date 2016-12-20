@@ -159,12 +159,12 @@ function openFileFromEvent({ event, filename }) {
 openFile$
   .buffer(fullAppReady$) // Form an array of open-file events from before app-ready
   .first() // Should only be the first
-  .subscribe(buffer => {
+  .subscribe((buffer) => {
     // Now we can choose whether to open the default notebook
     // based on if arguments went through argv or through open-file events
     if (notebooks.length <= 0 && buffer.length <= 0) {
       log.info('launching an empty notebook by default');
-      kernelSpecsPromise.then(specs => {
+      kernelSpecsPromise.then((specs) => {
         let kernel;
 
         if (argv.kernel in specs) {
@@ -182,7 +182,7 @@ openFile$
       );
     } else {
       notebooks
-        .forEach(f => {
+        .forEach((f) => {
           try {
             launch(resolve(f));
           } catch (e) {
@@ -201,7 +201,7 @@ openFile$
 
 fullAppReady$
   .subscribe(() => {
-    kernelSpecsPromise.then(kernelSpecs => {
+    kernelSpecsPromise.then((kernelSpecs) => {
       if (Object.keys(kernelSpecs).length !== 0) {
         // Get the default menu first
         Menu.setApplicationMenu(defaultMenu);
@@ -223,7 +223,7 @@ fullAppReady$
           }
         });
       }
-    }).catch(err => {
+    }).catch((err) => {
       dialog.showMessageBox({
         type: 'error',
         title: 'No Kernels Installed',

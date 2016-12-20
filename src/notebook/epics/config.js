@@ -21,7 +21,7 @@ export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const saveConfig = () => ({ type: SAVE_CONFIG });
 export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
 
-export const configLoaded = (config) => ({
+export const configLoaded = config => ({
   type: MERGE_CONFIG,
   config,
 });
@@ -42,7 +42,7 @@ export const loadConfigEpic = actions =>
       readFileObservable(CONFIG_FILE_PATH)
         .map(JSON.parse)
         .map(configLoaded)
-        .catch((err) =>
+        .catch(err =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
     );
@@ -69,6 +69,6 @@ export const saveConfigEpic = (actions, store) =>
       writeFileObservable(CONFIG_FILE_PATH, JSON.stringify(store.getState().config.toJS()))
       .map(doneSavingConfig)
     )
-    .catch((err) =>
+    .catch(err =>
       Observable.of({ type: 'ERROR', payload: err, error: true })
     );

@@ -110,7 +110,7 @@ export function triggerKernelRefresh(store) {
 
 export function triggerSaveAs(store) {
   showSaveAsDialog()
-    .then(filename => {
+    .then((filename) => {
       triggerWindowRefresh(store, filename);
       triggerKernelRefresh(store);
     });
@@ -177,9 +177,9 @@ export function dispatchRunAllBelow(store) {
   const cellsBelowFocusedId = notebook.get('cellOrder').skip(indexOfFocusedCell);
   const cells = notebook.get('cellMap');
 
-  cellsBelowFocusedId.filter((cellID) =>
+  cellsBelowFocusedId.filter(cellID =>
     cells.getIn([cellID, 'cell_type']) === 'code')
-      .map((cellID) => store.dispatch(
+      .map(cellID => store.dispatch(
         executeCell(
           cellID,
           cells.getIn([cellID, 'source'])
@@ -191,9 +191,9 @@ export function dispatchRunAll(store) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
-  notebook.get('cellOrder').filter((cellID) =>
+  notebook.get('cellOrder').filter(cellID =>
     cells.getIn([cellID, 'cell_type']) === 'code')
-      .map((cellID) => store.dispatch(
+      .map(cellID => store.dispatch(
         executeCell(
           cellID,
           cells.getIn([cellID, 'source'])
@@ -204,7 +204,7 @@ export function dispatchRunAll(store) {
 export function dispatchClearAll(store) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
-  notebook.get('cellOrder').map((value) => store.dispatch(clearOutputs(value)));
+  notebook.get('cellOrder').map(value => store.dispatch(clearOutputs(value)));
 }
 
 export function dispatchUnhideAll(store) {
@@ -212,8 +212,8 @@ export function dispatchUnhideAll(store) {
   const notebook = state.document.get('notebook');
   const cells = notebook.get('cellMap');
   notebook.get('cellOrder')
-    .filter((cellID) => cells.getIn([cellID, 'metadata', 'inputHidden']))
-    .map((cellID) => store.dispatch(changeInputVisibility(cellID)));
+    .filter(cellID => cells.getIn([cellID, 'metadata', 'inputHidden']))
+    .map(cellID => store.dispatch(changeInputVisibility(cellID)));
 }
 
 export function dispatchKillKernel(store) {

@@ -12,7 +12,7 @@ type MDRender = (input: string) => string;
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 
-const mdRender: MDRender = (input) => renderer.render(parser.parse(input));
+const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
 export class MarkdownDisplay extends React.Component {
   props: Props;

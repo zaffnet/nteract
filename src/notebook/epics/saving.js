@@ -23,7 +23,7 @@ const Observable = Rx.Observable;
   */
 export function saveEpic(action$) {
   return action$.ofType(SAVE)
-    .do(action => {
+    .do((action) => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
         throw new Error('save needs a filename');
@@ -33,14 +33,14 @@ export function saveEpic(action$) {
       writeFileObservable(action.filename,
         JSON.stringify(
           commutable.toJS(
-            action.notebook.update('cellMap', (cells) =>
-              cells.map((value) =>
+            action.notebook.update('cellMap', cells =>
+              cells.map(value =>
                 value.deleteIn(['metadata', 'inputHidden'])
                   .deleteIn(['metadata', 'outputHidden'])
                   .deleteIn(['metadata', 'status'])))),
           null,
           1))
-        .catch(error => {
+        .catch((error) => {
           const input$ = Observable.of({
             type: 'ERROR',
             payload: error,

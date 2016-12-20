@@ -54,7 +54,7 @@ export function acquireKernelInfo(channels) {
     .pluck('content', 'language_info')
     .map(setLanguageInfo);
 
-  return Rx.Observable.create(observer => {
+  return Rx.Observable.create((observer) => {
     const subscription = obs.subscribe(observer);
     channels.shell.next(message);
     return subscription;
@@ -70,7 +70,7 @@ export function acquireKernelInfo(channels) {
 export function newKernelObservable(kernelSpecName, cwd) {
   return Rx.Observable.create((observer) => {
     launch(kernelSpecName, { cwd })
-      .then(c => {
+      .then((c) => {
         const { config, spawn, connectionFile, kernelSpec } = c;
 
         const identity = uuid.v4();
@@ -124,7 +124,7 @@ export const watchExecutionStateEpic = action$ =>
   */
 export const acquireKernelInfoEpic = action$ =>
   action$.ofType(NEW_KERNEL)
-    .switchMap(action => {
+    .switchMap((action) => {
       /* istanbul ignore if -- used for interactive debugging */
       if (process.env.DEBUG) {
         window.channels = action.channels;
@@ -139,7 +139,7 @@ export const acquireKernelInfoEpic = action$ =>
   */
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
-    .do(action => {
+    .do((action) => {
       if (!action.kernelSpecName) {
         throw new Error('newKernel needs a kernelSpecName');
       }

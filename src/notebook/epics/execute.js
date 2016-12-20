@@ -23,8 +23,8 @@ import {
 const Rx = require('rxjs/Rx');
 const Immutable = require('immutable');
 
-export const createErrorActionObservable = (type) =>
-  (error) =>
+export const createErrorActionObservable = type =>
+  error =>
     Rx.Observable.of({
       type,
       payload: error,
@@ -76,7 +76,7 @@ export function createExecuteRequest(code) {
 export function createPagerActions(id, payloadStream) {
   return payloadStream.filter(p => p.source === 'page')
     .scan((acc, pd) => acc.push(Immutable.fromJS(pd)), new Immutable.List())
-    .map((pagerDatas) => updateCellPagers(id, pagerDatas));
+    .map(pagerDatas => updateCellPagers(id, pagerDatas));
 }
 
 /**
@@ -107,7 +107,7 @@ export function createSourceUpdateAction(id, setInputStream) {
 export function createCellAfterAction(id, setInputStream) {
   return setInputStream.filter(x => !x.replace)
     .pluck('text')
-    .map((text) => createCellAfter('code', id, text));
+    .map(text => createCellAfter('code', id, text));
 }
 
 /**
@@ -153,7 +153,7 @@ export function handleFormattableMessages(id, cellMessages) {
   return cellMessages
     .ofMessageType(['execute_result', 'display_data', 'stream', 'error'])
     .map(msgSpecToNotebookFormat)
-    .map((output) => ({ type: 'APPEND_OUTPUT', id, output }));
+    .map(output => ({ type: 'APPEND_OUTPUT', id, output }));
 }
 
 /**
@@ -212,7 +212,7 @@ export function executeCellStream(channels, id, code) {
   );
 
   // On subscription, send the message
-  return Rx.Observable.create(observer => {
+  return Rx.Observable.create((observer) => {
     const subscription = cellAction$.subscribe(observer);
     channels.shell.next(executeRequest);
     return subscription;
@@ -246,7 +246,7 @@ export function createExecuteCellStream(action$, store, source, id) {
  */
 export function executeCellEpic(action$, store) {
   return action$.ofType('EXECUTE_CELL')
-    .do(action => {
+    .do((action) => {
       if (!action.id) {
         throw new Error('execute cell needs an id');
       }
@@ -276,7 +276,7 @@ export const updateDisplayEpic = action$ =>
       channels.iopub.ofMessageType(['update_display_data'])
         .map(msgSpecToNotebookFormat)
         // Convert 'update_display_data' to 'display_data'
-        .map((output) => Object.assign({}, output, { output_type: 'display_data' }))
+        .map(output => Object.assign({}, output, { output_type: 'display_data' }))
         .map(output => ({ type: 'UPDATE_DISPLAY', output }))
         .catch(createErrorActionObservable(ERROR_UPDATE_DISPLAY))
     );

@@ -37,10 +37,10 @@ export function createMessage(msg_type, fields) {
  */
 export function childOf(parentMessage) {
   const parentMessageID = parentMessage.header.msg_id;
-  return Observable.create(subscriber => {
+  return Observable.create((subscriber) => {
     // since we're in an arrow function `this` is from the outer scope.
     // save our inner subscription
-    const subscription = this.subscribe(msg => {
+    const subscription = this.subscribe((msg) => {
       if (!msg.parent_header || !msg.parent_header.msg_id) {
         subscriber.error(new Error('no parent_header.msg_id on message'));
         return;
@@ -67,10 +67,10 @@ export function childOf(parentMessage) {
  * @return {Observable}                 the resulting observable
  */
 export function ofMessageType(messageTypes) {
-  return Observable.create(subscriber => {
+  return Observable.create((subscriber) => {
     // since we're in an arrow function `this` is from the outer scope.
     // save our inner subscription
-    const subscription = this.subscribe(msg => {
+    const subscription = this.subscribe((msg) => {
       if (!msg.header || !msg.header.msg_type) {
         subscriber.error(new Error('no header.msg_type on message'));
         return;

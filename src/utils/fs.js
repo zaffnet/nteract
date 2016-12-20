@@ -4,8 +4,8 @@ import * as fs from 'fs';
 export const filesystem = fs;
 const mkdirp = require('mkdirp');
 
-export const unlinkObservable = (path) =>
-  Rx.Observable.create(observer => {
+export const unlinkObservable = path =>
+  Rx.Observable.create((observer) => {
     if (filesystem.existsSync(path)) {
       filesystem.unlink(path, (error) => {
         if (error) {

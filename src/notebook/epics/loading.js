@@ -13,7 +13,7 @@ export const LOAD = 'LOAD';
 export const SET_NOTEBOOK = 'SET_NOTEBOOK';
 export const NEW_NOTEBOOK = 'NEW_NOTEBOOK';
 
-export const load = (filename) => ({ type: LOAD, filename });
+export const load = filename => ({ type: LOAD, filename });
 
 export const newNotebook = (kernelSpecName, cwd) => ({
   type: NEW_NOTEBOOK,
@@ -65,7 +65,7 @@ export const convertRawNotebook = (filename, data) => ({
   */
 export const loadEpic = actions =>
   actions.ofType(LOAD)
-    .do(action => {
+    .do((action) => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
         throw new Error('load needs a filename');
@@ -74,14 +74,14 @@ export const loadEpic = actions =>
     // Switch map since we want the last load request to be the lead
     .switchMap(action =>
       readFileObservable(action.filename)
-        .map((data) => convertRawNotebook(action.filename, data))
+        .map(data => convertRawNotebook(action.filename, data))
         .flatMap(({ filename, notebook }) =>
           Observable.of(
             notebookLoaded(filename, notebook),
             extractNewKernel(filename, notebook),
           )
         )
-        .catch((err) =>
+        .catch(err =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
     );
