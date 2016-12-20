@@ -55,6 +55,7 @@
     "coverage": "nyc report --reporter=text-lcov > coverage/lcov.info",
     "pack": "npm install && npm run clean && npm run build && build --dir",
     "dist": "npm install && npm run clean && npm run build && build",
+    "dist:all": "npm run dist -- -mlw",
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js"
   },
@@ -150,7 +151,7 @@
     "chai-immutable": "^1.6.0",
     "cross-env": "^3.1.3",
     "electron": "1.4.12",
-    "electron-builder": "^10.2.0",
+    "electron-builder": "^10.9.2",
     "electron-mocha": "^3.2.0",
     "enzyme": "^2.6.0",
     "esdoc": "^0.4.8",

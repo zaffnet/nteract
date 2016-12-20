@@ -105,7 +105,7 @@ And then opening `docs/index.html` in your favorite browser.
 
 > I want to debug redux actions and state changes.
 
--  Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by spawning the application with `npm run spawn:debug`. 
+-  Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by spawning the application with `npm run spawn:debug`.
 
 ## For maintainers: Creating a release
 
@@ -122,12 +122,16 @@ npm publish
 
 It is recommended to run `npm run reinstall` before packaging a release.
 
-To package a release run:
+To package a release for your current platform run:
 ```
 npm run dist
 ```
 
-This needs to be done on every platform we like to ship.
+To package a release for all platforms run:
+```
+npm run dist:all
+```
+Make sure you have the [required dependencies](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build) for a multi platform build installed.
 
 The OS X release has to be signed with an Apple developer key. Currently only
 Kyle (@rgbkrk) has this set up.
