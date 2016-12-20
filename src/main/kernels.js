@@ -16,7 +16,7 @@ export function ipyKernelTryObservable(env) {
   return spawn(executable, ['-m', 'ipykernel', '--version'], { split: true })
     .filter(x => x.source && x.source === 'stdout')
     .mapTo(env)
-    .catch(err => Rx.Observable.empty());
+    .catch(() => Rx.Observable.empty());
 }
 
 /**
@@ -58,7 +58,6 @@ export function createKernelSpecsFromEnvs(envs) {
   const languageKey = 'py'; // or r
 
   const languageExe = 'bin/python';
-  const jupyterBin = 'bin/jupyter';
 
   const langEnvs = {};
 

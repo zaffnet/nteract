@@ -127,7 +127,7 @@ export function commActionObservable(newKernelAction) {
  * @param  {redux.Store} store   the redux store
  * @return {ActionsObservable}         Comm actions
  */
-export const commListenEpic = (action$, store) =>
+export const commListenEpic = (action$) =>
   action$.ofType(NEW_KERNEL)
     // We have a new channel
     .switchMap(commActionObservable)

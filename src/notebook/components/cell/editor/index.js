@@ -26,7 +26,7 @@ import 'codemirror/mode/markdown/markdown';
 
 import './codemirror-ipython';
 
-import { codeComplete, pick, formChangeObject } from './complete';
+import { codeComplete, pick } from './complete';
 
 import { focusCell, focusCellEditor, updateCellSource } from '../../../actions';
 

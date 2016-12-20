@@ -6,10 +6,8 @@ import {
   createCellAfter,
   updateCellExecutionCount,
   updateCellSource,
-  updateCellOutputs,
   updateCellPagers,
   updateCellStatus,
-  executeCell,
   clearOutputs,
 } from '../actions';
 
@@ -18,7 +16,6 @@ import {
   REMOVE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
-  EXECUTE_CELL,
   ERROR_UPDATE_DISPLAY,
 } from '../constants';
 

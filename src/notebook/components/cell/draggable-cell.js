@@ -3,7 +3,6 @@
 import React from 'react';
 import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragSource, DropTarget } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
 
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 

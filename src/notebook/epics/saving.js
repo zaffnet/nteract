@@ -3,14 +3,11 @@ import { writeFileObservable } from '../../utils/fs';
 import {
   SAVE,
   SAVE_AS,
-  CHANGE_FILENAME,
-  DONE_SAVING,
 } from '../constants';
 
 import {
   changeFilename,
   save,
-  saveAs,
   doneSaving,
 } from '../actions';
 

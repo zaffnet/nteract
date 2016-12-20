@@ -1,6 +1,5 @@
 /* @flow */
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const vegaEmbed = require('vega-embed');
 
@@ -18,7 +17,7 @@ type EmbedProps = {
   renderedCallback: (err: any, result: any) => any,
 };
 
-const defaultCallback = (err: any, result: any): any => {};
+const defaultCallback = (): any => {};
 
 function embed(el: HTMLElement, spec: Object, mode: string, cb: (err: any, result: any) => any) {
   const embedSpec = {

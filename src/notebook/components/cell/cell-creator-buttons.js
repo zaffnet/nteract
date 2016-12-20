@@ -37,7 +37,7 @@ export class CellCreatorButtons extends React.Component {
     this.mergeCell = this.mergeCell.bind(this);
   }
 
-  shouldComponentUpdate(p: Props, s: any): boolean {
+  shouldComponentUpdate(): boolean {
     return false;
   }
 

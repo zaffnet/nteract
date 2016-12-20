@@ -126,7 +126,7 @@ export function createSplashSubscriber() {
 
 const appAndKernelSpecsReady = Rx.Observable.zip(fullAppReady$, kernelSpecsPromise);
 
-const splashSubscription = electronReady$
+electronReady$
   // TODO: Take until first window is shown
   .takeUntil(appAndKernelSpecsReady)
   .subscribe(createSplashSubscriber());
@@ -138,7 +138,7 @@ function closeAppOnNonDarwin() {
   }
 }
 const windowAllClosed = Rx.Observable.fromEvent(app, 'window-all-closed');
-const windowClosedSubscription = windowAllClosed
+windowAllClosed
   .skipUntil(appAndKernelSpecsReady)
   .subscribe(closeAppOnNonDarwin);
 

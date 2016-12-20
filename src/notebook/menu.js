@@ -6,13 +6,6 @@ import {
 
 import * as path from 'path';
 
-import { tildify } from './native-window';
-
-import {
-  PUBLISH_USER_GIST,
-  PUBLISH_ANONYMOUS_GIST,
-} from './constants';
-
 import {
   load,
   newNotebook,
@@ -32,8 +25,6 @@ import {
   cutCell,
   pasteCell,
   createCellAfter,
-  setAnonGithub,
-  setUserGithub,
   setGithubToken,
   changeInputVisibility,
   setTheme,
@@ -47,8 +38,6 @@ import {
   cwdKernelFallback,
 } from './path';
 
-const BrowserWindow = remote.BrowserWindow;
-
 export function dispatchSaveAs(store, evt, filename) {
   const state = store.getState();
   const notebook = state.document.get('notebook');
@@ -57,7 +46,7 @@ export function dispatchSaveAs(store, evt, filename) {
 
 const dialog = remote.dialog;
 
-export function showSaveAsDialog(defaultPath) {
+export function showSaveAsDialog() {
   return new Promise((resolve) => {
     const opts = Object.assign({
       title: 'Save Notebook',
@@ -78,7 +67,6 @@ export function triggerWindowRefresh(store, filename) {
     return;
   }
   const state = store.getState();
-  const executionState = state.app.get('executionState');
   const notebook = state.document.get('notebook');
   store.dispatch(saveAs(filename, notebook));
 }

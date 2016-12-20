@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import TextDisplay from './text';
