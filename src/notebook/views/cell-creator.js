@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import throttle from 'lodash.throttle';
+import { throttle } from 'lodash';
 
 declare type CellCreatorProps = {|
   above: boolean,
