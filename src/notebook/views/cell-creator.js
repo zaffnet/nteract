@@ -15,7 +15,11 @@ type State = {|
 
 const renderActionButtons = ({ above, createCell, mergeCell }: CellCreatorProps) => (
   <div className="cell-creator">
-    <button onClick={() => createCell('markdown')} title="create text cell" className="add-text-cell">
+    <button
+      onClick={() => createCell('markdown')}
+      title="create text cell"
+      className="add-text-cell"
+    >
       <span className="octicon octicon-markdown" />
     </button>
     <button onClick={() => createCell('code')} title="create code cell" className="add-code-cell">

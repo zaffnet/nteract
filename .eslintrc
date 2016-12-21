@@ -19,6 +19,7 @@
     "jsx-a11y/no-static-element-interactions": [0],
     "react/require-extension": "off",
     "comma-dangle": [0],
+    "no-unused-expressions": [0, { allowTernary: true }],
     "react/jsx-filename-extension": "off",
     "import/extensions": [0, { "js": "never", "jsx": "never"}],
     "max-len": [

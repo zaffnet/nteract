@@ -20,7 +20,6 @@ class CellCreator extends Component {
 
   constructor(): void {
     super();
-
     this.createCell = this.createCell.bind(this);
     this.mergeCell = this.mergeCell.bind(this);
   }
@@ -33,11 +32,7 @@ class CellCreator extends Component {
       return;
     }
 
-    if (above) {
-      dispatch(createCellBefore(type, id));
-    } else {
-      dispatch(createCellAfter(type, id));
-    }
+    above ? dispatch(createCellBefore(type, id)) : dispatch(createCellAfter(type, id));
   }
 
   mergeCell(): void {
