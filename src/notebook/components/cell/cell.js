@@ -1,6 +1,5 @@
 /* @flow */
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import CodeCell from './code-cell';
@@ -34,10 +33,9 @@ type State = {
   hoverCell: boolean,
 }
 
-export class Cell extends React.Component {
+export class Cell extends React.PureComponent {
   props: CellProps;
   state: State;
-  shouldComponentUpdate: (p: CellProps, s: State) => boolean;
   selectCell: () => void;
   focusAboveCell: () => void;
   focusBelowCell: () => void;
@@ -51,7 +49,6 @@ export class Cell extends React.Component {
 
   constructor(): void {
     super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.selectCell = this.selectCell.bind(this);
     this.focusCellEditor = this.focusCellEditor.bind(this);
     this.focusAboveCell = this.focusAboveCell.bind(this);

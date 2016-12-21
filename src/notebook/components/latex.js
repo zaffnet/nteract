@@ -1,6 +1,5 @@
 /* @flow */
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { typesetMath } from 'mathjax-electron';
 
 type Props = {
@@ -15,15 +14,9 @@ function isMathJaxOkYet(): boolean {
                                 && window.MathJax.Hub.Queue;
 }
 
-export default class LatexRenderer extends React.Component {
+export default class LatexRenderer extends React.PureComponent {
   props: Props;
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
   rendered: HTMLElement;
-
-  constructor(): void {
-    super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-  }
 
   componentDidMount(): void {
     if (isMathJaxOkYet()) typesetMath(this.rendered);

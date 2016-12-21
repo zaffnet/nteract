@@ -1,9 +1,6 @@
 // @flow
 import React from 'react';
-
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
-
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import { transforms, displayOrder } from '../../transforms';
 
@@ -20,9 +17,8 @@ type Props = {
 
 const DEFAULT_SCROLL_HEIGHT = 600;
 
-export default class Display extends React.Component {
+export default class Display extends React.PureComponent {
   props: Props;
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
   recomputeStyle: () => void;
   el: HTMLElement;
 
@@ -36,7 +32,6 @@ export default class Display extends React.Component {
   constructor() {
     super();
     this.recomputeStyle = this.recomputeStyle.bind(this);
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
   }
 
   componentDidMount() {

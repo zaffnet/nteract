@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* @flow */
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragDropContext as dragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { connect } from 'react-redux';
@@ -86,9 +85,8 @@ const mapStateToProps = (state: Object) => ({
   executionState: state.app.get('executionState'),
 });
 
-export class Notebook extends React.Component {
+export class Notebook extends React.PureComponent {
   props: Props;
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
   createCellElement: (s: string) => ?React.Element<any>;
   createStickyCellElement: (s: string) => ?React.Element<any>;
   keyDown: (e: KeyboardEvent) => void;
@@ -109,7 +107,6 @@ export class Notebook extends React.Component {
 
   constructor(): void {
     super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.createCellElement = this.createCellElement.bind(this);
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);

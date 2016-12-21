@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import CellCreatorButtons from './cell-creator-buttons';
 
@@ -13,17 +12,15 @@ type State = {
     show: boolean,
 };
 
-export default class CellCreator extends React.Component {
+export default class CellCreator extends React.PureComponent {
   props: Props;
   state: State;
-  shouldComponentUpdate: (p: Props, s: State) => boolean;
   setHoverElement: (el: HTMLElement) => void;
   updateVisibility: (mouseEvent: MouseEvent) => void;
   hoverElement: Object;
 
   constructor(): void {
     super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.setHoverElement = this.setHoverElement.bind(this);
     this.updateVisibility = this.updateVisibility.bind(this);
   }
