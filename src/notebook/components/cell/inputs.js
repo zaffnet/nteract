@@ -6,17 +6,14 @@ type Props = {
   running: boolean,
 };
 
-export default class Inputs extends React.PureComponent {
-  props: Props;
+export default function Inputs(props: Props): ?React.Element<any> {
+  const { executionCount, running } = props;
+  const count = !executionCount ? ' ' : executionCount;
+  const input = running ? '*' : count;
 
-  render(): ?React.Element<any> {
-    const { executionCount, running } = this.props;
-    const count = !executionCount ? ' ' : executionCount;
-    const input = running ? '*' : count;
-    return (
-      <div className="prompt">
-        [{input}]
-      </div>
-    );
-  }
+  return (
+    <div className="prompt">
+      [{input}]
+    </div>
+  );
 }
