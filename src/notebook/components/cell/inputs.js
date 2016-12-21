@@ -1,20 +1,13 @@
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 type Props = {
   executionCount: any,
   running: boolean,
 };
 
-export default class Inputs extends React.Component {
-  props: Props
-  shouldComponentUpdate: (p: Props, s: void) => boolean;
-
-  constructor(): void {
-    super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-  }
+export default class Inputs extends React.PureComponent {
+  props: Props;
 
   render(): ?React.Element<any> {
     const { executionCount, running } = this.props;

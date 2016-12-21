@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
@@ -136,9 +135,8 @@ CM.keyMap.basic.Down = 'goLineDownOrEmit';
 CM.commands.goLineUpOrEmit = goLineUpOrEmit;
 CM.commands.goLineDownOrEmit = goLineDownOrEmit;
 
-export default class Editor extends React.Component {
+export default class Editor extends React.PureComponent {
   state: State;
-  shouldComponentUpdate: (p: Props, s: State) => boolean;
   onChange: (text: string) => void;
   onFocusChange: (focused: boolean) => void;
   hint: (editor: Object, cb: Function) => void;
@@ -167,7 +165,6 @@ export default class Editor extends React.Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onFocusChange = this.onFocusChange.bind(this);
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.hint = this.completions.bind(this);
     this.hint.async = true;
 

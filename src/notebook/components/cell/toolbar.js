@@ -1,7 +1,6 @@
 /* eslint class-methods-use-this: 0 */
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 
 import {
@@ -21,8 +20,7 @@ type Props = {
   type: string,
 }
 
-export default class Toolbar extends React.Component {
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
+export default class Toolbar extends React.PureComponent {
   removeCell: () => void;
   executeCell: () => void;
   clearOutputs: () => void;
@@ -39,7 +37,6 @@ export default class Toolbar extends React.Component {
 
   constructor(props: Props): void {
     super(props);
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.removeCell = this.removeCell.bind(this);
     this.executeCell = this.executeCell.bind(this);
     this.clearOutputs = this.clearOutputs.bind(this);

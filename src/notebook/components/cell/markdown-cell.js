@@ -2,7 +2,6 @@
 import React from 'react';
 import CommonMark from 'commonmark';
 import MarkdownRenderer from 'commonmark-react-renderer';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import Editor from './editor';
 import LatexRenderer from '../latex';
@@ -31,12 +30,11 @@ const renderer = new MarkdownRenderer();
 
 const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
-export default class MarkdownCell extends React.Component {
+export default class MarkdownCell extends React.PureComponent {
   state: State;
   openEditor: () => void;
   editorKeyDown: (e: Object) => void;
   renderedKeyDown: (e: Object) => boolean;
-  shouldComponentUpdate: (p: Props, s: State) => boolean;
   rendered: HTMLElement;
 
   static contextTypes = {
@@ -49,7 +47,6 @@ export default class MarkdownCell extends React.Component {
 
   constructor(props: Props): void {
     super(props);
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.state = {
       view: true,
       // HACK: We'll need to handle props and state change better here

@@ -1,7 +1,6 @@
 // @flow
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { DragSource, DropTarget } from 'react-dnd';
 
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
@@ -82,10 +81,9 @@ function collectTarget(connect: Object, monitor: Object): Object {
   };
 }
 
-class DraggableCell extends React.Component {
+class DraggableCell extends React.PureComponent {
   props: Props;
   state: State;
-  shouldComponentUpdate: (p: Props, s: State) => boolean;
   selectCell: () => void;
   el: HTMLElement;
 
@@ -95,7 +93,6 @@ class DraggableCell extends React.Component {
 
   constructor(): void {
     super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.selectCell = this.selectCell.bind(this);
   }
 

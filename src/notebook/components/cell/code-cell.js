@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Inputs from './inputs';
@@ -28,20 +27,14 @@ type Props = {
   tabSize: number,
 };
 
-class CodeCell extends React.Component {
+class CodeCell extends React.PureComponent {
   props: Props;
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
 
   static defaultProps = {
     pagers: new ImmutableList(),
     running: false,
     tabSize: 4,
   };
-
-  constructor(): void {
-    super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-  }
 
   isOutputHidden(): any {
     return this.props.cell.getIn(['metadata', 'outputHidden']);

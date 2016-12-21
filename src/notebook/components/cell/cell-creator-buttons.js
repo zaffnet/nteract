@@ -1,7 +1,6 @@
 /* eslint class-methods-use-this: 0 */
 // @flow
 import React from 'react';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 
 import {
@@ -16,9 +15,8 @@ type Props = {
   id: string,
 };
 
-export class CellCreatorButtons extends React.Component {
+export class CellCreatorButtons extends React.PureComponent {
   props: Props;
-  shouldComponentUpdate: (p: Props, s: any) => boolean;
   createCodeCell: (type: string) => void;
   createTextCell: (type: string) => void;
   createCell: (type: string) => void;
@@ -30,7 +28,6 @@ export class CellCreatorButtons extends React.Component {
 
   constructor(): void {
     super();
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
     this.createCodeCell = this.createCell.bind(this, 'code');
     this.createTextCell = this.createCell.bind(this, 'markdown');
     this.createCell = this.createCell.bind(this);

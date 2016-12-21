@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { shouldComponentUpdate } from 'react-addons-pure-render-mixin';
 
 import { Provider } from 'react-redux';
 
@@ -45,19 +44,15 @@ initNativeHandlers(store);
 initMenuHandlers(store);
 initGlobalHandlers(store);
 
-class App extends React.Component {
-  props: Object
-  state: Object
+class App extends React.PureComponent {
+  props: Object;
+  state: Object;
   notificationSystem: NotificationSystem;
-  shouldComponentUpdate: (p: Object, s: Object) => boolean
 
-  constructor(props): void {
-    super(props);
-    this.shouldComponentUpdate = shouldComponentUpdate.bind(this);
-  }
   componentDidMount(): void {
     store.dispatch(setNotificationSystem(this.notificationSystem));
   }
+
   render(): ?React.Element<any> { // eslint-disable-line class-methods-use-this
     return (
       <Provider store={store}>
