@@ -14,7 +14,8 @@ export default class StatusBar extends React.Component {
 
   shouldComponentUpdate(nextProps: Props): boolean {
     if (this.props.notebook !== nextProps.notebook ||
-        this.props.lastSaved !== nextProps.lastSaved) {
+        this.props.lastSaved !== nextProps.lastSaved ||
+        this.props.executionState !== nextProps.executionState) {
       return true;
     }
     return false;
