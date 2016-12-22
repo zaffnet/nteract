@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import _ from 'lodash';
+import { merge } from 'lodash';
 
 const vegaEmbed = require('vega-embed');
 
@@ -25,7 +25,7 @@ function embed(el: HTMLElement, spec: Object, mode: string, cb: (err: any, resul
   };
 
   if (mode === 'vega-lite') {
-    embedSpec.spec.config = _.merge({
+    embedSpec.spec.config = merge({
       cell: {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
