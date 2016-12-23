@@ -1,5 +1,5 @@
-// flow-typed signature: ed1bee84103bb41647d690454d292a89
-// flow-typed version: 94e9f7e0a4/moment_v2.x.x/flow_>=v0.28.x
+// flow-typed signature: 5a8ee19f7555d98a7d8a9a474dbb1f65
+// flow-typed version: e48a305256/moment_v2.x.x/flow_>=v0.28.x
 
 type moment$MomentOptions = {
   y?: number|string,
@@ -173,7 +173,7 @@ declare class moment$Moment {
   static min(...dates: Array<moment$Moment>): moment$Moment;
   static min(dates: Array<moment$Moment>): moment$Moment;
   add(value: number|moment$MomentDuration|moment$Moment|Object, unit?: string): this;
-  subtract(value: number|moment$MomentDuration|moment$Moment|string, unit?: string): this;
+  subtract(value: number|moment$MomentDuration|moment$Moment|string|Object, unit?: string): this;
   startOf(unit: string): this;
   endOf(unit: string): this;
   local(): this;
@@ -195,21 +195,22 @@ declare class moment$Moment {
   toJSON(): string;
   toISOString(): string;
   toObject(): moment$MomentObject;
-  isBefore(date: moment$Moment|string|number|Date|Array<number>): bool;
-  isSame(date: moment$Moment|string|number|Date|Array<number>): bool;
-  isAfter(date: moment$Moment|string|number|Date|Array<number>): bool;
-  isSameOrBefore(date: moment$Moment|string|number|Date|Array<number>): bool;
-  isSameOrAfter(date: moment$Moment|string|number|Date|Array<number>): bool;
+  isBefore(date?: moment$Moment|string|number|Date|Array<number>): bool;
+  isSame(date?: moment$Moment|string|number|Date|Array<number>): bool;
+  isAfter(date?: moment$Moment|string|number|Date|Array<number>): bool;
+  isSameOrBefore(date?: moment$Moment|string|number|Date|Array<number>): bool;
+  isSameOrAfter(date?: moment$Moment|string|number|Date|Array<number>): bool;
   isBetween(date: moment$Moment|string|number|Date|Array<number>): bool;
   isDST(): bool;
   isDSTShifted(): bool;
   isLeapYear(): bool;
   clone(): moment$Moment;
   static isMoment(obj: any): bool;
-  static isDatE(obj: any): bool;
-  static locale(locale: string, localeData?: Object): void;
-  static locale(locales: Array<string>): void;
-  locale(locale: string, customization?: Object|null): void;
+  static isDate(obj: any): bool;
+  static locale(locale: string, localeData?: Object): string;
+  static updateLocale(locale: string, localeData?: ?Object): void;
+  static locale(locales: Array<string>): string;
+  locale(locale: string, customization?: Object|null): moment$Moment;
   locale(): string;
   static months(): Array<string>;
   static monthsShort(): Array<string>;
