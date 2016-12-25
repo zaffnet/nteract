@@ -1,18 +1,13 @@
 [Desktop Entry]
-Comment=nteract: Interactive literate coding notebook
-Exec=/opt/nteract-0.0.15/nteract %U
+Comment=Interactive literate coding notebook
+Exec=nteract %U
 GenericName[en_US]=nteract
 GenericName=nteract
-Icon=/opt/nteract-0.0.15/resources/app/static/icon.png
+Icon=/opt/nteract/resources/app/static/icon.png
 MimeType=application/x-ipynb+json
-Name[en_US]=nteract
-Name=nteract
-Path=/opt/nteract-0.0.15/
+Name=Nteract
+Path=/opt/nteract/
 StartupNotify=true
 Terminal=false
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=
-X-KDE-SubstituteUID=false
-X-KDE-Username=
 Categories=Science;Development;
