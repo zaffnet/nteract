@@ -73,6 +73,10 @@
       "target": "nsis"
     },
     "linux": {
+      "maintainer": {
+        "name": "nteract",
+        "email": "nteract@sharklasers.com"
+      },
       "target": [
         "deb"
       ],
