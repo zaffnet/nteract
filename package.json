@@ -72,6 +72,12 @@
     "win": {
       "target": "nsis"
     },
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "desktop": "./static/nteract.desktop"
+    },
     "files": [
       "lib",
       "node_modules",
