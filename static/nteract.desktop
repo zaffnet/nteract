@@ -1,8 +1,7 @@
 [Desktop Entry]
 Comment=Interactive literate coding notebook
 Exec=nteract %U
-GenericName[en_US]=nteract
-GenericName=nteract
+GenericName=Nteract
 Icon=/opt/nteract/resources/app/static/icon.png
 MimeType=application/x-ipynb+json
 Name=Nteract
