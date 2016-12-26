@@ -91,7 +91,9 @@
         "Terminal": "false",
         "Type": "Application",
         "Categories": "Science;Development;"
-        }
+      },
+      "category": "science",
+      "packageCategory": "editors"
     },
     "files": [
       "lib",
