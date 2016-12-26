@@ -66,7 +66,7 @@ contains package metadata that is used by package managers such as `dpkg` and
 ```
 tar -xf data.tar.gz
 tar -xf control.tar.gz
-```ar
+```
 
 ### Linting .deb files
 
