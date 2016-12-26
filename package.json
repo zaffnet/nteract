@@ -80,7 +80,18 @@
       "target": [
         "deb"
       ],
-      "desktop": "./static/nteract.desktop"
+      "desktop": {
+        "Comment": "Interactive literate coding notebook",
+        "Exec": "/opt/nteract/nteract %U",
+        "Icon": "nteract",
+        "MimeType": "application/x-ipynb+json",
+        "Name": "nteract",
+        "Path": "/opt/nteract/",
+        "StartupNotify": "true",
+        "Terminal": "false",
+        "Type": "Application",
+        "Categories": "Science;Development;"
+        }
     },
     "files": [
       "lib",
