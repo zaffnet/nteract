@@ -1,10 +1,17 @@
 
 
 
-# Environment for Linux .deb packaging
+# Packaging for Linux
+
+links
+
+- [electron-builder documentation](https://github.com/electron-userland/electron-builder/wiki/Options#LinuxBuildOptions)
+- [original pull request](https://github.com/nteract/nteract/pull/1299#issuecomment-269238534)
+
+## Environment for .deb packaging
 
 This section contains notes made during the initial setup of the `.deb`
-packaging.
+packaging. Initially written for ubuntu 16.10.
 
 apt-get packages:
 
