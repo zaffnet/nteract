@@ -1,7 +1,7 @@
 
 
 
-# Environment for Linux .deb packagin
+# Environment for Linux .deb packaging
 
 This section contains notes made during the initial setup of the `.deb` packaging.
 
@@ -23,15 +23,15 @@ install the debian package using `dpkg` or by double-clicking on the file, eg:
 sudo dpkg -i dist/nteract_0.0.15_amd64.deb
 ```
 
-that's it. Nteract can be launched from the command line as `nteract` or via a graphical launher.
+that's it. nteract can be launched from the command line as `nteract` or via a graphical launcher.
 The mime-type `application/x-ipynb+json` is used to identify files that can be opened with nteract.
 
 
 ## Contents of the .deb
 
-Intalling the package will modify the following directories on the system:
+Installing the package will modify the following directories on the system:
 
-- `/opt/interact`
+- `/opt/nteract`
     - most of the package's resources will be here
     - Ubuntu would like this to be in `/usr/share/nteract` (`lintian` linter will complain)
 - `/usr/share/applications`
