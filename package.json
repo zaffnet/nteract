@@ -72,6 +72,26 @@
     "win": {
       "target": "nsis"
     },
+    "linux": {
+      "maintainer": "nteract contributors <jupyter@googlegroups.com>",
+      "target": [
+        "deb"
+      ],
+      "desktop": {
+        "Comment": "Interactive literate coding notebook",
+        "Exec": "/opt/nteract/nteract %U",
+        "Icon": "nteract",
+        "MimeType": "application/x-ipynb+json",
+        "Name": "nteract",
+        "Path": "/opt/nteract/",
+        "StartupNotify": "true",
+        "Terminal": "false",
+        "Type": "Application",
+        "Categories": "Science;Development;"
+      },
+      "category": "science",
+      "packageCategory": "editors"
+    },
     "files": [
       "lib",
       "node_modules",
