@@ -74,13 +74,17 @@
       ]
     },
     "win": {
-      "target": "nsis"
+      "target": [
+        "nsis",
+        "zip"
+      ]
     },
     "linux": {
       "maintainer": "nteract contributors <jupyter@googlegroups.com>",
       "target": [
         "deb",
-        "AppImage"
+        "AppImage",
+        "tar.gz"
       ],
       "desktop": {
         "Comment": "Interactive literate coding notebook",
