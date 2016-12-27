@@ -75,7 +75,8 @@
     "linux": {
       "maintainer": "nteract contributors <jupyter@googlegroups.com>",
       "target": [
-        "deb"
+        "deb",
+        "AppImage"
       ],
       "desktop": {
         "Comment": "Interactive literate coding notebook",
