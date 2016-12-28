@@ -139,6 +139,7 @@ export default class Editor extends React.PureComponent {
   state: State;
   onChange: (text: string) => void;
   onFocusChange: (focused: boolean) => void;
+  tabToSpaces: (editor: Object) => void;
   hint: (editor: Object, cb: Function) => void;
   theme: string|null;
   cursorBlinkRate: number;
@@ -165,6 +166,7 @@ export default class Editor extends React.PureComponent {
     };
     this.onChange = this.onChange.bind(this);
     this.onFocusChange = this.onFocusChange.bind(this);
+    this.tabToSpaces = this.tabToSpaces.bind(this);
     this.hint = this.completions.bind(this);
     this.hint.async = true;
 
