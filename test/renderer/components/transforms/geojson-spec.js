@@ -9,7 +9,7 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-import GeoJSONTransform from '../../../../src/notebook/components/transforms/geojson';
+import GeoJSONTransform, { getTheme } from '../../../../src/notebook/components/transforms/geojson';
 
 const geojson = Immutable.fromJS({
   "type": "FeatureCollection",
@@ -73,4 +73,10 @@ describe('GeoJSONTransform', () => {
     })
 
   });
+  it('picks an appropriate theme when unknown', function() {
+    expect(getTheme('light')).to.equal('light');
+    expect(getTheme('dark')).to.equal('dark');
+    expect(getTheme('nteract')).to.equal('light');
+    expect(getTheme()).to.equal('light');
+  })
 });

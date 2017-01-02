@@ -15,7 +15,7 @@ const MIMETYPE = 'application/geo+json';
 
 type TileTheme = 'dark' | 'light';
 
-function getTheme(theme : string = 'light'): TileTheme {
+export function getTheme(theme : string = 'light'): TileTheme {
   switch (theme) {
     case 'light':
     case 'dark':
