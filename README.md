@@ -61,7 +61,7 @@ python3 -m ipykernel install --user
 
 #### Install `nteract` in dev mode
 
-Requires [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node).
+Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-node).
 
 1. Fork this repo
 2. Clone it `git clone https://github.com/nteract/nteract`
