@@ -13,6 +13,18 @@ L.Icon.Default.imagePath = '../node_modules/leaflet/dist/images/';
 
 const MIMETYPE = 'application/geo+json';
 
+type TileTheme = 'dark' | 'light';
+
+export function getTheme(theme : string = 'light'): TileTheme {
+  switch (theme) {
+    case 'light':
+    case 'dark':
+      return theme;
+    default:
+      return 'light';
+  }
+}
+
 export class GeoJSONTransform extends React.Component {
   props: Props;
   MIMETYPE: string;
@@ -37,9 +49,11 @@ export class GeoJSONTransform extends React.Component {
     this.map = L.map(this.el);
     this.map.scrollWheelZoom.disable();
 
+    const theme = getTheme(this.props.theme);
+
     this.tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      id: `mapbox.${this.props.theme}`,
+      id: `mapbox.${theme}`,
     }).addTo(this.map);
 
     const geoJSON = this.props.data.toJS();
@@ -58,8 +72,7 @@ export class GeoJSONTransform extends React.Component {
 
   componentDidUpdate(prevProps: Props): void {
     if (prevProps.theme !== this.props.theme) {
-      const theme = this.props.theme === 'light' ||
-                    this.props.theme === 'dark' ? this.props.theme : 'light';
+      const theme = getTheme(this.props.theme);
       this.map.removeLayer(this.tileLayer);
       this.tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
