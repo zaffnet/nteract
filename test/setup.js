@@ -170,3 +170,9 @@ mock('spawnteract', {
     });
   },
 });
+
+mock('fs', {
+  unlinkSync: function(){},
+  unlink: function(){},
+  existsSync: function(){},
+});
