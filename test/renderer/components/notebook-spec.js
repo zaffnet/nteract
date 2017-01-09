@@ -157,29 +157,3 @@ describe('Notebook', () => {
     });
   });
 });
-
-describe('Notebook DnD', () => {
-  it('drag and drop can be tested', () => {
-    const TestNotebook = DragDropContext(TestBackend)(Notebook);
-
-    const component = mount(
-      <Provider store={dummyStore()}>
-        <TestNotebook
-          className='test'
-          notebook={dummyCommutable}
-          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
-          cellPagers={new Immutable.Map()}
-          cellStatuses={dummyCellStatuses}
-          stickyCells={(new Immutable.Map())}
-        />
-      </Provider>
-    );
-
-    console.log(component.find(DragDropContext).debug())
-
-    const manager = component.find(DragDropContext).get(0).getManager();
-    const backend = manager.getBackend();
-
-    // TODO: Write tests for cell drag and drop
-  })
-})
