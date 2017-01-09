@@ -362,6 +362,26 @@ describe('clearOutputs', () => {
     const outputs = state.document.getIn(['notebook', 'cellMap', id, 'outputs']);
     expect(outputs).to.equal(List.of());
   });
+  it('doesn\'t clear outputs on markdown cells', () => {
+    const originalState = {
+      document: initialDocument.set('notebook',
+        commutable.appendCell(dummyCommutable,
+          commutable.emptyMarkdownCell
+        )
+      )
+    };
+
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
+
+    const action = {
+      type: constants.CLEAR_OUTPUTS,
+      id,
+    };
+
+    const state = reducers(originalState, action);
+    const outputs = state.document.getIn(['notebook', 'cellMap', id, 'outputs']);
+    expect(outputs).to.be.undefined;
+  });
 });
 
 describe('newCellAfter', () => {
@@ -569,7 +589,7 @@ describe('clearOutputs', () => {
       document: monocellDocument,
     };
 
-    const id = originalState.document.getIn(['notebook', 'cellOrder']).first();
+    const id = originalState.document.getIn(['notebook', 'cellOrder']).last();
 
     const action = {
       type: constants.CLEAR_OUTPUTS,

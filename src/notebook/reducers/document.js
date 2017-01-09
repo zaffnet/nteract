@@ -65,11 +65,16 @@ export default handleActions({
   },
   [constants.CLEAR_OUTPUTS]: function clearOutputs(state, action) {
     const { id } = action;
+    const type = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
 
-    return cleanCellTransient(
-      state.setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List()),
-      id
-    );
+    if (type === 'code') {
+      return cleanCellTransient(
+        state.setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List()),
+        id
+      );
+    }
+
+    return state;
   },
   [constants.APPEND_OUTPUT]: function appendOutput(state, action) {
     const output = action.output;
