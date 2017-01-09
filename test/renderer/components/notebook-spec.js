@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { shallow, mount } from 'enzyme';
-
 import Immutable from 'immutable';
+import { Provider } from 'react-redux';
+import { shallow, mount, render } from 'enzyme';
 
 import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
 
@@ -52,16 +51,18 @@ describe('Notebook', () => {
   });
   it('implements the correct css spec', () => {
     const component = mount(
-      <Notebook
-        notebook={dummyCommutable}
-        transient={new Immutable.Map({cellMap: new Immutable.Map()})}
-        cellPagers={new Immutable.Map()}
-        cellStatuses={dummyCellStatuses}
-        stickyCells={new Immutable.Map()}
-        displayOrder={displayOrder.delete('text/html')}
-        transforms={transforms.delete('text/html')}
-        CellComponent={Cell}
-      />
+      <Provider store={dummyStore()}>
+        <Notebook
+          notebook={dummyCommutable}
+          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+          cellPagers={new Immutable.Map()}
+          cellStatuses={dummyCellStatuses}
+          stickyCells={new Immutable.Map()}
+          displayOrder={displayOrder.delete('text/html')}
+          transforms={transforms.delete('text/html')}
+          CellComponent={Cell}
+        />
+      </Provider>
     );
     expect(component.find('.notebook').length).to.be.above(0, '.notebook');
     expect(component.find('.notebook .cell').length).to.be.above(0, '.notebook .cell');
@@ -162,16 +163,21 @@ describe('Notebook DnD', () => {
     const TestNotebook = DragDropContext(TestBackend)(Notebook);
 
     const component = mount(
-      <TestNotebook
-        notebook={dummyCommutable}
-        transient={new Immutable.Map({cellMap: new Immutable.Map()})}
-        cellPagers={new Immutable.Map()}
-        cellStatuses={dummyCellStatuses}
-        stickyCells={(new Immutable.Map())}
-      />
+      <Provider store={dummyStore()}>
+        <TestNotebook
+          className='test'
+          notebook={dummyCommutable}
+          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+          cellPagers={new Immutable.Map()}
+          cellStatuses={dummyCellStatuses}
+          stickyCells={(new Immutable.Map())}
+        />
+      </Provider>
     );
 
-    const manager = component.get(0).getManager();
+    console.log(component.find(DragDropContext).debug())
+
+    const manager = component.find(DragDropContext).get(0).getManager();
     const backend = manager.getBackend();
 
     // TODO: Write tests for cell drag and drop

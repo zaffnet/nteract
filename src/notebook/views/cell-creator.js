@@ -26,7 +26,7 @@ const renderActionButtons = ({ above, createCell, mergeCell }: CellCreatorProps)
       <span className="octicon octicon-code" />
     </button>
     { above ? null :
-    <button onClick={() => mergeCell()} title="merge cells">
+    <button onClick={() => mergeCell()} title="merge cells" className="merge-cell">
       <span className="octicon octicon-arrow-up" />
     </button> }
   </div>
