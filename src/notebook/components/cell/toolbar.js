@@ -47,10 +47,6 @@ export default class Toolbar extends React.PureComponent {
     this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
   }
 
-  shouldComponentUpdate(): boolean {
-    return false;
-  }
-
   toggleStickyCell(): void {
     this.context.store.dispatch(toggleStickyCell(this.props.id));
   }
