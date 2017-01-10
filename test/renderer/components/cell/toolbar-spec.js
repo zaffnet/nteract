@@ -30,6 +30,26 @@ describe('Toolbar', () => {
     );
     expect(() => {toolbar.instance().clearOutputs()}).to.not.throw(Error);
   });
+  it('shows "convert to code cell" menu entry for markdown type', () => {
+    const toolbar = mount(
+      <Toolbar type={'markdown'} />
+    );
+    expect(toolbar.text()).to.contain('Convert to Code Cell');
+  });
+  it('shows "convert to markdown cell" menu entry for code type', () => {
+    const toolbar = mount(
+      <Toolbar type={'code'} />
+    );
+    expect(toolbar.text()).to.contain('Convert to Markdown Cell');
+  });
+  it('changes "Convert to ..." menu entry on type change', () => {
+    const toolbar = mount(
+      <Toolbar type={'code'} />
+    );
+    expect(toolbar.text()).to.contain('Convert to Markdown Cell');
+    toolbar.setProps({ type: 'markdown' });
+    expect(toolbar.text()).to.contain('Convert to Code Cell');
+  });
 });
 
 describe('Toolbar.executeCell', () => {
