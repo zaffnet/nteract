@@ -16,7 +16,7 @@ import {
 
 import Cell from './cell/cell';
 import DraggableCell from './cell/draggable-cell';
-import CellCreator from './cell/cell-creator';
+import CellCreator from '../providers/cell-creator';
 import StatusBar from './status-bar';
 import {
   focusNextCell,
