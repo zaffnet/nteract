@@ -76,7 +76,7 @@ export function newKernelObservable(kernelSpec, cwd) {
 
   return Rx.Observable.create((observer) => {
     launchSpec(spec, { cwd })
-      .then(c => {
+      .then((c) => {
         const { config, spawn, connectionFile } = c;
         const kernelSpecName = kernelSpec.name;
 
@@ -141,7 +141,7 @@ export const acquireKernelInfoEpic = action$ =>
 
 export const newKernelByNameEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL_BY_NAME)
-    .do(action => {
+    .do((action) => {
       if (!action.kernelSpecName) {
         throw new Error('newKernelByNameEpic requires a kernel name');
       }
@@ -158,7 +158,7 @@ export const newKernelByNameEpic = action$ =>
   */
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
-    .do(action => {
+    .do((action) => {
       if (!action.kernelSpec) {
         throw new Error('newKernel needs a kernelSpec');
       }

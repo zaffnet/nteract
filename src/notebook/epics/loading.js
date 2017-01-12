@@ -77,7 +77,7 @@ export const loadEpic = actions =>
     // Switch map since we want the last load request to be the lead
     .switchMap(action =>
       readFileObservable(action.filename)
-        .map((data) => convertRawNotebook(action.filename, data))
+        .map(data => convertRawNotebook(action.filename, data))
         .flatMap(({ filename, notebook }) => {
           const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
           return Observable.of(
@@ -88,7 +88,7 @@ export const loadEpic = actions =>
             newKernelByName(kernelSpecName, cwd),
           );
         })
-        .catch((err) =>
+        .catch(err =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
     );
