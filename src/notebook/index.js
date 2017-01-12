@@ -28,11 +28,11 @@ import {
 } from './records';
 
 const store = configureStore({
-  app: new AppRecord(),
-  metadata: new MetadataRecord(),
-  document: new DocumentRecord(),
-  comms: new CommsRecord(),
-  config: new ImmutableMap({
+  app: AppRecord(),
+  metadata: MetadataRecord(),
+  document: DocumentRecord(),
+  comms: CommsRecord(),
+  config: ImmutableMap({
     theme: 'light',
   }),
 }, reducers);

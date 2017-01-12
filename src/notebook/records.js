@@ -67,7 +67,32 @@ export type MarkdownCell = {
 
 export type Cell = MarkdownCell | CodeCell;
 
+export type KernelspecMetadata = {
+  name: string,
+  display_name: string,
+}
+
+export type LanguageInfoMetadata = {
+  name: string,
+  codemirror_mode?: string | ImmutableJSONMap,
+  file_extension?: string,
+  mimetype?: string,
+  pygments_lexer?: string,
+}
+
 export type NotebookMetadata = {
+  kernelspec: KernelspecMetadata,
+  language_info: LanguageInfoMetadata,
+  // We're not currently using orig_nbformat in nteract. Based on the comment
+  // in the schema, I'm not sure we should:
+  //
+  //   > Original notebook format (major number) before converting the notebook between versions. This should never be written to a file
+  //
+  //   from https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L58-L61
+  //
+  // It seems like an intermediate/in-memory representation that bled its way into the spec
+  //
+  // orig_nbformat?: number,
 }
 
 export type Notebook = {
@@ -91,6 +116,17 @@ export const AppRecord = Immutable.Record({
   configLastSaved: null,
   error: null,
 });
+
+export type Document = {
+  notebook: Notebook,
+  transient: Immutable.Map<string, any>,
+  cellPagers: any,
+  outputStatuses: Immutable.Map<string, any>,
+  stickyCells: Immutable.Set<any>,
+  editorFocused: any,
+  cellFocused: any,
+  copied: Immutable.Map<any, any>,
+}
 
 export const DocumentRecord = Immutable.Record({
   notebook: null,
