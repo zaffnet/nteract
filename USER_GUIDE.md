@@ -77,6 +77,10 @@ A text cell can be created by accessing the menu,
 
 A text cell can also be created by clicking **M** on the cell hover menu.
 
+Text cells support the [commonmark spec](http://commonmark.org/).
+
+Note: commonmark does not include the GFM (Github flavored markdown) [table syntax](https://help.github.com/articles/organizing-information-with-tables/).
+
 ### Running a Cell
 A cell can be run from the keyboard by pressing *Shift ⏎* or by selecting the ▶︎ button from the cell toolbar.
 
