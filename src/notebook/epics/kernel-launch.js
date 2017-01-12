@@ -90,10 +90,7 @@ export function newKernelObservable(kernelSpec, cwd) {
           control: createControlSubject(identity, config),
           stdin: createStdinSubject(identity, config),
         };
-        observer.next(setNotebookKernelInfo({
-          name: kernelSpecName,
-          spec: kernelSpec,
-        }));
+        observer.next(setNotebookKernelInfo(kernelSpec));
 
         observer.next({
           type: NEW_KERNEL,
