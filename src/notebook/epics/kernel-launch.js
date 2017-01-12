@@ -1,6 +1,8 @@
 import Rx from 'rxjs/Rx';
 
-import { launch } from 'spawnteract';
+import { launchSpec } from 'spawnteract';
+
+import { find } from 'kernelspecs';
 
 import * as uuid from 'uuid';
 
@@ -22,11 +24,13 @@ import {
 import {
   setExecutionState,
   setNotebookKernelInfo,
+  newKernel,
 } from '../actions';
 
 import {
   NEW_KERNEL,
   LAUNCH_KERNEL,
+  LAUNCH_KERNEL_BY_NAME,
   SET_LANGUAGE_INFO,
   ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
@@ -67,11 +71,14 @@ export function acquireKernelInfo(channels) {
   * @param  {String}  kernelSpecName  The name of the kernel to launch
   * @param  {String}  cwd The working directory to launch the kernel in
   */
-export function newKernelObservable(kernelSpecName, cwd) {
+export function newKernelObservable(kernelSpec, cwd) {
+  const spec = kernelSpec.spec;
+
   return Rx.Observable.create((observer) => {
-    launch(kernelSpecName, { cwd })
+    launchSpec(spec, { cwd })
       .then((c) => {
-        const { config, spawn, connectionFile, kernelSpec } = c;
+        const { config, spawn, connectionFile } = c;
+        const kernelSpecName = kernelSpec.name;
 
         const identity = uuid.v4();
         // TODO: I'm realizing that we could trigger on when the underlying sockets
@@ -83,10 +90,7 @@ export function newKernelObservable(kernelSpecName, cwd) {
           control: createControlSubject(identity, config),
           stdin: createStdinSubject(identity, config),
         };
-        observer.next(setNotebookKernelInfo({
-          name: kernelSpecName,
-          spec: kernelSpec,
-        }));
+        observer.next(setNotebookKernelInfo(kernelSpec));
 
         observer.next({
           type: NEW_KERNEL,
@@ -132,6 +136,18 @@ export const acquireKernelInfoEpic = action$ =>
       return acquireKernelInfo(action.channels);
     });
 
+export const newKernelByNameEpic = action$ =>
+  action$.ofType(LAUNCH_KERNEL_BY_NAME)
+    .do((action) => {
+      if (!action.kernelSpecName) {
+        throw new Error('newKernelByNameEpic requires a kernel name');
+      }
+    })
+    .mergeMap(action =>
+      find(action.kernelSpecName)
+        .then(spec => newKernel(spec, action.cwd))
+    );
+
 /**
   * Launches a new kernel.
   *
@@ -140,13 +156,13 @@ export const acquireKernelInfoEpic = action$ =>
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
     .do((action) => {
-      if (!action.kernelSpecName) {
-        throw new Error('newKernel needs a kernelSpecName');
+      if (!action.kernelSpec) {
+        throw new Error('newKernel needs a kernelSpec');
       }
-      ipc.send('nteract:ping:kernel', action.kernelSpecName);
+      ipc.send('nteract:ping:kernel', action.kernelSpec);
     })
     .mergeMap(action =>
-      newKernelObservable(action.kernelSpecName, action.cwd)
+      newKernelObservable(action.kernelSpec, action.cwd)
     )
     .catch(error => Rx.Observable.of({
       type: ERROR_KERNEL_LAUNCH_FAILED,

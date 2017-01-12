@@ -1,6 +1,6 @@
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
 import { readFileObservable } from '../../utils/fs';
-import { newKernel } from '../actions';
+import { newKernelByName, newKernel } from '../actions';
 
 const Rx = require('rxjs/Rx');
 const commutable = require('commutable');
@@ -15,9 +15,9 @@ export const NEW_NOTEBOOK = 'NEW_NOTEBOOK';
 
 export const load = filename => ({ type: LOAD, filename });
 
-export const newNotebook = (kernelSpecName, cwd) => ({
+export const newNotebook = (kernelSpec, cwd) => ({
   type: NEW_NOTEBOOK,
-  kernelSpecName,
+  kernelSpec,
   cwd: cwd || process.cwd(),
 });
 
@@ -38,11 +38,14 @@ export const notebookLoaded = (filename, notebook) => ({
   */
 export const extractNewKernel = (filename, notebook) => {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
-  const kernelName = notebook.getIn(
+  const kernelSpecName = notebook.getIn(
     ['metadata', 'kernelspec', 'name'], notebook.getIn(
       ['metadata', 'language_info', 'name'],
         'python3'));
-  return newKernel(kernelName, cwd);
+  return {
+    cwd,
+    kernelSpecName,
+  };
 };
 
 /**
@@ -75,12 +78,16 @@ export const loadEpic = actions =>
     .switchMap(action =>
       readFileObservable(action.filename)
         .map(data => convertRawNotebook(action.filename, data))
-        .flatMap(({ filename, notebook }) =>
-          Observable.of(
+        .flatMap(({ filename, notebook }) => {
+          const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
+          return Observable.of(
             notebookLoaded(filename, notebook),
-            extractNewKernel(filename, notebook),
-          )
-        )
+            // Find kernel based on kernel name
+            // NOTE: Conda based kernels and remote kernels will need
+            // special handling
+            newKernelByName(kernelSpecName, cwd),
+          );
+        })
         .catch(err =>
           Observable.of({ type: 'ERROR', payload: err, error: true })
         )
@@ -100,6 +107,6 @@ export const newNotebookEpic = action$ =>
           type: 'SET_NOTEBOOK',
           notebook: starterNotebook,
         },
-        newKernel(action.kernelSpecName, action.cwd),
+        newKernel(action.kernelSpec, action.cwd),
       )
     );

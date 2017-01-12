@@ -29,8 +29,18 @@ describe('setExecutionState', () => {
 
 describe('newKernel', () => {
   it('creates a LAUNCH_KERNEL action', () => {
-    expect(actions.newKernel('python2', '.')).to.deep.equal({
+    expect(actions.newKernel({ spec: 'hokey' }, '.')).to.deep.equal({
       type: constants.LAUNCH_KERNEL,
+      kernelSpec: { spec: 'hokey' },
+      cwd: '.',
+    })
+  });
+});
+
+describe('newKernelByName', () => {
+  it('creates a LAUNCH_KERNEL_BY_NAME action', () => {
+    expect(actions.newKernelByName('python2', '.')).to.deep.equal({
+      type: constants.LAUNCH_KERNEL_BY_NAME,
       kernelSpecName: 'python2',
       cwd: '.',
     })

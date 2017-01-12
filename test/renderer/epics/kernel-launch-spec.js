@@ -14,6 +14,7 @@ import {
   watchExecutionStateEpic,
   newKernelObservable,
   newKernelEpic,
+  newKernelByNameEpic,
 } from '../../../src/notebook/epics/kernel-launch';
 
 import {
@@ -138,7 +139,7 @@ describe('newKernelEpic', () => {
   it('calls newKernelObservable if given the correct action', (done) => {
     const input$ = Rx.Observable.of({
       type: constants.LAUNCH_KERNEL,
-      kernelSpecName: 'kernelSpecName',
+      kernelSpec: { spec: 'hokey' },
       cwd: '~',
     });
     let actionBuffer = [];
@@ -149,6 +150,27 @@ describe('newKernelEpic', () => {
       (err) => expect.fail(err, null),
       () => {
         expect(actionBuffer).to.deep.equal([constants.SET_KERNEL_INFO, constants.NEW_KERNEL]); // ;
+        done();
+      },
+    )
+  })
+})
+
+describe('newKernelByNameEpic', () => {
+  it('creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action', (done) => {
+    const input$ = Rx.Observable.of({
+      type: constants.LAUNCH_KERNEL_BY_NAME,
+      kernelSpecName: 'python2.8',
+      cwd: '~',
+    });
+    let actionBuffer = [];
+    const action$ = new ActionsObservable(input$);
+    const obs = newKernelByNameEpic(action$);
+    obs.subscribe(
+      (x) => actionBuffer.push(x.type),
+      (err) => expect.fail(err, null),
+      () => {
+        expect(actionBuffer).to.deep.equal([constants.LAUNCH_KERNEL]); // ;
         done();
       },
     )

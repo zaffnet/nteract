@@ -53,10 +53,10 @@ export function launch(filename) {
 }
 launchIpynb = launch;
 
-export function launchNewNotebook(kernelSpecName) {
+export function launchNewNotebook(kernelSpec) {
   const win = launch();
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('main:new', kernelSpecName);
+    win.webContents.send('main:new', kernelSpec);
   });
   return win;
 }

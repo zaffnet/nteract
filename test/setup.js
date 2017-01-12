@@ -149,8 +149,14 @@ mock('react-notification-system', function () {
   };
 });
 
+mock('kernelspecs', {
+  'find': function(kernelName) {
+    return Promise.resolve({ name: kernelName });
+  }
+})
+
 mock('spawnteract', {
-  'launch': function(kernelSpec, config) {
+  'launchSpec': function(kernelSpec, config) {
     function writeConnectionFile(config) { return new Promise((resolve, reject) => {
         try {
          resolve({config, connectionFile: 'connectionFile'});
@@ -165,7 +171,26 @@ mock('spawnteract', {
         spawn: 'runningKernel',
         connectionFile: c.connectionFile,
         config: c.config,
-        kernelSpec,
+        kernelSpec: kernelSpec.name,
+      };
+    });
+  },
+  'launch': function(kernelSpecName, config) {
+    function writeConnectionFile(config) { return new Promise((resolve, reject) => {
+        try {
+         resolve({config, connectionFile: 'connectionFile'});
+        }
+        catch (err) {
+          reject(err);
+        }
+      })
+    }
+    return writeConnectionFile('config').then((c) => {
+      return {
+        spawn: 'runningKernel',
+        connectionFile: c.connectionFile,
+        config: c.config,
+        kernelSpecName,
       };
     });
   },

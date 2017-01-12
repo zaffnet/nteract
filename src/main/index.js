@@ -45,8 +45,8 @@ const notebooks = argv._
   .filter(x => /(.ipynb)$/.test(x))
   .filter(x => existsSync(resolve(x)));
 
-ipc.on('new-kernel', (event, newKernel) => {
-  launchNewNotebook(newKernel);
+ipc.on('new-kernel', (event, k) => {
+  launchNewNotebook(k);
 });
 
 ipc.on('open-notebook', (event, filename) => {
@@ -177,7 +177,7 @@ openFile$
           kernel = specList[0];
         }
 
-        launchNewNotebook(kernel);
+        launchNewNotebook(specs[kernel]);
       }
       );
     } else {
