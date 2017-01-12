@@ -6,6 +6,8 @@ import { installShellCommand } from './cli';
 
 const kernelspecs = require('kernelspecs');
 
+const _ = require('lodash');
+
 function getExampleNotebooksDir() {
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(path.join(__dirname, '..', '..', 'example-notebooks'));
@@ -492,7 +494,7 @@ export function loadFullMenu() {
     function generateSubMenu(kernelName) {
       return {
         label: kernelSpecs[kernelName].spec.display_name,
-        click: createSender('menu:new-kernel', kernelName),
+        click: createSender('menu:new-kernel-by-kernelspec', kernelSpecs[kernelName])
       };
     }
 
@@ -501,7 +503,7 @@ export function loadFullMenu() {
     const newNotebookItems = Object.keys(kernelSpecs)
       .map(kernelName => ({
         label: kernelSpecs[kernelName].spec.display_name,
-        click: () => launchNewNotebook(kernelName),
+        click: () => launchNewNotebook(kernelSpecs[kernelName]),
       }));
 
     const languageMenu = {

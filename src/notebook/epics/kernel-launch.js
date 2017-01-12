@@ -1,6 +1,6 @@
 import Rx from 'rxjs/Rx';
 
-import { launch } from 'spawnteract';
+import { launchSpec } from 'spawnteract';
 
 import * as uuid from 'uuid';
 
@@ -67,11 +67,14 @@ export function acquireKernelInfo(channels) {
   * @param  {String}  kernelSpecName  The name of the kernel to launch
   * @param  {String}  cwd The working directory to launch the kernel in
   */
-export function newKernelObservable(kernelSpecName, cwd) {
+export function newKernelObservable(kernelSpec, cwd) {
+  const spec = kernelSpec.spec;
+
   return Rx.Observable.create((observer) => {
-    launch(kernelSpecName, { cwd })
-      .then((c) => {
-        const { config, spawn, connectionFile, kernelSpec } = c;
+    launchSpec(spec, { cwd })
+      .then(c => {
+        const { config, spawn, connectionFile } = c;
+        const kernelSpecName = kernelSpec.name;
 
         const identity = uuid.v4();
         // TODO: I'm realizing that we could trigger on when the underlying sockets
@@ -139,14 +142,14 @@ export const acquireKernelInfoEpic = action$ =>
   */
 export const newKernelEpic = action$ =>
   action$.ofType(LAUNCH_KERNEL)
-    .do((action) => {
-      if (!action.kernelSpecName) {
-        throw new Error('newKernel needs a kernelSpecName');
+    .do(action => {
+      if (!action.kernelSpec) {
+        throw new Error('newKernel needs a kernelSpec');
       }
-      ipc.send('nteract:ping:kernel', action.kernelSpecName);
+      ipc.send('nteract:ping:kernel', action.kernelSpec);
     })
     .mergeMap(action =>
-      newKernelObservable(action.kernelSpecName, action.cwd)
+      newKernelObservable(action.kernelSpec, action.cwd)
     )
     .catch(error => Rx.Observable.of({
       type: ERROR_KERNEL_LAUNCH_FAILED,

@@ -1,9 +1,17 @@
 import * as constants from './constants';
 
-export function newKernel(kernelSpecName, cwd) {
+export function newKernel(kernelSpec, cwd) {
   return {
     type: constants.LAUNCH_KERNEL,
-    kernelSpecName,
+    kernelSpec,
+    cwd,
+  };
+}
+
+export function newKernelByName(kernelName, cwd) {
+  return {
+    type: constants.LAUNCH_KERNEL_BY_NAME,
+    kernelName,
     cwd,
   };
 }

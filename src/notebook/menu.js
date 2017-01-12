@@ -81,7 +81,7 @@ export function dispatchRestartKernel(store) {
   }
 
   store.dispatch(killKernel);
-  store.dispatch(newKernel(state.app.kernelSpecName, cwd));
+  store.dispatch(newKernelByName(state.app.kernelSpecName, cwd));
 
   notificationSystem.addNotification({
     title: 'Kernel Restarted',
@@ -142,12 +142,23 @@ export function dispatchSave(store) {
 }
 
 export function dispatchNewKernel(store, evt, name) {
+  console.log('dispatch new kernel');
+
   const state = store.getState();
   let cwd = cwdKernelFallback();
   if (state && state.document && state.metadata.get('filename')) {
     cwd = path.dirname(path.resolve(state.metadata.get('filename')));
   }
   store.dispatch(newKernel(name, cwd));
+}
+
+export function dispatchNewKernelByKernelSpec(store, evt, spec) {
+  const state = store.getState();
+  let cwd = cwdKernelFallback();
+  if (state && state.document && state.metadata.get('filename')) {
+    cwd = path.dirname(path.resolve(state.metadata.get('filename')));
+  }
+  store.dispatch(newKernelByKernelSpec(spec, cwd));
 }
 
 export function dispatchPublishAnonGist(store) {
@@ -291,17 +302,18 @@ export function dispatchLoad(store, event, filename) {
   store.dispatch(load(filename));
 }
 
-export function dispatchNewNotebook(store, event, kernelSpecName) {
-  store.dispatch(newNotebook(kernelSpecName, cwdKernelFallback()));
+export function dispatchNewNotebook(store, event, kernelSpec) {
+  store.dispatch(newNotebook(kernelSpec, cwdKernelFallback()));
 }
-
 
 export function dispatchLoadConfig(store) {
   store.dispatch(loadConfig());
 }
 
 export function initMenuHandlers(store) {
+  ipc.on('main:new', dispatchNewNotebook.bind(null, store));
   ipc.on('menu:new-kernel', dispatchNewKernel.bind(null, store));
+  ipc.on('menu:new-kernel-by-kernelspec', dispatchNewKernelByKernelSpec.bind(null, store));
   ipc.on('menu:run-all', dispatchRunAll.bind(null, store));
   ipc.on('menu:run-all-below', dispatchRunAllBelow.bind(null, store));
   ipc.on('menu:clear-all', dispatchClearAll.bind(null, store));
@@ -327,5 +339,4 @@ export function initMenuHandlers(store) {
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on('main:load', dispatchLoad.bind(null, store));
   ipc.on('main:load-config', dispatchLoadConfig.bind(null, store));
-  ipc.on('main:new', dispatchNewNotebook.bind(null, store));
 }
