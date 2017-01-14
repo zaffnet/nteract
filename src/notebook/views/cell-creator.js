@@ -1,19 +1,21 @@
 // @flow
+/* eslint-disable react/no-unused-prop-types */
+
 import React, { PureComponent } from 'react';
 import { throttle } from 'lodash';
 
-declare type CellCreatorProps = {|
+type Props = {
   above: boolean,
   id: string|null,
   createCell: (type: string) => void,
   mergeCell: () => void,
-|};
+};
 
 type State = {|
   show: boolean,
 |};
 
-const renderActionButtons = ({ above, createCell, mergeCell }: CellCreatorProps) => (
+const renderActionButtons = ({ above, createCell, mergeCell }: Props) => (
   <div className="cell-creator">
     <button
       onClick={() => createCell('markdown')}
@@ -33,7 +35,7 @@ const renderActionButtons = ({ above, createCell, mergeCell }: CellCreatorProps)
 );
 
 export default class CellCreator extends PureComponent {
-  props: CellCreatorProps;
+  props: Props;
   state: State;
   updateVisibility: (mouseEvent: MouseEvent) => void;
   hoverElement: HTMLElement;
