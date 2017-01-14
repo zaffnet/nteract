@@ -1,9 +1,10 @@
 // @flow
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
-import Cell from '../components/cell/cell';
 import { DragSource, DropTarget } from 'react-dnd';
+import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+
+import Cell from '../components/cell/cell';
 
 declare type DraggableCellProps = {|
   cell: ImmutableMap<string, any>,
@@ -11,6 +12,7 @@ declare type DraggableCellProps = {|
   connectDragPreview: (img: Image) => void,
   connectDragSource: (el: ?React.Element<any>) => void,
   connectDropTarget: (el: ?React.Element<any>) => void,
+  selectCell: () => void;
   id: string,
   isDragging: boolean,
   isOver: boolean,
@@ -30,16 +32,14 @@ type State = {|
 |};
 
 const cellSource = {
-  beginDrag(props: Props) {
+  beginDrag(props: DraggableCellProps) {
     return {
       id: props.id,
     };
   },
 };
 
-
-function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
-
+function isDragUpper(props: DraggableCellProps, monitor: Object, el: HTMLElement): boolean {
   const hoverBoundingRect = el.getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
@@ -50,7 +50,7 @@ function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
 }
 
 const cellTarget = {
-  drop(props: Props, monitor: Object|void, component: any): void {
+  drop(props: DraggableCellProps, monitor: Object|void, component: any): void {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
@@ -58,7 +58,7 @@ const cellTarget = {
     }
   },
 
-  hover(props: Props, monitor: Object|void, component: any): void {
+  hover(props: DraggableCellProps, monitor: Object|void, component: any): void {
     if (monitor) {
       component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component.el) });
     }

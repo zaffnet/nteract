@@ -2,10 +2,7 @@
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 
-import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
-
 import { connect } from 'react-redux';
-import Cell from '../components/cell/cell';
 import { focusCell } from '../actions';
 
 import DraggableCellView from '../views/draggable-cell';
@@ -24,9 +21,8 @@ class DraggableCell extends React.PureComponent {
     this.selectCell = this.selectCell.bind(this);
   }
 
-
   selectCell(): void {
-    const { dispatch, id } = this.props
+    const { dispatch, id } = this.props;
     dispatch(focusCell(id));
   }
 
@@ -34,7 +30,7 @@ class DraggableCell extends React.PureComponent {
     const props : DispatchCellProps = {
       ...this.props,
       selectCell: this.selectCell,
-    }
+    };
     return <DraggableCellView {...props} />;
   }
 }
