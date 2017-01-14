@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -9,14 +10,16 @@ import {
 } from '../actions';
 import CellCreatorView from '../views/cell-creator';
 
-type Props = {
+type Props = {|
   above: boolean,
-  dispatch: Dispatch,
+  dispatch: Dispatch<*>,
   id: string|null,
-}
+|}
 
 class CellCreator extends Component {
   props: Props;
+  createCell: (type: string) => void;
+  mergeCell: () => void;
 
   constructor(): void {
     super();
@@ -42,7 +45,7 @@ class CellCreator extends Component {
   }
 
   render(): React.Element<any> {
-    const props: CellCreatorProps = {
+    const props = {
       ...this.props,
       createCell: this.createCell,
       mergeCell: this.mergeCell,
