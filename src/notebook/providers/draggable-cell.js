@@ -12,7 +12,7 @@ type Props = {|
   id: string,
 |};
 
-class DraggableCell extends React.PureComponent {
+class DraggableCell extends React.Component {
   props: Props;
   selectCell: () => void;
 
