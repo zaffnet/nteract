@@ -3,9 +3,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
-import DraggableCell from '../../../../src/notebook/components/cell/draggable-cell';
+import DraggableCell from '../../../src/notebook/views/draggable-cell';
 import * as commutable from 'commutable';
-import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
+import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
 
 // Spoof DND manager for tests.
 const dragDropManager = {

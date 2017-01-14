@@ -2,18 +2,17 @@
 /* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
-import Cell from './cell';
-import { focusCell } from '../../actions';
+import Cell from '../components/cell/cell';
 
-type Props = {
+type Props = {|
   cell: ImmutableMap<string, any>,
+  displayOrder: ImmutableList<any>,
   connectDragPreview: (img: Image) => void,
   connectDragSource: (el: ?React.Element<any>) => void,
   connectDropTarget: (el: ?React.Element<any>) => void,
-  displayOrder: ImmutableList<any>,
+  selectCell: () => void;
   id: string,
   isDragging: boolean,
   isOver: boolean,
@@ -26,11 +25,11 @@ type Props = {
   cursorBlinkRate: number,
   pagers: ImmutableList<any>,
   moveCell: (source: string, dest: string, above: boolean) => Object,
-};
+|};
 
-type State = {
+type State = {|
   hoverUpperHalf: boolean,
-};
+|};
 
 const cellSource = {
   beginDrag(props: Props) {
@@ -81,20 +80,11 @@ function collectTarget(connect: Object, monitor: Object): Object {
   };
 }
 
-class DraggableCell extends React.PureComponent {
+class DraggableCellView extends React.PureComponent {
   props: Props;
   state: State;
-  selectCell: () => void;
+
   el: HTMLElement;
-
-  static contextTypes = {
-    store: React.PropTypes.object,
-  };
-
-  constructor(): void {
-    super();
-    this.selectCell = this.selectCell.bind(this);
-  }
 
   state = {
     hoverUpperHalf: true,
@@ -103,6 +93,7 @@ class DraggableCell extends React.PureComponent {
   componentDidMount(): void {
     const connectDragPreview = this.props.connectDragPreview;
     const img = new window.Image();
+
     img.src = [
       'data:image/png;base64,',
       'iVBORw0KGgoAAAANSUhEUgAAADsAAAAzCAYAAAApdnDeAAAAAXNSR0IArs4c6QAA',
@@ -129,10 +120,6 @@ class DraggableCell extends React.PureComponent {
     };
   }
 
-  selectCell(): void {
-    this.context.store.dispatch(focusCell(this.props.id));
-  }
-
   render(): ?React.Element<any> {
     return this.props.connectDropTarget(
       <div
@@ -150,7 +137,7 @@ class DraggableCell extends React.PureComponent {
           this.props.connectDragSource(
             <div
               className="cell-drag-handle"
-              onClick={this.selectCell}
+              onClick={this.props.selectCell}
             />
           )
         }
@@ -174,9 +161,10 @@ class DraggableCell extends React.PureComponent {
   }
 }
 
-type Source = DragSource<any, Props, State, DraggableCell>;
-type Target = DropTarget<any, Props, State, DraggableCell>;
+type Source = DragSource<any, Props, State, DraggableCellView>;
+type Target = DropTarget<any, Props, State, DraggableCellView>;
 
 const source: Source = new DragSource('CELL', cellSource, collectSource);
 const target: Target = new DropTarget('CELL', cellTarget, collectTarget);
-export default source(target(DraggableCell));
+
+export default source(target(DraggableCellView));
