@@ -7,10 +7,10 @@ import { focusCell } from '../actions';
 
 import DraggableCellView from '../views/draggable-cell';
 
-type Props = {
-  dispatch: Dispatch,
+type Props = {|
+  dispatch: Dispatch<*>,
   id: string,
-};
+|};
 
 class DraggableCell extends React.PureComponent {
   props: Props;
@@ -27,7 +27,7 @@ class DraggableCell extends React.PureComponent {
   }
 
   render(): ?React.Element<any> {
-    const props : DispatchCellProps = {
+    const props = {
       ...this.props,
       selectCell: this.selectCell,
     };

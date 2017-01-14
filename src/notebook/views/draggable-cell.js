@@ -6,7 +6,7 @@ import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 
 import Cell from '../components/cell/cell';
 
-declare type DraggableCellProps = {|
+type Props = {|
   cell: ImmutableMap<string, any>,
   displayOrder: ImmutableList<any>,
   connectDragPreview: (img: Image) => void,
@@ -32,14 +32,14 @@ type State = {|
 |};
 
 const cellSource = {
-  beginDrag(props: DraggableCellProps) {
+  beginDrag(props: Props) {
     return {
       id: props.id,
     };
   },
 };
 
-function isDragUpper(props: DraggableCellProps, monitor: Object, el: HTMLElement): boolean {
+function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
   const hoverBoundingRect = el.getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
@@ -50,7 +50,7 @@ function isDragUpper(props: DraggableCellProps, monitor: Object, el: HTMLElement
 }
 
 const cellTarget = {
-  drop(props: DraggableCellProps, monitor: Object|void, component: any): void {
+  drop(props: Props, monitor: Object|void, component: any): void {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
@@ -58,7 +58,7 @@ const cellTarget = {
     }
   },
 
-  hover(props: DraggableCellProps, monitor: Object|void, component: any): void {
+  hover(props: Props, monitor: Object|void, component: any): void {
     if (monitor) {
       component.setState({ hoverUpperHalf: isDragUpper(props, monitor, component.el) });
     }
@@ -81,7 +81,7 @@ function collectTarget(connect: Object, monitor: Object): Object {
 }
 
 class DraggableCellView extends React.PureComponent {
-  props: DraggableCellProps;
+  props: Props;
   state: State;
 
   el: HTMLElement;
@@ -161,8 +161,8 @@ class DraggableCellView extends React.PureComponent {
   }
 }
 
-type Source = DragSource<any, Props, State, DraggableCell>;
-type Target = DropTarget<any, Props, State, DraggableCell>;
+type Source = DragSource<any, Props, State, DraggableCellView>;
+type Target = DropTarget<any, Props, State, DraggableCellView>;
 
 const source: Source = new DragSource('CELL', cellSource, collectSource);
 const target: Target = new DropTarget('CELL', cellTarget, collectTarget);
