@@ -4,7 +4,6 @@ import * as Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
 import * as commutable from 'commutable';
-import { has } from 'lodash';
 
 import * as constants from '../constants';
 
@@ -13,6 +12,7 @@ import * as constants from '../constants';
 // We can swap these out later.
 
 type ImmutableOutput = Immutable.Map<string, any>;
+type ImmutableOutputs = Immutable.List<ImmutableOutput>;
 
 // Non-immutable output
 type JSON = | string | number | boolean | null | JSONObject | JSONArray; // eslint-disable-line no-use-before-define
@@ -34,6 +34,7 @@ export type DisplayData = {
   output_type: 'display_data',
   data: MimeBundle,
   metadata: JSONObject,
+  transient?: JSONObject,
 }
 
 export type StreamOutput = {
@@ -64,7 +65,7 @@ type DocumentState = Immutable.Map<string, any>; // & Document;
  * @param {Object} output - Outputted to be reduced into list of outputs
  * @return {Immutable.List<Object>} updated-outputs - Outputs + Output
  */
-export function reduceOutputs(outputs: Immutable.List<ImmutableOutput> = Immutable.List(), output: Output) { // eslint-disable-line max-len
+export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), output: Output) { // eslint-disable-line max-len
   if (output.output_type !== 'stream' ||
      (outputs.size > 0 && outputs.last().get('output_type') !== 'stream')) {
     // If it's not a stream type, we just fold in the output
@@ -150,53 +151,61 @@ function clearOutputs(state: DocumentState, action: ClearOutputsAction) {
   return state;
 }
 
+type AppendOutputAction = { type: 'APPEND_OUTPUT', id: CellID, output: Output };
+
+function appendOutput(state: DocumentState, action: AppendOutputAction) {
+  const output = action.output;
+  const cellID = action.id;
+
+  if (output.output_type !== 'display_data' ||
+    !(output && output.transient && output.transient.display_id)) {
+    return state.updateIn(
+      ['notebook', 'cellMap', cellID, 'outputs'],
+      (outputs: ImmutableOutputs): ImmutableOutputs => reduceOutputs(outputs, output));
+  }
+
+  // We now have a display_data that includes a transient display_id
+  // output: {
+  //   data: { 'text/html': '<b>woo</b>' }
+  //   metadata: {}
+  //   transient: { display_id: '12312' }
+  // }
+
+  // We now have a display to track
+  const displayID = output.transient.display_id;
+
+  // Every time we see a display id we're going to capture the keypath
+  // to the output
+
+  // Determine the next output index
+  const outputIndex = state.getIn(
+    ['notebook', 'cellMap', cellID, 'outputs'],
+    Immutable.List()
+  ).count();
+
+  // Construct the path to the output for updating later
+  const keyPath = Immutable.List(['notebook', 'cellMap', cellID, 'outputs', outputIndex]);
+
+  const keyPaths = state
+    // Extract the current list of keypaths for this displayID
+    .getIn(
+      ['transient', 'keyPathsForDisplays', displayID], new Immutable.List()
+    )
+    // Append our current output's keyPath
+    .push(keyPath);
+
+  const immutableOutput: ImmutableOutput = Immutable.fromJS(output);
+
+  // We'll reduce the overall state based on each keypath, updating output
+  return keyPaths.reduce((currState, kp) => currState.setIn(kp, immutableOutput), state)
+    .setIn(['transient', 'keyPathsForDisplays', displayID], keyPaths);
+}
 
 export default handleActions({
   [constants.SET_NOTEBOOK]: setNotebook,
   [constants.FOCUS_CELL]: focusCell,
   [constants.CLEAR_OUTPUTS]: clearOutputs,
-  [constants.APPEND_OUTPUT]: function appendOutput(state, action) {
-    const output = action.output;
-    const cellID = action.id;
-
-    if (output.output_type !== 'display_data' || !(has(output, 'transient.display_id'))) {
-      return state.updateIn(['notebook', 'cellMap', cellID, 'outputs'],
-        outputs => reduceOutputs(outputs, output));
-    }
-
-    // We now have a display_data that includes a transient display_id
-    // output: {
-    //   data: { 'text/html': '<b>woo</b>' }
-    //   metadata: {}
-    //   transient: { display_id: '12312' }
-    // }
-
-    // We now have a display to track
-    const displayID = output.transient.display_id;
-
-    // Every time we see a display id we're going to capture the keypath
-    // to the output
-
-    // Determine the next output index
-    const outputIndex = state.getIn(['notebook', 'cellMap', cellID, 'outputs']).count();
-
-    // Construct the path to the output for updating later
-    const keyPath = Immutable.List(['notebook', 'cellMap', cellID, 'outputs', outputIndex]);
-
-    const keyPaths = state
-      // Extract the current list of keypaths for this displayID
-      .getIn(
-        ['transient', 'keyPathsForDisplays', displayID], new Immutable.List()
-      )
-      // Append our current output's keyPath
-      .push(keyPath);
-
-    const immutableOutput = Immutable.fromJS(output);
-
-    // We'll reduce the overall state based on each keypath, updating output
-    return keyPaths.reduce((currState, kp) => currState.setIn(kp, immutableOutput), state)
-      .setIn(['transient', 'keyPathsForDisplays', displayID], keyPaths);
-  },
+  [constants.APPEND_OUTPUT]: appendOutput,
   [constants.UPDATE_DISPLAY]: function updateDisplay(state, action) {
     const output = Immutable.fromJS(action.output);
     const displayID = output.getIn(['transient', 'display_id']);
