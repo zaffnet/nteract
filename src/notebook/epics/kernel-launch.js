@@ -5,7 +5,6 @@ import { launchSpec } from 'spawnteract';
 import * as uuid from 'uuid';
 
 import {
-  remote,
   ipcRenderer as ipc,
 } from 'electron';
 
@@ -121,6 +120,20 @@ export const watchExecutionStateEpic = action$ =>
     );
 
 /**
+  * Get kernel specs from main process
+  *
+  * @returns  {Observable}  The reply from main process
+  */
+export const kernelSpecsObservable =
+  Rx.Observable.create((observer) => {
+    ipc.send('kernel_specs_request');
+    ipc.on('kernel_specs_reply', (event, specs) => {
+      observer.next(specs);
+      observer.complete();
+    });
+  });
+
+/**
   * Gets information about newly launched kernel.
   *
   * @param  {ActionObservable}  The action type
@@ -142,10 +155,11 @@ export const newKernelByNameEpic = action$ =>
         throw new Error('newKernelByNameEpic requires a kernel name');
       }
     })
-    .mergeMap((action) => {
-      const spec = remote.getGlobal('KERNEL_SPECS')[action.kernelSpecName];
-      return Rx.Observable.of(newKernel(spec, action.cwd));
-    }
+    .mergeMap(action =>
+      kernelSpecsObservable
+        .mergeMap(specs =>
+          Rx.Observable.of(newKernel(specs[action.kernelSpecName], action.cwd))
+        )
   );
 
 /**
