@@ -4,8 +4,6 @@ import * as path from 'path';
 import { launch, launchNewNotebook } from './launch';
 import { installShellCommand } from './cli';
 
-const kernelspecs = require('kernelspecs');
-
 function getExampleNotebooksDir() {
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(path.join(__dirname, '..', '..', 'example-notebooks'));
@@ -487,82 +485,80 @@ export function generateDefaultTemplate() {
 
 export const defaultMenu = Menu.buildFromTemplate(generateDefaultTemplate());
 
-export function loadFullMenu() {
-  return kernelspecs.findAll().then((kernelSpecs) => {
-    function generateSubMenu(kernelSpecName) {
-      return {
-        label: kernelSpecs[kernelSpecName].spec.display_name,
-        click: createSender('menu:new-kernel', kernelSpecs[kernelSpecName])
-      };
-    }
-
-    const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
-
-    const newNotebookItems = Object.keys(kernelSpecs)
-      .map(kernelSpecName => ({
-        label: kernelSpecs[kernelSpecName].spec.display_name,
-        click: () => launchNewNotebook(kernelSpecs[kernelSpecName]),
-      }));
-
-    const languageMenu = {
-      label: '&Language',
-      submenu: [
-        {
-          label: '&Kill Running Kernel',
-          click: createSender('menu:kill-kernel'),
-        },
-        {
-          label: '&Interrupt Running Kernel',
-          click: createSender('menu:interrupt-kernel'),
-        },
-        {
-          label: 'Restart Running Kernel',
-          click: createSender('menu:restart-kernel'),
-        },
-        {
-          label: 'Restart and Clear All Cells',
-          click: createSender('menu:restart-and-clear-all'),
-        },
-        {
-          type: 'separator',
-        },
-        // All the available kernels
-        ...kernelMenuItems,
-      ],
+export function loadFullMenu(kernelSpecs) {
+  function generateSubMenu(kernelSpecName) {
+    return {
+      label: kernelSpecs[kernelSpecName].spec.display_name,
+      click: createSender('menu:new-kernel', kernelSpecs[kernelSpecName])
     };
+  }
 
-    const template = [];
+  const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
 
-    if (process.platform === 'darwin') {
-      template.push(named);
-    }
+  const newNotebookItems = Object.keys(kernelSpecs)
+    .map(kernelSpecName => ({
+      label: kernelSpecs[kernelSpecName].spec.display_name,
+      click: () => launchNewNotebook(kernelSpecs[kernelSpecName]),
+    }));
 
-    const fileWithNew = {
-      label: '&File',
-      submenu: [
-        {
-          label: '&New',
-          submenu: newNotebookItems,
-        },
-        fileSubMenus.open,
-        fileSubMenus.openExampleNotebooks,
-        fileSubMenus.save,
-        fileSubMenus.saveAs,
-        fileSubMenus.publish,
-      ],
-    };
+  const languageMenu = {
+    label: '&Language',
+    submenu: [
+      {
+        label: '&Kill Running Kernel',
+        click: createSender('menu:kill-kernel'),
+      },
+      {
+        label: '&Interrupt Running Kernel',
+        click: createSender('menu:interrupt-kernel'),
+      },
+      {
+        label: 'Restart Running Kernel',
+        click: createSender('menu:restart-kernel'),
+      },
+      {
+        label: 'Restart and Clear All Cells',
+        click: createSender('menu:restart-and-clear-all'),
+      },
+      {
+        type: 'separator',
+      },
+      // All the available kernels
+      ...kernelMenuItems,
+    ],
+  };
 
-    template.push(fileWithNew);
-    template.push(edit);
-    template.push(cell);
-    template.push(view);
+  const template = [];
 
-    // Application specific functionality should go before window and help
-    template.push(languageMenu);
-    template.push(window);
-    template.push(help);
+  if (process.platform === 'darwin') {
+    template.push(named);
+  }
 
-    const menu = Menu.buildFromTemplate(template);
-    return menu;
-  });
+  const fileWithNew = {
+    label: '&File',
+    submenu: [
+      {
+        label: '&New',
+        submenu: newNotebookItems,
+      },
+      fileSubMenus.open,
+      fileSubMenus.openExampleNotebooks,
+      fileSubMenus.save,
+      fileSubMenus.saveAs,
+      fileSubMenus.publish,
+    ],
+  };
+
+  template.push(fileWithNew);
+  template.push(edit);
+  template.push(cell);
+  template.push(view);
+
+  // Application specific functionality should go before window and help
+  template.push(languageMenu);
+  template.push(window);
+  template.push(help);
+
+  const menu = Menu.buildFromTemplate(template);
+  return menu;
 }

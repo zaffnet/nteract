@@ -15,9 +15,10 @@ import {
   launchNewNotebook,
 } from './launch';
 
-import { defaultMenu, loadFullMenu } from './menu';
+import { loadFullMenu } from './menu';
 
 import prepareEnv from './prepare-env';
+import saveKernelspecs from './kernel-specs';
 
 const log = require('electron-log');
 
@@ -90,7 +91,8 @@ const prepJupyterObservable = prepareEnv
 
 const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
-  .then(() => kernelspecs.findAll());
+  .then(() => kernelspecs.findAll())
+  .then(kernelSpecs => saveKernelspecs(kernelSpecs));
 
 /**
  * Creates an Rx.Subscriber that will create a splash page onNext and close the
@@ -203,10 +205,8 @@ fullAppReady$
   .subscribe(() => {
     kernelSpecsPromise.then((kernelSpecs) => {
       if (Object.keys(kernelSpecs).length !== 0) {
-        // Get the default menu first
-        Menu.setApplicationMenu(defaultMenu);
-        // Let the kernels/languages come in after
-        loadFullMenu().then(menu => Menu.setApplicationMenu(menu));
+        const menu = loadFullMenu(kernelSpecs);
+        Menu.setApplicationMenu(menu);
       } else {
         dialog.showMessageBox({
           type: 'warning',

@@ -2,11 +2,10 @@ import Rx from 'rxjs/Rx';
 
 import { launchSpec } from 'spawnteract';
 
-import { find } from 'kernelspecs';
-
 import * as uuid from 'uuid';
 
 import {
+  remote,
   ipcRenderer as ipc,
 } from 'electron';
 
@@ -143,10 +142,11 @@ export const newKernelByNameEpic = action$ =>
         throw new Error('newKernelByNameEpic requires a kernel name');
       }
     })
-    .mergeMap(action =>
-      find(action.kernelSpecName)
-        .then(spec => newKernel(spec, action.cwd))
-    );
+    .mergeMap((action) => {
+      const spec = remote.getGlobal('KERNEL_SPECS')[action.kernelSpecName];
+      return Rx.Observable.of(newKernel(spec, action.cwd));
+    }
+  );
 
 /**
   * Launches a new kernel.

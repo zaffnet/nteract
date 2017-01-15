@@ -117,6 +117,14 @@ mock('electron', {
         'setDocumentEdited': function(){},
         'setRepresentedFilename': function() {},
       };
+    },
+    'getGlobal': function() {
+      return {
+        python3: {
+          name: 'python3',
+          spec: { argv: {}, display_name: 'Python 3', language: 'python' }
+        },
+      }
     }
   },
   'webFrame': {
