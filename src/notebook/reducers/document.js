@@ -117,10 +117,11 @@ export function cleanCellTransient(state: DocumentState, id: string) {
 }
 
 type Cell = Immutable.Map<string, any>;
-type Cells = Immutable.List<Cell>;
+type CellMap = Immutable.Map<string, Cell>;
 type Notebook = Immutable.Map<string, any>;
 
 type CellID = string;
+type CellOrder = Immutable.List<CellID>;
 
 // TODO: type that notebook!
 // It would probably be wise to make this JSON serializable and not be using
@@ -131,7 +132,7 @@ type ClearOutputsAction = { type: 'CLEAR_OUTPUTS', id: CellID };
 
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const notebook = action.notebook
-    .update('cellMap', (cells: Cells): Cells =>
+    .update('cellMap', (cells: CellMap): CellMap =>
       // TODO: Determine why setting the notebook is changing these values.
       //       Should they be transient or part of an overall app state?
       cells.map(value =>
@@ -254,7 +255,7 @@ function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
 
 type FocusPreviousCellAction = { type: 'FOCUS_PREVIOUS_CELL', id: CellID };
 
-function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction) {
+function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction): DocumentState {
   const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
   const nextIndex = Math.max(0, curIndex - 1);
@@ -262,137 +263,170 @@ function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction
   return state.set('cellFocused', cellOrder.get(nextIndex));
 }
 
-export default handleActions({
-  [constants.SET_NOTEBOOK]: setNotebook,
-  [constants.FOCUS_CELL]: focusCell,
-  [constants.CLEAR_OUTPUTS]: clearOutputs,
-  [constants.APPEND_OUTPUT]: appendOutput,
-  [constants.UPDATE_DISPLAY]: updateDisplay,
-  [constants.FOCUS_NEXT_CELL]: focusNextCell,
-  [constants.FOCUS_PREVIOUS_CELL]: focusPreviousCell,
-  [constants.FOCUS_CELL_EDITOR]: function focusCellEditor(state, action) {
-    return state.set('editorFocused', action.id);
-  },
-  [constants.FOCUS_NEXT_CELL_EDITOR]: function focusNextCellEditor(state, action) {
-    const cellOrder = state.getIn(['notebook', 'cellOrder']);
-    const curIndex = cellOrder.findIndex(id => id === action.id);
-    const nextIndex = curIndex + 1;
+type FocusCellEditorAction = { type: 'FOCUS_CELL_EDITOR', id: CellID };
 
-    return state.set('editorFocused', cellOrder.get(nextIndex));
-  },
-  [constants.FOCUS_PREVIOUS_CELL_EDITOR]: function focusPreviousCellEditor(state, action) {
-    const cellOrder = state.getIn(['notebook', 'cellOrder']);
-    const curIndex = cellOrder.findIndex(id => id === action.id);
-    const nextIndex = Math.max(0, curIndex - 1);
+function focusCellEditor(state: DocumentState, action: FocusCellEditorAction) {
+  return state.set('editorFocused', action.id);
+}
 
-    return state.set('editorFocused', cellOrder.get(nextIndex));
-  },
-  [constants.TOGGLE_STICKY_CELL]: function toggleStickyCell(state, action) {
-    const { id } = action;
-    const stickyCells = state.get('stickyCells');
-    if (stickyCells.has(id)) {
-      return state.set('stickyCells', stickyCells.delete(id));
-    }
-    return state.set('stickyCells', stickyCells.add(id));
-  },
-  [constants.UPDATE_CELL_EXECUTION_COUNT]: function updateExecutionCount(state, action) {
-    const { id, count } = action;
-    return state.update('notebook',
-      notebook => commutable.updateExecutionCount(notebook, id, count));
-  },
-  [constants.MOVE_CELL]: function moveCell(state, action) {
-    return state.updateIn(['notebook', 'cellOrder'],
-      (cellOrder) => {
-        const oldIndex = cellOrder.findIndex(id => id === action.id);
-        const newIndex = cellOrder.findIndex(id => id === action.destinationId)
-                          + (action.above ? 0 : 1);
-        if (oldIndex === newIndex) {
-          return cellOrder;
-        }
-        return cellOrder
-          .splice(oldIndex, 1)
-          .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
+type FocusNextCellEditorAction = { type: 'FOCUS_NEXT_CELL_EDITOR', id: CellID };
+
+function focusNextCellEditor(state: DocumentState, action: FocusNextCellEditorAction) {
+  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+  const nextIndex = curIndex + 1;
+
+  return state.set('editorFocused', cellOrder.get(nextIndex));
+}
+
+type FocusPreviousCellEditorAction = { type: 'FOCUS_PREVIOUS_CELL_EDITOR', id: CellID };
+
+function focusPreviousCellEditor(state: DocumentState, action: FocusPreviousCellEditorAction) {
+  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+  const nextIndex = Math.max(0, curIndex - 1);
+
+  return state.set('editorFocused', cellOrder.get(nextIndex));
+}
+
+type ToggleStickyCellAction = { type: 'TOGGLE_STICKY_CELL', id: CellID };
+function toggleStickyCell(state: DocumentState, action: ToggleStickyCellAction) {
+  const { id } = action;
+  const stickyCells: Immutable.Set<CellID> = state.get('stickyCells');
+  if (stickyCells.has(id)) {
+    return state.set('stickyCells', stickyCells.delete(id));
+  }
+  return state.set('stickyCells', stickyCells.add(id));
+}
+
+type FocusCellActionType = FocusPreviousCellEditorAction | FocusPreviousCellAction |
+                           FocusNextCellEditorAction | FocusNextCellAction |
+                           FocusCellEditorAction | FocusCellAction;
+
+type UpdateExecutionCountAction = { type: 'UPDATE_CELL_EXECUTION_COUNT', id: CellID, count: number }
+
+function updateExecutionCount(state: DocumentState, action: UpdateExecutionCountAction) {
+  return state.setIn(['notebook', 'cellMap', action.id, 'execution_count'], action.count);
+}
+
+type MoveCellAction = { type: 'MOVE_CELL', id: CellID, destinationId: CellID }
+
+function moveCell(state: DocumentState, action: MoveCellAction) {
+  return state.updateIn(['notebook', 'cellOrder'],
+    (cellOrder: CellOrder) => {
+      const oldIndex = cellOrder.findIndex(id => id === action.id);
+      const newIndex = cellOrder.findIndex(id => id === action.destinationId)
+                        + (action.above ? 0 : 1);
+      if (oldIndex === newIndex) {
+        return cellOrder;
       }
-    );
-  },
-  [constants.REMOVE_CELL]: function removeCell(state, action) {
-    const { id } = action;
-    return cleanCellTransient(
-      state.update('notebook',
-        notebook => commutable.removeCell(notebook, id)
-      ),
-      id
-    );
-  },
-  [constants.NEW_CELL_AFTER]: function newCellAfter(state, action) {
-    const { cellType, id, source } = action;
-    const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                           commutable.emptyCodeCell;
-    const cellID = uuid.v4();
-    return state.update('notebook', (notebook) => {
-      const index = notebook.get('cellOrder').indexOf(id) + 1;
-      return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
-    })
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
-  },
-  [constants.NEW_CELL_BEFORE]: function newCellBefore(state, action) {
-    // Draft API
-    const { cellType, id } = action;
-    const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                           commutable.emptyCodeCell;
-    const cellID = uuid.v4();
-    return state.update('notebook', (notebook) => {
-      const index = notebook.get('cellOrder').indexOf(id);
-      return commutable.insertCellAt(notebook, cell, cellID, index);
-    })
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
-  },
-  [constants.MERGE_CELL_AFTER]: function mergeCellAfter(state, action) {
-    const { id } = action;
-    const cellOrder = state.getIn(['notebook', 'cellOrder']);
-    const index = cellOrder.indexOf(id);
-    // do nothing if this is the last cell
-    if (cellOrder.size === index + 1) {
-      return state;
+      return cellOrder
+        .splice(oldIndex, 1)
+        .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
     }
-    const cellMap = state.getIn(['notebook', 'cellMap']);
+  );
+}
 
-    const nextId = cellOrder.get(index + 1);
-    const source = cellMap.getIn([id, 'source'])
-      .concat('\n', '\n', cellMap.getIn([nextId, 'source']));
+type RemoveCellAction = { type: 'REMOVE_CELL', id: CellID };
+function removeCell(state: DocumentState, action: RemoveCellAction) {
+  const { id } = action;
+  return cleanCellTransient(
+    state.update('notebook',
+      notebook => commutable.removeCell(notebook, id)
+    ),
+    id
+  );
+}
 
-    return state.update('notebook',
-      notebook => commutable.removeCell(commutable.updateSource(notebook, id, source), nextId)
-    );
-  },
-  [constants.NEW_CELL_APPEND]: function newCellAppend(state, action) {
-    // Draft API
-    const { cellType } = action;
-    const notebook = state.get('notebook');
-    const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                           commutable.emptyCodeCell;
-    const index = notebook.get('cellOrder').count();
-    const cellID = uuid.v4();
-    return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
-  },
-  [constants.UPDATE_CELL_SOURCE]: function updateSource(state, action) {
-    const { id, source } = action;
-    return state.update('notebook', notebook => commutable.updateSource(notebook, id, source));
-  },
-  [constants.SPLIT_CELL]: function splitCell(state, action) {
-    const { id, position } = action;
-    const index = state.getIn(['notebook', 'cellOrder']).indexOf(id);
-    const updatedState = state.update('notebook',
-        notebook => commutable.splitCell(notebook, id, position));
-    const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
-    return updatedState
-      .setIn(['notebook', 'cellMap', newCell, 'metadata', 'outputHidden'], false)
-      .setIn(['notebook', 'cellMap', newCell, 'metadata', 'inputHidden'], false);
-  },
+type CellType = 'code' | 'markdown';
+
+type NewCellAfterAction = {
+  type: 'NEW_CELL_AFTER', id: CellID, cellType: CellType, source: string
+};
+
+function newCellAfter(state: DocumentState, action: NewCellAfterAction) {
+  const { cellType, id, source } = action;
+  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
+                                         commutable.emptyCodeCell;
+  const cellID: CellID = uuid.v4();
+  return state.update('notebook', (notebook) => {
+    const index = notebook.get('cellOrder').indexOf(id) + 1;
+    return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
+  })
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+}
+
+type NewCellBeforeAction = { type: 'NEW_CELL_BEFORE', cellType: CellType, id: CellID };
+function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
+  const { cellType, id } = action;
+  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
+                                         commutable.emptyCodeCell;
+  const cellID: CellID = uuid.v4();
+  return state.update('notebook', (notebook) => {
+    const index = notebook.get('cellOrder').indexOf(id);
+    return commutable.insertCellAt(notebook, cell, cellID, index);
+  })
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+}
+
+type MergeCellAfterAction = { type: 'MERGE_CELL_AFTER', id: CellID };
+function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
+  const { id } = action;
+  const cellOrder: CellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const index = cellOrder.indexOf(id);
+  // do nothing if this is the last cell
+  if (cellOrder.size === index + 1) {
+    return state;
+  }
+  const cellMap: CellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
+
+  const nextId = cellOrder.get(index + 1);
+  const firstSource: string = cellMap.getIn([id, 'source'], '');
+  const secondSource: string = cellMap.getIn([nextId, 'source'], '');
+
+  const source = firstSource.concat('\n', '\n', secondSource);
+
+  return state.update('notebook',
+    notebook => commutable.removeCell(commutable.updateSource(notebook, id, source), nextId)
+  );
+}
+
+type NewCellAppendAction = { type: 'NEW_CELL_APPEND', cellType: CellType}
+
+function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
+  const { cellType } = action;
+  const notebook: Notebook = state.get('notebook');
+  const cell: Cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
+                                         commutable.emptyCodeCell;
+  const index = notebook.get('cellOrder').count();
+  const cellID: CellID = uuid.v4();
+  return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
+    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+}
+
+type UpdateSourceAction = { type: 'UPDATE_CELL_SOURCE', id: CellID, source: string }
+function updateSource(state: DocumentState, action: UpdateSourceAction) {
+  const { id, source } = action;
+  return state.setIn(['notebook', 'cellMap', id, 'source'], source);
+}
+
+type SplitCellAction = { type: 'SPLIT_CELL', id: CellID, position: number }
+// Note: position is line number in the source of the cell
+function splitCell(state: DocumentState, action: SplitCellAction) {
+  const { id, position } = action;
+  const index = state.getIn(['notebook', 'cellOrder'], Immutable.List()).indexOf(id);
+  const updatedState = state.update('notebook',
+      notebook => commutable.splitCell(notebook, id, position));
+  const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
+  return updatedState
+    .setIn(['notebook', 'cellMap', newCell, 'metadata', 'outputHidden'], false)
+    .setIn(['notebook', 'cellMap', newCell, 'metadata', 'inputHidden'], false);
+}
+
+const oldHandleActions: (DocumentState, Action) => DocumentState = handleActions({
   [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
     const { id } = action;
     return state.setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'],
@@ -481,3 +515,57 @@ export default handleActions({
         !cells.getIn([id, 'metadata', 'outputExpanded'])));
   },
 }, {});
+
+type DocumentAction =
+  ToggleStickyCellAction | FocusCellActionType | SetNotebookAction |
+  ClearOutputsAction | AppendOutputAction | UpdateDisplayAction |
+  UpdateExecutionCountAction | MoveCellAction | RemoveCellAction |
+  NewCellAfterAction | NewCellBeforeAction | NewCellAppendAction |
+  MergeCellAfterAction | UpdateSourceAction | SplitCellAction;
+
+export default function handleDocument(state: DocumentState, action: DocumentAction) {
+  switch (action.type) {
+    case constants.SET_NOTEBOOK:
+      return setNotebook(state, action);
+    case constants.FOCUS_CELL:
+      return focusCell(state, action);
+    case constants.CLEAR_OUTPUTS:
+      return clearOutputs(state, action);
+    case constants.APPEND_OUTPUT:
+      return appendOutput(state, action);
+    case constants.UPDATE_DISPLAY:
+      return updateDisplay(state, action);
+    case constants.FOCUS_NEXT_CELL:
+      return focusNextCell(state, action);
+    case constants.FOCUS_PREVIOUS_CELL:
+      return focusPreviousCell(state, action);
+    case constants.FOCUS_CELL_EDITOR:
+      return focusCellEditor(state, action);
+    case constants.FOCUS_NEXT_CELL_EDITOR:
+      return focusNextCellEditor(state, action);
+    case constants.FOCUS_PREVIOUS_CELL_EDITOR:
+      return focusPreviousCellEditor(state, action);
+    case constants.TOGGLE_STICKY_CELL:
+      return toggleStickyCell(state, action);
+    case constants.UPDATE_CELL_EXECUTION_COUNT:
+      return updateExecutionCount(state, action);
+    case constants.MOVE_CELL:
+      return moveCell(state, action);
+    case constants.REMOVE_CELL:
+      return removeCell(state, action);
+    case constants.NEW_CELL_AFTER:
+      return newCellAfter(state, action);
+    case constants.NEW_CELL_BEFORE:
+      return newCellBefore(state, action);
+    case constants.MERGE_CELL_AFTER:
+      return mergeCellAfter(state, action);
+    case constants.NEW_CELL_APPEND:
+      return newCellAppend(state, action);
+    case constants.UPDATE_CELL_SOURCE:
+      return updateSource(state, action);
+    case constants.SPLIT_CELL:
+      return splitCell(state, action);
+    default:
+      return oldHandleActions(state, action);
+  }
+}
