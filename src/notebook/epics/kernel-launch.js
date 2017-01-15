@@ -126,11 +126,11 @@ export const watchExecutionStateEpic = action$ =>
   */
 export const kernelSpecsObservable =
   Rx.Observable.create((observer) => {
-    ipc.send('kernel_specs_request');
     ipc.on('kernel_specs_reply', (event, specs) => {
       observer.next(specs);
       observer.complete();
     });
+    ipc.send('kernel_specs_request');
   });
 
 /**
