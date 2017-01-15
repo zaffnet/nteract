@@ -91,9 +91,9 @@ const prepJupyterObservable = prepareEnv
 
 const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
-  .then(() => kernelspecs.findAll())
-  .then(kernelSpecs => saveKernelspecs(kernelSpecs));
+  .then(() => kernelspecs.findAll());
 
+kernelSpecsPromise.then(saveKernelspecs);
 /**
  * Creates an Rx.Subscriber that will create a splash page onNext and close the
  * splash page onComplete.
