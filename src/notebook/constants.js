@@ -1,3 +1,5 @@
+/* @flow */
+
 export const CHANGE_FILENAME = 'CHANGE_FILENAME';
 
 export const START_SAVING = 'START_SAVING';

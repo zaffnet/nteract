@@ -1,10 +1,20 @@
-import Immutable from 'immutable';
+/* @flow */
+
+import * as Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
 import * as commutable from 'commutable';
 import { has } from 'lodash';
 
 import * as constants from '../constants';
+
+// Note that we can't use the type definition of Output from records.js
+// because it's an Immutable.Map here. When we have a union on Immutable Records.
+// We can swap these out later.
+
+type Output = Immutable.Map<string, any>;
+
+type DocumentState = Immutable.Map<string, any>;
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -15,7 +25,7 @@ import * as constants from '../constants';
  * @param {Object} output - Outputted to be reduced into list of outputs
  * @return {Immutable.List<Object>} updated-outputs - Outputs + Output
  */
-export function reduceOutputs(outputs, output) {
+export function reduceOutputs(outputs: Immutable.List<Output>, output: Object) {
   // Naive implementation of kernel stream buffering
   // This should be broken out into a nice testable function
   if (outputs.size > 0 &&
@@ -38,7 +48,7 @@ export function reduceOutputs(outputs, output) {
   return outputs.push(Immutable.fromJS(output));
 }
 
-export function cleanCellTransient(state, id) {
+export function cleanCellTransient(state: DocumentState, id: string) {
   // Clear out key paths that should no longer be referenced
   return state.updateIn(['transient', 'keyPathsForDisplays'], kpfd =>
     kpfd.map(keyPaths =>
