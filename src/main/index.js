@@ -18,7 +18,7 @@ import {
 import { loadFullMenu } from './menu';
 
 import prepareEnv from './prepare-env';
-import saveKernelspecs from './kernel-specs';
+import initializeKernelSpecs from './kernel-specs';
 
 const log = require('electron-log');
 
@@ -91,9 +91,9 @@ const prepJupyterObservable = prepareEnv
 
 const kernelSpecsPromise = prepJupyterObservable
   .toPromise()
-  .then(() => kernelspecs.findAll());
+  .then(() => kernelspecs.findAll())
+  .then(specs => initializeKernelSpecs(specs));
 
-kernelSpecsPromise.then(saveKernelspecs);
 /**
  * Creates an Rx.Subscriber that will create a splash page onNext and close the
  * splash page onComplete.
