@@ -12,9 +12,48 @@ import * as constants from '../constants';
 // because it's an Immutable.Map here. When we have a union on Immutable Records.
 // We can swap these out later.
 
-type Output = Immutable.Map<string, any>;
+type ImmutableOutput = Immutable.Map<string, any>;
 
-type DocumentState = Immutable.Map<string, any>;
+// Non-immutable output
+type JSON = | string | number | boolean | null | JSONObject | JSONArray; // eslint-disable-line no-use-before-define
+type JSONObject = { [key:string]: JSON };
+type JSONArray = Array<JSON>;
+
+type ExecutionCount = number | null;
+
+type MimeBundle = JSONObject;
+
+type ExecuteResult = {
+  output_type: 'execute_result',
+  execution_count: ExecutionCount,
+  data: MimeBundle,
+  metadata: JSONObject,
+}
+
+export type DisplayData = {
+  output_type: 'display_data',
+  data: MimeBundle,
+  metadata: JSONObject,
+}
+
+export type StreamOutput = {
+  output_type: 'stream',
+  name: 'stdout' | 'stderr',
+  text: string,
+}
+
+export type ErrorOutput = {
+  output_type: 'error',
+  ename: string,
+  evalue: string,
+  traceback: Array<string>,
+}
+
+export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
+
+// It's really an Immutable.Record<Document>, we'll do this for now until a fix
+// https://github.com/facebook/immutable-js/issues/998
+type DocumentState = Immutable.Map<string, any>; // & Document;
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -25,27 +64,36 @@ type DocumentState = Immutable.Map<string, any>;
  * @param {Object} output - Outputted to be reduced into list of outputs
  * @return {Immutable.List<Object>} updated-outputs - Outputs + Output
  */
-export function reduceOutputs(outputs: Immutable.List<Output>, output: Object) {
-  // Naive implementation of kernel stream buffering
-  // This should be broken out into a nice testable function
+export function reduceOutputs(outputs: Immutable.List<ImmutableOutput> = Immutable.List(), output: Output) { // eslint-disable-line max-len
+  if (output.output_type !== 'stream' ||
+     (outputs.size > 0 && outputs.last().get('output_type') !== 'stream')) {
+    // If it's not a stream type, we just fold in the output
+    return outputs.push(Immutable.fromJS(output));
+  }
+
+  const streamOutput : StreamOutput = output;
+
+  function appendText(text: string): string {
+    return text + streamOutput.text;
+  }
+
   if (outputs.size > 0 &&
-      output.output_type === 'stream' &&
-      typeof output.name !== 'undefined' &&
+      typeof streamOutput.name !== 'undefined' &&
       outputs.last().get('output_type') === 'stream'
     ) {
     // Invariant: size > 0, outputs.last() exists
-    if (outputs.last().get('name') === output.name) {
-      return outputs.updateIn([outputs.size - 1, 'text'], text => text + output.text);
+    if (outputs.last().get('name') === streamOutput.name) {
+      return outputs.updateIn([outputs.size - 1, 'text'], appendText);
     }
     const nextToLast = outputs.butLast().last();
     if (nextToLast &&
         nextToLast.get('output_type') === 'stream' &&
-        nextToLast.get('name') === output.name) {
-      return outputs.updateIn([outputs.size - 2, 'text'], text => text + output.text);
+        nextToLast.get('name') === streamOutput.name) {
+      return outputs.updateIn([outputs.size - 2, 'text'], appendText);
     }
   }
 
-  return outputs.push(Immutable.fromJS(output));
+  return outputs.push(Immutable.fromJS(streamOutput));
 }
 
 export function cleanCellTransient(state: DocumentState, id: string) {
@@ -57,35 +105,56 @@ export function cleanCellTransient(state: DocumentState, id: string) {
   ).setIn(['transient', 'cellMap'], new Immutable.Map());
 }
 
+type Cell = Immutable.Map<string, any>;
+type Cells = Immutable.List<Cell>;
+type Notebook = Immutable.Map<string, any>;
+
+type CellID = string;
+
+// TODO: type that notebook!
+// It would probably be wise to make this JSON serializable and not be using
+// the immutable.js version of the notebook in the action
+type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: Notebook };
+type FocusCellAction = { type: 'FOCUS_CELL', id: CellID };
+type ClearOutputsAction = { type: 'CLEAR_OUTPUTS', id: CellID };
+
+function setNotebook(state: DocumentState, action: SetNotebookAction) {
+  const notebook = action.notebook
+    .update('cellMap', (cells: Cells): Cells =>
+      // TODO: Determine why setting the notebook is changing these values.
+      //       Should they be transient or part of an overall app state?
+      cells.map(value =>
+        value.setIn(['metadata', 'inputHidden'], false)
+              .setIn(['metadata', 'outputHidden'], false)
+              .setIn(['metadata', 'outputExpanded'], false)));
+
+  return state.set('notebook', notebook)
+    .set('cellFocused', notebook.getIn(['cellOrder', 0]))
+    .setIn(['transient', 'cellMap'], new Immutable.Map());
+}
+
+function focusCell(state: DocumentState, action: FocusCellAction) {
+  return state.set('cellFocused', action.id);
+}
+
+function clearOutputs(state: DocumentState, action: ClearOutputsAction) {
+  const { id } = action;
+  const type = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
+
+  if (type === 'code') {
+    return cleanCellTransient(
+      state.setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List()),
+      id
+    );
+  }
+  return state;
+}
+
+
 export default handleActions({
-  [constants.SET_NOTEBOOK]: function setNotebook(state, action) {
-    const notebook = action.notebook
-      .update('cellMap', cells =>
-        cells.map(value =>
-          value.setIn(['metadata', 'inputHidden'], false)
-                .setIn(['metadata', 'outputHidden'], false)
-                .setIn(['metadata', 'outputExpanded'], false)));
-
-    return state.set('notebook', notebook)
-      .set('cellFocused', notebook.getIn(['cellOrder', 0]))
-      .setIn(['transient', 'cellMap'], new Immutable.Map());
-  },
-  [constants.FOCUS_CELL]: function focusCell(state, action) {
-    return state.set('cellFocused', action.id);
-  },
-  [constants.CLEAR_OUTPUTS]: function clearOutputs(state, action) {
-    const { id } = action;
-    const type = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
-
-    if (type === 'code') {
-      return cleanCellTransient(
-        state.setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List()),
-        id
-      );
-    }
-
-    return state;
-  },
+  [constants.SET_NOTEBOOK]: setNotebook,
+  [constants.FOCUS_CELL]: focusCell,
+  [constants.CLEAR_OUTPUTS]: clearOutputs,
   [constants.APPEND_OUTPUT]: function appendOutput(state, action) {
     const output = action.output;
     const cellID = action.id;
