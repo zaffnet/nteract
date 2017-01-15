@@ -52,6 +52,16 @@ export type ErrorOutput = {
 
 export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
 
+/*
+ * Alias for ECMAScript `Iterable` type, declared in
+ * https://github.com/facebook/flow/blob/master/lib/core.js
+ *
+ * Note that Immutable values implement the `ESIterable` interface.
+ */
+type ESIterable<T> = $Iterable<T, void, void>;
+type KeyPath = ESIterable<any>;
+type KeyPaths = Immutable.List<KeyPath>;
+
 // It's really an Immutable.Record<Document>, we'll do this for now until a fix
 // https://github.com/facebook/immutable-js/issues/998
 type DocumentState = Immutable.Map<string, any>; // & Document;
@@ -201,51 +211,65 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
     .setIn(['transient', 'keyPathsForDisplays', displayID], keyPaths);
 }
 
+type UpdateDisplayAction = { type: 'UPDATE_DISPLAY', output: Output };
+
+function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
+  const output: ImmutableOutput = Immutable.fromJS(action.output);
+  const displayID = output.getIn(['transient', 'display_id']);
+  const keyPaths: KeyPaths = state
+    .getIn(
+      ['transient', 'keyPathsForDisplays', displayID], new Immutable.List());
+  return keyPaths.reduce((currState: DocumentState, kp: KeyPath) =>
+    currState.setIn(kp, output), state);
+}
+
+type FocusNextCellAction = { type: 'FOCUS_NEXT_CELL', id: CellID, createCellIfUndefined: boolean }
+
+function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
+  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+
+  const nextIndex = curIndex + 1;
+
+  // When at the end, create a new cell
+  if (nextIndex >= cellOrder.size) {
+    if (!action.createCellIfUndefined) {
+      return state;
+    }
+
+    const cellID: CellID = uuid.v4();
+    // TODO: condition on state.defaultCellType (markdown vs. code)
+    // TODO: type cells (these could be records...)
+    const cell = commutable.emptyCodeCell;
+    return state.set('cellFocused', cellID)
+      .update('notebook',
+        notebook => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
+      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
+      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+  }
+
+  // When in the middle of the notebook document, move to the next cell
+  return state.set('cellFocused', cellOrder.get(nextIndex));
+}
+
+type FocusPreviousCellAction = { type: 'FOCUS_PREVIOUS_CELL', id: CellID };
+
+function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction) {
+  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+  const nextIndex = Math.max(0, curIndex - 1);
+
+  return state.set('cellFocused', cellOrder.get(nextIndex));
+}
+
 export default handleActions({
   [constants.SET_NOTEBOOK]: setNotebook,
   [constants.FOCUS_CELL]: focusCell,
   [constants.CLEAR_OUTPUTS]: clearOutputs,
   [constants.APPEND_OUTPUT]: appendOutput,
-  [constants.UPDATE_DISPLAY]: function updateDisplay(state, action) {
-    const output = Immutable.fromJS(action.output);
-    const displayID = output.getIn(['transient', 'display_id']);
-    const keyPaths = state
-      .getIn(
-        ['transient', 'keyPathsForDisplays', displayID], new Immutable.List());
-    return keyPaths.reduce((currState, kp) => currState.setIn(kp, output), state);
-  },
-  [constants.FOCUS_NEXT_CELL]: function focusNextCell(state, action) {
-    const cellOrder = state.getIn(['notebook', 'cellOrder']);
-    const curIndex = cellOrder.findIndex(id => id === action.id);
-
-    const nextIndex = curIndex + 1;
-
-    // When at the end, create a new cell
-    if (nextIndex >= cellOrder.size) {
-      if (!action.createCellIfUndefined) {
-        return state;
-      }
-
-      const cellID = uuid.v4();
-      // TODO: condition on state.defaultCellType (markdown vs. code)
-      const cell = commutable.emptyCodeCell;
-      return state.set('cellFocused', cellID)
-        .update('notebook',
-          notebook => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
-        .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-        .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
-    }
-
-    // When in the middle of the notebook document, move to the next cell
-    return state.set('cellFocused', cellOrder.get(nextIndex));
-  },
-  [constants.FOCUS_PREVIOUS_CELL]: function focusPreviousCell(state, action) {
-    const cellOrder = state.getIn(['notebook', 'cellOrder']);
-    const curIndex = cellOrder.findIndex(id => id === action.id);
-    const nextIndex = Math.max(0, curIndex - 1);
-
-    return state.set('cellFocused', cellOrder.get(nextIndex));
-  },
+  [constants.UPDATE_DISPLAY]: updateDisplay,
+  [constants.FOCUS_NEXT_CELL]: focusNextCell,
+  [constants.FOCUS_PREVIOUS_CELL]: focusPreviousCell,
   [constants.FOCUS_CELL_EDITOR]: function focusCellEditor(state, action) {
     return state.set('editorFocused', action.id);
   },
