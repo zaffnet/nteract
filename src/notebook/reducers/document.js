@@ -7,6 +7,8 @@ import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 
+import type { LanguageInfoMetadata, KernelspecMetadata } from '../records'
+
 // Note that we can't use the type definition of Output from records.js
 // because it's an Immutable.Map here. When we have a union on Immutable Records.
 // We can swap these out later.
@@ -22,6 +24,12 @@ type JSONArray = Array<JSON>;
 type ExecutionCount = number | null;
 
 type MimeBundle = JSONObject;
+
+type Pager = {
+  source: 'page',
+  data: MimeBundle,
+  start: number
+}
 
 type ExecuteResult = {
   output_type: 'execute_result',
@@ -426,102 +434,130 @@ function splitCell(state: DocumentState, action: SplitCellAction) {
     .setIn(['notebook', 'cellMap', newCell, 'metadata', 'inputHidden'], false);
 }
 
-const oldHandleActions: (DocumentState, Action) => DocumentState = handleActions({
-  [constants.CHANGE_OUTPUT_VISIBILITY]: function changeOutputVisibility(state, action) {
-    const { id } = action;
-    return state.setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'],
-      !state.getIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden']));
-  },
-  [constants.CHANGE_INPUT_VISIBILITY]: function changeInputVisibility(state, action) {
-    const { id } = action;
-    return state.setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'],
-      !state.getIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden']));
-  },
-  [constants.UPDATE_CELL_PAGERS]: function updateCellPagers(state, action) {
-    const { id, pagers } = action;
-    return state.setIn(['cellPagers', id], pagers);
-  },
-  [constants.UPDATE_CELL_STATUS]: function updateCellStatus(state, action) {
-    const { id, status } = action;
-    return state.setIn(['transient', 'cellMap', id, 'status'], status);
-  },
-  [constants.SET_LANGUAGE_INFO]: function setLanguageInfo(state, action) {
-    const langInfo = Immutable.fromJS(action.langInfo);
-    return state.setIn(['notebook', 'metadata', 'language_info'], langInfo);
-  },
-  [constants.SET_KERNEL_INFO]: function setKernelSpec(state, action) {
-    const { kernelInfo } = action;
-    return state
-      .setIn(['notebook', 'metadata', 'kernelspec'], Immutable.fromJS({
-        name: kernelInfo.name,
-        language: kernelInfo.spec.language,
-        display_name: kernelInfo.spec.display_name,
-      }))
-      .setIn(['notebook', 'metadata', 'kernel_info', 'name'], kernelInfo.name);
-  },
-  [constants.OVERWRITE_METADATA_FIELD]: function overwriteMetadata(state, action) {
-    const { field, value } = action;
-    return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
-  },
-  [constants.DELETE_METADATA_FIELD]: function deleteMetadata(state, action) {
-    const { field } = action;
-    return state.deleteIn(['notebook', 'metadata', field]);
-  },
-  [constants.COPY_CELL]: function copyCell(state, action) {
-    const { id } = action;
-    const cellMap = state.getIn(['notebook', 'cellMap']);
-    const cell = cellMap.get(id);
-    return state.set('copied', new Immutable.Map({ id, cell }));
-  },
-  [constants.CUT_CELL]: function cutCell(state, action) {
-    const { id } = action;
-    const cellMap = state.getIn(['notebook', 'cellMap']);
-    const cell = cellMap.get(id);
-    return state
-      .set('copied', new Immutable.Map({ id, cell }))
-      .update('notebook', notebook => commutable.removeCell(notebook, id));
-  },
-  [constants.PASTE_CELL]: function pasteCell(state) {
-    const copiedCell = state.getIn(['copied', 'cell']);
-    const copiedId = state.getIn(['copied', 'id']);
-    const id = uuid.v4();
+type ChangeOutputVisibilityAction = { type: 'CHANGE_OUTPUT_VISIBILITY', id: CellID }
+function changeOutputVisibility(state: DocumentState, action: ChangeOutputVisibilityAction) {
+  const { id } = action;
+  return state.setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'],
+    !state.getIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden']));
+}
 
-    return state.update('notebook', notebook =>
-        commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
-          .setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'], false)
-          .setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'], false);
-  },
-  [constants.CHANGE_CELL_TYPE]: function changeCellType(state, action) {
-    const { id, to } = action;
-    const from = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
+type ChangeInputVisibilityAction = { type: 'CHANGE_INPUT_VISIBILITY', id: CellID }
+function changeInputVisibility(state: DocumentState, action: ChangeInputVisibilityAction) {
+  const { id } = action;
+  return state.setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'],
+    !state.getIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden']));
+}
 
-    if (from === to) {
-      return state;
-    } else if (from === 'markdown') {
-      return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
-        .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
-        .setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List());
-    }
+type UpdateCellPagersAction = { type: 'UPDATE_CELL_PAGERS', id: CellID, pagers: Immutable.Map<string, Pager> }
+function updateCellPagers(state: DocumentState, action: UpdateCellPagersAction) {
+  const { id, pagers } = action;
+  return state.setIn(['cellPagers', id], pagers);
+}
 
-    return cleanCellTransient(state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
-      .deleteIn(['notebook', 'cellMap', id, 'execution_count'])
-      .deleteIn(['notebook', 'cellMap', id, 'outputs']),
-      id);
-  },
-  [constants.TOGGLE_OUTPUT_EXPANSION]: function toggleOutputExpansion(state, action) {
-    const { id } = action;
-    return state.updateIn(['notebook', 'cellMap'], cells =>
-      cells.setIn([id, 'metadata', 'outputExpanded'],
-        !cells.getIn([id, 'metadata', 'outputExpanded'])));
-  },
-}, {});
+type UpdateCellStatusAction = { type: 'UPDATE_CELL_STATUS', id: CellID, status: string }
+function updateCellStatus(state: DocumentState, action: UpdateCellStatusAction) {
+  const { id, status } = action;
+  return state.setIn(['transient', 'cellMap', id, 'status'], status);
+}
+
+type SetLanguageInfoAction = { type: 'SET_LANGUAGE_INFO', langInfo: LanguageInfoMetadata }
+function setLanguageInfo(state: DocumentState, action: SetLanguageInfoAction) {
+  const langInfo = Immutable.fromJS(action.langInfo);
+  return state.setIn(['notebook', 'metadata', 'language_info'], langInfo);
+}
+
+type SetKernelInfoAction = { type: 'SET_KERNEL_INFO', kernelInfo: KernelspecMetadata }
+function setKernelSpec(state: DocumentState, action: SetKernelInfoAction) {
+  const { kernelInfo } = action;
+  return state
+    .setIn(['notebook', 'metadata', 'kernelspec'], Immutable.fromJS({
+      name: kernelInfo.name,
+      language: kernelInfo.spec.language,
+      display_name: kernelInfo.spec.display_name,
+    }))
+    .setIn(['notebook', 'metadata', 'kernel_info', 'name'], kernelInfo.name);
+}
+
+type OverwriteMetadataFieldAction = { type: 'OVERWRITE_METADATA_FIELD', field: string, value: any }
+function overwriteMetadata(state: DocumentState, action: OverwriteMetadataFieldAction) {
+  const { field, value } = action;
+  return state.setIn(['notebook', 'metadata', field], Immutable.fromJS(value));
+}
+
+type DeleteMetadataFieldAction = { type: 'DELETE_METADATA_FIELD', field: string }
+function deleteMetadata(state: DocumentState, action: DeleteMetadataFieldAction) {
+  const { field } = action;
+  return state.deleteIn(['notebook', 'metadata', field]);
+}
+
+type CopyCellAction = { type: 'COPY_CELL', id: CellID }
+function copyCell(state: DocumentState, action: CopyCellAction) {
+  const { id } = action;
+  const cellMap = state.getIn(['notebook', 'cellMap']);
+  const cell = cellMap.get(id);
+  return state.set('copied', new Immutable.Map({ id, cell }));
+}
+
+type CutCellAction = { type: 'CUT_CELL', id: CellID }
+function cutCell(state: DocumentState, action: CutCellAction) {
+  const { id } = action;
+  const cellMap = state.getIn(['notebook', 'cellMap']);
+  const cell = cellMap.get(id);
+  return state
+    .set('copied', new Immutable.Map({ id, cell }))
+    .update('notebook', notebook => commutable.removeCell(notebook, id));
+}
+
+type PasteCellAction = { type: 'PASTE_CELL' }
+function pasteCell(state: DocumentState, action: PasteCellAction) {
+  const copiedCell = state.getIn(['copied', 'cell']);
+  const copiedId = state.getIn(['copied', 'id']);
+  const id = uuid.v4();
+
+  return state.update('notebook', notebook =>
+      commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
+        .setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'], false)
+        .setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'], false);
+}
+
+type ChangeCellTypeAction = { type: 'CHANGE_CELL_TYPE', id: CellID, to: string }
+function changeCellType(state: DocumentState, action: ChangeCellTypeAction) {
+  const { id, to } = action;
+  const from = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
+
+  if (from === to) {
+    return state;
+  } else if (from === 'markdown') {
+    return state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+      .setIn(['notebook', 'cellMap', id, 'execution_count'], null)
+      .setIn(['notebook', 'cellMap', id, 'outputs'], new Immutable.List());
+  }
+
+  return cleanCellTransient(state.setIn(['notebook', 'cellMap', id, 'cell_type'], to)
+    .deleteIn(['notebook', 'cellMap', id, 'execution_count'])
+    .deleteIn(['notebook', 'cellMap', id, 'outputs']),
+    id);
+}
+
+type ToggleCellExpansionAction = { type: 'TOGGLE_OUTPUT_EXPANSION', id: CellID }
+function toggleOutputExpansion(state: DocumentState, action: ToggleCellExpansionAction) {
+  const { id } = action;
+  return state.updateIn(['notebook', 'cellMap'], cells =>
+    cells.setIn([id, 'metadata', 'outputExpanded'],
+      !cells.getIn([id, 'metadata', 'outputExpanded'])));
+}
 
 type DocumentAction =
   ToggleStickyCellAction | FocusCellActionType | SetNotebookAction |
   ClearOutputsAction | AppendOutputAction | UpdateDisplayAction |
   UpdateExecutionCountAction | MoveCellAction | RemoveCellAction |
   NewCellAfterAction | NewCellBeforeAction | NewCellAppendAction |
-  MergeCellAfterAction | UpdateSourceAction | SplitCellAction;
+  MergeCellAfterAction | UpdateSourceAction | SplitCellAction |
+  ChangeOutputVisibilityAction | ChangeInputVisibilityAction | UpdateCellPagersAction |
+  UpdateCellStatusAction | SetLanguageInfoAction | SetKernelInfoAction |
+  OverwriteMetadataFieldAction | DeleteMetadataFieldAction | CopyCellAction |
+  CutCellAction | PasteCellAction | ChangeCellTypeAction |
+  ToggleCellExpansionAction
 
 export default function handleDocument(state: DocumentState, action: DocumentAction) {
   switch (action.type) {
@@ -565,7 +601,33 @@ export default function handleDocument(state: DocumentState, action: DocumentAct
       return updateSource(state, action);
     case constants.SPLIT_CELL:
       return splitCell(state, action);
+    case constants.CHANGE_OUTPUT_VISIBILITY:
+      return changeOutputVisibility(state, action);
+    case constants.CHANGE_INPUT_VISIBILITY:
+      return changeInputVisibility(state, action);
+    case constants.UPDATE_CELL_PAGERS:
+      return updateCellPagers(state, action);
+    case constants.UPDATE_CELL_STATUS:
+      return updateCellStatus(state, action);
+    case constants.SET_LANGUAGE_INFO:
+      return setLanguageInfo(state, action);
+    case constants.SET_KERNEL_INFO:
+      return setKernelSpec(state, action);
+    case constants.OVERWRITE_METADATA_FIELD:
+      return overwriteMetadata(state, action);
+    case constants.DELETE_METADATA_FIELD:
+      return deleteMetadata(state, action);
+    case constants.COPY_CELL:
+      return copyCell(state, action);
+    case constants.CUT_CELL:
+      return cutCell(state, action);
+    case constants.PASTE_CELL:
+      return pasteCell(state, action);
+    case constants.CHANGE_CELL_TYPE:
+      return changeCellType(state, action);
+    case constants.TOGGLE_OUTPUT_EXPANSION:
+      return toggleOutputExpansion(state, action);
     default:
-      return oldHandleActions(state, action);
+      return state;
   }
 }
