@@ -7,7 +7,9 @@ import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 
-import type { LanguageInfoMetadata, KernelspecMetadata } from '../records'
+import type { LanguageInfoMetadata, KernelspecMetadata } from '../records';
+
+import { DocumentRecord } from '../records';
 
 // Note that we can't use the type definition of Output from records.js
 // because it's an Immutable.Map here. When we have a union on Immutable Records.
@@ -448,7 +450,11 @@ function changeInputVisibility(state: DocumentState, action: ChangeInputVisibili
     !state.getIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden']));
 }
 
-type UpdateCellPagersAction = { type: 'UPDATE_CELL_PAGERS', id: CellID, pagers: Immutable.Map<string, Pager> }
+type UpdateCellPagersAction = {
+  type: 'UPDATE_CELL_PAGERS',
+  id: CellID,
+  pagers: Immutable.Map<string, Pager>
+}
 function updateCellPagers(state: DocumentState, action: UpdateCellPagersAction) {
   const { id, pagers } = action;
   return state.setIn(['cellPagers', id], pagers);
@@ -493,23 +499,23 @@ function deleteMetadata(state: DocumentState, action: DeleteMetadataFieldAction)
 type CopyCellAction = { type: 'COPY_CELL', id: CellID }
 function copyCell(state: DocumentState, action: CopyCellAction) {
   const { id } = action;
-  const cellMap = state.getIn(['notebook', 'cellMap']);
+  const cellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
   const cell = cellMap.get(id);
   return state.set('copied', new Immutable.Map({ id, cell }));
 }
 
-type CutCellAction = { type: 'CUT_CELL', id: CellID }
+type CutCellAction = { type: 'CUT_CELL', id: CellID };
 function cutCell(state: DocumentState, action: CutCellAction) {
   const { id } = action;
-  const cellMap = state.getIn(['notebook', 'cellMap']);
+  const cellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
   const cell = cellMap.get(id);
   return state
     .set('copied', new Immutable.Map({ id, cell }))
     .update('notebook', notebook => commutable.removeCell(notebook, id));
 }
 
-type PasteCellAction = { type: 'PASTE_CELL' }
-function pasteCell(state: DocumentState, action: PasteCellAction) {
+type PasteCellAction = { type: 'PASTE_CELL' };
+function pasteCell(state: DocumentState) {
   const copiedCell = state.getIn(['copied', 'cell']);
   const copiedId = state.getIn(['copied', 'id']);
   const id = uuid.v4();
@@ -559,7 +565,9 @@ type DocumentAction =
   CutCellAction | PasteCellAction | ChangeCellTypeAction |
   ToggleCellExpansionAction
 
-export default function handleDocument(state: DocumentState, action: DocumentAction) {
+const defaultDocument: DocumentState = DocumentRecord();
+
+function handleDocument(state: DocumentState = defaultDocument, action: DocumentAction) {
   switch (action.type) {
     case constants.SET_NOTEBOOK:
       return setNotebook(state, action);
@@ -631,3 +639,5 @@ export default function handleDocument(state: DocumentState, action: DocumentAct
       return state;
   }
 }
+
+export default handleDocument;
