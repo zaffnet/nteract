@@ -1,13 +1,12 @@
 /* @flow */
 
 import * as Immutable from 'immutable';
-import { handleActions } from 'redux-actions';
 import * as uuid from 'uuid';
 import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 
-import type { LanguageInfoMetadata, KernelspecMetadata } from '../records';
+import type { LanguageInfoMetadata } from '../records';
 
 import { DocumentRecord } from '../records';
 
@@ -472,7 +471,17 @@ function setLanguageInfo(state: DocumentState, action: SetLanguageInfoAction) {
   return state.setIn(['notebook', 'metadata', 'language_info'], langInfo);
 }
 
-type SetKernelInfoAction = { type: 'SET_KERNEL_INFO', kernelInfo: KernelspecMetadata }
+
+// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
+type KernelInfo = {
+  name: string,
+  spec: {
+    display_name: string,
+    language: string,
+  },
+};
+
+type SetKernelInfoAction = { type: 'SET_KERNEL_INFO', kernelInfo: KernelInfo }
 function setKernelSpec(state: DocumentState, action: SetKernelInfoAction) {
   const { kernelInfo } = action;
   return state
