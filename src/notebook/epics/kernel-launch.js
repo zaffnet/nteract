@@ -2,8 +2,6 @@ import Rx from 'rxjs/Rx';
 
 import { launchSpec } from 'spawnteract';
 
-import { find } from 'kernelspecs';
-
 import * as uuid from 'uuid';
 
 import {
@@ -122,6 +120,20 @@ export const watchExecutionStateEpic = action$ =>
     );
 
 /**
+  * Get kernel specs from main process
+  *
+  * @returns  {Observable}  The reply from main process
+  */
+export const kernelSpecsObservable =
+  Rx.Observable.create((observer) => {
+    ipc.on('kernel_specs_reply', (event, specs) => {
+      observer.next(specs);
+      observer.complete();
+    });
+    ipc.send('kernel_specs_request');
+  });
+
+/**
   * Gets information about newly launched kernel.
   *
   * @param  {ActionObservable}  The action type
@@ -144,9 +156,11 @@ export const newKernelByNameEpic = action$ =>
       }
     })
     .mergeMap(action =>
-      find(action.kernelSpecName)
-        .then(spec => newKernel(spec, action.cwd))
-    );
+      kernelSpecsObservable
+        .mergeMap(specs =>
+          Rx.Observable.of(newKernel(specs[action.kernelSpecName], action.cwd))
+        )
+  );
 
 /**
   * Launches a new kernel.

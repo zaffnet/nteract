@@ -160,7 +160,7 @@ describe('newKernelByNameEpic', () => {
   it('creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action', (done) => {
     const input$ = Rx.Observable.of({
       type: constants.LAUNCH_KERNEL_BY_NAME,
-      kernelSpecName: 'python2.8',
+      kernelSpecName: 'python3',
       cwd: '~',
     });
     let actionBuffer = [];

@@ -124,7 +124,17 @@ mock('electron', {
     'getZoomLevel': function() { return 1; },
   },
   'ipcRenderer': {
-    'on': function() {},
+    'on': function(message, callback) {
+      if (message === 'kernel_specs_reply') {
+        const specs = {
+          python3: {
+            name: 'python3',
+            spec: { argv: {}, display_name: 'Python 3', language: 'python' }
+          },
+        };
+        callback(null, specs);
+      }
+    },
     'send': function(message, action) {}
   },
 });
