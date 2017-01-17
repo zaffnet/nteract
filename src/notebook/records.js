@@ -150,3 +150,11 @@ export const MetadataRecord = Immutable.Record({
 export const CommsRecord = Immutable.Record({
   targets: new Immutable.Map(),
 });
+
+export type AppState = {
+  app: AppRecord,
+  metadata: MetadataRecord,
+  document: DocumentRecord,
+  comms: CommsRecord,
+  config: Immutable.Map<string, any>,
+};
