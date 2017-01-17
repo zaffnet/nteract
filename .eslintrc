@@ -24,6 +24,7 @@
     "comma-dangle": [0],
     "flowtype/define-flow-type": 2,
     "no-unused-expressions": [0, { allowTernary: true }],
+    "react/no-unused-prop-types": [0],
     "react/jsx-filename-extension": "off",
     "react/require-default-props": [0],
     "react/no-array-index-key": [0],
