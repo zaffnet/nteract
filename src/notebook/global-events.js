@@ -1,13 +1,13 @@
+/* @flow */
+
+import type { Store } from 'redux';
+import type { AppState } from './records';
+
 import {
   forceShutdownKernel,
 } from './kernel/shutdown';
 
-/**
-export function beforeUnload(store, dispatch, e) {
-}
-*/
-
-export function unload(store) {
+export function unload(store: Store<AppState, Action>) {
   const state = store.getState();
   const kernel = {
     channels: state.app.channels,
@@ -17,6 +17,6 @@ export function unload(store) {
   forceShutdownKernel(kernel);
 }
 
-export function initGlobalHandlers(store) {
+export function initGlobalHandlers(store: Store<AppState, Action>) {
   global.window.onunload = unload.bind(null, store);
 }

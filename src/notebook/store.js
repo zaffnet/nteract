@@ -1,4 +1,7 @@
+/* @flow */
 import { createStore, applyMiddleware } from 'redux';
+
+import type { AppState } from './records';
 
 import middlewares from './middlewares';
 import rootReducer from './reducers';
@@ -10,7 +13,7 @@ if (process.env.DEBUG === 'true') {
   middlewares.push(logger());
 }
 
-export default function configureStore(initialState) {
+export default function configureStore(initialState: AppState) {
   return createStore(
     rootReducer,
     initialState,
