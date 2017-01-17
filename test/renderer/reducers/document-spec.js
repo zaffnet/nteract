@@ -321,6 +321,66 @@ describe('moveCell', () => {
     expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(id);
     expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(destinationId);
   });
+  it('should move a cell above another when asked', () => {
+    const originalState = {
+      document: initialDocument.set('notebook', dummyCommutable),
+    };
+
+    const cellOrder = originalState.document.getIn(['notebook', 'cellOrder']);
+    const id = cellOrder.last();
+    const destinationId = cellOrder.first();
+
+    const action = {
+      type: constants.MOVE_CELL,
+      id,
+      destinationId,
+      above: true,
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellOrder']).last()).to.equal(destinationId);
+    expect(state.document.getIn(['notebook', 'cellOrder']).first()).to.equal(id);
+  });
+  it('should move a cell above another when asked', () => {
+    const originalState = reducers({
+      document: initialDocument.set('notebook', dummyCommutable)
+    }, {
+      type: 'NEW_CELL_AFTER',
+      id: dummyCommutable.get('cellOrder').first(),
+      cellType: 'markdown',
+      source: '# Woo\n*Yay*'
+    });
+
+    const cellOrder = originalState.document.getIn(['notebook', 'cellOrder']);
+
+    const action = {
+      type: constants.MOVE_CELL,
+      id: cellOrder.get(0),
+      destinationId: cellOrder.get(1),
+      // implicitly above: false
+    };
+
+    const state = reducers(originalState, action);
+    expect(state.document.getIn(['notebook', 'cellOrder']).toJS()).to.deep.equal([
+        cellOrder.get(1),
+        cellOrder.get(0),
+        cellOrder.get(2),
+    ])
+
+    const action2 = {
+      type: constants.MOVE_CELL,
+      id: cellOrder.get(0),
+      destinationId: cellOrder.get(1),
+      above: true
+    };
+
+    const state2 = reducers(originalState, action2);
+    expect(state2.document.getIn(['notebook', 'cellOrder']).toJS()).to.deep.equal([
+        cellOrder.get(0),
+        cellOrder.get(1),
+        cellOrder.get(2),
+    ])
+  });
 });
 
 describe('removeCell', () => {

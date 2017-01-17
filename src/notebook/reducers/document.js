@@ -75,6 +75,14 @@ type KeyPaths = Immutable.List<KeyPath>;
 // https://github.com/facebook/immutable-js/issues/998
 type DocumentState = Immutable.Map<string, any>; // & Document;
 
+type Cell = Immutable.Map<string, any>;
+type CellMap = Immutable.Map<string, Cell>;
+// TODO: type that notebook!
+type Notebook = Immutable.Map<string, any>;
+
+type CellID = string;
+type CellOrder = Immutable.List<CellID>;
+
 /**
  * An output can be a stream of data that does not arrive at a single time. This
  * function handles the different types of outputs and accumulates the data
@@ -125,14 +133,6 @@ export function cleanCellTransient(state: DocumentState, id: string) {
   ).setIn(['transient', 'cellMap'], new Immutable.Map());
 }
 
-type Cell = Immutable.Map<string, any>;
-type CellMap = Immutable.Map<string, Cell>;
-type Notebook = Immutable.Map<string, any>;
-
-type CellID = string;
-type CellOrder = Immutable.List<CellID>;
-
-// TODO: type that notebook!
 // It would probably be wise to make this JSON serializable and not be using
 // the immutable.js version of the notebook in the action
 type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: Notebook };
@@ -529,7 +529,7 @@ function pasteCell(state: DocumentState) {
   const copiedId = state.getIn(['copied', 'id']);
   const id = uuid.v4();
 
-  return state.update('notebook', notebook =>
+  return state.update('notebook', (notebook: Notebook) =>
       commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
         .setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'], false)
         .setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'], false);
@@ -557,7 +557,7 @@ function changeCellType(state: DocumentState, action: ChangeCellTypeAction) {
 type ToggleCellExpansionAction = { type: 'TOGGLE_OUTPUT_EXPANSION', id: CellID }
 function toggleOutputExpansion(state: DocumentState, action: ToggleCellExpansionAction) {
   const { id } = action;
-  return state.updateIn(['notebook', 'cellMap'], cells =>
+  return state.updateIn(['notebook', 'cellMap'], (cells: CellMap) =>
     cells.setIn([id, 'metadata', 'outputExpanded'],
       !cells.getIn([id, 'metadata', 'outputExpanded'])));
 }
