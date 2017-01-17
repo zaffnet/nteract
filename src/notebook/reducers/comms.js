@@ -1,10 +1,24 @@
-import { handleActions } from 'redux-actions';
+/* @flow */
+import * as Immutable from 'immutable';
 
-import * as constants from '../constants';
+type CommState = Immutable.Map<string, any>;
 
-export default handleActions({
-  // No one is using this --> we merely need a consistent structure
-  [constants.REGISTER_COMM_TARGET]: function registerCommTarget(state, action) {
-    return state.setIn(['targets', action.name], action.handler);
-  },
-}, {});
+const defaultCommState : CommState = Immutable.Map({
+  targets: Immutable.Map(),
+});
+
+type RegisterCommTargetAction = { type: 'REGISTER_COMM_TARGET', name: string, handler: string };
+function registerCommTarget(state: CommState, action: RegisterCommTargetAction): CommState {
+  return state.setIn(['targets', action.name], action.handler);
+}
+
+type CommAction = RegisterCommTargetAction;
+
+export default function (state: CommState = defaultCommState, action: CommAction) {
+  switch (action.type) {
+    case 'REGISTER_COMM_TARGET':
+      return registerCommTarget(state, action);
+    default:
+      return state;
+  }
+}
