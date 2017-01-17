@@ -126,6 +126,9 @@ type Notebook = Immutable.Map<string, any>;
 type CellID = string;
 type ImmutableCellOrder = Immutable.List<CellID>;
 
+// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
+type KernelInfo = { name: string, spec: { display_name: string, language: string } };
+
 export function createOutput(output: Output): ImmutableOutput {
   return Immutable.fromJS(output);
 }
@@ -184,9 +187,6 @@ export function cleanCellTransient(state: DocumentState, id: string) {
 // It would probably be wise to make this JSON serializable and not be using
 // the immutable.js version of the notebook in the action
 type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: Notebook };
-type FocusCellAction = { type: 'FOCUS_CELL', id: CellID };
-type ClearOutputsAction = { type: 'CLEAR_OUTPUTS', id: CellID };
-
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const notebook = action.notebook
     .update('cellMap', (cells: ImmutableCellMap): ImmutableCellMap =>
@@ -202,10 +202,12 @@ function setNotebook(state: DocumentState, action: SetNotebookAction) {
     .setIn(['transient', 'cellMap'], new Immutable.Map());
 }
 
+type FocusCellAction = { type: 'FOCUS_CELL', id: CellID };
 function focusCell(state: DocumentState, action: FocusCellAction) {
   return state.set('cellFocused', action.id);
 }
 
+type ClearOutputsAction = { type: 'CLEAR_OUTPUTS', id: CellID };
 function clearOutputs(state: DocumentState, action: ClearOutputsAction) {
   const { id } = action;
   const type = state.getIn(['notebook', 'cellMap', id, 'cell_type']);
@@ -220,7 +222,6 @@ function clearOutputs(state: DocumentState, action: ClearOutputsAction) {
 }
 
 type AppendOutputAction = { type: 'APPEND_OUTPUT', id: CellID, output: Output };
-
 function appendOutput(state: DocumentState, action: AppendOutputAction) {
   const output = action.output;
   const cellID = action.id;
@@ -273,7 +274,6 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
 }
 
 type UpdateDisplayAction = { type: 'UPDATE_DISPLAY', output: Output };
-
 function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
   const output: ImmutableOutput = createOutput(action.output);
   const displayID = output.getIn(['transient', 'display_id']);
@@ -285,7 +285,6 @@ function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
 }
 
 type FocusNextCellAction = { type: 'FOCUS_NEXT_CELL', id: CellID, createCellIfUndefined: boolean }
-
 function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
   const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
@@ -314,7 +313,6 @@ function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
 }
 
 type FocusPreviousCellAction = { type: 'FOCUS_PREVIOUS_CELL', id: CellID };
-
 function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction): DocumentState {
   const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
@@ -324,13 +322,11 @@ function focusPreviousCell(state: DocumentState, action: FocusPreviousCellAction
 }
 
 type FocusCellEditorAction = { type: 'FOCUS_CELL_EDITOR', id: CellID };
-
 function focusCellEditor(state: DocumentState, action: FocusCellEditorAction) {
   return state.set('editorFocused', action.id);
 }
 
 type FocusNextCellEditorAction = { type: 'FOCUS_NEXT_CELL_EDITOR', id: CellID };
-
 function focusNextCellEditor(state: DocumentState, action: FocusNextCellEditorAction) {
   const cellOrder : ImmutableCellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
@@ -340,7 +336,6 @@ function focusNextCellEditor(state: DocumentState, action: FocusNextCellEditorAc
 }
 
 type FocusPreviousCellEditorAction = { type: 'FOCUS_PREVIOUS_CELL_EDITOR', id: CellID };
-
 function focusPreviousCellEditor(state: DocumentState, action: FocusPreviousCellEditorAction) {
   const cellOrder : ImmutableCellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
@@ -359,18 +354,12 @@ function toggleStickyCell(state: DocumentState, action: ToggleStickyCellAction) 
   return state.set('stickyCells', stickyCells.add(id));
 }
 
-type FocusCellActionType = FocusPreviousCellEditorAction | FocusPreviousCellAction |
-                           FocusNextCellEditorAction | FocusNextCellAction |
-                           FocusCellEditorAction | FocusCellAction;
-
 type UpdateExecutionCountAction = { type: 'UPDATE_CELL_EXECUTION_COUNT', id: CellID, count: number }
-
 function updateExecutionCount(state: DocumentState, action: UpdateExecutionCountAction) {
   return state.setIn(['notebook', 'cellMap', action.id, 'execution_count'], action.count);
 }
 
 type MoveCellAction = { type: 'MOVE_CELL', id: CellID, destinationId: CellID }
-
 function moveCell(state: DocumentState, action: MoveCellAction) {
   return state.updateIn(['notebook', 'cellOrder'],
     (cellOrder: ImmutableCellOrder) => {
@@ -451,7 +440,6 @@ function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
 }
 
 type NewCellAppendAction = { type: 'NEW_CELL_APPEND', cellType: CellType}
-
 function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   const { cellType } = action;
   const notebook: Notebook = state.get('notebook');
@@ -471,7 +459,8 @@ function updateSource(state: DocumentState, action: UpdateSourceAction) {
 }
 
 type SplitCellAction = { type: 'SPLIT_CELL', id: CellID, position: number }
-// Note: position is line number in the source of the cell
+// Note: position is line number in the source of the cell and we
+//       don't have any UI for this action yet.
 function splitCell(state: DocumentState, action: SplitCellAction) {
   const { id, position } = action;
   const index = state.getIn(['notebook', 'cellOrder'], Immutable.List()).indexOf(id);
@@ -518,16 +507,6 @@ function setLanguageInfo(state: DocumentState, action: SetLanguageInfoAction) {
   const langInfo = Immutable.fromJS(action.langInfo);
   return state.setIn(['notebook', 'metadata', 'language_info'], langInfo);
 }
-
-
-// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
-type KernelInfo = {
-  name: string,
-  spec: {
-    display_name: string,
-    language: string,
-  },
-};
 
 type SetKernelInfoAction = { type: 'SET_KERNEL_INFO', kernelInfo: KernelInfo }
 function setKernelSpec(state: DocumentState, action: SetKernelInfoAction) {
@@ -609,6 +588,10 @@ function toggleOutputExpansion(state: DocumentState, action: ToggleCellExpansion
     cells.setIn([id, 'metadata', 'outputExpanded'],
       !cells.getIn([id, 'metadata', 'outputExpanded'])));
 }
+
+type FocusCellActionType = FocusPreviousCellEditorAction | FocusPreviousCellAction |
+                           FocusNextCellEditorAction | FocusNextCellAction |
+                           FocusCellEditorAction | FocusCellAction;
 
 type DocumentAction =
   ToggleStickyCellAction | FocusCellActionType | SetNotebookAction |
