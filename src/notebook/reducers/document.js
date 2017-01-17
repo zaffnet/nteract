@@ -14,6 +14,11 @@ import { DocumentRecord } from '../records';
 // because it's an Immutable.Map here. When we have a union on Immutable Records.
 // We can swap these out later.
 
+export type ImmutableJSON = | string | number | boolean | null
+                            | ImmutableJSONMap | ImmutableJSONList; // eslint-disable-line no-use-before-define
+export type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
+export type ImmutableJSONList = Immutable.List<ImmutableJSON>;
+
 type ImmutableOutput = Immutable.Map<string, any>;
 type ImmutableOutputs = Immutable.List<ImmutableOutput>;
 
@@ -23,6 +28,51 @@ type JSONObject = { [key:string]: JSON };
 type JSONArray = Array<JSON>;
 
 type ExecutionCount = number | null;
+
+type CellType = 'code' | 'markdown';
+
+// Until flow, Immutable, and Record play together
+export type ImmutableCodeCell = Immutable.Map<string, any>;
+export type ImmutableMarkdownCell = Immutable.Map<string, any>;
+export type ImmutableCell = ImmutableCodeCell | ImmutableMarkdownCell;
+
+export type CodeCell = {
+  cell_type: 'code',
+  metadata: ImmutableJSONMap,
+  execution_count: ExecutionCount,
+  source: string,
+  outputs: Immutable.List<ImmutableOutput>,
+}
+
+export type MarkdownCell = {
+  cell_type: 'markdown',
+  source: string,
+  metadata: ImmutableJSONMap,
+}
+
+export function createCodeCell(cell: CodeCell): ImmutableCodeCell {
+  return Immutable.Map(cell);
+}
+
+export function createMarkdownCell(cell: MarkdownCell): ImmutableMarkdownCell {
+  return Immutable.Map(cell);
+}
+
+export const emptyCodeCell = createCodeCell({
+  cell_type: 'code',
+  execution_count: null,
+  metadata: Immutable.Map({
+    collapsed: false,
+  }),
+  source: '',
+  outputs: Immutable.List(),
+});
+
+export const emptyMarkdownCell = createMarkdownCell({
+  cell_type: 'markdown',
+  metadata: Immutable.Map(),
+  source: '',
+});
 
 type MimeBundle = JSONObject;
 
@@ -61,20 +111,24 @@ export type ErrorOutput = {
 
 export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
 
-type KeyPath = Immutable.List<string>;
+// Note: number is only allowed when indexing into a List
+type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
 
 // It's really an Immutable.Record<Document>, we'll do this for now until a fix
 // https://github.com/facebook/immutable-js/issues/998
 type DocumentState = Immutable.Map<string, any>; // & Document;
 
-type Cell = Immutable.Map<string, any>;
-type CellMap = Immutable.Map<string, Cell>;
+type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
 // TODO: type that notebook!
 type Notebook = Immutable.Map<string, any>;
 
 type CellID = string;
-type CellOrder = Immutable.List<CellID>;
+type ImmutableCellOrder = Immutable.List<CellID>;
+
+export function createOutput(output: Output): ImmutableOutput {
+  return Immutable.fromJS(output);
+}
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -89,7 +143,7 @@ export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), outp
   if (output.output_type !== 'stream' ||
      (outputs.size > 0 && outputs.last().get('output_type') !== 'stream')) {
     // If it's not a stream type, we just fold in the output
-    return outputs.push(Immutable.fromJS(output));
+    return outputs.push(createOutput(output));
   }
 
   const streamOutput : StreamOutput = output;
@@ -106,7 +160,7 @@ export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), outp
     if (outputs.last().get('name') === streamOutput.name) {
       return outputs.updateIn([outputs.size - 1, 'text'], appendText);
     }
-    const nextToLast = outputs.butLast().last();
+    const nextToLast: ImmutableOutput = outputs.butLast().last();
     if (nextToLast &&
         nextToLast.get('output_type') === 'stream' &&
         nextToLast.get('name') === streamOutput.name) {
@@ -114,7 +168,7 @@ export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), outp
     }
   }
 
-  return outputs.push(Immutable.fromJS(streamOutput));
+  return outputs.push(createOutput(streamOutput));
 }
 
 export function cleanCellTransient(state: DocumentState, id: string) {
@@ -135,7 +189,7 @@ type ClearOutputsAction = { type: 'CLEAR_OUTPUTS', id: CellID };
 
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const notebook = action.notebook
-    .update('cellMap', (cells: CellMap): CellMap =>
+    .update('cellMap', (cells: ImmutableCellMap): ImmutableCellMap =>
       // TODO: Determine why setting the notebook is changing these values.
       //       Should they be transient or part of an overall app state?
       cells.map(value =>
@@ -198,9 +252,9 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
   ).count();
 
   // Construct the path to the output for updating later
-  const keyPath = Immutable.List(['notebook', 'cellMap', cellID, 'outputs', outputIndex]);
+  const keyPath: KeyPath = Immutable.List(['notebook', 'cellMap', cellID, 'outputs', outputIndex]);
 
-  const keyPaths = state
+  const keyPaths: KeyPaths = state
     // Extract the current list of keypaths for this displayID
     .getIn(
       ['transient', 'keyPathsForDisplays', displayID], new Immutable.List()
@@ -208,17 +262,20 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
     // Append our current output's keyPath
     .push(keyPath);
 
-  const immutableOutput: ImmutableOutput = Immutable.fromJS(output);
+  const immutableOutput = createOutput(output);
 
   // We'll reduce the overall state based on each keypath, updating output
-  return keyPaths.reduce((currState, kp) => currState.setIn(kp, immutableOutput), state)
+  return keyPaths.reduce(
+    (currState: DocumentState, kp: KeyPath) =>
+      currState.setIn(kp, immutableOutput), state
+    )
     .setIn(['transient', 'keyPathsForDisplays', displayID], keyPaths);
 }
 
 type UpdateDisplayAction = { type: 'UPDATE_DISPLAY', output: Output };
 
 function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
-  const output: ImmutableOutput = Immutable.fromJS(action.output);
+  const output: ImmutableOutput = createOutput(action.output);
   const displayID = output.getIn(['transient', 'display_id']);
   const keyPaths: KeyPaths = state
     .getIn(
@@ -241,10 +298,10 @@ function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
       return state;
     }
 
-    const cellID: CellID = uuid.v4();
+    const cellID = uuid.v4();
     // TODO: condition on state.defaultCellType (markdown vs. code)
     // TODO: type cells (these could be records...)
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     return state.set('cellFocused', cellID)
       .update('notebook',
         notebook => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
@@ -316,7 +373,7 @@ type MoveCellAction = { type: 'MOVE_CELL', id: CellID, destinationId: CellID }
 
 function moveCell(state: DocumentState, action: MoveCellAction) {
   return state.updateIn(['notebook', 'cellOrder'],
-    (cellOrder: CellOrder) => {
+    (cellOrder: ImmutableCellOrder) => {
       const oldIndex = cellOrder.findIndex(id => id === action.id);
       const newIndex = cellOrder.findIndex(id => id === action.destinationId)
                         + (action.above ? 0 : 1);
@@ -341,18 +398,15 @@ function removeCell(state: DocumentState, action: RemoveCellAction) {
   );
 }
 
-type CellType = 'code' | 'markdown';
-
 type NewCellAfterAction = {
   type: 'NEW_CELL_AFTER', id: CellID, cellType: CellType, source: string
 };
-
 function newCellAfter(state: DocumentState, action: NewCellAfterAction) {
   const { cellType, id, source } = action;
-  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                         commutable.emptyCodeCell;
-  const cellID: CellID = uuid.v4();
-  return state.update('notebook', (notebook) => {
+  const cell = cellType === 'markdown' ? emptyMarkdownCell :
+                                         emptyCodeCell;
+  const cellID = uuid.v4();
+  return state.update('notebook', (notebook: Notebook) => {
     const index = notebook.get('cellOrder').indexOf(id) + 1;
     return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
   })
@@ -363,9 +417,8 @@ function newCellAfter(state: DocumentState, action: NewCellAfterAction) {
 type NewCellBeforeAction = { type: 'NEW_CELL_BEFORE', cellType: CellType, id: CellID };
 function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
   const { cellType, id } = action;
-  const cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                         commutable.emptyCodeCell;
-  const cellID: CellID = uuid.v4();
+  const cell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
+  const cellID = uuid.v4();
   return state.update('notebook', (notebook) => {
     const index = notebook.get('cellOrder').indexOf(id);
     return commutable.insertCellAt(notebook, cell, cellID, index);
@@ -377,13 +430,13 @@ function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
 type MergeCellAfterAction = { type: 'MERGE_CELL_AFTER', id: CellID };
 function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
   const { id } = action;
-  const cellOrder: CellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const cellOrder: ImmutableCellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const index = cellOrder.indexOf(id);
   // do nothing if this is the last cell
   if (cellOrder.size === index + 1) {
     return state;
   }
-  const cellMap: CellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
+  const cellMap: ImmutableCellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
 
   const nextId = cellOrder.get(index + 1);
   const firstSource: string = cellMap.getIn([id, 'source'], '');
@@ -401,10 +454,9 @@ type NewCellAppendAction = { type: 'NEW_CELL_APPEND', cellType: CellType}
 function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   const { cellType } = action;
   const notebook: Notebook = state.get('notebook');
-  const cell: Cell = cellType === 'markdown' ? commutable.emptyMarkdownCell :
-                                         commutable.emptyCodeCell;
+  const cell: ImmutableCell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
   const index = notebook.get('cellOrder').count();
-  const cellID: CellID = uuid.v4();
+  const cellID = uuid.v4();
   return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
     .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
     .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
@@ -551,7 +603,7 @@ function changeCellType(state: DocumentState, action: ChangeCellTypeAction) {
 type ToggleCellExpansionAction = { type: 'TOGGLE_OUTPUT_EXPANSION', id: CellID }
 function toggleOutputExpansion(state: DocumentState, action: ToggleCellExpansionAction) {
   const { id } = action;
-  return state.updateIn(['notebook', 'cellMap'], (cells: CellMap) =>
+  return state.updateIn(['notebook', 'cellMap'], (cells: ImmutableCellMap) =>
     cells.setIn([id, 'metadata', 'outputExpanded'],
       !cells.getIn([id, 'metadata', 'outputExpanded'])));
 }
