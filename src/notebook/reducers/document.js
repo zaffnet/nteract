@@ -332,7 +332,7 @@ function focusCellEditor(state: DocumentState, action: FocusCellEditorAction) {
 type FocusNextCellEditorAction = { type: 'FOCUS_NEXT_CELL_EDITOR', id: CellID };
 
 function focusNextCellEditor(state: DocumentState, action: FocusNextCellEditorAction) {
-  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const cellOrder : ImmutableCellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
   const nextIndex = curIndex + 1;
 
@@ -342,7 +342,7 @@ function focusNextCellEditor(state: DocumentState, action: FocusNextCellEditorAc
 type FocusPreviousCellEditorAction = { type: 'FOCUS_PREVIOUS_CELL_EDITOR', id: CellID };
 
 function focusPreviousCellEditor(state: DocumentState, action: FocusPreviousCellEditorAction) {
-  const cellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
+  const cellOrder : ImmutableCellOrder = state.getIn(['notebook', 'cellOrder'], Immutable.List());
   const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
   const nextIndex = Math.max(0, curIndex - 1);
 
@@ -420,7 +420,8 @@ function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
   const cell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update('notebook', (notebook) => {
-    const index = notebook.get('cellOrder').indexOf(id);
+    const cellOrder : ImmutableCellOrder = notebook.get('cellOrder');
+    const index = cellOrder.indexOf(id);
     return commutable.insertCellAt(notebook, cell, cellID, index);
   })
     .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
@@ -454,8 +455,9 @@ type NewCellAppendAction = { type: 'NEW_CELL_APPEND', cellType: CellType}
 function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   const { cellType } = action;
   const notebook: Notebook = state.get('notebook');
+  const cellOrder : ImmutableCellOrder = notebook.get('cellOrder');
   const cell: ImmutableCell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
-  const index = notebook.get('cellOrder').count();
+  const index = cellOrder.count();
   const cellID = uuid.v4();
   return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
     .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
@@ -563,7 +565,7 @@ type CutCellAction = { type: 'CUT_CELL', id: CellID };
 function cutCell(state: DocumentState, action: CutCellAction) {
   const { id } = action;
   const cellMap = state.getIn(['notebook', 'cellMap'], Immutable.Map());
-  const cell = cellMap.get(id);
+  const cell : ImmutableCell = cellMap.get(id);
   return state
     .set('copied', new Immutable.Map({ id, cell }))
     .update('notebook', notebook => commutable.removeCell(notebook, id));
