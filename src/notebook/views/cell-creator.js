@@ -1,6 +1,4 @@
 // @flow
-/* eslint-disable react/no-unused-prop-types */
-
 import React, { PureComponent } from 'react';
 import { throttle } from 'lodash';
 

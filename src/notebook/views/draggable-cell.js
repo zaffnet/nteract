@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
