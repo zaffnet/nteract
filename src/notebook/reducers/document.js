@@ -50,15 +50,7 @@ export type MarkdownCell = {
   metadata: ImmutableJSONMap,
 }
 
-export function createCodeCell(cell: CodeCell): ImmutableCodeCell {
-  return Immutable.Map(cell);
-}
-
-export function createMarkdownCell(cell: MarkdownCell): ImmutableMarkdownCell {
-  return Immutable.Map(cell);
-}
-
-export const emptyCodeCell = createCodeCell({
+const defaultCodeCell = {
   cell_type: 'code',
   execution_count: null,
   metadata: Immutable.Map({
@@ -66,13 +58,24 @@ export const emptyCodeCell = createCodeCell({
   }),
   source: '',
   outputs: Immutable.List(),
-});
+};
 
-export const emptyMarkdownCell = createMarkdownCell({
+const defaultMarkdownCell = {
   cell_type: 'markdown',
   metadata: Immutable.Map(),
   source: '',
-});
+};
+
+export function createCodeCell(cell: CodeCell = defaultCodeCell): ImmutableCodeCell { // eslint-disable-line max-len
+  return Immutable.Map(cell);
+}
+
+export function createMarkdownCell(cell: MarkdownCell = defaultMarkdownCell): ImmutableMarkdownCell { // eslint-disable-line max-len
+  return Immutable.Map(cell);
+}
+
+export const emptyCodeCell = createCodeCell();
+export const emptyMarkdownCell = createMarkdownCell();
 
 type MimeBundle = JSONObject;
 
