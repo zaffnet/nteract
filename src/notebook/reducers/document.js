@@ -61,14 +61,7 @@ export type ErrorOutput = {
 
 export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
 
-/*
- * Alias for ECMAScript `Iterable` type, declared in
- * https://github.com/facebook/flow/blob/master/lib/core.js
- *
- * Note that Immutable values implement the `ESIterable` interface.
- */
-type ESIterable<T> = $Iterable<T, void, void>;
-type KeyPath = ESIterable<any>;
+type KeyPath = Immutable.List<string>;
 type KeyPaths = Immutable.List<KeyPath>;
 
 // It's really an Immutable.Record<Document>, we'll do this for now until a fix
@@ -126,9 +119,10 @@ export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), outp
 
 export function cleanCellTransient(state: DocumentState, id: string) {
   // Clear out key paths that should no longer be referenced
-  return state.updateIn(['transient', 'keyPathsForDisplays'], kpfd =>
-    kpfd.map(keyPaths =>
-      keyPaths.filter(keyPath => keyPath.get(2) !== id)
+  return state.updateIn(['transient', 'keyPathsForDisplays'],
+  (kpfd: Immutable.Map<string, KeyPaths>) =>
+    kpfd.map((keyPaths: KeyPaths) =>
+      keyPaths.filter((keyPath: KeyPath) => keyPath.get(2) !== id)
     )
   ).setIn(['transient', 'cellMap'], new Immutable.Map());
 }
