@@ -38,12 +38,21 @@ describe('reduceOutputs', () => {
 
     expect(newOutputs).to.equal(Immutable.List([1, 2, 3]));
   })
-
-  it('merges streams of text', () => {
+  it('handles the case of a single stream output', () => {
     const outputs = Immutable.fromJS([{name: 'stdout', text: 'hello', output_type: 'stream'}])
     const newOutputs = reduceOutputs(outputs, {name: 'stdout', text: ' world', output_type: 'stream' });
 
     expect(newOutputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello world', output_type: 'stream'}]));
+  })
+
+  it('merges streams of text', () => {
+    var outputs = Immutable.List();
+
+    outputs = reduceOutputs(outputs, {name: 'stdout', text: 'hello', output_type: 'stream'});
+    expect(outputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello', output_type: 'stream'}]));
+
+    outputs = reduceOutputs(outputs, {name: 'stdout', text: ' world', output_type: 'stream' });
+    expect(outputs).to.equal(Immutable.fromJS([{name: 'stdout', text: 'hello world', output_type: 'stream'}]));
   })
 
   it('keeps respective streams together', () => {
