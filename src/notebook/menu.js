@@ -19,7 +19,6 @@ import {
   executeCell,
   clearOutputs,
   newKernel,
-  newKernelByName,
   killKernel,
   interruptKernel,
   copyCell,
@@ -82,11 +81,11 @@ export function dispatchRestartKernel(store) {
   }
 
   store.dispatch(killKernel);
-  store.dispatch(newKernelByName(state.app.kernelSpecName, cwd));
+  store.dispatch(newKernel(state.app.kernelSpec, cwd));
 
   notificationSystem.addNotification({
     title: 'Kernel Restarted',
-    message: `Kernel ${state.app.kernelSpecName} has been restarted.`,
+    message: `Kernel ${state.app.kernelSpecDisplayName} has been restarted.`,
     dismissible: true,
     position: 'tr',
     level: 'success',
