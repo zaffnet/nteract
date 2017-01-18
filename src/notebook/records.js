@@ -111,6 +111,8 @@ export const AppRecord = Immutable.Record({
   connectionFile: null,
   notificationSystem: null,
   kernelSpecName: null,
+  kernelSpecDisplayName: null,
+  kernelSpec: null,
   isSaving: false,
   lastSaved: null,
   configLastSaved: null,

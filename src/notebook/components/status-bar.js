@@ -5,7 +5,7 @@ import moment from 'moment';
 type Props = {
   notebook: any,
   lastSaved: Date,
-  kernelSpecName: string,
+  kernelSpecDisplayName: string,
   executionState: string,
 };
 
@@ -22,7 +22,7 @@ export default class StatusBar extends React.Component {
   }
 
   render(): ?React.Element<any> {
-    const name = this.props.kernelSpecName || 'Loading...';
+    const name = this.props.kernelSpecDisplayName || 'Loading...';
 
     return (
       <div className="status-bar">

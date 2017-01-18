@@ -210,12 +210,15 @@ describe('newKernel', () => {
       channels: 'test_channels',
       spawn: 'test_spawn',
       kernelSpecName: 'test_name',
+      kernelSpec: { spec: { display_name: 'Test Name' } },
       executionState: 'starting',
     };
 
     const state = reducers(originalState, action);
     expect(state.app.executionState).to.equal('starting');
     expect(state.app.kernelSpecName).to.equal('test_name');
+    expect(state.app.kernelSpec).to.deep.equal({ spec: { display_name: 'Test Name' } });
+    expect(state.app.kernelSpecDisplayName).to.equal('Test Name');
     expect(state.app.spawn).to.equal('test_spawn');
     expect(state.app.channels).to.equal('test_channels');
   });

@@ -14,6 +14,8 @@ declare class AppState {
   spawn: ChildProcess,
   connectionFile: string,
   kernelSpecName: string,
+  kernelSpecDisplayName: string,
+  kernelSpec: Object,
   executionState: string,
   token: string,
   notificationSystem: Object,
@@ -35,6 +37,8 @@ function cleanupKernel(state: AppState): AppState {
       .set('spawn', null)
       .set('connectionFile', null)
       .set('kernelSpecName', null)
+      .set('kernelSpecDisplayName', null)
+      .set('kernelSpec', null)
       .set('executionState', 'not connected')
   );
 }
@@ -45,6 +49,7 @@ type NewKernelAction = {
   connectionFile: string,
   spawn: ChildProcess,
   kernelSpecName: string,
+  kernelSpec: Object,
 };
 
 function newKernel(state: AppState, action: NewKernelAction) {
@@ -54,6 +59,8 @@ function newKernel(state: AppState, action: NewKernelAction) {
         .set('connectionFile', action.connectionFile)
         .set('spawn', action.spawn)
         .set('kernelSpecName', action.kernelSpecName)
+        .set('kernelSpecDisplayName', action.kernelSpec.spec.display_name)
+        .set('kernelSpec', action.kernelSpec)
         .set('executionState', 'starting')
   );
 }
