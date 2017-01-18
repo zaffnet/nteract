@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/version-stable-blue.svg)](https://github.com/nteract/nteract/releases)
 [![codecov.io](https://codecov.io/github/nteract/nteract/coverage.svg?branch=master)](https://codecov.io/github/nteract/nteract?branch=master)
 ![Documentation Coverage](https://doc.esdoc.org/github.com/nteract/nteract/badge.svg)
-[![slack in](http://slack.nteract.in/badge.svg)](http://slack.nteract.in)
+[![slack in](https://slackin-egwcornswi.now.sh/badge.svg)](https://slackin-egwcornswi.now.sh/)
 
 [**Users**](#installation---users) | [**Contributors and Development**](#installation---contributors-and-development) | [**Maintainers**](#for-maintainers-creating-a-release)
 
