@@ -1,11 +1,28 @@
+/* @flow */
 import * as fs from 'fs';
+
+import type { Subject } from 'rxjs';
+// import type { ChildProcess } from 'child_process'; // eslint-disable-line no-unused-vars
 
 import { shutdownRequest } from 'enchannel';
 import { getUsername, session } from './messaging';
 
 export const filesystem = fs;
 
-export function cleanupKernel(kernel, closeChannels) {
+export type Channels = {
+  iopub: Subject,
+  stdin: Subject,
+  shell: Subject,
+  control: Subject,
+}
+
+export type Kernel = {
+  channels: Channels,
+  spawn: any, // ChildProcess,
+  connectionFile: string,
+}
+
+export function cleanupKernel(kernel: Kernel, closeChannels: boolean): void {
   if (kernel.channels && closeChannels) {
     try {
       kernel.channels.shell.complete();
@@ -34,7 +51,7 @@ export function cleanupKernel(kernel, closeChannels) {
   }
 }
 
-export function forceShutdownKernel(kernel) {
+export function forceShutdownKernel(kernel: Kernel): void {
   if (kernel && kernel.spawn && kernel.spawn.kill) {
     kernel.spawn.kill('SIGKILL');
   }
@@ -42,10 +59,10 @@ export function forceShutdownKernel(kernel) {
   cleanupKernel(kernel, true);
 }
 
-export function shutdownKernel(kernel) {
+export function shutdownKernel(kernel: Kernel): Promise<boolean> {
   // Validate the input, do nothing if invalid kernel info is provided.
   if (!(kernel && (kernel.channels || kernel.spawn))) {
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   // Fallback to forcefully shutting the kernel down.
