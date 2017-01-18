@@ -55,7 +55,7 @@ type Props = {
   theme: string,
   cursorBlinkRate: number,
   lastSaved: Date,
-  kernelSpecName: string,
+  kernelSpecDisplayName: string,
   CellComponent: any,
   executionState: string,
 };
@@ -75,7 +75,7 @@ const mapStateToProps = (state: Object) => ({
   theme: state.config.get('theme'),
   cursorBlinkRate: state.config.get('cursorBlinkRate'),
   lastSaved: state.app.get('lastSaved'),
-  kernelSpecName: state.app.get('kernelSpecName'),
+  kernelSpecDisplayName: state.app.get('kernelSpecDisplayName'),
   notebook: state.document.get('notebook'),
   transient: state.document.get('transient'),
   cellPagers: state.document.get('cellPagers'),
@@ -249,7 +249,7 @@ export class Notebook extends React.PureComponent {
         <StatusBar
           notebook={this.props.notebook}
           lastSaved={this.props.lastSaved}
-          kernelSpecName={this.props.kernelSpecName}
+          kernelSpecDisplayName={this.props.kernelSpecDisplayName}
           executionState={this.props.executionState}
         />
         <link rel="stylesheet" href={`../static/styles/theme-${this.props.theme}.css`} />
