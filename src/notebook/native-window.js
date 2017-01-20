@@ -23,13 +23,22 @@ export function setTitleFromAttributes(attributes) {
   const filename = tildify(attributes.fullpath);
   const { executionState } = attributes;
 
-  const win = remote.getCurrentWindow();
-  if (filename && win.setRepresentedFilename) {
-    win.setRepresentedFilename(attributes.fullpath);
-    win.setDocumentEdited(attributes.modified);
+  try {
+    const win = remote.getCurrentWindow();
+    if (filename && win.setRepresentedFilename) {
+      win.setRepresentedFilename(attributes.fullpath);
+      win.setDocumentEdited(attributes.modified);
+    }
+    const title = `${filename} - ${executionState}`;
+    win.setTitle(title);
+  } catch (e) {
+    /* istanbul ignore next */
+    (function log1277() {
+      console.error('Unable to set the filename, see https://github.com/nteract/nteract/issues/1277');
+      console.error(e);
+      console.error(e.stack);
+    }());
   }
-  const title = `${filename} - ${executionState}`;
-  win.setTitle(title);
 }
 
 export function createTitleFeed(state$) {
@@ -72,6 +81,7 @@ export function createTitleFeed(state$) {
 
 export function initNativeHandlers(store) {
   const state$ = Rx.Observable.from(store);
+
   return createTitleFeed(state$)
     .subscribe(setTitleFromAttributes, err => console.error(err));
 }
