@@ -240,11 +240,11 @@ export const cell = {
       click: createSender('menu:run-all-below'),
     },
     {
-      label: 'Clear All',
+      label: 'Clear All Outputs',
       click: createSender('menu:clear-all'),
     },
     {
-      label: 'Unhide All',
+      label: 'Unhide All Outputs',
       click: createSender('menu:unhide-all'),
     }
   ],
