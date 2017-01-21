@@ -1,6 +1,6 @@
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 
 const nodeModules = {
   zmq: 'commonjs zmq',
@@ -18,7 +18,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.json$/, loader: 'json-loader' },
     ]
   },
@@ -27,6 +27,7 @@ module.exports = {
   },
   externals: nodeModules,
   plugins: [
+    new LodashModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/\.(css|less)$/),
   ],
 };
