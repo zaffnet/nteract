@@ -1,3 +1,7 @@
+/* @flow */
+
+import { ActionsObservable } from 'redux-observable';
+
 import { emptyNotebook, emptyCodeCell, appendCell } from 'commutable';
 import { readFileObservable } from '../../utils/fs';
 import { newKernelByName, newKernel } from '../actions';
@@ -13,16 +17,21 @@ export const LOAD = 'LOAD';
 export const SET_NOTEBOOK = 'SET_NOTEBOOK';
 export const NEW_NOTEBOOK = 'NEW_NOTEBOOK';
 
-export const load = filename => ({ type: LOAD, filename });
+export function load(filename: string) {
+  return {
+    type: LOAD,
+    filename,
+  };
+}
 
-export const newNotebook = (kernelSpec, cwd) => ({
+export const newNotebook = (kernelSpec: Object, cwd: string) => ({
   type: NEW_NOTEBOOK,
   kernelSpec,
   cwd: cwd || process.cwd(),
 });
 
 // Expects notebook to be JS Object or Immutable.js
-export const notebookLoaded = (filename, notebook) => ({
+export const notebookLoaded = (filename: string, notebook: Object) => ({
   type: SET_NOTEBOOK,
   filename,
   notebook,
@@ -36,7 +45,7 @@ export const notebookLoaded = (filename, notebook) => ({
   *
   * @returns  {ActionObservable}  ActionObservable for a NEW_KERNEL action
   */
-export const extractNewKernel = (filename, notebook) => {
+export const extractNewKernel = (filename: string, notebook: Object) => {
   const cwd = (filename && path.dirname(path.resolve(filename))) || process.cwd();
   const kernelSpecName = notebook.getIn(
     ['metadata', 'kernelspec', 'name'], notebook.getIn(
@@ -56,7 +65,7 @@ export const extractNewKernel = (filename, notebook) => {
   *
   * @returns  {Object}  The filename and notebook in Immutable.Map form
   */
-export const convertRawNotebook = (filename, data) => ({
+export const convertRawNotebook = (filename: string, data: string) => ({
   filename,
   notebook: commutable.fromJS(JSON.parse(data)),
 });
@@ -66,7 +75,7 @@ export const convertRawNotebook = (filename, data) => ({
   *
   * @param  {ActionObservable}  A LOAD action with the notebook filename
   */
-export const loadEpic = actions =>
+export const loadEpic = (actions: ActionsObservable) =>
   actions.ofType(LOAD)
     .do((action) => {
       // If there isn't a filename, save-as it instead
@@ -99,7 +108,7 @@ export const loadEpic = actions =>
   * @param  {ActionObservable}  ActionObservable for NEW_NOTEBOOK action
   */
 const starterNotebook = appendCell(emptyNotebook, emptyCodeCell);
-export const newNotebookEpic = action$ =>
+export const newNotebookEpic = (action$: ActionsObservable) =>
   action$.ofType(NEW_NOTEBOOK)
     .switchMap(action =>
       Observable.of(
