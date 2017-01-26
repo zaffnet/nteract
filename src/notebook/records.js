@@ -1,5 +1,7 @@
 /* @flow */
 
+import type { Subject } from 'rxjs';
+
 const Immutable = require('immutable');
 
 /*
@@ -70,7 +72,14 @@ export type Cell = MarkdownCell | CodeCell;
 export type KernelspecMetadata = {
   name: string,
   display_name: string,
+  language: string,
 }
+
+// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
+export type KernelInfo = {
+  name: string,
+  spec: KernelspecMetadata,
+};
 
 export type LanguageInfoMetadata = {
   name: string,
@@ -94,6 +103,13 @@ export type NotebookMetadata = {
   //
   // orig_nbformat?: number,
 }
+
+export type Channels = {
+  iopub: Subject,
+  shell: Subject,
+  stdin: Subject,
+  control: Subject,
+};
 
 export type Notebook = {
   cellMap: Immutable.Map<string, Cell>,

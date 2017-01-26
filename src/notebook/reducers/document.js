@@ -6,7 +6,10 @@ import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 
-import type { LanguageInfoMetadata } from '../records';
+import type {
+  LanguageInfoMetadata,
+  KernelInfo,
+} from '../records';
 
 import { DocumentRecord } from '../records';
 
@@ -128,9 +131,6 @@ type Notebook = Immutable.Map<string, any>;
 
 type CellID = string;
 type ImmutableCellOrder = Immutable.List<CellID>;
-
-// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
-type KernelInfo = { name: string, spec: { display_name: string, language: string } };
 
 export function createOutput(output: Output): ImmutableOutput {
   return Immutable.fromJS(output);

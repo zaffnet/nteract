@@ -1,6 +1,10 @@
+/* @flow */
+
 import Rx from 'rxjs/Rx';
 
 import { launchSpec } from 'spawnteract';
+
+import { ActionsObservable } from 'redux-observable';
 
 import * as uuid from 'uuid';
 
@@ -14,6 +18,12 @@ import {
   createIOPubSubject,
   createShellSubject,
 } from 'enchannel-zmq-backend';
+
+import type {
+  LanguageInfoMetadata,
+  KernelInfo,
+  Channels,
+} from '../records';
 
 import {
   createMessage,
@@ -33,7 +43,7 @@ import {
   ERROR_KERNEL_LAUNCH_FAILED,
 } from '../constants';
 
-export function setLanguageInfo(langInfo) {
+export function setLanguageInfo(langInfo: LanguageInfoMetadata) {
   return {
     type: SET_LANGUAGE_INFO,
     langInfo,
@@ -46,7 +56,7 @@ export function setLanguageInfo(langInfo) {
   * @param  {Object}  channels  A object containing the kernel channels
   * @returns  {Observable}  The reply from the server
   */
-export function acquireKernelInfo(channels) {
+export function acquireKernelInfo(channels: Channels) {
   const message = createMessage('kernel_info_request');
 
   const obs = channels.shell
@@ -69,7 +79,7 @@ export function acquireKernelInfo(channels) {
   * @param  {String}  kernelSpecName  The name of the kernel to launch
   * @param  {String}  cwd The working directory to launch the kernel in
   */
-export function newKernelObservable(kernelSpec, cwd) {
+export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
   const spec = kernelSpec.spec;
 
   return Rx.Observable.create((observer) => {
@@ -108,7 +118,7 @@ export function newKernelObservable(kernelSpec, cwd) {
   *
   * @oaram  {ActionObservable}  action$ ActionObservable for NEW_KERNEL action
   */
-export const watchExecutionStateEpic = action$ =>
+export const watchExecutionStateEpic = (action$: ActionsObservable) =>
   action$.ofType(NEW_KERNEL)
     .switchMap(action =>
       Rx.Observable.merge(
@@ -138,7 +148,7 @@ export const kernelSpecsObservable =
   *
   * @param  {ActionObservable}  The action type
   */
-export const acquireKernelInfoEpic = action$ =>
+export const acquireKernelInfoEpic = (action$: ActionsObservable) =>
   action$.ofType(NEW_KERNEL)
     .switchMap((action) => {
       /* istanbul ignore if -- used for interactive debugging */
@@ -148,7 +158,7 @@ export const acquireKernelInfoEpic = action$ =>
       return acquireKernelInfo(action.channels);
     });
 
-export const newKernelByNameEpic = action$ =>
+export const newKernelByNameEpic = (action$: ActionsObservable) =>
   action$.ofType(LAUNCH_KERNEL_BY_NAME)
     .do((action) => {
       if (!action.kernelSpecName) {
@@ -167,7 +177,7 @@ export const newKernelByNameEpic = action$ =>
   *
   * @param  {ActionObservable} action$  ActionObservable for LAUNCH_KERNEL action
   */
-export const newKernelEpic = action$ =>
+export const newKernelEpic = (action$: ActionsObservable) =>
   action$.ofType(LAUNCH_KERNEL)
     .do((action) => {
       if (!action.kernelSpec) {
