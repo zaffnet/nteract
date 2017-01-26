@@ -13,74 +13,27 @@ import type {
 
 import { DocumentRecord } from '../records';
 
-// Note that we can't use the type definition of Output from records.js
-// because it's an Immutable.Map here. When we have a union on Immutable Records.
-// We can swap these out later.
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+} from '../../commutable';
 
-export type ImmutableJSON = | string | number | boolean | null
-                            | ImmutableJSONMap | ImmutableJSONList; // eslint-disable-line no-use-before-define
-export type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
-export type ImmutableJSONList = Immutable.List<ImmutableJSON>;
+import type {
+  ImmutableCell,
+  ImmutableNotebook,
+  CellID,
+  CellType,
+  ImmutableCellOrder,
+  ImmutableOutput,
+  ImmutableOutputs,
+  MimeBundle,
+} from '../../commutable/types';
 
-type ImmutableOutput = Immutable.Map<string, any>;
-type ImmutableOutputs = Immutable.List<ImmutableOutput>;
-
-// Non-immutable output
-type JSON = | string | number | boolean | null | JSONObject | JSONArray; // eslint-disable-line no-use-before-define
-type JSONObject = { [key:string]: JSON };
-type JSONArray = Array<JSON>;
-
-type ExecutionCount = number | null;
-
-type CellType = 'code' | 'markdown';
-
-// Until flow, Immutable, and Record play together
-export type ImmutableCodeCell = Immutable.Map<string, any>;
-export type ImmutableMarkdownCell = Immutable.Map<string, any>;
-export type ImmutableCell = ImmutableCodeCell | ImmutableMarkdownCell;
-
-export type CodeCell = {
-  cell_type: 'code',
-  metadata: ImmutableJSONMap,
-  execution_count: ExecutionCount,
-  source: string,
-  outputs: Immutable.List<ImmutableOutput>,
-}
-
-export type MarkdownCell = {
-  cell_type: 'markdown',
-  source: string,
-  metadata: ImmutableJSONMap,
-}
-
-const defaultCodeCell = {
-  cell_type: 'code',
-  execution_count: null,
-  metadata: Immutable.Map({
-    collapsed: false,
-  }),
-  source: '',
-  outputs: Immutable.List(),
-};
-
-const defaultMarkdownCell = {
-  cell_type: 'markdown',
-  metadata: Immutable.Map(),
-  source: '',
-};
-
-export function createCodeCell(cell: CodeCell = defaultCodeCell): ImmutableCodeCell { // eslint-disable-line max-len
-  return Immutable.Map(cell);
-}
-
-export function createMarkdownCell(cell: MarkdownCell = defaultMarkdownCell): ImmutableMarkdownCell { // eslint-disable-line max-len
-  return Immutable.Map(cell);
-}
-
-export const emptyCodeCell = createCodeCell();
-export const emptyMarkdownCell = createMarkdownCell();
-
-type MimeBundle = JSONObject;
+import type {
+  Output,
+  StreamOutput,
+  Notebook,
+} from '../../commutable/v4';
 
 type Pager = {
   source: 'page',
@@ -88,34 +41,10 @@ type Pager = {
   start: number
 }
 
-type ExecuteResult = {
-  output_type: 'execute_result',
-  execution_count: ExecutionCount,
-  data: MimeBundle,
-  metadata: JSONObject,
+// TODO: Bring this into commutable... I assume
+function createOutput(output: Output): ImmutableOutput {
+  return Immutable.fromJS(output);
 }
-
-export type DisplayData = {
-  output_type: 'display_data',
-  data: MimeBundle,
-  metadata: JSONObject,
-  transient?: JSONObject,
-}
-
-export type StreamOutput = {
-  output_type: 'stream',
-  name: 'stdout' | 'stderr',
-  text: string,
-}
-
-export type ErrorOutput = {
-  output_type: 'error',
-  ename: string,
-  evalue: string,
-  traceback: Array<string>,
-}
-
-export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
 
 // Note: number is only allowed when indexing into a List
 type KeyPath = Immutable.List<string | number>;
@@ -126,15 +55,6 @@ type KeyPaths = Immutable.List<KeyPath>;
 type DocumentState = Immutable.Map<string, any>; // & Document;
 
 type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
-// TODO: type that notebook!
-type Notebook = Immutable.Map<string, any>;
-
-type CellID = string;
-type ImmutableCellOrder = Immutable.List<CellID>;
-
-export function createOutput(output: Output): ImmutableOutput {
-  return Immutable.fromJS(output);
-}
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -155,7 +75,10 @@ export function reduceOutputs(outputs: ImmutableOutputs = Immutable.List(), outp
   const streamOutput : StreamOutput = output;
 
   function appendText(text: string): string {
-    return text + streamOutput.text;
+    if (typeof streamOutput.text === 'string') {
+      return text + streamOutput.text;
+    }
+    return text;
   }
 
   if (outputs.size > 0 &&
@@ -189,16 +112,17 @@ export function cleanCellTransient(state: DocumentState, id: string) {
 
 // It would probably be wise to make this JSON serializable and not be using
 // the immutable.js version of the notebook in the action
-type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: Notebook };
+type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: ImmutableNotebook };
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const notebook = action.notebook
     .update('cellMap', (cells: ImmutableCellMap): ImmutableCellMap =>
       // TODO: Determine why setting the notebook is changing these values.
       //       Should they be transient or part of an overall app state?
-      cells.map(value =>
-        value.setIn(['metadata', 'inputHidden'], false)
+      cells.map((cell: ImmutableCell) =>
+        cell.setIn(['metadata', 'inputHidden'], false)
               .setIn(['metadata', 'outputHidden'], false)
-              .setIn(['metadata', 'outputExpanded'], false)));
+              .setIn(['metadata', 'outputExpanded'], false)
+      ));
 
   return state.set('notebook', notebook)
     .set('cellFocused', notebook.getIn(['cellOrder', 0]))
@@ -398,7 +322,7 @@ function newCellAfter(state: DocumentState, action: NewCellAfterAction) {
   const cell = cellType === 'markdown' ? emptyMarkdownCell :
                                          emptyCodeCell;
   const cellID = uuid.v4();
-  return state.update('notebook', (notebook: Notebook) => {
+  return state.update('notebook', (notebook: ImmutableNotebook) => {
     const index = notebook.get('cellOrder').indexOf(id) + 1;
     return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
   })
@@ -445,7 +369,7 @@ function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
 type NewCellAppendAction = { type: 'NEW_CELL_APPEND', cellType: CellType}
 function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   const { cellType } = action;
-  const notebook: Notebook = state.get('notebook');
+  const notebook: ImmutableNotebook = state.get('notebook');
   const cellOrder : ImmutableCellOrder = notebook.get('cellOrder');
   const cell: ImmutableCell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
   const index = cellOrder.count();
