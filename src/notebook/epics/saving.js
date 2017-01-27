@@ -13,8 +13,12 @@ import {
   doneSaving,
 } from '../actions';
 
+import {
+  toJS,
+  stringifyNotebook,
+} from '../../commutable';
+
 const Rx = require('rxjs/Rx');
-const commutable = require('commutable');
 
 const Observable = Rx.Observable;
 
@@ -32,16 +36,7 @@ export function saveEpic(action$: ActionsObservable) {
       }
     })
     .mergeMap(action =>
-      writeFileObservable(action.filename,
-        JSON.stringify(
-          commutable.toJS(
-            action.notebook.update('cellMap', cells =>
-              cells.map(value =>
-                value.deleteIn(['metadata', 'inputHidden'])
-                  .deleteIn(['metadata', 'outputHidden'])
-                  .deleteIn(['metadata', 'status'])))),
-          null,
-          1))
+      writeFileObservable(action.filename, stringifyNotebook(toJS(action.notebook)))
         .catch((error: Error) =>
           Observable.of({
             type: 'ERROR_SAVING',

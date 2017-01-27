@@ -19,6 +19,7 @@
 import * as Immutable from 'immutable';
 
 import type {
+  JSONType,
   JSONObject,
   ImmutableNotebook,
   ImmutableCodeCell,
@@ -90,7 +91,7 @@ export type CodeCell = {|
   cell_type: 'code',
   metadata: JSONObject,
   execution_count: ExecutionCount,
-  source: string,
+  source: MultiLineString,
   outputs: Array<Output>,
 |};
 
@@ -106,7 +107,6 @@ export type RawCell = {|
   source: MultiLineString,
 |};
 
-// TODO: RawCell
 export type Cell = CodeCell | MarkdownCell | RawCell;
 
 export type Notebook = {|
@@ -123,9 +123,21 @@ function demultiline(s: string | Array<string>) {
   return s;
 }
 
+/**
+ * Split string into a list of strings delimited by newlines
+ */
+function remultiline(s: string | Array<string>): Array<string> {
+  if (Array.isArray(s)) {
+    // Assume
+    return s;
+  }
+  // Use positive lookahead regex to split on newline and retain newline char
+  return s.split(/(.+?(?:\r\n|\n))/g).filter(x => x !== '');
+}
+
 function cleanMimeData(key: string, data: string | Array<string> | Object) {
   // See https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L368
-  if (/^application\/(.*\\+)?json$/.test(key)) {
+  if (/^application\/(.*\+)?json$/.test(key)) {
     // Data stays as is for JSON types
     return data;
   }
@@ -170,13 +182,13 @@ function createImmutableOutput(output: Output): ImmutableOutput {
         output_type: output.output_type,
         execution_count: output.execution_count,
         data: createImmutableMimeBundle(output.data),
-        metadata: Immutable.fromJS(output.metadata), // TODO: Determine if this should be Immutable or just frozen
+        metadata: Immutable.fromJS(output.metadata),
       });
     case 'display_data':
       return Immutable.Map({
         output_type: output.output_type,
         data: createImmutableMimeBundle(output.data),
-        metadata: Immutable.fromJS(output.metadata), // TODO: Determine if this should be Immutable or just frozen
+        metadata: Immutable.fromJS(output.metadata),
       });
     case 'stream':
       return Immutable.Map({
@@ -205,7 +217,7 @@ function createImmutableMarkdownCell(cell: MarkdownCell): ImmutableMarkdownCell 
   return new Immutable.Map({
     cell_type: cell.cell_type,
     source: demultiline(cell.source),
-    metadata: Immutable.fromJS(cell.metadata), // TODO: Determine if this should be Immutable or just frozen
+    metadata: Immutable.fromJS(cell.metadata),
   });
 }
 
@@ -215,7 +227,7 @@ function createImmutableCodeCell(cell: CodeCell): ImmutableCodeCell {
     source: demultiline(cell.source),
     outputs: new Immutable.List(cell.outputs.map(createImmutableOutput)),
     execution_count: cell.execution_count,
-    metadata: Immutable.fromJS(cell.metadata), // TODO: Determine if this should be Immutable or just frozen
+    metadata: Immutable.fromJS(cell.metadata),
   });
 }
 
@@ -257,6 +269,140 @@ export function fromJS(notebook: Notebook): ImmutableNotebook {
     cellMap: cellStructure.cellMap.asImmutable(),
     nbformat_minor: notebook.nbformat_minor,
     nbformat: 4,
-    metadata: Immutable.fromJS(notebook.metadata), // TODO: Determine if this should be Immutable or just frozen
+    metadata: Immutable.fromJS(notebook.metadata),
   });
+}
+
+type PlainNotebook = {|
+  cellOrder: Immutable.List<string>,
+  cellMap: Immutable.Map<string, ImmutableCell>,
+  metadata: Immutable.Map<string, any>,
+  nbformat: 4,
+  nbformat_minor: number,
+|}
+
+function markdownCellToJS(immCell: ImmutableCell): MarkdownCell {
+  const cell: Cell = immCell.toObject();
+
+  return {
+    cell_type: 'markdown',
+    source: remultiline(cell.source),
+    metadata: Immutable.fromJS(cell.metadata),
+  };
+}
+
+function mimeBundleToJS(immMimeBundle: ImmutableMimeBundle): MimeBundle {
+  const bundle = immMimeBundle.toObject();
+
+  Object.keys(bundle).map((key) => {
+    if (/^application\/(.*\\+)?json$/.test(key)) {
+      if (Immutable.Map.isMap(bundle[key])) {
+        bundle[key] = bundle[key].toJS();
+      }
+      return bundle;
+    }
+
+    const data = bundle[key];
+
+    if (typeof data === 'string' || Array.isArray(data)) {
+      bundle[key] = remultiline(data);
+      return bundle;
+    }
+    throw new TypeError(`Data for ${key} is expected to be a string or an Array of strings`);
+  });
+
+  return bundle;
+}
+
+function outputToJS(immOutput: ImmutableOutput): Output {
+  // Technically this is an intermediate output with Immutables inside
+  const output = immOutput.toObject();
+
+  switch (output.output_type) {
+    case 'execute_result':
+      return {
+        output_type: output.output_type,
+        execution_count: output.execution_count,
+        data: mimeBundleToJS(output.data),
+        metadata: output.metadata.toJS(),
+      };
+    case 'display_data':
+      return {
+        output_type: output.output_type,
+        data: mimeBundleToJS(output.data),
+        metadata: output.metadata.toJS(),
+      };
+    case 'stream':
+      return {
+        output_type: output.output_type,
+        name: output.name,
+        text: remultiline(output.text),
+      };
+    case 'error':
+      // Note: this is one of the cases where the Array of strings (for traceback)
+      // is part of the format, not a multiline string
+      return immOutput.toJS();
+    default:
+      throw new TypeError(`Output type ${output.output_type} not recognized`);
+  }
+}
+
+type IntermediateCodeCell = {|
+  cell_type: 'code',
+  metadata: Immutable.Map<string, JSONType>,
+  execution_count: ExecutionCount,
+  source: string,
+  outputs: Immutable.List<ImmutableOutput>,
+|};
+
+function codeCellToJS(immCell: ImmutableCell): CodeCell {
+  const cell: IntermediateCodeCell = immCell.toObject();
+
+  return {
+    cell_type: 'code',
+    source: remultiline(cell.source),
+    outputs: cell.outputs.map(outputToJS).toArray(),
+    execution_count: cell.execution_count,
+    metadata: Immutable.fromJS(cell.metadata),
+  };
+}
+
+function rawCellToJS(immCell: ImmutableCell): RawCell {
+  const cell: Cell = immCell.toObject();
+
+  return {
+    cell_type: 'raw',
+    source: remultiline(cell.source),
+    metadata: Immutable.fromJS(cell.metadata),
+  };
+}
+
+export function cellToJS(immCell: ImmutableCell): Cell {
+  const cellType: 'markdown' | 'raw' | 'code' = immCell.get('cell_type');
+  switch (cellType) {
+    case 'markdown':
+      return markdownCellToJS(immCell);
+    case 'code':
+      return codeCellToJS(immCell);
+    case 'raw':
+      return rawCellToJS(immCell);
+    default:
+      throw new TypeError(`Cell type ${cellType} unknown`);
+  }
+}
+
+export function toJS(immnb: ImmutableNotebook): Notebook {
+  const plainNotebook: PlainNotebook = immnb.toObject();
+
+  const plainCellOrder: Array<string> = plainNotebook.cellOrder.toArray();
+  const plainCellMap: {[key: string]: ImmutableCell} = plainNotebook.cellMap.toObject();
+
+  const cells = plainCellOrder.map((cellID: string) => cellToJS(plainCellMap[cellID]));
+
+  return {
+    cells,
+    metadata: plainNotebook.metadata.toJS(),
+    nbformat: plainNotebook.nbformat,
+    nbformat_minor: plainNotebook.nbformat_minor,
+  };
 }

@@ -9,7 +9,11 @@ import {
   deleteMetadata,
 } from '../actions';
 
-const commutable = require('commutable');
+import {
+  toJS,
+  stringifyNotebook,
+} from '../../commutable';
+
 const path = require('path');
 
 const Rx = require('rxjs/Rx');
@@ -80,15 +84,7 @@ export function createGistCallback(observer, filename, notificationSystem) {
 export function publishNotebookObservable(github, notebook, filepath,
   notificationSystem, publishAsUser) {
   return Rx.Observable.create((observer) => {
-    const notebookString = JSON.stringify(
-      commutable.toJS(notebook.update('cellMap', cells =>
-        cells.map(value =>
-          value
-            .deleteIn(['metadata', 'inputHidden'])
-            .deleteIn(['metadata', 'outputHidden'])
-            .delete(['metadata', 'status'])))),
-      undefined,
-      1);
+    const notebookString = stringifyNotebook(toJS(notebook));
 
     const filename = filepath ? path.parse(filepath).base : 'Untitled.ipynb';
     const files = {};

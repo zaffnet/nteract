@@ -50,6 +50,18 @@ export function fromJS(notebookJSON: Notebook): ImmutableNotebook {
   throw new TypeError('This notebook format is not supported');
 }
 
+export function toJS(immnb: ImmutableNotebook): v4Notebook {
+  if (immnb.get('nbformat') === 4 && immnb.get('nbformat_minor') >= 0) {
+    return v4.toJS(immnb);
+  }
+  throw new TypeError('Only notebook format 4 is supported');
+}
+
+// Expected usage is stringifyNotebook(toJS(immutableNotebook))
+export function stringifyNotebook(notebook: v4Notebook): string {
+  return JSON.stringify(notebook, null, 2);
+}
+
 export type {
   ImmutableNotebook,
 };
