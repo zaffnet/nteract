@@ -23,6 +23,7 @@ export type CellID = string;
 export type ImmutableNotebook = ImmutableMap<string, any>;
 export type ImmutableCodeCell = ImmutableMap<string, any>;
 export type ImmutableMarkdownCell = ImmutableMap<string, any>;
+export type ImmutableRawCell = ImmutableMap<string, any>;
 export type ImmutableCell = ImmutableCodeCell | ImmutableMarkdownCell;
 export type ImmutableOutput = ImmutableMap<string, any>;
 export type ImmutableOutputs = ImmutableList<ImmutableOutput>;

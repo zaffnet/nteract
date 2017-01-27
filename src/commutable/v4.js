@@ -23,6 +23,7 @@ import type {
   ImmutableNotebook,
   ImmutableCodeCell,
   ImmutableMarkdownCell,
+  ImmutableRawCell,
   ImmutableCell,
   ImmutableOutput,
   ImmutableMimeBundle,
@@ -99,8 +100,14 @@ export type MarkdownCell = {|
   source: MultiLineString,
 |};
 
+export type RawCell = {|
+  cell_type: 'raw',
+  metadata: JSONObject,
+  source: MultiLineString,
+|};
+
 // TODO: RawCell
-export type Cell = CodeCell | MarkdownCell;
+export type Cell = CodeCell | MarkdownCell | RawCell;
 
 export type Notebook = {|
   cells: Array<Cell>,
@@ -186,6 +193,14 @@ function createImmutableOutput(output: Output): ImmutableOutput {
   }
 }
 
+function createImmutableRawCell(cell: RawCell): ImmutableRawCell {
+  return new Immutable.Map({
+    cell_type: cell.cell_type,
+    source: demultiline(cell.source),
+    metadata: Immutable.fromJS(cell.metadata),
+  });
+}
+
 function createImmutableMarkdownCell(cell: MarkdownCell): ImmutableMarkdownCell {
   return new Immutable.Map({
     cell_type: cell.cell_type,
@@ -210,6 +225,8 @@ function createImmutableCell(cell: Cell): ImmutableCell {
       return createImmutableMarkdownCell(cell);
     case 'code':
       return createImmutableCodeCell(cell);
+    case 'raw':
+      return createImmutableRawCell(cell);
     default:
       throw new TypeError(`Cell type ${cell.cell_type} unknown`);
   }
