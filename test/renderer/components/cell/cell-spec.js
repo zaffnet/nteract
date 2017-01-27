@@ -11,7 +11,12 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import { Cell } from '../../../../src/notebook/components/cell/cell';
-import * as commutable from 'commutable';
+
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+} from '../../../../src/commutable';
+
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
 const sharedProps = { displayOrder, transforms };
@@ -19,7 +24,7 @@ describe('Cell', () => {
   it('should be able to render a markdown cell', () => {
     const store = dummyStore();
     const cell = mount(
-      <Cell cell={commutable.emptyMarkdownCell} {...sharedProps} />,
+      <Cell cell={emptyMarkdownCell} {...sharedProps} />,
       {
         context: { store }
       }
@@ -30,7 +35,7 @@ describe('Cell', () => {
   it('should be able to render a code cell', () => {
     const store = dummyStore();
     const cell = mount(
-      <Cell cell={commutable.emptyCodeCell} {...sharedProps}
+      <Cell cell={emptyCodeCell} {...sharedProps}
       cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>,
       {
         context: { store }
@@ -42,7 +47,7 @@ describe('Cell', () => {
   it('dispatches cell actions', () => {
     const store = dummyStore();
     const cell = mount(
-      <Cell cell={commutable.emptyMarkdownCell} {...sharedProps} />,
+      <Cell cell={emptyMarkdownCell} {...sharedProps} />,
       {
         context: { store }
       }

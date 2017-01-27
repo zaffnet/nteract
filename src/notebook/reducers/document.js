@@ -2,7 +2,6 @@
 
 import * as Immutable from 'immutable';
 import * as uuid from 'uuid';
-import * as commutable from 'commutable';
 
 import * as constants from '../constants';
 
@@ -21,6 +20,7 @@ import {
 import {
   insertCellAt,
   insertCellAfter,
+  removeCell,
 } from '../../commutable/structures';
 
 import type {
@@ -299,11 +299,11 @@ function moveCell(state: DocumentState, action: MoveCellAction) {
 }
 
 type RemoveCellAction = { type: 'REMOVE_CELL', id: CellID };
-function removeCell(state: DocumentState, action: RemoveCellAction) {
+function removeCellFromState(state: DocumentState, action: RemoveCellAction) {
   const { id } = action;
   return cleanCellTransient(
     state.update('notebook',
-      notebook => commutable.removeCell(notebook, id)
+      (notebook: ImmutableNotebook) => removeCell(notebook, id)
     ),
     id
   );
@@ -353,7 +353,7 @@ function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
   const source = firstSource.concat('\n', '\n', secondSource);
 
   return state.update('notebook',
-    (notebook: ImmutableNotebook) => commutable.removeCell(
+    (notebook: ImmutableNotebook) => removeCell(
       notebook.setIn(['cellMap', id, 'source'], source),
       nextId)
   );
@@ -451,7 +451,7 @@ function cutCell(state: DocumentState, action: CutCellAction) {
   const cell : ImmutableCell = cellMap.get(id);
   return state
     .set('copied', new Immutable.Map({ id, cell }))
-    .update('notebook', notebook => commutable.removeCell(notebook, id));
+    .update('notebook', (notebook: ImmutableNotebook) => removeCell(notebook, id));
 }
 
 type PasteCellAction = { type: 'PASTE_CELL' };
@@ -543,7 +543,7 @@ function handleDocument(state: DocumentState = defaultDocument, action: Document
     case constants.MOVE_CELL:
       return moveCell(state, action);
     case constants.REMOVE_CELL:
-      return removeCell(state, action);
+      return removeCellFromState(state, action);
     case constants.NEW_CELL_AFTER:
       return newCellAfter(state, action);
     case constants.NEW_CELL_BEFORE:

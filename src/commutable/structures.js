@@ -135,4 +135,12 @@ export function insertCellAfter(
   return insertCellAt(notebook, cell, cellID, notebook.get('cellOrder').indexOf(priorCellID) + 1);
 }
 
+export function removeCell(notebook: ImmutableNotebook, cellID: string) {
+  return notebook
+    .removeIn(['cellMap', cellID])
+    .update('cellOrder',
+      (cellOrder: ImmutableCellOrder) => cellOrder.filterNot(id => id === cellID)
+    );
+}
+
 export const monocellNotebook = appendCellToNotebook(emptyNotebook, emptyCodeCell);
