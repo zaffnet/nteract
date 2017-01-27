@@ -13,6 +13,9 @@
   .status-bar {
     display: none!important;
   }
+  .cell-toolbar {
+    display: none!important;
+  }
 }
 
 #app {
