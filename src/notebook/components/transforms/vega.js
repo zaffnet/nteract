@@ -21,7 +21,7 @@ const defaultCallback = (): any => {};
 function embed(el: HTMLElement, spec: Object, mode: string, cb: (err: any, result: any) => any) {
   const embedSpec = {
     mode,
-    spec,
+    spec: Object.assign({}, spec),
   };
 
   if (mode === 'vega-lite') {
@@ -46,7 +46,7 @@ export class VegaEmbed extends React.Component {
   }
 
   componentDidMount(): void {
-    embed(this.el, this.props.data.toJS(), this.props.embedMode, this.props.renderedCallback);
+    embed(this.el, this.props.data, this.props.embedMode, this.props.renderedCallback);
   }
 
   shouldComponentUpdate(nextProps: EmbedProps): boolean {
@@ -54,7 +54,7 @@ export class VegaEmbed extends React.Component {
   }
 
   componentDidUpdate(): void {
-    embed(this.el, this.props.data.toJS(), this.props.embedMode, this.props.renderedCallback);
+    embed(this.el, this.props.data, this.props.embedMode, this.props.renderedCallback);
   }
 
   render(): ?React.Element<any> {

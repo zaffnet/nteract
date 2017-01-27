@@ -56,7 +56,7 @@ export class GeoJSONTransform extends React.Component {
       id: `mapbox.${theme}`,
     }).addTo(this.map);
 
-    const geoJSON = this.props.data.toJS();
+    const geoJSON = this.props.data;
 
     this.geoJSONLayer = L.geoJson(geoJSON).addTo(this.map);
     this.map.fitBounds(this.geoJSONLayer.getBounds());
@@ -81,7 +81,7 @@ export class GeoJSONTransform extends React.Component {
     }
 
     if (prevProps.data !== this.props.data) {
-      const geoJSON = this.props.data.toJS();
+      const geoJSON = this.props.data;
 
       this.map.removeLayer(this.geoJSONLayer);
       this.geoJSONLayer = L.geoJson(geoJSON).addTo(this.map);

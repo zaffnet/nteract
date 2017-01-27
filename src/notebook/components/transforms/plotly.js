@@ -2,6 +2,8 @@
 /* eslint class-methods-use-this: 0 */
 import React from 'react';
 
+import _ from 'lodash';
+
 type Props = {
   data: string|Object,
 };
@@ -49,8 +51,13 @@ export class PlotlyTransform extends React.Component {
     if (typeof figure === 'string') {
       return JSON.parse(figure);
     }
-    // assume immutable.js
-    return figure.toJS();
+
+    // The Plotly API *mutates* the figure to include a UID, which means
+    // they won't take our frozen objects
+    if (Object.isFrozen(figure)) {
+      return _.cloneDeep(figure);
+    }
+    return figure;
   }
 
   render(): ?React.Element<any> {

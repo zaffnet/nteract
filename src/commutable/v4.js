@@ -135,9 +135,13 @@ function remultiline(s: string | Array<string>): Array<string> {
   return s.split(/(.+?(?:\r\n|\n))/g).filter(x => x !== '');
 }
 
+function isJSONKey(key) {
+  return /^application\/(.*\+)?json$/.test(key);
+}
+
 function cleanMimeData(key: string, data: string | Array<string> | Object) {
   // See https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L368
-  if (/^application\/(.*\+)?json$/.test(key)) {
+  if (isJSONKey(key)) {
     // Data stays as is for JSON types
     return data;
   }
@@ -295,7 +299,7 @@ function mimeBundleToJS(immMimeBundle: ImmutableMimeBundle): MimeBundle {
   const bundle = immMimeBundle.toObject();
 
   Object.keys(bundle).map((key) => {
-    if (/^application\/(.*\\+)?json$/.test(key)) {
+    if (isJSONKey(key)) {
       if (Immutable.Map.isMap(bundle[key])) {
         bundle[key] = bundle[key].toJS();
       }
