@@ -3,7 +3,17 @@ import { expect } from 'chai';
 import * as constants from '../../../src/notebook/constants';
 
 import { MetadataRecord } from '../../../src/notebook/records';
-import * as commutable from 'commutable';
+
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+  fromJS,
+} from '../../../src/commutable';
+
+import {
+  appendCellToNotebook,
+} from '../../../src/commutable/structures';
+
 import { dummyCommutable } from '../dummy-nb';
 import { List } from 'immutable';
 
@@ -11,7 +21,7 @@ import reducers from '../../../src/notebook/reducers';
 
 const initialDocument = new Map();
 const monocellDocument = initialDocument.set('notebook',
-    commutable.appendCell(dummyCommutable, commutable.emptyCell));
+    appendCellToNotebook(dummyCommutable, emptyCodeCell));
 
 describe('changeFilename', () => {
   it('returns the same originalState if filename is undefined', () => {
@@ -34,7 +44,7 @@ describe('changeFilename', () => {
         filename: 'original.ipynb',
       })
     };
-    
+
     const action = {
       type: constants.CHANGE_FILENAME,
       filename: 'test.ipynb',

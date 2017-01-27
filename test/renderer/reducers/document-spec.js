@@ -1,7 +1,18 @@
 import { expect } from 'chai';
 
-import * as commutable from 'commutable';
 import * as constants from '../../../src/notebook/constants';
+
+
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+  fromJS,
+} from '../../../src/commutable';
+
+import {
+  appendCellToNotebook,
+} from '../../../src/commutable/structures';
+
 
 import { DocumentRecord, MetadataRecord } from '../../../src/notebook/records';
 
@@ -15,10 +26,6 @@ import {
 } from '../dummy-nb';
 
 import {
-  fromJS,
-} from 'commutable';
-
-import {
   List,
   Map,
   Set,
@@ -28,7 +35,7 @@ const Immutable = require('immutable');
 
 const initialDocument = new Map();
 const monocellDocument = initialDocument
-  .set('notebook', commutable.appendCell(dummyCommutable, commutable.emptyCodeCell))
+  .set('notebook', appendCellToNotebook(dummyCommutable, emptyCodeCell))
   .set('transient', new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() }));
 
 describe('reduceOutputs', () => {
@@ -414,8 +421,8 @@ describe('clearOutputs', () => {
   it('should clear outputs list', () => {
     const originalState = {
       document: initialDocument.set('notebook',
-        commutable.appendCell(dummyCommutable,
-          commutable.emptyCodeCell.set('outputs', ['dummy outputs']))
+        appendCellToNotebook(dummyCommutable,
+          emptyCodeCell.set('outputs', ['dummy outputs']))
         )
         .set('transient', new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() })),
     };
@@ -434,8 +441,8 @@ describe('clearOutputs', () => {
   it('doesn\'t clear outputs on markdown cells', () => {
     const originalState = {
       document: initialDocument.set('notebook',
-        commutable.appendCell(dummyCommutable,
-          commutable.emptyMarkdownCell
+        appendCellToNotebook(dummyCommutable,
+          emptyMarkdownCell
         )
       )
     };

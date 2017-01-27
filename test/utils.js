@@ -1,10 +1,14 @@
 import { expect } from 'chai';
 import Immutable from 'immutable';
+
 import {
-  emptyNotebook,
+  monocellNotebook,
   emptyCodeCell,
-  appendCell,
-} from 'commutable';
+} from '../src/commutable';
+
+import {
+  appendCellToNotebook,
+} from '../src/commutable/structures';
 
 import { shutdownKernel } from '../src/notebook/kernel/shutdown';
 import * as actions from '../src/notebook/actions';
@@ -32,7 +36,7 @@ const sinon = require('sinon');
  * Created using the config object passed in.
  */
 function buildDummyNotebook(config) {
-  let notebook = appendCell(emptyNotebook, emptyCodeCell).setIn([
+  let notebook = monocellNotebook.setIn([
     'metadata', 'kernelspec', 'name',
   ], 'python2');
 
@@ -40,13 +44,13 @@ function buildDummyNotebook(config) {
 
     if (config.codeCellCount) {
       for (let i=1; i < config.codeCellCount; i++) {
-        notebook = appendCell(notebook, emptyCodeCell);
+        notebook = appendCellToNotebook(notebook, emptyCodeCell);
       }
     }
 
     if (config.markdownCellCount){
       for (let i=0; i < config.markdownCellCount; i++) {
-        notebook = appendCell(notebook, emptyCodeCell.set('cell_type', 'markdown'));
+        notebook = appendCellToNotebook(notebook, emptyCodeCell.set('cell_type', 'markdown'));
       }
     }
 
