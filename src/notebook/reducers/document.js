@@ -385,20 +385,6 @@ function updateSource(state: DocumentState, action: UpdateSourceAction) {
   return state.setIn(['notebook', 'cellMap', id, 'source'], source);
 }
 
-type SplitCellAction = { type: 'SPLIT_CELL', id: CellID, position: number }
-// Note: position is line number in the source of the cell and we
-//       don't have any UI for this action yet.
-function splitCell(state: DocumentState, action: SplitCellAction) {
-  const { id, position } = action;
-  const index = state.getIn(['notebook', 'cellOrder'], Immutable.List()).indexOf(id);
-  const updatedState = state.update('notebook',
-      notebook => commutable.splitCell(notebook, id, position));
-  const newCell = updatedState.getIn(['notebook', 'cellOrder', index + 1]);
-  return updatedState
-    .setIn(['notebook', 'cellMap', newCell, 'metadata', 'outputHidden'], false)
-    .setIn(['notebook', 'cellMap', newCell, 'metadata', 'inputHidden'], false);
-}
-
 type ChangeOutputVisibilityAction = { type: 'CHANGE_OUTPUT_VISIBILITY', id: CellID }
 function changeOutputVisibility(state: DocumentState, action: ChangeOutputVisibilityAction) {
   const { id } = action;
@@ -525,7 +511,7 @@ type DocumentAction =
   ClearOutputsAction | AppendOutputAction | UpdateDisplayAction |
   UpdateExecutionCountAction | MoveCellAction | RemoveCellAction |
   NewCellAfterAction | NewCellBeforeAction | NewCellAppendAction |
-  MergeCellAfterAction | UpdateSourceAction | SplitCellAction |
+  MergeCellAfterAction | UpdateSourceAction |
   ChangeOutputVisibilityAction | ChangeInputVisibilityAction | UpdateCellPagersAction |
   UpdateCellStatusAction | SetLanguageInfoAction | SetKernelInfoAction |
   OverwriteMetadataFieldAction | DeleteMetadataFieldAction | CopyCellAction |
@@ -574,8 +560,6 @@ function handleDocument(state: DocumentState = defaultDocument, action: Document
       return newCellAppend(state, action);
     case constants.UPDATE_CELL_SOURCE:
       return updateSource(state, action);
-    case constants.SPLIT_CELL:
-      return splitCell(state, action);
     case constants.CHANGE_OUTPUT_VISIBILITY:
       return changeOutputVisibility(state, action);
     case constants.CHANGE_INPUT_VISIBILITY:
