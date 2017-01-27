@@ -18,6 +18,11 @@ import {
   emptyMarkdownCell,
 } from '../../commutable';
 
+import {
+  insertCellAt,
+  insertCellAfter,
+} from '../../commutable/structures';
+
 import type {
   ImmutableCell,
   ImmutableNotebook,
@@ -32,7 +37,6 @@ import type {
 import type {
   Output,
   StreamOutput,
-  Notebook,
 } from '../../commutable/v4';
 
 type Pager = {
@@ -114,15 +118,7 @@ export function cleanCellTransient(state: DocumentState, id: string) {
 // the immutable.js version of the notebook in the action
 type SetNotebookAction = { type: 'SET_NOTEBOOK', notebook: ImmutableNotebook };
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
-  const notebook = action.notebook
-    .update('cellMap', (cells: ImmutableCellMap): ImmutableCellMap =>
-      // TODO: Determine why setting the notebook is changing these values.
-      //       Should they be transient or part of an overall app state?
-      cells.map((cell: ImmutableCell) =>
-        cell.setIn(['metadata', 'inputHidden'], false)
-              .setIn(['metadata', 'outputHidden'], false)
-              .setIn(['metadata', 'outputExpanded'], false)
-      ));
+  const { notebook } = action;
 
   return state.set('notebook', notebook)
     .set('cellFocused', notebook.getIn(['cellOrder', 0]))
@@ -224,15 +220,14 @@ function focusNextCell(state: DocumentState, action: FocusNextCellAction) {
       return state;
     }
 
-    const cellID = uuid.v4();
-    // TODO: condition on state.defaultCellType (markdown vs. code)
-    // TODO: type cells (these could be records...)
+    const cellID: string = uuid.v4();
     const cell = emptyCodeCell;
+
+    const notebook: ImmutableNotebook = state.get('notebook');
+
     return state.set('cellFocused', cellID)
-      .update('notebook',
-        notebook => commutable.insertCellAt(notebook, cell, cellID, nextIndex))
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-      .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+                .set('notebook',
+                  insertCellAt(notebook, cell, cellID, nextIndex));
   }
 
   // When in the middle of the notebook document, move to the next cell
@@ -324,10 +319,8 @@ function newCellAfter(state: DocumentState, action: NewCellAfterAction) {
   const cellID = uuid.v4();
   return state.update('notebook', (notebook: ImmutableNotebook) => {
     const index = notebook.get('cellOrder').indexOf(id) + 1;
-    return commutable.insertCellAt(notebook, cell.set('source', source), cellID, index);
-  })
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+    return insertCellAt(notebook, cell.set('source', source), cellID, index);
+  });
 }
 
 type NewCellBeforeAction = { type: 'NEW_CELL_BEFORE', cellType: CellType, id: CellID };
@@ -335,13 +328,11 @@ function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
   const { cellType, id } = action;
   const cell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
-  return state.update('notebook', (notebook) => {
+  return state.update('notebook', (notebook: ImmutableNotebook) => {
     const cellOrder : ImmutableCellOrder = notebook.get('cellOrder');
     const index = cellOrder.indexOf(id);
-    return commutable.insertCellAt(notebook, cell, cellID, index);
-  })
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+    return insertCellAt(notebook, cell, cellID, index);
+  });
 }
 
 type MergeCellAfterAction = { type: 'MERGE_CELL_AFTER', id: CellID };
@@ -362,7 +353,9 @@ function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
   const source = firstSource.concat('\n', '\n', secondSource);
 
   return state.update('notebook',
-    notebook => commutable.removeCell(commutable.updateSource(notebook, id, source), nextId)
+    (notebook: ImmutableNotebook) => commutable.removeCell(
+      notebook.setIn(['cellMap', id, 'source'], source),
+      nextId)
   );
 }
 
@@ -374,9 +367,7 @@ function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   const cell: ImmutableCell = cellType === 'markdown' ? emptyMarkdownCell : emptyCodeCell;
   const index = cellOrder.count();
   const cellID = uuid.v4();
-  return state.set('notebook', commutable.insertCellAt(notebook, cell, cellID, index))
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'outputHidden'], false)
-    .setIn(['notebook', 'cellMap', cellID, 'metadata', 'inputHidden'], false);
+  return state.set('notebook', insertCellAt(notebook, cell, cellID, index));
 }
 
 type UpdateSourceAction = { type: 'UPDATE_CELL_SOURCE', id: CellID, source: string }
@@ -465,14 +456,17 @@ function cutCell(state: DocumentState, action: CutCellAction) {
 
 type PasteCellAction = { type: 'PASTE_CELL' };
 function pasteCell(state: DocumentState) {
-  const copiedCell = state.getIn(['copied', 'cell']);
-  const copiedId = state.getIn(['copied', 'id']);
+  const copiedCell: ImmutableCell | null = state.getIn(['copied', 'cell'], null);
+  const copiedId: string | null = state.getIn(['copied', 'id'], null);
+
+  if (copiedCell === null || copiedId === null) {
+    return state;
+  }
+
   const id = uuid.v4();
 
-  return state.update('notebook', (notebook: Notebook) =>
-      commutable.insertCellAfter(notebook, copiedCell, id, copiedId))
-        .setIn(['notebook', 'cellMap', id, 'metadata', 'outputHidden'], false)
-        .setIn(['notebook', 'cellMap', id, 'metadata', 'inputHidden'], false);
+  return state.update('notebook', (notebook: ImmutableNotebook) =>
+      insertCellAfter(notebook, copiedCell, id, copiedId));
 }
 
 type ChangeCellTypeAction = { type: 'CHANGE_CELL_TYPE', id: CellID, to: string }

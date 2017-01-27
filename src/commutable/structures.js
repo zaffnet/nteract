@@ -44,6 +44,8 @@ const defaultCodeCell = Object.freeze({
   execution_count: null,
   metadata: Immutable.Map({
     collapsed: false,
+    outputHidden: false,
+    inputHidden: false,
   }),
   source: '',
   outputs: Immutable.List(),
@@ -110,6 +112,27 @@ export function appendCellToNotebook(
     return nb.set('cellOrder', cellOrder)
              .set('cellMap', cellMap);
   });
+}
+
+export function insertCellAt(
+  notebook: ImmutableNotebook,
+  cell: ImmutableCell,
+  cellID: string,
+  index: number)
+  : ImmutableNotebook {
+  return notebook.withMutations(nb =>
+    nb.setIn(['cellMap', cellID], cell)
+      .set('cellOrder', nb.get('cellOrder').insert(index, cellID))
+    );
+}
+
+export function insertCellAfter(
+  notebook: ImmutableNotebook,
+  cell: ImmutableCell,
+  cellID: string,
+  priorCellID: string)
+  : ImmutableNotebook {
+  return insertCellAt(notebook, cell, cellID, notebook.get('cellOrder').indexOf(priorCellID) + 1);
 }
 
 export const monocellNotebook = appendCellToNotebook(emptyNotebook, emptyCodeCell);
