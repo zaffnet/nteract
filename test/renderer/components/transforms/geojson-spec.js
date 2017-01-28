@@ -7,11 +7,30 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
+import _ from 'lodash';
+
 chai.use(sinonChai);
+
+function deepFreeze(obj) {
+  // Retrieve the property names defined on obj
+  var propNames = Object.getOwnPropertyNames(obj);
+
+  // Freeze properties before freezing self
+  propNames.forEach(function(name) {
+    var prop = obj[name];
+
+    // Freeze prop if it is an object
+    if (typeof prop == 'object' && prop !== null)
+      deepFreeze(prop);
+  });
+
+  // Freeze self (no-op if already frozen)
+  return Object.freeze(obj);
+}
 
 import GeoJSONTransform, { getTheme } from '../../../../src/notebook/components/transforms/geojson';
 
-const geojson = Immutable.fromJS({
+const geojson = deepFreeze({
   "type": "FeatureCollection",
   "features": [
       {
@@ -68,7 +87,7 @@ describe('GeoJSONTransform', () => {
     expect(geoComponent.find('.leaflet-container')).to.have.length(1);
 
     geoComponent.setProps({
-      data: geojson.setIn(["features", 0, "properties", "popupContent"], "somewhere"),
+      data: _.set(_.cloneDeep(geojson), ["features", 0, "properties", "popupContent"], "somewhere"),
       theme: 'dark',
     })
 

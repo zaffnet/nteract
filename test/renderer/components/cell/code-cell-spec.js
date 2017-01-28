@@ -5,14 +5,19 @@ import Immutable from 'immutable';
 import {expect} from 'chai';
 
 import CodeCell from '../../../../src/notebook/components/cell/code-cell';
-import * as commutable from 'commutable';
+
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+} from '../../../../src/commutable';
+
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
 const sharedProps = { displayOrder, transforms };
 describe('CodeCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
-      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}
+      <CodeCell cell={emptyCodeCell} {...sharedProps}
       cellStatus={
         Immutable.Map({
           'outputHidden': false,
@@ -25,7 +30,7 @@ describe('CodeCell', () => {
   });
   it('creates an editor', () => {
     const cell = mount(
-      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}
+      <CodeCell cell={emptyCodeCell} {...sharedProps}
       cellStatus={
         Immutable.Map({
           'outputHidden': false,
@@ -38,7 +43,7 @@ describe('CodeCell', () => {
   });
   it('creates a pager', () => {
     const cell = mount(
-      <CodeCell cell={commutable.emptyCodeCell} {...sharedProps}
+      <CodeCell cell={emptyCodeCell} {...sharedProps}
       cellStatus={
         Immutable.Map({
           'outputHidden': false,

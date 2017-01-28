@@ -281,16 +281,6 @@ describe('setBackwardCheckpoint', () => {
   });
 });
 
-describe('splitCell', () => {
-  it('creates a SPLIT_CELL action', () => {
-    expect(actions.splitCell('235', 0)).to.deep.equal({
-      type: constants.SPLIT_CELL,
-      id: '235',
-      position: 0,
-    });
-  });
-});
-
 describe('copyCell', () => {
   it('creates a COPY_CELL action', () => {
     expect(actions.copyCell('235')).to.deep.equal({

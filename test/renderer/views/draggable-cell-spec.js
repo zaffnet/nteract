@@ -4,7 +4,11 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 import DraggableCell from '../../../src/notebook/views/draggable-cell';
-import * as commutable from 'commutable';
+
+import {
+  emptyMarkdownCell,
+} from '../../../src/commutable';
+
 import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
 
 // Spoof DND manager for tests.
@@ -24,7 +28,7 @@ const sharedProps = { displayOrder, transforms };
 describe('DraggableCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
-      <DraggableCell cell={commutable.emptyMarkdownCell} {...sharedProps}/>
+      <DraggableCell cell={emptyMarkdownCell} {...sharedProps}/>
     , {
       context: { dragDropManager }
     });

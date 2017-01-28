@@ -7,13 +7,32 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
+import _ from 'lodash';
+
 chai.use(sinonChai);
 
 const plotly = require('plotly.js/dist/plotly');
 
 import PlotlyTransform from '../../../../src/notebook/components/transforms/plotly';
 
-const immutableFigure = Immutable.fromJS({
+function deepFreeze(obj) {
+  // Retrieve the property names defined on obj
+  var propNames = Object.getOwnPropertyNames(obj);
+
+  // Freeze properties before freezing self
+  propNames.forEach(function(name) {
+    var prop = obj[name];
+
+    // Freeze prop if it is an object
+    if (typeof prop == 'object' && prop !== null)
+      deepFreeze(prop);
+  });
+
+  // Freeze self (no-op if already frozen)
+  return Object.freeze(obj);
+}
+
+const figure = deepFreeze({
   data: [
     {'x': [1999, 2000, 2001, 2002], 'y': [10, 15, 13, 17], 'type': 'scatter'},
     {'x': [1999, 2000, 2001, 2002], 'y': [16, 5, 11, 9], 'type': 'scatter'},
@@ -32,7 +51,7 @@ describe('PlotlyTransform', () => {
 
     const plotComponent = mount(
       <PlotlyTransform
-        data={immutableFigure}
+        data={figure}
       />
     );
 
@@ -62,7 +81,7 @@ describe('PlotlyTransform', () => {
 
     const plotComponent = mount(
       <PlotlyTransform
-        data={JSON.stringify(immutableFigure.toJS())}
+        data={JSON.stringify(figure)}
       />
     );
 
@@ -92,14 +111,14 @@ describe('PlotlyTransform', () => {
 
     const wrapper = mount(
       <PlotlyTransform
-        data={immutableFigure}
+        data={figure}
       />
     );
 
     const instance = wrapper.instance();
 
     wrapper.setProps({
-      data: immutableFigure.setIn(['data', 0, 'type'], 'bar'),
+      data: _.set(_.cloneDeep(figure), ['data', 0, 'type'], 'bar'),
     });
 
     expect(instance.el.data[0].type).to.equal('bar');

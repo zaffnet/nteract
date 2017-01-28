@@ -9,7 +9,11 @@ const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 const expect = chai.expect;
 
-import * as commutable from 'commutable';
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+} from '../../../../src/commutable';
+
 import { dummyStore } from '../../../utils';
 
 import Toolbar from '../../../../src/notebook/components/cell/toolbar';
@@ -54,7 +58,7 @@ describe('Toolbar', () => {
 
 describe('Toolbar.executeCell', () => {
   it('dispatches an executeCell action', () => {
-    const cell = commutable.emptyCodeCell.set('source', 'print("sup")')
+    const cell = emptyCodeCell.set('source', 'print("sup")')
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -78,7 +82,7 @@ describe('Toolbar.executeCell', () => {
 
 describe('Toolbar.removeCell', () => {
   it('dispatches a REMOVE_CELL action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -101,7 +105,7 @@ describe('Toolbar.removeCell', () => {
 
 describe('Toolbar.toggleStickyCell', () => {
   it('dispatches TOGGLE_STICKY_CELL action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -124,7 +128,7 @@ describe('Toolbar.toggleStickyCell', () => {
 
 describe('Toolbar.clearOutputs', () => {
   it('dispatches CLEAR_OUTPUTS action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -147,7 +151,7 @@ describe('Toolbar.clearOutputs', () => {
 
 describe('Toolbar.changeInputVisibility', () => {
   it('dispatches CHANGE_INPUT_VISIBILITY action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -170,7 +174,7 @@ describe('Toolbar.changeInputVisibility', () => {
 
 describe('Toolbar.changeOutputVisibility', () => {
   it('dispatches CHANGE_OUTPUT_VISIBILITY action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -193,7 +197,7 @@ describe('Toolbar.changeOutputVisibility', () => {
 
 describe('Toolbar.changeCellType', () => {
   it('dispatches CHANGE_CELL_TYPE action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 
@@ -217,7 +221,7 @@ describe('Toolbar.changeCellType', () => {
 
 describe('Toolbar.toggleOutputExpansion', () => {
   it('dispatches a TOGGLE_OUTPUT_EXPANSION action', () => {
-    const cell = commutable.emptyCodeCell;
+    const cell = emptyCodeCell;
     const store = dummyStore();
     store.dispatch = sinon.spy();
 

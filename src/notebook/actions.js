@@ -180,14 +180,6 @@ export function toggleStickyCell(id) {
   };
 }
 
-export function splitCell(id, position) {
-  return {
-    type: constants.SPLIT_CELL,
-    id,
-    position,
-  };
-}
-
 export function overwriteMetadata(field, value) {
   return {
     type: constants.OVERWRITE_METADATA_FIELD,

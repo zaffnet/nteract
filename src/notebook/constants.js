@@ -32,7 +32,6 @@ export const NEW_CELL_BEFORE = 'NEW_CELL_BEFORE';
 export const NEW_CELL_APPEND = 'NEW_CELL_APPEND';
 
 export const MERGE_CELL_AFTER = 'MERGE_CELL_AFTER';
-export const SPLIT_CELL = 'SPLIT_CELL';
 
 export const ABORT_EXECUTION = 'ABORT_EXECUTION';
 

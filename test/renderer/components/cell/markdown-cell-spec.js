@@ -14,7 +14,11 @@ import {
   focusNextCell,
 } from '../../../../src/notebook/actions';
 
-import * as commutable from 'commutable';
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+} from '../../../../src/commutable';
+
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
 import { dummyStore } from '../../../utils';
@@ -22,7 +26,7 @@ import { dummyStore } from '../../../utils';
 describe('MarkdownCell', () => {
   it('can be rendered', () => {
     const cell = shallow(
-      <MarkdownCell cell={commutable.emptyMarkdownCell} {...{ displayOrder, transforms }}/>
+      <MarkdownCell cell={emptyMarkdownCell} {...{ displayOrder, transforms }}/>
     );
     expect(cell).to.not.be.null;
   });
@@ -34,7 +38,7 @@ describe('MarkdownCell', () => {
     const cell = mount(
       <MarkdownCell
       id='1234'
-      cell={commutable.emptyMarkdownCell}
+      cell={emptyMarkdownCell}
       focusEditor={() => store.dispatch(focusCellEditor('1234'))}
       {...{ displayOrder, transforms }} />,
       { context: { store } }
@@ -61,10 +65,10 @@ describe('MarkdownCell', () => {
 
   it('sets the state of the text based on cell source', () => {
     const cell = mount(
-      <MarkdownCell cell={commutable.emptyMarkdownCell} {...{ displayOrder, transforms }}/>,
+      <MarkdownCell cell={emptyMarkdownCell} {...{ displayOrder, transforms }}/>,
     );
 
-    cell.setProps({'cell': commutable.emptyMarkdownCell.set('source', 'test')});
+    cell.setProps({'cell': emptyMarkdownCell.set('source', 'test')});
     expect(cell.state('source')).to.equal('test');
   });
 
@@ -75,7 +79,7 @@ describe('MarkdownCell', () => {
     const cell = shallow(
       <MarkdownCell
         id='1234'
-        cell={commutable.emptyMarkdownCell}
+        cell={emptyMarkdownCell}
         focusAbove={() => store.dispatch(focusPreviousCell('1234'))}
         {...{displayOrder, transforms }}/>,
       { context: { store } }
@@ -96,7 +100,7 @@ describe('MarkdownCell', () => {
     const cell = shallow(
       <MarkdownCell
         id='1234'
-        cell={commutable.emptyMarkdownCell}
+        cell={emptyMarkdownCell}
         focusBelow={() => store.dispatch(focusNextCell('1234', true))}
         {...{displayOrder, transforms }}/>,
       { context: { store } }

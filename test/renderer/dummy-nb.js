@@ -1,4 +1,4 @@
-import * as commutable from 'commutable';
+import { fromJS } from '../../src/commutable';
 
 export const dummy = '{"cells":[{"cell_type":"markdown","metadata":{},\
 "source":["## The Notable Nteract Notebook\\n","\\n","**It\'s a notebook!**\\n"]},\
@@ -16,4 +16,4 @@ export const dummy = '{"cells":[{"cell_type":"markdown","metadata":{},\
 
 export const dummyJSON = JSON.parse(dummy);
 
-export const dummyCommutable = commutable.fromJS(dummyJSON);
+export const dummyCommutable = fromJS(dummyJSON);
