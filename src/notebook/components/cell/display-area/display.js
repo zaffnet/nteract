@@ -13,6 +13,7 @@ type Props = {
   theme: string,
   expanded: boolean,
   isHidden: boolean,
+  models: ImmutableMap<string, any>,
 }
 
 const DEFAULT_SCROLL_HEIGHT = 600;
@@ -71,6 +72,7 @@ export default class Display extends React.PureComponent {
                 displayOrder={order}
                 transforms={tf}
                 theme={this.props.theme}
+                models={this.props.models}
               />
             )
           }

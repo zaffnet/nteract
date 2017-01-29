@@ -24,6 +24,7 @@ type Props = {|
   cursorBlinkRate: number,
   pagers: ImmutableList<any>,
   moveCell: (source: string, dest: string, above: boolean) => Object,
+  models: ImmutableMap<string, any>,
 |};
 
 type State = {|
@@ -153,6 +154,7 @@ class DraggableCellView extends React.PureComponent {
             cursorBlinkRate={this.props.cursorBlinkRate}
             pagers={this.props.pagers}
             transforms={this.props.transforms}
+            models={this.props.models}
           />
         </div>
       </div>

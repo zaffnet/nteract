@@ -22,6 +22,8 @@ import {
 import PlotlyTransform from './plotly';
 import GeoJSONTransform from './geojson';
 
+import ModelDebug from './model-debug';
+
 import {
   VegaLite,
   Vega,
@@ -58,20 +60,28 @@ export const standardDisplayOrder: StandardDisplayOrder = new ImmutableList([
   'text/plain',
 ]);
 
+function registerTransform({ transforms, displayOrder }, transform) {
+  return {
+    transforms: transforms.set(transform.MIMETYPE, transform),
+    displayOrder: displayOrder.insert(0, transform.MIMETYPE)
+  };
+}
 
-// Register custom transforms
-const transforms = standardTransforms
-  .set(PlotlyTransform.MIMETYPE, PlotlyTransform)
-  .set(GeoJSONTransform.MIMETYPE, GeoJSONTransform)
-  .set(VegaLite.MIMETYPE, VegaLite)
-  .set(Vega.MIMETYPE, Vega);
+const additionalTransforms = [
+  ModelDebug,
+  PlotlyTransform,
+  GeoJSONTransform,
+  VegaLite,
+  Vega,
+];
 
-// Register our custom transforms as the most rich (front of List)
-const displayOrder = standardDisplayOrder
-  .insert(0, PlotlyTransform.MIMETYPE)
-  .insert(0, VegaLite.MIMETYPE)
-  .insert(0, Vega.MIMETYPE)
-  .insert(0, GeoJSONTransform.MIMETYPE);
+const {
+  transforms,
+  displayOrder,
+} = additionalTransforms.reduce(registerTransform, {
+  transforms: standardTransforms,
+  displayOrder: standardDisplayOrder,
+});
 
 /**
  * Choose the richest mimetype available based on the displayOrder and transforms

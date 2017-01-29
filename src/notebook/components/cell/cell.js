@@ -27,6 +27,7 @@ export type CellProps = {
   cursorBlinkRate: number,
   pagers: ImmutableList<any>,
   transforms: ImmutableMap<string, any>,
+  models: ImmutableMap<string, any>,
 };
 
 type State = {
@@ -147,6 +148,7 @@ export class Cell extends React.PureComponent {
             transforms={this.props.transforms}
             pagers={this.props.pagers}
             running={this.props.running}
+            models={this.props.models}
           />
         }
       </div>
