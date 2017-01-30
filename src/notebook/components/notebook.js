@@ -58,6 +58,7 @@ type Props = {
   kernelSpecDisplayName: string,
   CellComponent: any,
   executionState: string,
+  models: ImmutableMap<string, any>,
 };
 
 export function getLanguageMode(notebook: any): string {
@@ -83,6 +84,7 @@ const mapStateToProps = (state: Object) => ({
   editorFocused: state.document.get('editorFocused'),
   stickyCells: state.document.get('stickyCells'),
   executionState: state.app.get('executionState'),
+  models: state.comms.get('models'),
 });
 
 export class Notebook extends React.PureComponent {
@@ -189,6 +191,7 @@ export class Notebook extends React.PureComponent {
       // tell CodeMirror to remeasure
       theme: this.props.theme,
       cursorBlinkRate: this.props.cursorBlinkRate,
+      models: this.props.models,
     };
   }
 

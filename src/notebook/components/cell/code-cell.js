@@ -25,6 +25,7 @@ type Props = {
   focusAbove: Function,
   focusBelow: Function,
   tabSize: number,
+  models: ImmutableMap<string, any>,
 };
 
 class CodeCell extends React.PureComponent {
@@ -99,6 +100,7 @@ class CodeCell extends React.PureComponent {
             theme={this.props.theme}
             expanded={this.isOutputExpanded()}
             isHidden={this.isOutputHidden()}
+            models={this.props.models}
           />
         </div>
       </LatexRenderer>

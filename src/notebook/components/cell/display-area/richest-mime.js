@@ -10,6 +10,7 @@ type Props = {
   bundle: ImmutableMap<string, any>,
   metadata: ImmutableMap<string, any>,
   theme: string,
+  models?: ImmutableMap<string, any>,
 };
 
 export default class RichestMime extends React.Component {
@@ -21,6 +22,7 @@ export default class RichestMime extends React.Component {
     theme: 'light',
     metadata: new ImmutableMap(),
     bundle: new ImmutableMap(),
+    models: new ImmutableMap(),
   };
 
   shouldComponentUpdate(nextProps: Props): boolean {  // eslint-disable-line class-methods-use-this
@@ -46,6 +48,13 @@ export default class RichestMime extends React.Component {
     const Transform = this.props.transforms.get(mimetype);
     const data = this.props.bundle.get(mimetype);
     const metadata = this.props.metadata.get(mimetype);
-    return <Transform data={data} metadata={metadata} theme={this.props.theme} />;
+    return (
+      <Transform
+        data={data}
+        metadata={metadata}
+        theme={this.props.theme}
+        models={this.props.models}
+      />
+    );
   }
 }

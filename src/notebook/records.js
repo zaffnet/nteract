@@ -167,6 +167,8 @@ export const MetadataRecord = Immutable.Record({
 
 export const CommsRecord = Immutable.Record({
   targets: new Immutable.Map(),
+  info: new Immutable.Map(),
+  models: new Immutable.Map(),
 });
 
 export type AppState = {
