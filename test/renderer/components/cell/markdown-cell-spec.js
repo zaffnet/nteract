@@ -17,7 +17,7 @@ import {
 import {
   emptyCodeCell,
   emptyMarkdownCell,
-} from '../../../../src/commutable';
+} from '../../../../packages/commutable';
 
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 

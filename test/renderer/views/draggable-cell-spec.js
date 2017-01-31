@@ -7,7 +7,7 @@ import DraggableCell from '../../../src/notebook/views/draggable-cell';
 
 import {
   emptyMarkdownCell,
-} from '../../../src/commutable';
+} from '../../../packages/commutable';
 
 import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
 

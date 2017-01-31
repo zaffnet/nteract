@@ -9,7 +9,7 @@ import CodeCell from '../../../../src/notebook/components/cell/code-cell';
 import {
   emptyCodeCell,
   emptyMarkdownCell,
-} from '../../../../src/commutable';
+} from '../../../../packages/commutable';
 
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 

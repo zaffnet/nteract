@@ -4,11 +4,11 @@ import Immutable from 'immutable';
 import {
   monocellNotebook,
   emptyCodeCell,
-} from '../src/commutable';
+} from '../packages/commutable';
 
 import {
   appendCellToNotebook,
-} from '../src/commutable/structures';
+} from '../packages/commutable/structures';
 
 import { shutdownKernel } from '../src/notebook/kernel/shutdown';
 import * as actions from '../src/notebook/actions';

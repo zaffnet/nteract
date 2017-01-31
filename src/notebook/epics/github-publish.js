@@ -12,7 +12,7 @@ import {
 import {
   toJS,
   stringifyNotebook,
-} from '../../commutable';
+} from '../../../packages/commutable';
 
 const path = require('path');
 

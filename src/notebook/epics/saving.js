@@ -16,7 +16,7 @@ import {
 import {
   toJS,
   stringifyNotebook,
-} from '../../commutable';
+} from '../../../packages/commutable';
 
 const Rx = require('rxjs/Rx');
 

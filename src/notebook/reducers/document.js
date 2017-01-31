@@ -15,13 +15,13 @@ import { DocumentRecord } from '../records';
 import {
   emptyCodeCell,
   emptyMarkdownCell,
-} from '../../commutable';
+} from '../../../packages/commutable';
 
 import {
   insertCellAt,
   insertCellAfter,
   removeCell,
-} from '../../commutable/structures';
+} from '../../../packages/commutable/structures';
 
 import type {
   ImmutableCell,
@@ -32,12 +32,12 @@ import type {
   ImmutableOutput,
   ImmutableOutputs,
   MimeBundle,
-} from '../../commutable/types';
+} from '../../../packages/commutable/types';
 
 import type {
   Output,
   StreamOutput,
-} from '../../commutable/v4';
+} from '../../../packages/commutable/v4';
 
 type Pager = {
   source: 'page',
