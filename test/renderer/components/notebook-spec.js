@@ -1,34 +1,26 @@
 import React from 'react';
 import Immutable from 'immutable';
 import { Provider } from 'react-redux';
-import { shallow, mount, render } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import { displayOrder, transforms } from '../../../src/notebook/components/transforms';
-
-const TestBackend = require('react-dnd-test-backend');
-import { DragDropContext } from 'react-dnd';
-
 import Cell from '../../../src/notebook/components/cell/cell';
+import { Notebook, getLanguageMode } from '../../../src/notebook/components/notebook';
+
+
+import { dummyStore } from '../../utils';
+import { dummyCommutable } from '../dummy-nb';
 
 const chai = require('chai');
 const sinon = require('sinon');
-const sinonChai = require("sinon-chai");
+const sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 const expect = chai.expect;
-
-import { dummyStore } from '../../utils';
-
-import {
-  dummyCommutable,
-} from '../dummy-nb';
-
 const dummyCellStatuses = dummyCommutable.get('cellOrder')
       .reduce((statuses, cellID) =>
         statuses.set(cellID, Immutable.fromJS({ outputHidden: false, inputHidden: false })),
       new Immutable.Map());
-
-import { Notebook, ConnectedNotebook, getLanguageMode, scrollToElement } from '../../../src/notebook/components/notebook';
 
 // Boilerplate test to make sure the testing setup is configured
 describe('Notebook', () => {
@@ -36,7 +28,7 @@ describe('Notebook', () => {
     const component = shallow(
       <Notebook
         notebook={dummyCommutable}
-        transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+        transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
         cellPagers={new Immutable.Map()}
         cellStatuses={new Immutable.Map()}
         stickyCells={(new Immutable.Map())
@@ -45,7 +37,7 @@ describe('Notebook', () => {
           .set(dummyCommutable.getIn(['cellOrder', 0]), true)
         }
         CellComponent={Cell}
-      />
+      />,
     );
     expect(component).to.not.be.null;
   });
@@ -54,7 +46,7 @@ describe('Notebook', () => {
       <Provider store={dummyStore()}>
         <Notebook
           notebook={dummyCommutable}
-          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+          transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={new Immutable.Map()}
@@ -62,7 +54,7 @@ describe('Notebook', () => {
           transforms={transforms.delete('text/html')}
           CellComponent={Cell}
         />
-      </Provider>
+      </Provider>,
     );
     expect(component.find('.notebook').length).to.be.above(0, '.notebook');
     expect(component.find('.notebook .cell').length).to.be.above(0, '.notebook .cell');
@@ -81,7 +73,7 @@ describe('Notebook', () => {
       const lang = getLanguageMode(dummyCommutable);
       expect(lang).to.equal('ipython');
 
-      const lang2 = getLanguageMode(dummyCommutable.setIn(['metadata', 'language_info', 'codemirror_mode', 'name'], 'r'))
+      const lang2 = getLanguageMode(dummyCommutable.setIn(['metadata', 'language_info', 'codemirror_mode', 'name'], 'r'));
       expect(lang2).to.equal('r');
     });
   });
@@ -92,14 +84,14 @@ describe('Notebook', () => {
 
       const context = {
         store: dummyStore(),
-      }
+      };
 
       context.store.dispatch = sinon.spy();
 
       const component = shallow(
         <Notebook
           notebook={dummyCommutable}
-          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+          transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={(new Immutable.Map())}
@@ -118,7 +110,7 @@ describe('Notebook', () => {
       expect(context.store.dispatch.firstCall).to.have.been.calledWith({
         type: 'EXECUTE_CELL',
         id: focusedCell,
-        source: dummyCommutable.getIn(['cellMap', focusedCell, 'source'])
+        source: dummyCommutable.getIn(['cellMap', focusedCell, 'source']),
       });
     });
     it('detects a focus to next cell keypress', () => {
@@ -126,14 +118,14 @@ describe('Notebook', () => {
 
       const context = {
         store: dummyStore(),
-      }
+      };
 
       context.store.dispatch = sinon.spy();
 
       const component = shallow(
         <Notebook
           notebook={dummyCommutable}
-          transient={new Immutable.Map({cellMap: new Immutable.Map()})}
+          transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={(new Immutable.Map())}

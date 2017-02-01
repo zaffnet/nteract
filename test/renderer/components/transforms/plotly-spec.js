@@ -1,31 +1,28 @@
 import React from 'react';
-import Immutable from 'immutable';
+import _ from 'lodash';
 
 import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
-
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import _ from 'lodash';
+
+import PlotlyTransform from '../../../../src/notebook/components/transforms/plotly';
 
 chai.use(sinonChai);
 
 const plotly = require('plotly.js/dist/plotly');
 
-import PlotlyTransform from '../../../../src/notebook/components/transforms/plotly';
-
 function deepFreeze(obj) {
   // Retrieve the property names defined on obj
-  var propNames = Object.getOwnPropertyNames(obj);
+  const propNames = Object.getOwnPropertyNames(obj);
 
   // Freeze properties before freezing self
-  propNames.forEach(function(name) {
-    var prop = obj[name];
+  propNames.forEach((name) => {
+    const prop = obj[name];
 
     // Freeze prop if it is an object
-    if (typeof prop == 'object' && prop !== null)
-      deepFreeze(prop);
+    if (typeof prop === 'object' && prop !== null) { deepFreeze(prop); }
   });
 
   // Freeze self (no-op if already frozen)
@@ -34,14 +31,14 @@ function deepFreeze(obj) {
 
 const figure = deepFreeze({
   data: [
-    {'x': [1999, 2000, 2001, 2002], 'y': [10, 15, 13, 17], 'type': 'scatter'},
-    {'x': [1999, 2000, 2001, 2002], 'y': [16, 5, 11, 9], 'type': 'scatter'},
+    { x: [1999, 2000, 2001, 2002], y: [10, 15, 13, 17], type: 'scatter' },
+    { x: [1999, 2000, 2001, 2002], y: [16, 5, 11, 9], type: 'scatter' },
   ],
   layout: {
-    'title': 'Super Stuff',
-    'xaxis': { 'title': 'Year', 'showgrid': false, 'zeroline': false },
-    'yaxis': { 'title': 'Percent', 'showline': false },
-    'height': '100px',
+    title: 'Super Stuff',
+    xaxis: { title: 'Year', showgrid: false, zeroline: false },
+    yaxis: { title: 'Percent', showline: false },
+    height: '100px',
   },
 });
 
@@ -52,7 +49,7 @@ describe('PlotlyTransform', () => {
     const plotComponent = mount(
       <PlotlyTransform
         data={figure}
-      />
+      />,
     );
 
     const instance = plotComponent.instance();
@@ -61,19 +58,19 @@ describe('PlotlyTransform', () => {
     expect(newPlot).to.have.been
       .calledWith(
         instance.el,
-        [
-          {'x': [1999, 2000, 2001, 2002], 'y': [10, 15, 13, 17], 'type': 'scatter'},
-          {'x': [1999, 2000, 2001, 2002], 'y': [16, 5, 11, 9], 'type': 'scatter'},
-        ],
-        {
-          'title': 'Super Stuff',
-          'xaxis': { 'title': 'Year', 'showgrid': false, 'zeroline': false },
-          'yaxis': { 'title': 'Percent', 'showline': false },
-          'height': '100px',
-        })
+      [
+          { x: [1999, 2000, 2001, 2002], y: [10, 15, 13, 17], type: 'scatter' },
+          { x: [1999, 2000, 2001, 2002], y: [16, 5, 11, 9], type: 'scatter' },
+      ],
+      {
+        title: 'Super Stuff',
+        xaxis: { title: 'Year', showgrid: false, zeroline: false },
+        yaxis: { title: 'Percent', showline: false },
+        height: '100px',
+      });
 
         // Unwrap spy
-        plotly.newPlot.restore();
+    plotly.newPlot.restore();
   });
 
   it('plots some data from a JSON string', () => {
@@ -82,7 +79,7 @@ describe('PlotlyTransform', () => {
     const plotComponent = mount(
       <PlotlyTransform
         data={JSON.stringify(figure)}
-      />
+      />,
     );
 
     const instance = plotComponent.instance();
@@ -91,28 +88,27 @@ describe('PlotlyTransform', () => {
     expect(newPlot).to.have.been
       .calledWith(
         instance.el,
-        [
-          {'x': [1999, 2000, 2001, 2002], 'y': [10, 15, 13, 17], 'type': 'scatter'},
-          {'x': [1999, 2000, 2001, 2002], 'y': [16, 5, 11, 9], 'type': 'scatter'},
-        ],
-        {
-          'title': 'Super Stuff',
-          'xaxis': { 'title': 'Year', 'showgrid': false, 'zeroline': false },
-          'yaxis': { 'title': 'Percent', 'showline': false },
-          'height': '100px',
-        })
+      [
+          { x: [1999, 2000, 2001, 2002], y: [10, 15, 13, 17], type: 'scatter' },
+          { x: [1999, 2000, 2001, 2002], y: [16, 5, 11, 9], type: 'scatter' },
+      ],
+      {
+        title: 'Super Stuff',
+        xaxis: { title: 'Year', showgrid: false, zeroline: false },
+        yaxis: { title: 'Percent', showline: false },
+        height: '100px',
+      });
     // Unwrap spy
     plotly.newPlot.restore();
   });
 
   it('processes updates', () => {
-    const newPlot = sinon.spy(plotly, 'newPlot');
     const redraw = sinon.spy(plotly, 'redraw');
 
     const wrapper = mount(
       <PlotlyTransform
         data={figure}
-      />
+      />,
     );
 
     const instance = wrapper.instance();
@@ -123,10 +119,9 @@ describe('PlotlyTransform', () => {
 
     expect(instance.el.data[0].type).to.equal('bar');
 
-    expect(redraw).to.have.been.calledWith(instance.el)
+    expect(redraw).to.have.been.calledWith(instance.el);
 
       // Unwrap spy
-      plotly.newPlot.restore();
-      plotly.redraw.restore();
-  })
+    plotly.redraw.restore();
+  });
 });

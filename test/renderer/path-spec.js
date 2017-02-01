@@ -1,9 +1,6 @@
 import { expect } from 'chai';
-import { remote } from 'electron';
-import {
-  defaultPathFallback,
-  cwdKernelFallback
-} from '../../src/notebook/path';
+
+import { defaultPathFallback } from '../../src/notebook/path';
 
 describe('defaultPathFallback', () => {
   it('returns a object with the defaultPath', () => {
@@ -12,7 +9,7 @@ describe('defaultPathFallback', () => {
   });
   it('returns a object with the correct path', () => {
     if (process.platform !== 'win32') {
-      process.chdir('/')
+      process.chdir('/');
       const path = defaultPathFallback();
       expect(path).to.deep.equal({ defaultPath: '/home/home/on/the/range' });
     }

@@ -1,23 +1,22 @@
 import React from 'react';
 import sinon from 'sinon';
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
 import CellCreator from '../../../src/notebook/views/cell-creator';
 
 describe('CellCreatorView', () => {
-  const createCell = sinon.spy()
-  const mergeCell = sinon.spy()
+  const createCell = sinon.spy();
+  const mergeCell = sinon.spy();
 
-  const setup = (id) => {
-    return shallow(
-      <CellCreator
-      createCell={createCell.bind(this)}
-      mergeCell={mergeCell.bind(this)}
+  const setup = (id) => shallow(
+    <CellCreator
+      createCell={createCell}
+      mergeCell={mergeCell}
       above={false}
-      id={id} />
-    )
-  };
+      id={id}
+    />,
+    );
 
   it('can be constructed', () => {
     const component = setup('test');
@@ -26,12 +25,12 @@ describe('CellCreatorView', () => {
   it('creates cell creator buttons if no cells exist', () => {
     const component = setup(null);
     const buttons = component.find('.cell-creator');
-    expect(buttons).to.have.length(1)
+    expect(buttons).to.have.length(1);
   });
   it('does not create cell creator buttons if not hovered', () => {
     const component = setup('test');
     const buttons = component.find('.cell-creator');
-    expect(buttons).to.not.have.length(1)
+    expect(buttons).to.not.have.length(1);
   });
   it('has create text cell button', () => {
     const component = setup(null);
@@ -54,6 +53,6 @@ describe('CellCreatorView', () => {
   it('clicking merge cell button invokes mergeCell', () => {
     const component = setup(null);
     component.find('.merge-cell').simulate('click');
-    expect(mergeCell).to.have.been.called
+    expect(mergeCell).to.have.been.called;
   });
 });

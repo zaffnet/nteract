@@ -1,4 +1,9 @@
-dist/*.js
-test/
+dist/
 scripts/
-bin/win
+bin/
+lib/
+static/
+flow-typed/
+types/
+build/
+example-notebooks/

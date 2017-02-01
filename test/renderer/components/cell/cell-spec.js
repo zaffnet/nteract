@@ -3,13 +3,10 @@ import Immutable from 'immutable';
 
 import { mount } from 'enzyme';
 import chai, { expect } from 'chai';
-import { dummyStore } from '../../../utils'
-
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-chai.use(sinonChai);
-
+import { dummyStore } from '../../../utils';
 import { Cell } from '../../../../src/notebook/components/cell/cell';
 
 import {
@@ -19,6 +16,8 @@ import {
 
 import { displayOrder, transforms } from '../../../../src/notebook/components/transforms';
 
+chai.use(sinonChai);
+
 const sharedProps = { displayOrder, transforms };
 describe('Cell', () => {
   it('should be able to render a markdown cell', () => {
@@ -26,8 +25,8 @@ describe('Cell', () => {
     const cell = mount(
       <Cell cell={emptyMarkdownCell} {...sharedProps} />,
       {
-        context: { store }
-      }
+        context: { store },
+      },
     );
     expect(cell).to.not.be.null;
     expect(cell.find('div.cell.text').length).to.be.greaterThan(0);
@@ -35,11 +34,13 @@ describe('Cell', () => {
   it('should be able to render a code cell', () => {
     const store = dummyStore();
     const cell = mount(
-      <Cell cell={emptyCodeCell} {...sharedProps}
-      cellStatus={Immutable.Map({'outputHidden': false, 'inputHidden': false})}/>,
+      <Cell
+        cell={emptyCodeCell} {...sharedProps}
+        cellStatus={Immutable.Map({ outputHidden: false, inputHidden: false })}
+      />,
       {
-        context: { store }
-      }
+        context: { store },
+      },
     );
     expect(cell).to.not.be.null;
     expect(cell.find('div.code.cell').length).to.be.greaterThan(0);
@@ -49,8 +50,8 @@ describe('Cell', () => {
     const cell = mount(
       <Cell cell={emptyMarkdownCell} {...sharedProps} />,
       {
-        context: { store }
-      }
+        context: { store },
+      },
     );
 
     store.dispatch = sinon.spy();

@@ -1,19 +1,7 @@
 import { expect } from 'chai';
 
 import * as constants from '../../../src/notebook/constants';
-
 import reducers from '../../../src/notebook/reducers';
-
-import sinon from 'sinon';
-
-import { Map, List } from 'immutable';
-
-const setNotebook = reducers[constants.SET_NOTEBOOK];
-const updateExecutionCount = reducers[constants.UPDATE_CELL_EXECUTION_COUNT];
-const newCellAfter = reducers[constants.NEW_CELL_AFTER];
-
-import Immutable from 'immutable';
-
 import { AppRecord } from '../../../src/notebook/records';
 
 const Github = require('github');
@@ -25,7 +13,7 @@ describe('cleanupKernel', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-      })
+      }),
     };
 
     const action = {
@@ -46,11 +34,11 @@ describe('setNotificationSystem', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-     })
+      }),
     };
 
     const action = {
-      type: constants.SET_NOTIFICATION_SYSTEM
+      type: constants.SET_NOTIFICATION_SYSTEM,
     };
 
     const state = reducers(originalState, action);
@@ -62,16 +50,16 @@ describe('setNotificationSystem', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-     })
+      }),
     };
 
     const action = {
       type: constants.SET_NOTIFICATION_SYSTEM,
-      notificationSystem: "",
+      notificationSystem: '',
     };
 
     const state = reducers(originalState, action);
-    expect(state.app.notificationSystem).to.equal("");
+    expect(state.app.notificationSystem).to.equal('');
   });
 });
 
@@ -120,7 +108,7 @@ describe('setExecutionState', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-      })
+      }),
     };
 
     const action = {
@@ -140,7 +128,7 @@ describe('alertKernelNotConnected', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-      })
+      }),
     };
 
     const action = {
@@ -149,7 +137,7 @@ describe('alertKernelNotConnected', () => {
 
     const state = reducers(originalState, action);
     expect(state.app.error).to.not.be.null;
-    expect(state.app.error).to.contain("not connected to a runtime");
+    expect(state.app.error).to.contain('not connected to a runtime');
   });
 });
 
@@ -160,7 +148,7 @@ describe('killKernel', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-      })
+      }),
     };
 
     const action = {
@@ -180,10 +168,10 @@ describe('interruptKernel', () => {
       app: new AppRecord({
         channels: false,
         spawn: {
-          kill: (signal) => { }
+          kill: () => { },
         },
         connectionFile: false,
-      })
+      }),
     };
 
     const action = {
@@ -202,7 +190,7 @@ describe('newKernel', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-     })
+      }),
     };
 
     const action = {
@@ -226,17 +214,16 @@ describe('newKernel', () => {
 
 describe('setGithubToken', () => {
   it('calls setGithubToken', () => {
-
     const originalState = {
       app: new AppRecord({
         github: new Github(),
         token: null,
-      })
+      }),
     };
 
     const action = {
       type: constants.SET_GITHUB_TOKEN,
-      token: 'TOKEN'
+      token: 'TOKEN',
     };
 
     const state = reducers(originalState, action);
@@ -253,7 +240,7 @@ describe('exit', () => {
         channels: false,
         spawn: false,
         connectionFile: false,
-     })
+      }),
     };
 
     const action = {

@@ -1,38 +1,14 @@
-const chai = require('chai');
-const chaiImmutable = require('chai-immutable');
-
-chai.use(chaiImmutable);
-
-
-import { dummyStore } from '../../utils';
-
 import { ActionsObservable } from 'redux-observable';
-
-const Immutable = require('immutable');
-
-const fromJS = Immutable.fromJS;
-
-const expect = chai.expect;
-
-const sinon = require('sinon');
-
-const Rx = require('rxjs/Rx');
-
-const Observable = Rx.Observable;
 import {
   EXECUTE_CELL,
-  UPDATE_CELL_EXECUTION_COUNT,
   ERROR_EXECUTING,
-  ERROR_UPDATE_DISPLAY,
   CLEAR_OUTPUTS,
   UPDATE_CELL_STATUS,
   UPDATE_CELL_PAGERS,
-  UPDATE_CELL_OUTPUTS,
  } from '../../../src/notebook/constants';
 
 import { executeCell } from '../../../src/notebook/actions';
 import {
-  reduceOutputs,
   executeCellStream,
   executeCellEpic,
   updateDisplayEpic,
@@ -44,9 +20,20 @@ import {
   createCellStatusAction,
   createExecuteCellStream,
   updateCellNumberingAction,
-  handleFormattableMessages,
   createErrorActionObservable,
 } from '../../../src/notebook/epics/execute';
+
+const Immutable = require('immutable');
+const Rx = require('rxjs/Rx');
+
+const sinon = require('sinon');
+const chai = require('chai');
+const chaiImmutable = require('chai-immutable');
+
+const expect = chai.expect;
+chai.use(chaiImmutable);
+
+const Observable = Rx.Observable;
 
 describe('executeCell', () => {
   it('returns an executeCell action', () => {
@@ -78,7 +65,7 @@ describe('executeCellStream', () => {
       .subscribe(msg => {
         expect(msg.header.msg_type).to.equal('execute_request');
         expect(msg.content.code).to.equal('import this');
-      })
+      });
 
     const action$ = executeCellStream(channels, '0', 'import this');
 
@@ -92,19 +79,16 @@ describe('executeCellStream', () => {
           { type: 'UPDATE_CELL_PAGERS', id: '0', pagers: Immutable.List() },
         ]);
         done(); // TODO: Make sure message check above is called
-      })
-
-
-  })
+      });
+  });
 
   it('outright rejects a lack of channels.shell and iopub', (done) => {
-    const obs = executeCellStream({}, '0', 'woo')
+    const obs = executeCellStream({}, '0', 'woo');
     obs.subscribe(null, (err) => {
-        expect(err.message).to.equal('kernel not connected');
-        done();
-    })
-
-  })
+      expect(err.message).to.equal('kernel not connected');
+      done();
+    });
+  });
 });
 
 describe('createExecuteRequest', () => {
@@ -119,7 +103,7 @@ describe('createExecuteRequest', () => {
 
 describe('msgSpecToNotebookFormat', () => {
   it('converts a message to the notebook format', () => {
-    const msg = {content: {data: 'test'}, header: {msg_type: 'test_header'}};
+    const msg = { content: { data: 'test' }, header: { msg_type: 'test_header' } };
     const notebookSpecMsg = msgSpecToNotebookFormat(msg);
 
     expect(notebookSpecMsg).to.have.property('output_type');
@@ -132,13 +116,13 @@ describe('createPagerActions', () => {
   it('emits actions to set pagers', (done) => {
     const msgObs = Rx.Observable.from([{
       source: 'page',
-      data: {'text/html': 'this is a test'},
+      data: { 'text/html': 'this is a test' },
     }]);
 
     const pagerAction$ = createPagerActions('1', msgObs);
 
     pagerAction$.subscribe((action) => {
-      const expected = [{ source: 'page', data: { 'text/html': 'this is a test' } } ];
+      const expected = [{ source: 'page', data: { 'text/html': 'this is a test' } }];
       expect(action.id).to.equal('1');
       expect(action.pagers.toJS()).to.deep.equal(expected);
       done();
@@ -172,7 +156,7 @@ describe('createCellStatusAction', () => {
       },
       parent_header: {},
       content: {
-        'execution_state': 'idle',
+        execution_state: 'idle',
       },
       metadata: {},
     }]);
@@ -196,7 +180,7 @@ describe('updateCellNumberingAction', () => {
       },
       parent_header: {},
       content: {
-        'execution_count': 3,
+        execution_count: 3,
       },
       metadata: {},
     }]);
@@ -229,79 +213,81 @@ describe('createSourceUpdateAction', () => {
 });
 describe('createExecuteCellStream', () => {
   it('errors if the kernel is not connected in create', (done) => {
-      const frontendToShell = new Rx.Subject();
-      const shellToFrontend = new Rx.Subject();
-      const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
-      const mockIOPub = new Rx.Subject();
-      const store = { getState: function() { return this.state; },
-                state: {
-                  app: {
-                    executionState: 'not connected',
-                    channels: { iopub: mockIOPub,
-                                shell: mockShell,
-                              },
-                    notificationSystem: {
-                      addNotification: sinon.spy(),
-                    },
-                  }
-                },
-              };
-      const action$ = ActionsObservable.of({type: 'EXECUTE_CELL'});
-      const observable = createExecuteCellStream(action$, store, 'source', 'id');
-      const actionBuffer = [];
-      const subscription = observable.subscribe(
-        (x) => actionBuffer.push(x.payload),
-        (err) => expect.fail(err, null),
-        () => { expect(actionBuffer).to.deep.equal(['Kernel not connected!']);
-                done(); },
-      )
-  });
-  it('doesnt complete but does push until abort action', (done) => {
-      const frontendToShell = new Rx.Subject();
-      const shellToFrontend = new Rx.Subject();
-      const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
-      const mockIOPub = new Rx.Subject();
-      const store = { getState: function() { return this.state; },
-                state: {
-                  app: {
-                    executionState: 'connected',
-                    channels: { iopub: mockIOPub,
-                                shell: mockShell,
-                              },
-                    notificationSystem: {
-                      addNotification: sinon.spy(),
-                    },
-                  }
-                },
-              };
-    const action$ = ActionsObservable.of({type: 'EXECUTE_CELL', id: 'id' },
-                                         {type: 'EXECUTE_CELL', id: 'id_2' },
-                                         {type: 'ABORT_EXECUTION', id: 'id_2' },
-                                         {type: 'EXECUTE_CELL', id: 'id' });
+    const frontendToShell = new Rx.Subject();
+    const shellToFrontend = new Rx.Subject();
+    const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
+    const mockIOPub = new Rx.Subject();
+    const store = { getState() { return this.state; },
+      state: {
+        app: {
+          executionState: 'not connected',
+          channels: { iopub: mockIOPub,
+            shell: mockShell,
+          },
+          notificationSystem: {
+            addNotification: sinon.spy(),
+          },
+        },
+      },
+    };
+    const action$ = ActionsObservable.of({ type: 'EXECUTE_CELL' });
     const observable = createExecuteCellStream(action$, store, 'source', 'id');
     const actionBuffer = [];
-    const subscription = observable.subscribe(
+    observable.subscribe(
+        (x) => actionBuffer.push(x.payload),
+        (err) => expect.fail(err, null),
+        () => {
+          expect(actionBuffer).to.deep.equal(['Kernel not connected!']);
+          done();
+        },
+      );
+  });
+  it('doesnt complete but does push until abort action', (done) => {
+    const frontendToShell = new Rx.Subject();
+    const shellToFrontend = new Rx.Subject();
+    const mockShell = Rx.Subject.create(frontendToShell, shellToFrontend);
+    const mockIOPub = new Rx.Subject();
+    const store = { getState() { return this.state; },
+      state: {
+        app: {
+          executionState: 'connected',
+          channels: { iopub: mockIOPub,
+            shell: mockShell,
+          },
+          notificationSystem: {
+            addNotification: sinon.spy(),
+          },
+        },
+      },
+    };
+    const action$ = ActionsObservable.of({ type: 'EXECUTE_CELL', id: 'id' },
+                                         { type: 'EXECUTE_CELL', id: 'id_2' },
+                                         { type: 'ABORT_EXECUTION', id: 'id_2' },
+                                         { type: 'EXECUTE_CELL', id: 'id' });
+    const observable = createExecuteCellStream(action$, store, 'source', 'id');
+    const actionBuffer = [];
+    observable.subscribe(
       (x) => actionBuffer.push(x.type),
       (err) => expect.fail(err, null),
     );
-    expect(actionBuffer).to.deep.equal([ CLEAR_OUTPUTS, UPDATE_CELL_STATUS, UPDATE_CELL_PAGERS ]);
+    expect(actionBuffer).to.deep.equal([CLEAR_OUTPUTS, UPDATE_CELL_STATUS, UPDATE_CELL_PAGERS]);
     done();
   });
-})
+});
 
 describe('executeCellEpic', () => {
-  const store = { getState: function() { return this.state; },
-            state: {
-              app: {
-                executionState: 'idle',
-                channels: 'errorInExecuteCellObservable',
-                notificationSystem: {
-                  addNotification: sinon.spy(),
-                },
-                token: 'blah'
-              }
-            },
-          };
+  const store = { getState() { return this.state; },
+    state: {
+      app: {
+        executionState: 'idle',
+        channels: 'errorInExecuteCellObservable',
+        notificationSystem: {
+          addNotification: sinon.spy(),
+        },
+        token: 'blah',
+      },
+    },
+  };
   it('Errors on a bad action', (done) => {
     const badInput$ = Observable.of({ type: EXECUTE_CELL });
     const badAction$ = new ActionsObservable(badInput$);
@@ -309,8 +295,9 @@ describe('executeCellEpic', () => {
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal('execute cell needs an id');
     });
-    const subscription = responseActions.subscribe(
-      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+    responseActions.subscribe(
+      // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.type),
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
         expect(actionBuffer).to.deep.equal([ERROR_EXECUTING]);
@@ -322,11 +309,12 @@ describe('executeCellEpic', () => {
     const badInput$ = Observable.of(executeCell('id', 2));
     const badAction$ = new ActionsObservable(badInput$);
     const actionBuffer = [];
-    const responseActions = executeCellEpic(badAction$, store).catch(error=> {
+    const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal('execute cell needs source string');
     });
-    const subscription = responseActions.subscribe(
-      (x) => actionBuffer.push(x.type), // Every action that goes through should get stuck on an array
+    responseActions.subscribe(
+      // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.type),
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
         expect(actionBuffer).to.deep.equal([ERROR_EXECUTING]);
@@ -339,16 +327,17 @@ describe('executeCellEpic', () => {
     const action$ = new ActionsObservable(input$);
     const actionBuffer = [];
     const responseActions = executeCellEpic(action$, store);
-    const subscription = responseActions.subscribe(
-      (x) => actionBuffer.push(x.payload.toString()), // Every action that goes through should get stuck on an array
+    responseActions.subscribe(
+      // Every action that goes through should get stuck on an array
+      (x) => actionBuffer.push(x.payload.toString()),
       (err) => expect.fail(err, null), // It should not error in the stream
       () => {
-        expect(actionBuffer).to.deep.equal(['Error: kernel not connected']); // ;
+        expect(actionBuffer).to.deep.equal(['Error: kernel not connected']);
         done();
       },
     );
   });
-})
+});
 
 describe('updateDisplayEpic', () => {
   it('creates an epic that handles update_display_data messages', (done) => {
@@ -400,26 +389,25 @@ describe('updateDisplayEpic', () => {
               output_type: 'display_data',
               data: { 'text/html': '<marquee>wee</marquee>' },
               transient: { display_id: '1234' },
-            }
+            },
           },
           { type: 'UPDATE_DISPLAY',
             output: {
               output_type: 'display_data',
               data: { 'text/plain': 'i am text' },
               transient: { display_id: 'here' },
-            }
+            },
           },
-        ])
+        ]);
         done();
-      }
-    )
-
-  })
-})
+      },
+    );
+  });
+});
 
 describe('createErrorActionObservable', () => {
   it('returns a function that creates an observable', (done) => {
-    const func = createErrorActionObservable('TEST_IT')
+    const func = createErrorActionObservable('TEST_IT');
     const err = new Error('HEY');
     const obs = func(err);
 
@@ -427,10 +415,9 @@ describe('createErrorActionObservable', () => {
       expect(x.type).to.equal('TEST_IT');
       expect(x.payload).to.equal(err);
       expect(x.error).to.equal(true);
-    }, (err) => { throw err; },
+    }, (e) => { throw e; },
     () => {
       done();
     });
-
-  })
-})
+  });
+});

@@ -1,21 +1,20 @@
-import * as globalEvents from '../../src/notebook/global-events';
-import * as kernel from '../../src/notebook/kernel/shutdown';
-
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-chai.use(sinonChai);
-
 import { dummyStore } from '../utils';
+import * as globalEvents from '../../src/notebook/global-events';
+import * as kernel from '../../src/notebook/kernel/shutdown';
+
+chai.use(sinonChai);
 
 describe('unload', () => {
   it('should force a kernel shutdown', () => {
     const store = dummyStore();
     const forceShutdownKernel = sinon.spy(kernel, 'forceShutdownKernel');
-   
+
     globalEvents.unload(store);
-    
+
     forceShutdownKernel.restore();
     expect(forceShutdownKernel).to.be.called;
   });

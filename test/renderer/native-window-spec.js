@@ -1,26 +1,17 @@
 import Immutable from 'immutable';
-
-import * as nativeWindow from '../../src/notebook/native-window';
+import Rx from 'rxjs/Rx';
+import { remote } from 'electron';
 
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import Rx from 'rxjs/Rx';
-
+import * as nativeWindow from '../../src/notebook/native-window';
 import { AppRecord, DocumentRecord, MetadataRecord } from '../../src/notebook/records';
 
 chai.use(sinonChai);
 
 const path = require('path');
-
-import {
-  remote,
-} from 'electron';
-
-import { dummyStore } from '../utils';
-
-import { dummyCommutable } from '../utils';
 
 const electron = require('electron');
 
@@ -48,16 +39,16 @@ describe('setTitleFromAttributes', () => {
       setTitle: sinon.spy(),
     };
 
-    const remote = sinon.stub(electron.remote, 'getCurrentWindow', () => win);
+    sinon.stub(electron.remote, 'getCurrentWindow', () => win);
 
 
-    const titleObject = { fullpath: "/tmp/test.ipynb", executionState: 'busy', modified: true };
+    const titleObject = { fullpath: '/tmp/test.ipynb', executionState: 'busy', modified: true };
     nativeWindow.setTitleFromAttributes(titleObject);
 
     // TODO: stub doesn't seem to get setup
     // expect(win.setTitle).to.have.been.called;
-  })
-})
+  });
+});
 
 describe('createTitleFeed', () => {
   it('creates an observable that updates title attributes', (done) => {
@@ -71,12 +62,12 @@ describe('createTitleFeed', () => {
       }),
       metadata: MetadataRecord({
         filename: 'titled.ipynb',
-      })
+      }),
     };
 
     const state$ = Rx.Observable.from([
       state,
-    ])
+    ]);
 
     const allAttributes = [];
     nativeWindow.createTitleFeed(state$)
@@ -85,10 +76,9 @@ describe('createTitleFeed', () => {
       }, null,
     () => {
       expect(allAttributes).to.deep.equal([
-        { modified: false, fullpath: 'titled.ipynb', executionState: 'not connected' }
+        { modified: false, fullpath: 'titled.ipynb', executionState: 'not connected' },
       ]);
       done();
-    })
-
-  })
-})
+    });
+  });
+});
