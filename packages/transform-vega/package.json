@@ -1,12 +1,15 @@
 {
   "name": "@nteract/transform-vega",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Vega Transform",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "react": "^15.4.2"
   },

@@ -1,7 +1,7 @@
 {
   "name": "@nteract/commutable",
-  "version": "1.0.0",
-  "description": "Testing out how to use lerna in a complex Electron app",
+  "version": "1.0.2",
+  "description": "library for immutable notebook operations",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,10 +1,13 @@
 {
   "name": "@nteract/transform-geojson",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "GeoJSON Transform",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": "",
   "license": "BSD-3-Clause"

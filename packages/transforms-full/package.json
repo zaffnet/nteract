@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms-full",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Transforms from nteract",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,9 @@
     "url": "https://github.com/nteract/nteract/issues"
   },
   "homepage": "https://github.com/nteract/nteract#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "react": "^15.4.2"
   },
@@ -28,10 +31,10 @@
     "react": "^15.4.2"
   },
   "dependencies": {
-    "@nteract/transform-geojson": "1.0.0",
-    "@nteract/transform-model-debug": "1.0.0",
-    "@nteract/transform-plotly": "1.0.0",
-    "@nteract/transform-vega": "1.0.0",
-    "@nteract/transforms":  "1.0.0"
+    "@nteract/transform-geojson": "^1.0.2",
+    "@nteract/transform-model-debug": "^1.0.2",
+    "@nteract/transform-plotly": "^1.0.2",
+    "@nteract/transform-vega": "^1.0.2",
+    "@nteract/transforms": "^1.0.2"
   }
 }
