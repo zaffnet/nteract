@@ -108,9 +108,13 @@ blockquote p {
  */
 
 .notebook {
-    paddingTop: 10px;
-    paddingLeft: 10px;
-    paddingRight: 10px;
+    padding-top : 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.notebook .cell-container:last-child {
+    padding-bottom: 200px;
 }
 
 /*
