@@ -1,6 +1,6 @@
 {
   "name": "@nteract/messaging",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Messaging mechanics for nteract apps (jupyter spec)",
   "main": "lib/index.js",
   "scripts": {
@@ -18,8 +18,8 @@
     "babel-cli": "^6.23.0",
     "flow-copy-source": "^1.1.0",
     "jest": "^18.1.0",
-    "@nteract/dev-scripts": "^1.0.1",
-    "@nteract/mockument": "^1.0.1"
+    "@nteract/dev-scripts": "^1.0.2",
+    "@nteract/mockument": "^1.0.2"
   },
   "keywords": [
     "nteract",
