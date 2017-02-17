@@ -1,6 +1,6 @@
 {
   "name": "@nteract/display-area",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Display area for nteract outputs",
   "main": "lib/",
   "scripts": {
@@ -29,7 +29,7 @@
     ]
   },
   "dependencies": {
-    "@nteract/transforms": "1.0.2"
+    "@nteract/transforms": "^1.0.3"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",
@@ -39,8 +39,8 @@
     "babel-cli": "^6.23.0",
     "flow-copy-source": "^1.1.0",
     "jest": "^18.1.0",
-    "@nteract/dev-scripts": "^1.0.0",
-    "@nteract/mockument": "^1.0.0"
+    "@nteract/dev-scripts": "^1.0.1",
+    "@nteract/mockument": "^1.0.1"
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause"
