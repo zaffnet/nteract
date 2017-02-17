@@ -1,6 +1,6 @@
 {
   "name": "@nteract/dev-scripts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Common development scripts across nteract components",
   "main": "index.js",
   "scripts": {

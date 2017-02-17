@@ -1,6 +1,6 @@
 {
   "name": "@nteract/editor",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The editor that lives inside cells in nteract",
   "main": "lib/index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "@nteract/messaging": "^1.0.2"
+    "@nteract/messaging": "^1.0.3"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",
@@ -36,8 +36,8 @@
     "babel-cli": "^6.23.0",
     "flow-copy-source": "^1.1.0",
     "jest": "^18.1.0",
-    "@nteract/dev-scripts": "^1.0.2",
-    "@nteract/mockument": "^1.0.2"
+    "@nteract/dev-scripts": "^1.0.3",
+    "@nteract/mockument": "^1.0.3"
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause"
