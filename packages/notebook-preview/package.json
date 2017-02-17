@@ -11,6 +11,9 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "test": "jest"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@nteract/commutable": "^1.0.4",
     "@nteract/display-area": "^1.0.2",

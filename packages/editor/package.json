@@ -17,6 +17,9 @@
     "notebook",
     "jupyter"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "jest": {
     "setupFiles": [
       "@nteract/mockument"
