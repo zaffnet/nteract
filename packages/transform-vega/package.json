@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-vega",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Vega Transform",
   "main": "lib/",
   "scripts": {
@@ -27,7 +27,7 @@
     "babel-cli": "^6.23.0",
     "flow-copy-source": "^1.1.0",
     "jest": "^18.1.0",
-    "@nteract/dev-scripts": "^1.0.3"
+    "@nteract/dev-scripts": "^1.0.4"
   },
   "license": "BSD-3-Clause"
 }
