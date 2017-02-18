@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-preview",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "View a notebook using a React Component",
   "main": "lib/index.js",
   "scripts": {
