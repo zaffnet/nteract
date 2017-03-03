@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-plotly",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Plotly Transform",
   "main": "lib/",
   "scripts": {
