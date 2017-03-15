@@ -75,6 +75,7 @@ class CodeCell extends React.PureComponent {
             {
             this.props.pagers.map((pager, key) =>
               <Pager
+                expanded
                 className="pager"
                 displayOrder={this.props.displayOrder}
                 transforms={this.props.transforms}

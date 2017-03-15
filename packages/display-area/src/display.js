@@ -58,14 +58,14 @@ export default class Display extends React.PureComponent {
   }
 
   render() {
-    const { isHidden, outputs, ...props } = this.props
+    const { isHidden, outputs, ...props } = this.props;
 
     if (!isHidden) {
       return (
         <div className="cell_display" ref={(el) => { this.el = el; }}>
           {
             outputs.map((output, index) =>
-              <Output key={index} output={output} { ...props } />
+              <Output key={index} output={output} {...props} />
             )
           }
         </div>
