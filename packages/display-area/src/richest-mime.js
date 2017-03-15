@@ -5,6 +5,7 @@ import { List as ImmutableList, Map as ImmutableMap } from 'immutable';
 import { richestMimetype, transforms, displayOrder } from '@nteract/transforms';
 
 type Props = {
+  expanded: boolean,
   displayOrder: ImmutableList<string>,
   transforms: ImmutableMap<string, any>,
   bundle: ImmutableMap<string, any>,
@@ -50,6 +51,7 @@ export default class RichestMime extends React.Component {
     const metadata = this.props.metadata.get(mimetype);
     return (
       <Transform
+        expanded={this.props.expanded}
         data={data}
         metadata={metadata}
         theme={this.props.theme}

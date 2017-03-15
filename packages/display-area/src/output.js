@@ -8,6 +8,7 @@ import { transforms, displayOrder } from '@nteract/transforms';
 import RichestMime from './richest-mime';
 
 type Props = {
+  expanded: boolean,
   displayOrder: ImmutableList<string>,
   output: any,
   transforms: ImmutableMap<string, any>,
@@ -31,6 +32,7 @@ export default function Output(props: Props): ?React.Element<any>|null {
       const metadata = output.get('metadata');
       return (
         <RichestMime
+          expanded={props.expanded}
           bundle={bundle}
           metadata={metadata}
           displayOrder={props.displayOrder}
