@@ -1,6 +1,6 @@
 {
   "name": "@nteract/display-area",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Display area for nteract outputs",
   "main": "lib/",
   "scripts": {
@@ -24,7 +24,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/transforms": "^1.0.9",
+    "@nteract/transforms": "^1.0.10",
     "ansi-to-react": "^1.1.1"
   },
   "peerDependencies": {
