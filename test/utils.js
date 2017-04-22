@@ -26,7 +26,8 @@ function hideCells(notebook) {
       .reduce(
         (acc, id) => acc.setIn([id, "metadata", "inputHidden"], true),
         cells
-      ));
+      )
+  );
 }
 
 /**

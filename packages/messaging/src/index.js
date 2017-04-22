@@ -9,10 +9,12 @@ const Observable = Rx.Observable;
 export const session = uuid.v4();
 
 export function getUsername() {
-  return process.env.LOGNAME ||
+  return (
+    process.env.LOGNAME ||
     process.env.USER ||
     process.env.LNAME ||
-    process.env.USERNAME;
+    process.env.USERNAME
+  );
 }
 
 export function createMessage(msg_type, fields) {

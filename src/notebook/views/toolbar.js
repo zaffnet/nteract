@@ -44,14 +44,12 @@ export default class Toolbar extends PureComponent {
     this.changeCellType = this.changeCellType.bind(this);
   }
 
-  renderToolbar(
-    {
-      type,
-      executeCell,
-      removeCell,
-      toggleStickyCell
-    }: ToolbarProps
-  ) {
+  renderToolbar({
+    type,
+    executeCell,
+    removeCell,
+    toggleStickyCell
+  }: ToolbarProps) {
     return (
       <div className="cell-toolbar-mask">
         <div className="cell-toolbar">

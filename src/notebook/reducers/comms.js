@@ -30,12 +30,7 @@ type CommOpenAction = {
 };
 
 function processCommOpen(state: CommState, action: CommOpenAction): CommState {
-  const {
-    target_name,
-    target_module,
-    data,
-    comm_id
-  } = action;
+  const { target_name, target_module, data, comm_id } = action;
 
   const commInfo = {
     target_module,
@@ -52,10 +47,7 @@ function processCommMessage(
   state: CommState,
   action: CommMessageAction
 ): CommState {
-  const {
-    data,
-    comm_id
-  } = action;
+  const { data, comm_id } = action;
 
   const commInfo = state.getIn(["info", comm_id]);
   if (

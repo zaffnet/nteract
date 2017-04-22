@@ -123,7 +123,9 @@ function createImmutableMimeBundle(
   const mimeBundle = {};
   Object.keys(output).map((key: string) => {
     if (
-      key !== "prompt_number" || key !== "metadata" || key !== "output_type"
+      key !== "prompt_number" ||
+      key !== "metadata" ||
+      key !== "output_type"
     ) {
       mimeBundle[VALID_MIMETYPES[key]] = output[key];
     }
@@ -208,7 +210,8 @@ function createImmutableHeadingCell(cell: HeadingCell): ImmutableMarkdownCell {
     source: Array.isArray(cell.source)
       ? demultiline(
           cell.source.map(line =>
-            Array(cell.level).join("#").concat(" ").concat(line))
+            Array(cell.level).join("#").concat(" ").concat(line)
+          )
         )
       : cell.source,
     metadata: Immutable.fromJS(cell.metadata)
@@ -250,7 +253,8 @@ export function fromJS(notebook: Notebook): ImmutableNotebook {
         (cellStruct: CellStructure, cell: Cell) =>
           appendCell(cellStruct, createImmutableCell(cell)),
         starterCellStructure
-      ))
+      )
+    )
   )[0];
 
   return Immutable.Map({

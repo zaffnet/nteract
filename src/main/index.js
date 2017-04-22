@@ -66,7 +66,8 @@ const prepJupyterObservable = prepareEnv
       mkdirpObservable(jupyterPaths.runtimeDir()),
       // Ensure the config directory is all set up
       mkdirpObservable(jupyterConfigDir)
-    ))
+    )
+  )
   // Set up our configuration file
   .mergeMap(() =>
     readFileObservable(nteractConfigFilename).catch(err => {
@@ -79,7 +80,8 @@ const prepJupyterObservable = prepareEnv
         );
       }
       throw err;
-    }));
+    })
+  );
 
 const kernelSpecsPromise = prepJupyterObservable
   .toPromise()

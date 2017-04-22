@@ -27,7 +27,8 @@ export const createNewSymlinkObservable = Rx.Observable.bindNodeCallback(
 
 export const createSymlinkObservable = (target, path) =>
   unlinkObservable(path).flatMap(() =>
-    createNewSymlinkObservable(target, path));
+    createNewSymlinkObservable(target, path)
+  );
 
 export const readFileObservable = Rx.Observable.bindNodeCallback(
   filesystem.readFile

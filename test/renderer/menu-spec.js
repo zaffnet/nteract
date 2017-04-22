@@ -468,9 +468,8 @@ describe("menu", () => {
     it("triggers notification when not saved", () => {
       const config = { noFilename: true };
       const store = dummyStore(config);
-      const addNotification = store
-        .getState()
-        .app.get("notificationSystem").addNotification;
+      const addNotification = store.getState().app.get("notificationSystem")
+        .addNotification;
       menu.storeToPDF(store);
       expect(addNotification).to.have.been.calledWithMatch({
         title: "File has not been saved!",
@@ -486,9 +485,8 @@ describe("menu", () => {
     it("calls export PDF when filename exists", () => {
       // const exportStub = sinon.spy(menu.exportPDF);
       const store = dummyStore();
-      const addNotification = store
-        .getState()
-        .app.get("notificationSystem").addNotification;
+      const addNotification = store.getState().app.get("notificationSystem")
+        .addNotification;
       menu.storeToPDF(store);
       expect(addNotification).to.have.been.calledWithMatch({
         title: "PDF exported",

@@ -127,7 +127,8 @@ function insertCellAt(
   return notebook.withMutations(nb =>
     nb
       .setIn(["cellMap", cellID], cell)
-      .set("cellOrder", nb.get("cellOrder").insert(index, cellID)));
+      .set("cellOrder", nb.get("cellOrder").insert(index, cellID))
+  );
 }
 
 function insertCellAfter(
@@ -148,7 +149,8 @@ function removeCell(notebook: ImmutableNotebook, cellID: string) {
   return notebook
     .removeIn(["cellMap", cellID])
     .update("cellOrder", (cellOrder: ImmutableCellOrder) =>
-      cellOrder.filterNot(id => id === cellID));
+      cellOrder.filterNot(id => id === cellID)
+    );
 }
 
 const monocellNotebook = appendCellToNotebook(emptyNotebook, emptyCodeCell);

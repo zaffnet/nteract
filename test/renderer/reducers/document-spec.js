@@ -749,7 +749,8 @@ describe("changeOutputVisibility", () => {
   it("changes the visibility on a single cell", () => {
     const originalState = {
       document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
-        cells.map(value => value.setIn(["metadata", "outputHidden"], false)))
+        cells.map(value => value.setIn(["metadata", "outputHidden"], false))
+      )
     };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
@@ -776,7 +777,8 @@ describe("changeInputVisibility", () => {
   it("changes the input visibility on a single cell", () => {
     const originalState = {
       document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
-        cells.map(value => value.setIn(["metadata", "inputHidden"], false)))
+        cells.map(value => value.setIn(["metadata", "inputHidden"], false))
+      )
     };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
@@ -980,9 +982,8 @@ describe("changeCellType", () => {
     expect(
       state.document.getIn(["notebook", "cellMap", id, "cell_type"])
     ).to.equal("code");
-    expect(
-      state.document.getIn(["notebook", "cellMap", id, "outputs"])
-    ).to.not.be.undefined;
+    expect(state.document.getIn(["notebook", "cellMap", id, "outputs"])).to.not
+      .be.undefined;
   });
   it("does nothing if cell type is same", () => {
     const originalState = {
@@ -1006,7 +1007,8 @@ describe("toggleOutputExpansion", () => {
   it("changes outputExpanded set", () => {
     const originalState = {
       document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
-        cells.map(value => value.setIn(["metadata", "outputExpanded"], false)))
+        cells.map(value => value.setIn(["metadata", "outputExpanded"], false))
+      )
     };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();

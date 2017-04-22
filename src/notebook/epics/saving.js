@@ -39,7 +39,8 @@ export function saveEpic(action$: ActionsObservable, store: Store<any, any>) {
               type: "ERROR",
               payload: error,
               error: true
-            }))
+            })
+          )
           .map(() => {
             const state = store.getState();
             const notificationSystem = state.app.get("notificationSystem");

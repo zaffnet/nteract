@@ -8,6 +8,12 @@ import {
   commActionObservable
 } from "../../../src/notebook/epics/comm";
 
+import {
+  COMM_OPEN,
+  COMM_MESSAGE,
+  COMM_ERROR
+} from "../../../src/notebook/constants";
+
 const chai = require("chai");
 const Rx = require("rxjs/Rx");
 
@@ -71,7 +77,7 @@ describe("createCommErrorAction", () => {
   it("creates a COMM_ERROR action with an error", () => {
     const err = new Error();
     return createCommErrorAction(err).toPromise().then(action => {
-      expect(action.type).to.equal("COMM_ERROR");
+      expect(action.type).to.equal(COMM_ERROR);
       expect(action.payload).to.equal(err);
       expect(action.error).to.be.true;
     });
@@ -93,7 +99,7 @@ describe("commOpenAction", () => {
     const action = commOpenAction(message);
 
     expect(action).to.deep.equal({
-      type: "COMM_OPEN",
+      type: COMM_OPEN,
       data: "DATA",
       metadata: "0",
       comm_id: "0123",
@@ -116,7 +122,7 @@ describe("commMessageAction", () => {
     const action = commMessageAction(message);
 
     expect(action).to.deep.equal({
-      type: "COMM_MESSAGE",
+      type: COMM_MESSAGE,
       data: "DATA",
       comm_id: "0123",
       buffers: new Uint8Array()
@@ -157,16 +163,11 @@ describe("commActionObservable", () => {
       }
     };
 
-    const actionBuffer = [];
-    commActionObservable(newKernelAction).subscribe(
-      action => {
-        actionBuffer.push(action);
-      },
-      err => expect.fail(err, null), // It should not error in the stream
-      () => {
-        expect(actionBuffer).to.deep.equal([
+    commActionObservable(newKernelAction).toArray().subscribe(
+      actions => {
+        expect(actions).to.deep.equal([
           {
-            type: "COMM_OPEN",
+            type: COMM_OPEN,
             data: "DATA",
             metadata: "0",
             comm_id: "0123",
@@ -175,15 +176,15 @@ describe("commActionObservable", () => {
             buffers: new Uint8Array()
           },
           {
-            type: "COMM_MESSAGE",
+            type: COMM_MESSAGE,
             data: "DATA",
             comm_id: "0123",
             buffers: new Uint8Array()
           }
         ]);
-
-        done();
-      }
+      },
+      err => expect.fail(err, null), // It should not error in the stream
+      () => done()
     );
   });
 });

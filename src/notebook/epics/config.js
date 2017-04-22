@@ -32,7 +32,8 @@ export const loadConfigEpic = actions =>
   actions
     .ofType(LOAD_CONFIG)
     .switchMap(() =>
-      readFileObservable(CONFIG_FILE_PATH).map(JSON.parse).map(configLoaded));
+      readFileObservable(CONFIG_FILE_PATH).map(JSON.parse).map(configLoaded)
+    );
 
 /**
   * An epic that saves the configuration if it has been changed.
@@ -56,4 +57,5 @@ export const saveConfigEpic = (actions, store) =>
       writeFileObservable(
         CONFIG_FILE_PATH,
         JSON.stringify(store.getState().config.toJS())
-      ).map(doneSavingConfig));
+      ).map(doneSavingConfig)
+    );

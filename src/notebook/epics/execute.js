@@ -20,13 +20,12 @@ import {
 const Rx = require("rxjs/Rx");
 const Immutable = require("immutable");
 
-export const createErrorActionObservable = type =>
-  error =>
-    Rx.Observable.of({
-      type,
-      payload: error,
-      error: true
-    });
+export const createErrorActionObservable = type => error =>
+  Rx.Observable.of({
+    type,
+    payload: error,
+    error: true
+  });
 
 /**
  * Create an object that adheres to the jupyter notebook specification.
@@ -227,7 +226,8 @@ export function createExecuteCellStream(action$, store, source, id) {
   const state = store.getState();
   const channels = state.app.channels;
 
-  const kernelConnected = channels &&
+  const kernelConnected =
+    channels &&
     !(state.app.executionState === "starting" ||
       state.app.executionState === "not connected");
 
@@ -270,19 +270,22 @@ export function executeCellEpic(action$, store) {
           // When a new EXECUTE_CELL comes in with the current ID, we create a
           // a new stream and unsubscribe from the old one.
           .switchMap(({ source, id }) =>
-            createExecuteCellStream(action$, store, source, id)))
+            createExecuteCellStream(action$, store, source, id)
+          )
+      )
       // Bring back all the inner Observables into one stream
       .mergeAll()
       .catch((err, source) =>
         Rx.Observable.merge(
           createErrorActionObservable(ERROR_EXECUTING)(err),
           source
-        ))
+        )
+      )
   );
 }
 
 export const updateDisplayEpic = action$ =>
-// Global message watcher so we need to set up a feed for each new kernel
+  // Global message watcher so we need to set up a feed for each new kernel
   action$.ofType(NEW_KERNEL).switchMap(({ channels }) =>
     channels.iopub
       .ofMessageType(["update_display_data"])
@@ -290,4 +293,5 @@ export const updateDisplayEpic = action$ =>
       // Convert 'update_display_data' to 'display_data'
       .map(output => Object.assign({}, output, { output_type: "display_data" }))
       .map(output => ({ type: "UPDATE_DISPLAY", output }))
-      .catch(createErrorActionObservable(ERROR_UPDATE_DISPLAY)));
+      .catch(createErrorActionObservable(ERROR_UPDATE_DISPLAY))
+  );

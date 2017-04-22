@@ -80,7 +80,8 @@ export class Cell extends React.PureComponent {
     const x = mouseEvent.clientX;
     const y = mouseEvent.clientY;
     const regionRect = this.cellDiv.getBoundingClientRect();
-    const hoverCell = regionRect.left < x &&
+    const hoverCell =
+      regionRect.left < x &&
       x < regionRect.right &&
       (regionRect.top < y && y < regionRect.bottom);
 
@@ -115,9 +116,7 @@ export class Cell extends React.PureComponent {
     const editorFocused = this.props.editorFocused === this.props.id;
     return (
       <div
-        className={
-          `cell ${type === "markdown" || type === "raw" ? "text" : "code"} ${cellFocused ? "focused" : ""}`
-        }
+        className={`cell ${type === "markdown" || type === "raw" ? "text" : "code"} ${cellFocused ? "focused" : ""}`}
         onClick={this.selectCell}
         role="presentation"
         ref={el => {

@@ -31,7 +31,8 @@ describe("The error middleware", () => {
     };
     const next = action => store.dispatch(action);
     const action = { type: "ERROR", payload: "This is a payload", err: true };
-    const notification = store.getState().app.notificationSystem.addNotification;
+    const notification = store.getState().app.notificationSystem
+      .addNotification;
     errorMiddleware(store)(next)(action);
     expect(notification).to.be.calledWith({
       title: "ERROR",
@@ -65,7 +66,8 @@ describe("The error middleware", () => {
     };
     const next = action => store.dispatch(action);
     const action = { type: "ERROR", payloa: "typo", err: true };
-    const notification = store.getState().app.notificationSystem.addNotification;
+    const notification = store.getState().app.notificationSystem
+      .addNotification;
     errorMiddleware(store)(next)(action);
     expect(notification).to.be.calledWith({
       title: "ERROR",

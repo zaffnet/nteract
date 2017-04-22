@@ -13,18 +13,16 @@ import {
   LOAD,
   loadEpic,
   NEW_NOTEBOOK,
+  SET_NOTEBOOK,
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
 
 const path = require("path");
-const Rx = require("rxjs/Rx");
-
-const Observable = Rx.Observable;
 
 describe("load", () => {
   it("loads a notebook", () => {
     expect(load("mytest.ipynb")).to.deep.equal({
-      type: "LOAD",
+      type: LOAD,
       filename: "mytest.ipynb"
     });
   });
@@ -33,7 +31,7 @@ describe("load", () => {
 describe("newNotebook", () => {
   it("creates a new notebook", () => {
     expect(newNotebook({ spec: "hokey" }, "/tmp")).to.deep.equal({
-      type: "NEW_NOTEBOOK",
+      type: NEW_NOTEBOOK,
       kernelSpec: { spec: "hokey" },
       cwd: "/tmp"
     });
@@ -43,7 +41,7 @@ describe("newNotebook", () => {
 describe("notebookLoaded", () => {
   it("sets a notebook", () => {
     expect(notebookLoaded("test", dummyCommutable)).to.deep.equal({
-      type: "SET_NOTEBOOK",
+      type: SET_NOTEBOOK,
       filename: "test",
       notebook: dummyCommutable
     });
@@ -65,20 +63,17 @@ describe("convertRawNotebook", () => {
     expect(converted.filename).to.equal("/tmp/test.ipynb");
 
     const notebook = converted.notebook;
-    expect(
-      dummyCommutable.get("metadata").equals(notebook.get("metadata"))
-    ).to.be.true;
+    expect(dummyCommutable.get("metadata").equals(notebook.get("metadata"))).to
+      .be.true;
   });
 });
 
 describe("loadingEpic", () => {
   it("errors without a filename", done => {
-    const input$ = Observable.of({ type: LOAD });
-    const action$ = new ActionsObservable(input$);
-    const actionBuffer = [];
+    const action$ = ActionsObservable.of({ type: LOAD });
     const responseActions = loadEpic(action$);
     responseActions.subscribe(
-      x => actionBuffer.push(x.type),
+      _ => _,
       err => {
         expect(err.message).to.equal("load needs a filename");
         done();
@@ -89,34 +84,30 @@ describe("loadingEpic", () => {
     );
   });
   it("errors when file cant be read", done => {
-    const input$ = Observable.of({ type: LOAD, filename: "file" });
-    const action$ = new ActionsObservable(input$);
-    const actionBuffer = [];
+    const action$ = ActionsObservable.of({ type: LOAD, filename: "file" });
     const responseActions = loadEpic(action$);
-    responseActions.subscribe(
-      x => actionBuffer.push(x.type),
+    responseActions.toArray().subscribe(
+      actions => {
+        const types = actions.map(({ type }) => type);
+        expect(types).to.deep.equal(["ERROR"]);
+      },
       () => expect.fail(),
-      () => {
-        expect(actionBuffer).to.deep.equal(["ERROR"]);
-        done();
-      }
+      () => done()
     );
   });
 });
 
 describe("newNotebookEpic", () => {
   it("calls new Kernel after creating a new notebook", done => {
-    const input$ = Observable.of({ type: NEW_NOTEBOOK });
-    const action$ = new ActionsObservable(input$);
-    const actionBuffer = [];
+    const action$ = ActionsObservable.of({ type: NEW_NOTEBOOK });
     const responseActions = newNotebookEpic(action$);
-    responseActions.subscribe(
-      x => actionBuffer.push(x.type),
+    responseActions.toArray().subscribe(
+      actions => {
+        const types = actions.map(({ type }) => type);
+        expect(types).to.deep.equal([SET_NOTEBOOK, "LAUNCH_KERNEL"]);
+      },
       () => expect.fail(),
-      () => {
-        expect(actionBuffer).to.deep.equal(["SET_NOTEBOOK", "LAUNCH_KERNEL"]);
-        done();
-      }
+      () => done()
     );
   });
 });

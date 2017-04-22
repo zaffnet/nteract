@@ -58,8 +58,8 @@ export const extractNewKernel = (
   filename: string,
   notebook: ImmutableNotebook
 ) => {
-  const cwd = (filename && path.dirname(path.resolve(filename))) ||
-    process.cwd();
+  const cwd =
+    (filename && path.dirname(path.resolve(filename))) || process.cwd();
   const kernelSpecName = notebook.getIn(
     ["metadata", "kernelspec", "name"],
     notebook.getIn(["metadata", "language_info", "name"], "python3")
@@ -112,7 +112,9 @@ export const loadEpic = (actions: ActionsObservable) =>
           );
         })
         .catch(err =>
-          Observable.of({ type: "ERROR", payload: err, error: true })));
+          Observable.of({ type: "ERROR", payload: err, error: true })
+        )
+    );
 
 /**
   * Sets a new empty notebook.
@@ -127,4 +129,5 @@ export const newNotebookEpic = (action$: ActionsObservable) =>
         notebook: monocellNotebook
       },
       newKernel(action.kernelSpec, action.cwd)
-    ));
+    )
+  );

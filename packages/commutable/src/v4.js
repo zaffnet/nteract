@@ -440,7 +440,8 @@ export function toJS(immnb: ImmutableNotebook): Notebook {
   } = plainNotebook.cellMap.toObject();
 
   const cells = plainCellOrder.map((cellID: string) =>
-    cellToJS(plainCellMap[cellID]));
+    cellToJS(plainCellMap[cellID])
+  );
 
   return {
     cells,

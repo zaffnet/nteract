@@ -154,7 +154,8 @@ describe("createGistCallback", () => {
 describe("notifyUser", () => {
   it("notifies a user that gist has been uploaded", () => {
     const store = dummyStore();
-    const notification = store.getState().app.notificationSystem.addNotification;
+    const notification = store.getState().app.notificationSystem
+      .addNotification;
     const notificationSystem = store.getState().app.notificationSystem;
     notifyUser("filename", "gistID", notificationSystem);
     expect(notification).to.be.calledWithMatch({

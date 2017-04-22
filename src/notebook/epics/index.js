@@ -25,8 +25,8 @@ export function retryAndEmitError(err, source) {
   return source.startWith({ type: "ERROR", payload: err, error: true });
 }
 
-export const wrapEpic = epic =>
-  (...args) => epic(...args).catch(retryAndEmitError);
+export const wrapEpic = epic => (...args) =>
+  epic(...args).catch(retryAndEmitError);
 
 const epics = [
   commListenEpic,

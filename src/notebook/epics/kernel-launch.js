@@ -128,7 +128,8 @@ export const watchExecutionStateEpic = (action$: ActionsObservable) =>
           .filter(msg => msg.header.msg_type === "status")
           .map(msg => setExecutionState(msg.content.execution_state)),
         Rx.Observable.of(setExecutionState("idle"))
-      ));
+      )
+    );
 /**
   * Get kernel specs from main process
   *
@@ -166,7 +167,9 @@ export const newKernelByNameEpic = (action$: ActionsObservable) =>
     })
     .mergeMap(action =>
       kernelSpecsObservable.mergeMap(specs =>
-        Rx.Observable.of(newKernel(specs[action.kernelSpecName], action.cwd))));
+        Rx.Observable.of(newKernel(specs[action.kernelSpecName], action.cwd))
+      )
+    );
 
 /**
   * Launches a new kernel.
@@ -191,4 +194,5 @@ export const newKernelEpic = (action$: ActionsObservable) =>
           error: true
         }),
         source
-      ));
+      )
+    );

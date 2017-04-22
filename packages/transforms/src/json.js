@@ -60,7 +60,8 @@ export default class JsonDisplay extends React.Component {
 
   shouldComponentUpdate(nextProps: Props): boolean {
     if (
-      nextProps.theme !== this.props.theme || nextProps.data !== this.props.data
+      nextProps.theme !== this.props.theme ||
+      nextProps.data !== this.props.data
     ) {
       return true;
     }

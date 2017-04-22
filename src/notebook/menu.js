@@ -170,7 +170,8 @@ export function dispatchRunAllBelow(store) {
   cellsBelowFocusedId
     .filter(cellID => cells.getIn([cellID, "cell_type"]) === "code")
     .map(cellID =>
-      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"]))));
+      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"])))
+    );
 }
 
 export function dispatchRunAll(store) {
@@ -181,7 +182,8 @@ export function dispatchRunAll(store) {
     .get("cellOrder")
     .filter(cellID => cells.getIn([cellID, "cell_type"]) === "code")
     .map(cellID =>
-      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"]))));
+      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"])))
+    );
 }
 
 export function dispatchClearAll(store) {
@@ -308,10 +310,12 @@ export function triggerSaveAsPDF(store) {
       Promise.all([
         triggerWindowRefresh(store, filename),
         triggerKernelRefresh(store)
-      ]))
+      ])
+    )
     .then(() => storeToPDF(store))
     .catch(e =>
-      store.dispatch({ type: "ERROR", payload: e.message, error: true }));
+      store.dispatch({ type: "ERROR", payload: e.message, error: true })
+    );
 }
 
 export function storeToPDF(store) {

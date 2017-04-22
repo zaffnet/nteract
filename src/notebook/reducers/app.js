@@ -37,7 +37,8 @@ function cleanupKernel(state: AppState): AppState {
       .set("kernelSpecName", null)
       .set("kernelSpecDisplayName", null)
       .set("kernelSpec", null)
-      .set("executionState", "not connected"));
+      .set("executionState", "not connected")
+  );
 }
 
 type NewKernelAction = {
@@ -58,7 +59,8 @@ function newKernel(state: AppState, action: NewKernelAction) {
       .set("kernelSpecName", action.kernelSpecName)
       .set("kernelSpecDisplayName", action.kernelSpec.spec.display_name)
       .set("kernelSpec", action.kernelSpec)
-      .set("executionState", "starting"));
+      .set("executionState", "starting")
+  );
 }
 function exit(state: AppState) {
   return cleanupKernel(state);

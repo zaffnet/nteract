@@ -65,7 +65,7 @@ describe("acquireKernelInfo", () => {
     obs.subscribe(langAction => {
       expect(langAction).to.deep.equal({
         langInfo: { language: "python" },
-        type: "SET_LANGUAGE_INFO"
+        type: constants.SET_LANGUAGE_INFO
       });
       done();
     });
@@ -74,7 +74,7 @@ describe("acquireKernelInfo", () => {
 
 describe("watchExecutionStateEpic", () => {
   it("returns an Observable with an initial state of idle", done => {
-    const input$ = Rx.Observable.of({
+    const action$ = ActionsObservable.of({
       type: constants.NEW_KERNEL,
       channels: {
         iopub: Rx.Observable.of({
@@ -83,20 +83,18 @@ describe("watchExecutionStateEpic", () => {
         })
       }
     });
-    const actionBuffer = [];
-    const action$ = new ActionsObservable(input$);
     const obs = watchExecutionStateEpic(action$);
-    obs.subscribe(
+    obs.toArray().subscribe(
       // Every action that goes through should get stuck on an array
-      x => actionBuffer.push(x.type),
-      () => expect.fail(), // It should not error in the stream
-      () => {
-        expect(actionBuffer).to.deep.equal([
+      actions => {
+        const types = actions.map(({ type }) => type);
+        expect(types).to.deep.equal([
           constants.SET_EXECUTION_STATE,
           constants.SET_EXECUTION_STATE
         ]);
-        done();
-      }
+      },
+      () => expect.fail(), // It should not error in the stream
+      () => done()
     );
   });
 });
@@ -110,13 +108,10 @@ describe("newKernelObservable", () => {
 
 describe("newKernelEpic", () => {
   it("throws an error if given a bad action", done => {
-    const input$ = Rx.Observable
-      .of({
-        type: constants.LAUNCH_KERNEL
-      })
-      .share();
     const actionBuffer = [];
-    const action$ = new ActionsObservable(input$);
+    const action$ = ActionsObservable.of({
+      type: constants.LAUNCH_KERNEL
+    }).share();
     const obs = newKernelEpic(action$);
     obs.subscribe(
       x => {
@@ -131,13 +126,12 @@ describe("newKernelEpic", () => {
     );
   });
   it("calls newKernelObservable if given the correct action", done => {
-    const input$ = Rx.Observable.of({
+    const actionBuffer = [];
+    const action$ = ActionsObservable.of({
       type: constants.LAUNCH_KERNEL,
       kernelSpec: { spec: "hokey" },
       cwd: "~"
     });
-    const actionBuffer = [];
-    const action$ = new ActionsObservable(input$);
     const obs = newKernelEpic(action$);
     obs.subscribe(
       x => {
@@ -160,21 +154,19 @@ describe("newKernelEpic", () => {
 
 describe("newKernelByNameEpic", () => {
   it("creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action", done => {
-    const input$ = Rx.Observable.of({
+    const action$ = ActionsObservable.of({
       type: constants.LAUNCH_KERNEL_BY_NAME,
       kernelSpecName: "python3",
       cwd: "~"
     });
-    const actionBuffer = [];
-    const action$ = new ActionsObservable(input$);
     const obs = newKernelByNameEpic(action$);
-    obs.subscribe(
-      x => actionBuffer.push(x.type),
+    obs.toArray().subscribe(
+      actions => {
+        const types = actions.map(({ type }) => type);
+        expect(types).to.deep.equal([constants.LAUNCH_KERNEL]);
+      },
       err => expect.fail(err, null),
-      () => {
-        expect(actionBuffer).to.deep.equal([constants.LAUNCH_KERNEL]);
-        done();
-      }
+      () => done()
     );
   });
 });

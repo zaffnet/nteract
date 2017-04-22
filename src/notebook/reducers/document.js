@@ -107,7 +107,8 @@ export function cleanCellTransient(state: DocumentState, id: string) {
       ["transient", "keyPathsForDisplays"],
       (kpfd: Immutable.Map<string, KeyPaths>) =>
         kpfd.map((keyPaths: KeyPaths) =>
-          keyPaths.filter((keyPath: KeyPath) => keyPath.get(2) !== id))
+          keyPaths.filter((keyPath: KeyPath) => keyPath.get(2) !== id)
+        )
     )
     .setIn(["transient", "cellMap", id], new Immutable.Map());
 }
@@ -347,7 +348,8 @@ function moveCell(state: DocumentState, action: MoveCellAction) {
     ["notebook", "cellOrder"],
     (cellOrder: ImmutableCellOrder) => {
       const oldIndex = cellOrder.findIndex(id => id === action.id);
-      const newIndex = cellOrder.findIndex(id => id === action.destinationId) +
+      const newIndex =
+        cellOrder.findIndex(id => id === action.destinationId) +
         (action.above ? 0 : 1);
       if (oldIndex === newIndex) {
         return cellOrder;
@@ -364,7 +366,8 @@ function removeCellFromState(state: DocumentState, action: RemoveCellAction) {
   const { id } = action;
   return cleanCellTransient(
     state.update("notebook", (notebook: ImmutableNotebook) =>
-      removeCell(notebook, id)),
+      removeCell(notebook, id)
+    ),
     id
   );
 }
@@ -425,7 +428,8 @@ function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
   const source = firstSource.concat("\n", "\n", secondSource);
 
   return state.update("notebook", (notebook: ImmutableNotebook) =>
-    removeCell(notebook.setIn(["cellMap", id, "source"], source), nextId));
+    removeCell(notebook.setIn(["cellMap", id, "source"], source), nextId)
+  );
 }
 
 type NewCellAppendAction = { type: "NEW_CELL_APPEND", cellType: CellType };
@@ -572,7 +576,8 @@ function cutCell(state: DocumentState, action: CutCellAction) {
   return state
     .set("copied", new Immutable.Map({ id, cell }))
     .update("notebook", (notebook: ImmutableNotebook) =>
-      removeCell(notebook, id));
+      removeCell(notebook, id)
+    );
 }
 
 type PasteCellAction = { type: "PASTE_CELL" };
@@ -590,7 +595,8 @@ function pasteCell(state: DocumentState) {
   const id = uuid.v4();
 
   return state.update("notebook", (notebook: ImmutableNotebook) =>
-    insertCellAfter(notebook, copiedCell, id, copiedId));
+    insertCellAfter(notebook, copiedCell, id, copiedId)
+  );
 }
 
 type ChangeCellTypeAction = {
@@ -633,7 +639,8 @@ function toggleOutputExpansion(
     cells.setIn(
       [id, "metadata", "outputExpanded"],
       !cells.getIn([id, "metadata", "outputExpanded"])
-    ));
+    )
+  );
 }
 
 type FocusCellActionType =

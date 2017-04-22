@@ -1,10 +1,13 @@
 import { ActionsObservable } from "redux-observable";
 import {
   EXECUTE_CELL,
+  ABORT_EXECUTION,
   ERROR_EXECUTING,
   CLEAR_OUTPUTS,
   UPDATE_CELL_STATUS,
-  UPDATE_CELL_PAGERS
+  UPDATE_CELL_PAGERS,
+  UPDATE_DISPLAY,
+  NEW_KERNEL
 } from "../../../src/notebook/constants";
 
 import { executeCell } from "../../../src/notebook/actions";
@@ -71,9 +74,9 @@ describe("executeCellStream", () => {
     action$.bufferCount(3).subscribe(messages => {
       expect(messages).to.deep.equal([
         // TODO: Order doesn't actually matter here
-        { type: "CLEAR_OUTPUTS", id: "0" },
-        { type: "UPDATE_CELL_STATUS", id: "0", status: "busy" },
-        { type: "UPDATE_CELL_PAGERS", id: "0", pagers: Immutable.List() }
+        { type: CLEAR_OUTPUTS, id: "0" },
+        { type: UPDATE_CELL_STATUS, id: "0", status: "busy" },
+        { type: UPDATE_CELL_PAGERS, id: "0", pagers: Immutable.List() }
       ]);
       done(); // TODO: Make sure message check above is called
     });
@@ -246,16 +249,15 @@ describe("createExecuteCellStream", () => {
         }
       }
     };
-    const action$ = ActionsObservable.of({ type: "EXECUTE_CELL" });
+    const action$ = ActionsObservable.of({ type: EXECUTE_CELL });
     const observable = createExecuteCellStream(action$, store, "source", "id");
-    const actionBuffer = [];
-    observable.subscribe(
-      x => actionBuffer.push(x.payload),
-      err => expect.fail(err, null),
-      () => {
-        expect(actionBuffer).to.deep.equal(["Kernel not connected!"]);
-        done();
-      }
+    observable.toArray().subscribe(
+      actions => {
+        const payloads = actions.map(({ payload }) => payload);
+        expect(payloads).to.deep.equal(["Kernel not connected!"]);
+      },
+      () => expect.fail(),
+      () => done()
     );
   });
   it("doesnt complete but does push until abort action", done => {
@@ -281,10 +283,10 @@ describe("createExecuteCellStream", () => {
       }
     };
     const action$ = ActionsObservable.of(
-      { type: "EXECUTE_CELL", id: "id" },
-      { type: "EXECUTE_CELL", id: "id_2" },
-      { type: "ABORT_EXECUTION", id: "id_2" },
-      { type: "EXECUTE_CELL", id: "id" }
+      { type: EXECUTE_CELL, id: "id" },
+      { type: EXECUTE_CELL, id: "id_2" },
+      { type: ABORT_EXECUTION, id: "id_2" },
+      { type: EXECUTE_CELL, id: "id" }
     );
     const observable = createExecuteCellStream(action$, store, "source", "id");
     const actionBuffer = [];
@@ -319,8 +321,7 @@ describe("executeCellEpic", () => {
   };
   it("Errors on a bad action", done => {
     // Make one hot action
-    const badInput$ = Observable.of({ type: EXECUTE_CELL }).share();
-    const badAction$ = new ActionsObservable(badInput$);
+    const badAction$ = ActionsObservable.of({ type: EXECUTE_CELL }).share();
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal("execute cell needs an id");
     });
@@ -337,15 +338,14 @@ describe("executeCellEpic", () => {
     );
   });
   it("Errors on an action where source not a string", done => {
-    const badInput$ = Observable.of(executeCell("id", 2)).share();
-    const badAction$ = new ActionsObservable(badInput$);
+    const badAction$ = ActionsObservable.of(executeCell("id", 2)).share();
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal("execute cell needs source string");
     });
     responseActions.subscribe(
       // Every action that goes through should get stuck on an array
       x => {
-        expect(x.type).to.equal("ERROR_EXECUTING");
+        expect(x.type).to.equal(ERROR_EXECUTING);
         done();
       },
       err => expect.fail(err, null), // It should not error in the stream
@@ -355,8 +355,7 @@ describe("executeCellEpic", () => {
     );
   });
   it("Informs about disconnected kernels, allows reconnection", done => {
-    const input$ = Observable.of(executeCell("id", "source")).share();
-    const action$ = new ActionsObservable(input$);
+    const action$ = ActionsObservable.of(executeCell("id", "source")).share();
     const responseActions = executeCellEpic(action$, store);
     responseActions.subscribe(
       x => {
@@ -409,8 +408,7 @@ describe("updateDisplayEpic", () => {
     const channels = {
       iopub: Observable.from(messages)
     };
-    const kernel$ = Observable.of({ type: "NEW_KERNEL", channels });
-    const action$ = new ActionsObservable(kernel$);
+    const action$ = ActionsObservable.of({ type: NEW_KERNEL, channels });
 
     const epic = updateDisplayEpic(action$);
 
@@ -423,7 +421,7 @@ describe("updateDisplayEpic", () => {
       () => {
         expect(responseActions).to.deep.equal([
           {
-            type: "UPDATE_DISPLAY",
+            type: UPDATE_DISPLAY,
             output: {
               output_type: "display_data",
               data: { "text/html": "<marquee>wee</marquee>" },
@@ -431,7 +429,7 @@ describe("updateDisplayEpic", () => {
             }
           },
           {
-            type: "UPDATE_DISPLAY",
+            type: UPDATE_DISPLAY,
             output: {
               output_type: "display_data",
               data: { "text/plain": "i am text" },

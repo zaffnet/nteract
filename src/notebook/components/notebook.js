@@ -125,8 +125,8 @@ export class Notebook extends React.PureComponent {
       ctrlKeyPressed = (e.metaKey || e.ctrlKey) && !(e.metaKey && e.ctrlKey);
     }
 
-    const shiftXORctrl = (e.shiftKey || ctrlKeyPressed) &&
-      !(e.shiftKey && ctrlKeyPressed);
+    const shiftXORctrl =
+      (e.shiftKey || ctrlKeyPressed) && !(e.shiftKey && ctrlKeyPressed);
     if (!shiftXORctrl) {
       return;
     }
