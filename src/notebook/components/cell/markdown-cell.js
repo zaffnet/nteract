@@ -137,7 +137,6 @@ export default class MarkdownCell extends React.PureComponent {
           ref={rendered => {
             this.rendered = rendered;
           }}
-          tabIndex="0"
         >
           <LatexRenderer>
             {mdRender(

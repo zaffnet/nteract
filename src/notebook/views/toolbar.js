@@ -93,11 +93,12 @@ export default class Toolbar extends PureComponent {
             </DropdownTrigger>
             <DropdownContent>
               {type === "code"
-                ? <ul>
+                ? <ul role="listbox" tabIndex="0">
                     <li
                       onClick={() => this.clearOutputs()}
                       className="clearOutput"
-                      role="button"
+                      role="option"
+                      aria-selected="false"
                       tabIndex="0"
                     >
                       <a>Clear Cell Output</a>
@@ -105,7 +106,8 @@ export default class Toolbar extends PureComponent {
                     <li
                       onClick={() => this.changeInputVisibility()}
                       className="inputVisibility"
-                      role="button"
+                      role="option"
+                      aria-selected="false"
                       tabIndex="0"
                     >
                       <a>Toggle Input Visibility</a>
@@ -113,7 +115,8 @@ export default class Toolbar extends PureComponent {
                     <li
                       onClick={() => this.changeOutputVisibility()}
                       className="outputVisibility"
-                      role="button"
+                      role="option"
+                      aria-selected="false"
                       tabIndex="0"
                     >
                       <a>Toggle Output Visibility</a>
@@ -121,18 +124,20 @@ export default class Toolbar extends PureComponent {
                     <li
                       onClick={() => this.toggleOutputExpansion()}
                       className="outputExpanded"
-                      role="button"
+                      role="option"
+                      aria-selected="false"
                       tabIndex="0"
                     >
                       <a>Toggle Expanded Output</a>
                     </li>
                   </ul>
                 : null}
-              <ul>
+              <ul role="listbox" tabIndex="0">
                 <li
                   onClick={() => this.changeCellType()}
                   className="changeType"
-                  role="button"
+                  role="option"
+                  aria-selected="false"
                   tabIndex="0"
                 >
                   <a>
