@@ -19,10 +19,10 @@
     "@nteract/display-area": "^1.2.0",
     "@nteract/editor": "^1.0.12",
     "@nteract/transforms": "^1.0.11",
-    "codemirror": "~5.24.0",
+    "codemirror": "^5.25.2",
     "commonmark": "^0.27.0",
-    "commonmark-react-renderer": "^4.3.1",
-    "mathjax-electron": "^2.0.0"
+    "commonmark-react-renderer": "^4.3.2",
+    "mathjax-electron": "^2.0.1"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",

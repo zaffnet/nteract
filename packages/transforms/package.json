@@ -30,11 +30,11 @@
     "access": "public"
   },
   "dependencies": {
-    "ansi-to-react": "^1.1.1",
+    "ansi-to-react": "^1.4.1",
     "commonmark": "^0.27.0",
-    "commonmark-react-renderer": "^4.3.1",
-    "mathjax-electron": "^2.0.0",
-    "react-json-tree": "^0.10.1"
+    "commonmark-react-renderer": "^4.3.2",
+    "mathjax-electron": "^2.0.1",
+    "react-json-tree": "^0.10.9"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",

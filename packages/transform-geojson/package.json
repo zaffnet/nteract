@@ -12,7 +12,7 @@
     "build:lib:watch": "npm run build:lib -- --watch"
   },
   "dependencies": {
-    "leaflet": "^1.0.1"
+    "leaflet": "^1.0.3"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",

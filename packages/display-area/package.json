@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@nteract/transforms": "^1.0.11",
-    "ansi-to-react": "^1.1.1"
+    "ansi-to-react": "^1.4.1"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",
