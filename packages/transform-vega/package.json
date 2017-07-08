@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-vega",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Vega Transform",
   "main": "lib/",
   "nteractDesktop": "src/index.js",

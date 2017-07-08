@@ -1,6 +1,6 @@
 {
   "name": "@nteract/editor",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The editor that lives inside cells in nteract",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -12,13 +12,18 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "keywords": ["nteract", "editor", "notebook", "jupyter"],
+  "keywords": [
+    "nteract",
+    "editor",
+    "notebook",
+    "jupyter"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@nteract/messaging": "^1.0.11",
-    "@nteract/transforms": "^2.0.0",
+    "@nteract/messaging": "^1.0.12",
+    "@nteract/transforms": "^2.0.1",
     "codemirror": "^5.27.0",
     "exenv": "^1.2.2",
     "lodash": "^4.17.4",
