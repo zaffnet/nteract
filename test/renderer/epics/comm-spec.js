@@ -15,7 +15,10 @@ import {
 } from "../../../src/notebook/constants";
 
 const chai = require("chai");
-const Rx = require("rxjs/Rx");
+
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/of";
+import "rxjs/add/operator/toArray";
 
 const expect = chai.expect;
 
@@ -159,7 +162,7 @@ describe("commActionObservable", () => {
 
     const newKernelAction = {
       channels: {
-        iopub: Rx.Observable.of(commOpenMessage, commMessage)
+        iopub: Observable.of(commOpenMessage, commMessage)
       }
     };
 
