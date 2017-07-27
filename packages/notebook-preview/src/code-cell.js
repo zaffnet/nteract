@@ -75,7 +75,7 @@ class CodeCell extends React.PureComponent {
                 focusBelow={() => {}}
               />
             </div>
-          : <div className="input-container invisible" />}
+          : null}
         <LatexRenderer>
           <div className="outputs">
             <Display
