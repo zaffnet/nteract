@@ -28,8 +28,7 @@ class CodeCell extends React.PureComponent {
   static defaultProps = {
     running: false,
     tabSize: 4,
-    models: new ImmutableMap(),
-    sourceHidden: false
+    models: new ImmutableMap()
   };
 
   isOutputHidden(): any {

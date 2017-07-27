@@ -50,7 +50,10 @@ export class Notebook extends React.PureComponent {
     const cell = cellMap.get(id);
 
     // Propagated from the hide_(all)_input nbextension
-    const sourceHidden = this.props.notebook.getIn("metadata", "hide_input");
+    const sourceHidden = this.props.notebook.getIn(
+      ["metadata", "hide_input"],
+      false
+    );
 
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
