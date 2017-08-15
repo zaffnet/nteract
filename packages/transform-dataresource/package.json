@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-dataresource",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Transform for data resource JSON",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -19,11 +19,7 @@
   "peerDependencies": {
     "react": "^15.6.1"
   },
-  "files": [
-    "lib",
-    "src",
-    "profiles"
-  ],
+  "files": ["lib", "src", "profiles"],
   "license": "BSD-3-Clause",
   "dependencies": {
     "d3-time-format": "^2.0.5",

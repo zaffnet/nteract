@@ -1,13 +1,13 @@
 {
   "name": "@nteract/notebook-preview-demo",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@nteract/commutable": "^2.0.2",
     "@nteract/notebook-preview": "^2.2.1",
-    "@nteract/transform-dataresource": "^1.1.1",
+    "@nteract/transform-dataresource": "^1.1.2",
     "@nteract/transforms": "^2.2.1",
     "codemirror": "^5.28.0",
     "isomorphic-fetch": "^2.2.1",

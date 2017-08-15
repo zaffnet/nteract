@@ -1,6 +1,6 @@
 {
   "name": "nteract-on-jupyter",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "nteract on jupyter, as an extension",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@nteract/notebook-preview": "^2.2.1",
-    "@nteract/transform-dataresource": "^1.1.1",
+    "@nteract/transform-dataresource": "^1.1.2",
     "@nteract/transform-vega": "^2.1.0",
     "@nteract/transforms": "^2.2.1",
     "anser": "^1.4.1",
@@ -25,12 +25,8 @@
     "react-dom": "^15.6.1"
   },
   "babel": {
-    "presets": [
-      "next/babel"
-    ],
-    "plugins": [
-      "transform-flow-strip-types"
-    ]
+    "presets": ["next/babel"],
+    "plugins": ["transform-flow-strip-types"]
   },
   "devDependencies": {
     "css-loader": "^0.28.4",
