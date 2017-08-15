@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms-full",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "description": "Transforms from nteract",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -38,7 +38,7 @@
     "@nteract/transform-geojson": "^2.0.2",
     "@nteract/transform-model-debug": "^2.0.2",
     "@nteract/transform-plotly": "^2.1.1",
-    "@nteract/transform-vega": "^2.0.2",
-    "@nteract/transforms": "^2.1.3"
+    "@nteract/transform-vega": "^2.1.0",
+    "@nteract/transforms": "^2.2.0"
   }
 }
