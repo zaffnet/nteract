@@ -8,6 +8,10 @@
     "prebuild:python": "rimraf dist",
     "publish": "echo 'not really publishing'"
   },
+  "publishConfig": {
+    "access": "public",
+    "dry-run": true
+  },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
