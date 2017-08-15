@@ -17,8 +17,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nteract/ansi-to-react.git"
+    "url": "git+https://github.com/nteract/nteract.git"
   },
+  "homepage": "https://github.com/nteract/nteract/tree/master/packages/ansi-to-react",
   "keywords": ["ansi", "react"],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "MPL-2.0",
