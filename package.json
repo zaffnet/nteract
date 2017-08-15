@@ -103,7 +103,8 @@
     "setupFiles": ["./scripts/mockument"]
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "git add"]
+    "*.js": ["prettier --write", "git add"],
+    "*.json": ["prettier --write", "git add"]
   },
   "dependencies": {
     "@nteract/plotly": "^1.0.0",
