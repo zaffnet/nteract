@@ -4,7 +4,6 @@ import * as fs from "fs";
 import type { Subject } from "rxjs";
 
 import { shutdownRequest } from "../../../packages/enchannel";
-import { getUsername, session } from "../../../packages/messaging";
 
 export const filesystem = fs;
 
@@ -82,7 +81,7 @@ export function shutdownKernel(kernel: Kernel): Promise<boolean> {
 
   // Attempt to gracefully terminate the kernel.
   try {
-    return shutdownRequest(kernel.channels, getUsername(), session, false)
+    return shutdownRequest(kernel.channels, false)
       .then(() => {
         // At this point, the kernel has cleaned up its resources.  Now we can
         // terminate the process and cleanup handles by calling forceShutdownKernel

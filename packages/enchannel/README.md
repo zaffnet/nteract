@@ -35,7 +35,7 @@ do-able](https://github.com/nteract/jupyter-transport-wrapper).
 Instead, let's rely on **Observables**: asynchronous data streams, [*from the
 future*](https://zenparsing.github.io/es-observable/). Observables, as
 flexible transport, are the multi-valued promise we've all been waiting for:
- 
+
 |                              | Single return value | Mutiple return values                  |
 | ---------------------------- | ------------------- | -------------------------------------- |
 | Pull/Synchronous/Interactive | Object              | Iterables (Array, Set, Map, Object) |
@@ -107,90 +107,6 @@ is not included in the spec above primarily because it's an implementation
 by-product and may end up being deprecated based on the chosen development
 approach.
 
-## What's in this repo? Convenience.
-
-In addition to the spec doc itself (the text above) this repo contains
-**convenience functions** for enchannel implementations and consumers. To use
-these functions install this package with npm:
-
-    npm install enchannel
-
-The utility functions included are described below.
-
-#### isChildMessage
-Checks to see if one message is child to another.  Accepts two arguments,
-parent and child, both of which are [Jupyter message
-objects](https://ipython.org/ipython-doc/3/development/messaging.html#general-message-format).
-To use as a conditional:
-
-```js
-const enchannel = require('enchannel');
-if (enchannel.isChildMessage(parent, child)) {
-  console.log('is child');
-}
-```
-
-It will probably make more sense to use it as an observable filter.  In the
-example below, `parent` is a [Jupyter message
-object](https://ipython.org/ipython-doc/3/development/messaging.html#general-message-format)
-and `channels.iopub` is an RxJS observable:
-
-```js
-const enchannel = require('enchannel');
-const isChildMessage = enchannel.isChildMessage.bind(null, parent);
-const childMessages = channels.iopub.filter(isChildMessage);
-```
-
-#### createMessage
-Creates a [Jupyter message object](https://ipython.org/ipython-doc/3/development/messaging.html#general-message-format) that accepts three arguments:
-
- - username: string  
- - session: string, `guid` unique to the current session  
- - msg_type: string, type of message being sent  
-
-This full example shows how you'd setup the session and
-username, and then create and send a shutdown request:
-
-```js
-channels = ...connected using an enchannel backend...
-
-// Created once with the channels
-const uuid = require('uuid');
-const session = uuid.v4();
-const username = process.env.LOGNAME || process.env.USER ||
-  process.env.LNAME || process.env.USERNAME;
-
-// Create the shutdown request method
-const enchannel = require('enchannel');
-const shutdownRequest = enchannel.createMessage(username, session, 'shutdown_request');
-shutdownRequest.content = { restart: false };
-
-// Send it
-// Before sending, don't forget to subscribe to the channel you are sending on!  In practice
-// there is more code involved here, because you'd want to filter the messages your subscribing
-// to for messages that are child to the one that you send.
-channels.shell.subscribe(content => { /* ... */ });
-channels.shell.next(shutdownRequest);
-```
-
-#### shutdownRequest
-Sends a [shutdown request Jupyter message](https://ipython.org/ipython-doc/3/development/messaging.html#kernel-shutdown) to the kernel and completes the observables.  Accepts three arguments:
-
- - channels: object, enchannel channels object
- - username, string  
- - session, string, `guid` unique to the current session  
- - restart: optional boolean, whether the shutdown request is actually a restart request
-
-The following example shows how this method would be used:
-
-```js
-const enchannel = require('enchannel');
-console.log('begin shutdown');
-enchannel.shutdownRequest(channels, username, session, restart).then(() => {
-  console.log('finished shutting down');
-});
-```
-
 ## Develop with us
 
  To contribute to the spec or convenience functions, clone this repo and
@@ -201,7 +117,7 @@ npm install
 ```
 
 Before contributing changes to the utility functions, be kind to your peers
-and check if the unit tests pass locally by running: 
+and check if the unit tests pass locally by running:
 
 ```
 npm test
