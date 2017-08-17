@@ -55,36 +55,65 @@ did and any questions you might have about what you did.
 
 ## How should I write my commit messages and PR titles?
 
-Great question! Here at nteract, we utilize the [conventional-changelog-standard](https://github.com/bcoe/conventional-changelog-standard/blob/master/convention.md)
-for writing our commit messages and PR titles. Why do we do this? The standard
-comes in really handy when we need to determine what kinds of information should
-go into our release documentation (as the word changelog in the title might suggest!).
-Good release messages means more informed users means a better project to use. Yay!
+Good commit messages serve at least three important purposes:
 
-Note that this standard applies to both your commit messages and PR titles so you'll
-need to draft the appropriate commit message when you run `git commit -m` or use the
-interface on your visual git interface.
+* To speed up the reviewing process.
 
-You can use the following verbs as part of your commit messages/PR titles.
-* fix: For when you have fixed a bug.
-* feat: For when you have added a new feature.
-* chore: For when you've done a small chore on the repository such as updating
-a script in package.json or changing your code based on feedback from the linter.
-* docs: For when you've added documentation.
-* style: For changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
-* refactor: For when you've refactored a portion of the application.
-* ux: For when you have changed a part of the user experience not covered by the previous verbs.
+* To help us write a good release note.
 
-In addition to the active verb, you'll also need to include the affected component
-in the commit message or PR title. The structure for this is as follows.
-* If you've made the change to a React component, use the components name, such as
-`CodeCell`.
-* If you've made a change to the overall application, such as the Electron code, use
- the `app` name.
-* If you've made a change to a reducer, use the name of the reducer, such as `document`
-or `app`.
-* If you've made a change to an epic, use the name of the epic exported, such as
-`executeCellEpic`.
+* To help the future maintainers of nteract/nteract (it could be you!),
+say five years into the future, to find out why a particular change was made to
+the code or why a specific feature was added.
+
+Structure your commit message like this:
+
+From: [[http://git-scm.com/book/ch5-2.html]]
+
+> ```
+> Short (50 chars or less) summary of changes
+>
+> More detailed explanatory text, if necessary.  Wrap it to about 72
+> characters or so.  In some contexts, the first line is treated as the
+> subject of an email and the rest of the text as the body.  The blank
+> line separating the summary from the body is critical (unless you omit
+> the body entirely); tools like rebase can get confused if you run the
+> two together.
+>
+> Further paragraphs come after blank lines.
+>
+>   - Bullet points are okay, too
+>
+>   - Typically a hyphen or asterisk is used for the bullet, preceded by a
+>     single space, with blank lines in between, but conventions vary here
+> ```
+
+
+### DO
+
+* Write the summary line and description of what you have done in the imperative
+mode, that is as if you were commanding. Start the line with "Fix", "Add",
+"Change" instead of "Fixed", "Added", "Changed".
+* Always leave the second line
+blank.
+* Line break the commit message (to make the commit message readable
+without having to scroll horizontally in gitk).
+
+### DON'T
+
+* Don't end the summary line with a period - it's a title and titles don't end
+with a period.
+
+### Tips
+
+* If it seems difficult to summarize what your commit does, it may be because it
+includes several logical changes or bug fixes, and are better split up into
+several commits using `git add -p`.
+
+### References
+
+The following blog post has a nice discussion of commit messages:
+
+"On commit messages":http://who-t.blogspot.com/2009/12/on-commit-messages.html
 
 ## How fast will my PR be merged?
 
