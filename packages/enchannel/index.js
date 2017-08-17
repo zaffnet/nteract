@@ -3,7 +3,6 @@ require("rxjs/add/operator/filter");
 require("rxjs/add/operator/map");
 
 const createMessage = require("@nteract/messaging").createMessage;
-console.log("heres cm ", createMessage);
 
 /**
  * Send a shutdown request message

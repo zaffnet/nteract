@@ -47,7 +47,6 @@ function main(rootEl: Node | null, dataEl: Node | null) {
 
   fetch(url, { credentials: "include" })
     .then(y => {
-      console.log(y);
       return y;
     })
     .then(x => x.json())
