@@ -20,7 +20,7 @@ import {
 } from "../actions";
 import type { CellProps } from "./cell/cell";
 
-// TODO: Remove after provider refactor finished
+// NOTE: PropTypes are required for the sake of contextTypes
 const PropTypes = require("prop-types");
 
 type Props = {
@@ -100,7 +100,7 @@ export class Notebook extends React.PureComponent {
     document.addEventListener("keydown", this.keyDown);
   }
 
-  componentDidUpdate(): void {
+  componentDidUpdate(prevProps: Props): void {
     if (this.stickyCellsPlaceholder) {
       // Make sure the document is vertically shifted so the top non-stickied
       // cell is always visible.
@@ -168,6 +168,14 @@ export class Notebook extends React.PureComponent {
       transforms: this.props.transforms,
       moveCell: this.moveCell,
       pagers: this.props.cellPagers.get(id),
+      // TODO: This prop should likely be id === this.props.cellFocused
+      //       so that computation is not done by all the cells.
+      //       They just need to know if they're focused.
+      //       Then again... It does feel like scroll behavior belongs in the
+      //       notebook itself, would require fixing up refs passing with connect()
+      //
+      //       Then again, having the previous focusedCellID (cellFocused) is useful
+      //       for within the cell doing scrolling
       cellFocused: this.props.cellFocused,
       editorFocused: this.props.editorFocused,
       running: transient.get("status") === "busy",
