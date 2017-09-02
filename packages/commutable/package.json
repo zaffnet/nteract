@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commutable",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "library for immutable notebook operations",
   "main": "index.js",
   "nteractDesktop": "src/index.js",
@@ -16,11 +16,7 @@
     "type": "git",
     "url": "https://github.com/nteract/nteract/tree/master/packages/commutable"
   },
-  "keywords": [
-    "commutable",
-    "nteract",
-    "notebooks"
-  ],
+  "keywords": ["commutable", "nteract", "notebooks"],
   "publishConfig": {
     "access": "public"
   },
