@@ -32,19 +32,25 @@
     "build:webpack:watch": "npm run build:webpack -- --watch",
     "build:packages": "lerna run build --ignore @nteract/notebook-preview-demo",
     "build:packages:watch": "lerna run build:lib:watch --stream",
-    "build:icon": "./scripts/make_icons.sh && cd static/icons && iconutil -c icns nteract.iconset && mv nteract.icns ../icon.icns",
+    "build:icon":
+      "./scripts/make_icons.sh && cd static/icons && iconutil -c icns nteract.iconset && mv nteract.icns ../icon.icns",
     "build:docs": "esdoc -c esdoc.json",
     "test": "npm run test:unit && npm run test:packages && npm run test:lint",
     "pretest:functional": "npm run build",
     "sublaunch": "electron-mocha --compilers js:babel-core/register",
     "test:conformance": "node scripts/conformance.js",
     "test:functional:launch": "npm run sublaunch -- test/main/launch.js",
-    "test:functional:launchNewNotebook": "npm run sublaunch -- test/main/launchNewNotebook.js",
-    "test:functional": "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
+    "test:functional:launchNewNotebook":
+      "npm run sublaunch -- test/main/launchNewNotebook.js",
+    "test:functional":
+      "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
     "test:coverage": "npm run coverage",
-    "test:unit": "mocha -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\" \"test/utils/**/*.js\"",
-    "test:debug": "mocha --debug-brk --inspect -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\" \"test/utils/**/*.js\"",
-    "test:unit:individual": "mocha -r test/setup.js --compilers js:babel-core/register ",
+    "test:unit":
+      "mocha -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\" \"test/utils/**/*.js\"",
+    "test:debug":
+      "mocha --debug-brk --inspect -r test/setup.js --compilers js:babel-core/register \"test/renderer/**/*.js\" \"test/utils/**/*.js\"",
+    "test:unit:individual":
+      "mocha -r test/setup.js --compilers js:babel-core/register ",
     "test:watch": "watch 'npm run test' test/",
     "test:lint": "npm run lint",
     "test:flow": "npm run flow",
@@ -134,7 +140,7 @@
     "commonmark-react-renderer": "^4.3.3",
     "cross-env": "^5.0.0",
     "date-fns": "^1.28.5",
-    "electron": "^1.7.6",
+    "electron": "~1.7.6",
     "electron-builder": "^19.22.2",
     "electron-context-menu": "^0.9.1",
     "electron-log": "^2.2.6",
