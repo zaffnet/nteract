@@ -47,7 +47,8 @@
     "prettier":
       "prettier --write '**/*.{js,json}' '!**/{lib,.git,flow-typed}/**'",
     "dist": "lerna run dist --scope @nteract/desktop --stream",
-    "pack": "lerna run pack --scope @nteract/desktop --stream"
+    "pack": "lerna run pack --scope @nteract/desktop --stream",
+    "publish": "lerna run publish --scope @nteract/desktop --stream"
   },
   "jest": {
     "setupFiles": ["raf/polyfill", "./scripts/mockument"],

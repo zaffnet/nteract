@@ -1,6 +1,6 @@
 {
   "name": "@nteract/desktop",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
   "repository": {
@@ -46,6 +46,8 @@
       "npm run clean && cross-env NODE_ENV=production webpack && electron-builder --dir",
     "dist":
       "npm run clean && cross-env NODE_ENV=production webpack && electron-builder",
+    "publish":
+      "npm run clean && cross-env NODE_ENV=production webpack && electron-builder -p always",
     "dist:all": "npm run dist -- -mlw"
   },
   "build": {
