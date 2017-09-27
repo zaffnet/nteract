@@ -1,5 +1,5 @@
 {
-  "name": "@nteract/desktop",
+  "name": "nteract",
   "version": "0.2.2",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
