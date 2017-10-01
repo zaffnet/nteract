@@ -21,7 +21,15 @@ import "rxjs/add/operator/toArray";
 
 describe("setLanguageInfo", () => {
   it("creates a SET_LANGUAGE_INFO action", () => {
-    const langInfo = { codemirror_mode: { name: "ipython", version: 3 }, file_extension: ".py", mimetype: "text/x-python", name: "python", nbconvert_exporter: "python", pygments_lexer: "ipython3", version: "3.5.1" };
+    const langInfo = {
+      codemirror_mode: { name: "ipython", version: 3 },
+      file_extension: ".py",
+      mimetype: "text/x-python",
+      name: "python",
+      nbconvert_exporter: "python",
+      pygments_lexer: "ipython3",
+      version: "3.5.1"
+    };
 
     expect(setLanguageInfo(langInfo)).to.deep.equal({
       type: constants.SET_LANGUAGE_INFO,
@@ -72,20 +80,18 @@ describe("watchExecutionStateEpic", () => {
       }
     });
     const obs = watchExecutionStateEpic(action$);
-    obs
-      .toArray()
-      .subscribe(
-        // Every action that goes through should get stuck on an array
-        actions => {
-          const types = actions.map(({ type }) => type);
-          expect(types).to.deep.equal([
-            constants.SET_EXECUTION_STATE,
-            constants.SET_EXECUTION_STATE
-          ]);
-        },
-        () => expect.fail(), // It should not error in the stream
-        () => done()
-      );
+    obs.toArray().subscribe(
+      // Every action that goes through should get stuck on an array
+      actions => {
+        const types = actions.map(({ type }) => type);
+        expect(types).to.deep.equal([
+          constants.SET_EXECUTION_STATE,
+          constants.SET_EXECUTION_STATE
+        ]);
+      },
+      () => expect.fail(), // It should not error in the stream
+      () => done()
+    );
   });
 });
 
@@ -103,13 +109,17 @@ describe("newKernelEpic", () => {
       type: constants.LAUNCH_KERNEL
     }).share();
     const obs = newKernelEpic(action$);
-    obs.subscribe(x => {
+    obs.subscribe(
+      x => {
         expect(x.type).to.equal(constants.ERROR_KERNEL_LAUNCH_FAILED);
         actionBuffer.push(x.type);
         done();
-      }, err => expect.fail(err, null), () => {
+      },
+      err => expect.fail(err, null),
+      () => {
         expect.fail("Should not complete");
-      });
+      }
+    );
   });
   it("calls newKernelObservable if given the correct action", done => {
     const actionBuffer = [];
@@ -119,7 +129,8 @@ describe("newKernelEpic", () => {
       cwd: "~"
     });
     const obs = newKernelEpic(action$);
-    obs.subscribe(x => {
+    obs.subscribe(
+      x => {
         actionBuffer.push(x.type);
         if (actionBuffer.length === 2) {
           expect(actionBuffer).to.deep.equal([
@@ -128,9 +139,12 @@ describe("newKernelEpic", () => {
           ]);
           done();
         }
-      }, err => expect.fail(err, null), () => {
+      },
+      err => expect.fail(err, null),
+      () => {
         expect.fail();
-      });
+      }
+    );
   });
 });
 
@@ -142,9 +156,13 @@ describe("newKernelByNameEpic", () => {
       cwd: "~"
     });
     const obs = newKernelByNameEpic(action$);
-    obs.toArray().subscribe(actions => {
+    obs.toArray().subscribe(
+      actions => {
         const types = actions.map(({ type }) => type);
         expect(types).to.deep.equal([constants.LAUNCH_KERNEL]);
-      }, err => expect.fail(err, null), () => done());
+      },
+      err => expect.fail(err, null),
+      () => done()
+    );
   });
 });

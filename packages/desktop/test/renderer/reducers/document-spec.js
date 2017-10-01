@@ -47,7 +47,8 @@ describe("reduceOutputs", () => {
       metadata: {}
     });
 
-    expect(newOutputs).to.deep.equal(Immutable.List([
+    expect(newOutputs).to.deep.equal(
+      Immutable.List([
         Immutable.Map({ output_type: "stream", name: "stdout", text: "Woo" }),
         Immutable.Map({
           output_type: "error",
@@ -60,7 +61,8 @@ describe("reduceOutputs", () => {
           data: Immutable.Map(),
           metadata: Immutable.Map()
         })
-      ]));
+      ])
+    );
   });
 
   it("handles the case of a single stream output", () => {
@@ -73,9 +75,11 @@ describe("reduceOutputs", () => {
       output_type: "stream"
     });
 
-    expect(newOutputs).to.equal(Immutable.fromJS([
+    expect(newOutputs).to.equal(
+      Immutable.fromJS([
         { name: "stdout", text: "hello world", output_type: "stream" }
-      ]));
+      ])
+    );
   });
 
   it("merges streams of text", () => {
@@ -86,18 +90,22 @@ describe("reduceOutputs", () => {
       text: "hello",
       output_type: "stream"
     });
-    expect(outputs).to.equal(Immutable.fromJS([
+    expect(outputs).to.equal(
+      Immutable.fromJS([
         { name: "stdout", text: "hello", output_type: "stream" }
-      ]));
+      ])
+    );
 
     outputs = reduceOutputs(outputs, {
       name: "stdout",
       text: " world",
       output_type: "stream"
     });
-    expect(outputs).to.equal(Immutable.fromJS([
+    expect(outputs).to.equal(
+      Immutable.fromJS([
         { name: "stdout", text: "hello world", output_type: "stream" }
-      ]));
+      ])
+    );
   });
 
   it("keeps respective streams together", () => {
@@ -111,24 +119,28 @@ describe("reduceOutputs", () => {
       output_type: "stream"
     });
 
-    expect(newOutputs).to.equal(Immutable.fromJS([
+    expect(newOutputs).to.equal(
+      Immutable.fromJS([
         { name: "stdout", text: "hello world", output_type: "stream" },
         { name: "stderr", text: "errors are", output_type: "stream" }
-      ]));
+      ])
+    );
 
     const evenNewerOutputs = reduceOutputs(newOutputs, {
       name: "stderr",
       text: " informative",
       output_type: "stream"
     });
-    expect(evenNewerOutputs).to.equal(Immutable.fromJS([
+    expect(evenNewerOutputs).to.equal(
+      Immutable.fromJS([
         { name: "stdout", text: "hello world", output_type: "stream" },
         {
           name: "stderr",
           text: "errors are informative",
           output_type: "stream"
         }
-      ]));
+      ])
+    );
   });
 });
 
@@ -152,15 +164,23 @@ describe("setNotebookCheckpoint", () => {
       type: constants.DONE_SAVING,
       notebook: dummyCommutable
     });
-    expect(is(state.document.get("notebook")), initialDocument.get("notebook")).to.equal(true);
-    expect(is(state.document.get("savedNotebook"), dummyCommutable)).to.equal(true);
+    expect(
+      is(state.document.get("notebook")),
+      initialDocument.get("notebook")
+    ).to.equal(true);
+    expect(is(state.document.get("savedNotebook"), dummyCommutable)).to.equal(
+      true
+    );
   });
 });
 
 describe("setLanguageInfo", () => {
   it("adds the metadata fields for the kernelspec and kernel_info", () => {
     const initialState = { app: [], document: initialDocument };
-    const kernelInfo = { name: "french", spec: { language: "french", display_name: "français" } };
+    const kernelInfo = {
+      name: "french",
+      spec: { language: "french", display_name: "français" }
+    };
     const state = reducers(initialState, {
       type: constants.SET_KERNEL_INFO,
       kernelInfo
@@ -208,11 +228,20 @@ describe("focusNextCell", () => {
     expect(state.document.getIn(["notebook", "cellOrder"]).size).to.equal(3);
   });
   it("should create and focus a new code cell if last cell and last cell is code cell", () => {
-    const originalState = { document: monocellDocument.set("notebook", appendCellToNotebook(dummyCommutable, emptyCodeCell)) };
+    const originalState = {
+      document: monocellDocument.set(
+        "notebook",
+        appendCellToNotebook(dummyCommutable, emptyCodeCell)
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.FOCUS_NEXT_CELL, id, createCellIfUndefined: true };
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+      createCellIfUndefined: true
+    };
 
     const state = reducers(originalState, action);
     const newCellId = state.document.getIn(["notebook", "cellOrder"]).last();
@@ -228,11 +257,20 @@ describe("focusNextCell", () => {
     expect(newCellType).to.equal("code");
   });
   it("should create and focus a new markdown cell if last cell and last cell is markdown cell", () => {
-    const originalState = { document: monocellDocument.set("notebook", appendCellToNotebook(dummyCommutable, emptyMarkdownCell)) };
+    const originalState = {
+      document: monocellDocument.set(
+        "notebook",
+        appendCellToNotebook(dummyCommutable, emptyMarkdownCell)
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.FOCUS_NEXT_CELL, id, createCellIfUndefined: true };
+    const action = {
+      type: constants.FOCUS_NEXT_CELL,
+      id,
+      createCellIfUndefined: true
+    };
 
     const state = reducers(originalState, action);
     const newCellId = state.document.getIn(["notebook", "cellOrder"]).last();
@@ -251,7 +289,9 @@ describe("focusNextCell", () => {
 
 describe("focusPreviousCell", () => {
   it("should focus the previous cell", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.document
@@ -293,7 +333,9 @@ describe("focusNextCellEditor", () => {
 
 describe("focusPreviousCellEditor", () => {
   it("should focus the editor of the previous cell", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.document
@@ -342,21 +384,24 @@ describe("updateExecutionCount", () => {
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.UPDATE_CELL_EXECUTION_COUNT, id, count: 42 };
+    const action = {
+      type: constants.UPDATE_CELL_EXECUTION_COUNT,
+      id,
+      count: 42
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "execution_count"
-      ])).to.equal(42);
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "execution_count"])
+    ).to.equal(42);
   });
 });
 
 describe("moveCell", () => {
   it("should swap the first and last cell appropriately", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const cellOrder = originalState.document.getIn(["notebook", "cellOrder"]);
     const id = cellOrder.last();
@@ -366,56 +411,70 @@ describe("moveCell", () => {
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(["notebook", "cellOrder"]).last()).to.equal(id);
-    expect(state.document
-        .getIn(["notebook", "cellOrder"])
-        .first()).to.equal(destinationId);
+    expect(state.document.getIn(["notebook", "cellOrder"]).first()).to.equal(
+      destinationId
+    );
   });
   it("should move a cell above another when asked", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const cellOrder = originalState.document.getIn(["notebook", "cellOrder"]);
     const id = cellOrder.last();
     const destinationId = cellOrder.first();
 
-    const action = { type: constants.MOVE_CELL, id, destinationId, above: true };
+    const action = {
+      type: constants.MOVE_CELL,
+      id,
+      destinationId,
+      above: true
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document
-        .getIn(["notebook", "cellOrder"])
-        .last()).to.equal(destinationId);
-    expect(state.document
-        .getIn(["notebook", "cellOrder"])
-        .first()).to.equal(id);
+    expect(state.document.getIn(["notebook", "cellOrder"]).last()).to.equal(
+      destinationId
+    );
+    expect(state.document.getIn(["notebook", "cellOrder"]).first()).to.equal(
+      id
+    );
   });
   it("should move a cell above another when asked", () => {
-    const originalState = reducers({ document: initialDocument.set("notebook", dummyCommutable) }, { type: "NEW_CELL_AFTER", id: dummyCommutable
-          .get("cellOrder")
-          .first(), cellType: "markdown", source: "# Woo\n*Yay*" });
+    const originalState = reducers(
+      { document: initialDocument.set("notebook", dummyCommutable) },
+      {
+        type: "NEW_CELL_AFTER",
+        id: dummyCommutable.get("cellOrder").first(),
+        cellType: "markdown",
+        source: "# Woo\n*Yay*"
+      }
+    );
 
     const cellOrder = originalState.document.getIn(["notebook", "cellOrder"]);
 
-    const action = { type: constants.MOVE_CELL, id: cellOrder.get(0), destinationId: cellOrder.get(1) };
+    const action = {
+      type: constants.MOVE_CELL,
+      id: cellOrder.get(0),
+      destinationId: cellOrder.get(1)
+    };
     // implicitly above: false
 
     const state = reducers(originalState, action);
-    expect(state.document
-        .getIn(["notebook", "cellOrder"])
-        .toJS()).to.deep.equal([
-      cellOrder.get(1),
-      cellOrder.get(0),
-      cellOrder.get(2)
-    ]);
+    expect(
+      state.document.getIn(["notebook", "cellOrder"]).toJS()
+    ).to.deep.equal([cellOrder.get(1), cellOrder.get(0), cellOrder.get(2)]);
 
-    const action2 = { type: constants.MOVE_CELL, id: cellOrder.get(0), destinationId: cellOrder.get(1), above: true };
+    const action2 = {
+      type: constants.MOVE_CELL,
+      id: cellOrder.get(0),
+      destinationId: cellOrder.get(1),
+      above: true
+    };
 
     const state2 = reducers(originalState, action2);
-    expect(state2.document
-        .getIn(["notebook", "cellOrder"])
-        .toJS()).to.deep.equal([
-      cellOrder.get(0),
-      cellOrder.get(1),
-      cellOrder.get(2)
-    ]);
+    expect(
+      state2.document.getIn(["notebook", "cellOrder"]).toJS()
+    ).to.deep.equal([cellOrder.get(0), cellOrder.get(1), cellOrder.get(2)]);
   });
 });
 
@@ -434,7 +493,8 @@ describe("removeCell", () => {
 
 describe("clearOutputs", () => {
   it("should clear outputs list", () => {
-    const originalState = { document: initialDocument
+    const originalState = {
+      document: initialDocument
         .set(
           "notebook",
           appendCellToNotebook(
@@ -445,7 +505,8 @@ describe("clearOutputs", () => {
         .set(
           "transient",
           new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() })
-        ) };
+        )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
@@ -461,7 +522,12 @@ describe("clearOutputs", () => {
     expect(outputs).to.equal(List.of());
   });
   it("doesn't clear outputs on markdown cells", () => {
-    const originalState = { document: initialDocument.set("notebook", appendCellToNotebook(dummyCommutable, emptyMarkdownCell)) };
+    const originalState = {
+      document: initialDocument.set(
+        "notebook",
+        appendCellToNotebook(dummyCommutable, emptyMarkdownCell)
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
@@ -495,11 +561,17 @@ describe("newCellAfter", () => {
 
 describe("newCellBefore", () => {
   it("creates a new cell after the given id", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.NEW_CELL_BEFORE, id, cellType: "markdown" };
+    const action = {
+      type: constants.NEW_CELL_BEFORE,
+      id,
+      cellType: "markdown"
+    };
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(["notebook", "cellOrder"]).size).to.equal(3);
@@ -509,19 +581,23 @@ describe("newCellBefore", () => {
 
 describe("mergeCellAfter", () => {
   it("merges cells appropriately", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
     const action = { type: constants.MERGE_CELL_AFTER, id };
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(["notebook", "cellOrder"]).size).to.equal(1);
-    expect(state.document
-        .getIn(["notebook", "cellOrder"])
-        .first()).to.equal(id);
+    expect(state.document.getIn(["notebook", "cellOrder"]).first()).to.equal(
+      id
+    );
   });
   it("should do nothing if merging the last cell", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).last();
     const action = { type: constants.MERGE_CELL_AFTER, id };
@@ -533,7 +609,9 @@ describe("mergeCellAfter", () => {
 
 describe("newCellAppend", () => {
   it("appends a new code cell at the end", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const action = { type: constants.NEW_CELL_APPEND, cellType: "code" };
 
@@ -544,19 +622,22 @@ describe("newCellAppend", () => {
 
 describe("updateSource", () => {
   it("updates the source of the cell", () => {
-    const originalState = { document: initialDocument.set("notebook", dummyCommutable) };
+    const originalState = {
+      document: initialDocument.set("notebook", dummyCommutable)
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.UPDATE_CELL_SOURCE, id, source: "This is a test" };
+    const action = {
+      type: constants.UPDATE_CELL_SOURCE,
+      id,
+      source: "This is a test"
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "source"
-      ])).to.equal("This is a test");
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "source"])
+    ).to.equal("This is a test");
   });
 });
 
@@ -564,73 +645,82 @@ describe("overwriteMetadata", () => {
   it("overwrites notebook metadata appropriately", () => {
     const originalState = { document: monocellDocument };
 
-    const action = { type: constants.OVERWRITE_METADATA_FIELD, field: "name", value: "javascript" };
+    const action = {
+      type: constants.OVERWRITE_METADATA_FIELD,
+      field: "name",
+      value: "javascript"
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "metadata",
-        "name"
-      ])).to.equal("javascript");
+    expect(state.document.getIn(["notebook", "metadata", "name"])).to.equal(
+      "javascript"
+    );
   });
 });
 
 describe("deleteMetadata", () => {
   it("deletes notebook metadata appropriately", () => {
-    const originalState = { document: monocellDocument.setIn(["notebook", "metadata", "name"], "johnwashere") };
+    const originalState = {
+      document: monocellDocument.setIn(
+        ["notebook", "metadata", "name"],
+        "johnwashere"
+      )
+    };
     const action = { type: constants.DELETE_METADATA_FIELD, field: "name" };
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "metadata",
-        "name"
-      ])).to.equal(undefined);
+    expect(state.document.getIn(["notebook", "metadata", "name"])).to.equal(
+      undefined
+    );
   });
 });
 
 describe("changeOutputVisibility", () => {
   it("changes the visibility on a single cell", () => {
-    const originalState = { document: monocellDocument.updateIn(
-        ["notebook", "cellMap"],
-        cells =>
-          cells.map(value => value.setIn(["metadata", "outputHidden"], false))
-      ) };
+    const originalState = {
+      document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
+        cells.map(value => value.setIn(["metadata", "outputHidden"], false))
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
     const action = { type: constants.CHANGE_OUTPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
+    expect(
+      state.document.getIn([
         "notebook",
         "cellMap",
         id,
         "metadata",
         "outputHidden"
-      ])).to.be.true;
+      ])
+    ).to.be.true;
   });
 });
 
 describe("changeInputVisibility", () => {
   it("changes the input visibility on a single cell", () => {
-    const originalState = { document: monocellDocument.updateIn(
-        ["notebook", "cellMap"],
-        cells =>
-          cells.map(value => value.setIn(["metadata", "inputHidden"], false))
-      ) };
+    const originalState = {
+      document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
+        cells.map(value => value.setIn(["metadata", "inputHidden"], false))
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
     const action = { type: constants.CHANGE_INPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
+    expect(
+      state.document.getIn([
         "notebook",
         "cellMap",
         id,
         "metadata",
         "inputHidden"
-      ])).to.be.true;
+      ])
+    ).to.be.true;
   });
 });
 
@@ -643,9 +733,9 @@ describe("clearOutputs", () => {
     const action = { type: constants.CLEAR_OUTPUTS, id };
 
     const state = reducers(originalState, action);
-    expect(state.document
-        .getIn(["notebook", "cellMap", id, "outputs"])
-        .count()).to.equal(0);
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "outputs"]).count()
+    ).to.equal(0);
   });
 });
 
@@ -655,7 +745,11 @@ describe("updateCellPagers", () => {
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.UPDATE_CELL_PAGERS, id, pagers: "Test pagers" };
+    const action = {
+      type: constants.UPDATE_CELL_PAGERS,
+      id,
+      pagers: "Test pagers"
+    };
 
     const state = reducers(originalState, action);
     expect(state.document.getIn(["cellPagers", id])).to.equal("Test pagers");
@@ -668,15 +762,16 @@ describe("updateCellStatus", () => {
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.UPDATE_CELL_STATUS, id, status: "test status" };
+    const action = {
+      type: constants.UPDATE_CELL_STATUS,
+      id,
+      status: "test status"
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "transient",
-        "cellMap",
-        id,
-        "status"
-      ])).to.equal("test status");
+    expect(
+      state.document.getIn(["transient", "cellMap", id, "status"])
+    ).to.equal("test status");
   });
 });
 
@@ -687,11 +782,9 @@ describe("setLanguageInfo", () => {
     const action = { type: constants.SET_LANGUAGE_INFO, langInfo: "test" };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "metadata",
-        "language_info"
-      ])).to.equal("test");
+    expect(
+      state.document.getIn(["notebook", "metadata", "language_info"])
+    ).to.equal("test");
   });
 });
 
@@ -731,10 +824,15 @@ describe("pasteCell", () => {
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
     const cell = monocellDocument.getIn(["notebook", "cellMap", id]);
 
-    const originalState = { document: monocellDocument.set("copied", new Map({
+    const originalState = {
+      document: monocellDocument.set(
+        "copied",
+        new Map({
           cell,
           id
-        })) };
+        })
+      )
+    };
 
     const action = { type: constants.PASTE_CELL };
 
@@ -743,12 +841,9 @@ describe("pasteCell", () => {
 
     expect(state.document.getIn(["notebook", "cellOrder"]).size).to.equal(4);
     expect(copiedId).to.not.equal(id);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        copiedId,
-        "source"
-      ])).to.equal(cell.get("source"));
+    expect(
+      state.document.getIn(["notebook", "cellMap", copiedId, "source"])
+    ).to.equal(cell.get("source"));
   });
 });
 
@@ -762,12 +857,9 @@ describe("changeCellType", () => {
 
     const state = reducers(originalState, action);
 
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "cell_type"
-      ])).to.equal("markdown");
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "cell_type"])
+    ).to.equal("markdown");
   });
   it("converts markdown cell to code cell", () => {
     const originalState = { document: monocellDocument };
@@ -778,18 +870,11 @@ describe("changeCellType", () => {
 
     const state = reducers(originalState, action);
 
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "cell_type"
-      ])).to.equal("code");
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "outputs"
-      ])).to.not.be.undefined;
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "cell_type"])
+    ).to.equal("code");
+    expect(state.document.getIn(["notebook", "cellMap", id, "outputs"])).to.not
+      .be.undefined;
   });
   it("does nothing if cell type is same", () => {
     const originalState = { document: monocellDocument };
@@ -805,24 +890,26 @@ describe("changeCellType", () => {
 
 describe("toggleOutputExpansion", () => {
   it("changes outputExpanded set", () => {
-    const originalState = { document: monocellDocument.updateIn(
-        ["notebook", "cellMap"],
-        cells =>
-          cells.map(value => value.setIn(["metadata", "outputExpanded"], false))
-      ) };
+    const originalState = {
+      document: monocellDocument.updateIn(["notebook", "cellMap"], cells =>
+        cells.map(value => value.setIn(["metadata", "outputExpanded"], false))
+      )
+    };
 
     const id = originalState.document.getIn(["notebook", "cellOrder"]).first();
 
     const action = { type: constants.TOGGLE_OUTPUT_EXPANSION, id };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
+    expect(
+      state.document.getIn([
         "notebook",
         "cellMap",
         id,
         "metadata",
         "outputExpanded"
-      ])).to.be.true;
+      ])
+    ).to.be.true;
   });
 });
 describe("appendOutput", () => {
@@ -831,51 +918,61 @@ describe("appendOutput", () => {
 
     const id = originalState.document.getIn(["notebook", "cellOrder", 2]);
 
-    const action = { type: constants.APPEND_OUTPUT, id, output: { output_type: "display_data", data: { "text/html": "<marquee>wee</marquee>" } } };
+    const action = {
+      type: constants.APPEND_OUTPUT,
+      id,
+      output: {
+        output_type: "display_data",
+        data: { "text/html": "<marquee>wee</marquee>" }
+      }
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "outputs"
-      ])).to.deep.equal(Immutable.fromJS([
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "outputs"])
+    ).to.deep.equal(
+      Immutable.fromJS([
         {
           output_type: "display_data",
           data: { "text/html": "<marquee>wee</marquee>" }
         }
-      ]));
-    expect(state.document.getIn([
-        "transient",
-        "keyPathsForDisplays"
-      ])).to.deep.equal(Immutable.Map());
+      ])
+    );
+    expect(
+      state.document.getIn(["transient", "keyPathsForDisplays"])
+    ).to.deep.equal(Immutable.Map());
   });
   it("appends output and tracks display IDs", () => {
     const originalState = { document: monocellDocument };
 
     const id = originalState.document.getIn(["notebook", "cellOrder", 2]);
 
-    const action = { type: constants.APPEND_OUTPUT, id, output: { output_type: "display_data", data: { "text/html": "<marquee>wee</marquee>" }, transient: { display_id: "1234" } } };
+    const action = {
+      type: constants.APPEND_OUTPUT,
+      id,
+      output: {
+        output_type: "display_data",
+        data: { "text/html": "<marquee>wee</marquee>" },
+        transient: { display_id: "1234" }
+      }
+    };
 
     const state = reducers(originalState, action);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
-        id,
-        "outputs"
-      ])).to.deep.equal(Immutable.fromJS([
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "outputs"])
+    ).to.deep.equal(
+      Immutable.fromJS([
         {
           output_type: "display_data",
           data: { "text/html": "<marquee>wee</marquee>" }
         }
-      ]));
-    expect(state.document.getIn([
-        "transient",
-        "keyPathsForDisplays",
-        "1234"
-      ])).to.deep.equal(Immutable.fromJS([
-        ["notebook", "cellMap", id, "outputs", 0]
-      ]));
+      ])
+    );
+    expect(
+      state.document.getIn(["transient", "keyPathsForDisplays", "1234"])
+    ).to.deep.equal(
+      Immutable.fromJS([["notebook", "cellMap", id, "outputs", 0]])
+    );
   });
 });
 
@@ -885,20 +982,40 @@ describe("updateDisplay", () => {
 
     const id = originalState.document.getIn(["notebook", "cellOrder", 2]);
 
-    const actions = [{ type: constants.APPEND_OUTPUT, id, output: { output_type: "display_data", data: { "text/html": "<marquee>wee</marquee>" }, transient: { display_id: "1234" } } }, { type: constants.UPDATE_DISPLAY, output: { output_type: "display_data", data: { "text/html": "<marquee>WOO</marquee>" }, transient: { display_id: "1234" } } }];
-
-    const state = actions.reduce((s, action) => reducers(s, action), originalState);
-    expect(state.document.getIn([
-        "notebook",
-        "cellMap",
+    const actions = [
+      {
+        type: constants.APPEND_OUTPUT,
         id,
-        "outputs"
-      ])).to.deep.equal(Immutable.fromJS([
+        output: {
+          output_type: "display_data",
+          data: { "text/html": "<marquee>wee</marquee>" },
+          transient: { display_id: "1234" }
+        }
+      },
+      {
+        type: constants.UPDATE_DISPLAY,
+        output: {
+          output_type: "display_data",
+          data: { "text/html": "<marquee>WOO</marquee>" },
+          transient: { display_id: "1234" }
+        }
+      }
+    ];
+
+    const state = actions.reduce(
+      (s, action) => reducers(s, action),
+      originalState
+    );
+    expect(
+      state.document.getIn(["notebook", "cellMap", id, "outputs"])
+    ).to.deep.equal(
+      Immutable.fromJS([
         {
           output_type: "display_data",
           data: { "text/html": "<marquee>WOO</marquee>" }
         }
-      ]));
+      ])
+    );
   });
 });
 
@@ -918,23 +1035,31 @@ describe("cleanCellTransient", () => {
       })
     });
 
-    expect(cleanCellTransient(state, "0000").getIn([
+    expect(
+      cleanCellTransient(state, "0000").getIn([
         "transient",
         "keyPathsForDisplays"
-      ])).to.deep.equal(Immutable.fromJS({
+      ])
+    ).to.deep.equal(
+      Immutable.fromJS({
         1234: [["notebook", "cellMap", "XYZA", "outputs", 0]],
         5678: [["notebook", "cellMap", "XYZA", "outputs", 1]]
-      }));
+      })
+    );
 
-    expect(cleanCellTransient(state, "XYZA").getIn([
+    expect(
+      cleanCellTransient(state, "XYZA").getIn([
         "transient",
         "keyPathsForDisplays"
-      ])).to.deep.equal(Immutable.fromJS({
+      ])
+    ).to.deep.equal(
+      Immutable.fromJS({
         1234: [
           ["notebook", "cellMap", "0000", "outputs", 0],
           ["notebook", "cellMap", "0000", "outputs", 1]
         ],
         5678: []
-      }));
+      })
+    );
   });
 });

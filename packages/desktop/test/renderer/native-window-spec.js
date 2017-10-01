@@ -39,11 +39,19 @@ describe("tildify", () => {
 describe("setTitleFromAttributes", () => {
   it("sets the window title", () => {
     // Set up our "Electron window"
-    const win = { setRepresentedFilename: sinon.spy(), setDocumentEdited: sinon.spy(), setTitle: sinon.spy() };
+    const win = {
+      setRepresentedFilename: sinon.spy(),
+      setDocumentEdited: sinon.spy(),
+      setTitle: sinon.spy()
+    };
 
     sinon.stub(electron.remote, "getCurrentWindow").callsFake(() => win);
 
-    const titleObject = { fullpath: "/tmp/test.ipynb", executionState: "busy", modified: true };
+    const titleObject = {
+      fullpath: "/tmp/test.ipynb",
+      executionState: "busy",
+      modified: true
+    };
     nativeWindow.setTitleFromAttributes(titleObject);
 
     // TODO: stub doesn't seem to get setup
@@ -53,19 +61,28 @@ describe("setTitleFromAttributes", () => {
 
 describe("createTitleFeed", () => {
   it("creates an observable that updates title attributes for modified notebook", done => {
-    const notebook = new Immutable.Map().setIn(["metadata", "kernelspec", "display_name"], "python3000");
-    const state = { document: DocumentRecord({
+    const notebook = new Immutable.Map().setIn(
+      ["metadata", "kernelspec", "display_name"],
+      "python3000"
+    );
+    const state = {
+      document: DocumentRecord({
         notebook
-      }), app: AppRecord({
+      }),
+      app: AppRecord({
         executionState: "not connected"
-      }), metadata: MetadataRecord({ filename: "titled.ipynb" }) };
+      }),
+      metadata: MetadataRecord({ filename: "titled.ipynb" })
+    };
 
     const state$ = Observable.from([state]);
 
     const allAttributes = [];
     nativeWindow.createTitleFeed(state$).subscribe(attributes => {
       allAttributes.push(attributes);
-    }, null, () => {
+    },
+    null,
+    () => {
       expect(allAttributes).to.deep.equal([
         {
           modified: process.platform === "darwin" ? true : false,
@@ -78,20 +95,29 @@ describe("createTitleFeed", () => {
   });
 
   it("creates an observable that updates title attributes", done => {
-    const notebook = new Immutable.Map().setIn(["metadata", "kernelspec", "display_name"], "python3000");
-    const state = { document: DocumentRecord({
+    const notebook = new Immutable.Map().setIn(
+      ["metadata", "kernelspec", "display_name"],
+      "python3000"
+    );
+    const state = {
+      document: DocumentRecord({
         notebook,
         savedNotebook: notebook
-      }), app: AppRecord({
+      }),
+      app: AppRecord({
         executionState: "not connected"
-      }), metadata: MetadataRecord({ filename: "titled.ipynb" }) };
+      }),
+      metadata: MetadataRecord({ filename: "titled.ipynb" })
+    };
 
     const state$ = Observable.from([state]);
 
     const allAttributes = [];
     nativeWindow.createTitleFeed(state$).subscribe(attributes => {
       allAttributes.push(attributes);
-    }, null, () => {
+    },
+    null,
+    () => {
       expect(allAttributes).to.deep.equal([
         {
           modified: false,

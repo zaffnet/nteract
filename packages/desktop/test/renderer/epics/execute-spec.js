@@ -45,13 +45,13 @@ chai.use(chaiImmutable);
 
 describe("executeCell", () => {
   it("returns an executeCell action", () => {
-    expect(executeCell("0-0-0-0", "import random; random.random()")).to.deep.equal(
-      {
-        type: EXECUTE_CELL,
-        id: "0-0-0-0",
-        source: "import random; random.random()"
-      }
-    );
+    expect(
+      executeCell("0-0-0-0", "import random; random.random()")
+    ).to.deep.equal({
+      type: EXECUTE_CELL,
+      id: "0-0-0-0",
+      source: "import random; random.random()"
+    });
   });
 });
 
@@ -105,7 +105,10 @@ describe("createExecuteRequest", () => {
 
 describe("msgSpecToNotebookFormat", () => {
   it("converts a message to the notebook format", () => {
-    const msg = { content: { data: "test" }, header: { msg_type: "test_header" } };
+    const msg = {
+      content: { data: "test" },
+      header: { msg_type: "test_header" }
+    };
     const notebookSpecMsg = msgSpecToNotebookFormat(msg);
 
     expect(notebookSpecMsg).to.have.property("output_type");
@@ -126,7 +129,9 @@ describe("createPagerActions", () => {
     const pagerAction$ = createPagerActions("1", msgObs);
 
     pagerAction$.subscribe(action => {
-      const expected = [{ source: "page", data: { "text/html": "this is a test" } }];
+      const expected = [
+        { source: "page", data: { "text/html": "this is a test" } }
+      ];
       expect(action.id).to.equal("1");
       expect(action.pagers.toJS()).to.deep.equal(expected);
       done();
@@ -229,28 +234,58 @@ describe("createExecuteCellStream", () => {
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
     const mockIOPub = new Subject();
-    const store = { getState() {
+    const store = {
+      getState() {
         return this.state;
-      }, state: { app: { executionState: "not connected", channels: { iopub: mockIOPub, shell: mockShell }, notificationSystem: { addNotification: sinon.spy() } } } };
+      },
+      state: {
+        app: {
+          executionState: "not connected",
+          channels: { iopub: mockIOPub, shell: mockShell },
+          notificationSystem: { addNotification: sinon.spy() }
+        }
+      }
+    };
     const action$ = ActionsObservable.of({ type: EXECUTE_CELL });
     const observable = createExecuteCellStream(action$, store, "source", "id");
-    observable.toArray().subscribe(actions => {
+    observable.toArray().subscribe(
+      actions => {
         const payloads = actions.map(({ payload }) => payload);
         expect(payloads).to.deep.equal(["Kernel not connected!"]);
-      }, () => expect.fail(), () => done());
+      },
+      () => expect.fail(),
+      () => done()
+    );
   });
   it("doesnt complete but does push until abort action", done => {
     const frontendToShell = new Subject();
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
     const mockIOPub = new Subject();
-    const store = { getState() {
+    const store = {
+      getState() {
         return this.state;
-      }, state: { app: { executionState: "connected", channels: { iopub: mockIOPub, shell: mockShell }, notificationSystem: { addNotification: sinon.spy() } } } };
-    const action$ = ActionsObservable.of({ type: EXECUTE_CELL, id: "id" }, { type: EXECUTE_CELL, id: "id_2" }, { type: ABORT_EXECUTION, id: "id_2" }, { type: EXECUTE_CELL, id: "id" });
+      },
+      state: {
+        app: {
+          executionState: "connected",
+          channels: { iopub: mockIOPub, shell: mockShell },
+          notificationSystem: { addNotification: sinon.spy() }
+        }
+      }
+    };
+    const action$ = ActionsObservable.of(
+      { type: EXECUTE_CELL, id: "id" },
+      { type: EXECUTE_CELL, id: "id_2" },
+      { type: ABORT_EXECUTION, id: "id_2" },
+      { type: EXECUTE_CELL, id: "id" }
+    );
     const observable = createExecuteCellStream(action$, store, "source", "id");
     const actionBuffer = [];
-    observable.subscribe(x => actionBuffer.push(x.type), err => expect.fail(err, null));
+    observable.subscribe(
+      x => actionBuffer.push(x.type),
+      err => expect.fail(err, null)
+    );
     expect(actionBuffer).to.deep.equal([
       CLEAR_OUTPUTS,
       UPDATE_CELL_STATUS,
@@ -261,55 +296,103 @@ describe("createExecuteCellStream", () => {
 });
 
 describe("executeCellEpic", () => {
-  const store = { getState() {
+  const store = {
+    getState() {
       return this.state;
-    }, state: { app: { executionState: "idle", channels: "errorInExecuteCellObservable", notificationSystem: { addNotification: sinon.spy() }, token: "blah" } } };
+    },
+    state: {
+      app: {
+        executionState: "idle",
+        channels: "errorInExecuteCellObservable",
+        notificationSystem: { addNotification: sinon.spy() },
+        token: "blah"
+      }
+    }
+  };
   it("Errors on a bad action", done => {
     // Make one hot action
     const badAction$ = ActionsObservable.of({ type: EXECUTE_CELL }).share();
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal("execute cell needs an id");
     });
-    responseActions.subscribe(// Every action that goes through should get stuck on an array
+    responseActions.subscribe(
+      // Every action that goes through should get stuck on an array
       x => {
         expect(x.type).to.equal(ERROR_EXECUTING);
         done();
-      }, err => expect.fail(err, null), () => {
+      },
+      err => expect.fail(err, null),
+      () => {
         // It should not error in the stream
         expect.fail("It should not complete");
-      });
+      }
+    );
   });
   it("Errors on an action where source not a string", done => {
     const badAction$ = ActionsObservable.of(executeCell("id", 2)).share();
     const responseActions = executeCellEpic(badAction$, store).catch(error => {
       expect(error.message).to.equal("execute cell needs source string");
     });
-    responseActions.subscribe(// Every action that goes through should get stuck on an array
+    responseActions.subscribe(
+      // Every action that goes through should get stuck on an array
       x => {
         expect(x.type).to.equal(ERROR_EXECUTING);
         done();
-      }, err => expect.fail(err, null), () => {
+      },
+      err => expect.fail(err, null),
+      () => {
         // It should not error in the stream
         expect.fail("The epic should not complete");
-      });
+      }
+    );
   });
   it("Informs about disconnected kernels, allows reconnection", done => {
     const action$ = ActionsObservable.of(executeCell("id", "source")).share();
     const responseActions = executeCellEpic(action$, store);
-    responseActions.subscribe(x => {
+    responseActions.subscribe(
+      x => {
         expect(x.payload.toString()).to.equal("Error: kernel not connected");
         done();
-      }, err => expect.fail(err, null), () => {
+      },
+      err => expect.fail(err, null),
+      () => {
         // It should not error in the stream
         expect.fail("the epic should not complete");
-      });
+      }
+    );
   });
 });
 
 describe("updateDisplayEpic", () => {
   it("creates an epic that handles update_display_data messages", done => {
-    const messages = [// Should be processed
-      { header: { msg_type: "update_display_data" }, content: { data: { "text/html": "<marquee>wee</marquee>" }, transient: { display_id: "1234" } } }, { header: { msg_type: "display_data" }, content: { data: { "text/html": "<marquee>wee</marquee>" }, transient: { display_id: "5555" } } }, { header: { msg_type: "ignored" }, content: { data: { "text/html": "<marquee>wee</marquee>" } } }, { header: { msg_type: "update_display_data" }, content: { data: { "text/plain": "i am text" }, transient: { display_id: "here" } } }]; // Should not be processed // Should be processed
+    const messages = [
+      // Should be processed
+      {
+        header: { msg_type: "update_display_data" },
+        content: {
+          data: { "text/html": "<marquee>wee</marquee>" },
+          transient: { display_id: "1234" }
+        }
+      },
+      {
+        header: { msg_type: "display_data" },
+        content: {
+          data: { "text/html": "<marquee>wee</marquee>" },
+          transient: { display_id: "5555" }
+        }
+      },
+      {
+        header: { msg_type: "ignored" },
+        content: { data: { "text/html": "<marquee>wee</marquee>" } }
+      },
+      {
+        header: { msg_type: "update_display_data" },
+        content: {
+          data: { "text/plain": "i am text" },
+          transient: { display_id: "here" }
+        }
+      }
+    ]; // Should not be processed // Should be processed
 
     const channels = { iopub: Observable.from(messages) };
     const action$ = ActionsObservable.of({ type: NEW_KERNEL, channels });
@@ -317,9 +400,12 @@ describe("updateDisplayEpic", () => {
     const epic = updateDisplayEpic(action$);
 
     const responseActions = [];
-    epic.subscribe(action => responseActions.push(action), err => {
+    epic.subscribe(
+      action => responseActions.push(action),
+      err => {
         throw err;
-      }, () => {
+      },
+      () => {
         expect(responseActions).to.deep.equal([
           {
             type: UPDATE_DISPLAY,
@@ -339,7 +425,8 @@ describe("updateDisplayEpic", () => {
           }
         ]);
         done();
-      });
+      }
+    );
   });
 });
 
@@ -349,14 +436,18 @@ describe("createErrorActionObservable", () => {
     const err = new Error("HEY");
     const obs = func(err);
 
-    obs.subscribe(x => {
+    obs.subscribe(
+      x => {
         expect(x.type).to.equal("TEST_IT");
         expect(x.payload).to.equal(err);
         expect(x.error).to.equal(true);
-      }, e => {
+      },
+      e => {
         throw e;
-      }, () => {
+      },
+      () => {
         done();
-      });
+      }
+    );
   });
 });

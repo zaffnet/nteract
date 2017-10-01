@@ -17,7 +17,11 @@ import {
 
 describe("createSubscriber", () => {
   it("creates a subscriber from a socket", () => {
-    const hokeySocket = { send: jest.fn(), removeAllListeners: jest.fn(), close: jest.fn() };
+    const hokeySocket = {
+      send: jest.fn(),
+      removeAllListeners: jest.fn(),
+      close: jest.fn()
+    };
 
     const ob = createSubscriber(hokeySocket);
     const message = { content: { x: 2 } };
@@ -25,7 +29,11 @@ describe("createSubscriber", () => {
     expect(hokeySocket.send).toBeCalledWith(new jmp.Message(message));
   });
   it("removes all listeners and closes the socket on complete()", () => {
-    const hokeySocket = { send: jest.fn(), removeAllListeners: jest.fn(), close: jest.fn() };
+    const hokeySocket = {
+      send: jest.fn(),
+      removeAllListeners: jest.fn(),
+      close: jest.fn()
+    };
 
     const ob = createSubscriber(hokeySocket);
     ob.complete();
@@ -33,7 +41,11 @@ describe("createSubscriber", () => {
     expect(hokeySocket.close).toBeCalled();
   });
   it("should only close once", () => {
-    const hokeySocket = { send: jest.fn(), removeAllListeners: jest.fn(), close: jest.fn() };
+    const hokeySocket = {
+      send: jest.fn(),
+      removeAllListeners: jest.fn(),
+      close: jest.fn()
+    };
 
     const ob = createSubscriber(hokeySocket);
     ob.complete();
@@ -93,7 +105,13 @@ describe("createSubject", () => {
 
 describe("createSocket", () => {
   it("creates a JMP socket on the channel with identity", () => {
-    const config = { signature_scheme: "hmac-sha256", key: "5ca1ab1e-c0da-aced-cafe-c0ffeefacade", ip: "127.0.0.1", transport: "tcp", iopub_port: 9009 };
+    const config = {
+      signature_scheme: "hmac-sha256",
+      key: "5ca1ab1e-c0da-aced-cafe-c0ffeefacade",
+      ip: "127.0.0.1",
+      transport: "tcp",
+      iopub_port: 9009
+    };
     const identity = uuidv4();
 
     const socket = createSocket("iopub", identity, config);

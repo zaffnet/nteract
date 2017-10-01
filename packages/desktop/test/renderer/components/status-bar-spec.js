@@ -15,16 +15,31 @@ describe("StatusBar", () => {
     const lastSaved = new Date();
     const kernelSpecDisplayName = "python3";
 
-    const component = shallow(<StatusBar notebook={dummyCommutable} lastSaved={lastSaved} kernelSpecDisplayName={kernelSpecDisplayName} />);
+    const component = shallow(
+      <StatusBar
+        notebook={dummyCommutable}
+        lastSaved={lastSaved}
+        kernelSpecDisplayName={kernelSpecDisplayName}
+      />
+    );
 
     expect(component).to.not.be.null;
   });
   it("no update if an irrelevant prop has changed", () => {
     const lastSaved = new Date();
     const kernelSpecDisplayName = "python3";
-    const shouldComponentUpdate = sinon.spy(StatusBar.prototype, "shouldComponentUpdate");
+    const shouldComponentUpdate = sinon.spy(
+      StatusBar.prototype,
+      "shouldComponentUpdate"
+    );
 
-    const component = shallow(<StatusBar notebook={dummyCommutable} lastSaved={lastSaved} kernelSpecDisplayName={kernelSpecDisplayName} />);
+    const component = shallow(
+      <StatusBar
+        notebook={dummyCommutable}
+        lastSaved={lastSaved}
+        kernelSpecDisplayName={kernelSpecDisplayName}
+      />
+    );
 
     component.setProps({
       lastSaved,
@@ -38,9 +53,18 @@ describe("StatusBar", () => {
   it("update if an irrelevant prop has changed", () => {
     const lastSaved = new Date();
     const kernelSpecDisplayName = "python3";
-    const shouldComponentUpdate = sinon.spy(StatusBar.prototype, "shouldComponentUpdate");
+    const shouldComponentUpdate = sinon.spy(
+      StatusBar.prototype,
+      "shouldComponentUpdate"
+    );
 
-    const component = shallow(<StatusBar notebook={dummyCommutable} lastSaved={lastSaved} kernelSpecDisplayName={kernelSpecDisplayName} />);
+    const component = shallow(
+      <StatusBar
+        notebook={dummyCommutable}
+        lastSaved={lastSaved}
+        kernelSpecDisplayName={kernelSpecDisplayName}
+      />
+    );
 
     component.setProps({
       lastSaved: new Date(),

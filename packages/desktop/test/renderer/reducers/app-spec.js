@@ -8,11 +8,13 @@ const Github = require("github");
 
 describe("cleanupKernel", () => {
   it("nullifies entries for the kernel in originalState", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.KILL_KERNEL };
 
@@ -25,11 +27,13 @@ describe("cleanupKernel", () => {
 
 describe("setNotificationSystem", () => {
   it("returns the same originalState if notificationSystem is undefined", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.SET_NOTIFICATION_SYSTEM };
 
@@ -37,13 +41,18 @@ describe("setNotificationSystem", () => {
     expect(state.app.notificationSystem).to.be.undefined;
   });
   it("sets the notificationSystem if given", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
-    const action = { type: constants.SET_NOTIFICATION_SYSTEM, notificationSystem: "" };
+    const action = {
+      type: constants.SET_NOTIFICATION_SYSTEM,
+      notificationSystem: ""
+    };
 
     const state = reducers(originalState, action);
     expect(state.app.notificationSystem).to.equal("");
@@ -52,11 +61,13 @@ describe("setNotificationSystem", () => {
 
 describe("startSaving", () => {
   it("should set isSaving to false", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.START_SAVING };
 
@@ -67,11 +78,13 @@ describe("startSaving", () => {
 
 describe("doneSaving", () => {
   it("should set isSaving to false", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.DONE_SAVING };
 
@@ -82,13 +95,18 @@ describe("doneSaving", () => {
 
 describe("setExecutionState", () => {
   it("should set the exeuction state to the given value", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
-    const action = { type: constants.SET_EXECUTION_STATE, executionState: "idle" };
+    const action = {
+      type: constants.SET_EXECUTION_STATE,
+      executionState: "idle"
+    };
 
     const state = reducers(originalState, action);
     expect(state.app.executionState, "idle");
@@ -97,11 +115,13 @@ describe("setExecutionState", () => {
 
 describe("alertKernelNotConnected", () => {
   it("sets an error on the app state", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.ERROR_KERNEL_NOT_CONNECTED };
 
@@ -113,11 +133,13 @@ describe("alertKernelNotConnected", () => {
 
 describe("killKernel", () => {
   it("clears out kernel configuration", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.KILL_KERNEL };
 
@@ -130,13 +152,15 @@ describe("killKernel", () => {
 
 describe("interruptKernel", () => {
   it("sends a SIGINT and clears the kernel", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: {
           kill: () => {}
         },
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.INTERRUPT_KERNEL };
 
@@ -147,13 +171,22 @@ describe("interruptKernel", () => {
 
 describe("newKernel", () => {
   it("creates a new kernel", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
-    const action = { type: constants.NEW_KERNEL, channels: "test_channels", spawn: "test_spawn", kernelSpecName: "test_name", kernelSpec: { spec: { display_name: "Test Name" } }, executionState: "starting" };
+    const action = {
+      type: constants.NEW_KERNEL,
+      channels: "test_channels",
+      spawn: "test_spawn",
+      kernelSpecName: "test_name",
+      kernelSpec: { spec: { display_name: "Test Name" } },
+      executionState: "starting"
+    };
 
     const state = reducers(originalState, action);
     expect(state.app.executionState).to.equal("starting");
@@ -169,10 +202,12 @@ describe("newKernel", () => {
 
 describe("setGithubToken", () => {
   it("calls setGithubToken", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         github: new Github(),
         token: null
-      }) };
+      })
+    };
 
     const action = { type: constants.SET_GITHUB_TOKEN, token: "TOKEN" };
 
@@ -185,11 +220,13 @@ describe("setGithubToken", () => {
 
 describe("exit", () => {
   it("calls cleanupKernel", () => {
-    const originalState = { app: new AppRecord({
+    const originalState = {
+      app: new AppRecord({
         channels: false,
         spawn: false,
         connectionFile: false
-      }) };
+      })
+    };
 
     const action = { type: constants.EXIT };
 

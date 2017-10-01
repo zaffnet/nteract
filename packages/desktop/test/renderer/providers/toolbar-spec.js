@@ -21,9 +21,12 @@ describe.skip("toolbar provider", () => {
   const store = dummyStore();
   const dropdown = { hide: () => {} };
 
-  const setup = props => mount(<Provider store={store}>
+  const setup = props =>
+    mount(
+      <Provider store={store}>
         <Toolbar {...props} />
-      </Provider>);
+      </Provider>
+    );
 
   it("toggle Sticky Cell works", done => {
     const dispatch = action => {

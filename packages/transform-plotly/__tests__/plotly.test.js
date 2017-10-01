@@ -65,7 +65,9 @@ describe("PlotlyTransform", () => {
   });
 
   it("plots some data from a JSON string", () => {
-    const plotComponent = mount(<PlotlyTransform data={JSON.stringify(figure)} />);
+    const plotComponent = mount(
+      <PlotlyTransform data={JSON.stringify(figure)} />
+    );
 
     const instance = plotComponent.instance();
 
