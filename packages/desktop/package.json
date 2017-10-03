@@ -1,6 +1,6 @@
 {
   "name": "nteract",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
   "repository": {
@@ -54,7 +54,11 @@
   "build": {
     "appId": "io.nteract.nteract",
     "productName": "nteract",
-    "publish": [{ "provider": "github" }],
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
     "fileAssociations": {
       "ext": "ipynb",
       "name": "ipynb"
@@ -106,12 +110,12 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@nteract/commutable": "^2.1.1",
-    "@nteract/display-area": "^2.4.1",
-    "@nteract/editor": "^2.3.1",
-    "@nteract/messaging": "^1.2.0",
+    "@nteract/commutable": "^2.1.2",
+    "@nteract/display-area": "^3.0.0",
+    "@nteract/editor": "^3.0.0",
+    "@nteract/messaging": "^2.0.0",
     "@nteract/plotly": "^1.0.0",
-    "@nteract/transforms-full": "^2.5.1",
+    "@nteract/transforms-full": "^3.0.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "cross-env": "^5.0.0",
@@ -122,11 +126,11 @@
     "electron-log": "^2.2.6",
     "electron-mocha": "^4.0.0",
     "electron-updater": "^2.10.0",
-    "enchannel": "^3.1.1",
-    "enchannel-zmq-backend": "^4.0.2",
+    "enchannel": "^4.0.0",
+    "enchannel-zmq-backend": "^5.0.0",
     "escape-carriage": "^1.2.0",
     "flow-bin": "^0.55.0",
-    "fs-observable": "1.0.0",
+    "fs-observable": "^2.0.0",
     "jsdom": "^11.0.0",
     "jsontableschema": "^0.2.2",
     "jupyter-paths": "^2.0.0",

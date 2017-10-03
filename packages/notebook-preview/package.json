@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-preview",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "View a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -16,10 +16,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/commutable": "^2.1.1",
-    "@nteract/display-area": "^2.4.1",
-    "@nteract/editor": "^2.3.1",
-    "@nteract/transforms": "^2.4.1",
+    "@nteract/commutable": "^2.1.2",
+    "@nteract/display-area": "^3.0.0",
+    "@nteract/editor": "^3.0.0",
+    "@nteract/transforms": "^3.0.0",
     "codemirror": "^5.28.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
