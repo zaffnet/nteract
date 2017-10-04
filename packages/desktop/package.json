@@ -92,7 +92,7 @@
       "category": "science",
       "packageCategory": "editors"
     },
-    "files": ["lib/*.js", "static"],
+    "files": ["lib/*.js", "lib/*.css", "lib/*.woff", "lib/*.woff2", "static"],
     "extraResources": ["bin", "example-notebooks"],
     "npmSkipBuildFromSource": true
   },
@@ -100,13 +100,10 @@
     "setupFiles": ["./scripts/mockument"]
   },
   "dependencies": {
-    "codemirror": "^5.28.0",
     "github": "^9.0.0",
     "ijavascript": "^5.0.17",
     "jmp": "^0.7.5",
     "mathjax-electron": "^2.0.1",
-    "normalize.css": "^7.0.0",
-    "nteract-assets": "^3.0.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
@@ -115,6 +112,7 @@
     "@nteract/editor": "^3.0.0",
     "@nteract/messaging": "^2.0.0",
     "@nteract/transforms-full": "^3.0.0",
+    "codemirror": "^5.28.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "cross-env": "^5.0.0",
@@ -134,6 +132,8 @@
     "jupyter-paths": "^2.0.0",
     "kernelspecs": "^2.0.0",
     "lodash": "^4.17.4",
+    "normalize.css": "^7.0.0",
+    "nteract-assets": "^3.0.0",
     "prop-types": "^15.5.10",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
