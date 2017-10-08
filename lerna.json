@@ -2,5 +2,10 @@
   "lerna": "2.1.2",
   "packages": ["packages/*", "packages/nbextension/nteract_on_jupyter"],
   "version": "independent",
-  "npmClient": "npm"
+  "npmClient": "npm",
+  "commands": {
+    "publish": {
+      "ignore": ["packages/desktop/*", "packages/nbextension/*"]
+    }
+  }
 }
