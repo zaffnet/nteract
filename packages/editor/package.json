@@ -1,6 +1,6 @@
 {
   "name": "@nteract/editor",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "The editor that lives inside cells in nteract",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -17,8 +17,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/messaging": "^2.0.0",
-    "@nteract/transforms": "^3.0.0",
+    "@nteract/messaging": "^2.0.1",
+    "@nteract/transforms": "^3.0.1",
     "classnames": "^2.2.5",
     "codemirror": "^5.28.0",
     "create-react-class": "^15.6.0",
