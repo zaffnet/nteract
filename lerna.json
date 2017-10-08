@@ -5,7 +5,11 @@
   "npmClient": "npm",
   "commands": {
     "publish": {
-      "ignore": ["packages/desktop/*", "packages/nbextension/*"]
+      "ignore": [
+        "packages/desktop/*",
+        "packages/nbextension/*",
+        "packages/desktop/**"
+      ]
     }
   }
 }
