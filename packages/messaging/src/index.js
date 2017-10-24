@@ -1,48 +1,74 @@
 // @flow
 /* eslint camelcase: 0 */ // <-- Per Jupyter message spec
 
-import * as uuid from "uuid";
-
 import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
+import { from } from "rxjs/observable/from";
+import { merge } from "rxjs/observable/merge";
+import { _throw } from "rxjs/observable/throw";
+
+import {
+  pluck,
+  first,
+  groupBy,
+  filter,
+  scan,
+  map,
+  mapTo,
+  switchMap,
+  mergeAll,
+  mergeMap,
+  takeUntil,
+  catchError,
+  tap
+} from "rxjs/operators";
+
+import * as uuid from "uuid";
 
 export const session = uuid.v4();
 
-export function getUsername() {
+export function getUsername(): string {
   return (
     process.env.LOGNAME ||
     process.env.USER ||
     process.env.LNAME ||
-    process.env.USERNAME
+    process.env.USERNAME ||
+    ""
   );
 }
 
-export function createMessage(msg_type: string, fields: Object = {}) {
-  const username = getUsername();
-  return Object.assign(
-    {
-      header: {
-        username,
-        session,
-        msg_type,
-        msg_id: uuid.v4(),
-        date: new Date(),
-        version: "5.0"
-      },
-      metadata: {},
-      parent_header: {},
-      content: {}
-    },
-    fields
-  );
+import { message, executeRequest } from "./messages";
+
+// TODO: The current expectation of this library is that createMessage hides the
+//       fact that there is a session number and a username
+//       We'll keep a bound version of createMessage around here, using the
+//       more generic and declarative `message` and `executeRequest`
+const sessionInfo = {
+  username: getUsername(),
+  session
+};
+
+import type { JupyterMessage, ExecuteRequest } from "./types";
+
+// TODO: Deprecate
+export function createMessage(
+  msg_type: string,
+  fields: Object = {}
+): JupyterMessage<*, *> {
+  return { ...message({ msg_type, ...sessionInfo }), ...fields };
+}
+
+// TODO: Deprecate
+export function createExecuteRequest(code: string = ""): ExecuteRequest {
+  return executeRequest(code, {}, sessionInfo);
 }
 
 /**
- * childOf filters out messages that don't have the parent header matching parentMessage
- * @param  {Object}  parentMessage Jupyter message protocol message
- * @return {Observable}               the resulting observable
+ * operator for getting all messages that declare their parent header as
+ * parentMessage's header
  */
-export const childOf = (parentMessage: Object) => (
-  source: rxjs$Observable<*>
+export const childOf = (parentMessage: JupyterMessage<*, *>) => (
+  source: rxjs$Observable<JupyterMessage<*, *>>
 ) => {
   const parentMessageID = parentMessage.header.msg_id;
   return new Observable(subscriber =>
@@ -71,24 +97,107 @@ export const childOf = (parentMessage: Object) => (
  * @param  {Array} messageTypes e.g. ['stream', 'error']
  * @return {Observable}                 the resulting observable
  */
-export const ofMessageType = (messageTypes: Array<string>) => (
-  source: rxjs$Observable<*>
-) =>
-  new Observable(subscriber =>
-    source.subscribe(
-      msg => {
-        if (!msg.header || !msg.header.msg_type) {
-          subscriber.error(new Error("no header.msg_type on message"));
-          return;
-        }
+export const ofMessageType = (
+  ...messageTypes: Array<string> | [Array<string>]
+) => {
+  // Switch to the splat mode
+  if (messageTypes.length === 1 && Array.isArray(messageTypes[0])) {
+    return ofMessageType(...messageTypes[0]);
+  }
 
-        if (messageTypes.indexOf(msg.header.msg_type) !== -1) {
-          subscriber.next(msg);
-        }
-      },
-      // be sure to handle errors and completions as appropriate and
-      // send them along
-      err => subscriber.error(err),
-      () => subscriber.complete()
-    )
+  return (
+    source: rxjs$Observable<JupyterMessage<*, *>>
+  ): rxjs$Observable<JupyterMessage<*, *>> =>
+    new Observable(subscriber =>
+      source.subscribe(
+        msg => {
+          if (!msg.header || !msg.header.msg_type) {
+            subscriber.error(new Error("no header.msg_type on message"));
+            return;
+          }
+
+          if (messageTypes.indexOf(msg.header.msg_type) !== -1) {
+            subscriber.next(msg);
+          }
+        },
+        // be sure to handle errors and completions as appropriate and
+        // send them along
+        err => subscriber.error(err),
+        () => subscriber.complete()
+      )
+    );
+};
+
+/**
+ * Create an object that adheres to the jupyter notebook specification.
+ * http://jupyter-client.readthedocs.io/en/latest/messaging.html
+ *
+ * @param {Object} msg - Message that has content which can be converted to nbformat
+ * @return {Object} formattedMsg  - Message with the associated output type
+ */
+export function convertOutputMessageToNotebookFormat(
+  msg: JupyterMessage<*, *>
+) {
+  return Object.assign({}, msg.content, {
+    output_type: msg.header.msg_type
+  });
+}
+
+/**
+ * Convert raw jupyter messages that are output messages into nbformat style
+ * outputs
+ *
+ * > o$ = iopub$.pipe(
+ *     childOf(originalMessage),
+ *     outputs()
+ *   )
+ */
+export const outputs = () => (
+  source: rxjs$Observable<JupyterMessage<*, *>>
+): rxjs$Observable<JupyterMessage<*, *>> =>
+  source.pipe(
+    ofMessageType("execute_result", "display_data", "stream", "error"),
+    map(convertOutputMessageToNotebookFormat)
   );
+
+export const updatedOutputs = () => (
+  source: rxjs$Observable<*>
+): rxjs$Observable<*> =>
+  source.pipe(
+    ofMessageType("update_display_data"),
+    map(msg => Object.assign({}, msg.content, { output_type: "display_data" }))
+  );
+
+/**
+   * Get all the payload message content from an observable of jupyter messages
+   *
+   * > p$ = shell$.pipe(
+   *     childOf(originalMessage),
+   *     payloads()
+   *   )
+   */
+export const payloads = () => (
+  source: rxjs$Observable<JupyterMessage<*, *>>
+): rxjs$Observable<JupyterMessage<*, *>> =>
+  source.pipe(
+    ofMessageType("execute_reply"),
+    pluck("content", "payload"),
+    filter(Boolean),
+    mergeMap(p => from(p))
+  );
+
+/**
+ * Get all the execution counts from an observable of jupyter messages
+ */
+export const executionCounts = () => (
+  source: rxjs$Observable<JupyterMessage<*, *>>
+): rxjs$Observable<JupyterMessage<*, *>> =>
+  source.pipe(
+    ofMessageType("execute_input"),
+    pluck("content", "execution_count")
+  );
+
+export const executionStates = () => (
+  source: rxjs$Observable<JupyterMessage<*, *>>
+): rxjs$Observable<JupyterMessage<*, *>> =>
+  source.pipe(ofMessageType("status"), pluck("content", "execution_state"));
