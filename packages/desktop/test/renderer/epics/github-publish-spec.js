@@ -3,8 +3,7 @@ import NotificationSystem from "react-notification-system";
 import sinon from "sinon";
 import sinonChai from "sinon-chai";
 
-import { dummyCommutable } from "../dummy-nb";
-import { dummyStore } from "../../utils";
+import { dummyStore, dummyCommutable } from "@nteract/core/lib/dummy";
 
 import { toArray } from "rxjs/operators";
 
@@ -156,11 +155,12 @@ describe("createGistCallback", () => {
 describe("notifyUser", () => {
   it("notifies a user that gist has been uploaded", () => {
     const store = dummyStore();
-    const notification = store.getState().app.notificationSystem
-      .addNotification;
     const notificationSystem = store.getState().app.notificationSystem;
+
+    const addNotification = sinon.spy(notificationSystem, "addNotification");
+
     notifyUser("filename", "gistID", notificationSystem);
-    expect(notification).to.be.calledWithMatch({
+    expect(addNotification).to.be.calledWithMatch({
       title: "Gist uploaded",
       message: "filename is ready",
       dismissible: true,

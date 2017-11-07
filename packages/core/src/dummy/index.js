@@ -99,7 +99,6 @@ export function dummyStore(config: *) {
       savedNotebook: config && config.saved === true ? dummyNotebook : null,
       cellPagers: new Immutable.Map(),
       stickyCells: new Immutable.Map(),
-      outputStatuses: new Immutable.Map(),
       cellFocused:
         config && config.codeCellCount > 1
           ? dummyNotebook.get("cellOrder").get(1)
@@ -108,15 +107,13 @@ export function dummyStore(config: *) {
     app: AppRecord({
       executionState: "not connected",
       notificationSystem: {
-        addNotification: jest.fn()
+        addNotification: () => {} // most of the time you'll want to mock this
       },
       token: "TOKEN",
       channels: "channelInfo"
     }),
     metadata: MetadataRecord({
-      filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb",
-      past: new Immutable.List(),
-      future: new Immutable.List()
+      filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
     config: Immutable.Map({
       theme: "light"
