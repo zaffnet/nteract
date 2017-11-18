@@ -8,16 +8,19 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import DraggableCell from "../providers/draggable-cell";
+import Cell from "../components/cell/cell";
+
+import DraggableCell from "./draggable-cell";
 import CellCreator from "../providers/cell-creator";
 import StatusBar from "./status-bar";
+
 import {
   focusNextCell,
   focusNextCellEditor,
   moveCell,
+  focusCell,
   executeCell
 } from "../actions";
-import type { CellProps } from "./cell/cell";
 
 import { LinkExternalOcticon } from "./octicons";
 
@@ -73,9 +76,9 @@ export class Notebook extends React.PureComponent<Props> {
   createStickyCellElement: (s: string) => ?React$Element<any>;
   keyDown: (e: KeyboardEvent) => void;
   moveCell: (source: string, dest: string, above: boolean) => void;
+  selectCell: (id: string) => void;
   stickyCellsPlaceholder: ?HTMLElement;
   stickyCellContainer: ?HTMLElement;
-  cellElements: ImmutableMap<string, any>;
 
   static defaultProps = {
     displayOrder,
@@ -93,7 +96,7 @@ export class Notebook extends React.PureComponent<Props> {
     this.createStickyCellElement = this.createStickyCellElement.bind(this);
     this.keyDown = this.keyDown.bind(this);
     this.moveCell = this.moveCell.bind(this);
-    this.cellElements = new ImmutableMap();
+    this.selectCell = this.selectCell.bind(this);
   }
 
   componentDidMount(): void {
@@ -116,6 +119,10 @@ export class Notebook extends React.PureComponent<Props> {
 
   moveCell(sourceId: string, destinationId: string, above: boolean): void {
     this.context.store.dispatch(moveCell(sourceId, destinationId, above));
+  }
+
+  selectCell(id: string): void {
+    this.context.store.dispatch(focusCell(id));
   }
 
   keyDown(e: KeyboardEvent): void {
@@ -156,37 +163,6 @@ export class Notebook extends React.PureComponent<Props> {
     }
   }
 
-  createCellProps(id: string, cell: any, transient: any): CellProps {
-    return {
-      id,
-      cell,
-      language: getLanguageMode(this.props.notebook),
-      key: id,
-      ref: el => {
-        this.cellElements = this.cellElements.set(id, el);
-      },
-      displayOrder: this.props.displayOrder,
-      transforms: this.props.transforms,
-      moveCell: this.moveCell,
-      pagers: this.props.cellPagers.get(id),
-      // TODO: This prop should likely be id === this.props.cellFocused
-      //       so that computation is not done by all the cells.
-      //       They just need to know if they're focused.
-      //       Then again... It does feel like scroll behavior belongs in the
-      //       notebook itself, would require fixing up refs passing with connect()
-      //
-      //       Then again, having the previous focusedCellID (cellFocused) is useful
-      //       for within the cell doing scrolling
-      cellFocused: this.props.cellFocused,
-      editorFocused: this.props.editorFocused,
-      running: transient.get("status") === "busy",
-      // Theme is passed through to let the Editor component know when to
-      // tell CodeMirror to remeasure
-      theme: this.props.theme,
-      models: this.props.models
-    };
-  }
-
   createCellElement(id: string): ?React$Element<any> {
     const cellMap = this.props.notebook.get("cellMap");
     const cell = cellMap.get(id);
@@ -207,7 +183,25 @@ export class Notebook extends React.PureComponent<Props> {
             </span>
           </div>
         ) : (
-          <CellComponent {...this.createCellProps(id, cell, transient)} />
+          <DraggableCell
+            moveCell={this.moveCell}
+            id={id}
+            selectCell={this.selectCell}
+          >
+            <Cell
+              cell={cell}
+              displayOrder={this.props.displayOrder}
+              id={id}
+              cellFocused={this.props.cellFocused}
+              editorFocused={this.props.editorFocused}
+              language={getLanguageMode(this.props.notebook)}
+              running={transient.get("status") === "busy"}
+              theme={this.props.theme}
+              pagers={this.props.cellPagers.get(id)}
+              transforms={this.props.transforms}
+              models={this.props.models}
+            />
+          </DraggableCell>
         )}
         <CellCreator key={`creator-${id}`} id={id} above={false} />
       </div>
@@ -224,7 +218,19 @@ export class Notebook extends React.PureComponent<Props> {
     const cell = cellMap.get(id);
     return (
       <div key={`cell-container-${id}`}>
-        <CellComponent {...this.createCellProps(id, cell, transient)} />
+        <Cell
+          cell={cell}
+          displayOrder={this.props.displayOrder}
+          id={id}
+          cellFocused={this.props.cellFocused}
+          editorFocused={this.props.editorFocused}
+          language={getLanguageMode(this.props.notebook)}
+          running={transient.get("status") === "busy"}
+          theme={this.props.theme}
+          pagers={this.props.cellPagers.get(id)}
+          transforms={this.props.transforms}
+          models={this.props.models}
+        />
       </div>
     );
   }
