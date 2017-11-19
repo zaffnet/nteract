@@ -67,6 +67,36 @@ export default class App extends React.PureComponent<Object, Object> {
               this.notificationSystem = notificationSystem;
             }}
           />
+          <style jsx global>{`
+            body {
+              font-family: "Source Sans Pro";
+              font-size: 16px;
+              line-height: 22px;
+              background-color: var(--main-bg-color);
+              color: var(--main-fg-color);
+              /* All the old theme setups declared this, putting it back for consistency */
+              line-height: 1.3 !important;
+            }
+
+            #app {
+              padding-top: 20px;
+            }
+
+            @keyframes fadeOut {
+              from {
+                opacity: 1;
+              }
+              to {
+                opacity: 0;
+              }
+            }
+
+            div#loading {
+              animation-name: fadeOut;
+              animation-duration: 0.25s;
+              animation-fill-mode: forwards;
+            }
+          `}</style>
         </div>
       </Provider>
     );

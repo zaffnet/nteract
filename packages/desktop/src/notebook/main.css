@@ -8,78 +8,6 @@
 @import "../../node_modules/nteract-assets/fonts/source-sans-pro/source-sans-pro.css";
 @import "../../node_modules/nteract-assets/fonts/source-code-pro/source-code-pro.css";
 
-:root {
-  --prompt-width: 50px;
-  --cell-placeholder-opacity: 0.3;
-  --link-color-unvisited: blue;
-  --link-color-visited: var(--link-color-unvisited);
-}
-
-/**
- * TODO: Bring these styles into our nextgen components directly as part of
- *       their inline styled-jsx
- */
-@media print {
-  * {
-    box-shadow: none !important;
-  }
-  .status-bar {
-    display: none !important;
-  }
-  .notifications-wrapper {
-    display: none !important;
-  }
-  .cell-toolbar {
-    display: none !important;
-  }
-  .cell-creator {
-    display: none !important;
-  }
-  .cell.focused {
-    border: none;
-    background: var(--cell-bg) !important;
-  }
-  .cell:focus .prompt,
-  .cell.focused .prompt {
-    background: var(--pager-bg) !important;
-  }
-  .draggable-cell {
-    padding: 0px !important;
-  }
-  .cell-drag-handle {
-    display: none !important;
-  }
-  .cell-toolbar-mask {
-    display: none !important;
-  }
-  .invisible {
-    display: none !important;
-  }
-}
-
-#app {
-  padding-top: 20px;
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-div#loading {
-  animation-name: fadeOut;
-  animation-duration: 0.25s;
-  animation-fill-mode: forwards;
-}
-
-/*
-  Globals
- */
-
 /* completions styles */
 
 .CodeMirror-hint {
@@ -156,76 +84,6 @@ div#loading {
 }
 
 /* end completion type color and content */
-
-body {
-  font-family: "Source Sans Pro";
-  font-size: 16px;
-  line-height: 22px;
-  background-color: var(--main-bg-color);
-  color: var(--main-fg-color);
-}
-
-body {
-  /* All the old theme setups declared this, putting it back for consistency */
-  line-height: 1.3 !important;
-}
-
-/*
-  Notebook
- */
-
-.notebook {
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-@media not print {
-  .notebook .cell-container:last-child {
-    padding-bottom: calc(100vh - 110px);
-  }
-}
-/*
-  Cell
- */
-
-/* Show the cell-toolbar-mask if hovering on cell,
-   or cell was the last clicked (has .focused class). */
-.cell:hover .cell-toolbar-mask,
-.cell.focused .cell-toolbar-mask {
-  display: block;
-}
-
-.cell-placeholder {
-  text-align: center;
-  color: var(--main-fg-color);
-  padding: 10px;
-  opacity: var(--cell-placeholder-opacity);
-}
-
-.sticky-cell-container {
-  background: var(--main-bg-color);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-
-  top: 0px;
-  position: fixed;
-  z-index: 300;
-  width: 100%;
-  max-height: 50%;
-
-  padding-bottom: 10px;
-  padding-top: 20px;
-  overflow: auto;
-}
-
-.sticky-cell-container:empty {
-  display: none;
-}
-
-/** TODO: Recover this in the styling -- this likely relates to pinned cells */
-.cell .input-container.invisible {
-  height: 34px;
-}
 
 /*
     Codemirror
@@ -353,6 +211,8 @@ body {
   background: var(--cm-hint-bg);
   font-size: 90%;
   font-family: "Source Code Pro", monospace;
+
+  z-index: 9001;
 
   overflow-y: auto;
 }
