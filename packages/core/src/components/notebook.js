@@ -46,6 +46,76 @@ type Props = {
   language: string
 };
 
+export class StickyCellContainer extends React.Component<*, *> {
+  stickyCellsPlaceholder: ?HTMLElement;
+  stickyCellContainer: ?HTMLElement;
+
+  componentDidUpdate(prevProps: Props): void {
+    if (this.stickyCellsPlaceholder && this.stickyCellContainer) {
+      // Make sure the document is vertically shifted so the top non-stickied
+      // cell is always visible.
+      this.stickyCellsPlaceholder.style.height = `${
+        this.stickyCellContainer.clientHeight
+      }px`;
+    }
+  }
+
+  render() {
+    if (
+      !this.props.children ||
+      React.Children.count(this.props.children) === 0
+    ) {
+      return null;
+    }
+
+    return (
+      <div>
+        <div
+          className="sticky-cells-placeholder"
+          ref={ref => {
+            this.stickyCellsPlaceholder = ref;
+          }}
+        />
+        <div
+          className="sticky-cell-container"
+          ref={ref => {
+            this.stickyCellContainer = ref;
+          }}
+        >
+          {this.props.children}
+        </div>
+        <style jsx>{`
+          .sticky-cell-container {
+            background: var(--main-bg-color, white);
+            border-bottom: dashed var(--primary-border, #cbcbcb) 1px;
+
+            top: 0px;
+            position: fixed;
+            z-index: 300;
+            width: 100%;
+            max-height: 50%;
+
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            padding-top: 20px;
+
+            overflow: auto;
+          }
+
+          .sticky-cell-container:empty {
+            display: none;
+          }
+
+          .sticky-cell-container > :global(*) {
+            margin: 20px;
+          }
+        `}</style>
+      </div>
+    );
+  }
+}
+
 const PinnedPlaceHolderCell = () => (
   <div className="cell-placeholder">
     <span className="octicon">
@@ -102,8 +172,6 @@ export class Notebook extends React.PureComponent<Props> {
   moveCell: (source: string, dest: string, above: boolean) => void;
   selectCell: (id: string) => void;
   renderCell: (id: string) => React$Element<any>;
-  stickyCellsPlaceholder: ?HTMLElement;
-  stickyCellContainer: ?HTMLElement;
 
   static defaultProps = {
     displayOrder,
@@ -126,16 +194,6 @@ export class Notebook extends React.PureComponent<Props> {
 
   componentDidMount(): void {
     document.addEventListener("keydown", this.keyDown);
-  }
-
-  componentDidUpdate(prevProps: Props): void {
-    if (this.stickyCellsPlaceholder && this.stickyCellContainer) {
-      // Make sure the document is vertically shifted so the top non-stickied
-      // cell is always visible.
-      this.stickyCellsPlaceholder.style.height = `${
-        this.stickyCellContainer.clientHeight
-      }px`;
-    }
   }
 
   componentWillUnmount(): void {
@@ -193,62 +251,26 @@ export class Notebook extends React.PureComponent<Props> {
     const stickyCells = cellOrder.filter(id => this.props.stickyCells.get(id));
 
     return (
-      <div>
-        <div
-          className="sticky-cells-placeholder"
-          ref={ref => {
-            this.stickyCellsPlaceholder = ref;
-          }}
-        />
-        <div
-          className="sticky-cell-container"
-          ref={ref => {
-            this.stickyCellContainer = ref;
-          }}
-        >
-          {stickyCells.map(id => (
-            <div key={`sticky-cell-container-${id}`} className="sticky-cell">
-              {this.renderCell(id)}
-            </div>
-          ))}
-        </div>
+      <StickyCellContainer>
+        {stickyCells.map(id => (
+          <div key={`sticky-cell-container-${id}`} className="sticky-cell">
+            {this.renderCell(id)}
+          </div>
+        ))}
         <style jsx>{`
           .sticky-cell {
             padding-right: 20px;
           }
-
-          .sticky-cell-container {
-            background: var(--main-bg-color, white);
-            border-bottom: dashed var(--primary-border, #cbcbcb) 1px;
-
-            top: 0px;
-            position: fixed;
-            z-index: 300;
-            width: 100%;
-            max-height: 50%;
-
-            padding-left: 10px;
-            padding-right: 10px;
-            padding-bottom: 10px;
-            padding-top: 20px;
-
-            overflow: auto;
-          }
-
-          .sticky-cell-container:empty {
-            display: none;
-          }
         `}</style>
-      </div>
+      </StickyCellContainer>
     );
   }
 
   renderCell(id: string): React$Element<any> {
     const cell = this.props.cellMap.get(id);
-    const transient = this.props.transient.getIn(
-      ["cellMap", id],
-      new ImmutableMap()
-    );
+
+    const running =
+      this.props.transient.getIn(["cellMap", id, "status"]) === "busy";
 
     return (
       <Cell
@@ -258,7 +280,7 @@ export class Notebook extends React.PureComponent<Props> {
         cellFocused={this.props.cellFocused}
         editorFocused={this.props.editorFocused}
         language={this.props.language}
-        running={transient.get("status") === "busy"}
+        running={running}
         theme={this.props.theme}
         pagers={this.props.cellPagers.get(id)}
         transforms={this.props.transforms}
