@@ -1,10 +1,16 @@
 {
   "name": "nteract",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
   "repository": "nteract/nteract",
-  "keywords": ["jupyter", "electron", "notebook", "nteract", "data"],
+  "keywords": [
+    "jupyter",
+    "electron",
+    "notebook",
+    "nteract",
+    "data"
+  ],
   "author": "nteract contributors",
   "license": "BSD-3-Clause",
   "bugs": {
@@ -25,23 +31,15 @@
     "pretest:functional": "npm run build",
     "sublaunch": "electron-mocha --compilers js:babel-core/register",
     "test:functional:launch": "npm run sublaunch -- test/main/launch.js",
-    "test:functional:launchNewNotebook":
-      "npm run sublaunch -- test/main/launchNewNotebook.js",
-    "test:functional":
-      "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
-    "test:unit":
-      "mocha -r test/setup.js --compilers js:babel-core/register --require ignore-styles \"test/renderer/**/*.js\"",
-    "test:debug":
-      "mocha --debug-brk --inspect -r test/setup.js --compilers js:babel-core/register --require ignore-styles \"test/renderer/**/*.js\"",
-    "test:unit:individual":
-      "mocha -r test/setup.js --compilers js:babel-core/register --require ignore-styles",
+    "test:functional:launchNewNotebook": "npm run sublaunch -- test/main/launchNewNotebook.js",
+    "test:functional": "npm run test:functional:launch && npm run test:functional:launchNewNotebook",
+    "test:unit": "mocha -r test/setup.js --compilers js:babel-core/register --require ignore-styles \"test/renderer/**/*.js\"",
+    "test:debug": "mocha --debug-brk --inspect -r test/setup.js --compilers js:babel-core/register --require ignore-styles \"test/renderer/**/*.js\"",
+    "test:unit:individual": "mocha -r test/setup.js --compilers js:babel-core/register --require ignore-styles",
     "test:watch": "watch 'npm run test' test/",
-    "pack":
-      "npm run clean && webpack --config webpack.prod.js && electron-builder --dir",
-    "dist":
-      "npm run clean && webpack --config webpack.prod.js && electron-builder",
-    "publish":
-      "npm run clean && webpack --config webpack.prod.js && electron-builder -p always",
+    "pack": "npm run clean && webpack --config webpack.prod.js && electron-builder --dir",
+    "dist": "npm run clean && webpack --config webpack.prod.js && electron-builder",
+    "publish": "npm run clean && webpack --config webpack.prod.js && electron-builder -p always",
     "dist:all": "npm run dist -- -mlw",
     "publish:all": "npm run publish -- -mlw"
   },
@@ -59,18 +57,28 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "nsis": {
       "perMachine": true,
       "oneClick": false
     },
     "win": {
-      "target": ["nsis", "zip"]
+      "target": [
+        "nsis",
+        "zip"
+      ]
     },
     "linux": {
       "maintainer": "nteract contributors <jupyter@googlegroups.com>",
-      "target": ["deb", "AppImage", "tar.gz"],
+      "target": [
+        "deb",
+        "AppImage",
+        "tar.gz"
+      ],
       "desktop": {
         "Comment": "Interactive literate coding notebook",
         "Exec": "/opt/nteract/nteract %U",
@@ -86,12 +94,23 @@
       "category": "Science",
       "packageCategory": "editors"
     },
-    "files": ["lib/*.js", "lib/*.css", "lib/*.woff", "lib/*.woff2", "static"],
-    "extraResources": ["bin", "example-notebooks"],
+    "files": [
+      "lib/*.js",
+      "lib/*.css",
+      "lib/*.woff",
+      "lib/*.woff2",
+      "static"
+    ],
+    "extraResources": [
+      "bin",
+      "example-notebooks"
+    ],
     "npmSkipBuildFromSource": true
   },
   "jest": {
-    "setupFiles": ["./scripts/mockument"]
+    "setupFiles": [
+      "./scripts/mockument"
+    ]
   },
   "dependencies": {
     "github": "^9.0.0",
@@ -99,16 +118,15 @@
     "jmp": "^0.7.5",
     "mathjax-electron": "^2.0.1",
     "redux-electron-store": "^0.4.1",
-
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@nteract/core": "^0.0.1-beta",
-    "@nteract/commutable": "^2.1.2",
-    "@nteract/display-area": "^3.0.2",
-    "@nteract/editor": "^3.0.2",
-    "@nteract/messaging": "^2.0.1",
-    "@nteract/transforms-full": "^3.0.2",
+    "@nteract/commutable": "^2.2.0",
+    "@nteract/core": "^0.0.1",
+    "@nteract/display-area": "^3.1.0",
+    "@nteract/editor": "^4.0.0",
+    "@nteract/messaging": "^2.1.0",
+    "@nteract/transforms-full": "^4.0.0",
     "codemirror": "^5.28.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
@@ -120,11 +138,11 @@
     "electron-log": "^2.2.6",
     "electron-mocha": "^4.0.0",
     "electron-updater": "^2.12.1",
-    "enchannel": "^4.0.1",
-    "enchannel-zmq-backend": "^5.0.1",
+    "enchannel": "^4.0.2",
+    "enchannel-zmq-backend": "^5.0.2",
     "escape-carriage": "^1.2.0",
     "flow-bin": "^0.54.0",
-    "fs-observable": "^2.0.1",
+    "fs-observable": "^2.0.2",
     "jsdom": "^11.0.0",
     "jupyter-paths": "^2.0.0",
     "kernelspecs": "^2.0.0",
@@ -135,8 +153,8 @@
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
     "react-notification-system": "^0.2.14",
-    "react-simple-dropdown": "^3.0.0",
     "react-redux": "^5.0.5",
+    "react-simple-dropdown": "^3.0.0",
     "redux": "^3.7.0",
     "redux-logger": "^3.0.6",
     "redux-observable": "^0.16.0",

@@ -1,6 +1,6 @@
 {
   "name": "fs-observable",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Observables for node fs",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -12,16 +12,18 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/fs-observable",
-  "keywords": ["rxjs", "fs", "observable"],
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/fs-observable",
+  "keywords": [
+    "rxjs",
+    "fs",
+    "observable"
+  ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
-  "homepage":
-    "https://github.com/nteract/nteract/tree/master/packages/fs-observable",
+  "homepage": "https://github.com/nteract/nteract/tree/master/packages/fs-observable",
   "publishConfig": {
     "access": "public"
   },

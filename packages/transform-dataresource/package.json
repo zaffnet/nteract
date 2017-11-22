@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-dataresource",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Transform for data resource JSON",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -13,15 +13,18 @@
     "build:lib:watch": "npm run build:lib -- --watch"
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/transform-dataresource",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/transform-dataresource",
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
     "react": "^16.0.0"
   },
-  "files": ["lib", "src", "profiles"],
+  "files": [
+    "lib",
+    "src",
+    "profiles"
+  ],
   "license": "BSD-3-Clause",
   "dependencies": {
     "d3-time-format": "^2.0.5",

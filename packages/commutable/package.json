@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commutable",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "library for immutable notebook operations",
   "main": "index.js",
   "nteractDesktop": "src/index.js",
@@ -12,9 +12,12 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/commutable",
-  "keywords": ["commutable", "nteract", "notebooks"],
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/commutable",
+  "keywords": [
+    "commutable",
+    "nteract",
+    "notebooks"
+  ],
   "publishConfig": {
     "access": "public"
   },

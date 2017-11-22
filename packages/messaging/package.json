@@ -1,6 +1,6 @@
 {
   "name": "@nteract/messaging",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Messaging mechanics for nteract apps (jupyter spec)",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -12,8 +12,7 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/messaging",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/messaging",
   "dependencies": {
     "rxjs": "^5.5.0",
     "uuid": "^3.1.0"
@@ -21,7 +20,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["nteract", "messaging", "jmp", "jupyter"],
+  "keywords": [
+    "nteract",
+    "messaging",
+    "jmp",
+    "jupyter"
+  ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause"
 }

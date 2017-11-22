@@ -1,6 +1,6 @@
 {
   "name": "@nteract/display-area",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "Display area for nteract outputs",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -12,15 +12,18 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/display-area",
-  "keywords": ["nteract", "display", "jupyter"],
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/display-area",
+  "keywords": [
+    "nteract",
+    "display",
+    "jupyter"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@nteract/transforms": "^3.0.2",
-    "ansi-to-react": "^2.0.0"
+    "@nteract/transforms": "^3.0.3",
+    "ansi-to-react": "^2.0.1"
   },
   "peerDependencies": {
     "react": "^16.0.0"

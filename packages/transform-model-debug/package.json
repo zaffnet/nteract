@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-model-debug",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Transform for debug usage with nteract models",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -12,8 +12,7 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/transform-model-debug",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/transform-model-debug",
   "author": "",
   "publishConfig": {
     "access": "public"

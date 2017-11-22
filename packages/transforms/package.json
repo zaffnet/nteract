@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Common transforms for Jupyter",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -12,9 +12,12 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/transforms",
-  "keywords": ["nteract", "transforms", "notebook"],
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/transforms",
+  "keywords": [
+    "nteract",
+    "transforms",
+    "notebook"
+  ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "bugs": {
@@ -24,8 +27,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/transform-vdom": "^2.0.1",
-    "ansi-to-react": "^2.0.0",
+    "@nteract/transform-vdom": "^2.0.2",
+    "ansi-to-react": "^2.0.1",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "mathjax-electron": "^2.0.1",

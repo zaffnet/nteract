@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-vdom",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "VDOM Transform for jupyter outputs",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -12,8 +12,7 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/transform-vdom",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/transform-vdom",
   "author": "",
   "publishConfig": {
     "access": "public"
