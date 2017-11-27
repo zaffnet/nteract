@@ -1,6 +1,6 @@
 {
   "name": "@nteract/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "core modules and components for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -15,7 +15,7 @@
   "dependencies": {
     "@nteract/commutable": "^2.2.0",
     "@nteract/display-area": "^3.1.0",
-    "@nteract/editor": "^4.0.0",
+    "@nteract/editor": "^4.1.0",
     "@nteract/transforms": "^3.0.3",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
