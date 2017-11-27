@@ -1,6 +1,6 @@
 {
   "name": "nteract",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Interactive literate coding notebook!",
   "main": "./lib/webpacked-main.js",
   "repository": "nteract/nteract",
@@ -122,7 +122,7 @@
   },
   "devDependencies": {
     "@nteract/commutable": "^2.2.0",
-    "@nteract/core": "^0.0.2",
+    "@nteract/core": "^0.0.3",
     "@nteract/display-area": "^3.1.0",
     "@nteract/editor": "^4.1.0",
     "@nteract/messaging": "^2.1.0",

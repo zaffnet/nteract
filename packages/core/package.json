@@ -1,6 +1,6 @@
 {
   "name": "@nteract/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "core modules and components for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
