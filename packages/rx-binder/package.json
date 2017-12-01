@@ -1,6 +1,6 @@
 {
   "name": "rx-binder",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "RxJS bindings to Binder",
   "main": "lib/index.js",
   "scripts": {
@@ -16,7 +16,13 @@
     "type": "git",
     "url": "git+https://github.com/nteract/nteract.git"
   },
-  "keywords": ["binder", "mybinder", "jupyter", "notebook", "nteract"],
+  "keywords": [
+    "binder",
+    "mybinder",
+    "jupyter",
+    "notebook",
+    "nteract"
+  ],
   "dependencies": {
     "eventsource": "^1.0.5",
     "rxjs": "^5.5.0"
