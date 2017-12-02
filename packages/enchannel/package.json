@@ -1,6 +1,6 @@
 {
   "name": "enchannel",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Light spec for wiring up communications between Jupyter frontend and backend implementations.",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "url": "https://github.com/nteract/nteract/issues"
   },
   "dependencies": {
-    "@nteract/messaging": "^2.1.1",
+    "@nteract/messaging": "^2.2.0",
     "rxjs": "^5.5.0"
   }
 }
