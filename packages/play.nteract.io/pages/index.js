@@ -1,5 +1,27 @@
 import * as React from "react";
 
+import CodeMirrorEditor from "@nteract/editor";
+import { Display } from "@nteract/display-area";
+import {
+  executeRequest,
+  kernelInfoRequest,
+  childOf,
+  ofMessageType
+} from "@nteract/messaging";
+
+// TODO: finish making these our top level components
+import { _nextgen } from "@nteract/core/components";
+
+const {
+  Cell,
+  Input,
+  Prompt,
+  PromptBuffer,
+  Editor,
+  Outputs,
+  Notebook
+} = _nextgen;
+
 import { BinderConsole } from "../components/consoles";
 
 const { binder } = require("rx-binder");
@@ -18,21 +40,86 @@ const {
 
 const { empty } = require("rxjs/observable/empty");
 
-const { omit } = require("lodash");
 const uuid = require("uuid");
+
+function detectPlatform(ctx) {
+  if (ctx.req && ctx.req.headers) {
+    // Server side
+    const ua = ctx.req.headers["user-agent"];
+    if (/Windows/.test(ua)) {
+      return "Windows";
+    } else if (/Linux/.test(ua)) {
+      return "Linux";
+    }
+    // Client side
+  } else if (navigator.platform) {
+    if (/Win/.test(navigator.platform)) {
+      return "Windows";
+    } else if (/Linux/.test(navigator.platform)) {
+      return "Linux";
+    }
+  }
+  // Else keep macOS default
+  return "macOS";
+}
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.getServer = this.getServer.bind(this);
+    this.runSomeCode = this.runSomeCode.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
 
     this.state = {
       binderMessages: [],
       kernelMessages: [],
       serverConfig: null,
-      error: null
+      kernelStatus: "provisioning",
+      kernel: null,
+      error: null,
+      source: `from IPython.display import display
+from vdom import h1, p, img, div, b, span
+
+display(
+    div(
+        h1('Welcome to play.nteract.io'),
+        p('Run Python code via Binder & Jupyter'),
+        img(src="https://bit.ly/storybot-vdom"),
+        p('Change the code, click ',
+            span("▶ Run", style=dict(
+                color="white",
+                backgroundColor="black",
+                padding="10px"
+            )),
+          ' Up above'
+        )
+    )
+)`,
+      outputs: [],
+      showPanel: false
     };
+  }
+
+  static async getInitialProps(ctx: Context<EmptyQuery>): Promise<OSProps> {
+    const platform = detectPlatform(ctx);
+    return { platform };
+  }
+
+  onEditorChange(source) {
+    this.setState({ source });
+  }
+
+  async runSomeCode() {
+    if (!this.state.kernel) {
+      return;
+    }
+
+    await new Promise(resolve => this.setState({ outputs: [] }, resolve));
+
+    const message = executeRequest(this.state.source);
+
+    this.state.kernel.channels.next(message);
   }
 
   async kernelLifecycle(kernel) {
@@ -40,11 +127,24 @@ export default class App extends React.Component {
       this.setState({ kernelMessages: [] }, resolve)
     );
 
-    console.log("kicking off kernel");
-
     kernel.channels.subscribe({
       next: msg => {
-        console.log(msg);
+        this.setState({
+          kernelMessages: this.state.kernelMessages.concat(msg)
+        });
+        switch (msg.header.msg_type) {
+          case "status":
+            this.setState({ kernelStatus: msg.content.execution_state });
+            break;
+          case "display_data":
+          case "execute_result":
+          case "stream":
+          case "error":
+            const output = Object.assign({}, msg.content, {
+              output_type: msg.header.msg_type
+            });
+            this.setState({ outputs: this.state.outputs.concat(output) });
+        }
       },
       error: err => {
         this.setState({ error: err });
@@ -54,92 +154,20 @@ export default class App extends React.Component {
       }
     });
 
-    kernel.channels.next(
-      JSON.stringify({
-        header: {
-          msg_id: uuid(),
-          username: "username",
-          session: kernel.session,
-          date: new Date().toISOString(),
-          msg_type: "kernel_info_request",
-          version: "5.2"
-        },
-        channel: "shell",
-        parent_header: {},
-        metadata: {},
-        content: {},
-        buffers: []
-      })
-    );
+    kernel.channels.next(kernelInfoRequest());
 
-    await kernel.channels
-      .pipe(filter(m => m.header.msg_type === "status"), first())
-      .toPromise();
+    await kernel.channels.pipe(ofMessageType("status"), first()).toPromise();
 
-    const kernelInfoRequest = {
-      header: {
-        msg_id: uuid(),
-        username: "username",
-        session: kernel.session,
-        date: new Date().toISOString(),
-        msg_type: "kernel_info_request",
-        version: "5.2"
-      },
-      channel: "shell",
-      parent_header: {},
-      metadata: {},
-      content: {},
-      buffers: []
-    };
+    const kir = kernelInfoRequest();
 
     // Prep our handler for the kernel info reply
     const kr = kernel.channels
-      .pipe(
-        filter(m => m.parent_header.msg_id === kernelInfoRequest.header.msg_id),
-        filter(m => m.header.msg_type === "kernel_info_reply"),
-        first()
-      )
+      .pipe(childOf(kir), ofMessageType("kernel_info_reply"), first())
       .toPromise();
 
-    kernel.channels.next(JSON.stringify(kernelInfoRequest));
+    kernel.channels.next(kernelInfoRequest());
 
-    // Wait for the kernel info reply
     await kr;
-
-    // Prep our handler for the kernel shutdown reply
-    const ks = kernel.channels
-      .pipe(
-        filter(m => m.header.msg_type === "shutdown_reply"),
-        first(),
-        timeout(100),
-        catchError(() => empty())
-      )
-      .toPromise();
-
-    kernel.channels.next(
-      JSON.stringify({
-        header: {
-          msg_id: uuid(),
-          username: "username",
-          session: kernel.session,
-          date: new Date().toISOString(),
-          msg_type: "shutdown_request",
-          version: "5.2"
-        },
-        channel: "shell",
-        parent_header: {},
-        metadata: {},
-        content: {},
-        buffers: []
-      })
-    );
-
-    await ks;
-
-    kernel.channels.complete();
-
-    console.log("** Killing kernel just to make it official **");
-    kernels.kill(this.state.serverConfig, kernel.id);
   }
 
   async getKernel(serverConfig, kernelName = "python3") {
@@ -149,9 +177,11 @@ export default class App extends React.Component {
       .start(serverConfig, kernelName, "")
       .pipe(
         map(aj => {
-          return Object.assign({}, aj.response, {
-            session: session,
-            channels: kernels.connect(serverConfig, aj.response.id, session)
+          const kernel = aj.response;
+          const wsSubject = kernels.connect(serverConfig, kernel.id, session);
+
+          return Object.assign({}, kernel, {
+            channels: wsSubject
           });
         })
       )
@@ -209,19 +239,171 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <BinderConsole
-          logs={this.state.binderMessages}
-          expanded={!this.state.serverConfig}
-        />
-        <h2>Server config</h2>
-        <pre>{JSON.stringify(this.state.serverConfig, null, 2)}</pre>
-        <h3>Kernel config</h3>
-        <pre>
-          {JSON.stringify(omit(this.state.kernel, "channels"), null, 2)}
-        </pre>
+        <header>
+          <div className="left">
+            <img
+              src="https://media.githubusercontent.com/media/nteract/logos/master/nteract_logo_cube_book/exports/images/svg/nteract_logo_wide_purple_inverted.svg"
+              alt="nteract logo"
+              className="nteract-logo"
+            />
+
+            <button
+              onClick={this.runSomeCode}
+              className="play"
+              disabled={!this.state.kernel}
+              title={`run cell (${
+                this.props.platform === "macOS" ? "⌘-" : "Ctrl-"
+              }⏎)`}
+            >
+              ▶ Run
+            </button>
+            <button
+              onClick={() =>
+                this.setState({ showPanel: !this.state.showPanel })
+              }
+            >
+              {this.state.showPanel ? "Hide" : "Show"} logs
+            </button>
+          </div>
+
+          <div className="kernel-data">
+            <div className="kernelInfo">
+              <span className="kernel">Runtime: </span>
+              {this.state.kernelStatus}
+            </div>
+          </div>
+        </header>
+
+        {this.state.showPanel ? (
+          <BinderConsole logs={this.state.binderMessages} />
+        ) : null}
+
+        <div className="play-editor">
+          <CodeMirrorEditor
+            options={{
+              lineNumbers: true,
+              extraKeys: {
+                "Ctrl-Enter": this.runSomeCode,
+                "Cmd-Enter": this.runSomeCode
+              }
+            }}
+            value={this.state.source}
+            language={"python"}
+            onChange={this.onEditorChange}
+          />
+        </div>
+
+        <div className="play-outputs">
+          <Outputs>
+            <Display outputs={this.state.outputs} />
+          </Outputs>
+        </div>
+
+        <style jsx>{`
+          --header-height: 42px;
+          --editor-width: 52%;
+
+          header {
+            display: flex;
+            justify-content: space-between;
+            background-color: black;
+          }
+
+          header img {
+            height: calc(var(--header-height) - 16px);
+            width: 80px;
+            margin-left: 10px;
+          }
+
+          header img,
+          header button,
+          header div {
+            vertical-align: middle;
+          }
+
+          header button {
+            padding: 0px 16px;
+            border: none;
+            outline: none;
+            border-radius: unset;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            height: var(--header-height);
+          }
+
+          header button:active,
+          header button:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+
+          header button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #d7d7d7;
+          }
+
+          header button:disabled {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.1);
+          }
+
+          header img {
+            padding: 0px 20px 0px 10px;
+          }
+
+          .kernelInfo {
+            color: #f1f1f1;
+            line-height: var(--header-height);
+            font-family: Monaco, monospace, system-ui;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            vertical-align: middle;
+            display: table-cell;
+            padding-right: 20px;
+          }
+          .kernel {
+            color: #888;
+          }
+
+          .play-editor {
+            width: var(--editor-width);
+            position: absolute;
+            left: 0;
+            height: 100%;
+          }
+
+          .play-editor :global(.CodeMirror) {
+            height: 100%;
+          }
+
+          .play-outputs {
+            width: calc(100% - var(--editor-width));
+            position: absolute;
+            right: 0;
+            height: 100%;
+          }
+
+          .play-outputs :global(*) {
+            font-family: Monaco, monospace;
+          }
+
+          .play-editor > :global(*) {
+            height: 100%;
+          }
+          :global(.CodeMirror) {
+            height: 100%;
+          }
+        `}</style>
+
         <style jsx global>{`
           body {
             margin: 0;
+          }
+          .CodeMirror {
+            height: 100%;
+          }
+          .CodeMirror-gutters {
+            box-shadow: unset;
           }
         `}</style>
       </div>
