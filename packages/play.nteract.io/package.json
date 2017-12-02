@@ -1,6 +1,6 @@
 {
   "name": "@nteract/play",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "a playground for execution",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/core": "^0.0.6",
+    "@nteract/core": "^0.0.7",
     "@nteract/display-area": "^3.1.0",
     "@nteract/editor": "^4.2.1",
     "@nteract/messaging": "^2.2.1",
