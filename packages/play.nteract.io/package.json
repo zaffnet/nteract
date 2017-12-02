@@ -1,6 +1,6 @@
 {
   "name": "@nteract/play",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a playground for execution",
   "main": "index.js",
   "scripts": {
