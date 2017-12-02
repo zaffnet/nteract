@@ -8,7 +8,8 @@
       "ignore": [
         "packages/desktop/*",
         "packages/nbextension/*",
-        "packages/desktop/**"
+        "packages/desktop/**",
+        "packages/play.nteract.io/*"
       ]
     }
   }
