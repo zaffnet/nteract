@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-preview",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "description": "View a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -12,16 +12,15 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch"
   },
-  "repository":
-    "https://github.com/nteract/nteract/tree/master/packages/notebook-preview",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/notebook-preview",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@nteract/commutable": "^2.2.0",
-    "@nteract/core": "^0.0.7",
+    "@nteract/core": "^0.0.8",
     "@nteract/display-area": "^3.1.0",
-    "@nteract/editor": "^4.2.1",
+    "@nteract/editor": "^4.2.2",
     "@nteract/transforms": "^3.0.3",
     "codemirror": "^5.28.0",
     "commonmark": "^0.28.0",
