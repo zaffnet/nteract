@@ -53,11 +53,6 @@ import {
 
 const Immutable = require("immutable");
 
-type Channels = {
-  iopub: Subject<*>,
-  shell: Subject<*>
-};
-
 /**
  * Observe all the reactions to running code for cell with id.
  *
@@ -73,19 +68,17 @@ export function executeCellStream(
   id: string,
   code: string
 ) {
-  if (!channels || !channels.iopub || !channels.shell) {
+  if (!channels || !channels.pipe) {
     return _throw(new Error("kernel not connected"));
   }
 
   const executeRequest = createExecuteRequest(code);
 
-  const { iopub, shell } = channels;
+  // All the streams intended for all frontends
+  const cellMessages = channels.pipe(childOf(executeRequest));
 
-  // All the payload streams, intended for one user (since it's the shell channel)
-  const payloadStream = shell.pipe(childOf(executeRequest), payloads());
-
-  // All the streams intended for all frontends (since it's the iopub channel)
-  const cellMessages = iopub.pipe(childOf(executeRequest));
+  // All the payload streams, intended for one user
+  const payloadStream = cellMessages.pipe(payloads());
 
   const cellAction$ = merge(
     // help menu in IPython
@@ -138,7 +131,7 @@ export function executeCellStream(
   // On subscription, send the message
   return Observable.create(observer => {
     const subscription = cellAction$.subscribe(observer);
-    channels.shell.next(executeRequest);
+    channels.next(executeRequest);
     return subscription;
   });
 }
@@ -216,7 +209,7 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
     .ofType(NEW_KERNEL)
     .pipe(
       switchMap(({ channels }) =>
-        channels.iopub.pipe(
+        channels.pipe(
           updatedOutputs(),
           map(output => ({ type: "UPDATE_DISPLAY", output })),
           catchError(err =>

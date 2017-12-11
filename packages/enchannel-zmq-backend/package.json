@@ -13,6 +13,7 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch",
     "test": "jest",
+    "test:integration": "node scripts/exercise-enchannel.js",
     "test:watch": "npm run test -- --watch"
   },
   "repository":
@@ -26,5 +27,9 @@
     "jmp": "^0.7.5",
     "rxjs": "^5.5.0",
     "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "@nteract/messaging": "^2.2.1",
+    "spawnteract": "^4.0.0"
   }
 }

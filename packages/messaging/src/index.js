@@ -23,30 +23,7 @@ import {
   tap
 } from "rxjs/operators";
 
-import * as uuid from "uuid";
-
-export const session = uuid.v4();
-
-export function getUsername(): string {
-  return (
-    process.env.LOGNAME ||
-    process.env.USER ||
-    process.env.LNAME ||
-    process.env.USERNAME ||
-    ""
-  );
-}
-
 import { message, executeRequest } from "./messages";
-
-// TODO: The current expectation of this library is that createMessage hides the
-//       fact that there is a session number and a username
-//       We'll keep a bound version of createMessage around here, using the
-//       more generic and declarative `message` and `executeRequest`
-const sessionInfo = {
-  username: getUsername(),
-  session
-};
 
 import type { JupyterMessage, ExecuteRequest } from "./types";
 
@@ -55,12 +32,12 @@ export function createMessage(
   msg_type: string,
   fields: Object = {}
 ): JupyterMessage<*, *> {
-  return { ...message({ msg_type, ...sessionInfo }), ...fields };
+  return { ...message({ msg_type }), ...fields };
 }
 
 // TODO: Deprecate
 export function createExecuteRequest(code: string = ""): ExecuteRequest {
-  return executeRequest(code, {}, sessionInfo);
+  return executeRequest(code, {});
 }
 
 /**

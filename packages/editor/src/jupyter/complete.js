@@ -6,7 +6,7 @@ import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import { js_idx_to_char_idx, char_idx_to_js_idx } from "./surrogate";
 
-import type { EditorChange, CMI, Channels } from "../types";
+import type { EditorChange, CMI } from "../types";
 
 // Hint picker
 export const pick = (cm: any, handle: { pick: () => void }) => handle.pick();
@@ -105,7 +105,7 @@ export function codeCompleteObservable(
   editor: CMI,
   message: Object
 ) {
-  const completion$ = channels.shell.pipe(
+  const completion$ = channels.pipe(
     childOf(message),
     ofMessageType("complete_reply"),
     pluck("content"),
@@ -117,7 +117,7 @@ export function codeCompleteObservable(
   // On subscription, send the message
   return Observable.create(observer => {
     const subscription = completion$.subscribe(observer);
-    channels.shell.next(message);
+    channels.next(message);
     return subscription;
   });
 }

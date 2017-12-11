@@ -4,6 +4,9 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+import { of } from "rxjs/observable/of";
+import { Subject } from "rxjs/Subject";
+
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
@@ -82,13 +85,6 @@ mock("electron-json-storage", {
 mock("@nteract/plotly", {
   newPlot: () => {},
   redraw: () => {}
-});
-
-mock("enchannel-zmq-backend", {
-  createControlSubject: () => {},
-  createStdinSubject: () => {},
-  createIOPubSubject: () => {},
-  createShellSubject: () => {}
 });
 
 mock("electron", {
@@ -178,6 +174,14 @@ mock("kernelspecs", {
   find: kernelName => Promise.resolve({ name: kernelName })
 });
 
+mock("enchannel-zmq-backend", {
+  createMainChannel: () => {
+    throw Error(
+      "not implemented for the mocha tests, only here to prevent zmq loading"
+    );
+  }
+});
+
 mock("spawnteract", {
   launchSpec: kernelSpec => {
     function writeConnectionFile(config) {
@@ -223,5 +227,9 @@ mock("fs", {
   unlinkSync: () => {},
   unlink: () => {},
   existsSync: () => {},
-  writeFile: (name, data, callback) => callback(null)
+  writeFile: (name, data, callback) => callback()
+});
+
+mock("fs-observable", {
+  writeFileObservable: () => of(null)
 });
