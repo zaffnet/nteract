@@ -23,13 +23,11 @@ type BinderOptions = {
 }
 */
 
-function formBinderURL(
-  {
-    repo = "jupyter/notebook",
-    ref = "master",
-    binderURL = mybinderURL
-  } /*: BinderOptions */ = {}
-) /*: string */ {
+function formBinderURL({
+  repo = "jupyter/notebook",
+  ref = "master",
+  binderURL = mybinderURL
+} /*: BinderOptions */ = {}) /*: string */ {
   repo = cleanRepo(repo);
   // trim trailing / on binderURL
   binderURL = binderURL.replace(/(\/?$)/g, "");
