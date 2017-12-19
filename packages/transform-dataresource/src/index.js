@@ -98,7 +98,25 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.setState({ view: viewTypes.SCATTER });
   };
 
+  renderIconButtons() {
+    return [
+      <IconButton onClick={this.setGrid} message={"Data Table"}>
+        <DatabaseOcticon />
+      </IconButton>,
+      <IconButton onClick={this.setLine} message={"Line Graph"}>
+        <LineGraphOcticon />
+      </IconButton>,
+      <IconButton onClick={this.setBar} message={"Bar Graph"}>
+        <BarGraphOcticon />
+      </IconButton>,
+      <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
+        <TelescopeOcticon />
+      </IconButton>
+    ];
+  }
+
   render(): ?React$Element<any> {
+    const buttons = this.renderIconButtons();
     const { view } = this.state;
     return (
       <div
@@ -127,28 +145,34 @@ class DataResourceTransform extends React.Component<Props, State> {
             flexFlow: "column nowrap"
           }}
         >
-          <button onClick={this.setGrid}>
-            <span className="octicon">
-              <DatabaseOcticon />
-            </span>
-          </button>
-          <button onClick={this.setLine}>
-            <span className="octicon">
-              <LineGraphOcticon />
-            </span>
-          </button>
-          <button onClick={this.setBar}>
-            <span className="octicon">
-              <BarGraphOcticon />
-            </span>
-          </button>
-          <button onClick={this.setScatter}>
-            <span className="octicon">
-              <TelescopeOcticon />
-            </span>
-          </button>
+          {buttons}
         </div>
       </div>
+    );
+  }
+}
+
+type IconButtonProps = {
+  message: string,
+  onClick: () => void,
+  children?: React.Node
+};
+
+class IconButton extends React.Component<IconButtonProps> {
+  render() {
+    const { message, onClick, children } = this.props;
+    return (
+      <button
+        onClick={onClick}
+        key={message}
+        alt={message}
+        style={{
+          width: "32px",
+          height: "32px"
+        }}
+      >
+        {children}
+      </button>
     );
   }
 }
