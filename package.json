@@ -53,7 +53,7 @@
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js",
     "precommit": "lint-staged",
-    "prettier": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,flow-typed}/**'",
+    "prettify": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,flow-typed}/**'",
     "dist": "lerna run dist --scope nteract --stream",
     "pack": "lerna run pack --scope nteract --stream",
     "publish": "lerna run publish --scope nteract --stream",
