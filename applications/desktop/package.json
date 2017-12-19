@@ -105,7 +105,7 @@
   "dependencies": {
     "github": "^9.0.0",
     "ijavascript": "^5.0.17",
-    "jmp": "^0.7.5",
+    "jmp": "^1.0.0",
     "mathjax-electron": "^2.0.1",
     "redux-electron-store": "^0.4.1",
     "uuid": "^3.1.0"
