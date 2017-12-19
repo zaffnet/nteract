@@ -11,7 +11,22 @@ import Body from "../components/body";
 
 import { Entry } from "../components/contents";
 
-class ViewPage extends React.Component<*> {
+type ServerConfig = {
+  commuterExecuteLink?: string
+};
+
+type ViewPageProps = {
+  contents: any,
+  statusCode: any,
+  viewPath: any,
+  serverConfig: ServerConfig
+};
+
+type ViewPageState = {
+  config: ServerConfig
+};
+
+class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
   static async getInitialProps(context: Object) {
     const req = context.req;
     const query = context.query;
@@ -21,6 +36,9 @@ class ViewPage extends React.Component<*> {
     // during the refactor
     // The best choice will be to rely only on client side for now
     // I'm sure
+
+    const config = {};
+    config.commuterExecuteLink = process.env.COMMUTER_EXECUTE_LINK;
 
     const viewPath = query.viewPath || "/";
 
@@ -44,12 +62,26 @@ class ViewPage extends React.Component<*> {
     return {
       contents: json,
       statusCode,
-      viewPath
+      viewPath,
+      serverConfig: config
     };
   }
 
+  constructor(props: ViewPageProps) {
+    super(props);
+    let config = {};
+    if (props.serverConfig) {
+      this.state = { config: props.serverConfig };
+    } else {
+      const configScriptElement = document.getElementById("serverConfig");
+      if (configScriptElement !== null) {
+        const config = JSON.parse(configScriptElement.textContent);
+      }
+      this.state = { config };
+    }
+  }
+
   render() {
-    console.log(this.props.services);
     if (this.props.statusCode) {
       return <div>{`Nothing found for ${this.props.viewPath}`}</div>;
     }
@@ -61,6 +93,7 @@ class ViewPage extends React.Component<*> {
           basepath={"/view"}
           path={this.props.viewPath}
           type={this.props.contents.type}
+          commuterExecuteLink={this.state.config.commuterExecuteLink}
         />
         <Body>
           {/* Entry */}
