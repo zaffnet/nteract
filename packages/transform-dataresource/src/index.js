@@ -9,8 +9,6 @@ import {
   TelescopeOcticon
 } from "@nteract/octicons";
 
-// import VirtualizedTable from './virtualized-table';
-
 type Props = {
   data: Object,
   theme?: string,
@@ -158,14 +156,14 @@ type IconButtonProps = {
   children?: React.Node
 };
 
-class IconButton extends React.Component<IconButtonProps> {
+export class IconButton extends React.Component<IconButtonProps> {
   render() {
     const { message, onClick, children } = this.props;
     return (
       <button
         onClick={onClick}
         key={message}
-        alt={message}
+        title={message}
         style={{
           width: "32px",
           height: "32px"
