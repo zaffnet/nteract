@@ -1,6 +1,5 @@
 {
-  "extends": [
-    "config:base"
-  ],
-  "semanticCommits": false
+  "extends": ["config:base"],
+  "semanticCommits": false,
+  "ignoreDeps": ["flow-bin"]
 }
