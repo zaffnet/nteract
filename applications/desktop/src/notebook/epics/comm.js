@@ -2,6 +2,7 @@
 import { of } from "rxjs/observable/of";
 import { merge } from "rxjs/observable/merge";
 import { map, retry, switchMap } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 import { createMessage, ofMessageType, childOf } from "@nteract/messaging";
 
@@ -148,4 +149,4 @@ export function commActionObservable(newKernelAction: any) {
  * @return {ActionsObservable}         Comm actions
  */
 export const commListenEpic = (action$: ActionsObservable<*>) =>
-  action$.ofType(NEW_KERNEL).pipe(switchMap(commActionObservable)); // We have a new channel
+  action$.pipe(ofType(NEW_KERNEL), switchMap(commActionObservable)); // We have a new channel

@@ -6,6 +6,7 @@ import { toJS, stringifyNotebook } from "@nteract/commutable";
 
 import { of } from "rxjs/observable/of";
 import { tap, map, switchMap, catchError } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -51,7 +52,8 @@ export function loadEpic(
   action$: ActionsObservable<ALL_ACTIONS>,
   store: Store<*, *>
 ) {
-  return action$.ofType("LOAD").pipe(
+  return action$.pipe(
+    ofType("LOAD"),
     tap((action: LOAD_ACTION) => {
       // If there isn't a filename, save-as it instead
       if (!action.path) {

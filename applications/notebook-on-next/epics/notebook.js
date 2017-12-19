@@ -7,6 +7,7 @@ import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 
 import { of } from "rxjs/observable/of";
 import { tap, filter, map, catchError } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -14,7 +15,8 @@ export function setNotebookEpic(
   action$: ActionsObservable<*>,
   store: Store<*, *>
 ) {
-  return action$.ofType("LOADED").pipe(
+  return action$.pipe(
+    ofType("LOADED"),
     tap(action => {
       console.log(action);
       if (!action.payload || !action.payload.type) {

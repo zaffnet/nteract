@@ -1,6 +1,9 @@
 /* @flow */
 
-import { ActionsObservable } from "redux-observable"; /* eslint-disable no-unused-vars */
+import {
+  ActionsObservable,
+  ofType
+} from "redux-observable"; /* eslint-disable no-unused-vars */
 import { writeFileObservable } from "fs-observable";
 import { SAVE, SAVE_AS } from "@nteract/core/constants";
 
@@ -22,7 +25,8 @@ export function saveEpic(
   action$: ActionsObservable<*>,
   store: Store<any, any>
 ) {
-  return action$.ofType(SAVE).pipe(
+  return action$.pipe(
+    ofType(SAVE),
     tap(action => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
@@ -75,12 +79,11 @@ export function saveEpic(
  * @param  {ActionObservable}  action$ The SAVE_AS action with the filename and notebook
  */
 export function saveAsEpic(action$: ActionsObservable<*>) {
-  return action$
-    .ofType(SAVE_AS)
-    .pipe(
-      mergeMap(action => [
-        changeFilename(action.filename),
-        save(action.filename, action.notebook)
-      ])
-    );
+  return action$.pipe(
+    ofType(SAVE_AS),
+    mergeMap(action => [
+      changeFilename(action.filename),
+      save(action.filename, action.notebook)
+    ])
+  );
 }

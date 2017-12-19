@@ -18,6 +18,7 @@ import type { ActionsObservable } from "redux-observable";
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { mergeMap, catchError } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 const Github = require("github");
 
@@ -184,10 +185,9 @@ export function handleGistAction(store: any, action: any) {
  */
 export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
   const boundHandleGistAction = handleGistAction.bind(null, store);
-  return action$
-    .ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST)
-    .pipe(
-      mergeMap(action => boundHandleGistAction(action)),
-      catchError(handleGistError)
-    );
+  return action$.pipe(
+    ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST),
+    mergeMap(action => boundHandleGistAction(action)),
+    catchError(handleGistError)
+  );
 };
