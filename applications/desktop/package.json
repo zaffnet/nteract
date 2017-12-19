@@ -142,7 +142,7 @@
     "react-simple-dropdown": "3.2.0",
     "redux": "3.7.2",
     "redux-logger": "3.0.6",
-    "redux-observable": "0.16.0",
+    "redux-observable": "0.17.0",
     "rimraf": "2.6.2",
     "rxjs": "5.5.5",
     "shell-env": "0.3.0",
