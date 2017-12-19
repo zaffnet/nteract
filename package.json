@@ -24,10 +24,10 @@
     "//lerna bootstrap": "builds packages",
     "lerna": "lerna bootstrap",
     "build:apps": "lerna run build --scope nteract --scope @nteract/play --scope @nteract/commuter --scope @nteract/notebook-on-next --scope @nteract/showcase",
-    "app:desktop": "lerna build --scope nteract --stream",
+    "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
     "app:showcase": "lerna run dev --scope @nteract/showcase --stream",
-    "app:commuter": "lerna build --scope @nteract/commuter --stream",
+    "app:commuter": "lerna run dev --scope @nteract/commuter --stream",
     "app:notebook-on-next": "lerna run dev --scope @nteract/notebook-on-next --stream",
     "start": "npm run app:desktop",
     "spawn": "lerna run spawn --scope nteract",
@@ -52,8 +52,6 @@
     "// pretest": "ensure that zeromq is built for node",
     "pretest": "lerna exec --scope enchannel-zmq-backend -- npm rebuild",
     "test:desktop": "lerna run test:unit --scope nteract --stream",
-
-
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js",
     "precommit": "lint-staged",

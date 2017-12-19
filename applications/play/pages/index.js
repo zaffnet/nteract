@@ -27,8 +27,6 @@ import { KernelUI } from "../components/kernelUI";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
 import { binder } from "rx-binder";
 
-const { binder } = require("rx-binder");
-
 const {
   filter,
   map,
