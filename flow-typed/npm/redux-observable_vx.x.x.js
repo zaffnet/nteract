@@ -25,15 +25,19 @@ declare module "redux-observable" {
   declare export class ActionsObservable<
     A: { +type: $Subtype<string> }
   > extends Observable<A> {
-    static of(...actions: Array<A>): ActionsObservable<A>,
+    static of(...actions: Array<A>): ActionsObservable<A>;
     static from(
       actions: Iterable<A>,
       scheduler: rxjs$SchedulerClass
-    ): ActionsObservable<A>,
-    constructor(actionsSubject: Observable<A>): void,
-    lift(operator: Function): ActionsObservable<A>,
-    ofType(...keys: Array<$PropertyType<A, "type">>): ActionsObservable<A>
+    ): ActionsObservable<A>;
+    constructor(actionsSubject: Observable<A>): void;
+    lift(operator: Function): ActionsObservable<A>;
+    ofType(...keys: Array<$PropertyType<A, "type">>): ActionsObservable<A>;
   }
+
+  declare export function ofType<A: { +type: $Subtype<string> }>(
+    ...keys: Array<$PropertyType<A, "type">>
+  ): (source: ActionsObservable<A>) => ActionsObservable<A>;
 
   declare export function combineEpics<S, A, D>(
     ...epics: Array<Epic<S, A, D>>
