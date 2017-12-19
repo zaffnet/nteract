@@ -95,6 +95,43 @@ export const LinkExternalOcticon = (props: any) => (
   </SVGWrapper>
 );
 
+export const GraphOcticon = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 10 16" outerProps={props}>
+    <path
+      fillRule="evenodd"
+      d="M16 14v1H0V0h1v14h15zM5 13H3V8h2v5zm4 0H7V3h2v10zm4 0h-2V6h2v7z"
+    />
+  </SVGWrapper>
+);
+
+export const PulseOcticon = (props: any) => (
+  <SVGWrapper width={14} height={16} viewBox="0 0 14 16" outerProps={props}>
+    <path
+      fillRule="evenodd"
+      d="M11.5 8L8.8 5.4 6.6 8.5 5.5 1.6 2.38 8H0v2h3.6l.9-1.8.9 5.4L9 8.5l1.6 1.5H14V8z"
+    />
+    />
+  </SVGWrapper>
+);
+
+export const DatabaseOcticon = (props: any) => (
+  <SVGWrapper width={12} height={16} viewBox="0 0 12 16" outerProps={props}>
+    <path
+      fillRule="evenodd"
+      d="M6 15c-3.31 0-6-.9-6-2v-2c0-.17.09-.34.21-.5.67.86 3 1.5 5.79 1.5s5.12-.64 5.79-1.5c.13.16.21.33.21.5v2c0 1.1-2.69 2-6 2zm0-4c-3.31 0-6-.9-6-2V7c0-.11.04-.21.09-.31.03-.06.07-.13.12-.19C.88 7.36 3.21 8 6 8s5.12-.64 5.79-1.5c.05.06.09.13.12.19.05.1.09.21.09.31v2c0 1.1-2.69 2-6 2zm0-4c-3.31 0-6-.9-6-2V3c0-1.1 2.69-2 6-2s6 .9 6 2v2c0 1.1-2.69 2-6 2zm0-5c-2.21 0-4 .45-4 1s1.79 1 4 1 4-.45 4-1-1.79-1-4-1z"
+    />
+  </SVGWrapper>
+);
+
+export const TelescopeOcticon = (props: any) => (
+  <SVGWrapper width={14} height={16} viewBox="0 0 14 16" outerProps={props}>
+    <path
+      fillRule="evenodd"
+      d="M8 9l3 6h-1l-2-4v5H7v-6l-2 5H4l2-5 2-1zM7 0H6v1h1V0zM5 3H4v1h1V3zM2 1H1v1h1V1zM.63 9a.52.52 0 0 0-.16.67l.55.92c.13.23.41.31.64.2l1.39-.66-1.16-2-1.27.86.01.01zm7.89-5.39l-5.8 3.95L3.95 9.7l6.33-3.03-1.77-3.06h.01zm4.22 1.28l-1.47-2.52a.51.51 0 0 0-.72-.17l-1.2.83 1.84 3.2 1.33-.64c.27-.13.36-.44.22-.7z"
+    />
+  </SVGWrapper>
+);
+
 export const FileText = (props: any) => (
   <SVGWrapper width={12} height={16} viewBox="0 0 12 16" outerProps={props}>
     <path d="M6 5H2V4h4v1zM2 8h7V7H2v1zm0 2h7V9H2v1zm0 2h7v-1H2v1zm10-7.5V14c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V2c0-.55.45-1 1-1h7.5L12 4.5zM11 5L8 2H1v12h10V5z" />

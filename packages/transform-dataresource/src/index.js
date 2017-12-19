@@ -2,6 +2,13 @@
 import React from "react";
 import VirtualizedGrid from "./virtualized-grid";
 import PlotlyTransform from "@nteract/transform-plotly";
+import {
+  GraphOcticon as BarGraphOcticon,
+  PulseOcticon as LineGraphOcticon,
+  DatabaseOcticon,
+  TelescopeOcticon
+} from "@nteract/octicons";
+
 // import VirtualizedTable from './virtualized-table';
 
 type Props = {
@@ -120,10 +127,26 @@ class DataResourceTransform extends React.Component<Props, State> {
             flexFlow: "column nowrap"
           }}
         >
-          <button onClick={this.setGrid}>Grid</button>
-          <button onClick={this.setLine}>Lines</button>
-          <button onClick={this.setBar}>Bar</button>
-          <button onClick={this.setScatter}>Scatter</button>
+          <button onClick={this.setGrid}>
+            <span className="octicon">
+              <DatabaseOcticon />
+            </span>
+          </button>
+          <button onClick={this.setLine}>
+            <span className="octicon">
+              <LineGraphOcticon />
+            </span>
+          </button>
+          <button onClick={this.setBar}>
+            <span className="octicon">
+              <BarGraphOcticon />
+            </span>
+          </button>
+          <button onClick={this.setScatter}>
+            <span className="octicon">
+              <TelescopeOcticon />
+            </span>
+          </button>
         </div>
       </div>
     );
