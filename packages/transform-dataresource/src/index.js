@@ -34,10 +34,29 @@ const DataResourceTransformGrid = ({
   );
 };
 
-const DataResourceTransformPlot = ({ data: { data, schema } }) => {
+const viewTypes = {
+  LINE: "line",
+  BAR: "bar",
+  SCATTER: "scatter",
+  GRID: "grid"
+};
+
+const viewTypeToPlotlyTraceProps = {
+  [viewTypes.LINE]: {},
+  [viewTypes.BAR]: { type: "bar" },
+  [viewTypes.SCATTER]: { mode: "markers" }
+};
+
+const plotViewTypes = Object.keys(viewTypeToPlotlyTraceProps);
+
+const DataResourceTransformPlot = ({
+  data: { data, schema },
+  type: givenType
+}) => {
   const figure = { data: [] };
+  const traceProps = viewTypeToPlotlyTraceProps[givenType];
   schema.fields.forEach(({ name }, i) => {
-    figure.data[i] = { name, y: [], type: "bar" };
+    figure.data[i] = { name, y: [], ...traceProps };
   });
   data.forEach((row, j) => {
     schema.fields.forEach(({ name }, i) => {
@@ -50,32 +69,62 @@ const DataResourceTransformPlot = ({ data: { data, schema } }) => {
 class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
-  state = { showGrid: false, showPlot: true };
+  state = { view: viewTypes.GRID };
 
   shouldComponentUpdate(): boolean {
     return true;
   }
 
-  toggleGrid = () => {
-    this.setState(state => ({ showGrid: !state.showGrid }));
+  setGrid = () => {
+    this.setState({ view: viewTypes.GRID });
   };
 
-  togglePlot = () => {
-    this.setState(state => ({ showPlot: !state.showPlot }));
+  setLine = () => {
+    this.setState({ view: viewTypes.LINE });
+  };
+
+  setBar = () => {
+    this.setState({ view: viewTypes.BAR });
+  };
+
+  setScatter = () => {
+    this.setState({ view: viewTypes.SCATTER });
   };
 
   render(): ?React$Element<any> {
-    const { showGrid, showPlot } = this.state;
+    const { view } = this.state;
     return (
-      <div>
-        {showGrid ? <DataResourceTransformGrid {...this.props} /> : null}
-        {showPlot ? <DataResourceTransformPlot {...this.props} /> : null}
-        <button onClick={this.toggleGrid}>{`${
-          showGrid ? "Hide" : "Show"
-        } Grid`}</button>
-        <button onClick={this.togglePlot}>{`${
-          showPlot ? "Hide" : "Show"
-        } Plot`}</button>
+      <div
+        style={{
+          display: "flex",
+          flexFlow: "row nowrap",
+          width: "100%",
+          height: this.props.height
+        }}
+      >
+        <div
+          style={{
+            flex: "1"
+          }}
+        >
+          {view === viewTypes.GRID ? (
+            <DataResourceTransformGrid {...this.props} />
+          ) : null}
+          {plotViewTypes.includes(view) ? (
+            <DataResourceTransformPlot {...this.props} type={view} />
+          ) : null}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "column nowrap"
+          }}
+        >
+          <button onClick={this.setGrid}>Grid</button>
+          <button onClick={this.setLine}>Lines</button>
+          <button onClick={this.setBar}>Bar</button>
+          <button onClick={this.setScatter}>Scatter</button>
+        </div>
       </div>
     );
   }

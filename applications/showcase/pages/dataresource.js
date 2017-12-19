@@ -1,21 +1,10 @@
 import DataResourceTransform from "@nteract/transform-dataresource";
 
 const props = {
+  height: 400,
   data: {
     schema: {
       fields: [
-        {
-          name: "id",
-          type: "integer"
-        },
-        {
-          name: "player",
-          type: "string"
-        },
-        {
-          name: "year",
-          type: "integer"
-        },
         {
           name: "stint",
           type: "integer"
