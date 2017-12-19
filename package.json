@@ -23,7 +23,7 @@
     "postinstall": "npm run lerna",
     "//lerna bootstrap": "builds packages",
     "lerna": "lerna bootstrap",
-    "build:apps": "lerna run build --scope nteract --scope @nteract/play --scope @nteract/commuter --scope @nteract/notebook-on-next --scope @nteract/showcase",
+    "build:apps": "lerna run build --scope nteract --scope @nteract/play --scope @nteract/commuter --scope @nteract/notebook-on-next --scope @nteract/showcase --parallel --stream",
     "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
     "app:showcase": "lerna run dev --scope @nteract/showcase --stream",
