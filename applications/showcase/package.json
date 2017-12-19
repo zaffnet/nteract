@@ -4,7 +4,9 @@
   "description": "showcase of nteract components",
   "main": "index.js",
   "scripts": {
-    "dev": "next"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "@nteract/commutable": "^2.2.0",
