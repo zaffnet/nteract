@@ -27,6 +27,8 @@ import { LinkExternalOcticon } from "@nteract/octicons";
 // NOTE: PropTypes are required for the sake of contextTypes
 const PropTypes = require("prop-types");
 
+const themes = require("../../themes");
+
 type Props = {
   displayOrder: Array<string>,
   // TODO: Make types stricter, we have definitions _somewhere_
@@ -332,11 +334,7 @@ export class Notebook extends React.PureComponent<Props> {
             padding-right: 10px;
           }
         `}</style>
-        <link
-          rel="stylesheet"
-          // TODO: Tear this out or switch to styled-jsx for the inline setting here
-          href={`../static/styles/theme-${this.props.theme}.css`}
-        />
+        <style>{`:root { ${themes[this.props.theme]} } `}</style>
       </div>
     );
   }
