@@ -7,6 +7,10 @@ platform:
 
 build: off
 
+cache:
+  - '%APPDATA%\npm-cache'  # npm cache
+  - node_modules
+
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - appveyor-retry npm install
