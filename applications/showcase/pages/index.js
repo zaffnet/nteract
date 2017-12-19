@@ -15,12 +15,10 @@ import ReactMarkdown from "react-markdown";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
 
-import {
-  idea,
-  agate,
-  androidstudio,
-  docco
-} from "react-syntax-highlighter/dist/styles";
+import idea from "react-syntax-highlighter/styles/hljs/idea";
+import agate from "react-syntax-highlighter/styles/hljs/agate";
+import androidstudio from "react-syntax-highlighter/styles/hljs/androidstudio";
+import docco from "react-syntax-highlighter/styles/hljs/docco";
 
 /** These are fake cell types for the purposes of demonstration **/
 type CodeCell = {|

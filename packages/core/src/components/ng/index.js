@@ -2,7 +2,8 @@
 import * as React from "react";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { idea, agate } from "react-syntax-highlighter/dist/styles";
+import agate from "react-syntax-highlighter/styles/hljs/agate";
+import idea from "react-syntax-highlighter/styles/hljs/idea";
 
 export type PagersProps = {
   children: React.Node,
