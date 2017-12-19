@@ -91,9 +91,6 @@ const props = {
     },
     data: [
       {
-        id: 88641,
-        player: "womacto01",
-        year: 2006,
         stint: 2,
         team: "CHN",
         lg: "NL",
@@ -116,9 +113,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 88643,
-        player: "schilcu01",
-        year: 2006,
         stint: 1,
         team: "BOS",
         lg: "AL",
@@ -141,9 +135,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 88645,
-        player: "myersmi01",
-        year: 2006,
         stint: 1,
         team: "NYA",
         lg: "AL",
@@ -166,9 +157,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 88649,
-        player: "helliri01",
-        year: 2006,
         stint: 1,
         team: "MIL",
         lg: "NL",
@@ -191,9 +179,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 88650,
-        player: "johnsra05",
-        year: 2006,
         stint: 1,
         team: "NYA",
         lg: "AL",
@@ -216,9 +201,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 88652,
-        player: "finlest01",
-        year: 2006,
         stint: 1,
         team: "SFN",
         lg: "NL",
@@ -241,9 +223,6 @@ const props = {
         gidp: 6
       },
       {
-        id: 88653,
-        player: "gonzalu01",
-        year: 2006,
         stint: 1,
         team: "ARI",
         lg: "NL",
@@ -266,9 +245,6 @@ const props = {
         gidp: 14
       },
       {
-        id: 88662,
-        player: "seleaa01",
-        year: 2006,
         stint: 1,
         team: "LAN",
         lg: "NL",
@@ -291,9 +267,6 @@ const props = {
         gidp: 1
       },
       {
-        id: 89177,
-        player: "francju01",
-        year: 2007,
         stint: 2,
         team: "ATL",
         lg: "NL",
@@ -316,9 +289,6 @@ const props = {
         gidp: 1
       },
       {
-        id: 89178,
-        player: "francju01",
-        year: 2007,
         stint: 1,
         team: "NYN",
         lg: "NL",
@@ -341,9 +311,6 @@ const props = {
         gidp: 1
       },
       {
-        id: 89330,
-        player: "zaungr01",
-        year: 2007,
         stint: 1,
         team: "TOR",
         lg: "AL",
@@ -366,9 +333,6 @@ const props = {
         gidp: 9
       },
       {
-        id: 89333,
-        player: "witasja01",
-        year: 2007,
         stint: 1,
         team: "TBA",
         lg: "AL",
@@ -391,9 +355,6 @@ const props = {
         gidp: 0
       },
       {
-        id: 89334,
-        player: "williwo02",
-        year: 2007,
         stint: 1,
         team: "HOU",
         lg: "NL",
@@ -416,9 +377,6 @@ const props = {
         gidp: 1
       },
       {
-        id: 89335,
-        player: "wickmbo01",
-        year: 2007,
         stint: 2,
         team: "ARI",
         lg: "NL",
