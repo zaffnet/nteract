@@ -17,7 +17,7 @@ import {
 
 import { launchSpec } from "spawnteract";
 
-import { ActionsObservable } from "redux-observable";
+import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
@@ -123,19 +123,18 @@ export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
  * @oaram  {ActionObservable}  action$ ActionObservable for NEW_KERNEL action
  */
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
-  action$
-    .ofType(NEW_KERNEL)
-    .pipe(
-      switchMap(action =>
-        merge(
-          action.channels.pipe(
-            filter(msg => msg.header.msg_type === "status"),
-            map(msg => setExecutionState(msg.content.execution_state))
-          ),
-          of(setExecutionState("idle"))
-        )
+  action$.pipe(
+    ofType(NEW_KERNEL),
+    switchMap(action =>
+      merge(
+        action.channels.pipe(
+          filter(msg => msg.header.msg_type === "status"),
+          map(msg => setExecutionState(msg.content.execution_state))
+        ),
+        of(setExecutionState("idle"))
       )
-    );
+    )
+  );
 /**
  * Get kernel specs from main process
  *
@@ -155,7 +154,8 @@ export const kernelSpecsObservable = Observable.create(observer => {
  * @param  {ActionObservable}  The action type
  */
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
-  action$.ofType(NEW_KERNEL).pipe(
+  action$.pipe(
+    ofType(NEW_KERNEL),
     switchMap(action => {
       /* istanbul ignore if -- used for interactive debugging */
       if (process.env.DEBUG) {
@@ -166,7 +166,8 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   );
 
 export const newKernelByNameEpic = (action$: ActionsObservable<*>) =>
-  action$.ofType(LAUNCH_KERNEL_BY_NAME).pipe(
+  action$.pipe(
+    ofType(LAUNCH_KERNEL_BY_NAME),
     tap(action => {
       if (!action.kernelSpecName) {
         throw new Error("newKernelByNameEpic requires a kernel name");
@@ -187,7 +188,8 @@ export const newKernelByNameEpic = (action$: ActionsObservable<*>) =>
  * @param  {ActionObservable} action$  ActionObservable for LAUNCH_KERNEL action
  */
 export const newKernelEpic = (action$: ActionsObservable<*>) =>
-  action$.ofType(LAUNCH_KERNEL).pipe(
+  action$.pipe(
+    ofType(LAUNCH_KERNEL),
     tap(action => {
       if (!action.kernelSpec) {
         throw new Error("newKernel needs a kernelSpec");

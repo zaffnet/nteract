@@ -13,6 +13,7 @@ import {
   mergeMap,
   catchError
 } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -44,7 +45,8 @@ export function listKernelSpecsEpic(
   action$: ActionsObservable<ALL_ACTIONS>,
   store: Store<*, *>
 ) {
-  return action$.ofType("LIST_KERNELSPECS").pipe(
+  return action$.pipe(
+    ofType("LIST_KERNELSPECS"),
     switchMap((action: LIST_KERNELSPECS) => {
       const config = store.getState().webApp.config;
       // Normalizing to match rx-jupyter vs. the jupyter server config

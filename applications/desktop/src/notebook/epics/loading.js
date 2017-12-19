@@ -1,6 +1,6 @@
 /* @flow */
 
-import { ActionsObservable } from "redux-observable";
+import { ActionsObservable, ofType } from "redux-observable";
 
 import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 
@@ -84,7 +84,8 @@ export const convertRawNotebook = (filename: string, data: string) => ({
  * @param  {ActionObservable}  A LOAD action with the notebook filename
  */
 export const loadEpic = (actions: ActionsObservable<*>) =>
-  actions.ofType(LOAD).pipe(
+  actions.pipe(
+    ofType(LOAD),
     tap(action => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
@@ -116,7 +117,8 @@ export const loadEpic = (actions: ActionsObservable<*>) =>
  * @param  {ActionObservable}  ActionObservable for NEW_NOTEBOOK action
  */
 export const newNotebookEpic = (action$: ActionsObservable<*>) =>
-  action$.ofType(NEW_NOTEBOOK).pipe(
+  action$.pipe(
+    ofType(NEW_NOTEBOOK),
     switchMap(action =>
       of(
         {

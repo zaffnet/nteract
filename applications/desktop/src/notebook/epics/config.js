@@ -9,6 +9,7 @@ import {
 
 import { readFileObservable, writeFileObservable } from "fs-observable";
 import { mapTo, mergeMap, map, switchMap } from "rxjs/operators";
+import { ofType } from "redux-observable";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -37,16 +38,15 @@ export const CONFIG_FILE_PATH = path.join(HOME, ".jupyter", "nteract.json");
  * @return {ActionObservable}  ActionObservable for MERGE_CONFIG action
  */
 export const loadConfigEpic = (actions: ActionsObservable<*>) =>
-  actions
-    .ofType(LOAD_CONFIG)
-    .pipe(
-      switchMap(() =>
-        readFileObservable(CONFIG_FILE_PATH).pipe(
-          map(JSON.parse),
-          map(configLoaded)
-        )
+  actions.pipe(
+    ofType(LOAD_CONFIG),
+    switchMap(() =>
+      readFileObservable(CONFIG_FILE_PATH).pipe(
+        map(JSON.parse),
+        map(configLoaded)
       )
-    );
+    )
+  );
 
 /**
  * An epic that saves the configuration if it has been changed.
@@ -55,7 +55,7 @@ export const loadConfigEpic = (actions: ActionsObservable<*>) =>
  * @return {ActionObservable}  ActionObservable with SAVE_CONFIG type
  */
 export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
-  actions.ofType(SET_CONFIG_KEY).pipe(mapTo({ type: SAVE_CONFIG }));
+  actions.pipe(ofType(SET_CONFIG_KEY), mapTo({ type: SAVE_CONFIG }));
 
 /**
  * An epic that saves the configuration.
@@ -64,7 +64,8 @@ export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
  * @return {ActionObservable}  ActionObservable for DONE_SAVING action
  */
 export const saveConfigEpic = (actions: ActionsObservable<*>, store: any) =>
-  actions.ofType(SAVE_CONFIG).pipe(
+  actions.pipe(
+    ofType(SAVE_CONFIG),
     mergeMap(() =>
       writeFileObservable(
         CONFIG_FILE_PATH,

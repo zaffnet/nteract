@@ -31,6 +31,8 @@ import {
   tap
 } from "rxjs/operators";
 
+import { ofType } from "redux-observable";
+
 import {
   createCellAfter,
   updateCellExecutionCount,
@@ -162,9 +164,10 @@ export function createExecuteCellStream(
 
   return executeCellStream(channels, id, source).pipe(
     takeUntil(
-      action$
-        .pipe(filter(laterAction => laterAction.id === id))
-        .ofType(ABORT_EXECUTION, REMOVE_CELL)
+      action$.pipe(
+        filter(laterAction => laterAction.id === id),
+        ofType(ABORT_EXECUTION, REMOVE_CELL)
+      )
     )
   );
 }
@@ -174,7 +177,8 @@ export function createExecuteCellStream(
  * inner observable streams of the running execution responses
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
-  return action$.ofType("EXECUTE_CELL").pipe(
+  return action$.pipe(
+    ofType("EXECUTE_CELL"),
     tap(action => {
       if (!action.id) {
         throw new Error("execute cell needs an id");
@@ -205,16 +209,15 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 
 export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   // Global message watcher so we need to set up a feed for each new kernel
-  action$
-    .ofType(NEW_KERNEL)
-    .pipe(
-      switchMap(({ channels }) =>
-        channels.pipe(
-          updatedOutputs(),
-          map(output => ({ type: "UPDATE_DISPLAY", output })),
-          catchError(err =>
-            of({ type: ERROR_UPDATE_DISPLAY, payload: err, error: true })
-          )
+  action$.pipe(
+    ofType(NEW_KERNEL),
+    switchMap(({ channels }) =>
+      channels.pipe(
+        updatedOutputs(),
+        map(output => ({ type: "UPDATE_DISPLAY", output })),
+        catchError(err =>
+          of({ type: ERROR_UPDATE_DISPLAY, payload: err, error: true })
         )
       )
-    );
+    )
+  );
