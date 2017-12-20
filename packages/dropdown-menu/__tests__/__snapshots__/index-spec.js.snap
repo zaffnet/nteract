@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DropdownMenu clicking dropdown content triggers the items callback and closes the menu 1`] = `
+<DropdownMenu>
+  <div
+    className="jsx-2673522894 jsx-2673522894 dropdown"
+  >
+    <DropdownTrigger
+      key=".0"
+      onClick={[Function]}
+    >
+      <div
+        className="jsx-2673522894 jsx-3273030785"
+        onClick={[Function]}
+      >
+        <div
+          className="clickMe"
+        >
+          Click me
+        </div>
+        <JSXStyle
+          css="div.jsx-3273030785{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;}"
+          styleId="3273030785"
+        />
+      </div>
+    </DropdownTrigger>
+    <JSXStyle
+      css=".dropdown.jsx-2673522894{display:inline-block;}"
+      styleId="2673522894"
+    />
+  </div>
+</DropdownMenu>
+`;
+
+exports[`DropdownMenu clicking dropdown content triggers the items callback and closes the menu 2`] = `
+<DropdownMenu>
+  <div
+    className="jsx-2673522894 jsx-2673522894 dropdown"
+  >
+    <DropdownTrigger
+      key=".0"
+      onClick={[Function]}
+    >
+      <div
+        className="jsx-2673522894 jsx-3273030785"
+        onClick={[Function]}
+      >
+        <div
+          className="clickMe"
+        >
+          Click me
+        </div>
+        <JSXStyle
+          css="div.jsx-3273030785{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;}"
+          styleId="3273030785"
+        />
+      </div>
+    </DropdownTrigger>
+    <JSXStyle
+      css=".dropdown.jsx-2673522894{display:inline-block;}"
+      styleId="2673522894"
+    />
+  </div>
+</DropdownMenu>
+`;
+
+exports[`DropdownMenu clicking dropdown content triggers the items callback and closes the menu 3`] = `
+<DropdownMenu>
+  <div
+    className="jsx-2673522894 jsx-2673522894 dropdown"
+  >
+    <DropdownTrigger
+      key=".0"
+      onClick={[Function]}
+    >
+      <div
+        className="jsx-2673522894 jsx-3273030785"
+        onClick={[Function]}
+      >
+        <div
+          className="clickMe"
+        >
+          Click me
+        </div>
+        <JSXStyle
+          css="div.jsx-3273030785{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;}"
+          styleId="3273030785"
+        />
+      </div>
+    </DropdownTrigger>
+    <DropdownContent
+      key=".1"
+      onItemClick={[Function]}
+    >
+      <div
+        className="jsx-2673522894 jsx-30005146"
+      >
+        <ul
+          className="jsx-2673522894 jsx-30005146"
+        >
+          <li
+            className="alsoClickMe"
+            key=".0"
+            onClick={[Function]}
+          >
+            1
+          </li>
+        </ul>
+        <JSXStyle
+          css="div.jsx-30005146{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;opacity:1;position:absolute;top:0.2em;right:0;border-style:none;padding:0;font-family:\\"Source Sans Pro\\";font-size:12px;line-height:1.5;margin:20px 0;background-color:var(--dropdown-content,#eeedee);}ul.jsx-30005146{list-style:none;text-align:left;padding:0;margin:0;opacity:1;}li{padding:0.5rem;}li:hover{background-color:var(--dropdown-content-hover,#e2dfe3);cursor:pointer;}"
+          styleId="30005146"
+        />
+      </div>
+    </DropdownContent>
+    <JSXStyle
+      css=".dropdown.jsx-2673522894{display:inline-block;}"
+      styleId="2673522894"
+    />
+  </div>
+</DropdownMenu>
+`;
+
+exports[`DropdownMenu clicking dropdown content triggers the items callback and closes the menu 4`] = `
+<DropdownMenu>
+  <div
+    className="jsx-2673522894 jsx-2673522894 dropdown"
+  >
+    <DropdownTrigger
+      key=".0"
+      onClick={[Function]}
+    >
+      <div
+        className="jsx-2673522894 jsx-3273030785"
+        onClick={[Function]}
+      >
+        <div
+          className="clickMe"
+        >
+          Click me
+        </div>
+        <JSXStyle
+          css="div.jsx-3273030785{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;}"
+          styleId="3273030785"
+        />
+      </div>
+    </DropdownTrigger>
+    <JSXStyle
+      css=".dropdown.jsx-2673522894{display:inline-block;}"
+      styleId="2673522894"
+    />
+  </div>
+</DropdownMenu>
+`;

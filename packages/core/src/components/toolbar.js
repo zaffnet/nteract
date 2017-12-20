@@ -7,10 +7,12 @@
 // TODO: All the `<li>` below that have role button should just be `<button>` with proper styling
 
 import React, { PureComponent } from "react";
-import Dropdown, {
+
+import {
+  DropdownMenu,
   DropdownTrigger,
   DropdownContent
-} from "react-simple-dropdown";
+} from "@nteract/dropdown-menu";
 
 import {
   PinOcticon,
@@ -20,7 +22,7 @@ import {
 } from "@nteract/octicons";
 
 declare type ToolbarProps = {|
-  type: string,
+  type: "markdown" | "code" | "raw",
   executeCell: () => void,
   removeCell: () => void,
   toggleStickyCell: () => void,
@@ -38,6 +40,11 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
   changeCellType: () => void;
   toggleOutputExpansion: () => void;
   dropdown: any;
+
+  static defaultProps = {
+    type: "code"
+  };
+
   constructor(props: ToolbarProps) {
     super(props);
     this.clearOutputs = this.clearOutputs.bind(this);
@@ -48,27 +55,22 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
   }
 
   clearOutputs(): void {
-    this.dropdown.hide();
     this.props.clearOutputs();
   }
 
   changeOutputVisibility(): void {
-    this.dropdown.hide();
     this.props.changeOutputVisibility();
   }
 
   changeInputVisibility(): void {
-    this.dropdown.hide();
     this.props.changeInputVisibility();
   }
 
   toggleOutputExpansion(): void {
-    this.dropdown.hide();
     this.props.toggleOutputExpansion();
   }
 
   changeCellType(): void {
-    this.dropdown.hide();
     this.props.changeCellType();
   }
   render(): React$Element<any> {
@@ -112,60 +114,52 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
               </span>
             </button>
           </div>
-          <Dropdown
-            ref={dropdown => {
-              this.dropdown = dropdown;
-            }}
-          >
+          <DropdownMenu>
             <DropdownTrigger>
               <button title="show additional actions">
-                <span className="octicon">
+                <span className="octicon toggle-menu">
                   <ChevronDownOcticon />
                 </span>
               </button>
             </DropdownTrigger>
-            <DropdownContent>
-              {type === "code" ? (
-                <ul role="listbox" tabIndex="0">
-                  <li
-                    onClick={() => this.clearOutputs()}
-                    className="clearOutput"
-                    role="option"
-                    aria-selected="false"
-                    tabIndex="0"
-                  >
-                    <a>Clear Cell Output</a>
-                  </li>
-                  <li
-                    onClick={() => this.changeInputVisibility()}
-                    className="inputVisibility"
-                    role="option"
-                    aria-selected="false"
-                    tabIndex="0"
-                  >
-                    <a>Toggle Input Visibility</a>
-                  </li>
-                  <li
-                    onClick={() => this.changeOutputVisibility()}
-                    className="outputVisibility"
-                    role="option"
-                    aria-selected="false"
-                    tabIndex="0"
-                  >
-                    <a>Toggle Output Visibility</a>
-                  </li>
-                  <li
-                    onClick={() => this.toggleOutputExpansion()}
-                    className="outputExpanded"
-                    role="option"
-                    aria-selected="false"
-                    tabIndex="0"
-                  >
-                    <a>Toggle Expanded Output</a>
-                  </li>
-                </ul>
-              ) : null}
-              <ul role="listbox" tabIndex="0">
+            {type === "code" ? (
+              <DropdownContent>
+                <li
+                  onClick={() => this.clearOutputs()}
+                  className="clearOutput"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Clear Cell Output</a>
+                </li>
+                <li
+                  onClick={() => this.changeInputVisibility()}
+                  className="inputVisibility"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Toggle Input Visibility</a>
+                </li>
+                <li
+                  onClick={() => this.changeOutputVisibility()}
+                  className="outputVisibility"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Toggle Output Visibility</a>
+                </li>
+                <li
+                  onClick={() => this.toggleOutputExpansion()}
+                  className="outputExpanded"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Toggle Expanded Output</a>
+                </li>
                 <li
                   onClick={() => this.changeCellType()}
                   className="changeType"
@@ -173,13 +167,23 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
                   aria-selected="false"
                   tabIndex="0"
                 >
-                  <a>
-                    Convert to {type === "markdown" ? "Code" : "Markdown"} Cell
-                  </a>
+                  <a>Convert to Markdown Cell</a>
                 </li>
-              </ul>
-            </DropdownContent>
-          </Dropdown>
+              </DropdownContent>
+            ) : (
+              <DropdownContent>
+                <li
+                  onClick={() => this.changeCellType()}
+                  className="changeType"
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Convert to Code Cell</a>
+                </li>
+              </DropdownContent>
+            )}
+          </DropdownMenu>
         </div>
 
         <style jsx>{`
@@ -226,7 +230,7 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
             position: absolute;
             top: 0px;
             right: 0px;
-            z-index: 99;
+            z-index: 9999;
             height: 34px;
 
             /* Set the left padding to 50px to give users extra room to move their
@@ -237,47 +241,6 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
 
           .octicon {
             transition: color 0.5s;
-          }
-
-          .cell-toolbar :global(.dropdown) {
-            display: inline-block;
-          }
-
-          .cell-toolbar :global(.dropdown__content) {
-            display: none;
-            opacity: 1;
-            position: absolute;
-            top: 0.2em;
-            right: 0;
-            border-style: none;
-            padding: 0;
-            font-family: "Source Sans Pro";
-            font-size: 12px;
-            line-height: 1.5;
-            margin: 20px 0;
-            background-color: var(--dropdown-content, #eeedee);
-          }
-
-          .cell-toolbar :global(.dropdown__content ul) {
-            list-style: none;
-            text-align: left;
-            padding: 0;
-            margin: 0;
-            opacity: 1;
-          }
-
-          .cell-toolbar :global(.dropdown__content li) {
-            padding: 0.5rem;
-          }
-
-          .cell-toolbar :global(.dropdown__content li:hover) {
-            background-color: var(--dropdown-content-hover, #e2dfe3);
-            cursor: pointer;
-          }
-
-          .cell-toolbar :global(.dropdown--active .dropdown__content) {
-            display: inline-block;
-            opacity: 1;
           }
         `}</style>
       </div>
