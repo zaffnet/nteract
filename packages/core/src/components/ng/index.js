@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { idea, agate } from "react-syntax-highlighter/dist/styles";
+import syntax from "../../../themes/syntax-highlighting";
 
 export type PagersProps = {
   children: React.Node,
@@ -231,17 +231,6 @@ export type EditorProps = {
   theme: "light" | "dark"
 };
 
-function selectHighlighterStyle(theme: string = "light") {
-  switch (theme) {
-    case "light":
-      return idea;
-    case "dark":
-      return agate;
-    default:
-      return idea;
-  }
-}
-
 export class Editor extends React.Component<EditorProps> {
   static defaultProps = {
     children: "",
@@ -255,7 +244,7 @@ export class Editor extends React.Component<EditorProps> {
     if (typeof this.props.children === "string") {
       return (
         <SyntaxHighlighter
-          style={selectHighlighterStyle(this.props.theme)}
+          style={syntax}
           language={this.props.language}
           className={this.props.className}
           customStyle={{
