@@ -88,9 +88,13 @@ const server = (state = {}, { type, payload }) => {
     case actionTypes.FETCH_SERVER: {
       return { ...state, isFetching: true, error: null };
     }
-    case actionTypes.FETCH_SERVER_FULFILLED:
+    case actionTypes.FETCH_SERVER_FULFILLED: {
+      return { ...state, isFetching: false, error: null };
+    }
+    case actionTypes.FETCH_SERVER_FAILED: {
+      return { ...state, isFetching: false, error: payload };
+    }
     case actionTypes.SET_SERVER:
-    case actionTypes.FETCH_SERVER_FAILED:
     case actionTypes.FETCH_SERVER_CANCELED:
     case actionTypes.KILL_SERVER:
     case actionTypes.KILL_SERVER_FULFILLED:
@@ -167,4 +171,8 @@ const ui = combineReducers({
   showPanel,
   serverId,
   currentKernelName
+});
+
+const entities = combineReducers({
+  serversById
 });

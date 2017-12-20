@@ -29,7 +29,7 @@ state:
     serversById: {
       <ID>: {
         server: {
-          endpoint: <ID>,
+          endpoint: <string>,
           token: <string>,
           uri: <string>,
           crossDomain: <boolean>,
