@@ -10,7 +10,7 @@ global.$ = jquery;
 import React, { PropTypes as T } from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
-import MarkdownTransform from "@nteract/transforms/lib/markdown";
+import { MarkdownTransform } from "@nteract/transforms";
 import DataResourceTransform from "@nteract/transform-dataresource";
 import { VegaLite, Vega } from "@nteract/transform-vega";
 import { PlotlyNullTransform, PlotlyTransform } from "./transforms";

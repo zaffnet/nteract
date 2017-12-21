@@ -48,7 +48,6 @@ function createContentResponse(
     path.join(parsedFilePath.dir, parsedFilePath.base)
   );
   const writable = Boolean(fs.constants.W_OK & stat.mode);
-  // $FlowFixMe: See https://github.com/facebook/flow/pull/3767
   const created: Date = stat.birthtime;
   const last_modified = stat.mtime;
 
@@ -206,7 +205,6 @@ function getDirectory(
 
         Promise.all(contentPromises)
           .then(contents =>
-            // $FlowFixMe
             contents.filter(x => !(x === null || x === undefined))
           )
           .then(contents => {
