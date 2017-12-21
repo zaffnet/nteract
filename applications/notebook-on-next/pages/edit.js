@@ -43,9 +43,7 @@ export default class Edit extends React.Component<*> {
     if (this.props.serverNotebook) {
       store.dispatch({
         type: "SET_NOTEBOOK",
-        notebook: this.props.serverNotebook
-          ? fromJS(this.props.serverNotebook)
-          : emptyNotebook
+        notebook: fromJS(this.props.serverNotebook)
       });
     }
   }
