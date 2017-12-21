@@ -2,8 +2,8 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
-import { ConnectedNotebook } from "@nteract/core/lib/components/notebook";
-import withRedux from "next-redux-wrapper";
+import { Notebook } from "@nteract/core/components";
+import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 import configureStore from "../store";
@@ -28,7 +28,7 @@ async function fetchFromGist(gistId) {
     .catch(err => emptyNotebook.toJS());
 }
 
-class Simple extends React.Component<*> {
+export default class Simple extends React.Component<*> {
   static async getInitialProps({ query, isServer }) {
     // TODO: Error handling
     const serverNotebook = await fetchFromGist(query.gistid);
@@ -51,40 +51,12 @@ class Simple extends React.Component<*> {
   }
 
   render() {
-    return <ConnectedNotebook {...this.props} />;
+    return (
+      <Provider store={store}>
+        <div>
+          <Notebook />;
+        </div>
+      </Provider>
+    );
   }
 }
-
-export function getLanguageMode(metadata: ImmutableMap<*, *>): string {
-  // First try codemirror_mode, then name, and fallback to 'text'
-  const language = metadata.getIn(
-    ["language_info", "codemirror_mode", "name"],
-    metadata.getIn(
-      ["language_info", "codemirror_mode"],
-      metadata.getIn(["language_info", "name"], "text")
-    )
-  );
-  return language;
-}
-
-const mapStateToProps = (state: Object) => ({
-  theme: state.config.get("theme"),
-  lastSaved: state.app.get("lastSaved"),
-  kernelSpecDisplayName: state.app.get("kernelSpecDisplayName"),
-  cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
-  cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
-  transient: state.document.get("transient"),
-  cellPagers: state.document.get("cellPagers"),
-  cellFocused: state.document.get("cellFocused"),
-  editorFocused: state.document.get("editorFocused"),
-  stickyCells: state.document.get("stickyCells"),
-  executionState: state.app.get("executionState"),
-  models: state.comms.get("models"),
-  language: getLanguageMode(
-    state.document.getIn(["notebook", "metadata"], ImmutableMap())
-  )
-});
-
-// We should reuse the fully connected notebook from @nteract/core in the future
-// since we actually don't need the serverside state
-export default withRedux(() => store, mapStateToProps)(Simple);
