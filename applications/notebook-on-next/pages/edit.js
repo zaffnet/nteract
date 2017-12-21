@@ -1,14 +1,14 @@
 // @flow
 import React from "react";
-import { ConnectedNotebook } from "@nteract/core/lib/components/notebook";
 import fetch from "isomorphic-fetch";
-import configureStore from "../store";
-import withRedux from "next-redux-wrapper";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
-import { Map } from "immutable";
-import type { List } from "immutable";
+import { Notebook } from "@nteract/core/components";
+import { Provider } from "react-redux";
+import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
-const store = () => configureStore({});
+import configureStore from "../store";
+
+const store = configureStore();
 
 async function fetchFromGist(gistId) {
   const path = `https://api.github.com/gists/${gistId}`;
@@ -25,56 +25,87 @@ async function fetchFromGist(gistId) {
         }
       }
     })
-    .catch(err => emptyNotebook);
+    .catch(err => emptyNotebook.toJS());
 }
 
-type Props = {
-  cellOrder: List<any>,
-  cellMap: Map<string, any>,
-  language: string
-};
-
-class Edit extends React.Component<Props, Props> {
-  static async getInitialProps({ query, res }) {
-    const notebook = await fetchFromGist(query.gistid);
-    return { notebook };
+export default class Edit extends React.Component<*> {
+  static async getInitialProps({ query, isServer }) {
+    // TODO: Error handling
+    const serverNotebook = await fetchFromGist(query.gistid);
+    store.dispatch({
+      type: "SET_NOTEBOOK",
+      notebook: serverNotebook ? fromJS(serverNotebook) : emptyNotebook
+    });
+    return { serverNotebook, isServer };
   }
 
-  constructor(props) {
-    super(props);
-    const notebook = fromJS(props.notebook);
-    const language = notebook.getIn(
-      ["metadata", "language_info", "codemirror_mode", "name"],
-      notebook.getIn(
-        ["metadata", "language_info", "codemirror_mode"],
-        notebook.getIn(["metadata", "language_info", "name"], "text")
-      )
-    );
-    const cellOrder = notebook.get("cellOrder");
-    const cellMap = notebook.get("cellMap");
-    this.state = { cellOrder, language, cellMap };
+  componentWillMount() {
+    if (this.props.serverNotebook) {
+      store.dispatch({
+        type: "SET_NOTEBOOK",
+        notebook: fromJS(this.props.serverNotebook)
+      });
+    }
   }
 
   render() {
-    const { cellOrder, cellMap, language } = this.state;
     return (
-      <ConnectedNotebook
-        cellOrder={cellOrder}
-        cellMap={cellMap}
-        cellPagers={Map()}
-        stickyCells={Map()}
-        transient={Map()}
-        cellFocused={null}
-        editorFocused={null}
-        theme={"light"}
-        lastSaved={new Date()}
-        kernelSpecDisplayName={"python"}
-        executionState={"idle"}
-        models={Map()}
-        language={language}
-      />
+      <div>
+        <style>{`@media print {
+          * {
+            box-shadow: none !important;
+          }
+          .status-bar {
+            display: none !important;
+          }
+          .notifications-wrapper {
+            display: none !important;
+          }
+          .cell-toolbar {
+            display: none !important;
+          }
+          .cell-creator {
+            display: none !important;
+          }
+          .cell.focused {
+            border: none;
+            background: var(--cell-bg, white) !important;
+          }
+          .cell:focus .prompt,
+          .cell.focused .prompt {
+            background: var(--pager-bg, #fafafa) !important;
+          }
+          .draggable-cell {
+            padding: 0px !important;
+          }
+          .cell-drag-handle {
+            display: none !important;
+          }
+          .cell-toolbar-mask {
+            display: none !important;
+          }
+          .invisible {
+            display: none !important;
+          }
+        }
+        @media not print {
+          .cells {
+            padding-bottom: calc(100vh - 110px);
+          }
+        }
+        body {
+          margin: 0;
+          font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+            "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
+            "Segoe UI Emoji", "Segoe UI Symbol";
+          font-size: 1em;
+        }`}</style>
+        <Provider store={store}>
+          <div>
+            <Notebook />;
+          </div>
+        </Provider>
+      </div>
     );
   }
 }
-
-export default withRedux(store, null)(Edit);
