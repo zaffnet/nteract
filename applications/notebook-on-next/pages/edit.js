@@ -37,7 +37,7 @@ const Error = () => (
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 30px;
-      font-family: Source Sans Pro;
+      font-family: Source Sans Pro, Helvetica, sans-serif;
     `}</style>
     Could not fetch notebook.
   </div>
