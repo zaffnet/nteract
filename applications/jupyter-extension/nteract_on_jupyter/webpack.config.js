@@ -13,7 +13,6 @@ module.exports = {
       "redux-observable",
       "immutable",
       "rxjs",
-      "codemirror",
       "jquery"
     ]
   },

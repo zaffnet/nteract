@@ -19,7 +19,6 @@
     "@nteract/transform-vega": "^3.0.1",
     "@nteract/transforms": "^3.0.3",
     "anser": "^1.4.1",
-    "codemirror": "^5.28.0",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
     "plotly.js": "^1.29.3",
