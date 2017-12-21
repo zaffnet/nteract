@@ -172,7 +172,6 @@ export function connect(
     // Subject.create takes a subscriber and an observable. We're only overriding
     // the subscriber here so we pass the subject on as an observable as the
     // second argument to Subject.create (since it's _also_ an observable)
-    // $FlowFixMe: update the flow definition to allow this
     wsSubject
   );
 }

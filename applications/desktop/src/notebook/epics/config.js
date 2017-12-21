@@ -69,7 +69,6 @@ export const saveConfigEpic = (actions: ActionsObservable<*>, store: any) =>
     mergeMap(() =>
       writeFileObservable(
         CONFIG_FILE_PATH,
-        // $FlowFixMe: We're totally using this argument, not sure what's up here
         JSON.stringify(store.getState().config.toJS())
       ).pipe(map(doneSavingConfig))
     )

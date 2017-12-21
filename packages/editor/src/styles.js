@@ -1,5 +1,4 @@
 // @flow
-// $FlowFixMe: this is a "fake" import from styled-jsx that gets handled by their babel setup
 import css from "styled-jsx/css";
 
 export default css`

@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
-import MarkdownTransform from "@nteract/transforms/lib/markdown";
+import { MarkdownTransform } from "@nteract/transforms";
 
 import DirectoryListing from "./directory-listing";
 
@@ -109,7 +109,6 @@ export const Entry = (props: EntryProps) => {
     case "notebook":
       return (
         <NotebookPreview
-          // $FlowFixMe COME BACK TO THIS
           notebook={props.entry.content}
           displayOrder={displayOrder}
           transforms={transforms}

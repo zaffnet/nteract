@@ -1,8 +1,7 @@
 // @flow
 import * as React from "react";
 
-import JSONTransform from "@nteract/transforms/lib/json";
-import HTML from "@nteract/transforms/lib/html";
+import { JSONTransform, HTMLTransform } from "@nteract/transforms";
 
 import { _nextgen } from "@nteract/core/components";
 
@@ -162,7 +161,7 @@ const UnsupportedResult = props => (
 const Message = props => {
   switch (props.type) {
     case "HTML":
-      return <HTML data={props.data} />;
+      return <HTMLTransform data={props.data} />;
     case "TEXT":
       return <Text data={props.data} />;
     default:
@@ -177,7 +176,7 @@ const Result = props => {
 
   switch (props.result.type) {
     case "HTML":
-      return <HTML data={props.result.msg} />;
+      return <HTMLTransform data={props.result.msg} />;
     case "TEXT":
       return <Text data={props.result.msg} />;
     case "TABLE":

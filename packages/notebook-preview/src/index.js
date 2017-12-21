@@ -13,7 +13,7 @@ import {
   appendCellToNotebook,
   fromJS
 } from "@nteract/commutable";
-import { createCodeCell } from "@nteract/commutable/lib/structures";
+import { createCodeCell } from "@nteract/commutable";
 
 import { _nextgen } from "@nteract/core/components";
 
