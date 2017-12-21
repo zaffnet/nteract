@@ -12,6 +12,9 @@ export default class MyDocument extends Document {
     return (
       <html lang="en-US">
         <Head>
+          {/* TODO: Once we're fully migrated to our next gen components we can remove the vendored style sheets */}
+          <link href="/static/normalize.css" rel="stylesheet" type="text/css" />
+          <link href="/static/main.css" rel="stylesheet" type="text/css" />
           <link
             href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700,300,200,500,600,900"
             rel="stylesheet"
