@@ -120,7 +120,7 @@
     "codemirror": "5.32.0",
     "commonmark": "0.28.1",
     "commonmark-react-renderer": "4.3.4",
-    "cross-env": "5.1.1",
+    "cross-env": "5.1.2",
     "date-fns": "1.29.0",
     "electron": "1.7.10",
     "electron-builder": "19.49.2",
