@@ -28,7 +28,7 @@ async function fetchFromGist(gistId) {
     .catch(err => emptyNotebook.toJS());
 }
 
-export default class Simple extends React.Component<*> {
+export default class Edit extends React.Component<*> {
   static async getInitialProps({ query, isServer }) {
     // TODO: Error handling
     const serverNotebook = await fetchFromGist(query.gistid);
