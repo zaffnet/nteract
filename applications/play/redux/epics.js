@@ -44,6 +44,7 @@ const activateServerEpic = action$ =>
             actionsArray.push(actions.fetchKernelSpecs({ serverId }));
             if (oldServerId) {
               // TODO: kill server epic doesn't exist yet to handle this.
+              // TODO: the server will be culled once we do a jupyter shutdown call
               actionsArray.push(actions.killServer({ serverId: oldServerId }));
             }
           }
