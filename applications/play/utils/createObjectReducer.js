@@ -10,7 +10,7 @@
  * @param {Function} config.valueReducer A standard redux reducer function.
  * @returns {Function} A standard redux reducer function.
  */
-const createObjectReducer = config => (state = {}, action) => {
+const createObjectReducer = (config: *) => (state: * = {}, action: *) => {
   const key = config.getKey(action);
   if (typeof key !== "undefined") {
     const previousValueState = state[key];
