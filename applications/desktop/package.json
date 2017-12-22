@@ -126,7 +126,6 @@
     "electron-context-menu": "0.9.1",
     "electron-log": "2.2.13",
     "electron-updater": "2.17.6",
-    "enchannel": "^4.2.1",
     "enchannel-zmq-backend": "^5.1.0",
     "escape-carriage": "1.2.0",
     "fs-observable": "^2.0.2",
