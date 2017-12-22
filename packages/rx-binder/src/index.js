@@ -18,8 +18,8 @@ function cleanRepo(repo) {
 /*::
 type BinderOptions = {
   repo: string,
-  ref: string,
-  binderURL: string,
+  ref?: string,
+  binderURL?: string,
 }
 */
 

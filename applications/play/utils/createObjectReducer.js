@@ -1,3 +1,4 @@
+// @flow
 /**
  * Similar to how combineReducers allows you to create a container reducer to
  * delegate actions where each key maps to a reducer to handle the key's value--

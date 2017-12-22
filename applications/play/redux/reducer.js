@@ -1,3 +1,4 @@
+// @flow
 import { combineReducers } from "redux";
 import * as actionTypes from "./actionTypes";
 import * as utils from "../utils";

@@ -1,8 +1,13 @@
+// @flow
 import * as actionTypes from "./actionTypes";
 import * as actions from "./actions";
-// TODO don't import everything from "rxjs"!
-import { Observable } from "rxjs";
+
+// $FlowFixMe: ofType should now be a lettable operator and is used on master
 import { combineEpics, ofType } from "redux-observable";
+
+import { of } from "rxjs/observable/of";
+import { merge } from "rxjs/observable/merge";
+
 import {
   catchError,
   ignoreElements,
@@ -13,7 +18,7 @@ import {
 } from "rxjs/operators";
 import { binder } from "rx-binder";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 import objectPath from "object-path";
 
@@ -42,10 +47,10 @@ const activateServerEpic = action$ =>
               actionsArray.push(actions.killServer({ serverId: oldServerId }));
             }
           }
-          return Observable.of(...actionsArray);
+          return of(...actionsArray);
         }),
         catchError(error =>
-          Observable.of(actions.activateServerFailed({ serverId, error }))
+          of(actions.activateServerFailed({ serverId, error }))
         )
       );
     })
@@ -56,10 +61,11 @@ const fetchKernelSpecsEpic = (action$, store) =>
     ofType(actionTypes.FETCH_KERNEL_SPECS),
     mergeMap(({ payload: { serverId } }) => {
       const { config } = store.getState().entities.serversById[serverId].server;
+      // $FlowFixMe: this should be ok, once rebased this should work out
       return kernelspecs.list(config).pipe(
         mergeMap(data => {
           const kernelName = data.response.default;
-          return Observable.of(
+          return of(
             actions.fetchKernelSpecsFulfilled({
               serverId,
               response: data.response
@@ -68,7 +74,7 @@ const fetchKernelSpecsEpic = (action$, store) =>
           );
         }),
         catchError(error =>
-          Observable.of(actions.fetchKernelSpecsFailed({ serverId, error }))
+          of(actions.fetchKernelSpecsFailed({ serverId, error }))
         )
       );
     })
@@ -93,7 +99,7 @@ const setActiveKernelEpic = (action$, store) =>
       if (!channel) {
         actionsArray.push(actions.activateKernel({ serverId, kernelName }));
       }
-      return Observable.of(...actionsArray);
+      return of(...actionsArray);
     })
   );
 
@@ -147,7 +153,7 @@ const activateKernelEpic = (action$, store) =>
                 default:
                   break;
               }
-              return Observable.of(...actionsArray);
+              return of(...actionsArray);
             })
           );
 
@@ -156,8 +162,8 @@ const activateKernelEpic = (action$, store) =>
           kernel.channel.next(kernelInfoRequest());
           kernel.channel.next(kernelInfoRequest());
 
-          return Observable.merge(
-            Observable.of(
+          return merge(
+            of(
               actions.activateKernelFulfilled({
                 serverId,
                 kernelName,

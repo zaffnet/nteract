@@ -1,3 +1,4 @@
+// @flow
 const PREFIX = "PLAY";
 const FULFILLED = "FULFILLED";
 const FAILED = "FAILED";

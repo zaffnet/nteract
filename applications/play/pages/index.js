@@ -1,3 +1,4 @@
+// @flow
 import * as React from "react";
 import Main from "../components/Main";
 import { createStore } from "../redux";
@@ -25,7 +26,7 @@ function detectPlatform(req) {
   return "macOS";
 }
 
-class Page extends React.Component {
+class Page extends React.Component<*, *> {
   static async getInitialProps({ req, store }) {
     // Note that we cannot dispatch async actions in getInitialProps since it's
     // being handled server side. If we _need_ to do that, we should refactor
