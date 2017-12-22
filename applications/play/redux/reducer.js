@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
 import * as actionTypes from "./actionTypes";
-import { formBinderURL } from "rx-binder";
+import * as utils from "../utils";
+import objectPath from "object-path";
 
-const repo = (state = "binder-examples/jupyter-stacks", { type, payload }) => {
-  switch (type) {
+const repo = (state = "", action) => {
+  switch (action.type) {
     case actionTypes.SUBMIT_BINDER_FORM: {
-      return payload.repo;
+      return action.payload.repo;
     }
     default: {
       return state;
@@ -13,10 +14,10 @@ const repo = (state = "binder-examples/jupyter-stacks", { type, payload }) => {
   }
 };
 
-const gitref = (state = "master", { type, payload }) => {
-  switch (type) {
+const gitref = (state = "", action) => {
+  switch (action.type) {
     case actionTypes.SUBMIT_BINDER_FORM: {
-      return payload.gitref;
+      return action.payload.gitref;
     }
     default: {
       return state;
@@ -24,25 +25,10 @@ const gitref = (state = "master", { type, payload }) => {
   }
 };
 
-const default_source = `from vdom import h1, p, img, div, b, span
-div(
-    h1('Welcome to play.nteract.io'),
-    p('Run Python code via Binder & Jupyter'),
-    img(src="https://bit.ly/storybot-vdom"),
-    p('Change the code, click ',
-        span("▶ Run", style=dict(
-            color="white",
-            backgroundColor="black",
-            padding="10px"
-        )),
-      ' Up above'
-    )
-)`;
-
-const source = (state = default_source, { type, payload }) => {
-  switch (type) {
+const source = (state = "", action) => {
+  switch (action.type) {
     case actionTypes.SET_SOURCE: {
-      return payload;
+      return action.payload;
     }
     default: {
       return state;
@@ -50,10 +36,10 @@ const source = (state = default_source, { type, payload }) => {
   }
 };
 
-const showPanel = (state = false, { type, payload }) => {
-  switch (type) {
+const showPanel = (state = false, action) => {
+  switch (action.type) {
     case actionTypes.SET_SHOW_PANEL: {
-      return payload;
+      return action.payload;
     }
     default: {
       return state;
@@ -61,10 +47,11 @@ const showPanel = (state = false, { type, payload }) => {
   }
 };
 
-const serverId = (state = "", { type, payload }) => {
-  switch (type) {
-    case actionTypes.SET_SERVER_ID: {
-      return payload;
+const currentServerId = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_SERVER:
+    case actionTypes.SET_CURRENT_SERVER_ID: {
+      return action.payload.serverId;
     }
     default: {
       return state;
@@ -72,10 +59,21 @@ const serverId = (state = "", { type, payload }) => {
   }
 };
 
-const setCurrentKernelName = (state = "", { type, payload }) => {
-  switch (type) {
+const platform = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.SET_PLATFORM: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
+const currentKernelName = (state = "", action) => {
+  switch (action.type) {
     case actionTypes.SET_CURRENT_KERNEL_NAME: {
-      return payload;
+      return action.payload;
     }
     default: {
       return state;
@@ -83,96 +81,241 @@ const setCurrentKernelName = (state = "", { type, payload }) => {
   }
 };
 
-const server = (state = {}, { type, payload }) => {
-  switch (type) {
-    case actionTypes.FETCH_SERVER: {
-      return { ...state, isFetching: true, error: null };
-    }
-    case actionTypes.FETCH_SERVER_FULFILLED: {
-      return { ...state, isFetching: false, error: null };
-    }
-    case actionTypes.FETCH_SERVER_FAILED: {
-      return { ...state, isFetching: false, error: payload };
-    }
-    case actionTypes.SET_SERVER:
-    case actionTypes.FETCH_SERVER_CANCELED:
-    case actionTypes.KILL_SERVER:
-    case actionTypes.KILL_SERVER_FULFILLED:
-    case actionTypes.KILL_SERVER_FAILED:
-    case actionTypes.KILL_SERVER_CANCELED:
-    case actionTypes.FETCH_KERNEL_SPECS:
-    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
-    case actionTypes.FETCH_KERNEL_SPECS_FAILED:
-    case actionTypes.FETCH_KERNEL_SPECS_CANCELED:
-    case actionTypes.SET_ACTIVE_KERNEL:
-    case actionTypes.SET_RESTART_KERNEL:
-    case actionTypes.ACTIVATE_KERNEL:
-    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
-    case actionTypes.ACTIVATE_KERNEL_FAILED:
-    case actionTypes.ACTIVATE_KERNEL_CANCELED:
-    case actionTypes.INTERRUPT_KERNEL:
-    case actionTypes.INTERRUPT_KERNEL_FULFILLED:
-    case actionTypes.INTERRUPT_KERNEL_FAILED:
-    case actionTypes.INTERRUPT_KERNEL_CANCELED:
-    case actionTypes.KILL_KERNEL:
-    case actionTypes.KILL_KERNEL_FULFILLED:
-    case actionTypes.KILL_KERNEL_FAILED:
-    case actionTypes.KILL_KERNEL_CANCELED: {
-    }
+const serverConfig = (state = {}, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_SERVER_FULFILLED:
+      return action.payload.config;
     default:
       return state;
   }
 };
 
-const serversById = (state = {}, { type, payload }) => {
-  switch (type) {
-    case actionTypes.FETCH_SERVER:
-    case actionTypes.FETCH_SERVER_FULFILLED:
-    case actionTypes.SET_SERVER:
-    case actionTypes.FETCH_SERVER_FAILED:
-    case actionTypes.FETCH_SERVER_CANCELED:
-    case actionTypes.KILL_SERVER:
-    case actionTypes.KILL_SERVER_FULFILLED:
-    case actionTypes.KILL_SERVER_FAILED:
-    case actionTypes.KILL_SERVER_CANCELED:
-    case actionTypes.FETCH_KERNEL_SPECS:
-    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
-    case actionTypes.FETCH_KERNEL_SPECS_FAILED:
-    case actionTypes.FETCH_KERNEL_SPECS_CANCELED:
-    case actionTypes.SET_ACTIVE_KERNEL:
-    case actionTypes.SET_RESTART_KERNEL:
-    case actionTypes.ACTIVATE_KERNEL:
-    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
-    case actionTypes.ACTIVATE_KERNEL_FAILED:
-    case actionTypes.ACTIVATE_KERNEL_CANCELED:
-    case actionTypes.INTERRUPT_KERNEL:
-    case actionTypes.INTERRUPT_KERNEL_FULFILLED:
-    case actionTypes.INTERRUPT_KERNEL_FAILED:
-    case actionTypes.INTERRUPT_KERNEL_CANCELED:
-    case actionTypes.KILL_KERNEL:
-    case actionTypes.KILL_KERNEL_FULFILLED:
-    case actionTypes.KILL_KERNEL_FAILED:
-    case actionTypes.KILL_KERNEL_CANCELED: {
-      // TODO: add flow type to indicate that id is required
-      return {
-        ...state,
-        [payload.id]: server(state[payload.id], { type, payload })
-      };
-    }
+const serverMessages = (state = [], action) => {
+  switch (action.type) {
+    case actionTypes.ADD_SERVER_MESSAGE:
+      return [...state, action.payload.message];
     default:
-      return source;
+      return state;
   }
 };
+
+const kernelSpecsLoading = (state = false, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_KERNEL_SPECS:
+      return true;
+    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
+    case actionTypes.FETCH_KERNEL_SPECS_FAILED:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const kernelSpecsError = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_KERNEL_SPECS:
+    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
+      return null;
+    case actionTypes.FETCH_KERNEL_SPECS_FAILED:
+      return action.payload.error;
+    default:
+      return state;
+  }
+};
+
+const kernelSpecsDefault = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
+      return action.payload.response.default;
+    default:
+      return state;
+  }
+};
+
+const kernelSpecsKernelSpecByKernelName = (state = {}, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_KERNEL_SPECS_FULFILLED:
+      return action.payload.response.kernelspecs;
+    default:
+      return state;
+  }
+};
+
+const serverKernelSpecs = combineReducers({
+  loading: kernelSpecsLoading,
+  error: kernelSpecsError,
+  default: kernelSpecsDefault,
+  kernelSpecByKernelName: kernelSpecsKernelSpecByKernelName
+});
+
+const activeKernelName = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+      return action.payload.kernel.name;
+    default:
+      return state;
+  }
+};
+
+const activeKernelId = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+      return action.payload.kernel.id;
+    default:
+      return state;
+  }
+};
+
+const activeKernelLastActivity = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+      return action.payload.kernel.last_activity;
+    default:
+      return state;
+  }
+};
+
+const activeKernelChannel = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+      return action.payload.kernel.channel;
+    default:
+      return state;
+  }
+};
+
+const activeKernelOutputs = (state = [], action) => {
+  switch (action.type) {
+    case actionTypes.ADD_KERNEL_OUTPUT:
+      return [...state, action.payload.output];
+    default:
+      return state;
+  }
+};
+
+const activeKernelStatus = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.SET_KERNEL_STATUS:
+      return action.payload.status;
+    default:
+      return state;
+  }
+};
+
+const activeKernelMessages = (state = [], action) => {
+  switch (action.type) {
+    case actionTypes.ADD_KERNEL_MESSAGE:
+      return [...state, action.payload.message];
+    default:
+      return state;
+  }
+};
+
+const activeKernel = combineReducers({
+  name: activeKernelName,
+  id: activeKernelId,
+  lastActivity: activeKernelLastActivity,
+  channel: activeKernelChannel,
+  outputs: activeKernelOutputs,
+  status: activeKernelStatus,
+  messages: activeKernelMessages
+});
+
+const activeKernelEnvelopeLoading = (state = false, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL: {
+      return true;
+    }
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+    case actionTypes.ACTIVATE_KERNEL_FAILED:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const activeKernelEnvelopeError = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_KERNEL_FULFILLED:
+    case actionTypes.ACTIVATE_KERNEL: {
+      return false;
+    }
+    case actionTypes.ACTIVATE_KERNEL_FAILED:
+      return action.payload.error;
+    default:
+      return state;
+  }
+};
+
+const activeKernelEnvelope = combineReducers({
+  loading: activeKernelEnvelopeLoading,
+  error: activeKernelEnvelopeError,
+  kernel: activeKernel
+});
+
+const serverActiveKernelsByName = utils.createObjectReducer({
+  getKey: action => objectPath.get(action, "payload.kernelName"),
+  valueReducer: activeKernelEnvelope
+});
+
+const server = combineReducers({
+  config: serverConfig,
+  messages: serverMessages,
+  kernelSpecs: serverKernelSpecs,
+  activeKernelsByName: serverActiveKernelsByName
+});
+
+const serverEnvelopeLoading = (state = false, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_SERVER: {
+      return true;
+    }
+    case actionTypes.ACTIVATE_SERVER_FULFILLED:
+    case actionTypes.ACTIVATE_SERVER_FAILED:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const serverEnvelopeError = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ACTIVATE_SERVER_FULFILLED:
+    case actionTypes.ACTIVATE_SERVER: {
+      return false;
+    }
+    case actionTypes.ACTIVATE_SERVER_FAILED:
+      return action.payload.error;
+    default:
+      return state;
+  }
+};
+
+const serverEnvelope = combineReducers({
+  loading: serverEnvelopeLoading,
+  error: serverEnvelopeError,
+  server
+});
+
+const serversById = utils.createObjectReducer({
+  getKey: action => objectPath.get(action, "payload.serverId"),
+  valueReducer: serverEnvelope
+});
 
 const ui = combineReducers({
   repo,
   gitref,
   source,
   showPanel,
-  serverId,
+  currentServerId,
+  platform,
   currentKernelName
 });
 
 const entities = combineReducers({
   serversById
 });
+
+const reducer = combineReducers({ ui, entities });
+
+export default reducer;

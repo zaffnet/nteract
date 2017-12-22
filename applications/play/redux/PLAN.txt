@@ -22,17 +22,20 @@ state:
     gitref: <string>,
     source: <string>,
     showPanel: <boolean>,
-    serverId: <string>,
-    currentKernelName: <string>
+    currentServerId: <string>,
+    currentKernelName: <string>,
+    platform: <string>
   },
   entities: {
     serversById: {
       <ID>: {
         server: {
-          endpoint: <string>,
-          token: <string>,
-          uri: <string>,
-          crossDomain: <boolean>,
+          config: {
+              endpoint: <string>,
+              token: <string>,
+              uri: <string>,
+              crossDomain: <boolean>
+          },
           messages: <array>,
           kernelSpecs: {
             kernelSpecByKernelName: {
@@ -42,26 +45,27 @@ state:
                 spec: <object>
               }
             },
+            error: <object>,
             default: <string>,
-            isFetching: <boolean>
+            loading: <boolean>
           }
           activeKernelsByName: {
             <NAME>: {
               kernel: {
                 name: <NAME>,
                 id: <string>,
-                last_activity: <string>,
+                lastActivity: <string>,
                 channel: <observable>,
                 outputs: <array>,
                 status: <string>,
                 messages: <array>
               },
-              isFetching: <boolean>,
+              loading: <boolean>,
               error: <object>
             }
           }
         },
-        isFetching: <boolean>,
+        loading: <boolean>,
         error: <object>
       }
     }

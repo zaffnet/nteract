@@ -1,24 +1,42 @@
 import * as actionTypes from "./actionTypes";
 
-export const setServer = payload => ({
-  type: actionTypes.SET_SERVER,
+// Simple actions related to UI state.
+export const setCurrentKernelName = payload => ({
+  type: actionTypes.SET_CURRENT_KERNEL_NAME,
+  payload
+});
+export const setCurrentServerId = payload => ({
+  type: actionTypes.SET_CURRENT_SERVER_ID,
+  payload
+});
+export const setPlatform = payload => ({
+  type: actionTypes.SET_PLATFORM,
+  payload
+});
+export const setShowPanel = payload => ({
+  type: actionTypes.SET_SHOW_PANEL,
+  payload
+});
+export const setSource = payload => ({
+  type: actionTypes.SET_SOURCE,
+  payload
+});
+export const submitBinderForm = payload => ({
+  type: actionTypes.SUBMIT_BINDER_FORM,
   payload
 });
 
-export const fetchServer = payload => ({
-  type: actionTypes.FETCH_SERVER,
+// Actions related to servers.
+export const activateServer = payload => ({
+  type: actionTypes.ACTIVATE_SERVER,
   payload
 });
-export const fetchServerFulfilled = payload => ({
-  type: actionTypes.FETCH_SERVER_FULFILLED,
+export const activateServerFulfilled = payload => ({
+  type: actionTypes.ACTIVATE_SERVER_FULFILLED,
   payload
 });
-export const fetchServerFailed = payload => ({
-  type: actionTypes.FETCH_SERVER_FAILED,
-  payload
-});
-export const fetchServerCanceled = payload => ({
-  type: actionTypes.FETCH_SERVER_CANCELED,
+export const activateServerFailed = payload => ({
+  type: actionTypes.ACTIVATE_SERVER_FAILED,
   payload
 });
 
@@ -34,10 +52,6 @@ export const killServerFailed = payload => ({
   type: actionTypes.KILL_SERVER_FAILED,
   payload
 });
-export const killServerCanceled = payload => ({
-  type: actionTypes.KILL_SERVER_CANCELED,
-  payload
-});
 
 export const fetchKernelSpecs = payload => ({
   type: actionTypes.FETCH_KERNEL_SPECS,
@@ -51,20 +65,13 @@ export const fetchKernelSpecsFailed = payload => ({
   type: actionTypes.FETCH_KERNEL_SPECS_FAILED,
   payload
 });
-export const fetchKernelSpecsCanceled = payload => ({
-  type: actionTypes.FETCH_KERNEL_SPECS_CANCELED,
+
+export const addServerMessage = payload => ({
+  type: actionTypes.ADD_SERVER_MESSAGE,
   payload
 });
 
-export const setActiveKernel = payload => ({
-  type: actionTypes.SET_ACTIVE_KERNEL,
-  payload
-});
-export const restartKernel = payload => ({
-  type: actionTypes.RESTART_KERNEL,
-  payload
-});
-
+// Actions related to kernels.
 export const activateKernel = payload => ({
   type: actionTypes.ACTIVATE_KERNEL,
   payload
@@ -73,12 +80,9 @@ export const activateKernelFulfilled = payload => ({
   type: actionTypes.ACTIVATE_KERNEL_FULFILLED,
   payload
 });
-export const activatedKernelFailed = payload => ({
+
+export const activateKernelFailed = payload => ({
   type: actionTypes.ACTIVATE_KERNEL_FAILED,
-  payload
-});
-export const activateKernelCanceled = payload => ({
-  type: actionTypes.ACTIVATE_KERNEL_CANCELED,
   payload
 });
 
@@ -94,10 +98,6 @@ export const interruptKernelFailed = payload => ({
   type: actionTypes.INTERRUPT_KERNEL_FAILED,
   payload
 });
-export const interruptKernelCanceled = payload => ({
-  type: actionTypes.INTERRUPT_KERNEL_CANCELED,
-  payload
-});
 
 export const killKernel = payload => ({
   type: actionTypes.KILL_KERNEL,
@@ -111,32 +111,28 @@ export const killKernelFailed = payload => ({
   type: actionTypes.KILL_KERNEL_FAILED,
   payload
 });
-export const killKernelCanceled = payload => ({
-  type: actionTypes.KILL_KERNEL_CANCELED,
+
+export const addKernelMessage = payload => ({
+  type: actionTypes.ADD_KERNEL_MESSAGE,
   payload
 });
-
-export const submitBinderForm = payload => ({
-  type: actionTypes.SUBMIT_BINDER_FORM,
+export const addKernelOutput = payload => ({
+  type: actionTypes.ADD_KERNEL_OUTPUT,
   payload
 });
-
-export const setSource = payload => ({
-  type: actionTypes.SET_SOURCE,
+export const restartKernel = payload => ({
+  type: actionTypes.RESTART_KERNEL,
   payload
 });
-
-export const setShowPanel = payload => ({
-  type: actionTypes.SET_SHOW_PANEL,
+export const runSource = payload => ({
+  type: actionTypes.RUN_SOURCE,
   payload
 });
-
-export const setServerId = payload => ({
-  type: actionTypes.SET_SERVER_ID,
+export const setActiveKernel = payload => ({
+  type: actionTypes.SET_ACTIVE_KERNEL,
   payload
 });
-
-export const setCurrentKernelName = payload => ({
-  type: actionTypes.SET_CURRENT_KERNEL_NAME,
+export const setKernelStatus = payload => ({
+  type: actionTypes.SET_KERNEL_STATUS,
   payload
 });
