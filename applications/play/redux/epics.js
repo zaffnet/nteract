@@ -6,6 +6,7 @@ import * as actions from "./actions";
 import { combineEpics, ofType } from "redux-observable";
 
 import { of } from "rxjs/observable/of";
+import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 
 import {
@@ -13,8 +14,7 @@ import {
   ignoreElements,
   map,
   mergeMap,
-  switchMap,
-  tap
+  switchMap
 } from "rxjs/operators";
 import { binder } from "rx-binder";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
@@ -104,6 +104,53 @@ const setActiveKernelEpic = (action$, store) =>
     })
   );
 
+const initializeKernelMessaging = (action$, store) =>
+  action$.pipe(
+    ofType(actionTypes.ACTIVATE_KERNEL_FULFILLED),
+    // When new kernels come in we should drop our old message handling
+    switchMap(({ payload }) => {
+      const { kernel, kernelName, serverId } = payload;
+      // Side effect! Get that Kernel Info!
+      kernel.channel.next(kernelInfoRequest());
+      return kernel.channel.pipe(
+        mergeMap(message => {
+          const actionsArray = [
+            actions.addKernelMessage({ serverId, kernelName, message })
+          ];
+          switch (message.header.msg_type) {
+            case "status":
+              actionsArray.push(
+                actions.setKernelStatus({
+                  serverId,
+                  kernelName,
+                  status: message.content.execution_state
+                })
+              );
+              break;
+            case "display_data":
+            case "execute_result":
+            case "stream":
+            case "error":
+              actionsArray.push(
+                actions.addKernelOutput({
+                  serverId,
+                  kernelName,
+                  output: {
+                    ...message.content,
+                    output_type: message.header.msg_type
+                  }
+                })
+              );
+              break;
+            default:
+              break;
+          }
+          return from(actionsArray);
+        })
+      );
+    })
+  );
+
 const activateKernelEpic = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.ACTIVATE_KERNEL),
@@ -118,49 +165,11 @@ const activateKernelEpic = (action$, store) =>
       const config = objectPath.get(store.getState(), configPath);
       return kernels.start(config, kernelName, "").pipe(
         mergeMap(data => {
-          const kernel = data.response;
           const session = uuid();
-          kernel.channel = kernels.connect(config, kernel.id, session);
-          const channelAction$ = kernel.channel.pipe(
-            mergeMap(message => {
-              const actionsArray = [
-                actions.addKernelMessage({ serverId, kernelName, message })
-              ];
-              switch (message.header.msg_type) {
-                case "status":
-                  actionsArray.push(
-                    actions.setKernelStatus({
-                      serverId,
-                      kernelName,
-                      status: message.content.execution_state
-                    })
-                  );
-                  break;
-                case "display_data":
-                case "execute_result":
-                case "stream":
-                case "error":
-                  actionsArray.push(
-                    actions.addKernelOutput({
-                      serverId,
-                      kernelName,
-                      output: {
-                        ...message.content,
-                        output_type: message.header.msg_type
-                      }
-                    })
-                  );
-                  break;
-                default:
-                  break;
-              }
-              return of(...actionsArray);
-            })
-          );
+          const kernel = Object.assign({}, data.response, {
+            channel: kernels.connect(config, data.response.id, session)
+          });
 
-          // The responses to these have to happen on the next tick, so we expect
-          // that we'll be subscribed by then.
-          kernel.channel.next(kernelInfoRequest());
           kernel.channel.next(kernelInfoRequest());
 
           return merge(
@@ -170,8 +179,7 @@ const activateKernelEpic = (action$, store) =>
                 kernelName,
                 kernel
               })
-            ),
-            channelAction$
+            )
           );
         })
       );
@@ -205,6 +213,7 @@ const epics = combineEpics(
   fetchKernelSpecsEpic,
   setActiveKernelEpic,
   activateKernelEpic,
+  initializeKernelMessaging,
   runSourceEpic
 );
 
