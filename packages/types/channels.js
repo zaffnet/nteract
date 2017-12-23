@@ -1,3 +1,1 @@
-// @flow
-
-declare type Channels = rxjs$Subject<*>;
+module.exports = require("./channels");

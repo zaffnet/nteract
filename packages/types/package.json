@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "collection of types for nteract components",
   "scripts": {
-  },
+    "prepare": "npm run build",
+    "build": "npm run build:clean && npm run build:lib",
+    "build:clean": "rimraf lib",
+    "build:lib": "babel -d lib src"
+   },
   "publishConfig": {
     "access": "public"
   },
