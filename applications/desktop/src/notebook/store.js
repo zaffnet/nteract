@@ -1,7 +1,7 @@
 /* @flow */
 import { createStore, applyMiddleware } from "redux";
 
-import type { AppState } from "@nteract/core/records";
+import type { AppState } from "@nteract/types/core/records";
 
 import middlewares from "./middlewares";
 import rootReducer from "./reducers";
