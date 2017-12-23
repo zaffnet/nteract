@@ -4,7 +4,7 @@ import type {
   JupyterMessage,
   ExecuteRequest,
   JupyterMessageHeader
-} from "./types";
+} from "@nteract/types/messaging";
 
 import * as uuid from "uuid";
 
