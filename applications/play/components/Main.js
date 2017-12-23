@@ -1,3 +1,4 @@
+// @flow
 import * as React from "react";
 import CodeMirrorEditor from "@nteract/editor";
 import { BinderConsole } from "./consoles";
@@ -14,7 +15,7 @@ const { Outputs } = _nextgen;
 
 const NTERACT_LOGO_URL =
   "https://media.githubusercontent.com/media/nteract/logos/master/nteract_logo_cube_book/exports/images/svg/nteract_logo_wide_purple_inverted.svg";
-class Main extends React.Component {
+class Main extends React.Component<*, *> {
   constructor(props) {
     super(props);
     this.state = {
@@ -130,9 +131,39 @@ class Main extends React.Component {
 
         <div className="play-editor">
           <CodeMirrorEditor
+            // TODO: these should have defaultProps on the codemirror editor
+            cellFocused
+            editorFocused
+            channels={
+              currentKernel && currentKernel.channel
+                ? currentKernel.channel
+                : null
+            }
+            tip
+            completion
+            theme="light"
+            // TODO: This property needs to be excised from the editor, as it belongs
+            //       in codemirror options below
+            cursorBlinkRate={0}
+            // TODO: This is the notebook implementation leaking into the editor
+            //       component. It shouldn't be here, I won't refactor it as part
+            //       of the current play PR though.
+            id="not-really-a-cell"
+            onFocusChange={() => {}}
+            focusAbove={() => {}}
+            focusBelow={() => {}}
+            // END TODO for notebook leakage
+            // TODO: executionState should be allowed to be null or undefined,
+            //       resulting in thought of as either idle or not connected by
+            //       default. This is primarily used for determining if code
+            //       completion should be enabled
+            executionState={
+              currentKernel ? currentKernel.status : "not connected"
+            }
             options={{
               lineNumbers: true,
               extraKeys: {
+                "Ctrl-Space": "autocomplete",
                 "Ctrl-Enter": this.handleSourceSubmit,
                 "Cmd-Enter": this.handleSourceSubmit
               }

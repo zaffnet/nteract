@@ -1,6 +1,7 @@
+// @flow
 import * as React from "react";
 
-class BinderLogo extends React.Component {
+class BinderLogo extends React.Component<*, *> {
   render() {
     return (
       <div>
@@ -22,7 +23,7 @@ class BinderLogo extends React.Component {
   }
 }
 
-class BinderTextInput extends React.Component {
+class BinderTextInput extends React.Component<*, *> {
   render() {
     const { onChange, value, id, labelText, name } = this.props;
 
@@ -57,7 +58,7 @@ class BinderTextInput extends React.Component {
   }
 }
 
-class BinderForm extends React.Component {
+class BinderForm extends React.Component<*, *> {
   render() {
     const { onSubmit } = this.props;
     return (
@@ -99,7 +100,7 @@ class BinderForm extends React.Component {
   }
 }
 
-class BinderLogs extends React.Component {
+class BinderLogs extends React.Component<*, *> {
   render() {
     const { logs } = this.props;
     return (
@@ -161,7 +162,7 @@ class BinderLogs extends React.Component {
 }
 // TODO: Make a generic little console for some of the styled container pieces,
 //       then make this component inject the binder specific bits
-export class BinderConsole extends React.Component {
+export class BinderConsole extends React.Component<*, *> {
   render() {
     const {
       logs,
