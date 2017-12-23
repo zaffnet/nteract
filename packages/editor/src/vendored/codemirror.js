@@ -83,7 +83,6 @@ export default css`
     animation: blink 1.06s steps(1) infinite;
     background-color: #7e7;
   }
-
   @-moz-keyframes blink {
     0% {
     }
@@ -236,10 +235,10 @@ export default css`
   /* Default styles for common addons */
 
   :global(div.CodeMirror span.CodeMirror-matchingbracket) {
-    color: #0f0;
+    color: #0b0;
   }
   :global(div.CodeMirror span.CodeMirror-nonmatchingbracket) {
-    color: #f22;
+    color: #a22;
   }
   :global(.CodeMirror-matchingtag) {
     background: rgba(255, 150, 0, 0.3);
@@ -388,7 +387,7 @@ export default css`
   :global(.CodeMirror-linewidget) {
     position: relative;
     z-index: 2;
-    overflow: auto;
+    padding: 0.1px; /* Force widget margins to stay inside of the container */
   }
 
   :global(.CodeMirror-widget) {
@@ -470,6 +469,15 @@ export default css`
   :global(.cm-force-border) {
     padding-right: 0.1px;
   }
+
+  /**
+  style jsx doens't work well with media queries
+  @media print {
+    .CodeMirror div.CodeMirror-cursors {
+      visibility: hidden;
+    }
+  }
+  **/
 
   /* See issue #2901 */
   :global(.cm-tab-wrap-hack:after) {

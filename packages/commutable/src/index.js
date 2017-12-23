@@ -21,7 +21,7 @@ const {
   emptyMarkdownCell,
   appendCell,
   monocellNotebook,
-
+  createCodeCell,
   appendCellToNotebook,
 
   insertCellAt,
@@ -99,6 +99,7 @@ module.exports = {
   toJS,
   fromJS,
 
+  createCodeCell,
   parseNotebook,
   stringifyNotebook,
 

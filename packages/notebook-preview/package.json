@@ -6,7 +6,8 @@
   "nteractDesktop": "src/index.js",
   "scripts": {
     "prepare": "npm run build",
-    "build": "npm run build:clean && npm run build:lib && npm run build:flow",
+    "prepublishOnly": "npm run build && npm run build:flow",
+    "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
@@ -23,7 +24,6 @@
     "@nteract/display-area": "^3.1.0",
     "@nteract/editor": "^4.2.2",
     "@nteract/transforms": "^3.0.3",
-    "codemirror": "^5.28.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "mathjax-electron": "^2.0.1",

@@ -5,9 +5,9 @@
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
   "scripts": {
-    "prebuild": "npm run build:clean",
-    "prepublish": "npm run build",
-    "build": "npm run build:clean && npm run build:lib && npm run build:flow",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build && npm run build:flow",
+    "build": "npm run build:clean && npm run build:lib",
     "build:flow": "flow-copy-source -v -i '**/tests/**' src lib",
     "build:clean": "rimraf lib",
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",

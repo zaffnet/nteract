@@ -10,10 +10,11 @@ import configureStore from "../store";
 
 const store = configureStore();
 
-async function fetchFromGist(gistId) {
+async function fetchFromGist(gistId): ?Object {
   const path = `https://api.github.com/gists/${gistId}`;
   return fetch(path)
     .then(async response => {
+      if (response.status !== 200) return null;
       const ghResponse = await response.json();
       for (const file in ghResponse.files) {
         if (/.ipynb$/.test(file)) {
@@ -25,16 +26,30 @@ async function fetchFromGist(gistId) {
         }
       }
     })
-    .catch(err => emptyNotebook.toJS());
+    .catch(err => null);
 }
+
+const Error = () => (
+  <div>
+    <style jsx>{`
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      font-family: Source Sans Pro, Helvetica, sans-serif;
+    `}</style>
+    Could not fetch notebook.
+  </div>
+);
 
 export default class Edit extends React.Component<*> {
   static async getInitialProps({ query, isServer }) {
-    // TODO: Error handling
     const serverNotebook = await fetchFromGist(query.gistid);
+    if (!serverNotebook) return {};
     store.dispatch({
       type: "SET_NOTEBOOK",
-      notebook: serverNotebook ? fromJS(serverNotebook) : emptyNotebook
+      notebook: serverNotebook ? fromJS(serverNotebook) : null
     });
     return { serverNotebook, isServer };
   }
@@ -49,6 +64,7 @@ export default class Edit extends React.Component<*> {
   }
 
   render() {
+    if (!this.props.serverNotebook) return <Error />;
     return (
       <div>
         <style>{`@media print {
