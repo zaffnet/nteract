@@ -1,0 +1,13 @@
+{
+  "name": "@nteract/types",
+  "version": "1.0.0",
+  "description": "collection of types for nteract components",
+  "scripts": {
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [],
+  "author": "Safia Abdalla <safia@safia.rocks>",
+  "license": "BSD-3-Clause"
+}
