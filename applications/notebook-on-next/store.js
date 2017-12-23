@@ -7,7 +7,11 @@ import { Map as ImmutableMap } from "immutable";
 import { document, comms, config } from "@nteract/core/reducers";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
 
-import { AppRecord, DocumentRecord, CommsRecord } from "@nteract/core/records";
+import {
+  AppRecord,
+  DocumentRecord,
+  CommsRecord
+} from "@nteract/types/core/records";
 
 export type AppState = {
   app: AppRecord,

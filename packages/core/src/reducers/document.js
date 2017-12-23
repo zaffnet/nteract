@@ -7,9 +7,12 @@ import { escapeCarriageReturnSafe } from "escape-carriage";
 
 import * as constants from "../constants";
 
-import type { LanguageInfoMetadata, KernelInfo } from "../records";
+import type {
+  LanguageInfoMetadata,
+  KernelInfo
+} from "@nteract/types/core/records";
 
-import { DocumentRecord } from "../records";
+import { DocumentRecord } from "@nteract/types/core/records";
 
 import {
   emptyCodeCell,
@@ -29,7 +32,7 @@ import type {
   ImmutableOutput,
   ImmutableOutputs,
   MimeBundle
-} from "@nteract/commutable/src/types";
+} from "@nteract/types/commutable";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 

@@ -18,6 +18,7 @@
     "@nteract/transform-dataresource": "^2.0.2",
     "@nteract/transform-vega": "^3.0.1",
     "@nteract/transforms": "^3.0.3",
+    "@nteract/types": "^1.0.0",
     "anser": "^1.4.1",
     "codemirror": "^5.28.0",
     "isomorphic-fetch": "^2.2.1",

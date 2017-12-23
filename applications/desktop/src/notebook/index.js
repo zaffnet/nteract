@@ -21,7 +21,11 @@ import { initMenuHandlers } from "./menu";
 import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
 
-import { AppRecord, DocumentRecord, CommsRecord } from "@nteract/core/records";
+import {
+  AppRecord,
+  DocumentRecord,
+  CommsRecord
+} from "@nteract/types/core/records";
 
 import "./main.css";
 

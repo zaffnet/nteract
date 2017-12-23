@@ -1,5 +1,5 @@
 import commsReducer from "../src/reducers/comms";
-import { CommsRecord } from "../src/records";
+import { CommsRecord } from "@nteract/types/core/records";
 
 describe("registerCommTarget", () => {
   test("sets comm targets", () => {

@@ -12,7 +12,7 @@ import {
   appendCellToNotebook
 } from "@nteract/commutable";
 
-import { DocumentRecord } from "../src/records";
+import { DocumentRecord } from "@nteract/types/core/records";
 
 import { reduceOutputs, cleanCellTransient } from "../src/reducers/document";
 

@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   config
 });
 
-import type { AppState } from "../records";
+import type { AppState } from "@nteract/types/records";
 
 /**
 function configureStore(initialState: AppState) {

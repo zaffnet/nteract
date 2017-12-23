@@ -3,7 +3,7 @@
 import type { Notebook as v4Notebook } from "./v4";
 import type { Notebook as v3Notebook } from "./v3";
 
-import type { ImmutableNotebook, JSONType } from "./types";
+import type { ImmutableNotebook, JSONType } from "@nteract/types/commutable";
 
 import * as Immutable from "immutable";
 
