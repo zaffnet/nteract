@@ -42,14 +42,14 @@ export const activateServer = (payload: {
 });
 export const activateServerFulfilled = (payload: {
   serverId: string,
-  config: object
+  config: *
 }) => ({
   type: actionTypes.ACTIVATE_SERVER_FULFILLED,
   payload
 });
 export const activateServerFailed = (payload: {
   serverId: string,
-  error: object
+  error: *
 }) => ({
   type: actionTypes.ACTIVATE_SERVER_FAILED,
   payload
@@ -63,10 +63,7 @@ export const killServerFulfilled = (payload: { serverId: string }) => ({
   type: actionTypes.KILL_SERVER_FULFILLED,
   payload
 });
-export const killServerFailed = (payload: {
-  serverId: string,
-  error: object
-}) => ({
+export const killServerFailed = (payload: { serverId: string, error: * }) => ({
   type: actionTypes.KILL_SERVER_FAILED,
   payload
 });
@@ -75,16 +72,18 @@ export const fetchKernelSpecs = (payload: { serverId: string }) => ({
   type: actionTypes.FETCH_KERNEL_SPECS,
   payload
 });
+
 export const fetchKernelSpecsFulfilled = (payload: {
   serverId: string,
-  repsonse: object
+  response: *
 }) => ({
   type: actionTypes.FETCH_KERNEL_SPECS_FULFILLED,
   payload
 });
+
 export const fetchKernelSpecsFailed = (payload: {
   serverId: string,
-  error: object
+  error: *
 }) => ({
   type: actionTypes.FETCH_KERNEL_SPECS_FAILED,
   payload
@@ -109,7 +108,7 @@ export const activateKernel = (payload: {
 export const activateKernelFulfilled = (payload: {
   serverId: string,
   kernelName: string,
-  kernel: object
+  kernel: *
 }) => ({
   type: actionTypes.ACTIVATE_KERNEL_FULFILLED,
   payload
@@ -117,7 +116,7 @@ export const activateKernelFulfilled = (payload: {
 export const activateKernelFailed = (payload: {
   serverId: string,
   kernelName: string,
-  error: object
+  error: *
 }) => ({
   type: actionTypes.ACTIVATE_KERNEL_FAILED,
   payload
@@ -140,7 +139,7 @@ export const interruptKernelFulfilled = (payload: {
 export const interruptKernelFailed = (payload: {
   serverId: string,
   kernelName: string,
-  error: object
+  error: *
 }) => ({
   type: actionTypes.INTERRUPT_KERNEL_FAILED,
   payload
@@ -163,7 +162,7 @@ export const killKernelFulfilled = (payload: {
 export const killKernelFailed = (payload: {
   serverId: string,
   kernelName: string,
-  error: object
+  error: *
 }) => ({
   type: actionTypes.KILL_KERNEL_FAILED,
   payload
@@ -172,7 +171,7 @@ export const killKernelFailed = (payload: {
 export const addKernelMessage = (payload: {
   serverId: string,
   kernelName: string,
-  message: object
+  message: *
 }) => ({
   type: actionTypes.ADD_KERNEL_MESSAGE,
   payload
@@ -180,7 +179,7 @@ export const addKernelMessage = (payload: {
 export const addKernelOutput = (payload: {
   serverId: string,
   kernelName: string,
-  output: object
+  output: *
 }) => ({
   type: actionTypes.ADD_KERNEL_OUTPUT,
   payload

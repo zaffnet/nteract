@@ -2,7 +2,6 @@
 import * as actionTypes from "./actionTypes";
 import * as actions from "./actions";
 
-// $FlowFixMe: ofType should now be a lettable operator and is used on master
 import { combineEpics, ofType } from "redux-observable";
 
 import { of } from "rxjs/observable/of";
