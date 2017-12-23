@@ -189,7 +189,7 @@ const activateKernelEpic = (action$, store) =>
 const runSourceEpic = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.RUN_SOURCE),
-    map(({ payload: { serverId, kernelName, source } }) => {
+    mergeMap(({ payload: { serverId, kernelName, source } }) => {
       const channelPath = [
         "entities",
         "serversById",
@@ -204,7 +204,10 @@ const runSourceEpic = (action$, store) =>
       if (channel) {
         channel.next(executeRequest(source));
       }
-      return actions.setSource(source);
+      return of(
+        actions.clearKernelOutputs({ serverId, kernelName }),
+        actions.setSource(source)
+      );
     })
   );
 

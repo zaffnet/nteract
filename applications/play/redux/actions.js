@@ -120,6 +120,10 @@ export const addKernelOutput = (payload: *) => ({
   type: actionTypes.ADD_KERNEL_OUTPUT,
   payload
 });
+export const clearKernelOutputs = (payload: *) => ({
+  type: actionTypes.CLEAR_KERNEL_OUTPUTS,
+  payload
+});
 export const restartKernel = (payload: *) => ({
   type: actionTypes.RESTART_KERNEL,
   payload

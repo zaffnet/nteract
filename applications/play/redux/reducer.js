@@ -187,6 +187,8 @@ const activeKernelChannel = (state = null, action) => {
 
 const activeKernelOutputs = (state = [], action) => {
   switch (action.type) {
+    case actionTypes.CLEAR_KERNEL_OUTPUTS:
+      return [];
     case actionTypes.ADD_KERNEL_OUTPUT:
       return [...state, action.payload.output];
     default:
