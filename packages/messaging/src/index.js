@@ -25,7 +25,7 @@ import {
 
 import { message, executeRequest } from "./messages";
 
-import type { JupyterMessage, ExecuteRequest } from "@nteract/types";
+import type { JupyterMessage, ExecuteRequest } from "@nteract/types/messaging";
 
 // TODO: Deprecate
 export function createMessage(
