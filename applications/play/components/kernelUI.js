@@ -1,13 +1,14 @@
+// @flow
 import * as React from "react";
 
-class KernelOption extends React.Component {
+class KernelOption extends React.Component<*, *> {
   render() {
     const { kernelName } = this.props;
     return <option value={kernelName}>{kernelName}</option>;
   }
 }
 
-class KernelSelector extends React.Component {
+class KernelSelector extends React.Component<*, *> {
   render() {
     const { kernelspecs, currentKernel, onChange } = this.props;
     return (
@@ -31,7 +32,7 @@ class KernelSelector extends React.Component {
   }
 }
 
-export class KernelUI extends React.Component {
+export class KernelUI extends React.Component<*, *> {
   render() {
     const { status, ...otherprops } = this.props;
     return (
