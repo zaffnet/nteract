@@ -26,6 +26,7 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@nteract/types": "^1.0.0",
     "immutable": "^3.8.1",
     "uuid": "^3.1.0"
   }
