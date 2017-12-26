@@ -6,7 +6,8 @@ import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import { js_idx_to_char_idx, char_idx_to_js_idx } from "./surrogate";
 
-import type { EditorChange, CMI } from "@nteract/types/editor";
+import type { EditorChange, CMI } from "../types";
+import type { Channels } from "@nteract/types/channels";
 
 // Hint picker
 export const pick = (cm: any, handle: { pick: () => void }) => handle.pick();

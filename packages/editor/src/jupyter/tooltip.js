@@ -6,7 +6,7 @@ import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import { js_idx_to_char_idx } from "./surrogate";
 
-import type { Channels, CMI } from "@nteract/types/editor";
+import type { Channels, CMI } from "../types";
 
 export function tooltipObservable(
   channels: Channels,

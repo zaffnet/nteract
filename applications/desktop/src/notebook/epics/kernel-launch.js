@@ -30,6 +30,8 @@ import type {
   KernelInfo
 } from "@nteract/types/core/records";
 
+import type { Channels } from "@nteract/types/channels";
+
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import {

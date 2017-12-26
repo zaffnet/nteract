@@ -6,6 +6,7 @@ import type { AppState } from "@nteract/types/core/records";
 import { dialog } from "electron";
 import { is } from "immutable";
 import { forceShutdownKernel } from "./kernel/shutdown";
+import type { Action } from "@nteract/types/redux";
 
 export function unload(store: Store<AppState, Action>) {
   const state = store.getState();

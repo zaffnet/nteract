@@ -23,6 +23,8 @@ import { v4 as uuid } from "uuid";
 
 export type CHANNEL_NAME = "iopub" | "stdin" | "shell" | "control";
 
+import type { Channels } from "@nteract/types/channels";
+
 export type JUPYTER_CONNECTION_INFO = {
   iopub_port: number,
   shell_port: number,

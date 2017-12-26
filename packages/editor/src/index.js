@@ -18,12 +18,7 @@ import { tool } from "./jupyter/tooltip";
 
 import { debounce, merge } from "lodash";
 
-import type {
-  EditorChange,
-  ScrollInfo,
-  CMI,
-  CMDoc
-} from "@nteract/types/editor";
+import type { EditorChange, ScrollInfo, CMI, CMDoc } from "./types";
 
 import styles from "./styles";
 
