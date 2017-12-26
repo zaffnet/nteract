@@ -67,6 +67,7 @@ class Main extends React.Component<*, *> {
   render() {
     const {
       currentKernel,
+      currentKernelLanguage,
       currentKernelName,
       currentServer,
       platform,
@@ -166,7 +167,7 @@ class Main extends React.Component<*, *> {
               }
             }}
             value={sourceValue}
-            language={"python"}
+            language={currentKernelLanguage}
             onChange={this.handleEditorChange}
           />
         </div>
@@ -318,6 +319,7 @@ const mapStateToProps = state => ({
   showPanel: state.ui.showPanel,
   currentServerId: state.ui.currentServerId,
   currentKernelName: state.ui.currentKernelName,
+  currentKernelLanguage: state.ui.currentKernelLanguage,
   currentKernel: objectPath.get(state, [
     "entities",
     "serversById",

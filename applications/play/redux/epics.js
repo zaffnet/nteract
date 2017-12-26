@@ -126,6 +126,12 @@ const initializeKernelMessaging = (action$, store) =>
                 })
               );
               break;
+            case "kernel_info_reply":
+              actionsArray.push(
+                actions.setCurrentKernelLanguage(
+                  message.content.language_info.name
+                )
+              );
             case "display_data":
             case "execute_result":
             case "stream":

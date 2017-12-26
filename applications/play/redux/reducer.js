@@ -82,6 +82,17 @@ const currentKernelName = (state = "", action) => {
   }
 };
 
+const currentKernelLanguage = (state = "", action) => {
+  switch (action.type) {
+    case actionTypes.SET_CURRENT_KERNEL_LANGUAGE: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 const serverConfig = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.ACTIVATE_SERVER_FULFILLED:
@@ -312,7 +323,8 @@ const ui = combineReducers({
   showPanel,
   currentServerId,
   platform,
-  currentKernelName
+  currentKernelName,
+  currentKernelLanguage
 });
 
 const entities = combineReducers({
