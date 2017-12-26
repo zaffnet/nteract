@@ -14,6 +14,8 @@ import {
   toggleOutputExpansion
 } from "../actions";
 
+import type { Action } from "@nteract/types/redux";
+
 type Props = {
   cell: any,
   id: string,

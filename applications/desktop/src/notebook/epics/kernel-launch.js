@@ -25,7 +25,12 @@ import { ipcRenderer as ipc } from "electron";
 
 import { createMainChannel } from "enchannel-zmq-backend";
 
-import type { LanguageInfoMetadata, KernelInfo } from "@nteract/core/records";
+import type {
+  LanguageInfoMetadata,
+  KernelInfo
+} from "@nteract/types/core/records";
+
+import type { Channels } from "@nteract/types/channels";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 

@@ -4,7 +4,9 @@ import type { ChildProcess } from "child_process"; // eslint-disable-line no-unu
 
 import { shutdownKernel } from "../kernel/shutdown";
 
-import { AppRecord } from "@nteract/core/records";
+import { AppRecord } from "@nteract/types/core/records";
+
+import type { Channels } from "@nteract/types/channels";
 
 declare class AppState {
   channels: Channels;

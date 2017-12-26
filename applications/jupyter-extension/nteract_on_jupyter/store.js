@@ -8,7 +8,11 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 import { document, comms, config } from "@nteract/core/reducers";
 
-import { AppRecord, DocumentRecord, CommsRecord } from "@nteract/core/records";
+import {
+  AppRecord,
+  DocumentRecord,
+  CommsRecord
+} from "@nteract/types/core/records";
 
 import epics from "./epics";
 

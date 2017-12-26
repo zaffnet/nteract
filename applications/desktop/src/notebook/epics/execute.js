@@ -17,6 +17,8 @@ import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 import { _throw } from "rxjs/observable/throw";
 
+import type { Channels } from "@nteract/types/channels";
+
 import {
   groupBy,
   filter,
