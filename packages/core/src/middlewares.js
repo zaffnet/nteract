@@ -9,9 +9,10 @@ type Action = {
 // Get the type
 type Console = typeof console;
 
-export const errorMiddleware = (store: any, console: Console = console) => (
-  next: any
-) => (action: Action) => {
+export const errorMiddleware = (
+  store: any,
+  console: Console = global.console
+) => (next: any) => (action: Action) => {
   if (!action.type.includes("ERROR")) {
     return next(action);
   }

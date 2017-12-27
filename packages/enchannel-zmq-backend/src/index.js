@@ -68,15 +68,33 @@ export function createSocket(
   channel: CHANNEL_NAME,
   identity: string,
   config: JUPYTER_CONNECTION_INFO
-) {
+): Promise<jmp.Socket> {
   const zmqType = ZMQType.frontend[channel];
   const scheme = config.signature_scheme.slice("hmac-".length);
+
   const socket = new jmp.Socket(zmqType, scheme, config.key);
   socket.identity = identity;
 
-  socket.connect(formConnectionString(config, channel));
+  const url = formConnectionString(config, channel);
+  return verifiedConnect(socket, url);
+}
 
-  return socket;
+/**
+ * ensures the socket is ready after connecting
+ */
+export function verifiedConnect(
+  socket: jmp.Socket,
+  url: string
+): Promise<jmp.Socket> {
+  return new Promise((resolve, reject) => {
+    socket.on("connect", () => {
+      // We are not ready until this happens for all the sockets
+      socket.unmonitor();
+      resolve(socket);
+    });
+    socket.monitor();
+    socket.connect(url);
+  });
 }
 
 type HEADER_FILLER = {
@@ -105,7 +123,7 @@ export function getUsername(): string {
  * @param  {string} subscription            subscribed topic; defaults to all
  * @return {Subject} Subject containing multiplexed channels
  */
-export function createMainChannel(
+export async function createMainChannel(
   config: JUPYTER_CONNECTION_INFO,
   subscription: string = "",
   identity: string = uuid(),
@@ -114,7 +132,7 @@ export function createMainChannel(
     username: getUsername()
   }
 ): Channels {
-  const sockets = createSockets(config, subscription, identity);
+  const sockets = await createSockets(config, subscription, identity);
   const main = createMainChannelFromSockets(sockets, header);
   return main;
 }
@@ -123,20 +141,26 @@ export function createMainChannel(
  * createSockets sets up the sockets for each of the jupyter channels
  * @return {[type]}              [description]
  */
-export function createSockets(
+export async function createSockets(
   config: JUPYTER_CONNECTION_INFO,
   subscription: string = "",
   identity: string = uuid()
 ) {
-  const ioPubSocket = createSocket("iopub", identity, config);
+  const [shell, control, stdin, iopub] = await Promise.all([
+    createSocket("shell", identity, config),
+    createSocket("control", identity, config),
+    createSocket("stdin", identity, config),
+    createSocket("iopub", identity, config)
+  ]);
+
   // NOTE: ZMQ PUB/SUB subscription (not an Rx subscription)
-  ioPubSocket.subscribe(subscription);
+  iopub.subscribe(subscription);
 
   return {
-    shell: createSocket("shell", identity, config),
-    control: createSocket("control", identity, config),
-    stdin: createSocket("stdin", identity, config),
-    iopub: ioPubSocket
+    shell,
+    control,
+    stdin,
+    iopub
   };
 }
 
@@ -160,20 +184,21 @@ export function createMainChannelFromSockets(
           return;
         }
         const socket = sockets[message.channel];
-        if (socket) {
-          socket.send(
-            new jmp.Message({
-              ...message,
-              // Fold in the setup header to ease usage of messages on channels
-              header: { ...message.header, ...header }
-            })
-          );
-        } else {
+        if (!socket) {
           // If, for some reason, a message is sent on a channel we don't have
           // a socket for, warn about it but don't bomb the stream
           console.warn("channel not understood for message", message);
           return;
         }
+        const jMessage = new jmp.Message({
+          // Fold in the setup header to ease usage of messages on channels
+          header: { ...message.header, ...header },
+          parent_header: { ...message.parent_header },
+          content: { ...message.content },
+          metadata: { ...message.metadata },
+          buffers: [...message.buffers]
+        });
+        socket.send(jMessage);
       },
       complete: () => {
         // When the subject is completed / disposed, close all the event
@@ -204,7 +229,7 @@ export function createMainChannelFromSockets(
           refCount()
         );
       })
-    )
+    ).pipe(publish(), refCount())
   );
 
   return subject;

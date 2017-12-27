@@ -10,11 +10,12 @@ import {
   createSocket,
   ZMQType,
   getUsername,
-  createMainChannelFromSockets
+  createMainChannelFromSockets,
+  verifiedConnect
 } from "../src";
 
 describe("createSocket", () => {
-  test("creates a JMP socket on the channel with identity", () => {
+  test("creates a JMP socket on the channel with identity", async function(done) {
     const config = {
       signature_scheme: "hmac-sha256",
       key: "5ca1ab1e-c0da-aced-cafe-c0ffeefacade",
@@ -24,11 +25,64 @@ describe("createSocket", () => {
     };
     const identity = uuidv4();
 
-    const socket = createSocket("iopub", identity, config);
+    const socket = await createSocket("iopub", identity, config);
     expect(socket).not.toBeNull();
     expect(socket.identity).toBe(identity);
     expect(socket.type).toBe(ZMQType.frontend.iopub);
     socket.close();
+
+    done();
+  });
+});
+
+describe("verifiedConnect", () => {
+  test("verifiedConnect monitors the socket", async function(done) {
+    const emitter = new EventEmitter();
+
+    const socket = {
+      monitor: jest.fn(),
+      unmonitor: jest.fn(),
+      close: jest.fn(),
+      on: jest.fn(emitter.on.bind(emitter)),
+      emit: jest.fn(emitter.emit.bind(emitter)),
+      connect: jest.fn(() => {})
+    };
+
+    const p = verifiedConnect(socket, "tcp://127.0.0.1:8945");
+    expect(socket.monitor).toHaveBeenCalledTimes(1);
+    expect(socket.connect).toHaveBeenCalledTimes(1);
+    expect(socket.connect).toHaveBeenCalledWith("tcp://127.0.0.1:8945");
+    expect(socket.unmonitor).toHaveBeenCalledTimes(0);
+
+    // Test that we unmonitor after connected
+    socket.emit("connect");
+
+    const connected = await p;
+    expect(socket.unmonitor).toHaveBeenCalledTimes(1);
+
+    done();
+  });
+
+  test("verifiedConnect monitors the socket properly even on fast connect", async function(done) {
+    const emitter = new EventEmitter();
+
+    const socket = {
+      monitor: jest.fn(),
+      unmonitor: jest.fn(),
+      close: jest.fn(),
+      on: jest.fn(emitter.on.bind(emitter)),
+      emit: jest.fn(emitter.emit.bind(emitter)),
+      connect: jest.fn(() => {
+        emitter.emit("connect");
+      })
+    };
+
+    const p = verifiedConnect(socket, "tcp://127.0.0.1:8945");
+    expect(socket.monitor).toHaveBeenCalledTimes(1);
+    expect(socket.connect).toHaveBeenCalledTimes(1);
+    expect(socket.unmonitor).toHaveBeenCalledTimes(1);
+    expect(socket.connect).toHaveBeenCalledWith("tcp://127.0.0.1:8945");
+    done();
   });
 });
 
