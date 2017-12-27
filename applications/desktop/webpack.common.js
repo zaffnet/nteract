@@ -44,7 +44,6 @@ const rendererConfig = {
       "react-dnd-html5-backend",
       "react-dom",
       "react-redux",
-      "react-simple-dropdown",
       "redux",
       "redux-logger",
       "redux-observable",

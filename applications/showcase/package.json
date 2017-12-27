@@ -14,6 +14,7 @@
     "@nteract/display-area": "^3.1.0",
     "@nteract/editor": "^4.2.2",
     "@nteract/notebook-preview": "^4.1.5",
+    "@nteract/dropdown-menu": "^0.0.1",
     "@nteract/transforms": "^3.0.3",
     "@nteract/transforms-full": "^4.0.0",
     "next": "^4.1.4",

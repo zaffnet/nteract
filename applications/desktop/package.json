@@ -138,7 +138,6 @@
     "react-dnd-html5-backend": "2.5.4",
     "react-notification-system": "0.2.16",
     "react-redux": "5.0.6",
-    "react-simple-dropdown": "3.2.0",
     "redux": "3.7.2",
     "redux-logger": "3.0.6",
     "redux-observable": "0.17.0",

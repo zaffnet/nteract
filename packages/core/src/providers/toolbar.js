@@ -19,7 +19,8 @@ import type { Action } from "@nteract/types/redux";
 type Props = {
   cell: any,
   id: string,
-  type: string,
+  // TODO: Create a flow type for cell type
+  type: "markdown" | "code" | "raw",
   dispatch: Dispatch<Action>
 };
 
