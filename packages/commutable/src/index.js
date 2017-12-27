@@ -44,7 +44,6 @@ function parseNotebook(notebookString: string): Notebook {
 
 function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
   if (Immutable.Map.isMap(notebook)) {
-    // $FlowFixMe: Immutable
     const immNotebook: ImmutableNotebook = notebook;
     if (immNotebook.has("cellOrder") && immNotebook.has("cellMap")) {
       return immNotebook;
@@ -54,7 +53,6 @@ function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
     );
   }
 
-  // $FlowFixMe: Immutable
   const notebookJSON: Notebook = notebook;
 
   if (notebookJSON.nbformat === 4 && notebookJSON.nbformat_minor >= 0) {

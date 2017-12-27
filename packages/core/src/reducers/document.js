@@ -62,7 +62,6 @@ type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
  * @return {Immutable.List<Object>} updated-outputs - Outputs + Output
  */
 export function reduceOutputs(
-  // $FlowFixMe: Immutable
   outputs: ImmutableOutputs = Immutable.List(),
   output: Output
 ) {
@@ -312,7 +311,6 @@ function focusNextCellEditor(
   state: DocumentState,
   action: FocusNextCellEditorAction
 ) {
-  // $FlowFixMe: Immutable
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
@@ -331,7 +329,6 @@ function focusPreviousCellEditor(
   state: DocumentState,
   action: FocusPreviousCellEditorAction
 ) {
-  // $FlowFixMe: Immutable
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
@@ -420,7 +417,6 @@ function newCellBefore(state: DocumentState, action: NewCellBeforeAction) {
 type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
 function mergeCellAfter(state: DocumentState, action: MergeCellAfterAction) {
   const { id } = action;
-  // $FlowFixMe: Immutable
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
