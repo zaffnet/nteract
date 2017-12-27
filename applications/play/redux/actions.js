@@ -29,8 +29,8 @@ export const submitBinderForm = (payload: {
   type: actionTypes.SUBMIT_BINDER_FORM,
   payload
 });
-export const setCurrentKernelLanguage = (payload: string) => ({
-  type: actionTypes.SET_CURRENT_KERNEL_LANGUAGE,
+export const setHighlightedLanguage = (payload: string) => ({
+  type: actionTypes.SET_HIGHLIGHTED_LANGUAGE,
   payload
 });
 

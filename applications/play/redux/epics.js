@@ -128,10 +128,11 @@ const initializeKernelMessaging = (action$, store) =>
               break;
             case "kernel_info_reply":
               actionsArray.push(
-                actions.setCurrentKernelLanguage(
+                actions.setHighlightedLanguage(
                   message.content.language_info.name
                 )
               );
+              break;
             case "display_data":
             case "execute_result":
             case "stream":

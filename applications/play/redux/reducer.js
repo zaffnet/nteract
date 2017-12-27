@@ -82,9 +82,9 @@ const currentKernelName = (state = "", action) => {
   }
 };
 
-const currentKernelLanguage = (state = "", action) => {
+const highlightedLanguage = (state = "", action) => {
   switch (action.type) {
-    case actionTypes.SET_CURRENT_KERNEL_LANGUAGE: {
+    case actionTypes.SET_HIGHLIGHTED_LANGUAGE: {
       return action.payload;
     }
     default: {
@@ -324,7 +324,7 @@ const ui = combineReducers({
   currentServerId,
   platform,
   currentKernelName,
-  currentKernelLanguage
+  highlightedLanguage
 });
 
 const entities = combineReducers({
