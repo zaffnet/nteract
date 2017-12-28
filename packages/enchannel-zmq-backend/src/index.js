@@ -193,10 +193,10 @@ export function createMainChannelFromSockets(
         const jMessage = new jmp.Message({
           // Fold in the setup header to ease usage of messages on channels
           header: { ...message.header, ...header },
-          parent_header: { ...message.parent_header },
-          content: { ...message.content },
-          metadata: { ...message.metadata },
-          buffers: [...message.buffers]
+          parent_header: message.parent_header,
+          content: message.content,
+          metadata: message.metadata,
+          buffers: message.buffers
         });
         socket.send(jMessage);
       },
