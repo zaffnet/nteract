@@ -8,11 +8,7 @@ import renderer from "react-test-renderer";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 import Cell from "../../src/components/cell/cell";
-import {
-  Notebook,
-  getLanguageMode,
-  StickyCellContainer
-} from "../../src/components/notebook";
+import { Notebook, getLanguageMode } from "../../src/providers/notebook";
 
 import { dummyStore, dummyCommutable } from "../../src/dummy";
 
@@ -167,26 +163,5 @@ describe("Notebook", () => {
         createCellIfUndefined: true
       });
     });
-  });
-});
-
-describe("Sticky Cell Container", () => {
-  test("creates a container when there are children", () => {
-    const component = renderer.create(
-      <StickyCellContainer>
-        <div>cell one</div>
-        <div>cell two</div>
-      </StickyCellContainer>
-    );
-
-    let tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("returns null when there are no children", () => {
-    const component = renderer.create(<StickyCellContainer />);
-    let tree = component.toJSON();
-    expect(tree).toBeNull();
-    expect(tree).toMatchSnapshot();
   });
 });
