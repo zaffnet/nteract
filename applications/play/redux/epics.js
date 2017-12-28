@@ -56,6 +56,20 @@ const activateServerEpic = action$ =>
     })
   );
 
+const killServerEpic = (action$, store) =>
+  action$.pipe(
+    ofType(actionTypes.KILL_SERVER),
+    mergeMap(({ payload: { serverId } }) => {
+      const { config } = store.getState().entities.serversById[serverId].server;
+      return shutdown(config).pipe(
+        mergeMap(data => {
+          return of(actions.killServerFulfilled({ serverId }));
+        }),
+        catchError(error => of(actions.killServerFailed({ serverId, error })))
+      );
+    })
+  );
+
 const fetchKernelSpecsEpic = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.FETCH_KERNEL_SPECS),
