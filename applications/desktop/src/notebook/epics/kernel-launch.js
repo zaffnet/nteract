@@ -89,29 +89,41 @@ export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
   const spec = kernelSpec.spec;
 
   return Observable.create(observer => {
-    launchSpec(spec, { cwd }).then(c => {
+    launchSpec(spec, { cwd, stdio: ["ignore", "pipe", "pipe"] }).then(c => {
       const { config, spawn, connectionFile } = c;
       const kernelSpecName = kernelSpec.name;
 
-      // TODO: I'm realizing that we could trigger on when the underlying sockets
-      //       are ready with these subjects to let us know when the kernels
-      //       are *really* ready
-      const channels = createMainChannel(config);
-      observer.next(setNotebookKernelInfo(kernelSpec));
-
-      observer.next({
-        type: NEW_KERNEL,
-        channels,
-        connectionFile,
-        spawn,
-        kernelSpecName,
-        kernelSpec
+      spawn.stdout.on("data", data => {
+        const action = { type: "RAW_STDOUT", payload: data.toString() };
+        observer.next(action);
       });
+      spawn.stderr.on("data", data => {
+        const action = { type: "RAW_STDERR", payload: data.toString() };
+        observer.next(action);
+      });
+
+      createMainChannel(config)
+        .then(channels => {
+          observer.next(setNotebookKernelInfo(kernelSpec));
+
+          observer.next({
+            type: NEW_KERNEL,
+            channels,
+            connectionFile,
+            spawn,
+            kernelSpecName,
+            kernelSpec
+          });
+        })
+        .catch(error => {
+          observer.error({ type: "ERROR", payload: error, err: true });
+        });
 
       spawn.on("error", error => {
         observer.error({ type: "ERROR", payload: error, err: true });
         observer.complete();
       });
+
       spawn.on("exit", () => {
         observer.complete();
       });

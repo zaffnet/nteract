@@ -11,7 +11,11 @@ module.exports = {
     }
     return writeConnectionFile("config").then(c => {
       return {
-        spawn: { on: () => {} },
+        spawn: {
+          on: () => {},
+          stdout: { on: () => {} },
+          stderr: { on: () => {} }
+        },
         connectionFile: c.connectionFile,
         config: c.config,
         kernelSpec: kernelSpec.name

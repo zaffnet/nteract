@@ -21,7 +21,7 @@
   "homepage": "https://github.com/nteract/nteract",
   "scripts": {
     "postinstall": "npm run lerna",
-    "//lerna bootstrap": "builds packages",
+    "//lerna bootstrap": "links and builds packages",
     "lerna": "lerna bootstrap",
     "build:apps": "lerna run build --scope nteract --scope @nteract/play --scope @nteract/commuter --scope @nteract/notebook-on-next --scope @nteract/showcase --parallel --stream",
     "app:desktop": "lerna run start --scope nteract --stream",
@@ -49,8 +49,6 @@
     "test:conformance": "node scripts/conformance.js",
     "test:lint": "npm run lint",
     "test:flow": "npm run flow",
-    "// pretest": "ensure that zeromq is built for node",
-    "pretest": "lerna exec --scope enchannel-zmq-backend -- npm rebuild",
     "test:desktop": "lerna run test:unit --scope nteract --stream",
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js",
