@@ -150,7 +150,11 @@ class Main extends React.Component<*, *> {
             onFocusChange={() => {}}
             focusAbove={() => {}}
             focusBelow={() => {}}
-            mode={currentKernel.languageInfo.codemirror_mode}
+            mode={
+              currentKernel && currentKernel.languageInfo
+                ? currentKernel.languageInfo.codemirror_mode
+                : null
+            }
             // END TODO for notebook leakage
             // TODO: executionState should be allowed to be null or undefined,
             //       resulting in thought of as either idle or not connected by
