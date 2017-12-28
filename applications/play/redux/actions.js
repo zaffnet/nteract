@@ -217,6 +217,14 @@ export const setActiveKernel = (payload: {
   type: actionTypes.SET_ACTIVE_KERNEL,
   payload
 });
+export const setActiveKernelLanguageInfo = (payload: {
+  serverId: string,
+  kernelName: string,
+  languageInfo: *
+}) => ({
+  type: actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO,
+  payload
+});
 export const setKernelStatus = (payload: {
   serverId: string,
   kernelName: string

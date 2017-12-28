@@ -132,6 +132,13 @@ const initializeKernelMessaging = (action$, store) =>
                   message.content.language_info.name
                 )
               );
+              actionsArray.push(
+                actions.setActiveKernelLanguageInfo({
+                  serverId,
+                  kernelName,
+                  languageInfo: message.content.language_info
+                })
+              );
               break;
             case "display_data":
             case "execute_result":

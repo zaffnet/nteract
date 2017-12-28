@@ -225,6 +225,15 @@ const activeKernelMessages = (state = [], action) => {
   }
 };
 
+const activeKernelLanguageInfo = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO:
+      return action.payload.languageInfo;
+    default:
+      return state;
+  }
+};
+
 const activeKernel = combineReducers({
   name: activeKernelName,
   id: activeKernelId,
@@ -232,7 +241,8 @@ const activeKernel = combineReducers({
   channel: activeKernelChannel,
   outputs: activeKernelOutputs,
   status: activeKernelStatus,
-  messages: activeKernelMessages
+  messages: activeKernelMessages,
+  languageInfo: activeKernelLanguageInfo
 });
 
 const activeKernelEnvelopeLoading = (state = false, action) => {
