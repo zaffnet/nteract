@@ -25,17 +25,15 @@ type State = {
   view: boolean
 };
 
+// TODO: Standardize this as @nteract/markdown-renderer
+//       and keep it consistent amongst the markdown transform and in the
+//       rendered view of markdown cells
 type MDRender = (input: string) => string;
-
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
-
 const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
 export default class MarkdownCell extends React.PureComponent<any, State> {
-  openEditor: () => void;
-  editorKeyDown: (e: SyntheticKeyboardEvent<*>) => void;
-  renderedKeyDown: (e: SyntheticKeyboardEvent<*>) => boolean;
   rendered: ?HTMLElement;
 
   static defaultProps = {
@@ -47,9 +45,9 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     this.state = {
       view: true
     };
-    this.openEditor = this.openEditor.bind(this);
-    this.editorKeyDown = this.editorKeyDown.bind(this);
-    this.renderedKeyDown = this.renderedKeyDown.bind(this);
+    (this: any).openEditor = this.openEditor.bind(this);
+    (this: any).editorKeyDown = this.editorKeyDown.bind(this);
+    (this: any).renderedKeyDown = this.renderedKeyDown.bind(this);
   }
 
   componentDidMount(): void {
