@@ -1,8 +1,9 @@
+// @flow
 import React from "react";
 
 import { shallow, mount } from "enzyme";
 
-import MarkdownCell from "../../../src/components/cell/markdown-cell";
+import MarkdownCell from "../../src/components/markdown-preview";
 
 import { emptyMarkdownCell } from "@nteract/commutable";
 
