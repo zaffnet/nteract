@@ -10,7 +10,7 @@ import CodeMirror from "../../providers/editor";
 import LatexRenderer from "../latex";
 import { Display, RichestMime } from "@nteract/display-area";
 
-import MarkdownCell from "./markdown-cell";
+import MarkdownPreviewer from "../markdown-preview";
 import Toolbar from "../../providers/toolbar";
 
 // TODO: This can be deleted once Toolbar and Editor are no longer connected
@@ -162,13 +162,13 @@ export default class CellView extends React.Component<CellProps, *> {
         break;
       case "markdown":
         element = (
-          <MarkdownCell
+          <MarkdownPreviewer
             focusAbove={this.props.focusAboveCell}
             focusBelow={this.props.focusBelowCell}
             focusEditor={this.props.focusCellEditor}
             cellFocused={cellFocused}
             editorFocused={editorFocused}
-            cell={cell}
+            source={cell.get("source", "")}
           >
             <Editor>
               <CodeMirror
@@ -186,7 +186,7 @@ export default class CellView extends React.Component<CellProps, *> {
                 }}
               />
             </Editor>
-          </MarkdownCell>
+          </MarkdownPreviewer>
         );
         break;
 
