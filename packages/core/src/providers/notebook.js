@@ -8,7 +8,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import Cell from "../components/cell/cell";
+import CellView from "../components/cell/cell";
 
 import DraggableCell from "../components/draggable-cell";
 import CellCreator from "./cell-creator";
@@ -20,6 +20,9 @@ import {
 } from "../components/pinned-cell";
 
 import {
+  focusCellEditor,
+  focusPreviousCell,
+  focusPreviousCellEditor,
   focusNextCell,
   focusNextCellEditor,
   moveCell,
@@ -188,7 +191,21 @@ export class Notebook extends React.PureComponent<Props> {
       this.props.transient.getIn(["cellMap", id, "status"]) === "busy";
 
     return (
-      <Cell
+      <CellView
+        selectCell={() => {
+          this.context.store.dispatch(focusCell(id));
+        }}
+        focusCellEditor={() => {
+          this.context.store.dispatch(focusCellEditor(id));
+        }}
+        focusAboveCell={() => {
+          this.context.store.dispatch(focusPreviousCell(id));
+          this.context.store.dispatch(focusPreviousCellEditor(id));
+        }}
+        focusBelowCell={() => {
+          this.context.store.dispatch(focusNextCell(id, true));
+          this.context.store.dispatch(focusNextCellEditor(id));
+        }}
         cell={cell}
         displayOrder={this.props.displayOrder}
         id={id}
