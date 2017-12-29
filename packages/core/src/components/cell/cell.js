@@ -13,19 +13,12 @@ import { Display, RichestMime } from "@nteract/display-area";
 import MarkdownCell from "./markdown-cell";
 import Toolbar from "../../providers/toolbar";
 
-import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../ng";
-
-import {
-  focusCell,
-  focusPreviousCell,
-  focusNextCell,
-  focusCellEditor,
-  focusPreviousCellEditor,
-  focusNextCellEditor
-} from "../../actions";
-
-// NOTE: PropTypes are required for the sake of contextTypes
+// TODO: This can be deleted once Toolbar and Editor are no longer connected
+//       components. This is really only needed for tests, I'm hoping to tackle
+//       this next.
 const PropTypes = require("prop-types");
+
+import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../ng";
 
 export type CellProps = {
   cell: any,
@@ -38,34 +31,25 @@ export type CellProps = {
   theme: string,
   pagers: ImmutableList<any>,
   transforms: Object,
-  models: ImmutableMap<string, any>
+  models: ImmutableMap<string, any>,
+  selectCell: () => void,
+  focusAboveCell: () => void,
+  focusBelowCell: () => void,
+  focusCellEditor: () => void
 };
 
-export class ConnectedCell extends React.PureComponent<CellProps, *> {
-  selectCell: () => void;
-  focusAboveCell: () => void;
-  focusBelowCell: () => void;
-  focusCellEditor: () => void;
-  cellDiv: ?HTMLElement;
-  scrollIntoViewIfNeeded: Function;
-
+export default class CellView extends React.Component<CellProps, *> {
   static defaultProps = {
     pagers: new ImmutableList(),
     models: new ImmutableMap()
   };
 
+  // TODO: This can be deleted once Toolbar no longer is a connected component
   static contextTypes = {
     store: PropTypes.object
   };
 
-  constructor(): void {
-    super();
-    this.selectCell = this.selectCell.bind(this);
-    this.focusCellEditor = this.focusCellEditor.bind(this);
-    this.focusAboveCell = this.focusAboveCell.bind(this);
-    this.focusBelowCell = this.focusBelowCell.bind(this);
-    this.scrollIntoViewIfNeeded = this.scrollIntoViewIfNeeded.bind(this);
-  }
+  cellDiv: ?HTMLElement;
 
   componentDidUpdate(prevProps: CellProps) {
     this.scrollIntoViewIfNeeded(prevProps.cellFocused);
@@ -101,25 +85,7 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
     }
   }
 
-  selectCell(): void {
-    this.context.store.dispatch(focusCell(this.props.id));
-  }
-
-  focusCellEditor(): void {
-    this.context.store.dispatch(focusCellEditor(this.props.id));
-  }
-
-  focusAboveCell(): void {
-    this.context.store.dispatch(focusPreviousCell(this.props.id));
-    this.context.store.dispatch(focusPreviousCellEditor(this.props.id));
-  }
-
-  focusBelowCell(): void {
-    this.context.store.dispatch(focusNextCell(this.props.id, true));
-    this.context.store.dispatch(focusNextCellEditor(this.props.id));
-  }
-
-  render(): ?React$Element<any> {
+  render() {
     const cell = this.props.cell;
     const cellType = cell.get("cell_type");
     const cellFocused = this.props.cellFocused === this.props.id;
@@ -155,8 +121,8 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
                   cellFocused={cellFocused}
                   editorFocused={editorFocused}
                   theme={this.props.theme}
-                  focusAbove={this.focusAboveCell}
-                  focusBelow={this.focusBelowCell}
+                  focusAbove={this.props.focusAboveCell}
+                  focusBelow={this.props.focusBelowCell}
                 />
               </Editor>
             </Input>
@@ -197,9 +163,9 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
       case "markdown":
         element = (
           <MarkdownCell
-            focusAbove={this.focusAboveCell}
-            focusBelow={this.focusBelowCell}
-            focusEditor={this.focusCellEditor}
+            focusAbove={this.props.focusAboveCell}
+            focusBelow={this.props.focusBelowCell}
+            focusEditor={this.props.focusCellEditor}
             cellFocused={cellFocused}
             editorFocused={editorFocused}
             cell={cell}
@@ -210,8 +176,8 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
                 id={this.props.id}
                 value={this.props.cell.get("source")}
                 theme={this.props.theme}
-                focusAbove={this.focusAboveCell}
-                focusBelow={this.focusBelowCell}
+                focusAbove={this.props.focusAboveCell}
+                focusBelow={this.props.focusBelowCell}
                 cellFocused={cellFocused}
                 editorFocused={editorFocused}
                 options={{
@@ -232,7 +198,7 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
     return (
       <Cell id={this.props.id} isSelected={cellFocused}>
         <div
-          onClick={this.selectCell}
+          onClick={this.props.selectCell}
           role="presentation"
           ref={el => {
             this.cellDiv = el;
@@ -255,5 +221,3 @@ export class ConnectedCell extends React.PureComponent<CellProps, *> {
     );
   }
 }
-
-export default ConnectedCell;

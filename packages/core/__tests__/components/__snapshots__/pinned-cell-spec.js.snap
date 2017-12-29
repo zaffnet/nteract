@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PinnedPlaceHolderCell has a snapshot test at least 1`] = `
+<div
+  className="jsx-719937883 jsx-719937883 cell-placeholder"
+>
+  <span
+    className="jsx-719937883 jsx-719937883 octicon"
+  >
+    <span>
+      <svg
+        height={16}
+        style={
+          Object {
+            "display": "inline-block",
+            "fill": "currentColor",
+            "verticalAlign": "text-bottom",
+          }
+        }
+        viewBox="0 0 12 16"
+        width={12}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11 10h1v3c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h3v1H1v10h10v-3zM6 2l2.25 2.25L5 7.5 6.5 9l3.25-3.25L12 8V2H6z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Sticky Cell Container creates a container when there are children 1`] = `
+<div
+  className="jsx-719937883 jsx-1455849675"
+>
+  <div
+    className="jsx-719937883 jsx-1455849675 sticky-cells-placeholder"
+  />
+  <div
+    className="jsx-719937883 jsx-1455849675 sticky-cell-container"
+  >
+    <div>
+      cell one
+    </div>
+    <div>
+      cell two
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Sticky Cell Container returns null when there are no children 1`] = `null`;
