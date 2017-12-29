@@ -7,7 +7,6 @@ import { shallow, mount } from "enzyme";
 import renderer from "react-test-renderer";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import Cell from "../../src/components/cell/cell";
 import { Notebook, getLanguageMode } from "../../src/providers/notebook";
 
 import { dummyStore, dummyCommutable } from "../../src/dummy";
@@ -40,7 +39,6 @@ describe("Notebook", () => {
         // Sticky the first cell of the notebook so that the sticky code gets
         // triggered.
         stickyCells={stickyCells}
-        CellComponent={Cell}
       />
     );
     expect(component).not.toBeNull();
@@ -76,7 +74,6 @@ describe("Notebook", () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={new Immutable.Set()}
-          CellComponent={Cell}
           cellFocused={focusedCell}
         />,
         { context }
@@ -111,7 +108,6 @@ describe("Notebook", () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={new Immutable.Set()}
-          CellComponent={Cell}
           cellFocused={focusedCell}
         />,
         { context }
@@ -146,7 +142,6 @@ describe("Notebook", () => {
           cellPagers={new Immutable.Map()}
           cellStatuses={dummyCellStatuses}
           stickyCells={new Immutable.Set([focusedCell])}
-          CellComponent={Cell}
           cellFocused={focusedCell}
         />,
         { context }
