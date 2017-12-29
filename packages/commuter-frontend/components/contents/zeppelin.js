@@ -3,9 +3,7 @@ import * as React from "react";
 
 import { JSONTransform, HTMLTransform } from "@nteract/transforms";
 
-import { _nextgen } from "@nteract/core/components";
-
-const { Editor } = _nextgen;
+import { Editor } from "@nteract/core/components";
 
 const d3 = Object.assign({}, require("d3-dsv"));
 

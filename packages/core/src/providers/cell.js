@@ -5,20 +5,20 @@
 
 import React from "react";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
-import CodeMirror from "../../providers/editor";
+import CodeMirror from "./editor";
 
-import LatexRenderer from "../latex";
+import LatexRenderer from "../components/latex";
 import { Display, RichestMime } from "@nteract/display-area";
 
-import MarkdownPreviewer from "../markdown-preview";
-import Toolbar from "../../providers/toolbar";
+import MarkdownPreviewer from "../components/markdown-preview";
+import Toolbar from "./toolbar";
 
 // TODO: This can be deleted once Toolbar and Editor are no longer connected
 //       components. This is really only needed for tests, I'm hoping to tackle
 //       this next.
 const PropTypes = require("prop-types");
 
-import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../ng";
+import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../components";
 
 export type CellProps = {
   cell: any,

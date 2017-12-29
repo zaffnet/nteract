@@ -12,7 +12,7 @@ import {
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import CellView from "../components/cell/cell";
+import CellView from "./cell";
 
 import DraggableCell from "../components/draggable-cell";
 import CellCreator from "./cell-creator";

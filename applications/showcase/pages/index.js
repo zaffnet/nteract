@@ -1,7 +1,5 @@
 // @flow
-import { _nextgen } from "@nteract/core/components";
-
-const {
+import {
   Cell,
   Input,
   Prompt,
@@ -9,7 +7,7 @@ const {
   Editor,
   Outputs,
   Notebook
-} = _nextgen;
+} from "@nteract/core/components";
 
 import ReactMarkdown from "react-markdown";
 

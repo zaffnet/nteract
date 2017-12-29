@@ -8,7 +8,7 @@ import MarkdownRenderer from "commonmark-react-renderer";
 
 import LatexRenderer from "./latex";
 
-import { Outputs, PromptBuffer, Input } from "./ng";
+import { Outputs, PromptBuffer, Input } from "./";
 
 type Props = {
   source: string,

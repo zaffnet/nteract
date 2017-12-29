@@ -2,7 +2,7 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
-import { Notebook } from "@nteract/core/components";
+import { Notebook } from "@nteract/core/providers";
 import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 

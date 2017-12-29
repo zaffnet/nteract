@@ -15,12 +15,7 @@ import {
 } from "@nteract/commutable";
 import { createCodeCell } from "@nteract/commutable";
 
-import { _nextgen } from "@nteract/core/components";
-
-import LatexRenderer from "./latex";
-import { PapermillView } from "./papermill";
-
-const {
+import {
   Cell,
   Input,
   Prompt,
@@ -28,7 +23,10 @@ const {
   Editor,
   Outputs,
   Notebook
-} = _nextgen;
+} from "@nteract/core/components";
+
+import LatexRenderer from "./latex";
+import { PapermillView } from "./papermill";
 
 const themes = require("@nteract/core/themes");
 

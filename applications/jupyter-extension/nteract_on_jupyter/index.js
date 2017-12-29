@@ -17,7 +17,7 @@ type JupyterConfigData = {
   appVersion: string
 };
 
-import { Notebook } from "@nteract/core/components";
+import { Notebook } from "@nteract/core/providers";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
