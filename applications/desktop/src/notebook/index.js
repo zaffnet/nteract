@@ -22,7 +22,7 @@ import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
 
 import {
-  AppRecord,
+  makeAppRecord,
   DocumentRecord,
   CommsRecord
 } from "@nteract/types/core/records";
@@ -30,7 +30,7 @@ import {
 import "./main.css";
 
 const store = configureStore({
-  app: AppRecord(),
+  app: makeAppRecord(),
   document: DocumentRecord(),
   comms: CommsRecord(),
   config: ImmutableMap({
@@ -100,4 +100,6 @@ export default class App extends React.PureComponent<Object, Object> {
   }
 }
 
-ReactDOM.render(<App />, document.querySelector("#app"));
+// $FlowFixMe: Needs to be nullable
+const app: Element = document.querySelector("#app");
+ReactDOM.render(<App />, app);

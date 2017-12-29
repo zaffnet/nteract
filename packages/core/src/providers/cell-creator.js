@@ -10,11 +10,11 @@ import {
 } from "../actions";
 import CellCreatorView from "../components/cell-creator";
 
-type Props = {|
+type Props = {
   above: boolean,
   dispatch: Dispatch<*>,
-  id: string
-|};
+  id?: string
+};
 
 class CellCreator extends Component<Props> {
   createCell: (type: string) => void;
@@ -42,7 +42,10 @@ class CellCreator extends Component<Props> {
   mergeCell(): void {
     const { dispatch, id } = this.props;
 
-    dispatch(mergeCellAfter(id));
+    // We can't merge cells if we don't have a cell ID
+    if (id) {
+      dispatch(mergeCellAfter(id));
+    }
   }
 
   render(): React$Element<any> {

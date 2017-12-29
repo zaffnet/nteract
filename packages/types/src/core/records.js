@@ -3,6 +3,10 @@
 import type { Subject } from "rxjs";
 
 const Immutable = require("immutable");
+import type { RecordFactory, RecordOf } from "immutable";
+import type { ChildProcess } from "child_process";
+import { Record } from "immutable";
+import type { Channels } from "../channels";
 
 /*
 
@@ -120,10 +124,23 @@ export type Notebook = {
 // Parts of AppRecord should become
 // ElectronAppRecord
 // Basically, anything that's only for desktop should have its own record & reducers
-
-export const AppRecord = Immutable.Record({
+type AppRecordProps = {
+  executionState: "not connected" | "busy" | "idle" | "starting",
+  token: ?string,
+  channels: ?Channels,
+  spawn: ?ChildProcess,
+  connectionFile: ?string,
+  notificationSystem: ?Object,
+  kernelSpecName: ?string,
+  kernelSpecDisplayName: ?string,
+  kernelSpec: ?Object,
+  isSaving: boolean,
+  lastSaved: ?Date,
+  configLastSaved: ?Date,
+  error: any
+};
+export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   executionState: "not connected",
-
   token: null, // Electron specific (ish...)
   channels: null, // Electron, though we hope to adapt these...
   spawn: null, // Very Electron
@@ -137,6 +154,7 @@ export const AppRecord = Immutable.Record({
   configLastSaved: null, // ?
   error: null // All
 });
+export type AppRecord = RecordOf<AppRecordProps>;
 
 export type Document = {
   notebook: Notebook,
@@ -145,7 +163,7 @@ export type Document = {
   // right now it's keypaths and then it looks like it's able to handle any per
   // cell transient data that will be deleted when the kernel is restarted
   cellPagers: any,
-  stickyCells: Immutable.Set<any>,
+  stickyCells: ?Immutable.Set<any>,
   editorFocused: any,
   cellFocused: any,
   copied: Immutable.Map<any, any>

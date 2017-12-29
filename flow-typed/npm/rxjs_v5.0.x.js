@@ -1,14 +1,5 @@
-// flow-typed signature: 28eccd0f1e7597c4d9f2fc7f666f0419
-// flow-typed version: 995af265b9/rxjs_v5.0.x/flow_>=v0.34.x
-
-// FIXME(samgoldman) Remove top-level interface once Babel supports
-// `declare interface` syntax.
-// FIXME(samgoldman) Remove this once rxjs$Subject<T> can mixin rxjs$Observer<T>
-interface rxjs$IObserver<-T> {
-  next(value: T): mixed;
-  error(error: any): mixed;
-  complete(): mixed;
-}
+// flow-typed signature: fea082aa61a81ca321d98f27415fa109
+// flow-typed version: bead2dda6f/rxjs_v5.0.x/flow_>=v0.34.x
 
 type rxjs$PartialObserver<-T> =
   | {
@@ -41,80 +32,17 @@ type rxjs$EventListenerOptions =
     }
   | boolean;
 
-type rxjs$UnaryFunction<T, R> = (source: T) => R;
+type rxjs$ObservableInput<T> = rxjs$Observable<T> | Promise<T> | Iterable<T>;
 
-type rxjs$OperatorFunction<T, R> = rxjs$UnaryFunction<
-  rxjs$Observable<T>,
-  rxjs$Observable<R>
->;
+type rxjs$OperatorFunction<T, R> = (rxjs$Observable<T>) => rxjs$Observable<R>;
+type rxjs$OperatorFunctionLast<T, R: rxjs$Observable<*>> = (
+  rxjs$Observable<T>
+) => R;
 
 declare class rxjs$Observable<+T> {
   constructor(
-    subscribe?: (observer: rxjs$Observer<T>) => rxjs$TeardownLogic
+    subscriber?: (observer: rxjs$Observer<T>) => rxjs$TeardownLogic
   ): void;
-  pipe(): rxjs$Observable<T>;
-  pipe<A>(op1: rxjs$OperatorFunction<T, A>): rxjs$Observable<A>;
-  pipe<A, B>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>
-  ): rxjs$Observable<B>;
-  pipe<A, B, C>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>
-  ): rxjs$Observable<C>;
-  pipe<A, B, C, D>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>
-  ): rxjs$Observable<D>;
-  pipe<A, B, C, D, E>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>,
-    op5: rxjs$OperatorFunction<D, E>
-  ): rxjs$Observable<E>;
-  pipe<A, B, C, D, E, F>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>,
-    op5: rxjs$OperatorFunction<D, E>,
-    op6: rxjs$OperatorFunction<E, F>
-  ): rxjs$Observable<F>;
-  pipe<A, B, C, D, E, F, G>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>,
-    op5: rxjs$OperatorFunction<D, E>,
-    op6: rxjs$OperatorFunction<E, F>,
-    op7: rxjs$OperatorFunction<F, G>
-  ): rxjs$Observable<G>;
-  pipe<A, B, C, D, E, F, G, H>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>,
-    op5: rxjs$OperatorFunction<D, E>,
-    op6: rxjs$OperatorFunction<E, F>,
-    op7: rxjs$OperatorFunction<F, G>,
-    op8: rxjs$OperatorFunction<G, H>
-  ): rxjs$Observable<H>;
-  pipe<A, B, C, D, E, F, G, H, I>(
-    op1: rxjs$OperatorFunction<T, A>,
-    op2: rxjs$OperatorFunction<A, B>,
-    op3: rxjs$OperatorFunction<B, C>,
-    op4: rxjs$OperatorFunction<C, D>,
-    op5: rxjs$OperatorFunction<D, E>,
-    op6: rxjs$OperatorFunction<E, F>,
-    op7: rxjs$OperatorFunction<F, G>,
-    op8: rxjs$OperatorFunction<G, H>,
-    op9: rxjs$OperatorFunction<H, I>
-  ): rxjs$Observable<I>;
-  pipe<R>(...operations: rxjs$OperatorFunction<T, R>[]): rxjs$Observable<R>;
 
   static bindCallback(
     callbackFunc: (callback: (_: void) => any) => any,
@@ -341,7 +269,10 @@ declare class rxjs$Observable<+T> {
     observableFactory: () => rxjs$Observable<T> | Promise<T>
   ): rxjs$Observable<T>;
 
-  static from(iterable: Iterable<T>): rxjs$Observable<T>;
+  static from(
+    input: rxjs$ObservableInput<T>,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<T>;
 
   static fromEvent(
     element: any,
@@ -400,17 +331,49 @@ declare class rxjs$Observable<+T> {
 
   static of(...values: T[]): rxjs$Observable<T>;
 
+  static range(
+    start?: number,
+    count?: number,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<number>;
+
   static throw(error: any): rxjs$Observable<any>;
 
   audit(
     durationSelector: (value: T) => rxjs$Observable<any> | Promise<any>
   ): rxjs$Observable<T>;
 
+  auditTime(
+    duration: number,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<T>;
+
   race(other: rxjs$Observable<T>): rxjs$Observable<T>;
 
-  repeat(): rxjs$Observable<T>;
+  repeat(count?: number): rxjs$Observable<T>;
 
   buffer(bufferBoundaries: rxjs$Observable<any>): rxjs$Observable<Array<T>>;
+
+  bufferCount(
+    bufferSize: number,
+    startBufferEvery?: number
+  ): rxjs$Observable<Array<T>>;
+
+  bufferTime(
+    bufferTimeSpan: number,
+    bufferCreationInterval?: number,
+    maxBufferSize?: number,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<Array<T>>;
+
+  bufferToggle<U>(
+    openings: rxjs$Observable<U> | Promise<U>,
+    closingSelector: (value: U) => rxjs$Observable<any> | Promise<any>
+  ): rxjs$Observable<Array<T>>;
+
+  bufferWhen(
+    closingSelector: () => rxjs$Observable<any>
+  ): rxjs$Observable<Array<T>>;
 
   catch<U>(
     selector: (err: any, caught: rxjs$Observable<T>) => rxjs$Observable<U>
@@ -421,13 +384,25 @@ declare class rxjs$Observable<+T> {
   concatAll<U>(): rxjs$Observable<U>;
 
   concatMap<U>(
-    f: (value: T) => rxjs$Observable<U> | Promise<U> | Iterable<U>
+    f: (value: T, index: number) => rxjs$ObservableInput<U>,
+    _: void
   ): rxjs$Observable<U>;
+  concatMap<U, V>(
+    f: (value: T, index: number) => rxjs$ObservableInput<U>,
+    resultSelector: (
+      outerValue: T,
+      innerValue: U,
+      outerIndex: number,
+      innerIndex: number
+    ) => V
+  ): rxjs$Observable<V>;
 
   debounceTime(
     dueTime: number,
     scheduler?: rxjs$SchedulerClass
   ): rxjs$Observable<T>;
+
+  defaultIfEmpty<U>(defaultValue: U): rxjs$Observable<T | U>;
 
   delay(dueTime: number, scheduler?: rxjs$SchedulerClass): rxjs$Observable<T>;
 
@@ -444,6 +419,26 @@ declare class rxjs$Observable<+T> {
   ): rxjs$Observable<T>;
 
   elementAt(index: number, defaultValue?: T): rxjs$Observable<T>;
+
+  exhaustMap<U>(
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    _: void
+  ): rxjs$Observable<U>;
+  exhaustMap<U, V>(
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    resultSelector: (
+      outerValue: T,
+      innerValue: U,
+      outerIndex: number,
+      innerIndex: number
+    ) => V
+  ): rxjs$Observable<V>;
+
+  expand(
+    project: (value: T, index: number) => rxjs$Observable<T>,
+    concurrent?: number,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<T>;
 
   filter(
     predicate: (value: T, index: number) => boolean,
@@ -473,13 +468,40 @@ declare class rxjs$Observable<+T> {
     defaultValue: U
   ): rxjs$Observable<U>;
 
-  groupBy(
-    keySelector: (value: T) => mixed,
-    elementSelector?: (value: T) => T,
-    compare?: (x: T, y: T) => boolean
-  ): rxjs$Observable<rxjs$Observable<T>>;
+  groupBy<K>(
+    keySelector: (value: T) => K,
+    _: void
+  ): rxjs$Observable<rxjs$GroupedObservable<K, T>>;
+  groupBy<K, V>(
+    keySelector: (value: T) => K,
+    elementSelector: (value: T) => V,
+    durationSelector?: (
+      grouped: rxjs$GroupedObservable<K, V>
+    ) => rxjs$Observable<any>
+  ): rxjs$Observable<rxjs$GroupedObservable<K, V>>;
 
   ignoreElements<U>(): rxjs$Observable<U>;
+
+  last(
+    predicate?: (value: T, index: number, source: rxjs$Observable<T>) => boolean
+  ): rxjs$Observable<T>;
+  last<U>(
+    predicate: ?(
+      value: T,
+      index: number,
+      source: rxjs$Observable<T>
+    ) => boolean,
+    resultSelector: (value: T, index: number) => U
+  ): rxjs$Observable<U>;
+  last<U>(
+    predicate: ?(
+      value: T,
+      index: number,
+      source: rxjs$Observable<T>
+    ) => boolean,
+    resultSelector: ?(value: T, index: number) => U,
+    defaultValue: U
+  ): rxjs$Observable<U>;
 
   let<U>(
     project: (self: rxjs$Observable<T>) => rxjs$Observable<U>
@@ -494,9 +516,19 @@ declare class rxjs$Observable<+T> {
 
   // Alias for `mergeMap`
   flatMap<U>(
-    project: (value: T) => rxjs$Observable<U> | Promise<U> | Iterable<U>,
-    index?: number
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    concurrency?: number
   ): rxjs$Observable<U>;
+  flatMap<U, V>(
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    resultSelector: (
+      outerValue: T,
+      innerValue: U,
+      outerIndex: number,
+      innerIndex: number
+    ) => V,
+    concurrency?: number
+  ): rxjs$Observable<V>;
 
   flatMapTo<U>(innerObservable: rxjs$Observable<U>): rxjs$Observable<U>;
 
@@ -512,13 +544,22 @@ declare class rxjs$Observable<+T> {
   ): rxjs$Observable<V>;
 
   switchMap<U>(
-    project: (value: T) => rxjs$Observable<U> | Promise<U> | Iterable<U>,
-    index?: number
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    _: void
   ): rxjs$Observable<U>;
+  switchMap<U, V>(
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    resultSelector: (
+      outerValue: T,
+      innerValue: U,
+      outerIndex: number,
+      innerIndex: number
+    ) => V
+  ): rxjs$Observable<V>;
 
   switchMapTo<U>(innerObservable: rxjs$Observable<U>): rxjs$Observable<U>;
 
-  map<U>(f: (value: T) => U): rxjs$Observable<U>;
+  map<U>(f: (value: T, index: number) => U, thisArg?: any): rxjs$Observable<U>;
 
   mapTo<U>(value: U): rxjs$Observable<U>;
 
@@ -527,12 +568,19 @@ declare class rxjs$Observable<+T> {
   mergeAll<U>(): rxjs$Observable<U>;
 
   mergeMap<U>(
-    project: (
-      value: T,
-      index?: number
-    ) => rxjs$Observable<U> | Promise<U> | Iterable<U>,
-    index?: number
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    concurrency?: number
   ): rxjs$Observable<U>;
+  mergeMap<U, V>(
+    project: (value: T, index: number) => rxjs$ObservableInput<U>,
+    resultSelector: (
+      outerValue: T,
+      innerValue: U,
+      outerIndex: number,
+      innerIndex: number
+    ) => V,
+    concurrency?: number
+  ): rxjs$Observable<V>;
 
   mergeMapTo<U>(innerObservable: rxjs$Observable<U>): rxjs$Observable<U>;
 
@@ -554,6 +602,41 @@ declare class rxjs$Observable<+T> {
   observeOn(scheduler: rxjs$SchedulerClass): rxjs$Observable<T>;
 
   pairwise(): rxjs$Observable<[T, T]>;
+
+  partition(
+    predicate: (value: T, index: number) => boolean,
+    thisArg: any
+  ): [rxjs$Observable<T>, rxjs$Observable<T>];
+
+  pipe(): rxjs$Observable<T>;
+
+  pipe<A>(op1: rxjs$OperatorFunctionLast<T, A>): A;
+
+  pipe<A, B>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunctionLast<A, B>
+  ): B;
+
+  pipe<A, B, C>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunctionLast<B, C>
+  ): C;
+
+  pipe<A, B, C, D>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunctionLast<C, D>
+  ): D;
+
+  pipe<A, B, C, D, E>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunctionLast<D, E>
+  ): E;
 
   publish(): rxjs$ConnectableObservable<T>;
 
@@ -627,6 +710,12 @@ declare class rxjs$Observable<+T> {
 
   timeout(due: number | Date, _: void): rxjs$Observable<T>;
 
+  timeoutWith<U>(
+    due: number | Date,
+    withObservable: rxjs$Observable<U>,
+    scheduler?: rxjs$SchedulerClass
+  ): rxjs$Observable<T | U>;
+
   toArray(): rxjs$Observable<T[]>;
 
   toPromise(): Promise<T>;
@@ -693,6 +782,8 @@ declare class rxjs$Observable<+T> {
     g: rxjs$Observable<G>,
     resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => H
   ): rxjs$Observable<H>;
+
+  static combineLatest<A>(a: rxjs$Observable<A>, _: void): rxjs$Observable<[A]>;
 
   static combineLatest<A, B>(
     a: rxjs$Observable<A>,
@@ -815,6 +906,185 @@ declare class rxjs$Observable<+T> {
     resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => H
   ): rxjs$Observable<H>;
 
+  static zip<A, B>(
+    a: rxjs$Observable<A>,
+    resultSelector: (a: A) => B
+  ): rxjs$Observable<B>;
+
+  static zip<A, B, C>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    resultSelector: (a: A, b: B) => C
+  ): rxjs$Observable<C>;
+
+  static zip<A, B, C, D>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    resultSelector: (a: A, b: B, c: C) => D
+  ): rxjs$Observable<D>;
+
+  static zip<A, B, C, D, E>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    resultSelector: (a: A, b: B, c: C, d: D) => E
+  ): rxjs$Observable<E>;
+
+  static zip<A, B, C, D, E, F>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E) => F
+  ): rxjs$Observable<F>;
+
+  static zip<A, B, C, D, E, F, G>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F) => G
+  ): rxjs$Observable<G>;
+
+  static zip<A, B, C, D, E, F, G, H>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    g: rxjs$Observable<G>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => H
+  ): rxjs$Observable<H>;
+
+  static zip<A>(a: rxjs$Observable<A>, _: void): rxjs$Observable<[A]>;
+
+  static zip<A, B>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    _: void
+  ): rxjs$Observable<[A, B]>;
+
+  static zip<A, B, C>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    _: void
+  ): rxjs$Observable<[A, B, C]>;
+
+  static zip<A, B, C, D>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    _: void
+  ): rxjs$Observable<[A, B, C, D]>;
+
+  static zip<A, B, C, D, E>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    _: void
+  ): rxjs$Observable<[A, B, C, D, E]>;
+
+  static zip<A, B, C, D, E, F>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    _: void
+  ): rxjs$Observable<[A, B, C, D, E, F]>;
+
+  static zip<A, B, C, D, E, F, G>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    g: rxjs$Observable<G>,
+    _: void
+  ): rxjs$Observable<[A, B, C, D, E, F, G]>;
+
+  static zip<A, B, C, D, E, F, G, H>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    g: rxjs$Observable<G>,
+    h: rxjs$Observable<H>,
+    _: void
+  ): rxjs$Observable<[A, B, C, D, E, F, G, H]>;
+
+  zip<A>(a: rxjs$Observable<A>, _: void): rxjs$Observable<[T, A]>;
+
+  zip<A, B>(
+    a: rxjs$Observable<A>,
+    resultSelector: (a: A) => B
+  ): rxjs$Observable<B>;
+
+  zip<A, B, C>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    resultSelector: (a: A, b: B) => C
+  ): rxjs$Observable<C>;
+
+  zip<A, B, C, D>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    resultSelector: (a: A, b: B, c: C) => D
+  ): rxjs$Observable<D>;
+
+  zip<A, B, C, D, E>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    resultSelector: (a: A, b: B, c: C, d: D) => E
+  ): rxjs$Observable<E>;
+
+  zip<A, B, C, D, E, F>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E) => F
+  ): rxjs$Observable<F>;
+
+  zip<A, B, C, D, E, F, G>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F) => G
+  ): rxjs$Observable<G>;
+
+  zip<A, B, C, D, E, F, G, H>(
+    a: rxjs$Observable<A>,
+    b: rxjs$Observable<B>,
+    c: rxjs$Observable<C>,
+    d: rxjs$Observable<D>,
+    e: rxjs$Observable<E>,
+    f: rxjs$Observable<F>,
+    g: rxjs$Observable<G>,
+    resultSelector: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => H
+  ): rxjs$Observable<H>;
+
   static forkJoin<A, B>(
     a: rxjs$Observable<A>,
     resultSelector: (a: A) => B
@@ -934,6 +1204,41 @@ declare class rxjs$Observable<+T> {
     _: void
   ): rxjs$Observable<[A, B, C, D, E, F, G, H]>;
 
+  static forkJoin<A>(
+    a: Array<rxjs$Observable<A>>,
+    _: void
+  ): rxjs$Observable<Array<A>>;
+
+  static forkJoin<A>(
+    a: Array<rxjs$Observable<any>>,
+    _: void
+  ): rxjs$Observable<A>;
+
+  static forkJoin<A, B>(
+    a: Array<rxjs$Observable<A>>,
+    resultSelector: (...values: Array<A>) => B
+  ): rxjs$Observable<B>;
+
+  static forkJoin<A>(
+    a: Array<rxjs$Observable<any>>,
+    resultSelector: (...values: Array<any>) => A
+  ): rxjs$Observable<A>;
+
+  window(
+    windowBoundaries: rxjs$Observable<any>
+  ): rxjs$Observable<rxjs$Observable<T>>;
+  windowCount(
+    windowSize: number,
+    startWindowEvery?: number
+  ): rxjs$Observable<rxjs$Observable<T>>;
+  windowToggle<A>(
+    openings: rxjs$Observable<A>,
+    closingSelector: (value: A) => rxjs$Observable<any>
+  ): rxjs$Observable<rxjs$Observable<T>>;
+  windowWhen(
+    closingSelector: () => rxjs$Observable<any>
+  ): rxjs$Observable<rxjs$Observable<T>>;
+
   withLatestFrom<A>(a: rxjs$Observable<A>, _: void): rxjs$Observable<[T, A]>;
 
   withLatestFrom<A, B>(
@@ -996,11 +1301,21 @@ declare class rxjs$Observable<+T> {
     resourceFactory: () => ?R,
     observableFactory: (resource: R) => rxjs$Observable<T> | Promise<T> | void
   ): rxjs$Observable<T>;
+
+  _subscribe(observer: rxjs$Subscriber<T>): rxjs$Subscription;
+
+  _isScalar: boolean;
+  source: ?rxjs$Observable<any>;
+  operator: ?rxjs$Operator<any, any>;
 }
 
 declare class rxjs$ConnectableObservable<T> extends rxjs$Observable<T> {
   connect(): rxjs$Subscription;
   refCount(): rxjs$Observable<T>;
+}
+
+declare class rxjs$GroupedObservable<K, V> extends rxjs$Observable<V> {
+  key: K;
 }
 
 declare class rxjs$Observer<T> {
@@ -1011,35 +1326,35 @@ declare class rxjs$Observer<T> {
   complete(): mixed;
 }
 
-// NOTE: This is the nteract definition, for our subjects -- not that of flow-typed
-// Bring in the latest after https://github.com/flowtype/flow-typed/pull/1616 is
-// reviewed and merged.
-// prettier-ignore
-declare class rxjs$Subject<T> extends rxjs$Observable<T> mixins rxjs$Observer<T> {
-  static create<T>(
-    destination: rxjs$Observer<T>,
-    source: rxjs$Observable<T>
-  ): rxjs$AnonymousSubject<T>;
+declare interface rxjs$Operator<T, R> {
+  call(subscriber: rxjs$Subscriber<R>, source: any): rxjs$TeardownLogic;
+}
 
+declare class rxjs$Subject<T> mixins rxjs$Observable<T>, rxjs$Observer<T> {
   asObservable(): rxjs$Observable<T>;
 
   observers: Array<rxjs$Observer<T>>;
 
   unsubscribe(): void;
 
-  // Copied from rxjs$Observer<T>
-  next(value: T): mixed;
-  error(error: any): mixed;
-  complete(): mixed;
-
-  // For use in subclasses only:
-  _next(value: T): void;
-  _subscribe(observer: rxjs$PartialObserver<T>): rxjs$Subscription;
+  static create<T>(
+    next?: (x?: T) => void,
+    error?: (e?: any) => void,
+    complete?: () => void
+  ): rxjs$AnonymousSubject<T>;
 }
 
 declare class rxjs$AnonymousSubject<T> extends rxjs$Subject<T> {
-  destination: rxjs$Observer<T>;
-  source: rxjs$Observable<T>;
+  source: ?rxjs$Observable<T>;
+  destination: ?rxjs$Observer<T>;
+
+  constructor(
+    destination?: rxjs$Observer<T>,
+    source?: rxjs$Observable<T>
+  ): void;
+  next(value: T): void;
+  error(err: any): void;
+  complete(): void;
 }
 
 declare class rxjs$BehaviorSubject<T> extends rxjs$Subject<T> {
@@ -1061,6 +1376,24 @@ declare class rxjs$Subscription {
   add(teardown: rxjs$TeardownLogic): rxjs$Subscription;
 }
 
+declare class rxjs$Subscriber<T> extends rxjs$Subscription {
+  static create<T>(
+    next?: (x?: T) => void,
+    error?: (e?: any) => void,
+    complete?: () => void
+  ): rxjs$Subscriber<T>;
+
+  constructor(
+    destinationOrNext?: rxjs$PartialObserver<any> | ((value: T) => void),
+    error?: (e?: any) => void,
+    complete?: () => void
+  ): void;
+  next(value?: T): void;
+  error(err?: any): void;
+  complete(): void;
+  unsubscribe(): void;
+}
+
 declare class rxjs$SchedulerClass {
   schedule<T>(
     work: (state?: T) => void,
@@ -1074,8 +1407,11 @@ declare class rxjs$TimeoutError extends Error {}
 declare module "rxjs" {
   declare module.exports: {
     Observable: typeof rxjs$Observable,
+    Observer: typeof rxjs$Observer,
     ConnectableObservable: typeof rxjs$ConnectableObservable,
     Subject: typeof rxjs$Subject,
+    Subscriber: typeof rxjs$Subscriber,
+    AnonymousSubject: typeof rxjs$AnonymousSubject,
     BehaviorSubject: typeof rxjs$BehaviorSubject,
     ReplaySubject: typeof rxjs$ReplaySubject,
     Scheduler: {
@@ -1115,7 +1451,14 @@ declare module "rxjs/ReplaySubject" {
 
 declare module "rxjs/Subject" {
   declare module.exports: {
-    Subject: typeof rxjs$Subject
+    Subject: typeof rxjs$Subject,
+    AnonymousSubject: typeof rxjs$AnonymousSubject
+  };
+}
+
+declare module "rxjs/Subscriber" {
+  declare module.exports: {
+    Subscriber: typeof rxjs$Subscriber
   };
 }
 

@@ -4,7 +4,11 @@ import * as React from "react";
 import { DragDropContext as dragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { connect } from "react-redux";
-import { List as ImmutableList, Map as ImmutableMap } from "immutable";
+import {
+  List as ImmutableList,
+  Map as ImmutableMap,
+  Set as ImmutableSet
+} from "immutable";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
@@ -42,7 +46,7 @@ type Props = {
   cellMap: ImmutableMap<string, any>,
   transforms: Object,
   cellPagers: ImmutableMap<string, any>,
-  stickyCells: ImmutableMap<string, any>,
+  stickyCells: ImmutableSet<string>,
   transient: ImmutableMap<string, any>,
   cellFocused: string,
   editorFocused: string,
@@ -159,7 +163,9 @@ export class Notebook extends React.PureComponent<Props> {
       this.context.store.dispatch(focusNextCellEditor(id));
     }
 
+    // $FlowFixMe: Cell might be undefined.
     if (cell.get("cell_type") === "code") {
+      // $FlowFixMe: Cell might be undefined.
       this.context.store.dispatch(executeCell(id, cell.get("source")));
     }
   }
@@ -249,7 +255,7 @@ export class Notebook extends React.PureComponent<Props> {
         {this.renderStickyCells()}
         {/* Actual cells! */}
         <div className="cells">
-          <CellCreator id={this.props.cellOrder.get(0, null)} above />
+          <CellCreator id={this.props.cellOrder.get(0)} above />
           {this.props.cellOrder.map(this.createCellElement)}
         </div>
         <StatusBar
@@ -271,4 +277,5 @@ export class Notebook extends React.PureComponent<Props> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(Notebook);
+// $FlowFixMe: Flow can't figure out what to do with connect with one param.
 export default connect(mapStateToProps)(ConnectedNotebook);

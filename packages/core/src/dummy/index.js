@@ -17,13 +17,14 @@ export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
 
 const rootReducer = combineReducers({
   // Fake out app, since it comes from
-  app: (state = AppRecord(), action) => state,
+  app: (state = makeAppRecord(), action) => state,
   document,
   comms,
   config
 });
 
 import type { AppState } from "@nteract/types/core/records";
+import { makeAppRecord } from "@nteract/types/core/records";
 
 /**
 function configureStore(initialState: AppState) {
@@ -31,10 +32,11 @@ function configureStore(initialState: AppState) {
 }
 **/
 
-import { AppRecord, DocumentRecord, CommsRecord } from "../records";
+import { DocumentRecord, CommsRecord } from "@nteract/types/core/records";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
+    // $FlowFixMe: Notebook should be a typed record.
     notebook
       .get("cellOrder")
       .reduce(
@@ -92,14 +94,15 @@ export function dummyStore(config: *) {
       notebook: dummyNotebook,
       savedNotebook: config && config.saved === true ? dummyNotebook : null,
       cellPagers: new Immutable.Map(),
-      stickyCells: new Immutable.Map(),
+      stickyCells: new Immutable.Set(),
       cellFocused:
         config && config.codeCellCount > 1
-          ? dummyNotebook.get("cellOrder").get(1)
+          ? // $FlowFixMe: Notebook should be typed.
+            dummyNotebook.get("cellOrder").get(1)
           : null,
       filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
-    app: AppRecord({
+    app: makeAppRecord({
       executionState: "not connected",
       notificationSystem: {
         addNotification: () => {} // most of the time you'll want to mock this
