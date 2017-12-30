@@ -56,6 +56,28 @@ const activateServerEpic = action$ =>
     })
   );
 
+const killServerEpic = (action$, store) =>
+  action$.pipe(
+    ofType(actionTypes.KILL_SERVER),
+    mergeMap(({ payload: { serverId } }) => {
+      const oldServer = store.getState().entities.serversById[serverId];
+      if (!oldServer)
+        return of(
+          actions.killServerFailed({
+            serverId,
+            error: `server with id ${serverId} does not exist in store.`
+          })
+        );
+      const { config } = oldServer.server;
+      return shutdown(config).pipe(
+        mergeMap(data => {
+          return of(actions.killServerFulfilled({ serverId }));
+        }),
+        catchError(error => of(actions.killServerFailed({ serverId, error })))
+      );
+    })
+  );
+
 const fetchKernelSpecsEpic = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.FETCH_KERNEL_SPECS),
@@ -212,6 +234,7 @@ const runSourceEpic = (action$, store) =>
 
 const epics = combineEpics(
   activateServerEpic,
+  killServerEpic,
   fetchKernelSpecsEpic,
   setActiveKernelEpic,
   activateKernelEpic,

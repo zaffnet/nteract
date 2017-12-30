@@ -49,7 +49,7 @@ class Main extends React.Component<*, *> {
     restartKernel({ serverId, kernelName });
   };
   handleFormSubmit = event => {
-    const { serverId: oldServerId, activateServer } = this.props;
+    const { currentServerId: oldServerId, activateServer } = this.props;
     const { gitrefValue: gitref, repoValue: repo } = this.state;
     event.preventDefault();
     const serverId = utils.makeServerId({ gitref, repo });
