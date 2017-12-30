@@ -241,6 +241,9 @@ export class Editor extends React.Component<EditorProps> {
 
   render() {
     // Build in a default renderer when they pass a plain string
+    // This is primarily for use with non-editable contexts (notebook-preview)
+    // to make rendering much faster (compared to codemirror)
+    // Ref: https://github.com/nteract/notebook-preview/issues/20
     if (typeof this.props.children === "string") {
       return (
         <SyntaxHighlighter
