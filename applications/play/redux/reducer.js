@@ -1,5 +1,6 @@
 // @flow
 import { combineReducers } from "redux";
+import { omit } from "lodash";
 import * as actionTypes from "./actionTypes";
 import * as utils from "../utils";
 import objectPath from "object-path";
@@ -300,10 +301,18 @@ const serverEnvelope = combineReducers({
   server
 });
 
-const serversById = utils.createObjectReducer({
-  getKey: action => objectPath.get(action, "payload.serverId"),
-  valueReducer: serverEnvelope
-});
+const serversById = (state = {}, action) => {
+  switch (action.type) {
+    case actionTypes.KILL_SERVER_FULFILLED: {
+      return omit(state, action.payload.serverId);
+    }
+    default:
+      return utils.createObjectReducer({
+        getKey: action => objectPath.get(action, "payload.serverId"),
+        valueReducer: serverEnvelope
+      })(state, action);
+  }
+};
 
 const ui = combineReducers({
   repo,
