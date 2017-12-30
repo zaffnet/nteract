@@ -14,6 +14,8 @@ import { displayOrder, transforms } from "@nteract/transforms";
 
 import CellView from "./cell";
 
+import {} from "../components";
+
 import DraggableCell from "../components/draggable-cell";
 import CellCreator from "./cell-creator";
 import StatusBar from "../components/status-bar";
@@ -89,12 +91,6 @@ const mapStateToProps = (state: Object) => ({
 });
 
 export class NotebookApp extends React.PureComponent<Props> {
-  createCellElement: (s: string) => ?React$Element<any>;
-  keyDown: (e: KeyboardEvent) => void;
-  moveCell: (source: string, dest: string, above: boolean) => void;
-  selectCell: (id: string) => void;
-  renderCell: (id: string) => React$Element<any>;
-
   static defaultProps = {
     displayOrder,
     transforms,
@@ -107,11 +103,11 @@ export class NotebookApp extends React.PureComponent<Props> {
 
   constructor(): void {
     super();
-    this.createCellElement = this.createCellElement.bind(this);
-    this.keyDown = this.keyDown.bind(this);
-    this.moveCell = this.moveCell.bind(this);
-    this.selectCell = this.selectCell.bind(this);
-    this.renderCell = this.renderCell.bind(this);
+    (this: any).createCellElement = this.createCellElement.bind(this);
+    (this: any).keyDown = this.keyDown.bind(this);
+    (this: any).moveCell = this.moveCell.bind(this);
+    (this: any).selectCell = this.selectCell.bind(this);
+    (this: any).renderCell = this.renderCell.bind(this);
   }
 
   componentDidMount(): void {
@@ -227,7 +223,7 @@ export class NotebookApp extends React.PureComponent<Props> {
     );
   }
 
-  createCellElement(id: string): ?React$Element<any> {
+  createCellElement(id: string): React$Element<*> {
     const isStickied = this.props.stickyCells.get(id);
 
     return (
