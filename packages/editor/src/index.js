@@ -42,7 +42,7 @@ export type CodeMirrorEditorProps = {
   channels: any,
   cursorBlinkRate: number,
   executionState: "idle" | "starting" | "not connected",
-  language: string,
+  language?: string,
   mode?: string | Object,
   onChange: (value: string, change: EditorChange) => void,
   onFocusChange: (focused: boolean) => void,
