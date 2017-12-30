@@ -2,6 +2,7 @@
 import { applyMiddleware, createStore } from "redux";
 import { combineReducers, compose } from "redux";
 import { createEpicMiddleware } from "redux-observable";
+import { errorMiddleware } from "@nteract/core/middlewares";
 import epics from "./epics";
 import reducer from "./reducer";
 import getInitialState from "./getInitialState";
@@ -36,6 +37,6 @@ export default function(givenInitialState: Object = {}) {
   return createStore(
     reducer,
     initialState,
-    composeEnhancers(applyMiddleware(epicMiddleware))
+    composeEnhancers(applyMiddleware(epicMiddleware, errorMiddleware))
   );
 }
