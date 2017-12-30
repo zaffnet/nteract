@@ -42,7 +42,8 @@ export type CodeMirrorEditorProps = {
   channels: any,
   cursorBlinkRate: number,
   executionState: "idle" | "starting" | "not connected",
-  language: string,
+  language?: string,
+  mode?: string | Object,
   onChange: (value: string, change: EditorChange) => void,
   onFocusChange: (focused: boolean) => void,
   onScroll: (scrollInfo: ScrollInfo) => any,
@@ -95,7 +96,7 @@ class CodeMirrorEditor extends React.Component<
     // Which means we likely won't respond to updates properly
     this.defaultOptions = {
       autoCloseBrackets: true,
-      mode: props.language || "python",
+      mode: props.mode || props.language || "python",
       lineNumbers: false,
       matchBrackets: true,
       theme: "composition",
@@ -227,8 +228,12 @@ class CodeMirrorEditor extends React.Component<
       }
     }
 
-    if (prevProps.language !== this.props.language) {
+    if (prevProps.language !== this.props.language && !prevProps.mode) {
       this.cm.setOption("mode", this.props.language);
+    }
+
+    if (prevProps.mode !== this.props.mode) {
+      this.cm.setOption("mode", this.props.mode);
     }
   }
 

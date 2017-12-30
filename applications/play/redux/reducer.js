@@ -83,6 +83,17 @@ const currentKernelName = (state = "", action) => {
   }
 };
 
+const codeMirrorMode = (state = "python", action) => {
+  switch (action.type) {
+    case actionTypes.SET_CODE_MIRROR_MODE: {
+      return action.payload;
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 const serverConfig = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.ACTIVATE_SERVER_FULFILLED:
@@ -215,6 +226,15 @@ const activeKernelMessages = (state = [], action) => {
   }
 };
 
+const activeKernelLanguageInfo = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO:
+      return action.payload.languageInfo;
+    default:
+      return state;
+  }
+};
+
 const activeKernel = combineReducers({
   name: activeKernelName,
   id: activeKernelId,
@@ -222,7 +242,8 @@ const activeKernel = combineReducers({
   channel: activeKernelChannel,
   outputs: activeKernelOutputs,
   status: activeKernelStatus,
-  messages: activeKernelMessages
+  messages: activeKernelMessages,
+  languageInfo: activeKernelLanguageInfo
 });
 
 const activeKernelEnvelopeLoading = (state = false, action) => {
@@ -321,7 +342,8 @@ const ui = combineReducers({
   showPanel,
   currentServerId,
   platform,
-  currentKernelName
+  currentKernelName,
+  codeMirrorMode
 });
 
 const entities = combineReducers({

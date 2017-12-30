@@ -29,6 +29,10 @@ export const submitBinderForm = (payload: {
   type: actionTypes.SUBMIT_BINDER_FORM,
   payload
 });
+export const setCodeMirrorMode = (payload: string | Object) => ({
+  type: actionTypes.SET_CODE_MIRROR_MODE,
+  payload
+});
 
 // Actions related to servers.
 export const activateServer = (payload: {
@@ -211,6 +215,14 @@ export const setActiveKernel = (payload: {
   kernelName: string
 }) => ({
   type: actionTypes.SET_ACTIVE_KERNEL,
+  payload
+});
+export const setActiveKernelLanguageInfo = (payload: {
+  serverId: string,
+  kernelName: string,
+  languageInfo: *
+}) => ({
+  type: actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO,
   payload
 });
 export const setKernelStatus = (payload: {
