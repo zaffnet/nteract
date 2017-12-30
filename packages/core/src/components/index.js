@@ -376,17 +376,19 @@ Cell.defaultProps = {
   id: null
 };
 
-// For
-export const Notebook = (props: {
-  children: React.ChildrenArray<React.Element<typeof Cell>>,
+export const Cells = (props: {
+  children: React.ChildrenArray<React.Element<*>>,
   selected: string | null
 }) => {
-  const children = React.Children.map(props.children, child =>
-    React.cloneElement(child, {
-      // If there's a selection and it matches the cell's ID, mark isSelected
-      isSelected: props.selected && child.props.id === props.selected
-    })
-  );
+  const children = React.Children.map(props.children, child => {
+    if (child.type === Cell) {
+      return React.cloneElement(child, {
+        // If there's a selection and it matches the cell's ID, mark isSelected
+        isSelected: props.selected && child.props.id === props.selected
+      });
+    }
+    return child;
+  });
   return (
     <div className="cells">
       <style jsx>{`
@@ -409,7 +411,7 @@ export const Notebook = (props: {
   );
 };
 
-Notebook.defaultProps = {
+Cells.defaultProps = {
   children: [],
   selected: null
 };

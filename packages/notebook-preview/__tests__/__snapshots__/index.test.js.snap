@@ -4,7 +4,7 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
 <div
   className="notebook-preview"
 >
-  <Notebook
+  <Cells
     selected={null}
   >
     <Cell
@@ -126,7 +126,7 @@ print('hey')
         />
       </Outputs>
     </Cell>
-  </Notebook>
+  </Cells>
   <style>
     :root {
           
@@ -194,7 +194,7 @@ exports[`Notebook accepts an Object of cells 1`] = `
 <div
   className="notebook-preview"
 >
-  <Notebook
+  <Cells
     selected={null}
   >
     <Cell
@@ -316,7 +316,7 @@ print('hey')
         />
       </Outputs>
     </Cell>
-  </Notebook>
+  </Cells>
   <style>
     :root {
           

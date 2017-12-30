@@ -22,7 +22,7 @@ import {
   PromptBuffer,
   Editor,
   Outputs,
-  Notebook
+  Cells
 } from "@nteract/core/components";
 
 import LatexRenderer from "./latex";
@@ -94,7 +94,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
 
     return (
       <div className="notebook-preview">
-        <Notebook>
+        <Cells>
           {cellOrder.map(cellID => {
             const cell = cellMap.get(cellID);
             const cellType = cell.get("cell_type");
@@ -188,7 +188,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                 );
             }
           })}
-        </Notebook>
+        </Cells>
         <style>{`:root {
           ${themes[this.props.theme]}
             --cell-shadow-hover-1: none;
