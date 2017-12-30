@@ -60,7 +60,15 @@ const killServerEpic = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.KILL_SERVER),
     mergeMap(({ payload: { serverId } }) => {
-      const { config } = store.getState().entities.serversById[serverId].server;
+      const oldServer = store.getState().entities.serversById[serverId];
+      if (!oldServer)
+        return of(
+          actions.killServerFailed({
+            serverId,
+            error: `server with id ${serverId} does not exist in store.`
+          })
+        );
+      const { config } = oldServer.server;
       return shutdown(config).pipe(
         mergeMap(data => {
           return of(actions.killServerFulfilled({ serverId }));
