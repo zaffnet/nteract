@@ -67,7 +67,7 @@ class Main extends React.Component<*, *> {
   render() {
     const {
       currentKernel,
-      highlightedLanguage,
+      codeMirrorMode,
       currentKernelName,
       currentServer,
       platform,
@@ -150,11 +150,7 @@ class Main extends React.Component<*, *> {
             onFocusChange={() => {}}
             focusAbove={() => {}}
             focusBelow={() => {}}
-            mode={
-              currentKernel && currentKernel.languageInfo
-                ? currentKernel.languageInfo.codemirror_mode
-                : null
-            }
+            mode={codeMirrorMode}
             // END TODO for notebook leakage
             // TODO: executionState should be allowed to be null or undefined,
             //       resulting in thought of as either idle or not connected by
@@ -172,7 +168,6 @@ class Main extends React.Component<*, *> {
               }
             }}
             value={sourceValue}
-            language={highlightedLanguage}
             onChange={this.handleEditorChange}
           />
         </div>
@@ -324,7 +319,7 @@ const mapStateToProps = state => ({
   showPanel: state.ui.showPanel,
   currentServerId: state.ui.currentServerId,
   currentKernelName: state.ui.currentKernelName,
-  highlightedLanguage: state.ui.highlightedLanguage,
+  codeMirrorMode: state.ui.codeMirrorMode,
   currentKernel: objectPath.get(state, [
     "entities",
     "serversById",

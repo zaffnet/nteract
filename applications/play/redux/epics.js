@@ -103,6 +103,19 @@ const setActiveKernelEpic = (action$, store) =>
     })
   );
 
+const extractCodeMirrorModeEpic = (action$, store) =>
+  action$.pipe(
+    ofType(actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO),
+    switchMap(({ payload }) => {
+      const { languageInfo } = payload;
+      return of(
+        actions.setCodeMirrorMode(
+          languageInfo.codemirror_mode || languageInfo.name || ""
+        )
+      );
+    })
+  );
+
 const initializeKernelMessaging = (action$, store) =>
   action$.pipe(
     ofType(actionTypes.ACTIVATE_KERNEL_FULFILLED),
@@ -127,11 +140,6 @@ const initializeKernelMessaging = (action$, store) =>
               );
               break;
             case "kernel_info_reply":
-              actionsArray.push(
-                actions.setHighlightedLanguage(
-                  message.content.language_info.name
-                )
-              );
               actionsArray.push(
                 actions.setActiveKernelLanguageInfo({
                   serverId,
@@ -230,6 +238,7 @@ const epics = combineEpics(
   setActiveKernelEpic,
   activateKernelEpic,
   initializeKernelMessaging,
+  extractCodeMirrorModeEpic,
   runSourceEpic
 );
 

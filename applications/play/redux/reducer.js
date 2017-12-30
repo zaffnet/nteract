@@ -82,9 +82,9 @@ const currentKernelName = (state = "", action) => {
   }
 };
 
-const highlightedLanguage = (state = "", action) => {
+const codeMirrorMode = (state = "python", action) => {
   switch (action.type) {
-    case actionTypes.SET_HIGHLIGHTED_LANGUAGE: {
+    case actionTypes.SET_CODE_MIRROR_MODE: {
       return action.payload;
     }
     default: {
@@ -334,7 +334,7 @@ const ui = combineReducers({
   currentServerId,
   platform,
   currentKernelName,
-  highlightedLanguage
+  codeMirrorMode
 });
 
 const entities = combineReducers({

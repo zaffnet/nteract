@@ -29,8 +29,8 @@ export const submitBinderForm = (payload: {
   type: actionTypes.SUBMIT_BINDER_FORM,
   payload
 });
-export const setHighlightedLanguage = (payload: string) => ({
-  type: actionTypes.SET_HIGHLIGHTED_LANGUAGE,
+export const setCodeMirrorMode = (payload: string | Object) => ({
+  type: actionTypes.SET_CODE_MIRROR_MODE,
   payload
 });
 
