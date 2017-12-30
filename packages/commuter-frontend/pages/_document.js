@@ -70,6 +70,19 @@ class MyDocument extends Document {
           <script src="https://cdn.plot.ly/plotly-latest.min.js" />
 
           <script
+            type="application/json"
+            id="serverConfig"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                {
+                  commuterExecuteLink: process.env.COMMUTER_EXECUTE_LINK
+                },
+                null,
+                2
+              )
+            }}
+          />
+          <script
             type="text/javascript"
             src="/static/mathjax-electron/resources/MathJax/MathJax.js?config=electron"
           />

@@ -23,7 +23,8 @@ class BrowseHeader extends React.Component<*> {
   props: {
     path: string,
     basepath: string,
-    type: string
+    type: string,
+    commuterExecuteLink: ?string
   };
 
   static defaultProps = {
@@ -46,6 +47,10 @@ class BrowseHeader extends React.Component<*> {
 
     // TODO: Ensure this works under an app subpath (which is not implemented yet)
     const filePath = basepath.replace(/view\/?/, "files/") + path;
+
+    const serverSide = typeof document === "undefined";
+
+    const viewingNotebook = filePath.endsWith(".ipynb");
 
     return (
       <nav>
@@ -71,9 +76,19 @@ class BrowseHeader extends React.Component<*> {
           })}
         </ul>
         {this.props.type === "directory" ? null : (
-          <a href={filePath} download className="ops">
-            Download
-          </a>
+          <div>
+            {this.props.commuterExecuteLink && viewingNotebook ? (
+              <a
+                href={`${this.props.commuterExecuteLink}/${path}`}
+                className="ops"
+              >
+                Run
+              </a>
+            ) : null}
+            <a href={filePath} download className="ops">
+              Download
+            </a>
+          </div>
         )}
         <style jsx>{`
           nav {
@@ -149,6 +164,10 @@ class BrowseHeader extends React.Component<*> {
             background-color: ${theme.primary};
             color: ${theme.active};
             transition: background-color 0.5s ease-out, color 6s ease-out;
+          }
+
+          .ops:not(:last-child) {
+            margin-right: 10px;
           }
         `}</style>
       </nav>
