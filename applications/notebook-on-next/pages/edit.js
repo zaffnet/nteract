@@ -2,7 +2,7 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
-import { Notebook } from "@nteract/core/components";
+import { NotebookApp } from "@nteract/core/providers";
 import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
@@ -120,7 +120,7 @@ export default class Edit extends React.Component<*> {
         }`}</style>
         <Provider store={store}>
           <div>
-            <Notebook />;
+            <NotebookApp />;
           </div>
         </Provider>
       </div>

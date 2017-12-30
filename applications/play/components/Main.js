@@ -4,14 +4,11 @@ import CodeMirrorEditor from "@nteract/editor";
 import { BinderConsole } from "./consoles";
 import { Display } from "@nteract/display-area";
 import { KernelUI } from "./kernelUI";
-import { _nextgen } from "@nteract/core/components";
+import { Outputs } from "@nteract/core/components";
 import { connect } from "react-redux";
 import { actions } from "../redux";
 import objectPath from "object-path";
 import * as utils from "../utils";
-
-// TODO: finish making these our top level components
-const { Outputs } = _nextgen;
 
 const NTERACT_LOGO_URL =
   "https://media.githubusercontent.com/media/nteract/logos/master/nteract_logo_cube_book/exports/images/svg/nteract_logo_wide_purple_inverted.svg";

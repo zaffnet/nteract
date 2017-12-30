@@ -15,20 +15,18 @@ import {
 } from "@nteract/commutable";
 import { createCodeCell } from "@nteract/commutable";
 
-import { _nextgen } from "@nteract/core/components";
-
-import LatexRenderer from "./latex";
-import { PapermillView } from "./papermill";
-
-const {
+import {
   Cell,
   Input,
   Prompt,
   PromptBuffer,
   Editor,
   Outputs,
-  Notebook
-} = _nextgen;
+  Cells
+} from "@nteract/core/components";
+
+import LatexRenderer from "./latex";
+import { PapermillView } from "./papermill";
 
 const themes = require("@nteract/core/themes");
 
@@ -96,7 +94,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
 
     return (
       <div className="notebook-preview">
-        <Notebook>
+        <Cells>
           {cellOrder.map(cellID => {
             const cell = cellMap.get(cellID);
             const cellType = cell.get("cell_type");
@@ -190,7 +188,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                 );
             }
           })}
-        </Notebook>
+        </Cells>
         <style>{`:root {
           ${themes[this.props.theme]}
             --cell-shadow-hover-1: none;

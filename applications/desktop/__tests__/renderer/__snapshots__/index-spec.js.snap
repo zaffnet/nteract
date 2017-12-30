@@ -15,7 +15,7 @@ exports[`App renders app 1`] = `
   <div
     className="jsx-825914725 jsx-825914725"
   >
-    <Connect(DragDropContext(Notebook))
+    <Connect(DragDropContext(NotebookApp))
       displayOrder={
         Array [
           "application/vnd.vega.v2+json",

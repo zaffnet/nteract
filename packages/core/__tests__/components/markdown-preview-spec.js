@@ -1,14 +1,15 @@
+// @flow
 import React from "react";
 
 import { shallow, mount } from "enzyme";
 
-import MarkdownCell from "../../../src/components/cell/markdown-cell";
+import MarkdownPreview from "../../src/components/markdown-preview";
 
 import { emptyMarkdownCell } from "@nteract/commutable";
 
-describe("MarkdownCell", () => {
+describe("MarkdownPreview ", () => {
   test("can be rendered", () => {
-    const cell = shallow(<MarkdownCell cell={emptyMarkdownCell} />);
+    const cell = shallow(<MarkdownPreview cell={emptyMarkdownCell} />);
     expect(cell).not.toBeNull();
   });
 
@@ -16,7 +17,7 @@ describe("MarkdownCell", () => {
     const focusEditor = jest.fn();
 
     const cell = mount(
-      <MarkdownCell
+      <MarkdownPreview
         id="1234"
         cell={emptyMarkdownCell}
         focusEditor={focusEditor}
@@ -43,7 +44,7 @@ describe("MarkdownCell", () => {
     const focusAbove = jest.fn();
 
     const cell = shallow(
-      <MarkdownCell
+      <MarkdownPreview
         id="1234"
         cell={emptyMarkdownCell}
         focusAbove={focusAbove}
@@ -59,7 +60,7 @@ describe("MarkdownCell", () => {
     const focusBelow = jest.fn();
 
     const cell = shallow(
-      <MarkdownCell
+      <MarkdownPreview
         id="1234"
         cell={emptyMarkdownCell}
         focusBelow={focusBelow}

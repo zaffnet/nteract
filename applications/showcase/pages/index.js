@@ -1,15 +1,13 @@
 // @flow
-import { _nextgen } from "@nteract/core/components";
-
-const {
+import {
   Cell,
   Input,
   Prompt,
   PromptBuffer,
   Editor,
   Outputs,
-  Notebook
-} = _nextgen;
+  Cells
+} from "@nteract/core/components";
 
 import ReactMarkdown from "react-markdown";
 
@@ -38,11 +36,11 @@ type MarkdownCell = {|
 
 type CellData = MarkdownCell | CodeCell;
 
-type Cells = {
+type CellsStructure = {
   [string]: CellData
 };
 
-const cells: Cells = {
+const cells: CellsStructure = {
   md: {
     type: "markdown",
     code:
@@ -176,7 +174,7 @@ export const notebook = {
 };
 
 export const Example = () => (
-  <Notebook selected="bde">
+  <Cells selected="bde">
     {cellOrder.map(cellID => {
       const cell: CellData = cells[cellID];
 
@@ -220,7 +218,7 @@ export const Example = () => (
         </Cell>
       );
     })}
-  </Notebook>
+  </Cells>
 );
 
 const cellText = `<Cell>

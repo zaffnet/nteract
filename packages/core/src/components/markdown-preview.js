@@ -6,13 +6,12 @@ import React from "react";
 import CommonMark from "commonmark";
 import MarkdownRenderer from "commonmark-react-renderer";
 
-import Editor from "../../providers/editor";
-import LatexRenderer from "../latex";
+import LatexRenderer from "./latex";
 
-import { Outputs, PromptBuffer, Input } from "../ng";
+import { Outputs, PromptBuffer, Input } from "./";
 
 type Props = {
-  cell: any,
+  source: string,
   focusAbove: () => void,
   focusBelow: () => void,
   focusEditor: Function,
@@ -25,21 +24,33 @@ type State = {
   view: boolean
 };
 
+// TODO: Standardize this as @nteract/markdown-renderer
+//       and keep it consistent amongst the markdown transform and in the
+//       rendered view of markdown cells
 type MDRender = (input: string) => string;
-
 const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
-
 const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
+// TODO: Consider whether this component is really something like two components:
+//
+//       * a behavioral component that tracks focus (possibly already covered elsewhere)
+//       * the actual markdown previewer
+//
+//       Since I'm really unsure and don't want to write a silly abstraction that
+//       only I (@rgbkrk) understand, I'll wait for others to reflect on this
+//       within the code base (or leave it alone, which is totally cool too). :)
+
 export default class MarkdownCell extends React.PureComponent<any, State> {
-  openEditor: () => void;
-  editorKeyDown: (e: SyntheticKeyboardEvent<*>) => void;
-  renderedKeyDown: (e: SyntheticKeyboardEvent<*>) => boolean;
   rendered: ?HTMLElement;
 
   static defaultProps = {
-    cellFocused: false
+    cellFocused: false,
+    editorFocused: false,
+    focusAbove: () => {},
+    focusBelow: () => {},
+    focusEditor: () => {},
+    source: ""
   };
 
   constructor(props: Props): void {
@@ -47,9 +58,9 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     this.state = {
       view: true
     };
-    this.openEditor = this.openEditor.bind(this);
-    this.editorKeyDown = this.editorKeyDown.bind(this);
-    this.renderedKeyDown = this.renderedKeyDown.bind(this);
+    (this: any).openEditor = this.openEditor.bind(this);
+    (this: any).editorKeyDown = this.editorKeyDown.bind(this);
+    (this: any).renderedKeyDown = this.renderedKeyDown.bind(this);
   }
 
   componentDidMount(): void {
@@ -129,7 +140,7 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
   }
 
   render(): ?React$Element<any> {
-    const source = this.props.cell.get("source");
+    const source = this.props.source;
 
     return this.state && this.state.view ? (
       <div

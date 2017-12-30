@@ -11,7 +11,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { Notebook } from "@nteract/core/components";
+import { NotebookApp } from "@nteract/core/providers";
 
 import { setNotificationSystem } from "@nteract/core/actions";
 
@@ -58,7 +58,7 @@ export default class App extends React.PureComponent<Object, Object> {
     return (
       <Provider store={store}>
         <div>
-          <Notebook transforms={transforms} displayOrder={displayOrder} />
+          <NotebookApp transforms={transforms} displayOrder={displayOrder} />
           <NotificationSystem
             ref={notificationSystem => {
               this.notificationSystem = notificationSystem;
