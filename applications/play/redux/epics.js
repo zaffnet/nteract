@@ -234,6 +234,7 @@ const runSourceEpic = (action$, store) =>
 
 const epics = combineEpics(
   activateServerEpic,
+  killServerEpic,
   fetchKernelSpecsEpic,
   setActiveKernelEpic,
   activateKernelEpic,
