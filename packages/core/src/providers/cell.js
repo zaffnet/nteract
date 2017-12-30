@@ -44,7 +44,7 @@ export default class CellView extends React.Component<CellProps, *> {
     models: new ImmutableMap()
   };
 
-  // TODO: This can be deleted once Toolbar no longer is a connected component
+  // TODO: This can be deleted once Toolbar and Editor are no longer connected components
   static contextTypes = {
     store: PropTypes.object
   };
