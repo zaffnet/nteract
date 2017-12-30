@@ -88,7 +88,7 @@ const mapStateToProps = (state: Object) => ({
   )
 });
 
-export class Notebook extends React.PureComponent<Props> {
+export class NotebookApp extends React.PureComponent<Props> {
   createCellElement: (s: string) => ?React$Element<any>;
   keyDown: (e: KeyboardEvent) => void;
   moveCell: (source: string, dest: string, above: boolean) => void;
@@ -276,6 +276,6 @@ export class Notebook extends React.PureComponent<Props> {
   }
 }
 
-export const ConnectedNotebook = dragDropContext(HTML5Backend)(Notebook);
+export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
 // $FlowFixMe: Flow can't figure out what to do with connect with one param.
 export default connect(mapStateToProps)(ConnectedNotebook);

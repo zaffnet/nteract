@@ -17,7 +17,7 @@ type JupyterConfigData = {
   appVersion: string
 };
 
-import { Notebook } from "@nteract/core/providers";
+import { NotebookApp } from "@nteract/core/providers";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
@@ -35,7 +35,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
         <Provider store={store}>
           <div>
             {/* <Contents /> */}
-            <Notebook />
+            <NotebookApp />
             <NotificationSystem
               ref={notificationSystem => {
                 this.notificationSystem = notificationSystem;

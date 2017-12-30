@@ -7,7 +7,7 @@ import { shallow, mount } from "enzyme";
 import renderer from "react-test-renderer";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import { Notebook, getLanguageMode } from "../../src/providers/notebook";
+import { NotebookApp, getLanguageMode } from "../../src/providers/notebook-app";
 
 import { dummyStore, dummyCommutable } from "../../src/dummy";
 
@@ -23,14 +23,14 @@ const dummyCellStatuses = dummyCommutable
   );
 
 // Boilerplate test to make sure the testing setup is configured
-describe("Notebook", () => {
+describe("NotebookApp", () => {
   test("accepts an Immutable.List of cells", () => {
     const stickyCells = new Immutable.Set().add(
       dummyCommutable.getIn(["cellOrder", 0])
     );
 
     const component = shallow(
-      <Notebook
+      <NotebookApp
         cellOrder={dummyCommutable.get("cellOrder")}
         cellMap={dummyCommutable.get("cellMap")}
         transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
@@ -67,7 +67,7 @@ describe("Notebook", () => {
       context.store.dispatch = jest.fn();
 
       const component = shallow(
-        <Notebook
+        <NotebookApp
           cellOrder={dummyCommutable.get("cellOrder")}
           cellMap={dummyCommutable.get("cellMap")}
           transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
@@ -101,7 +101,7 @@ describe("Notebook", () => {
       context.store.dispatch = jest.fn();
 
       const component = shallow(
-        <Notebook
+        <NotebookApp
           cellOrder={dummyCommutable.get("cellOrder")}
           cellMap={dummyCommutable.get("cellMap")}
           transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
@@ -135,7 +135,7 @@ describe("Notebook", () => {
       context.store.dispatch = jest.fn();
 
       const component = shallow(
-        <Notebook
+        <NotebookApp
           cellOrder={dummyCommutable.get("cellOrder")}
           cellMap={dummyCommutable.get("cellMap")}
           transient={new Immutable.Map({ cellMap: new Immutable.Map() })}
