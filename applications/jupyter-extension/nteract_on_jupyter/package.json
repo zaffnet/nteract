@@ -1,6 +1,6 @@
 {
   "name": "nteract-on-jupyter",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "nteract on jupyter, as an extension",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@nteract/commutable": "^3.0.1",
-    "@nteract/core": "^1.0.1",
-    "@nteract/notebook-preview": "^5.0.1",
+    "@nteract/core": "^1.0.2",
+    "@nteract/notebook-preview": "^5.0.2",
     "@nteract/transform-dataresource": "^2.0.3",
     "@nteract/transform-vega": "^3.0.2",
     "@nteract/transforms": "^3.1.1",
