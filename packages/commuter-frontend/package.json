@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commuter-frontend",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Frontend for commuter",
   "main": "index.js",
   "scripts": {
@@ -27,13 +27,13 @@
   },
   "homepage": "https://github.com/nteract/nteract/tree/master/packages/commuter-frontend#readme",
   "dependencies": {
-    "@nteract/core": "^1.0.0",
-    "@nteract/notebook-preview": "^5.0.0",
+    "@nteract/core": "^1.0.1",
+    "@nteract/notebook-preview": "^5.0.1",
     "@nteract/octicons": "^0.0.2",
     "@nteract/timeago": "^3.4.4",
     "@nteract/transform-dataresource": "^2.0.3",
     "@nteract/transform-vega": "^3.0.2",
-    "@nteract/transforms": "^3.1.0",
+    "@nteract/transforms": "^3.1.1",
     "babel-preset-flow": "^6.23.0",
     "d3-dsv": "^1.0.7",
     "isomorphic-fetch": "^2.2.1",

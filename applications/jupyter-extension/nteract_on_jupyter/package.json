@@ -1,6 +1,6 @@
 {
   "name": "nteract-on-jupyter",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "nteract on jupyter, as an extension",
   "main": "index.js",
   "scripts": {
@@ -15,12 +15,12 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/commutable": "^3.0.0",
-    "@nteract/core": "^1.0.0",
-    "@nteract/notebook-preview": "^5.0.0",
+    "@nteract/commutable": "^3.0.1",
+    "@nteract/core": "^1.0.1",
+    "@nteract/notebook-preview": "^5.0.1",
     "@nteract/transform-dataresource": "^2.0.3",
     "@nteract/transform-vega": "^3.0.2",
-    "@nteract/transforms": "^3.1.0",
+    "@nteract/transforms": "^3.1.1",
     "@nteract/types": "^1.0.1",
     "anser": "^1.4.1",
     "isomorphic-fetch": "^2.2.1",

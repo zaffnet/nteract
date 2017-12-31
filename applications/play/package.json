@@ -1,6 +1,6 @@
 {
   "name": "@nteract/play",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "a playground for execution",
   "main": "index.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/play",
@@ -15,10 +15,10 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/core": "^1.0.0",
-    "@nteract/display-area": "^3.1.1",
-    "@nteract/editor": "^5.0.0",
-    "@nteract/messaging": "^3.0.0",
+    "@nteract/core": "^1.0.1",
+    "@nteract/display-area": "^3.1.2",
+    "@nteract/editor": "^5.0.1",
+    "@nteract/messaging": "^3.0.1",
     "deepmerge": "^2.0.1",
     "lodash": "^4.17.4",
     "next": "^4.1.4",
