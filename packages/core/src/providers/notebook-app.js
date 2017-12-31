@@ -198,6 +198,7 @@ export class NotebookApp extends React.PureComponent<Props> {
 
   renderCell(id: string): ?React$Element<any> {
     const cell = this.props.cellMap.get(id);
+
     if (!cell) {
       return null;
     }
@@ -274,10 +275,7 @@ export class NotebookApp extends React.PureComponent<Props> {
                 ))}
             </Pagers>
             <LatexRenderer>
-              <Outputs
-                hidden={outputHidden}
-                expanded={cell.getIn(["metadata", "outputExpanded"], true)}
-              >
+              <Outputs hidden={outputHidden} expanded={outputExpanded}>
                 <Display
                   className="outputs-display"
                   outputs={cell.get("outputs").toJS()}
