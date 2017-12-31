@@ -9,10 +9,8 @@
     "start": "echo \"This must be run with the commuter server\"",
     "test": "echo \"no test for now\"",
     "precopy-mathjax": "mkdirp static/mathjax-electron",
-    "copy-mathjax": "cp -r node_modules/mathjax-electron static",
-    "copy-static": "npm run copy-mathjax",
+    "copy-static": "node copy-static.js",
     "prepare": "npm run copy-static",
-    "prepublish": "npm run copy-static",
     "comment": "echo 'we copy assets over to a non-version controlled folder in static for next to serve'",
     "prepublishOnly": "npm run build"
   },
