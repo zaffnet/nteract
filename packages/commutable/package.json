@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commutable",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "library for immutable notebook operations",
   "main": "index.js",
   "nteractDesktop": "src/index.js",
@@ -26,7 +26,7 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/types": "^1.0.2",
+    "@nteract/types": "^1.0.3",
     "immutable": "^4.0.0-rc.9",
     "uuid": "^3.1.0"
   }

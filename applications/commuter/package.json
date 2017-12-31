@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commuter",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "share, publish, and discover notebooks",
   "main": "lib/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/commuter-frontend": "^3.0.4",
+    "@nteract/commuter-frontend": "^3.0.5",
     "aws-sdk": "^2.108.0",
     "body-parser": "^1.15.2",
     "bodybuilder": "^2.2.1",
