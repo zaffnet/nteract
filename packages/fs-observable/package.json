@@ -1,6 +1,6 @@
 {
   "name": "fs-observable",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Observables for node fs",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",

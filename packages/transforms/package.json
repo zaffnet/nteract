@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Common transforms for Jupyter",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -29,8 +29,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/transform-vdom": "^2.0.3",
-    "ansi-to-react": "^2.0.2",
+    "@nteract/transform-vdom": "^2.0.4",
+    "ansi-to-react": "^2.0.3",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "mathjax-electron": "^2.0.1",

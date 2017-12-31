@@ -1,6 +1,6 @@
 {
   "name": "@nteract/messaging",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Messaging mechanics for nteract apps (jupyter spec)",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -16,7 +16,7 @@
   },
   "repository": "https://github.com/nteract/nteract/tree/master/packages/messaging",
   "dependencies": {
-    "@nteract/types": "^1.0.1",
+    "@nteract/types": "^1.0.2",
     "rxjs": "^5.5.0",
     "uuid": "^3.1.0"
   },

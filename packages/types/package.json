@@ -1,6 +1,6 @@
 {
   "name": "@nteract/types",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "collection of types for nteract components",
   "scripts": {
     "prepare": "npm run build",

@@ -1,6 +1,6 @@
 {
   "name": "@nteract/octicons",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "octicon react components, styled for use within nteract packages",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
