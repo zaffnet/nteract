@@ -10,11 +10,20 @@ import {
   Set as ImmutableSet
 } from "immutable";
 
+import LatexRenderer from "../components/latex";
+
+import { HijackScroll } from "../components/hijack-scroll";
+
+import MarkdownPreviewer from "../components/markdown-preview";
+import Toolbar from "./toolbar";
+
+import { Display, RichestMime } from "@nteract/display-area";
+
+import CodeMirror from "./editor";
+
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import CellView from "./cell";
-
-import {} from "../components";
+import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../components";
 
 import DraggableCell from "../components/draggable-cell";
 import CellCreator from "./cell-creator";
@@ -79,7 +88,7 @@ const mapStateToProps = (state: Object) => ({
   cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
   cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
   transient: state.document.get("transient"),
-  cellPagers: state.document.get("cellPagers"),
+  cellPagers: state.document.get("cellPagers", ImmutableMap()),
   cellFocused: state.document.get("cellFocused"),
   editorFocused: state.document.get("editorFocused"),
   stickyCells: state.document.get("stickyCells"),
@@ -94,6 +103,7 @@ export class NotebookApp extends React.PureComponent<Props> {
   static defaultProps = {
     displayOrder,
     transforms,
+    models: ImmutableMap(),
     language: "python"
   };
 
@@ -186,40 +196,154 @@ export class NotebookApp extends React.PureComponent<Props> {
     );
   }
 
-  renderCell(id: string): React$Element<any> {
+  renderCell(id: string): ?React$Element<any> {
     const cell = this.props.cellMap.get(id);
+
+    if (!cell) {
+      return null;
+    }
 
     const running =
       this.props.transient.getIn(["cellMap", id, "status"]) === "busy";
 
+    const cellType = cell.get("cell_type");
+
+    // TODO: Figure out nomenclature
+    const cellFocused = this.props.cellFocused === id;
+    const editorFocused = this.props.editorFocused === id;
+
+    let element = null;
+
+    const selectCell = () => {
+      this.context.store.dispatch(focusCell(id));
+    };
+    const focusEditor = () => {
+      this.context.store.dispatch(focusCellEditor(id));
+    };
+    const focusAboveCell = () => {
+      this.context.store.dispatch(focusPreviousCell(id));
+      this.context.store.dispatch(focusPreviousCellEditor(id));
+    };
+    const focusBelowCell = () => {
+      this.context.store.dispatch(focusNextCell(id, true));
+      this.context.store.dispatch(focusNextCellEditor(id));
+    };
+
+    switch (cellType) {
+      case "code":
+        const sourceHidden =
+          cell.getIn(["metadata", "inputHidden"], false) ||
+          cell.getIn(["metadata", "hide_input"], false);
+
+        const outputHidden =
+          cell.get("outputs").size === 0 ||
+          cell.getIn(["metadata", "outputHidden"]);
+        const outputExpanded = cell.getIn(["metadata", "outputExpanded"]);
+
+        element = (
+          <div>
+            <Input hidden={sourceHidden}>
+              <Prompt counter={cell.get("execution_count")} running={running} />
+              <Editor>
+                <CodeMirror
+                  tip
+                  completion
+                  id={id}
+                  value={cell.get("source")}
+                  language={this.props.language}
+                  cellFocused={cellFocused}
+                  editorFocused={editorFocused}
+                  theme={this.props.theme}
+                  focusAbove={focusAboveCell}
+                  focusBelow={focusBelowCell}
+                />
+              </Editor>
+            </Input>
+            <Pagers>
+              {this.props.cellPagers
+                .get(id, ImmutableList())
+                .map((pager, key) => (
+                  <RichestMime
+                    expanded
+                    className="pager"
+                    displayOrder={this.props.displayOrder}
+                    transforms={this.props.transforms}
+                    bundle={pager}
+                    theme={this.props.theme}
+                    key={key}
+                  />
+                ))}
+            </Pagers>
+            <LatexRenderer>
+              <Outputs hidden={outputHidden} expanded={outputExpanded}>
+                <Display
+                  className="outputs-display"
+                  outputs={cell.get("outputs").toJS()}
+                  displayOrder={this.props.displayOrder}
+                  transforms={this.props.transforms}
+                  theme={this.props.theme}
+                  expanded={outputExpanded}
+                  isHidden={outputHidden}
+                  models={this.props.models.toJS()}
+                />
+              </Outputs>
+            </LatexRenderer>
+          </div>
+        );
+
+        break;
+      case "markdown":
+        element = (
+          <MarkdownPreviewer
+            focusAbove={focusAboveCell}
+            focusBelow={focusBelowCell}
+            focusEditor={focusEditor}
+            cellFocused={cellFocused}
+            editorFocused={editorFocused}
+            source={cell.get("source", "")}
+          >
+            <Editor>
+              <CodeMirror
+                language="markdown"
+                id={id}
+                value={cell.get("source")}
+                theme={this.props.theme}
+                focusAbove={focusAboveCell}
+                focusBelow={focusBelowCell}
+                cellFocused={cellFocused}
+                editorFocused={editorFocused}
+                options={{
+                  // Markdown should always be line wrapped
+                  lineWrapping: true
+                }}
+              />
+            </Editor>
+          </MarkdownPreviewer>
+        );
+        break;
+
+      default:
+        element = <pre>{cell.get("source")}</pre>;
+        break;
+    }
+
     return (
-      <CellView
-        selectCell={() => {
-          this.context.store.dispatch(focusCell(id));
-        }}
-        focusCellEditor={() => {
-          this.context.store.dispatch(focusCellEditor(id));
-        }}
-        focusAboveCell={() => {
-          this.context.store.dispatch(focusPreviousCell(id));
-          this.context.store.dispatch(focusPreviousCellEditor(id));
-        }}
-        focusBelowCell={() => {
-          this.context.store.dispatch(focusNextCell(id, true));
-          this.context.store.dispatch(focusNextCellEditor(id));
-        }}
-        cell={cell}
-        displayOrder={this.props.displayOrder}
-        id={id}
-        cellFocused={this.props.cellFocused}
-        editorFocused={this.props.editorFocused}
-        language={this.props.language}
-        running={running}
-        theme={this.props.theme}
-        pagers={this.props.cellPagers.get(id)}
-        transforms={this.props.transforms}
-        models={this.props.models}
-      />
+      <HijackScroll focused={cellFocused} onClick={selectCell}>
+        <Cell isSelected={cellFocused}>
+          <Toolbar type={cellType} cell={cell} id={id} />
+          {element}
+          <style jsx>{`
+            /*
+           * Show the cell-toolbar-mask if hovering on cell,
+           * or cell was the last clicked (has .focused class).
+           */
+            :global(.cell:hover .cell-toolbar-mask),
+            :global(.cell.focused .cell-toolbar-mask) {
+              display: block;
+            }
+          `}</style>
+        </Cell>
+      </HijackScroll>
     );
   }
 
