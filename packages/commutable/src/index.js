@@ -7,11 +7,6 @@ import type { ImmutableNotebook, JSONType } from "@nteract/types/commutable";
 
 import * as Immutable from "immutable";
 
-type PlaceholderNotebook = {
-  nbformat: number,
-  nbformat_minor: number
-};
-
 const v4 = require("./v4");
 const v3 = require("./v3");
 
@@ -29,7 +24,7 @@ const {
   removeCell
 } = require("./structures");
 
-export type Notebook = PlaceholderNotebook & v4Notebook & v3Notebook;
+export type Notebook = v4Notebook | v3Notebook;
 
 function freezeReviver(k: string, v: JSONType): JSONType {
   return Object.freeze(v);
@@ -55,7 +50,6 @@ function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
 
   const notebookJSON: Notebook = notebook;
 
-  // $FlowFixMe: It doesn't seem to be picking up the combined defined of Notebook.
   if (notebookJSON.nbformat === 4 && notebookJSON.nbformat_minor >= 0) {
     if (
       Array.isArray(notebookJSON.cells) &&
@@ -63,7 +57,6 @@ function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
     ) {
       return v4.fromJS(notebookJSON);
     }
-    // $FlowFixMe: It doesn't seem to be picking up the combined defined of Notebook.
   } else if (notebookJSON.nbformat === 3 && notebookJSON.nbformat_minor >= 0) {
     return v3.fromJS(notebookJSON);
   }
