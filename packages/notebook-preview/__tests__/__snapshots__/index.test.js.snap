@@ -8,7 +8,6 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
     selected={null}
   >
     <Cell
-      id={null}
       isSelected={false}
       key="3"
     >
@@ -41,7 +40,6 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
       />
     </Cell>
     <Cell
-      id={null}
       isSelected={false}
       key="4"
     >
@@ -198,7 +196,6 @@ exports[`Notebook accepts an Object of cells 1`] = `
     selected={null}
   >
     <Cell
-      id={null}
       isSelected={false}
       key="5"
     >
@@ -231,7 +228,6 @@ exports[`Notebook accepts an Object of cells 1`] = `
       />
     </Cell>
     <Cell
-      id={null}
       isSelected={false}
       key="6"
     >
