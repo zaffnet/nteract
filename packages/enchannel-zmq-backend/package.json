@@ -1,6 +1,6 @@
 {
   "name": "enchannel-zmq-backend",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Channeling jupyter over zmq",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -22,13 +22,13 @@
     "url": "https://github.com/nteract/nteract/issues"
   },
   "dependencies": {
-    "@nteract/types": "^1.0.3",
+    "@nteract/types": "^1.0.4",
     "jmp": "^1.0.0",
     "rxjs": "^5.5.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@nteract/messaging": "^3.0.3",
+    "@nteract/messaging": "^3.0.4",
     "spawnteract": "4.0.0"
   }
 }
