@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://nteract.io",
   "scripts": {
     "clean": "rimraf lib dist",

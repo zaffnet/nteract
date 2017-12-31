@@ -8,8 +8,7 @@
     "dev": "NODE_ENV=development node lib/index.js",
     "start": "node lib/index.js",
     "build": "babel src -d lib",
-    "copy-readme": "cp ../../README.md .",
-    "prepublishOnly": "npm run copy-readme && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "bin": {
     "commuter": "bin.js"
