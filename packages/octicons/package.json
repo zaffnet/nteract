@@ -1,6 +1,6 @@
 {
   "name": "@nteract/octicons",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "octicon react components, styled for use within nteract packages",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -14,8 +14,6 @@
     "build:lib:watch": "npm run build:lib -- --watch",
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "react": "16.2.0"
   },
@@ -25,7 +23,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["octicons", "react"],
+  "keywords": [
+    "octicons",
+    "react"
+  ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause"
 }
