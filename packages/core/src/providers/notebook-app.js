@@ -164,14 +164,16 @@ export class NotebookApp extends React.PureComponent<Props> {
     const id = this.props.cellFocused;
     const cell = cellMap.get(id);
 
+    if (!cell) {
+      return;
+    }
+
     if (e.shiftKey && !this.props.stickyCells.has(id)) {
       this.context.store.dispatch(focusNextCell(this.props.cellFocused, true));
       this.context.store.dispatch(focusNextCellEditor(id));
     }
 
-    // $FlowFixMe: Cell might be undefined.
     if (cell.get("cell_type") === "code") {
-      // $FlowFixMe: Cell might be undefined.
       this.context.store.dispatch(executeCell(id, cell.get("source")));
     }
   }
