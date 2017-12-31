@@ -3,7 +3,7 @@
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
 /* eslint jsx-a11y/click-events-have-key-events: 0 */
 
-import React from "react";
+import * as React from "react";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 import CodeMirror from "./editor";
 
@@ -19,6 +19,8 @@ import Toolbar from "./toolbar";
 const PropTypes = require("prop-types");
 
 import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../components";
+
+import { HijackScroll } from "../components/hijack-scroll";
 
 export type CellProps = {
   cell: any,
@@ -48,42 +50,6 @@ export default class CellView extends React.Component<CellProps, *> {
   static contextTypes = {
     store: PropTypes.object
   };
-
-  cellDiv: ?HTMLElement;
-
-  componentDidUpdate(prevProps: CellProps) {
-    this.scrollIntoViewIfNeeded(prevProps.cellFocused);
-  }
-
-  componentDidMount(): void {
-    this.scrollIntoViewIfNeeded();
-  }
-
-  scrollIntoViewIfNeeded(prevCellFocused?: string): void {
-    // If the previous cell that was focused was not us, we go ahead and scroll
-
-    // Check if the .cell div is being hovered over.
-    const hoverCell =
-      this.cellDiv &&
-      this.cellDiv.parentElement &&
-      this.cellDiv.parentElement.querySelector(":hover") === this.cellDiv;
-
-    if (
-      this.props.cellFocused &&
-      this.props.cellFocused === this.props.id &&
-      prevCellFocused !== this.props.cellFocused &&
-      // Don't scroll into view if already hovered over, this prevents
-      // accidentally selecting text within the codemirror area
-      !hoverCell
-    ) {
-      if (this.cellDiv && "scrollIntoViewIfNeeded" in this.cellDiv) {
-        // $FlowFixMe: This is only valid in Chrome, WebKit
-        this.cellDiv.scrollIntoViewIfNeeded();
-      } else {
-        // TODO: Polyfill as best we can for the webapp version
-      }
-    }
-  }
 
   render() {
     const cell = this.props.cell;
@@ -196,28 +162,22 @@ export default class CellView extends React.Component<CellProps, *> {
     }
 
     return (
-      <Cell id={this.props.id} isSelected={cellFocused}>
-        <div
-          onClick={this.props.selectCell}
-          role="presentation"
-          ref={el => {
-            this.cellDiv = el;
-          }}
-        >
+      <HijackScroll focused={cellFocused} onClick={this.props.selectCell}>
+        <Cell isSelected={cellFocused}>
           <Toolbar type={cellType} cell={cell} id={this.props.id} />
           {element}
-        </div>
-        <style jsx>{`
-          /*
+          <style jsx>{`
+            /*
            * Show the cell-toolbar-mask if hovering on cell,
            * or cell was the last clicked (has .focused class).
            */
-          :global(.cell:hover .cell-toolbar-mask),
-          :global(.cell.focused .cell-toolbar-mask) {
-            display: block;
-          }
-        `}</style>
-      </Cell>
+            :global(.cell:hover .cell-toolbar-mask),
+            :global(.cell.focused .cell-toolbar-mask) {
+              display: block;
+            }
+          `}</style>
+        </Cell>
+      </HijackScroll>
     );
   }
 }

@@ -318,11 +318,7 @@ export class Input extends React.Component<InputProps> {
   }
 }
 
-export const Cell = (props: {
-  isSelected: boolean,
-  children?: React.Node,
-  id?: string
-}) => {
+export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
   const children = props.children;
   return (
     <div className={`cell ${props.isSelected ? "focused" : ""}`}>
@@ -372,21 +368,29 @@ export const Cell = (props: {
 
 Cell.defaultProps = {
   isSelected: false,
-  children: null,
-  id: null
+  children: null
 };
 
 export const Cells = (props: {
-  children: React.ChildrenArray<React.Element<*>>,
+  children: React.ChildrenArray<any>,
   selected: string | null
 }) => {
   const children = React.Children.map(props.children, child => {
+    if (!child) {
+      return null;
+    }
+
+    if (!child.type) {
+      return child;
+    }
+
     if (child.type === Cell) {
       return React.cloneElement(child, {
         // If there's a selection and it matches the cell's ID, mark isSelected
         isSelected: props.selected && child.props.id === props.selected
       });
     }
+
     return child;
   });
   return (
