@@ -163,7 +163,7 @@ export default class CellView extends React.Component<CellProps, *> {
 
     return (
       <HijackScroll focused={cellFocused} onClick={this.props.selectCell}>
-        <Cell id={this.props.id} isSelected={cellFocused}>
+        <Cell isSelected={cellFocused}>
           <Toolbar type={cellType} cell={cell} id={this.props.id} />
           {element}
           <style jsx>{`

@@ -318,11 +318,7 @@ export class Input extends React.Component<InputProps> {
   }
 }
 
-export const Cell = (props: {
-  isSelected: boolean,
-  children?: React.Node,
-  id?: string
-}) => {
+export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
   const children = props.children;
   return (
     <div className={`cell ${props.isSelected ? "focused" : ""}`}>
@@ -372,8 +368,7 @@ export const Cell = (props: {
 
 Cell.defaultProps = {
   isSelected: false,
-  children: null,
-  id: null
+  children: null
 };
 
 export const Cells = (props: {
