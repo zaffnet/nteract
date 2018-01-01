@@ -10,8 +10,6 @@ import {
   NEW_KERNEL
 } from "@nteract/core/constants";
 
-import * as wtf from "@nteract/core/constants";
-
 import { executeCell } from "@nteract/core/actions";
 import {
   executeCellStream,
