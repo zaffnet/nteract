@@ -36,6 +36,6 @@
   },
   "homepage": "https://github.com/nteract/nteract",
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.2.0"
   }
 }
