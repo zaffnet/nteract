@@ -34,7 +34,7 @@
     "showcase": "lerna run dev --scope @nteract/showcase --stream",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build": "npm run build:packages && npm run build:desktop",
+    "build": "npm run build:packages",
     "build:desktop": "lerna run build --scope nteract --stream",
     "build:desktop:watch": "lerna run build:watch --scope nteract --stream",
     "build:packages": "lerna run build --parallel --ignore @nteract/play --ignore @nteract/showcase --ignore nteract --ignore @nteract/commuter-frontend --ignore @nteract/notebook-on-next --ignore nteract-on-jupyter",
