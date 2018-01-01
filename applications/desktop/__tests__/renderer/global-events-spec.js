@@ -1,4 +1,4 @@
-import { dummyStore } from "@nteract/core/lib/dummy";
+import { dummyStore } from "@nteract/core/dummy";
 import * as globalEvents from "../../src/notebook/global-events";
 import * as kernel from "../../src/notebook/kernel/shutdown";
 

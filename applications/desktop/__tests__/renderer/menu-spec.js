@@ -1,6 +1,6 @@
 import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
-import { dummyStore } from "@nteract/core/lib/dummy";
+import { dummyStore } from "@nteract/core/dummy";
 import * as menu from "../../src/notebook/menu";
 import * as constants from "@nteract/core/constants";
 

@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import { dummyStore, dummyCommutable } from "@nteract/core/lib/dummy";
+import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 import { toArray } from "rxjs/operators";
 
