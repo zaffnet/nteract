@@ -13,7 +13,6 @@ import NotebookPreview from "@nteract/notebook-preview";
 import { MarkdownTransform } from "@nteract/transforms";
 import DataResourceTransform from "@nteract/transform-dataresource";
 import { VegaLite, Vega } from "@nteract/transform-vega";
-import { PlotlyNullTransform, PlotlyTransform } from "./transforms";
 
 import {
   standardTransforms,
@@ -24,8 +23,6 @@ import {
 // Order is important here. The last transform in the array will have order `0`.
 const { transforms, displayOrder } = [
   DataResourceTransform,
-  PlotlyNullTransform,
-  PlotlyTransform,
   VegaLite,
   Vega
 ].reduce(registerTransform, {
