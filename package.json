@@ -21,7 +21,7 @@
   "homepage": "https://github.com/nteract/nteract",
   "scripts": {
     "postinstall": "npm run lerna",
-    "lerna": "lerna bootstrap --hoist",
+    "lerna": "lerna bootstrap --hoist --log-level verbose --no-hoist='{follow-redirects,https-proxy-agent,mime,netrc,jp-kernel,zeromq,lodash}'",
     "build:apps": "lerna run build --scope nteract --scope @nteract/play --scope @nteract/commuter --scope @nteract/notebook-on-next --scope @nteract/showcase --parallel --stream",
     "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
@@ -66,7 +66,7 @@
       "./scripts/test-setup"
     ],
     "moduleNameMapper": {
-      "uuid": "<rootDir>/packages/commutable/node_modules/uuid/",
+      "@nteract/core": "<rootDir>/packages/core/src",
       "\\.css$": "<rootDir>/scripts/noop-module.js"
     },
     "coveragePathIgnorePatterns": [
