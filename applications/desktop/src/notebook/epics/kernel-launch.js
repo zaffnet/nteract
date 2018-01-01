@@ -24,6 +24,7 @@ import * as uuid from "uuid";
 import { ipcRenderer as ipc } from "electron";
 
 import { createMainChannel } from "enchannel-zmq-backend";
+import * as jmp from "jmp";
 
 import type {
   LanguageInfoMetadata,
@@ -102,7 +103,7 @@ export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
         observer.next(action);
       });
 
-      createMainChannel(config)
+      createMainChannel(config, undefined, undefined, jmp)
         .then(channels => {
           observer.next(setNotebookKernelInfo(kernelSpec));
 
