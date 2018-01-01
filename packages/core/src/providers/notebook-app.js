@@ -48,7 +48,7 @@ import {
 // NOTE: PropTypes are required for the sake of contextTypes
 const PropTypes = require("prop-types");
 
-const themes = require("../../themes");
+const themes = require("../themes");
 
 type Props = {
   displayOrder: Array<string>,

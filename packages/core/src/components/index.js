@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
-import syntax from "../../themes/syntax-highlighting";
+import syntax from "../themes/syntax-highlighting";
 
 export type PagersProps = {
   children: React.Node,
