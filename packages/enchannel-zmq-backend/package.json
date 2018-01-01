@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "@nteract/messaging": "^3.0.4",
-    "spawnteract": "4.0.0"
+    "spawnteract": "^4.0.0"
   }
 }
