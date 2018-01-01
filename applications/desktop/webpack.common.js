@@ -4,8 +4,6 @@ const path = require("path");
 
 const nodeModules = {
   jmp: "commonjs jmp",
-  uuid: "commonjs uuid",
-  github: "commonjs github",
   canvas: "commonjs canvas"
 };
 
