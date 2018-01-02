@@ -2,6 +2,9 @@ import DataResourceTransform from "@nteract/transform-dataresource";
 
 const props = {
   height: 400,
+  metadata: {
+    sampled: true
+  },
   data: {
     schema: {
       fields: [

@@ -6,11 +6,13 @@ import {
   GraphOcticon as BarGraphOcticon,
   PulseOcticon as LineGraphOcticon,
   DatabaseOcticon,
-  TelescopeOcticon
+  TelescopeOcticon,
+  Beaker
 } from "@nteract/octicons";
 
 type Props = {
   data: Object,
+  metadata: Object,
   theme?: string,
   expanded?: boolean,
   height?: number
@@ -69,6 +71,62 @@ const DataResourceTransformPlot = ({
   return <PlotlyTransform data={figure} />;
 };
 
+const MetadataWarning = ({ metadata }) => {
+  const warning =
+    metadata && metadata.sampled ? (
+      <span>
+        <b>NOTE:</b> This data is sampled
+      </span>
+    ) : null;
+
+  return (
+    <div
+      style={{
+        fontFamily:
+          "Source Sans Pro, Helvetica Neue, Helvetica, Arial, sans-serif"
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "#cec",
+          color: "#111",
+          padding: "10px",
+          paddingLeft: "20px"
+        }}
+      >
+        This interactive data explorer is in the works.{" "}
+        <a
+          href="https://github.com/nteract/nteract/issues/new"
+          style={{
+            color: "#333"
+          }}
+        >
+          Help us improve it!
+        </a>
+        <Beaker
+          style={{
+            color: "#111",
+            verticalAlign: "center",
+            textAlign: "center",
+            paddingLeft: "10px"
+          }}
+        />
+      </div>
+      {warning ? (
+        <div
+          style={{
+            backgroundColor: "#cce",
+            padding: "10px",
+            paddingLeft: "20px"
+          }}
+        >
+          {warning}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
@@ -106,39 +164,42 @@ class DataResourceTransform extends React.Component<Props, State> {
     }
 
     return (
-      <div
-        style={{
-          display: "flex",
-          flexFlow: "row nowrap",
-          width: "100%",
-          height: this.props.height
-        }}
-      >
-        <div
-          style={{
-            flex: "1"
-          }}
-        >
-          {display}
-        </div>
+      <div>
+        <MetadataWarning metadata={this.props.metadata} />
         <div
           style={{
             display: "flex",
-            flexFlow: "column nowrap"
+            flexFlow: "row nowrap",
+            width: "100%",
+            height: this.props.height
           }}
         >
-          <IconButton onClick={this.setGrid} message={"Data Table"}>
-            <DatabaseOcticon />
-          </IconButton>
-          <IconButton onClick={this.setLine} message={"Line Graph"}>
-            <LineGraphOcticon />
-          </IconButton>
-          <IconButton onClick={this.setBar} message={"Bar Graph"}>
-            <BarGraphOcticon />
-          </IconButton>
-          <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
-            <TelescopeOcticon />
-          </IconButton>
+          <div
+            style={{
+              flex: "1"
+            }}
+          >
+            {display}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "column nowrap"
+            }}
+          >
+            <IconButton onClick={this.setGrid} message={"Data Table"}>
+              <DatabaseOcticon />
+            </IconButton>
+            <IconButton onClick={this.setLine} message={"Line Graph"}>
+              <LineGraphOcticon />
+            </IconButton>
+            <IconButton onClick={this.setBar} message={"Bar Graph"}>
+              <BarGraphOcticon />
+            </IconButton>
+            <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
+              <TelescopeOcticon />
+            </IconButton>
+          </div>
         </div>
       </div>
     );

@@ -20,11 +20,14 @@ export const SVGWrapper = (props: WrapperProps<*>) => {
         height={props.height}
         viewBox={props.viewBox}
         {...props.outerProps}
-        style={{
-          fill: "currentColor",
-          display: "inline-block",
-          verticalAlign: "text-bottom"
-        }}
+        style={Object.assign(
+          {
+            fill: "currentColor",
+            display: "inline-block",
+            verticalAlign: "text-bottom"
+          },
+          props.outerProps.style
+        )}
       >
         {props.children}
       </svg>
@@ -161,6 +164,15 @@ export const CloudDownload = (props: any) => (
     <path
       fillRule="evenodd"
       d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"
+    />
+  </SVGWrapper>
+);
+
+export const Beaker = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
+    <path
+      fillRule="evenodd"
+      d="M14.38 14.59L11 7V3h1V2H3v1h1v4L.63 14.59A1 1 0 0 0 1.54 16h11.94c.72 0 1.2-.75.91-1.41h-.01zM3.75 10L5 7V3h5v4l1.25 3h-7.5zM8 8h1v1H8V8zM7 7H6V6h1v1zm0-3h1v1H7V4zm0-3H6V0h1v1z"
     />
   </SVGWrapper>
 );
