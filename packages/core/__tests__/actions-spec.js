@@ -2,8 +2,6 @@
 import * as actions from "../actions";
 import * as constants from "../constants";
 
-import { dummyCommutable } from "../src/dummy";
-
 describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
     expect(actions.setExecutionState("idle")).toEqual({
@@ -333,25 +331,28 @@ describe("toggleOutputExpansion", () => {
 
 describe("save", () => {
   test("creates a SAVE action", () => {
-    expect(actions.save("foo.ipynb", dummyCommutable)).toEqual({
+    const fakeNotebook = { nbformat: "eh" };
+    expect(actions.save("foo.ipynb", fakeNotebook)).toEqual({
       type: constants.SAVE,
       filename: "foo.ipynb",
-      notebook: dummyCommutable
+      notebook: fakeNotebook
     });
   });
 
   test("creates a SAVE_AS action", () => {
-    expect(actions.saveAs("foo.ipynb", dummyCommutable)).toEqual({
+    const fakeNotebook = { nbformat: "eh" };
+    expect(actions.saveAs("foo.ipynb", fakeNotebook)).toEqual({
       type: constants.SAVE_AS,
       filename: "foo.ipynb",
-      notebook: dummyCommutable
+      notebook: fakeNotebook
     });
   });
 
   test("creates a SAVE_AS action", () => {
-    expect(actions.doneSaving(dummyCommutable)).toEqual({
+    const fakeNotebook = { nbformat: "eh" };
+    expect(actions.doneSaving(fakeNotebook)).toEqual({
       type: constants.DONE_SAVING,
-      notebook: dummyCommutable
+      notebook: fakeNotebook
     });
   });
 });
