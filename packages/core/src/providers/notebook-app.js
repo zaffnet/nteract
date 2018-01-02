@@ -392,7 +392,16 @@ export class NotebookApp extends React.PureComponent<Props> {
             padding-right: 10px;
           }
         `}</style>
-        <style>{`:root { ${themes[this.props.theme]} } `}</style>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+:root {
+  ${themes[this.props.theme]};
+}`
+          }}
+        >
+          {}
+        </style>
       </div>
     );
   }
