@@ -1,5 +1,5 @@
 /* @flow */
-import React from "react";
+import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
 import PlotlyTransform from "@nteract/transform-plotly";
 import {
@@ -17,8 +17,7 @@ type Props = {
 };
 
 type State = {
-  showGrid: boolean,
-  showPlot: boolean
+  view: "line" | "bar" | "scatter" | "grid"
 };
 
 const DataResourceTransformGrid = ({
@@ -39,17 +38,16 @@ const DataResourceTransformGrid = ({
   );
 };
 
-const viewTypes = {
-  LINE: "line",
-  BAR: "bar",
-  SCATTER: "scatter",
-  GRID: "grid"
-};
+type LINE_VIEW = "line";
+type BAR_VIEW = "bar";
+type SCATTER_VIEW = "scatter";
+type GRID_VIEW = "grid";
 
 const viewTypeToPlotlyTraceProps = {
-  [viewTypes.LINE]: {},
-  [viewTypes.BAR]: { type: "bar" },
-  [viewTypes.SCATTER]: { mode: "markers" }
+  grid: {}, // avoid our lookup
+  line: {},
+  bar: { type: "bar" },
+  scatter: { mode: "markers" }
 };
 
 const plotViewTypes = Object.keys(viewTypeToPlotlyTraceProps);
@@ -74,26 +72,26 @@ const DataResourceTransformPlot = ({
 class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
-  state = { view: viewTypes.GRID };
+  state = { view: "grid" };
 
   shouldComponentUpdate(): boolean {
     return true;
   }
 
   setGrid = () => {
-    this.setState({ view: viewTypes.GRID });
+    this.setState({ view: "grid" });
   };
 
   setLine = () => {
-    this.setState({ view: viewTypes.LINE });
+    this.setState({ view: "line" });
   };
 
   setBar = () => {
-    this.setState({ view: viewTypes.BAR });
+    this.setState({ view: "bar" });
   };
 
   setScatter = () => {
-    this.setState({ view: viewTypes.SCATTER });
+    this.setState({ view: "scatter" });
   };
 
   renderIconButtons() {
@@ -116,6 +114,19 @@ class DataResourceTransform extends React.Component<Props, State> {
   render(): ?React$Element<any> {
     const buttons = this.renderIconButtons();
     const { view } = this.state;
+
+    let display = null;
+    switch (view) {
+      case "grid":
+        display = <DataResourceTransformGrid {...this.props} />;
+        break;
+      case plotViewTypes.includes(view):
+        display = <DataResourceTransformPlot {...this.props} type={view} />;
+      default:
+        display = null;
+        break;
+    }
+
     return (
       <div
         style={{
@@ -130,12 +141,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             flex: "1"
           }}
         >
-          {view === viewTypes.GRID ? (
-            <DataResourceTransformGrid {...this.props} />
-          ) : null}
-          {plotViewTypes.includes(view) ? (
-            <DataResourceTransformPlot {...this.props} type={view} />
-          ) : null}
+          {display}
         </div>
         <div
           style={{
