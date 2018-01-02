@@ -10,6 +10,12 @@ const repo = (state = "", action) => {
     case actionTypes.SUBMIT_BINDER_FORM: {
       return action.payload.repo;
     }
+    case actionTypes.INITIALIZE_FROM_QUERY: {
+      if (action.payload.repo) {
+        return action.payload.repo;
+      }
+      return state;
+    }
     default: {
       return state;
     }
@@ -20,6 +26,12 @@ const gitref = (state = "", action) => {
   switch (action.type) {
     case actionTypes.SUBMIT_BINDER_FORM: {
       return action.payload.gitref;
+    }
+    case actionTypes.INITIALIZE_FROM_QUERY: {
+      if (action.payload.gitref) {
+        return action.payload.gitref;
+      }
+      return state;
     }
     default: {
       return state;

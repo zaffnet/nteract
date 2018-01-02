@@ -232,3 +232,13 @@ export const setKernelStatus = (payload: {
   type: actionTypes.SET_KERNEL_STATUS,
   payload
 });
+
+export const initalizeFromQuery = (
+  payload: {
+    repo?: string,
+    gitref?: string
+  } = {}
+) => ({
+  type: actionTypes.INITIALIZE_FROM_QUERY,
+  payload
+});

@@ -27,13 +27,14 @@ function detectPlatform(req) {
 }
 
 class Page extends React.Component<*, *> {
-  static async getInitialProps({ req, store }) {
+  static async getInitialProps({ req, store, query }) {
     // Note that we cannot dispatch async actions in getInitialProps since it's
     // being handled server side. If we _need_ to do that, we should refactor
     // the related epics so that we can either (a) await them in some way or (b)
     // manually fetch the things we need and only dispatch the final,
     // synchronous actions.
     store.dispatch(actions.setPlatform(detectPlatform(req)));
+    store.dispatch(actions.initalizeFromQuery(query));
   }
   render() {
     return <Main />;
