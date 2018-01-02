@@ -28,6 +28,7 @@
     "app:showcase": "lerna run dev --scope @nteract/showcase --stream",
     "app:commuter": "lerna run dev --scope @nteract/commuter --stream",
     "app:notebook-on-next": "lerna run dev --scope @nteract/notebook-on-next --stream",
+    "app:jupyter-extension": "lerna run dev --scope nteract-on-jupyter --stream",
     "start": "npm run app:desktop",
     "spawn": "lerna run spawn --scope nteract",
     "showcase": "lerna run dev --scope @nteract/showcase --stream",
