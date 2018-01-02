@@ -25,7 +25,7 @@ import { from } from "rxjs/observable/from";
 import { toArray, share, catchError, bufferCount } from "rxjs/operators";
 
 describe("executeCell", () => {
-  it("returns an executeCell action", () => {
+  test("returns an executeCell action", () => {
     expect(executeCell("0-0-0-0", "import random; random.random()")).toEqual({
       type: EXECUTE_CELL,
       id: "0-0-0-0",
@@ -75,7 +75,7 @@ describe("executeCellStream", () => {
 });
 
 describe("createExecuteCellStream", () => {
-  it("errors if the kernel is not connected in create", done => {
+  test("errors if the kernel is not connected in create", done => {
     const frontendToShell = new Subject();
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
@@ -104,7 +104,7 @@ describe("createExecuteCellStream", () => {
       err => done.fail(err)
     );
   });
-  it("doesnt complete but does push until abort action", done => {
+  test("doesnt complete but does push until abort action", done => {
     const frontendToShell = new Subject();
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
@@ -155,7 +155,7 @@ describe("executeCellEpic", () => {
       }
     }
   };
-  it("Errors on a bad action", done => {
+  test("Errors on a bad action", done => {
     // Make one hot action
     const badAction$ = ActionsObservable.of({ type: EXECUTE_CELL }).pipe(
       share()
@@ -174,7 +174,7 @@ describe("executeCellEpic", () => {
       err => done.fail(err)
     );
   });
-  it("Errors on an action where source not a string", done => {
+  test("Errors on an action where source not a string", done => {
     const badAction$ = ActionsObservable.of(executeCell("id", 2)).pipe(share());
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
@@ -190,7 +190,7 @@ describe("executeCellEpic", () => {
       err => done.fail(err)
     );
   });
-  it("Informs about disconnected kernels, allows reconnection", done => {
+  test("Informs about disconnected kernels, allows reconnection", done => {
     const action$ = ActionsObservable.of(executeCell("id", "source")).pipe(
       share()
     );
@@ -206,7 +206,7 @@ describe("executeCellEpic", () => {
 });
 
 describe("updateDisplayEpic", () => {
-  it("creates an epic that handles update_display_data messages", done => {
+  test("creates an epic that handles update_display_data messages", done => {
     const messages = [
       // Should be processed
       {

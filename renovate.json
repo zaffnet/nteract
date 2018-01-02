@@ -1,5 +1,5 @@
 {
   "extends": ["config:base"],
   "semanticCommits": false,
-  "ignoreDeps": ["flow-bin"]
+  "pinVersions": false
 }

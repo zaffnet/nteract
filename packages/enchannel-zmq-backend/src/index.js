@@ -8,7 +8,7 @@ import { merge } from "rxjs/observable/merge";
 import { fromEvent } from "rxjs/observable/fromEvent";
 import { map, publish, refCount } from "rxjs/operators";
 
-import * as jmp from "jmp";
+import * as moduleJMP from "jmp";
 
 export const ZMQType = {
   frontend: {
@@ -67,8 +67,9 @@ export function formConnectionString(
 export function createSocket(
   channel: CHANNEL_NAME,
   identity: string,
-  config: JUPYTER_CONNECTION_INFO
-): Promise<jmp.Socket> {
+  config: JUPYTER_CONNECTION_INFO,
+  jmp = moduleJMP
+): Promise<moduleJMP.Socket> {
   const zmqType = ZMQType.frontend[channel];
   const scheme = config.signature_scheme.slice("hmac-".length);
 
@@ -83,9 +84,9 @@ export function createSocket(
  * ensures the socket is ready after connecting
  */
 export function verifiedConnect(
-  socket: jmp.Socket,
+  socket: moduleJMP.Socket,
   url: string
-): Promise<jmp.Socket> {
+): Promise<moduleJMP.Socket> {
   return new Promise((resolve, reject) => {
     socket.on("connect", () => {
       // We are not ready until this happens for all the sockets
@@ -130,10 +131,11 @@ export async function createMainChannel(
   header: HEADER_FILLER = {
     session: uuid(),
     username: getUsername()
-  }
+  },
+  jmp = moduleJMP
 ): Channels {
-  const sockets = await createSockets(config, subscription, identity);
-  const main = createMainChannelFromSockets(sockets, header);
+  const sockets = await createSockets(config, subscription, identity, jmp);
+  const main = createMainChannelFromSockets(sockets, header, jmp);
   return main;
 }
 
@@ -144,13 +146,14 @@ export async function createMainChannel(
 export async function createSockets(
   config: JUPYTER_CONNECTION_INFO,
   subscription: string = "",
-  identity: string = uuid()
+  identity: string = uuid(),
+  jmp = moduleJMP
 ) {
   const [shell, control, stdin, iopub] = await Promise.all([
-    createSocket("shell", identity, config),
-    createSocket("control", identity, config),
-    createSocket("stdin", identity, config),
-    createSocket("iopub", identity, config)
+    createSocket("shell", identity, config, jmp),
+    createSocket("control", identity, config, jmp),
+    createSocket("stdin", identity, config, jmp),
+    createSocket("iopub", identity, config, jmp)
   ]);
 
   // NOTE: ZMQ PUB/SUB subscription (not an Rx subscription)
@@ -166,12 +169,13 @@ export async function createSockets(
 
 export function createMainChannelFromSockets(
   sockets: {
-    [string]: jmp.Socket
+    [string]: moduleJMP.Socket
   },
   header: HEADER_FILLER = {
     session: uuid(),
     username: getUsername()
-  }
+  },
+  jmp = moduleJMP
 ) {
   // The mega subject that encapsulates all the sockets as one multiplexed stream
   const subject = Subject.create(

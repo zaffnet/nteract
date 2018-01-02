@@ -12,7 +12,6 @@
   },
   "presets": [["env", { "targets": { "electron": "1.7" } }], "react"],
   "plugins": [
-    "lodash",
     "styled-jsx/babel",
     "transform-class-properties",
     "transform-flow-strip-types",
