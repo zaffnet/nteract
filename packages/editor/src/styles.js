@@ -222,7 +222,7 @@ export default css`
     font-size: 14px;
     line-height: 20px;
 
-    height: auto;
+    height: inherit;
 
     background: none;
 
