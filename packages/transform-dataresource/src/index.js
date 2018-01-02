@@ -94,37 +94,15 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.setState({ view: "scatter" });
   };
 
-  renderIconButtons() {
-    return [
-      <IconButton onClick={this.setGrid} message={"Data Table"}>
-        <DatabaseOcticon />
-      </IconButton>,
-      <IconButton onClick={this.setLine} message={"Line Graph"}>
-        <LineGraphOcticon />
-      </IconButton>,
-      <IconButton onClick={this.setBar} message={"Bar Graph"}>
-        <BarGraphOcticon />
-      </IconButton>,
-      <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
-        <TelescopeOcticon />
-      </IconButton>
-    ];
-  }
-
   render(): ?React$Element<any> {
-    const buttons = this.renderIconButtons();
     const { view } = this.state;
 
     let display = null;
-    switch (view) {
-      case "grid":
-        display = <DataResourceTransformGrid {...this.props} />;
-        break;
-      case plotViewTypes.includes(view):
-        display = <DataResourceTransformPlot {...this.props} type={view} />;
-      default:
-        display = null;
-        break;
+
+    if (view === "grid") {
+      display = <DataResourceTransformGrid {...this.props} />;
+    } else if (plotViewTypes.includes(view)) {
+      display = <DataResourceTransformPlot {...this.props} type={view} />;
     }
 
     return (
@@ -149,7 +127,18 @@ class DataResourceTransform extends React.Component<Props, State> {
             flexFlow: "column nowrap"
           }}
         >
-          {buttons}
+          <IconButton onClick={this.setGrid} message={"Data Table"}>
+            <DatabaseOcticon />
+          </IconButton>
+          <IconButton onClick={this.setLine} message={"Line Graph"}>
+            <LineGraphOcticon />
+          </IconButton>
+          <IconButton onClick={this.setBar} message={"Bar Graph"}>
+            <BarGraphOcticon />
+          </IconButton>
+          <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
+            <TelescopeOcticon />
+          </IconButton>
         </div>
       </div>
     );
