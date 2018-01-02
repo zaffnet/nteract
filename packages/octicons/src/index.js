@@ -12,9 +12,6 @@ type WrapperProps<T> = {
 };
 
 export const SVGWrapper = (props: WrapperProps<*>) => {
-  // TODO: revert back to {...props.outerProps} when transpilation works again.
-  // See: https://github.com/zeit/styled-jsx/issues/329
-  const outerProps = props.outerProps;
   return (
     <span>
       <svg
@@ -22,7 +19,7 @@ export const SVGWrapper = (props: WrapperProps<*>) => {
         width={props.width}
         height={props.height}
         viewBox={props.viewBox}
-        {...outerProps}
+        {...props.outerProps}
         style={{
           fill: "currentColor",
           display: "inline-block",
