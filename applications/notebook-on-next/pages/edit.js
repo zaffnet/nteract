@@ -69,7 +69,9 @@ export default class Edit extends React.Component<*> {
     if (!this.props.serverNotebook) return <Error />;
     return (
       <div>
-        <style>{`@media print {
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `@media print {
           * {
             box-shadow: none !important;
           }
@@ -117,7 +119,9 @@ export default class Edit extends React.Component<*> {
             "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
             "Segoe UI Emoji", "Segoe UI Symbol";
           font-size: 1em;
-        }`}</style>
+        }`
+          }}
+        />
         <Provider store={store}>
           <div>
             <NotebookApp />;

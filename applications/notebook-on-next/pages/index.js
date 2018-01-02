@@ -25,7 +25,16 @@ class Input extends React.Component {
 
   render() {
     return (
-      <div className="centering">
+      <div>
+        <div className="centering">
+          <input
+            placeholder="Gist ID"
+            value={this.state.gistid}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeydown}
+          />
+          <button onClick={this.handleConfirm}>Launch Notebook</button>
+        </div>
         <style jsx>{`
           .centering {
             position: absolute;
@@ -64,13 +73,6 @@ class Input extends React.Component {
             outline: none;
           }
         `}</style>
-        <input
-          placeholder="Gist ID"
-          value={this.state.gistid}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeydown}
-        />
-        <button onClick={this.handleConfirm}>Launch Notebook</button>
       </div>
     );
   }
