@@ -106,12 +106,9 @@
     ]
   },
   "dependencies": {
-    "github": "^9.0.0",
     "ijavascript": "^5.0.17",
     "jmp": "^1.0.0",
-    "mathjax-electron": "^2.0.1",
-    "redux-electron-store": "^0.4.1",
-    "uuid": "^3.1.0"
+    "mathjax-electron": "^2.0.1"
   },
   "devDependencies": {
     "@nteract/commutable": "^3.0.4",
@@ -133,20 +130,17 @@
     "enchannel-zmq-backend": "^6.0.1",
     "escape-carriage": "^1.2.0",
     "fs-observable": "^2.0.3",
+    "github": "^13.0.0",
     "jupyter-paths": "^2.0.0",
     "kernelspecs": "^2.0.0",
     "lodash": "^4.17.4",
     "nteract-assets": "^4.0.0",
-    "netrc": "^0.1.4",
-    "mime": "^1.4.1",
-    "zeromq": "^4.0.0",
-    "https-proxy-agent": "^1.0.0",
-    "follow-redirects": "0.0.7",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
+    "redux-electron-store": "^0.4.1",
     "redux-logger": "^3.0.6",
     "redux-observable": "^0.17.0",
     "rimraf": "^2.6.2",
@@ -155,6 +149,7 @@
     "spawn-rx": "^2.0.12",
     "spawnteract": "^4.0.0",
     "styled-jsx": "^2.2.1",
+    "uuid": "^3.1.0",
     "yargs": "^10.0.3"
   }
 }
