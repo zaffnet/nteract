@@ -130,6 +130,10 @@ const MetadataWarning = ({ metadata }) => {
 class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
+  static defaultProps = {
+    metadata: {}
+  };
+
   state = { view: "grid" };
 
   shouldComponentUpdate(): boolean {
