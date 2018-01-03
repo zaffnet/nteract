@@ -10,7 +10,7 @@ def fancy(word):
     colors = ['#FA8AAE', '#8AE7FA', '#FAFA8A', '#8AFA8A']
 
     return [
-        span(letter, style=dict(color=colors[idx % len(colors)]))
+        span(letter, style=dict(color=colors[idx % len(colors)]), key=idx)
         for (idx, letter) in enumerate(word)
     ]
 
