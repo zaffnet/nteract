@@ -1,6 +1,6 @@
 {
   "name": "@nteract/nbextension",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "nteract on jupyter, as an extension",
   "scripts": {
     "build:python": "python setup.py sdist",
@@ -15,8 +15,6 @@
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
-  "dependencies": {
-  },
   "devDependencies": {
     "rimraf": "^2.6.2"
   }

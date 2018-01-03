@@ -1,6 +1,6 @@
 {
   "name": "@nteract/showcase",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "showcase of nteract components",
   "main": "index.js",
   "scripts": {
@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@nteract/commutable": "^3.0.4",
-    "@nteract/core": "^1.0.6",
-    "@nteract/display-area": "^3.1.7",
-    "@nteract/dropdown-menu": "^0.0.5",
-    "@nteract/editor": "^5.0.6",
-    "@nteract/notebook-preview": "^5.0.6",
-    "@nteract/transforms": "^3.1.4",
-    "@nteract/transforms-full": "^4.0.6",
+    "@nteract/core": "^1.0.7",
+    "@nteract/display-area": "^3.1.8",
+    "@nteract/dropdown-menu": "^0.0.6",
+    "@nteract/editor": "^5.0.7",
+    "@nteract/notebook-preview": "^5.0.7",
+    "@nteract/transforms": "^3.1.5",
+    "@nteract/transforms-full": "^4.0.7",
     "next": "^4.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

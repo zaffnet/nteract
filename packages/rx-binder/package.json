@@ -1,6 +1,6 @@
 {
   "name": "rx-binder",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "RxJS bindings to Binder",
   "main": "lib/index.js",
   "scripts": {

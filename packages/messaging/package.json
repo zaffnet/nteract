@@ -1,6 +1,6 @@
 {
   "name": "@nteract/messaging",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Messaging mechanics for nteract apps (jupyter spec)",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
