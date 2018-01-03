@@ -24,7 +24,7 @@ div(h1('Welcome to ', fancy('play'), '!'),
           style=dict(color="white", backgroundColor="black", padding="10px")),
       ' Up above'))
 `,
-    showPanel: true,
+    showPanel: false,
     currentServerId: "",
     currentKernelName: "",
     platform: ""
