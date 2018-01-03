@@ -6,15 +6,5 @@
     "applications/jupyter-extension/nteract_on_jupyter"
   ],
   "version": "independent",
-  "npmClient": "npm",
-  "commands": {
-    "publish": {
-      "ignore": [
-        "packages/desktop/*",
-        "packages/jupyter-extension/*",
-        "applications/desktop/**",
-        "applications/play/**"
-      ]
-    }
-  }
+  "npmClient": "npm"
 }
