@@ -1,5 +1,7 @@
 // @flow
 import * as React from "react";
+import Head from "next/head";
+
 import CodeMirrorEditor from "@nteract/editor";
 import { BinderConsole } from "./consoles";
 import { Display } from "@nteract/display-area";
@@ -77,6 +79,21 @@ class Main extends React.Component<*, *> {
     const { repoValue, gitrefValue, sourceValue } = this.state;
     return (
       <div>
+        <Head>
+          <link rel="dns-prefetch" href="https://mybinder.org" />
+          <link
+            rel="prefetch"
+            href="https://mybinder.org/static/logo.svg?v=f9f0d927b67cc9dc99d788c822ca21c0"
+          />
+          {/*
+            prefetch our little sample graphic for an extra touch of ✨
+          */}
+          <link rel="prefetch" href="https://bit.ly/storybot-vdom" />
+          <link
+            rel="prefetch"
+            href="https://media.giphy.com/media/xUPGcguWZHRC2HyBRS/giphy.gif"
+          />
+        </Head>
         <header>
           <div className="left">
             <img
