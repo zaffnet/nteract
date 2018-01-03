@@ -152,41 +152,39 @@ class DiscoveryGrid extends React.Component<*> {
   render() {
     if (this.props.discovered.length === 0) {
       return (
-        <div>
+        <React.Fragment>
           <Header />
           <Body>
             <h1>No discoveries...</h1>
           </Body>
-        </div>
+        </React.Fragment>
       );
     }
 
     return (
-      <div>
+      <React.Fragment>
         <Header active="discover" />
         <Body>
-          <div>
-            <div className="discoveries">
-              {this.props.discovered
-                ? this.props.discovered.map(item => (
-                    <DiscoveryItem key={item.path} {...item} />
-                  ))
-                : null}
-            </div>
-            <style jsx>{`
-              .discoveries {
-                margin-top: 1rem;
-                margin-left: 1rem;
-                margin-right: 1rem;
-              }
-
-              .discoveries > * {
-                display: block;
-              }
-            `}</style>
+          <div className="discoveries">
+            {this.props.discovered
+              ? this.props.discovered.map(item => (
+                  <DiscoveryItem key={item.path} {...item} />
+                ))
+              : null}
           </div>
+          <style jsx>{`
+            .discoveries {
+              margin-top: 1rem;
+              margin-left: 1rem;
+              margin-right: 1rem;
+            }
+
+            .discoveries > * {
+              display: block;
+            }
+          `}</style>
         </Body>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -51,7 +51,7 @@ const GroupedDirectoryListings = (props: DirectoryListingProps) => {
   ));
 
   return (
-    <div>
+    <React.Fragment>
       <div className="letters">
         {groupNames.map(x => (
           <a href={`#group-${x}`} key={x}>
@@ -71,7 +71,7 @@ const GroupedDirectoryListings = (props: DirectoryListingProps) => {
           padding-left: 6px;
         }
       `}</style>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -82,7 +82,7 @@ const DirectoryListing = (props: DirectoryListingProps) => {
   const contents = props.contents.filter(row => !row.name.startsWith("."));
 
   return (
-    <div>
+    <React.Fragment>
       <div className="directory-listing">
         <table>
           <tbody>
@@ -208,7 +208,7 @@ const DirectoryListing = (props: DirectoryListingProps) => {
           }
         `}
       </style>
-    </div>
+    </React.Fragment>
   );
 };
 

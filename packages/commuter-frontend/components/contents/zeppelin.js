@@ -8,20 +8,83 @@ import { Editor } from "@nteract/core/components";
 const d3 = Object.assign({}, require("d3-dsv"));
 
 const Text = (props: { data: string }) => (
-  <div>
+  <React.Fragment>
     <code>{props.data}</code>
     <style jsx>{`
       code {
         white-space: pre;
       }
     `}</style>
-  </div>
+  </React.Fragment>
 );
 
 const HokeyTable = props => (
-  <div>
-    <style jsx>
-      {`
+  <React.Fragment>
+    <style jsx>{`
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        border-collapse: collapse;
+        border-spacing: 0;
+        empty-cells: show;
+        border: 1px solid #cbcbcb;
+        max-height: 200px;
+        overflow-y: scroll;
+      }
+
+      td,
+      th {
+        padding: 0;
+        border-left: 1px solid #cbcbcb; /*  inner column border */
+        border-width: 0 0 0 1px;
+        font-size: inherit;
+        margin: 0;
+        overflow: visible; /*to make ths where the title is really long work*/
+        padding: 0.5em 1em; /* cell padding */
+      }
+
+      td:first-child,
+      th:first-child {
+        border-left-width: 0;
+      }
+
+      thead {
+        background-color: #e0e0e0;
+        color: #000;
+        text-align: left;
+        vertical-align: bottom;
+      }
+    `}</style>
+    <table>
+      <thead>
+        <tr>
+          {props.columnNames.map(column => (
+            <th key={column.index}>{column.name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {props.rows.map((row, idx) => (
+          <tr key={idx}>
+            {row.map((item, colIdx) => <td key={colIdx}>{item}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </React.Fragment>
+);
+
+const DSVTable = (props: { data: Array<Object> }) => {
+  if (!Array.isArray(props.data) || props.data.length <= 0) {
+    return null;
+  }
+
+  const columnNames = Object.keys(props.data[0]);
+  const rows = props.data;
+
+  return (
+    <React.Fragment>
+      <style jsx>{`
         table {
           border-collapse: collapse;
           border-spacing: 0;
@@ -55,74 +118,7 @@ const HokeyTable = props => (
           text-align: left;
           vertical-align: bottom;
         }
-      `}
-    </style>
-    <table>
-      <thead>
-        <tr>
-          {props.columnNames.map(column => (
-            <th key={column.index}>{column.name}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {props.rows.map((row, idx) => (
-          <tr key={idx}>
-            {row.map((item, colIdx) => <td key={colIdx}>{item}</td>)}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
-
-const DSVTable = (props: { data: Array<Object> }) => {
-  if (!Array.isArray(props.data) || props.data.length <= 0) {
-    return null;
-  }
-
-  const columnNames = Object.keys(props.data[0]);
-  const rows = props.data;
-
-  return (
-    <div>
-      <style jsx>
-        {`
-          table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            border-collapse: collapse;
-            border-spacing: 0;
-            empty-cells: show;
-            border: 1px solid #cbcbcb;
-            max-height: 200px;
-            overflow-y: scroll;
-          }
-
-          td,
-          th {
-            padding: 0;
-            border-left: 1px solid #cbcbcb; /*  inner column border */
-            border-width: 0 0 0 1px;
-            font-size: inherit;
-            margin: 0;
-            overflow: visible; /*to make ths where the title is really long work*/
-            padding: 0.5em 1em; /* cell padding */
-          }
-
-          td:first-child,
-          th:first-child {
-            border-left-width: 0;
-          }
-
-          thead {
-            background-color: #e0e0e0;
-            color: #000;
-            text-align: left;
-            vertical-align: bottom;
-          }
-        `}
-      </style>
+      `}</style>
       <table>
         <thead>
           <tr>
@@ -137,12 +133,12 @@ const DSVTable = (props: { data: Array<Object> }) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </React.Fragment>
   );
 };
 
 const UnsupportedResult = props => (
-  <div>
+  <React.Fragment>
     <h1>UNSUPPORTED ZEPPELIN RESULT</h1>
     <p>
       Post an issue to{" "}
@@ -152,7 +148,7 @@ const UnsupportedResult = props => (
       to let us know about it
     </p>
     <JSONTransform data={props.result} />
-  </div>
+  </React.Fragment>
 );
 
 // Old style Zeppelin
@@ -242,11 +238,9 @@ const Paragraph = props => {
   if (props.result) {
     resultView = <Result result={props.result} />;
   } else if (props.results && Array.isArray(props.results.msg)) {
-    resultView = (
-      <div>
-        {props.results.msg.map((item, idx) => <Message {...item} key={idx} />)}
-      </div>
-    );
+    resultView = props.results.msg.map((item, idx) => (
+      <Message {...item} key={idx} />
+    ));
   }
 
   if (lang === "markdown") {
@@ -263,7 +257,7 @@ const Paragraph = props => {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <Editor language={lang}>{props.text}</Editor>
       <div
         style={{
@@ -273,7 +267,7 @@ const Paragraph = props => {
       >
         {resultView}
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

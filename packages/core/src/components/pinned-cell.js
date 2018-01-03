@@ -44,7 +44,7 @@ export class StickyCellContainer extends React.Component<*, *> {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <div
           className="sticky-cells-placeholder"
           ref={ref => {
@@ -86,7 +86,7 @@ export class StickyCellContainer extends React.Component<*, *> {
             margin: 20px;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }

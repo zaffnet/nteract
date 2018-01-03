@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc } from "electron";
 
@@ -57,7 +57,7 @@ export default class App extends React.PureComponent<Object, Object> {
     // eslint-disable-line class-methods-use-this
     return (
       <Provider store={store}>
-        <div>
+        <React.Fragment>
           <NotebookApp transforms={transforms} displayOrder={displayOrder} />
           <NotificationSystem
             ref={notificationSystem => {
@@ -94,7 +94,7 @@ export default class App extends React.PureComponent<Object, Object> {
               animation-fill-mode: forwards;
             }
           `}</style>
-        </div>
+        </React.Fragment>
       </Provider>
     );
   }

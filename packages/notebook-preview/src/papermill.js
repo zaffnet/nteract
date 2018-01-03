@@ -12,7 +12,7 @@ export const PapermillView = (props: PapermillMetadata) => {
 
   if (props.status === "running") {
     return (
-      <div>
+      <React.Fragment>
         <div className="papermill">Executing with Papermill...</div>
         <style jsx>{`
           .papermill {
@@ -26,7 +26,7 @@ export const PapermillView = (props: PapermillMetadata) => {
             box-sizing: border-box;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
   return null;

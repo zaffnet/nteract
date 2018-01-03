@@ -9,6 +9,8 @@ import {
   Cells
 } from "@nteract/core/components";
 
+import * as React from "react";
+
 import ReactMarkdown from "react-markdown";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
@@ -50,7 +52,7 @@ const cells: CellsStructure = {
   abc: {
     code: "from hogwarts import characters;\ndisplay(characters)",
     outputs: (
-      <div>
+      <React.Fragment>
         <table>
           <thead>
             <tr>
@@ -129,7 +131,7 @@ const cells: CellsStructure = {
             vertical-align: middle;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     ),
     running: false,
     queued: false,

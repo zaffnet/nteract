@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
@@ -84,11 +84,11 @@ function main(rootEl: Element, dataEl: Node | null) {
   // When the data element isn't there, provide an error message
   // Primarily for development usage
   const ErrorPage = (props: { error?: Error }) => (
-    <div>
+    <React.Fragment>
       <h1>ERROR</h1>
       <pre>Unable to parse / process the jupyter config data.</pre>
       {props.error ? props.error.message : null}
-    </div>
+    </React.Fragment>
   );
 
   if (!dataEl) {

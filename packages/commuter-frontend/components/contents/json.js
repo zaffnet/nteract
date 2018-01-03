@@ -24,11 +24,11 @@ export default props => {
     );
   } catch (e) {
     return (
-      <div>
+      <React.Fragment>
         <h1>Failed to parse Zeppelin Notebook</h1>
         <pre>{e.toString()}</pre>
         <code>{this.props.entry.content}</code>
-      </div>
+      </React.Fragment>
     );
   }
 };

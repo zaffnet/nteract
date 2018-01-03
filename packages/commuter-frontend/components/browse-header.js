@@ -76,7 +76,7 @@ class BrowseHeader extends React.Component<*> {
           })}
         </ul>
         {this.props.type === "directory" ? null : (
-          <div>
+          <React.Fragment>
             {this.props.commuterExecuteLink && viewingNotebook ? (
               <a
                 href={`${this.props.commuterExecuteLink}/${path}`}
@@ -88,7 +88,7 @@ class BrowseHeader extends React.Component<*> {
             <a href={filePath} download className="ops">
               Download
             </a>
-          </div>
+          </React.Fragment>
         )}
         <style jsx>{`
           nav {

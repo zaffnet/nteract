@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Router } from "../routes";
 
 class Input extends React.Component {
@@ -25,7 +25,7 @@ class Input extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <div className="centering">
           <input
             placeholder="Gist ID"
@@ -73,7 +73,7 @@ class Input extends React.Component {
             outline: none;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -10,132 +10,120 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
     <div
       className="jsx-3867617067 jsx-3867617067 cell-toolbar"
     >
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+      <button
+        className="jsx-3867617067 jsx-3867617067 executeButton"
+        title="execute cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 executeButton"
-          title="execute cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <TriangleRightOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 6 16"
-                width={6}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <TriangleRightOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 6 16"
+              width={6}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 6 16"
-                    width={6}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0 14l6-6-6-6z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </TriangleRightOcticon>
-          </span>
-        </button>
-      </div>
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+                  }
+                  viewBox="0 0 6 16"
+                  width={6}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 14l6-6-6-6z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </TriangleRightOcticon>
+        </span>
+      </button>
+      <button
+        className="jsx-3867617067 jsx-3867617067 stickyButton"
+        title="pin cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 stickyButton"
-          title="pin cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <PinOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 16 16"
-                width={16}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <PinOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 16 16"
-                    width={16}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </PinOcticon>
-          </span>
-        </button>
-      </div>
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+                  }
+                  viewBox="0 0 16 16"
+                  width={16}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </PinOcticon>
+        </span>
+      </button>
+      <button
+        className="jsx-3867617067 jsx-3867617067 deleteButton"
+        title="delete cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 deleteButton"
-          title="delete cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <TrashOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 12 16"
-                width={12}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <TrashOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 12 16"
+              width={12}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 12 16"
-                    width={12}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </TrashOcticon>
-          </span>
-        </button>
-      </div>
+                  }
+                  viewBox="0 0 12 16"
+                  width={12}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </TrashOcticon>
+        </span>
+      </button>
       <DropdownMenu>
         <div
           className="jsx-2673522894 dropdown"
@@ -217,132 +205,120 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
     <div
       className="jsx-3867617067 jsx-3867617067 cell-toolbar"
     >
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+      <button
+        className="jsx-3867617067 jsx-3867617067 executeButton"
+        title="execute cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 executeButton"
-          title="execute cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <TriangleRightOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 6 16"
-                width={6}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <TriangleRightOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 6 16"
+              width={6}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 6 16"
-                    width={6}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0 14l6-6-6-6z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </TriangleRightOcticon>
-          </span>
-        </button>
-      </div>
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+                  }
+                  viewBox="0 0 6 16"
+                  width={6}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 14l6-6-6-6z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </TriangleRightOcticon>
+        </span>
+      </button>
+      <button
+        className="jsx-3867617067 jsx-3867617067 stickyButton"
+        title="pin cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 stickyButton"
-          title="pin cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <PinOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 16 16"
-                width={16}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <PinOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 16 16"
-                    width={16}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </PinOcticon>
-          </span>
-        </button>
-      </div>
-      <div
-        className="jsx-3867617067 jsx-3867617067"
+                  }
+                  viewBox="0 0 16 16"
+                  width={16}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </PinOcticon>
+        </span>
+      </button>
+      <button
+        className="jsx-3867617067 jsx-3867617067 deleteButton"
+        title="delete cell"
       >
-        <button
-          className="jsx-3867617067 jsx-3867617067 deleteButton"
-          title="delete cell"
+        <span
+          className="jsx-3867617067 jsx-3867617067 octicon"
         >
-          <span
-            className="jsx-3867617067 jsx-3867617067 octicon"
-          >
-            <TrashOcticon>
-              <SVGWrapper
-                height={16}
-                outerProps={Object {}}
-                viewBox="0 0 12 16"
-                width={12}
-              >
-                <span>
-                  <svg
-                    height={16}
-                    style={
-                      Object {
-                        "display": "inline-block",
-                        "fill": "currentColor",
-                        "verticalAlign": "text-bottom",
-                      }
+          <TrashOcticon>
+            <SVGWrapper
+              height={16}
+              outerProps={Object {}}
+              viewBox="0 0 12 16"
+              width={12}
+            >
+              <span>
+                <svg
+                  height={16}
+                  style={
+                    Object {
+                      "display": "inline-block",
+                      "fill": "currentColor",
+                      "verticalAlign": "text-bottom",
                     }
-                    viewBox="0 0 12 16"
-                    width={12}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
-                      fillRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </SVGWrapper>
-            </TrashOcticon>
-          </span>
-        </button>
-      </div>
+                  }
+                  viewBox="0 0 12 16"
+                  width={12}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </SVGWrapper>
+          </TrashOcticon>
+        </span>
+      </button>
       <DropdownMenu>
         <div
           className="jsx-2673522894 dropdown"

@@ -8,11 +8,7 @@ type BodyProps = {
 };
 
 const Body = (props: BodyProps) => {
-  return (
-    <div>
-      <div className="main-container">{props.children}</div>
-    </div>
-  );
+  return props.children;
 };
 
 export default Body;

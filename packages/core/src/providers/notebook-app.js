@@ -243,7 +243,7 @@ export class NotebookApp extends React.PureComponent<Props> {
         const outputExpanded = cell.getIn(["metadata", "outputExpanded"]);
 
         element = (
-          <div>
+          <React.Fragment>
             <Input hidden={sourceHidden}>
               <Prompt counter={cell.get("execution_count")} running={running} />
               <Editor>
@@ -290,7 +290,7 @@ export class NotebookApp extends React.PureComponent<Props> {
                 />
               </Outputs>
             </LatexRenderer>
-          </div>
+          </React.Fragment>
         );
 
         break;
@@ -372,7 +372,7 @@ export class NotebookApp extends React.PureComponent<Props> {
 
   render(): ?React$Element<any> {
     return (
-      <div>
+      <React.Fragment>
         {/* Sticky cells */}
         {this.renderStickyCells()}
         {/* Actual cells! */}
@@ -402,7 +402,7 @@ export class NotebookApp extends React.PureComponent<Props> {
         >
           {}
         </style>
-      </div>
+      </React.Fragment>
     );
   }
 }

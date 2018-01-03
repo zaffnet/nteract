@@ -83,11 +83,11 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
 
   render() {
     if (this.props.statusCode) {
-      return <div>{`Nothing found for ${this.props.viewPath}`}</div>;
+      return `Nothing found for ${this.props.viewPath}`;
     }
 
     return (
-      <div>
+      <React.Fragment>
         <Header />
         <BrowseHeader
           basepath={"/view"}
@@ -110,7 +110,7 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
             `}</style>
           </div>
         </Body>
-      </div>
+      </React.Fragment>
     );
   }
 }
