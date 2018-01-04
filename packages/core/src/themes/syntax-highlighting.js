@@ -4,13 +4,17 @@ module.exports = {
     overflowX: "auto",
     padding: "0.5em",
     background: "var(--cm-background, #fafafa)",
-    color: "var(--cm-color, black)"
+    color: "var(--cm-color, black)",
+    fontFamily: '"Source Code Pro", monospace',
+    // Conform to our CodeMirror-line formatting
+    fontSize: "14px",
+    lineHeight: "1.21429em"
   },
   "hljs-name": {
-    fontWeight: "bold"
+    fontWeight: 600
   },
   "hljs-strong": {
-    fontWeight: "bold"
+    fontWeight: 600
   },
   "hljs-code": {
     fontStyle: "italic",
@@ -68,7 +72,8 @@ module.exports = {
     color: "#d36363"
   },
   "hljs-keyword": {
-    color: "var(--cm-keyword, blue)"
+    color: "var(--cm-keyword, blue)",
+    fontWeight: 700
   },
   "hljs-selector-tag": {
     color: "#fcc28c"
