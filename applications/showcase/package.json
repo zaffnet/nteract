@@ -17,6 +17,7 @@
     "@nteract/notebook-preview": "^5.0.7",
     "@nteract/transforms": "^3.1.5",
     "@nteract/transforms-full": "^4.0.7",
+    "@nteract/transform-dataresource": "^2.0.7",
     "next": "^4.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

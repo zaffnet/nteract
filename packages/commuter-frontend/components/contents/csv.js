@@ -11,6 +11,6 @@ export default class CSVView extends React.Component<*> {
 
   render() {
     const data = d3.csvParse(this.props.entry.content);
-    return <DataTransform data={{ data }} theme="light" />;
+    return <DataTransform data={{ data }} metadata={{}} theme="light" />;
   }
 }
