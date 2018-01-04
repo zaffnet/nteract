@@ -3,8 +3,8 @@ module.exports = {
     display: "block",
     overflowX: "auto",
     padding: "0.5em",
-    background: "var(--cm-background)",
-    color: "var(--cm-color)"
+    background: "var(--cm-background, #fafafa)",
+    color: "var(--cm-color, black)"
   },
   "hljs-name": {
     fontWeight: "bold"
@@ -23,10 +23,10 @@ module.exports = {
     color: "#170"
   },
   "hljs-variable": {
-    color: "var(--cm-variable)"
+    color: "var(--cm-variable, black)"
   },
   "hljs-template-variable": {
-    color: "var(--cm-variable)"
+    color: "var(--cm-variable, black)"
   },
   "hljs-selector-id": {
     color: "#ade5fc"
@@ -35,7 +35,7 @@ module.exports = {
     color: "#ade5fc"
   },
   "hljs-string": {
-    color: "var(--cm-string)"
+    color: "var(--cm-string, #a22)"
   },
   "hljs-bullet": {
     color: "#d36363"
@@ -56,19 +56,19 @@ module.exports = {
     color: "#090"
   },
   "hljs-built_in": {
-    color: "var(--cm-builtin)"
+    color: "var(--cm-builtin, #077)"
   },
   "hljs-builtin-name": {
-    color: "var(--cm-builtin)"
+    color: "var(--cm-builtin, #077)"
   },
   "hljs-number": {
-    color: "var(--cm-number)"
+    color: "var(--cm-number, #3a3)"
   },
   "hljs-symbol": {
     color: "#d36363"
   },
   "hljs-keyword": {
-    color: "var(--cm-keyword)"
+    color: "var(--cm-keyword, blue)"
   },
   "hljs-selector-tag": {
     color: "#fcc28c"
@@ -77,7 +77,7 @@ module.exports = {
     color: "#fcc28c"
   },
   "hljs-comment": {
-    color: "var(--cm-comment)"
+    color: "var(--cm-comment, #a86)"
   },
   "hljs-deletion": {
     color: "#333",
@@ -87,10 +87,10 @@ module.exports = {
     color: "#c6b4f0"
   },
   "hljs-link": {
-    color: "var(--cm-link)"
+    color: "var(--cm-link, #3a3)"
   },
   "hljs-meta": {
-    color: "var(--cm-meta)"
+    color: "var(--cm-meta, #555)"
   },
   "hljs-addition": {
     backgroundColor: "#a2fca2",
