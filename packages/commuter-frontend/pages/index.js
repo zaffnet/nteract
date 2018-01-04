@@ -17,12 +17,12 @@ class IndexPage extends React.Component<*> {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         Redirecting to{" "}
         <Link href="/view">
           <a>/view</a>
         </Link>
-      </div>
+      </React.Fragment>
     );
   }
 }

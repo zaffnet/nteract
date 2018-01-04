@@ -62,11 +62,7 @@ class File extends React.Component<*> {
       case "md":
       case "markdown":
       case "rmd":
-        return (
-          <div>
-            <MarkdownTransform data={this.props.entry.content} />
-          </div>
-        );
+        return <MarkdownTransform data={this.props.entry.content} />;
       case "gif":
       case "jpeg":
       case "jpg":

@@ -1,5 +1,5 @@
 /* @flow */
-import React from "react";
+import * as React from "react";
 
 type Props = {
   data: string,
@@ -21,10 +21,10 @@ class ModelDebug extends React.Component<Props> {
     // show all the models
     const model = models.modelID || models;
     return (
-      <div>
+      <React.Fragment>
         <h1>{JSON.stringify(data, null, 2)}</h1>
         <pre>{model ? JSON.stringify(model, null, 2) : null}</pre>
-      </div>
+      </React.Fragment>
     );
   }
 }

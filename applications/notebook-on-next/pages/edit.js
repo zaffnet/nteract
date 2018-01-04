@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import * as React from "react";
 import fetch from "isomorphic-fetch";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
 import { NotebookApp } from "@nteract/core/providers";
@@ -30,7 +30,7 @@ async function fetchFromGist(gistId): ?Object {
 }
 
 const Error = () => (
-  <div>
+  <React.Fragment>
     <style jsx>{`
       position: absolute;
       top: 50%;
@@ -40,7 +40,7 @@ const Error = () => (
       font-family: Source Sans Pro, Helvetica, sans-serif;
     `}</style>
     Could not fetch notebook.
-  </div>
+  </React.Fragment>
 );
 
 export default class Edit extends React.Component<*> {
@@ -68,7 +68,7 @@ export default class Edit extends React.Component<*> {
   render() {
     if (!this.props.serverNotebook) return <Error />;
     return (
-      <div>
+      <React.Fragment>
         <style
           dangerouslySetInnerHTML={{
             __html: `@media print {
@@ -127,7 +127,7 @@ export default class Edit extends React.Component<*> {
             <NotebookApp />;
           </div>
         </Provider>
-      </div>
+      </React.Fragment>
     );
   }
 }

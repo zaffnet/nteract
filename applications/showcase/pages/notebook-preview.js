@@ -78,7 +78,7 @@ class StaticNotebookApp extends React.Component<
   render() {
     if (this.state.notebook) {
       return (
-        <div>
+        <React.Fragment>
           <button onClick={() => this.toggleTheme()} className="theme-toggle">
             Toggle Theme
           </button>
@@ -130,10 +130,10 @@ class StaticNotebookApp extends React.Component<
               background-color: "black";
             }
           `}</style>
-        </div>
+        </React.Fragment>
       );
     }
-    return <div>loading...</div>;
+    return "loading...";
   }
 }
 

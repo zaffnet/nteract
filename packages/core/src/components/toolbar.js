@@ -80,40 +80,34 @@ export default class Toolbar extends PureComponent<ToolbarProps> {
       <div className="cell-toolbar-mask">
         <div className="cell-toolbar">
           {type !== "markdown" && (
-            <div>
-              <button
-                onClick={executeCell}
-                title="execute cell"
-                className="executeButton"
-              >
-                <span className="octicon">
-                  <TriangleRightOcticon />
-                </span>
-              </button>
-            </div>
+            <button
+              onClick={executeCell}
+              title="execute cell"
+              className="executeButton"
+            >
+              <span className="octicon">
+                <TriangleRightOcticon />
+              </span>
+            </button>
           )}
-          <div>
-            <button
-              onClick={toggleStickyCell}
-              title="pin cell"
-              className="stickyButton"
-            >
-              <span className="octicon">
-                <PinOcticon />
-              </span>
-            </button>
-          </div>
-          <div>
-            <button
-              onClick={removeCell}
-              title="delete cell"
-              className="deleteButton"
-            >
-              <span className="octicon">
-                <TrashOcticon />
-              </span>
-            </button>
-          </div>
+          <button
+            onClick={toggleStickyCell}
+            title="pin cell"
+            className="stickyButton"
+          >
+            <span className="octicon">
+              <PinOcticon />
+            </span>
+          </button>
+          <button
+            onClick={removeCell}
+            title="delete cell"
+            className="deleteButton"
+          >
+            <span className="octicon">
+              <TrashOcticon />
+            </span>
+          </button>
           <DropdownMenu>
             <DropdownTrigger>
               <button title="show additional actions">

@@ -4,7 +4,7 @@ import * as React from "react";
 class BinderLogo extends React.Component<*, *> {
   render() {
     return (
-      <div>
+      <React.Fragment>
         <a className="anchor" href="https://mybinder.org" target="_blank">
           <img
             src="https://mybinder.org/static/logo.svg?v=f9f0d927b67cc9dc99d788c822ca21c0"
@@ -18,7 +18,7 @@ class BinderLogo extends React.Component<*, *> {
             margin: 0 0 7px 0px;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -28,7 +28,7 @@ class BinderTextInput extends React.Component<*, *> {
     const { onChange, value, id, labelText, name } = this.props;
 
     return (
-      <div>
+      <React.Fragment>
         <fieldset className="binder">
           <label htmlFor={id}>
             <span>{labelText}</span>
@@ -53,7 +53,7 @@ class BinderTextInput extends React.Component<*, *> {
             display: inline-block;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -62,7 +62,7 @@ class BinderForm extends React.Component<*, *> {
   render() {
     const { onSubmit } = this.props;
     return (
-      <div className="binder-ui-wrapper">
+      <React.Fragment>
         <form onSubmit={onSubmit} className="form">
           {this.props.children}
           <fieldset className="binder">
@@ -95,7 +95,7 @@ class BinderForm extends React.Component<*, *> {
             margin-left: 0px;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }

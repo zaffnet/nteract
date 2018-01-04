@@ -1,6 +1,6 @@
 /* @flow */
 /* eslint class-methods-use-this: 0 */
-import React from "react";
+import * as React from "react";
 import L from "leaflet";
 
 type Props = {
@@ -109,7 +109,7 @@ export class GeoJSONTransform extends React.Component<Props> {
 
   render(): ?React$Element<any> {
     return (
-      <div>
+      <React.Fragment>
         <link
           rel="stylesheet"
           href="../node_modules/leaflet/dist/leaflet.css"
@@ -120,7 +120,7 @@ export class GeoJSONTransform extends React.Component<Props> {
           }}
           style={{ height: 600, width: "100%" }}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

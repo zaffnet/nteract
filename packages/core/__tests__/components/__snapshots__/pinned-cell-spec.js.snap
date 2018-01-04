@@ -32,12 +32,10 @@ exports[`PinnedPlaceHolderCell has a snapshot test at least 1`] = `
 `;
 
 exports[`Sticky Cell Container creates a container when there are children 1`] = `
-<div
-  className="jsx-719937883 jsx-1455849675"
->
+Array [
   <div
     className="jsx-719937883 jsx-1455849675 sticky-cells-placeholder"
-  />
+  />,
   <div
     className="jsx-719937883 jsx-1455849675 sticky-cell-container"
   >
@@ -47,8 +45,8 @@ exports[`Sticky Cell Container creates a container when there are children 1`] =
     <div>
       cell two
     </div>
-  </div>
-</div>
+  </div>,
+]
 `;
 
 exports[`Sticky Cell Container returns null when there are no children 1`] = `null`;

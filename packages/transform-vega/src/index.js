@@ -1,5 +1,5 @@
 /* @flow */
-import React from "react";
+import * as React from "react";
 
 const merge = require("lodash").merge;
 const vegaEmbed = require("vega-embed");
@@ -81,14 +81,14 @@ export class VegaEmbed extends React.Component<EmbedProps> {
   render(): ?React$Element<any> {
     // Note: We hide vega-actions since they won't work in our environment
     return (
-      <div>
+      <React.Fragment>
         <style>{".vega-actions{ display: none; }"}</style>
         <div
           ref={el => {
             this.el = el;
           }}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

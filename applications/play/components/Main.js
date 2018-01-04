@@ -78,7 +78,7 @@ class Main extends React.Component<*, *> {
     } = this.props;
     const { repoValue, gitrefValue, sourceValue } = this.state;
     return (
-      <div>
+      <React.Fragment>
         <Head>
           <link rel="dns-prefetch" href="https://mybinder.org" />
           <link
@@ -285,7 +285,7 @@ class Main extends React.Component<*, *> {
             margin: 0;
           }
         `}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }
