@@ -306,7 +306,7 @@ function focusPreviousCell(
   return state.set("cellFocused", cellOrder.get(nextIndex));
 }
 
-type FocusCellEditorAction = { type: "FOCUS_CELL_EDITOR", id: CellID };
+type FocusCellEditorAction = { type: "FOCUS_CELL_EDITOR", id: CellID | null };
 function focusCellEditor(state: DocumentState, action: FocusCellEditorAction) {
   return state.set("editorFocused", action.id);
 }

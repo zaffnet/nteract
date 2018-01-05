@@ -14,7 +14,8 @@ type Props = {
   source: string,
   focusAbove: () => void,
   focusBelow: () => void,
-  focusEditor: Function,
+  focusEditor: () => void,
+  unfocusEditor: () => void,
   cellFocused: boolean,
   editorFocused: boolean,
   children: React$Element<*>
@@ -50,6 +51,7 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     focusAbove: () => {},
     focusBelow: () => {},
     focusEditor: () => {},
+    unfocusEditor: () => {},
     source: ""
   };
 
@@ -61,6 +63,7 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     (this: any).openEditor = this.openEditor.bind(this);
     (this: any).editorKeyDown = this.editorKeyDown.bind(this);
     (this: any).renderedKeyDown = this.renderedKeyDown.bind(this);
+    (this: any).closeEditor = this.closeEditor.bind(this);
   }
 
   componentDidMount(): void {
@@ -103,8 +106,13 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === "Enter") {
-      this.setState({ view: true });
+      this.closeEditor();
     }
+  }
+
+  closeEditor(): void {
+    this.setState({ view: true });
+    this.props.unfocusEditor();
   }
 
   openEditor(): void {
@@ -115,12 +123,12 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
   /**
    * Handles when a keydown event occurs on the rendered MD cell
    */
-  renderedKeyDown(e: SyntheticKeyboardEvent<*>): boolean {
+  renderedKeyDown(e: SyntheticKeyboardEvent<*>) {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === "Enter") {
-      this.setState({ view: true });
-      return false;
+      this.closeEditor();
+      return;
     }
 
     switch (e.key) {
@@ -133,10 +141,10 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
       case "Enter":
         this.openEditor();
         e.preventDefault();
-        return false;
+        return;
       default:
     }
-    return true;
+    return;
   }
 
   render(): ?React$Element<any> {
