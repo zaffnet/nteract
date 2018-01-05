@@ -3,7 +3,6 @@ flow-typed
 types
 
 [options]
-module.ignore_non_literal_requires=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 module.name_mapper='^@nteract/(.*)$' -> '<PROJECT_ROOT>/packages/$1/src/'
 module.name_mapper='^ansi-to-react$' -> '<PROJECT_ROOT>/packages/ansi-to-react/src/'
