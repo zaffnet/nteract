@@ -36,7 +36,6 @@ import { DocumentRecord, CommsRecord } from "@nteract/types/core/records";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
-    // $FlowFixMe: Notebook should be a typed record.
     notebook
       .get("cellOrder")
       .reduce(
@@ -97,8 +96,7 @@ export function dummyStore(config: *) {
       stickyCells: new Immutable.Set(),
       cellFocused:
         config && config.codeCellCount > 1
-          ? // $FlowFixMe: Notebook should be typed.
-            dummyNotebook.get("cellOrder").get(1)
+          ? dummyNotebook.get("cellOrder").get(1)
           : null,
       filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
