@@ -81,7 +81,7 @@ export default class TimeAgo extends React.Component<Props, void> {
     now: () => Date.now()
   };
 
-  timeoutId: ?number;
+  timeoutId: ?TimeoutID;
   isStillMounted: boolean = false;
 
   tick = (refresh: ?boolean): void => {

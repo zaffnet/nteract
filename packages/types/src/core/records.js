@@ -156,7 +156,7 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
 });
 export type AppRecord = RecordOf<AppRecordProps>;
 
-export type Document = {
+export type DocumentState = {
   notebook: Notebook,
   transient: Immutable.Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)

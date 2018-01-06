@@ -60,6 +60,7 @@ export default function configureStore(config: any) {
 
   // $FlowFixMe: Address issue with store
   return createStore(
+    // $FlowFixMe: Types incompatible, we've got to align what our app stores will be like
     rootReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))

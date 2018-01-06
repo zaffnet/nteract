@@ -9,7 +9,8 @@ import * as constants from "../constants";
 
 import type {
   LanguageInfoMetadata,
-  KernelInfo
+  KernelInfo,
+  DocumentState
 } from "@nteract/types/core/records";
 
 import { DocumentRecord } from "@nteract/types/core/records";
@@ -45,10 +46,6 @@ type Pager = {
 // Note: number is only allowed when indexing into a List
 type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
-
-// It's really an Immutable.Record<Document>, we'll do this for now until a fix
-// https://github.com/facebook/immutable-js/issues/998
-type DocumentState = Immutable.Map<string, any>; // & Document;
 
 type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
 
