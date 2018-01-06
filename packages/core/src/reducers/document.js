@@ -125,14 +125,11 @@ type SetNotebookAction = {
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const { notebook, filename } = action;
 
-  return (
-    state
-      .set("notebook", notebook)
-      .update("filename", oldFilename => (filename ? filename : oldFilename))
-      .set("cellFocused", notebook.getIn(["cellOrder", 0]))
-      // $FlowFixMe: Intersection type error.
-      .setIn(["transient", "cellMap"], new Immutable.Map())
-  );
+  return state
+    .set("notebook", notebook)
+    .update("filename", oldFilename => (filename ? filename : oldFilename))
+    .set("cellFocused", notebook.getIn(["cellOrder", 0]))
+    .setIn(["transient", "cellMap"], new Immutable.Map());
 }
 
 type SetNotebookCheckpointAction = {
@@ -227,7 +224,6 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
   return keyPaths
     .reduce(
       (currState: DocumentState, kp: KeyPath) =>
-        // $FlowFixMe: setIn is failing here.
         currState.setIn(kp, immutableOutput),
       state
     )
@@ -248,7 +244,6 @@ function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
     new Immutable.List()
   );
   return keyPaths.reduce(
-    // $FlowFixMe: setIn call fails.
     (currState: DocumentState, kp: KeyPath) => currState.setIn(kp, immOutput),
     state
   );
@@ -347,7 +342,6 @@ function toggleStickyCell(
   action: ToggleStickyCellAction
 ) {
   const { id } = action;
-  // $FlowFixMe: Use a typed DocumentRecord will fix this
   const stickyCells: Immutable.Set<CellID> = state.get("stickyCells");
   if (stickyCells.has(id)) {
     return state.set("stickyCells", stickyCells.delete(id));
@@ -477,7 +471,6 @@ type SetInCellAction = {
   value: any
 };
 function setInCell(state: DocumentState, action: SetInCellAction) {
-  // $FlowFixMe: Probably some issue related to the reducer setup
   return state.setIn(
     ["notebook", "cellMap", action.id].concat(action.path),
     action.value
