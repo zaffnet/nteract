@@ -126,7 +126,7 @@ export type Notebook = {
 // Basically, anything that's only for desktop should have its own record & reducers
 type AppRecordProps = {
   executionState: "not connected" | "busy" | "idle" | "starting",
-  token: ?string,
+  githubToken: ?string,
   channels: ?Channels,
   spawn: ?ChildProcess,
   connectionFile: ?string,
@@ -141,7 +141,7 @@ type AppRecordProps = {
 };
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   executionState: "not connected",
-  token: null, // Electron specific (ish...)
+  githubToken: null, // Electron specific (ish...)
   channels: null, // Electron, though we hope to adapt these...
   spawn: null, // Very Electron
   connectionFile: null, // Electron

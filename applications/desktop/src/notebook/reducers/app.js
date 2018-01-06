@@ -8,6 +8,7 @@ import { makeAppRecord } from "@nteract/types/core/records";
 
 import type { Channels } from "@nteract/types/channels";
 
+// TODO: This should be coming from @nteract/types/core/records
 declare class AppState {
   channels: Channels;
   spawn: ChildProcess;
@@ -16,7 +17,7 @@ declare class AppState {
   kernelSpecDisplayName: string;
   kernelSpec: Object;
   executionState: string;
-  token: string;
+  githubToken: string;
   notificationSystem: Object;
   set(string, any): AppState;
   withMutations(any): AppState;
@@ -106,7 +107,7 @@ function setNotificationsSystem(
 type SetGithubTokenAction = { type: "SET_GITHUB_TOKEN", githubToken: string };
 function setGithubToken(state: AppState, action: SetGithubTokenAction) {
   const { githubToken } = action;
-  return state.set("token", githubToken);
+  return state.set("githubToken", githubToken);
 }
 
 type ExitAction = { type: "EXIT" };

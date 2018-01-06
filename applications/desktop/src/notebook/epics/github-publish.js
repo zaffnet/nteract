@@ -166,7 +166,7 @@ export function handleGistAction(store: any, action: any) {
   const notificationSystem = state.app.get("notificationSystem");
   let publishAsUser = false;
   if (action.type === "PUBLISH_USER_GIST") {
-    const githubToken = state.app.get("token");
+    const githubToken = state.app.get("githubToken");
     github.authenticate({ type: "oauth", token: githubToken });
     publishAsUser = true;
   }
