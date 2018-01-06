@@ -1,6 +1,7 @@
 // @flow
 
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
+/* eslint jsx-a11y/no-noninteractive-tabindex: 0 */
 
 import React from "react";
 import CommonMark from "commonmark";
@@ -12,9 +13,10 @@ import { Outputs, PromptBuffer, Input } from "./";
 
 type Props = {
   source: string,
+  focusEditor: () => void,
+  unfocusEditor: () => void,
   focusAbove: () => void,
   focusBelow: () => void,
-  focusEditor: Function,
   cellFocused: boolean,
   editorFocused: boolean,
   children: React$Element<*>
@@ -32,6 +34,8 @@ const parser = new CommonMark.Parser();
 const renderer = new MarkdownRenderer();
 const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
+const noop = function() {};
+
 // TODO: Consider whether this component is really something like two components:
 //
 //       * a behavioral component that tracks focus (possibly already covered elsewhere)
@@ -47,9 +51,10 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
   static defaultProps = {
     cellFocused: false,
     editorFocused: false,
-    focusAbove: () => {},
-    focusBelow: () => {},
-    focusEditor: () => {},
+    focusAbove: noop,
+    focusBelow: noop,
+    focusEditor: noop,
+    unfocusEditor: noop,
     source: ""
   };
 
@@ -61,6 +66,7 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     (this: any).openEditor = this.openEditor.bind(this);
     (this: any).editorKeyDown = this.editorKeyDown.bind(this);
     (this: any).renderedKeyDown = this.renderedKeyDown.bind(this);
+    (this: any).closeEditor = this.closeEditor.bind(this);
   }
 
   componentDidMount(): void {
@@ -95,16 +101,16 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
    * Handles when a keydown event occurs on the unrendered MD cell
    */
   editorKeyDown(e: SyntheticKeyboardEvent<*>): void {
-    // TODO: ctrl-enter will set the state view mode, _however_
-    //       the focus is still set from above the editor
-    //       Suggestion: we need a `this.props.unfocusEditor`
-    //       It's either that or we should be setting `view` from
-    //       the outside
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === "Enter") {
-      this.setState({ view: true });
+      this.closeEditor();
     }
+  }
+
+  closeEditor(): void {
+    this.setState({ view: true });
+    this.props.unfocusEditor();
   }
 
   openEditor(): void {
@@ -115,28 +121,32 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
   /**
    * Handles when a keydown event occurs on the rendered MD cell
    */
-  renderedKeyDown(e: SyntheticKeyboardEvent<*>): boolean {
+  renderedKeyDown(e: SyntheticKeyboardEvent<*>) {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === "Enter") {
-      this.setState({ view: true });
-      return false;
+      if (this.state.view) {
+        return;
+      }
+      // This likely isn't even possible, as we _should_ be in view mode
+      this.closeEditor();
+      return;
     }
 
     switch (e.key) {
+      case "Enter":
+        this.openEditor();
+        e.preventDefault();
+        return;
       case "ArrowUp":
         this.props.focusAbove();
         break;
       case "ArrowDown":
         this.props.focusBelow();
         break;
-      case "Enter":
-        this.openEditor();
-        e.preventDefault();
-        return false;
       default:
     }
-    return true;
+    return;
   }
 
   render(): ?React$Element<any> {
@@ -148,6 +158,10 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
         onKeyDown={this.renderedKeyDown}
         ref={rendered => {
           this.rendered = rendered;
+        }}
+        tabIndex={this.props.cellFocused ? 0 : null}
+        style={{
+          outline: "none"
         }}
       >
         <Outputs>

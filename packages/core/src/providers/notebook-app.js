@@ -222,6 +222,11 @@ export class NotebookApp extends React.PureComponent<Props> {
     const focusEditor = () => {
       this.context.store.dispatch(focusCellEditor(id));
     };
+
+    const unfocusEditor = () => {
+      this.context.store.dispatch(focusCellEditor(null));
+    };
+
     const focusAboveCell = () => {
       this.context.store.dispatch(focusPreviousCell(id));
       this.context.store.dispatch(focusPreviousCellEditor(id));
@@ -302,6 +307,7 @@ export class NotebookApp extends React.PureComponent<Props> {
             focusEditor={focusEditor}
             cellFocused={cellFocused}
             editorFocused={editorFocused}
+            unfocusEditor={unfocusEditor}
             source={cell.get("source", "")}
           >
             <Editor>

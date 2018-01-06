@@ -195,7 +195,7 @@ export function focusPreviousCell(id: string) {
   };
 }
 
-export function focusCellEditor(id: string) {
+export function focusCellEditor(id: string | null) {
   return {
     type: constants.FOCUS_CELL_EDITOR,
     id
