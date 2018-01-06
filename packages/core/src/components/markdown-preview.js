@@ -125,6 +125,10 @@ export default class MarkdownCell extends React.PureComponent<any, State> {
     const shift = e.shiftKey;
     const ctrl = e.ctrlKey;
     if ((shift || ctrl) && e.key === "Enter") {
+      if (this.state.view) {
+        return;
+      }
+      // This likely isn't even possible, as we _should_ be in view mode
       this.closeEditor();
       return;
     }
