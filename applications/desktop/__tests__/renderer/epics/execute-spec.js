@@ -151,7 +151,7 @@ describe("executeCellEpic", () => {
         executionState: "idle",
         channels: "errorInExecuteCellObservable",
         notificationSystem: { addNotification: jest.fn() },
-        token: "blah"
+        githubToken: "blah"
       }
     }
   };

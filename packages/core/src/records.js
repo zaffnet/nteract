@@ -124,7 +124,7 @@ export type Notebook = {
 export const AppRecord = Immutable.Record({
   executionState: "not connected",
 
-  token: null, // Electron specific (ish...)
+  githubToken: null, // Belongs in a separate state tree
   channels: null, // Electron, though we hope to adapt these...
   spawn: null, // Very Electron
   connectionFile: null, // Electron

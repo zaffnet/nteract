@@ -185,7 +185,7 @@ describe("setGithubToken", () => {
     const originalState = {
       app: makeAppRecord({
         github: new Github(),
-        token: null
+        githubToken: null
       })
     };
 
@@ -194,7 +194,7 @@ describe("setGithubToken", () => {
     const state = reducers(originalState, action);
     // this is a crappy way of testing this
     expect(state.app.github).not.toBeNull();
-    expect(state.app.token).not.toBeNull();
+    expect(state.app.githubToken).not.toBeNull();
   });
 });
 
