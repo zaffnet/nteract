@@ -9,7 +9,8 @@ import * as constants from "../constants";
 
 import type {
   LanguageInfoMetadata,
-  KernelInfo
+  KernelInfo,
+  DocumentState
 } from "@nteract/types/core/records";
 
 import { DocumentRecord } from "@nteract/types/core/records";
@@ -45,10 +46,6 @@ type Pager = {
 // Note: number is only allowed when indexing into a List
 type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
-
-// It's really an Immutable.Record<Document>, we'll do this for now until a fix
-// https://github.com/facebook/immutable-js/issues/998
-type DocumentState = Immutable.Map<string, any>; // & Document;
 
 type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
 
@@ -128,14 +125,11 @@ type SetNotebookAction = {
 function setNotebook(state: DocumentState, action: SetNotebookAction) {
   const { notebook, filename } = action;
 
-  return (
-    state
-      .set("notebook", notebook)
-      .update("filename", oldFilename => (filename ? filename : oldFilename))
-      .set("cellFocused", notebook.getIn(["cellOrder", 0]))
-      // $FlowFixMe: Intersection type error.
-      .setIn(["transient", "cellMap"], new Immutable.Map())
-  );
+  return state
+    .set("notebook", notebook)
+    .update("filename", oldFilename => (filename ? filename : oldFilename))
+    .set("cellFocused", notebook.getIn(["cellOrder", 0]))
+    .setIn(["transient", "cellMap"], new Immutable.Map());
 }
 
 type SetNotebookCheckpointAction = {
@@ -230,7 +224,6 @@ function appendOutput(state: DocumentState, action: AppendOutputAction) {
   return keyPaths
     .reduce(
       (currState: DocumentState, kp: KeyPath) =>
-        // $FlowFixMe: setIn is failing here.
         currState.setIn(kp, immutableOutput),
       state
     )
@@ -251,7 +244,6 @@ function updateDisplay(state: DocumentState, action: UpdateDisplayAction) {
     new Immutable.List()
   );
   return keyPaths.reduce(
-    // $FlowFixMe: setIn call fails.
     (currState: DocumentState, kp: KeyPath) => currState.setIn(kp, immOutput),
     state
   );
@@ -350,7 +342,6 @@ function toggleStickyCell(
   action: ToggleStickyCellAction
 ) {
   const { id } = action;
-  // $FlowFixMe: Use a typed DocumentRecord will fix this
   const stickyCells: Immutable.Set<CellID> = state.get("stickyCells");
   if (stickyCells.has(id)) {
     return state.set("stickyCells", stickyCells.delete(id));
@@ -480,7 +471,6 @@ type SetInCellAction = {
   value: any
 };
 function setInCell(state: DocumentState, action: SetInCellAction) {
-  // $FlowFixMe: Probably some issue related to the reducer setup
   return state.setIn(
     ["notebook", "cellMap", action.id].concat(action.path),
     action.value
