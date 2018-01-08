@@ -13,6 +13,7 @@
     "access": "public",
     "dry-run": true
   },
+  "private": true,
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "devDependencies": {
