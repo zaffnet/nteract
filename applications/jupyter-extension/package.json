@@ -8,12 +8,12 @@
     "prebuild:python": "rimraf dist",
     "publish": "echo 'not really publishing'"
   },
-  "repository": "https://github.com/nteract/nteract/tree/master/applications/jupyter-extension",
   "publishConfig": {
     "access": "public",
     "dry-run": true
   },
   "private": true,
+  "repository": "https://github.com/nteract/nteract/tree/master/applications/jupyter-extension",
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "devDependencies": {

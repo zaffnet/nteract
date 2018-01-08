@@ -54,15 +54,11 @@
     "precommit": "lint-staged",
     "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
-    "publish": "lerna run publish --ignore nteract --ignore @nteract/commuter-frontend --ignore @nteract/commuter",
-    "prepublish:commuter": "npm run build:packages",
-    "publish:commuter": "lerna run publish --scope @nteract/commuter-frontend --scope @nteract/commuter",
+    "publish": "lerna run publish",
     "prettify": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,flow-typed}/**'",
     "pack": "lerna run pack --scope nteract --stream",
     "dist": "lerna run dist --scope nteract --stream",
-    "dist:all": "lerna run dist:all --scope nteract --stream",
-    "publish:desktop": "lerna run publish --scope nteract --stream",
-    "publish:desktop:all": "lerna run publish:all --scope nteract --stream"
+    "dist:all": "lerna run dist:all --scope nteract --stream"
   },
   "jest": {
     "setupFiles": [

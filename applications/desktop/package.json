@@ -32,9 +32,12 @@
     "build:watch": "npm run build -- --watch",
     "pack": "npm run clean && webpack --config webpack.prod.js && electron-builder --dir",
     "dist": "npm run clean && webpack --config webpack.prod.js && electron-builder",
-    "publish": "npm run clean && webpack --config webpack.prod.js && electron-builder -p always",
+    "// publish:one will only build for the current platform": "echo its for triaging broken releases",
+    "publish:one": "npm run clean && webpack --config webpack.prod.js && electron-builder -p always",
+    "publish": "npm run publish:one -- -mlw",
     "dist:all": "npm run dist -- -mlw",
-    "publish:all": "npm run publish -- -mlw"
+    "// publish:all is basically deprecated": "echo yeah",
+    "publish:all": "npm run publish"
   },
   "build": {
     "appId": "io.nteract.nteract",
