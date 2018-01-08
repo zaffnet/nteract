@@ -52,7 +52,7 @@
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js",
     "precommit": "lint-staged",
-    "verifyBeforePublish":  "lerna run prepublishOnly && lerna run prepare",
+    "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
     "publish": "lerna run publish --ignore nteract --ignore @nteract/commuter-frontend --ignore @nteract/commuter",
     "prepublish:commuter": "npm run build:packages",
