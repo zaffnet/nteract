@@ -4,7 +4,8 @@ const path = require("path");
 
 const nodeModules = {
   jmp: "commonjs jmp",
-  canvas: "commonjs canvas"
+  canvas: "commonjs canvas",
+  "canvas-prebuilt": "commonjs canvas-prebuilt"
 };
 
 const mainConfig = {

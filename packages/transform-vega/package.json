@@ -22,7 +22,8 @@
   "dependencies": {
     "d3": "^3.5.17",
     "lodash": "^4.17.4",
-    "@nteract/vega-embed2": "^1.0.0"
+    "@nteract/vega-embed2": "^1.0.0",
+    "vega-embed": "^3.0.0-rc7"
   },
   "peerDependencies": {
     "react": "^16.2.0"
