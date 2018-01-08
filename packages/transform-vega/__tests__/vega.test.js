@@ -2,7 +2,7 @@ import React from "react";
 
 import { shallow, mount } from "enzyme";
 
-import { Vega, VegaLite, VegaEmbed } from "../src/";
+import { Vega2, Vega3, VegaLite1, VegaLite2, VegaEmbed } from "../src/";
 
 const cars = require("vega-lite/data/cars.json");
 
@@ -20,21 +20,43 @@ const spec = {
   }
 };
 
-describe("Vega", () => {
+describe("Vega2", () => {
   it("renders VegaEmbed with embedMode vega", () => {
-    const wrapper = shallow(<Vega data={spec} />);
+    const wrapper = shallow(<Vega2 data={spec} />);
 
     expect(wrapper.name()).toEqual("VegaEmbed");
     expect(wrapper.props().embedMode).toEqual("vega");
+    expect(wrapper.props().version).toEqual("vega2");
   });
 });
 
-describe("VegaLite", () => {
+describe("Vega3", () => {
+  it("renders VegaEmbed with embedMode vega", () => {
+    const wrapper = shallow(<Vega3 data={spec} />);
+
+    expect(wrapper.name()).toEqual("VegaEmbed");
+    expect(wrapper.props().embedMode).toEqual("vega");
+    expect(wrapper.props().version).toEqual("vega3");
+  });
+});
+
+describe("VegaLite1", () => {
   it("renders VegaEmbed with embedMode vega-lite", () => {
-    const wrapper = shallow(<VegaLite data={spec} />);
+    const wrapper = shallow(<VegaLite1 data={spec} />);
 
     expect(wrapper.name()).toEqual("VegaEmbed");
     expect(wrapper.props().embedMode).toEqual("vega-lite");
+    expect(wrapper.props().version).toEqual("vega2");
+  });
+});
+
+describe("VegaLite2", () => {
+  it("renders VegaEmbed with embedMode vega-lite", () => {
+    const wrapper = shallow(<VegaLite2 data={spec} />);
+
+    expect(wrapper.name()).toEqual("VegaEmbed");
+    expect(wrapper.props().embedMode).toEqual("vega-lite");
+    expect(wrapper.props().version).toEqual("vega3");
   });
 });
 

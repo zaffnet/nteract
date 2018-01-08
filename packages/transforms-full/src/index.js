@@ -11,7 +11,7 @@ import ModelDebug from "@nteract/transform-model-debug";
 
 import DataResourceTransform from "@nteract/transform-dataresource";
 
-import { VegaLite, Vega } from "@nteract/transform-vega";
+import { VegaLite1, VegaLite2, Vega2, Vega3 } from "@nteract/transform-vega";
 
 import {
   standardTransforms,
@@ -26,8 +26,10 @@ const additionalTransforms = [
   PlotlyNullTransform,
   PlotlyTransform,
   GeoJSONTransform,
-  VegaLite,
-  Vega
+  VegaLite1,
+  VegaLite2,
+  Vega2,
+  Vega3
 ];
 
 const { transforms, displayOrder } = additionalTransforms.reduce(

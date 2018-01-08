@@ -21,7 +21,7 @@ import type { Content } from "./types";
 
 import DataResourceTransform from "@nteract/transform-dataresource";
 
-import { VegaLite, Vega } from "@nteract/transform-vega";
+import { VegaLite1, VegaLite2, Vega2, Vega3 } from "@nteract/transform-vega";
 
 import { PlotlyNullTransform, PlotlyTransform } from "../../transforms";
 
@@ -30,8 +30,10 @@ const { transforms, displayOrder } = [
   DataResourceTransform,
   PlotlyNullTransform,
   PlotlyTransform,
-  VegaLite,
-  Vega
+  VegaLite1,
+  VegaLite2,
+  Vega2,
+  Vega3
 ].reduce(registerTransform, {
   transforms: standardTransforms,
   displayOrder: standardDisplayOrder

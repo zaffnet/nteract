@@ -12,7 +12,7 @@ import React, { PropTypes as T } from "react";
 import NotebookPreview from "@nteract/notebook-preview";
 import { MarkdownTransform } from "@nteract/transforms";
 import DataResourceTransform from "@nteract/transform-dataresource";
-import { VegaLite, Vega } from "@nteract/transform-vega";
+import { VegaLite1, VegaLite2, Vega2, Vega3 } from "@nteract/transform-vega";
 
 import {
   standardTransforms,
@@ -23,8 +23,10 @@ import {
 // Order is important here. The last transform in the array will have order `0`.
 const { transforms, displayOrder } = [
   DataResourceTransform,
-  VegaLite,
-  Vega
+  VegaLite1,
+  VegaLite2,
+  Vega2,
+  Vega3
 ].reduce(registerTransform, {
   transforms: standardTransforms,
   displayOrder: standardDisplayOrder
