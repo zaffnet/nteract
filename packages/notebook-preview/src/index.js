@@ -2,9 +2,6 @@
 import React from "react";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
-import CommonMark from "commonmark";
-import MarkdownRenderer from "commonmark-react-renderer";
-
 import { Display } from "@nteract/display-area";
 import { displayOrder, transforms } from "@nteract/transforms";
 
@@ -28,14 +25,10 @@ import {
 import LatexRenderer from "./latex";
 import { PapermillView } from "./papermill";
 
+// Markdown/MathJax Renderer
+import Markdown from "@nteract/markdown";
+
 const themes = require("@nteract/core/themes");
-
-type MDRender = (input: string) => string;
-
-const parser = new CommonMark.Parser();
-const renderer = new MarkdownRenderer();
-
-const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
 type Props = {
   displayOrder: Array<string>,
@@ -48,7 +41,7 @@ type State = {
   notebook: any
 };
 
-export class NotebookPreview extends React.Component<Props, State> {
+export class NotebookPreview extends React.PureComponent<Props, State> {
   static defaultProps = {
     displayOrder,
     transforms,
@@ -146,7 +139,9 @@ export class NotebookPreview extends React.Component<Props, State> {
                       {/* TODO: embed mathjax on the page here, otherwise LaTeX
                               rendering doesn't actually happen
                     */}
-                      <LatexRenderer>{mdRender(source)}</LatexRenderer>
+                      <LatexRenderer>
+                        <Markdown source={source} />
+                      </LatexRenderer>
                     </div>
                     <style jsx>{`
                       .content-margin {

@@ -42,3 +42,5 @@ applications/desktop/bin/nteract-env
 packages/*/yarn.lock
 
 .next
+
+.DS_Store

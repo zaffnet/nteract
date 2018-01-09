@@ -1,0 +1,32 @@
+{
+  "name": "@nteract/markdown",
+  "version": "0.0.1",
+  "description": "Markdown/MathJax renderer for nteract",
+  "main": "lib/index.js",
+  "nteractDesktop": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build && npm run build:flow",
+    "build": "npm run build:clean && npm run build:lib",
+    "build:clean": "rimraf lib",
+    "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
+    "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
+    "build:lib:watch": "npm run build:lib -- --watch",
+    "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
+  },
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/markdown",
+  "keywords": [
+    "markdown",
+    "mathjax"
+  ],
+  "author": "Trevor Lyon <github.com/tlyon3>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "react-markdown": "^3.1.4",
+    "react-mathjax": "git+https://github.com/wko27/react-mathjax.git",
+    "remark-math": "^1.0.3"
+  }
+}
