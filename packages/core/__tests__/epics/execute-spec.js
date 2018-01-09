@@ -1,3 +1,4 @@
+// @flow
 import { ActionsObservable } from "redux-observable";
 import {
   EXECUTE_CELL,
@@ -16,7 +17,7 @@ import {
   executeCellEpic,
   updateDisplayEpic,
   createExecuteCellStream
-} from "../../../src/notebook/epics/execute";
+} from "../../src/epics/execute";
 
 const Immutable = require("immutable");
 
