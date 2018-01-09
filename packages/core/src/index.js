@@ -6,6 +6,7 @@ import * as reducers from "./reducers";
 import * as components from "./components";
 import * as providers from "./providers";
 import * as themes from "./themes";
+import * as epics from "./epics";
 
 export {
   actions,
@@ -14,5 +15,6 @@ export {
   reducers,
   components,
   providers,
-  themes
+  themes,
+  epics
 };
