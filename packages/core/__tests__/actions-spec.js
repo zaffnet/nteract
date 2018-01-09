@@ -1,6 +1,6 @@
 // @flow
-import * as actions from "../actions";
-import * as constants from "../constants";
+import * as actions from "../src/actions";
+import * as constants from "../src/constants";
 
 describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
