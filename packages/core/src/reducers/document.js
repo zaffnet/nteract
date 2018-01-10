@@ -483,6 +483,7 @@ function acceptPayloadMessage(
       });
     }
   }
+  // If the payload is unsupported, just return the current state
   return state;
 }
 

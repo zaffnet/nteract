@@ -1021,3 +1021,34 @@ describe("sendExecuteRequest", () => {
     expect(state.getIn(["cellPagers", firstCellId])).toEqual(Immutable.List());
   });
 });
+
+describe("acceptPayloadMessage", () => {
+  test("processes jupyter payload message types", () => {
+    const state = reducers(initialDocument, {
+      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      id: firstCellId,
+      payload: {
+        source: "page",
+        data: { well: "alright" }
+      }
+    });
+
+    expect(state.getIn(["cellPagers", firstCellId])).toEqual(
+      Immutable.List([{ well: "alright" }])
+    );
+
+    const nextState = reducers(state, {
+      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      id: firstCellId,
+      payload: {
+        source: "set_next_input",
+        replace: true,
+        text: "this is now the text"
+      }
+    });
+
+    expect(
+      nextState.getIn(["notebook", "cellMap", firstCellId, "source"])
+    ).toEqual("this is now the text");
+  });
+});
