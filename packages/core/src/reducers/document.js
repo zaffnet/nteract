@@ -496,10 +496,11 @@ function sendExecuteRequest(
   action: SendExecuteMessageAction
 ) {
   const { id } = action;
-  // TODO: We could now note the last execute request in the store at this moment
-  // TODO: The cell state could be thought of as queued for now, rather than "busy"
+  // TODO: Record the last execute request for this cell
 
-  // For now, just clear out everything that should be cleared out
+  // * Clear pager data (help menu)
+  // * Clear outputs
+  // * Set status to queued, as all we've done is submit the execution request
   // TODO: Use a setWithMutations or otherwise to do this in an efficient way
   return clearOutputs(state.setIn(["cellPagers", id], Immutable.List()), {
     type: "CLEAR_OUTPUTS",

@@ -28,6 +28,8 @@ const monocellDocument = initialDocument
     new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() })
   );
 
+const firstCellId = monocellDocument.getIn(["notebook", "cellOrder"]).first();
+
 describe("reduceOutputs", () => {
   test("puts new outputs at the end by default", () => {
     const outputs = Immutable.List([
@@ -1001,5 +1003,21 @@ describe("changeFilename", () => {
 
     const state = reducers(originalState, action);
     expect(state.filename).toBe("test.ipynb");
+  });
+});
+
+describe("sendExecuteRequest", () => {
+  test("cleans up the outputs, pagers, and status", () => {
+    const state = reducers(initialDocument, {
+      type: constants.SEND_EXECUTE_REQUEST,
+      id: firstCellId,
+      message: {}
+    });
+
+    expect(
+      state.getIn(["transient", "cellMap", firstCellId, "status"])
+    ).toEqual("queued");
+
+    expect(state.getIn(["cellPagers", firstCellId])).toEqual(Immutable.List());
   });
 });
