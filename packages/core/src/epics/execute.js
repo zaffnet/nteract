@@ -94,14 +94,11 @@ export function executeCellStream(
         type: "ACCEPT_PAYLOAD_MESSAGE_ACTION"
       }))
     ),
-    // TODO: Create a "CLEAR_PAGER" action
-    // TODO: Consider a RESET_CELL action that would clear out outputs, pagers, etc.
 
     // All actions for updating cell status
     cellMessages.pipe(
       executionStates(),
-      map(status => updateCellStatus(id, status)),
-      startWith(updateCellStatus(id, "busy"))
+      map(status => updateCellStatus(id, status))
     ),
 
     // Update the input numbering: `[ ]`
@@ -113,8 +110,7 @@ export function executeCellStream(
     // All actions for new outputs
     cellMessages.pipe(
       outputs(),
-      map(output => ({ type: "APPEND_OUTPUT", id, output })),
-      startWith(clearOutputs(id))
+      map(output => ({ type: "APPEND_OUTPUT", id, output }))
     ),
 
     // clear_output display message

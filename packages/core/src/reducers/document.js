@@ -35,6 +35,8 @@ import type {
   MimeBundle
 } from "@nteract/types/commutable";
 
+import type { ExecuteRequest } from "@nteract/types/messaging";
+
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 type Pager = {
@@ -484,6 +486,27 @@ function acceptPayloadMessage(
   return state;
 }
 
+type SendExecuteMessageAction = {
+  type: "SEND_EXECUTE_REQUEST",
+  id: CellID,
+  message: ExecuteRequest
+};
+function sendExecuteRequest(
+  state: DocumentState,
+  action: SendExecuteMessageAction
+) {
+  const { id } = action;
+  // TODO: We could now note the last execute request in the store at this moment
+  // TODO: The cell state could be thought of as queued for now, rather than "busy"
+
+  // For now, just clear out everything that should be cleared out
+  // TODO: Use a setWithMutations or otherwise to do this in an efficient way
+  return clearOutputs(state.setIn(["cellPagers", id], Immutable.List()), {
+    type: "CLEAR_OUTPUTS",
+    id
+  }).setIn(["transient", "cellMap", id, "status"], "queued");
+}
+
 type SetInCellAction = {
   type: "SET_IN_CELL",
   id: CellID,
@@ -724,6 +747,7 @@ type DocumentAction =
   | ToggleCellExpansionAction
   | SetNotebookCheckpointAction
   | AcceptPayloadMessageAction
+  | SendExecuteMessageAction
   | SetInCellAction;
 
 const defaultDocument: DocumentState = DocumentRecord();
@@ -733,6 +757,8 @@ function handleDocument(
   action: DocumentAction
 ) {
   switch (action.type) {
+    case constants.SEND_EXECUTE_REQUEST:
+      return sendExecuteRequest(state, action);
     case constants.SET_NOTEBOOK:
       return setNotebook(state, action);
     case constants.DONE_SAVING:
