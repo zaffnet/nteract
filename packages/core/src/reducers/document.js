@@ -35,6 +35,8 @@ import type {
   MimeBundle
 } from "@nteract/types/commutable";
 
+import type { ExecuteRequest } from "@nteract/types/messaging";
+
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 type Pager = {
@@ -451,17 +453,61 @@ function newCellAppend(state: DocumentState, action: NewCellAppendAction) {
   return state.set("notebook", insertCellAt(notebook, cell, cellID, index));
 }
 
-type UpdateCellPagersAction = {
-  type: "UPDATE_CELL_PAGERS",
+type AcceptPayloadMessageAction = {
+  type: "ACCEPT_PAYLOAD_MESSAGE_ACTION",
   id: CellID,
-  pagers: Immutable.Map<string, Pager>
+  payload: *
 };
-function updateCellPagers(
+function acceptPayloadMessage(
   state: DocumentState,
-  action: UpdateCellPagersAction
+  action: AcceptPayloadMessageAction
+): DocumentState {
+  const { id, payload } = action;
+
+  if (payload.source === "page") {
+    // append pager
+    return state.updateIn(["cellPagers", id], Immutable.List(), l =>
+      l.push(payload.data)
+    );
+  } else if (payload.source === "set_next_input") {
+    if (payload.replace) {
+      // this payload is sent in IPython when you use %load
+      // and is intended to replace cell source
+      return state.setIn(["notebook", "cellMap", id, "source"], payload.text);
+    } else {
+      // create the next cell
+      return newCellAfter(state, {
+        type: constants.NEW_CELL_AFTER,
+        cellType: "code",
+        source: payload.text,
+        id
+      });
+    }
+  }
+  // If the payload is unsupported, just return the current state
+  return state;
+}
+
+type SendExecuteMessageAction = {
+  type: "SEND_EXECUTE_REQUEST",
+  id: CellID,
+  message: ExecuteRequest
+};
+function sendExecuteRequest(
+  state: DocumentState,
+  action: SendExecuteMessageAction
 ) {
-  const { id, pagers } = action;
-  return state.setIn(["cellPagers", id], pagers);
+  const { id } = action;
+  // TODO: Record the last execute request for this cell
+
+  // * Clear pager data (help menu)
+  // * Clear outputs
+  // * Set status to queued, as all we've done is submit the execution request
+  // TODO: Use a setWithMutations or otherwise to do this in an efficient way
+  return clearOutputs(state.setIn(["cellPagers", id], Immutable.List()), {
+    type: "CLEAR_OUTPUTS",
+    id
+  }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
 type SetInCellAction = {
@@ -692,7 +738,6 @@ type DocumentAction =
   | MergeCellAfterAction
   | ChangeOutputVisibilityAction
   | ChangeInputVisibilityAction
-  | UpdateCellPagersAction
   | UpdateCellStatusAction
   | SetLanguageInfoAction
   | SetKernelInfoAction
@@ -704,6 +749,8 @@ type DocumentAction =
   | ChangeCellTypeAction
   | ToggleCellExpansionAction
   | SetNotebookCheckpointAction
+  | AcceptPayloadMessageAction
+  | SendExecuteMessageAction
   | SetInCellAction;
 
 const defaultDocument: DocumentState = DocumentRecord();
@@ -713,6 +760,8 @@ function handleDocument(
   action: DocumentAction
 ) {
   switch (action.type) {
+    case constants.SEND_EXECUTE_REQUEST:
+      return sendExecuteRequest(state, action);
     case constants.SET_NOTEBOOK:
       return setNotebook(state, action);
     case constants.DONE_SAVING:
@@ -755,8 +804,8 @@ function handleDocument(
       return changeOutputVisibility(state, action);
     case constants.CHANGE_INPUT_VISIBILITY:
       return changeInputVisibility(state, action);
-    case constants.UPDATE_CELL_PAGERS:
-      return updateCellPagers(state, action);
+    case constants.ACCEPT_PAYLOAD_MESSAGE_ACTION:
+      return acceptPayloadMessage(state, action);
     case constants.UPDATE_CELL_STATUS:
       return updateCellStatus(state, action);
     case constants.SET_LANGUAGE_INFO:

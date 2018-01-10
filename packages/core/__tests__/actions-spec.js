@@ -74,20 +74,6 @@ describe("updateCellExecutionCount", () => {
   });
 });
 
-describe("updateCellPagers", () => {
-  test("creates a UPDATE_CELL_PAGERS action", () => {
-    expect(
-      actions.updateCellPagers("1234", {
-        data: "woo"
-      })
-    ).toEqual({
-      type: constants.UPDATE_CELL_PAGERS,
-      id: "1234",
-      pagers: { data: "woo" }
-    });
-  });
-});
-
 describe("updateCellStatus", () => {
   test("creates an UPDATE_CELL_STATUS action", () => {
     expect(actions.updateCellStatus("1234", "test")).toEqual({

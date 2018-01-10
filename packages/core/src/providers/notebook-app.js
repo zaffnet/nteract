@@ -205,8 +205,10 @@ export class NotebookApp extends React.PureComponent<Props> {
       return null;
     }
 
-    const running =
-      this.props.transient.getIn(["cellMap", id, "status"]) === "busy";
+    const cellStatus = this.props.transient.getIn(["cellMap", id, "status"]);
+
+    const running = cellStatus === "busy";
+    const queued = cellStatus === "queued";
 
     const cellType = cell.get("cell_type");
 
@@ -250,7 +252,11 @@ export class NotebookApp extends React.PureComponent<Props> {
         element = (
           <React.Fragment>
             <Input hidden={sourceHidden}>
-              <Prompt counter={cell.get("execution_count")} running={running} />
+              <Prompt
+                counter={cell.get("execution_count")}
+                running={running}
+                queued={queued}
+              />
               <Editor>
                 <CodeMirror
                   tip

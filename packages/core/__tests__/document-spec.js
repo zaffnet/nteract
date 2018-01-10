@@ -28,6 +28,8 @@ const monocellDocument = initialDocument
     new Immutable.Map({ keyPathsForDisplays: new Immutable.Map() })
   );
 
+const firstCellId = monocellDocument.getIn(["notebook", "cellOrder"]).first();
+
 describe("reduceOutputs", () => {
   test("puts new outputs at the end by default", () => {
     const outputs = Immutable.List([
@@ -681,23 +683,6 @@ describe("clearOutputs", () => {
   });
 });
 
-describe("updateCellPagers", () => {
-  test("updates cell pagers", () => {
-    const originalState = monocellDocument;
-
-    const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = {
-      type: constants.UPDATE_CELL_PAGERS,
-      id,
-      pagers: "Test pagers"
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.getIn(["cellPagers", id])).toBe("Test pagers");
-  });
-});
-
 describe("updateCellStatus", () => {
   test("updates cell status", () => {
     const originalState = monocellDocument;
@@ -1018,5 +1003,52 @@ describe("changeFilename", () => {
 
     const state = reducers(originalState, action);
     expect(state.filename).toBe("test.ipynb");
+  });
+});
+
+describe("sendExecuteRequest", () => {
+  test("cleans up the outputs, pagers, and status", () => {
+    const state = reducers(initialDocument, {
+      type: constants.SEND_EXECUTE_REQUEST,
+      id: firstCellId,
+      message: {}
+    });
+
+    expect(
+      state.getIn(["transient", "cellMap", firstCellId, "status"])
+    ).toEqual("queued");
+
+    expect(state.getIn(["cellPagers", firstCellId])).toEqual(Immutable.List());
+  });
+});
+
+describe("acceptPayloadMessage", () => {
+  test("processes jupyter payload message types", () => {
+    const state = reducers(initialDocument, {
+      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      id: firstCellId,
+      payload: {
+        source: "page",
+        data: { well: "alright" }
+      }
+    });
+
+    expect(state.getIn(["cellPagers", firstCellId])).toEqual(
+      Immutable.List([{ well: "alright" }])
+    );
+
+    const nextState = reducers(state, {
+      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      id: firstCellId,
+      payload: {
+        source: "set_next_input",
+        replace: true,
+        text: "this is now the text"
+      }
+    });
+
+    expect(
+      nextState.getIn(["notebook", "cellMap", firstCellId, "source"])
+    ).toEqual("this is now the text");
   });
 });

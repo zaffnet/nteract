@@ -181,7 +181,7 @@ describe("newKernel", () => {
 });
 
 describe("setGithubToken", () => {
-  test.only("calls setGithubToken", () => {
+  test("calls setGithubToken", () => {
     const originalState = {
       app: makeAppRecord({
         github: new Github(),
