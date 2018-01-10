@@ -249,10 +249,6 @@ describe("menu", () => {
         .document.getIn(["notebook", "cellOrder"])
         .first();
 
-      const source = store
-        .getState()
-        .document.getIn(["notebook", "cellMap", first, "source"]);
-
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "SEND_EXECUTE_REQUEST",
         id: first,
