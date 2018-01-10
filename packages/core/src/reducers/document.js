@@ -471,7 +471,8 @@ function acceptPayloadMessage(
     );
   } else if (payload.source === "set_next_input") {
     if (payload.replace) {
-      // replace cell source here
+      // this payload is sent in IPython when you use %load
+      // and is intended to replace cell source
       return state.setIn(["notebook", "cellMap", id, "source"], payload.text);
     } else {
       // create the next cell
