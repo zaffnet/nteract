@@ -88,9 +88,9 @@ describe("NotebookApp", () => {
       inst.keyDown(evt);
 
       expect(context.store.dispatch).toHaveBeenCalledWith({
-        type: "EXECUTE_CELL",
+        type: "SEND_EXECUTE_REQUEST",
         id: focusedCell,
-        source: dummyCommutable.getIn(["cellMap", focusedCell, "source"])
+        message: expect.any(Object)
       });
     });
     test("detects a focus to next cell keypress", () => {

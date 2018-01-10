@@ -9,7 +9,7 @@ import { dummyStore } from "../../src/dummy";
 import {
   TOGGLE_STICKY_CELL,
   REMOVE_CELL,
-  EXECUTE_CELL,
+  SEND_EXECUTE_REQUEST,
   CLEAR_OUTPUTS,
   CHANGE_INPUT_VISIBILITY,
   CHANGE_OUTPUT_VISIBILITY,
@@ -62,7 +62,7 @@ describe.skip("toolbar provider", () => {
     const dispatch = action => {
       expect(action.id).toBe("cell");
       expect(action.source).toBe("source");
-      expect(action.type).toBe(EXECUTE_CELL);
+      expect(action.type).toBe(SEND_EXECUTE_REQUEST);
       done();
     };
     store.dispatch = dispatch;

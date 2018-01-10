@@ -1,15 +1,16 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
 import {
-  EXECUTE_CELL,
+  SEND_EXECUTE_REQUEST,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
   CLEAR_OUTPUTS,
   UPDATE_CELL_STATUS,
-  UPDATE_CELL_PAGERS,
   UPDATE_DISPLAY,
   NEW_KERNEL
 } from "@nteract/core/constants";
+
+import { createExecuteRequest } from "@nteract/messaging";
 
 import { executeCell } from "@nteract/core/actions";
 import {
@@ -28,46 +29,16 @@ import { toArray, share, catchError, bufferCount } from "rxjs/operators";
 describe("executeCell", () => {
   test("returns an executeCell action", () => {
     expect(executeCell("0-0-0-0", "import random; random.random()")).toEqual({
-      type: EXECUTE_CELL,
+      type: SEND_EXECUTE_REQUEST,
       id: "0-0-0-0",
-      source: "import random; random.random()"
+      message: expect.any(Object)
     });
   });
 });
 
 describe("executeCellStream", () => {
-  // TODO: Refactor executeCelStream into separate testable observables
-  test("is entirely too insane for me to test this well right this second", done => {
-    const frontendToShell = new Subject();
-    const shellToFrontend = new Subject();
-    const mockShell = Subject.create(frontendToShell, shellToFrontend);
-    const mockIOPub = new Subject();
-
-    // TODO: Combine shell and iopub with enchannel-zmq's createMainChannel
-    // Better idea though: create a enchannel-test-provider
-    const channels = mockShell;
-
-    // Expect message to have been sent
-    frontendToShell.subscribe(msg => {
-      expect(msg.header.msg_type).toEqual("execute_request");
-      expect(msg.content.code).toEqual("import this");
-    });
-
-    const action$ = executeCellStream(channels, "0", "import this");
-
-    action$.pipe(bufferCount(3)).subscribe(messages => {
-      expect(messages).toEqual([
-        // TODO: Order doesn't actually matter here
-        { type: UPDATE_CELL_PAGERS, id: "0", pagers: Immutable.List() },
-        { type: UPDATE_CELL_STATUS, id: "0", status: "busy" },
-        { type: CLEAR_OUTPUTS, id: "0" }
-      ]);
-      done(); // TODO: Make sure message check above is called
-    });
-  });
-
   test("outright rejects a lack of channels.shell and iopub", done => {
-    const obs = executeCellStream({}, "0", "woo");
+    const obs = executeCellStream({}, "0", {});
     obs.subscribe(null, err => {
       expect(err.message).toEqual("kernel not connected");
       done();
@@ -94,7 +65,7 @@ describe("createExecuteCellStream", () => {
         }
       }
     };
-    const action$ = ActionsObservable.of({ type: EXECUTE_CELL });
+    const action$ = ActionsObservable.of({ type: SEND_EXECUTE_REQUEST });
     const observable = createExecuteCellStream(action$, store, "source", "id");
     observable.pipe(toArray()).subscribe(
       actions => {
@@ -125,19 +96,32 @@ describe("createExecuteCellStream", () => {
       }
     };
     const action$ = ActionsObservable.of(
-      { type: EXECUTE_CELL, id: "id" },
-      { type: EXECUTE_CELL, id: "id_2" },
+      {
+        type: SEND_EXECUTE_REQUEST,
+        id: "id",
+        message: createExecuteRequest("this")
+      },
+      {
+        type: SEND_EXECUTE_REQUEST,
+        id: "id_2",
+        message: createExecuteRequest("is")
+      },
       { type: ABORT_EXECUTION, id: "id_2" },
-      { type: EXECUTE_CELL, id: "id" }
+      {
+        type: SEND_EXECUTE_REQUEST,
+        id: "id",
+        message: createExecuteRequest("kind of")
+      }
     );
-    const observable = createExecuteCellStream(action$, store, "source", "id");
+    const observable = createExecuteCellStream(
+      action$,
+      store,
+      createExecuteRequest("source"),
+      "id"
+    );
     const actionBuffer = [];
     observable.subscribe(x => actionBuffer.push(x.type), err => done.fail(err));
-    expect(actionBuffer).toEqual([
-      UPDATE_CELL_PAGERS,
-      UPDATE_CELL_STATUS,
-      CLEAR_OUTPUTS
-    ]);
+    expect(actionBuffer).toEqual([]);
     done();
   });
 });
@@ -158,9 +142,9 @@ describe("executeCellEpic", () => {
   };
   test("Errors on a bad action", done => {
     // Make one hot action
-    const badAction$ = ActionsObservable.of({ type: EXECUTE_CELL }).pipe(
-      share()
-    );
+    const badAction$ = ActionsObservable.of({
+      type: SEND_EXECUTE_REQUEST
+    }).pipe(share());
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs an id");

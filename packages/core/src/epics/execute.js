@@ -50,7 +50,6 @@ import type { ActionsObservable } from "redux-observable";
 import {
   NEW_KERNEL,
   REMOVE_CELL,
-  EXECUTE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
   ERROR_UPDATE_DISPLAY,

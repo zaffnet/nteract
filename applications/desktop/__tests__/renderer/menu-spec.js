@@ -238,7 +238,7 @@ describe("menu", () => {
   });
 
   describe("dispatchRunAll", () => {
-    test("dispatches EXECUTE_CELL for all cells action", () => {
+    test.only("dispatches SEND_EXECUTE_REQUEST for all cells action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
@@ -248,12 +248,15 @@ describe("menu", () => {
         .getState()
         .document.getIn(["notebook", "cellOrder"])
         .first();
+
+      const source = store
+        .getState()
+        .document.getIn(["notebook", "cellMap", first, "source"]);
+
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: "EXECUTE_CELL",
+        type: "SEND_EXECUTE_REQUEST",
         id: first,
-        source: store
-          .getState()
-          .document.getIn(["notebook", "cellMap", first, "source"])
+        message: expect.any(Object)
       });
     });
   });

@@ -681,23 +681,6 @@ describe("clearOutputs", () => {
   });
 });
 
-describe("updateCellPagers", () => {
-  test("updates cell pagers", () => {
-    const originalState = monocellDocument;
-
-    const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = {
-      type: constants.UPDATE_CELL_PAGERS,
-      id,
-      pagers: "Test pagers"
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.getIn(["cellPagers", id])).toBe("Test pagers");
-  });
-});
-
 describe("updateCellStatus", () => {
   test("updates cell status", () => {
     const originalState = monocellDocument;
