@@ -229,7 +229,7 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledTimes(3);
       markdownCells.forEach(cellId => {
         expect(store.dispatch).not.toHaveBeenCalledWith({
-          type: "EXECUTE_CELL",
+          type: "SEND_EXECUTE_REQUEST",
           id: cellId,
           source: ""
         });
@@ -238,7 +238,7 @@ describe("menu", () => {
   });
 
   describe("dispatchRunAll", () => {
-    test.only("dispatches SEND_EXECUTE_REQUEST for all cells action", () => {
+    test("dispatches SEND_EXECUTE_REQUEST for all cells action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
