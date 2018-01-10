@@ -1,22 +1,28 @@
 // @flow
-// The ID type is for external resources, e.g. with /api/kernels/9092-7679-9978-8822,
-// 9092-7679-9978-8822 is the ID
-opaque type ID = string;
-// A ref is an internal ID, used for kernels, hosts, kernelspec collections, etc.
+import type { ChildProcess } from "child_process";
+
+// The Id type is for external resources, e.g. with /api/kernels/9092-7679-9978-8822,
+// 9092-7679-9978-8822 is the Id
+opaque type Id = string;
+// A ref is an internal Id, used for kernels, hosts, kernelspec collections, etc.
 opaque type Ref = string;
+
+opaque type KernelRef = Ref;
+opaque type HostRef = Ref;
+opaque type KernelSpecsRef = Ref;
 
 import type { RecordFactory, RecordOf } from "immutable";
 import { Record, List } from "immutable";
 
 type BaseHostProps = {
-  id: ?ID,
-  ref: ?Ref,
-  selectedKernelRef: ?Ref,
-  kernelSpecsRef: ?Ref, // reference to a collection of kernelspecs
+  id: ?Id,
+  ref: ?HostRef,
+  selectedKernelRef: ?KernelRef,
+  kernelSpecsRef: ?KernelSpecsRef, // reference to a collection of kernelspecs
   defaultKernelName: ?string,
   // In the desktop case, this _should_ be only one, pending
   // kernel cleanup
-  activeKernelRefs: List<ID>
+  activeKernelRefs: List<Id>
 };
 
 type JupyterHostRecordProps = BaseHostProps & {
@@ -65,3 +71,20 @@ export const makeDesktopHostRecord: RecordFactory<
 });
 
 export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
+
+type BaseKernelProps = {
+  ref: KernelRef,
+  name: string,
+  lastActivity: Date,
+  channels: rxjs$Subject<*, *>,
+  status: string
+};
+
+type RemoteKernelProps = BaseKernelProps & {
+  id: Id
+};
+
+type LocalKernelProps = BaseKernelProps & {
+  spawn: ChildProcess,
+  connectionFile: string
+};
