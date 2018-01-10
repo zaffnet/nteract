@@ -50,6 +50,7 @@ import type { ActionsObservable } from "redux-observable";
 import {
   NEW_KERNEL,
   REMOVE_CELL,
+  EXECUTE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
   ERROR_UPDATE_DISPLAY
@@ -180,7 +181,7 @@ export function createExecuteCellStream(
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
-    ofType("EXECUTE_CELL"),
+    ofType(EXECUTE_CELL),
     tap(action => {
       if (!action.id) {
         throw new Error("execute cell needs an id");

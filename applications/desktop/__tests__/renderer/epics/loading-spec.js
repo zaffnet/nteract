@@ -8,12 +8,11 @@ import {
   notebookLoaded,
   extractNewKernel,
   convertRawNotebook,
-  LOAD,
   loadEpic,
-  NEW_NOTEBOOK,
-  SET_NOTEBOOK,
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
+
+import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/constants";
 
 import { toArray } from "rxjs/operators";
 

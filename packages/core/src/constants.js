@@ -101,3 +101,11 @@ export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
 
 export const SAVE = "SAVE";
 export const SAVE_AS = "SAVE_AS";
+
+export const LOAD = "LOAD";
+
+export const LOAD_CONFIG = "LOAD_CONFIG";
+export const SAVE_CONFIG = "SAVE_CONFIG";
+
+export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
+export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
