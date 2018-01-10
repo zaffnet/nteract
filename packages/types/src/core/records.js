@@ -8,6 +8,16 @@ import type { ChildProcess } from "child_process";
 import { Record } from "immutable";
 import type { Channels } from "../channels";
 
+import type {
+  Id,
+  Ref,
+  KernelRef,
+  KernelSpecsRef,
+  HostRef,
+  RemoteKernelProps,
+  LocalKernelProps
+} from "./hosts";
+
 /*
 
 This is the definition of JSON that Flow provides
@@ -19,7 +29,6 @@ type JSONArray = Array<JSON>;
 Which we'll adapt for our use of Immutable.js
 
 */
-
 export type ImmutableJSON =
   | string
   | number
@@ -101,14 +110,15 @@ export type LanguageInfoMetadata = {
 export type NotebookMetadata = {
   kernelspec: KernelspecMetadata,
   language_info: LanguageInfoMetadata
-  // We're not currently using orig_nbformat in nteract. Based on the comment
-  // in the schema, I'm not sure we should:
+  // NOTE: We're not currently using orig_nbformat in nteract. Based on the comment
+  // in the schema, we won't:
   //
   //   > Original notebook format (major number) before converting the notebook between versions. This should never be written to a file
   //
   //   from https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L58-L61
   //
-  // It seems like an intermediate/in-memory representation that bled its way into the spec
+  // It seems like an intermediate/in-memory representation that bled its way into the spec, when it should have been
+  // handled as separate state.
   //
   // orig_nbformat?: number,
 };
@@ -125,6 +135,7 @@ export type Notebook = {
 // ElectronAppRecord
 // Basically, anything that's only for desktop should have its own record & reducers
 type AppRecordProps = {
+  kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
   executionState: "not connected" | "busy" | "idle" | "starting",
   githubToken: ?string,
   channels: ?Channels,
@@ -140,6 +151,7 @@ type AppRecordProps = {
   error: any
 };
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
+  kernel: null,
   executionState: "not connected",
   githubToken: null, // Electron specific (ish...)
   channels: null, // Electron, though we hope to adapt these...

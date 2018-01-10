@@ -3,18 +3,18 @@ import type { ChildProcess } from "child_process";
 
 // The Id type is for external resources, e.g. with /api/kernels/9092-7679-9978-8822,
 // 9092-7679-9978-8822 is the Id
-opaque type Id = string;
+export opaque type Id = string;
 // A ref is an internal Id, used for kernels, hosts, kernelspec collections, etc.
-opaque type Ref = string;
+export opaque type Ref = string;
 
-opaque type KernelRef = Ref;
-opaque type HostRef = Ref;
-opaque type KernelSpecsRef = Ref;
+export opaque type KernelRef = Ref;
+export opaque type HostRef = Ref;
+export opaque type KernelSpecsRef = Ref;
 
 import type { RecordFactory, RecordOf } from "immutable";
 import { Record, List } from "immutable";
 
-type BaseHostProps = {
+export type BaseHostProps = {
   id: ?Id,
   ref: ?HostRef,
   selectedKernelRef: ?KernelRef,
@@ -25,7 +25,7 @@ type BaseHostProps = {
   activeKernelRefs: List<Id>
 };
 
-type JupyterHostRecordProps = BaseHostProps & {
+export type JupyterHostRecordProps = BaseHostProps & {
   type: "jupyter",
   token: ?string,
   serverUrl: ?string,
@@ -49,12 +49,12 @@ export const makeJupyterHostRecord: RecordFactory<
 
 export type JupyterHostRecord = RecordOf<JupyterHostRecordProps>;
 
-type BinderHostRecordProps = JupyterHostRecordProps & {
+export type BinderHostRecordProps = JupyterHostRecordProps & {
   // TODO: figure out if this belong here, it was brought over by play
   messages: List<string>
 };
 
-type DesktopHostRecordProps = BaseHostProps & {
+export type DesktopHostRecordProps = BaseHostProps & {
   type: "local"
 };
 
@@ -72,7 +72,7 @@ export const makeDesktopHostRecord: RecordFactory<
 
 export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
 
-type BaseKernelProps = {
+export type BaseKernelProps = {
   ref: KernelRef,
   name: string,
   lastActivity: Date,
@@ -80,11 +80,11 @@ type BaseKernelProps = {
   status: string
 };
 
-type RemoteKernelProps = BaseKernelProps & {
+export type RemoteKernelProps = BaseKernelProps & {
   id: Id
 };
 
-type LocalKernelProps = BaseKernelProps & {
+export type LocalKernelProps = BaseKernelProps & {
   spawn: ChildProcess,
   connectionFile: string
 };
