@@ -38,8 +38,6 @@ import { ofType } from "redux-observable";
 import {
   createCellAfter,
   updateCellExecutionCount,
-  updateCellSource,
-  updateCellPagers,
   updateCellStatus,
   clearOutputs
 } from "../actions";
@@ -86,28 +84,15 @@ export function executeCellStream(
   const payloadStream = cellMessages.pipe(payloads());
 
   const cellAction$ = merge(
-    // help menu in IPython
-    // TODO: This should let the reducer in redux do the clear and append instead
     payloadStream.pipe(
-      filter(p => p.source === "page"),
-      // TODO: Switch to "APPEND_PAGER" action
-      scan((acc, pd) => acc.push(pd.data), new Immutable.List()),
-      map(pagerDatas => updateCellPagers(id, pagerDatas)),
-      // TODO: Switch to "CLEAR_PAGER" action
-      // TODO: Consider a RESET_CELL action that would clear out outputs, pagers, etc.
-      startWith(updateCellPagers(id, new Immutable.List()))
+      map(payload => ({
+        id,
+        payload,
+        type: "ACCEPT_PAYLOAD_MESSAGE_ACTION"
+      }))
     ),
-
-    // set_next_input
-    payloadStream.pipe(
-      filter(payload => payload.source === "set_next_input"),
-      map(
-        c =>
-          c.replace
-            ? updateCellSource(id, c.text)
-            : createCellAfter("code", id, c.text)
-      )
-    ),
+    // TODO: Create a "CLEAR_PAGER" action
+    // TODO: Consider a RESET_CELL action that would clear out outputs, pagers, etc.
 
     // All actions for updating cell status
     cellMessages.pipe(

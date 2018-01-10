@@ -155,15 +155,6 @@ export function changeInputVisibility(id: string) {
 }
 
 // TODO de-anyify this signature
-export function updateCellPagers(id: string, pagers: any) {
-  return {
-    type: constants.UPDATE_CELL_PAGERS,
-    id,
-    pagers
-  };
-}
-
-// TODO de-anyify this signature
 export function updateCellStatus(id: string, status: any) {
   return {
     type: constants.UPDATE_CELL_STATUS,
