@@ -19,6 +19,8 @@ import { _throw } from "rxjs/observable/throw";
 
 import type { Channels } from "@nteract/types/channels";
 
+import type { ExecuteRequest } from "@nteract/types/messaging";
+
 import {
   groupBy,
   filter,
@@ -51,7 +53,8 @@ import {
   EXECUTE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
-  ERROR_UPDATE_DISPLAY
+  ERROR_UPDATE_DISPLAY,
+  SEND_EXECUTE_REQUEST
 } from "../constants";
 
 const Immutable = require("immutable");
@@ -69,13 +72,13 @@ const Immutable = require("immutable");
 export function executeCellStream(
   channels: Channels,
   id: string,
-  code: string
+  message: ExecuteRequest
 ) {
   if (!channels || !channels.pipe) {
     return _throw(new Error("kernel not connected"));
   }
 
-  const executeRequest = createExecuteRequest(code);
+  const executeRequest = message;
 
   // All the streams intended for all frontends
   const cellMessages = channels.pipe(childOf(executeRequest));
@@ -129,7 +132,7 @@ export function executeCellStream(
 export function createExecuteCellStream(
   action$: ActionsObservable<*>,
   store: any,
-  source: string,
+  message: ExecuteRequest,
   id: string
 ) {
   const state = store.getState();
@@ -150,7 +153,7 @@ export function createExecuteCellStream(
     });
   }
 
-  return executeCellStream(channels, id, source).pipe(
+  return executeCellStream(channels, id, message).pipe(
     takeUntil(
       action$.pipe(
         filter(laterAction => laterAction.id === id),
@@ -166,13 +169,10 @@ export function createExecuteCellStream(
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
-    ofType(EXECUTE_CELL),
+    ofType(SEND_EXECUTE_REQUEST),
     tap(action => {
       if (!action.id) {
         throw new Error("execute cell needs an id");
-      }
-      if (typeof action.source !== "string") {
-        throw new Error("execute cell needs source string");
       }
     }),
     // Split stream by cell IDs
@@ -180,10 +180,10 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     // Work on each cell's stream
     map(cellActionStream =>
       cellActionStream.pipe(
-        // When a new EXECUTE_CELL comes in with the current ID, we create a
+        // When a new SEND_EXECUTE_REQUEST comes in with the current ID, we create a
         // a new stream and unsubscribe from the old one.
-        switchMap(({ source, id }) =>
-          createExecuteCellStream(action$, store, source, id)
+        switchMap(({ message, id }) =>
+          createExecuteCellStream(action$, store, message, id)
         )
       )
     ),

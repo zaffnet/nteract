@@ -12,6 +12,8 @@ import type {
   MimeBundle
 } from "@nteract/commutable/src/types";
 
+import { createExecuteRequest } from "@nteract/messaging";
+
 export function newKernel(kernelSpec: any, cwd: string) {
   return {
     type: constants.LAUNCH_KERNEL,
@@ -310,10 +312,12 @@ export function toggleOutputExpansion(id: string) {
  * @return {Object} executeCellAction - Action to be dispatched to reducer.
  */
 export function executeCell(id: string, source: string) {
+  const message = createExecuteRequest(source);
+
   return {
-    type: constants.EXECUTE_CELL,
+    type: constants.SEND_EXECUTE_REQUEST,
     id,
-    source
+    message
   };
 }
 
