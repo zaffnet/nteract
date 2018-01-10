@@ -73,18 +73,30 @@ export const makeDesktopHostRecord: RecordFactory<
 export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
 
 export type BaseKernelProps = {
-  ref: KernelRef,
-  name: string,
-  lastActivity: Date,
-  channels: rxjs$Subject<*, *>,
-  status: string
+  ref: ?KernelRef,
+  name: ?string,
+  lastActivity: ?Date,
+  channels: ?rxjs$Subject<*, *>,
+  status: ?string
 };
 
 export type RemoteKernelProps = BaseKernelProps & {
-  id: Id
+  id: ?Id
 };
 
 export type LocalKernelProps = BaseKernelProps & {
-  spawn: ChildProcess,
-  connectionFile: string
+  spawn: ?ChildProcess,
+  connectionFile: ?string
 };
+
+export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
+  ref: null,
+  name: null,
+  lastActivity: null,
+  channels: null,
+  status: null,
+  spawn: null,
+  connectionFile: null
+});
+
+export type LocalKernelRecord = RecordOf<LocalKernelProps>;

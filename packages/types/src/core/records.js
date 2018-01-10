@@ -18,6 +18,8 @@ import type {
   LocalKernelProps
 } from "./hosts";
 
+export { makeLocalKernelRecord } from "./hosts";
+
 /*
 
 This is the definition of JSON that Flow provides
@@ -138,9 +140,6 @@ type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
   executionState: "not connected" | "busy" | "idle" | "starting",
   githubToken: ?string,
-  channels: ?Channels,
-  spawn: ?ChildProcess,
-  connectionFile: ?string,
   notificationSystem: ?Object,
   kernelSpecName: ?string,
   kernelSpecDisplayName: ?string,
@@ -154,9 +153,6 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   kernel: null,
   executionState: "not connected",
   githubToken: null, // Electron specific (ish...)
-  channels: null, // Electron, though we hope to adapt these...
-  spawn: null, // Very Electron
-  connectionFile: null, // Electron
   notificationSystem: null, // Should be available for all I assume
   kernelSpecName: null, // All
   kernelSpecDisplayName: null, // All
@@ -196,15 +192,22 @@ export const DocumentRecord = Immutable.Record({
   filename: ""
 });
 
+type CommsRecordProps = {
+  targets: Immutable.Map<any, any>,
+  info: Immutable.Map<any, any>,
+  models: Immutable.Map<any, any>
+};
+
 export const CommsRecord = Immutable.Record({
   targets: new Immutable.Map(),
   info: new Immutable.Map(),
   models: new Immutable.Map()
 });
 
+// TODO: I don't think flow is fully checking things here
 export type AppState = {
-  app: AppRecord,
-  document: DocumentRecord,
-  comms: CommsRecord,
+  app: RecordOf<AppRecordProps>,
+  document: RecordOf<DocumentState>,
+  comms: RecordOf<CommsRecordProps>,
   config: Immutable.Map<string, any>
 };

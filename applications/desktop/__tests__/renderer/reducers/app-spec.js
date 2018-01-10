@@ -1,6 +1,10 @@
 import * as constants from "@nteract/core/constants";
 import reducers from "../../../src/notebook/reducers";
-import { AppRecord, makeAppRecord } from "@nteract/types/core/records";
+import {
+  AppRecord,
+  makeAppRecord,
+  makeLocalKernelRecord
+} from "@nteract/types/core/records";
 
 const Github = require("github");
 
@@ -8,18 +12,18 @@ describe("cleanupKernel", () => {
   test("nullifies entries for the kernel in originalState", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
     const action = { type: constants.KILL_KERNEL };
 
     const state = reducers(originalState, action);
-    expect(state.app.channels).toBeNull();
-    expect(state.app.spawn).toBeNull();
-    expect(state.app.connectionFile).toBeNull();
+    expect(state.app.kernel).toBeNull();
   });
 });
 
@@ -27,9 +31,11 @@ describe("setNotificationSystem", () => {
   test("returns the same originalState if notificationSystem is undefined", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -41,9 +47,11 @@ describe("setNotificationSystem", () => {
   test("sets the notificationSystem if given", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -61,9 +69,11 @@ describe("startSaving", () => {
   test("should set isSaving to false", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -78,9 +88,11 @@ describe("doneSaving", () => {
   test("should set isSaving to false", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -95,9 +107,11 @@ describe("setExecutionState", () => {
   test("should set the exeuction state to the given value", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -115,18 +129,18 @@ describe("killKernel", () => {
   test("clears out kernel configuration", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
     const action = { type: constants.KILL_KERNEL };
 
     const state = reducers(originalState, action);
-    expect(state.app.channels).toBeNull();
-    expect(state.app.spawn).toBeNull();
-    expect(state.app.connectionFile).toBeNull();
+    expect(state.app.kernel).toBeNull();
   });
 });
 
@@ -134,11 +148,13 @@ describe("interruptKernel", () => {
   test("sends a SIGINT and clears the kernel", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: {
-          kill: () => {}
-        },
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: {
+            kill: () => {}
+          },
+          connectionFile: false
+        })
       })
     };
 
@@ -153,9 +169,11 @@ describe("newKernel", () => {
   test("creates a new kernel", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
@@ -175,8 +193,8 @@ describe("newKernel", () => {
       spec: { display_name: "Test Name" }
     });
     expect(state.app.kernelSpecDisplayName).toBe("Test Name");
-    expect(state.app.spawn).toBe("test_spawn");
-    expect(state.app.channels).toBe("test_channels");
+    expect(state.app.kernel.spawn).toBe("test_spawn");
+    expect(state.app.kernel.channels).toBe("test_channels");
   });
 });
 
@@ -202,18 +220,18 @@ describe("exit", () => {
   test("calls cleanupKernel", () => {
     const originalState = {
       app: makeAppRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
+        kernel: makeLocalKernelRecord({
+          channels: false,
+          spawn: false,
+          connectionFile: false
+        })
       })
     };
 
     const action = { type: constants.EXIT };
 
     const state = reducers(originalState, action);
-    expect(state.app.channels).toBeNull();
-    expect(state.app.spawn).toBeNull();
-    expect(state.app.connectionFile).toBeNull();
+    expect(state.app.kernel).toBeNull();
     expect(state.app.kernelSpecName).toBeNull();
     expect(state.app.executionState).toBe("not connected");
   });

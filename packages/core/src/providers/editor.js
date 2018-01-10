@@ -26,7 +26,7 @@ type Props = {
 function mapStateToProps(state: Object): Object {
   return {
     cursorBlinkRate: state.config.get("cursorBlinkRate"),
-    channels: state.app.channels,
+    channels: state.app.kernel ? state.app.kernel.channels : null,
     executionState: state.app.executionState
   };
 }

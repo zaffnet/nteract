@@ -4,7 +4,10 @@ import type { ChildProcess } from "child_process"; // eslint-disable-line no-unu
 
 import { shutdownKernel } from "../kernel/shutdown";
 
-import { makeAppRecord } from "@nteract/types/core/records";
+import {
+  makeAppRecord,
+  makeLocalKernelRecord
+} from "@nteract/types/core/records";
 
 import type { Channels } from "@nteract/types/channels";
 
@@ -24,18 +27,11 @@ declare class AppState {
 }
 
 function cleanupKernel(state: AppState): AppState {
-  const kernel = {
-    channels: state.channels,
-    spawn: state.spawn,
-    connectionFile: state.connectionFile
-  };
-  shutdownKernel(kernel);
+  shutdownKernel(state.kernel);
 
   return state.withMutations((ctx: AppState) =>
     ctx
-      .set("channels", null)
-      .set("spawn", null)
-      .set("connectionFile", null)
+      .set("kernel", null)
       .set("kernelSpecName", null)
       .set("kernelSpecDisplayName", null)
       .set("kernelSpec", null)
@@ -53,11 +49,15 @@ type NewKernelAction = {
 };
 
 function newKernel(state: AppState, action: NewKernelAction) {
+  const kernel = makeLocalKernelRecord({
+    channels: action.channels,
+    spawn: action.spawn,
+    connectionFile: action.connectionFile
+  });
+
   return cleanupKernel(state).withMutations((ctx: AppState) =>
     ctx
-      .set("channels", action.channels)
-      .set("connectionFile", action.connectionFile)
-      .set("spawn", action.spawn)
+      .set("kernel", kernel)
       .set("kernelSpecName", action.kernelSpecName)
       .set("kernelSpecDisplayName", action.kernelSpec.spec.display_name)
       .set("kernelSpec", action.kernelSpec)
@@ -69,7 +69,7 @@ function exit(state: AppState) {
 }
 
 function interruptKernel(state: AppState) {
-  state.spawn.kill("SIGINT");
+  state.kernel.spawn.kill("SIGINT");
   return state;
 }
 
