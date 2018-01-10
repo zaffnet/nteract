@@ -14,9 +14,7 @@ const path = require("path");
 import { of } from "rxjs/observable/of";
 import { map, tap, mergeMap, switchMap, catchError } from "rxjs/operators";
 
-export const LOAD = "LOAD";
-export const SET_NOTEBOOK = "SET_NOTEBOOK";
-export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
+import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/constants";
 
 export function load(filename: string) {
   return {
@@ -122,7 +120,7 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
     switchMap(action =>
       of(
         {
-          type: "SET_NOTEBOOK",
+          type: SET_NOTEBOOK,
           notebook: monocellNotebook
         },
         newKernel(action.kernelSpec, action.cwd)

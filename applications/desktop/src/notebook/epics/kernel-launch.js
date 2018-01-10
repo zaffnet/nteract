@@ -46,7 +46,9 @@ import {
   LAUNCH_KERNEL,
   LAUNCH_KERNEL_BY_NAME,
   SET_LANGUAGE_INFO,
-  ERROR_KERNEL_LAUNCH_FAILED
+  ERROR_KERNEL_LAUNCH_FAILED,
+  KERNEL_RAW_STDOUT,
+  KERNEL_RAW_STDERR
 } from "@nteract/core/constants";
 
 export function setLanguageInfo(langInfo: LanguageInfoMetadata) {
@@ -95,11 +97,11 @@ export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
       const kernelSpecName = kernelSpec.name;
 
       spawn.stdout.on("data", data => {
-        const action = { type: "RAW_STDOUT", payload: data.toString() };
+        const action = { type: KERNEL_RAW_STDOUT, payload: data.toString() };
         observer.next(action);
       });
       spawn.stderr.on("data", data => {
-        const action = { type: "RAW_STDERR", payload: data.toString() };
+        const action = { type: KERNEL_RAW_STDERR, payload: data.toString() };
         observer.next(action);
       });
 

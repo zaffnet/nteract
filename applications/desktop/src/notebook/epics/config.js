@@ -4,7 +4,9 @@ import { remote } from "electron";
 import {
   MERGE_CONFIG,
   SET_CONFIG_KEY,
-  DONE_SAVING_CONFIG
+  DONE_SAVING_CONFIG,
+  LOAD_CONFIG,
+  SAVE_CONFIG
 } from "@nteract/core/constants";
 
 import { readFileObservable, writeFileObservable } from "fs-observable";
@@ -15,10 +17,7 @@ import type { ActionsObservable } from "redux-observable";
 
 const path = require("path");
 
-export const LOAD_CONFIG = "LOAD_CONFIG";
 export const loadConfig = () => ({ type: LOAD_CONFIG });
-
-export const SAVE_CONFIG = "SAVE_CONFIG";
 export const saveConfig = () => ({ type: SAVE_CONFIG });
 export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
 
