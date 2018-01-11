@@ -1,23 +1,30 @@
+// @flow
 import * as React from "react";
 import { Router } from "../routes";
 
-class Input extends React.Component {
-  constructor(props) {
+type InputState = {
+  gistid: string
+};
+
+type InputProps = {};
+
+class Input extends React.Component<InputProps, InputState> {
+  constructor(props: InputProps) {
     super(props);
     this.state = { gistid: "" };
   }
 
-  handleChange = e => {
-    this.setState({ gistid: e.target.value });
+  handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    this.setState({ gistid: e.currentTarget.value });
   };
 
-  handleKeydown = e => {
+  handleKeydown = (e: SyntheticEvent<HTMLInputElement>) => {
     if (e.key == "Enter") {
       this.handleConfirm();
     }
   };
 
-  handleConfirm = () => {
+  handleConfirm = (e?: SyntheticEvent<HTMLButtonElement>) => {
     if (this.state.gistid) {
       Router.pushRoute("edit", { gistid: this.state.gistid });
     }

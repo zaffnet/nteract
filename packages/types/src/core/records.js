@@ -205,10 +205,9 @@ export const CommsRecord = Immutable.Record({
   models: new Immutable.Map()
 });
 
-// TODO: I don't think flow is fully checking things here
 export type AppState = {
   app: RecordOf<AppRecordProps>,
-  document: RecordOf<DocumentState>,
+  document: RecordOf<DocumentRecordProps>,
   comms: RecordOf<CommsRecordProps>,
   config: Immutable.Map<string, any>
 };
