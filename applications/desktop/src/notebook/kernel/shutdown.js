@@ -16,6 +16,13 @@ export type Kernel = {
 };
 
 export function cleanupKernel(kernel: Kernel, closeChannels: boolean): void {
+  if (!kernel) {
+    console.warn(
+      `Could not cleanup kernel channels, have they already
+      been completed?`
+    );
+    return;
+  }
   if (kernel.channels && closeChannels) {
     try {
       kernel.channels.complete();

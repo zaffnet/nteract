@@ -131,7 +131,7 @@ export function createExecuteCellStream(
   id: string
 ) {
   const state = store.getState();
-  const channels = state.app.channels;
+  const channels = state.app.kernel ? state.app.kernel.channels : null;
 
   const kernelConnected =
     channels &&
