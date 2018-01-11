@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
-import Contents from "./providers/contents";
 
 type JupyterConfigData = {
   token: string,
@@ -34,7 +33,6 @@ function createApp(jupyterConfigData: JupyterConfigData) {
       return (
         <Provider store={store}>
           <div>
-            {/* <Contents /> */}
             <NotebookApp />
             <NotificationSystem
               ref={notificationSystem => {
