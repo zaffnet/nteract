@@ -32,7 +32,7 @@ function configureStore(initialState: AppState) {
 }
 **/
 
-import { DocumentRecord, CommsRecord } from "@nteract/types/core/records";
+import { makeDocumentRecord, CommsRecord } from "@nteract/types/core/records";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
@@ -89,7 +89,7 @@ export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
   return createStore(rootReducer, {
-    document: DocumentRecord({
+    document: makeDocumentRecord({
       notebook: dummyNotebook,
       savedNotebook: config && config.saved === true ? dummyNotebook : null,
       cellPagers: new Immutable.Map(),

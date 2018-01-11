@@ -12,7 +12,7 @@ import {
   appendCellToNotebook
 } from "@nteract/commutable";
 
-import { DocumentRecord } from "@nteract/types/core/records";
+import { makeDocumentRecord } from "@nteract/types/core/records";
 
 import { reduceOutputs, cleanCellTransient } from "../src/reducers/document";
 
@@ -985,7 +985,7 @@ describe("cleanCellTransient", () => {
 
 describe("changeFilename", () => {
   test("returns the same originalState if filename is undefined", () => {
-    const originalState = new DocumentRecord({
+    const originalState = makeDocumentRecord({
       filename: "original.ipynb"
     });
 
@@ -995,7 +995,7 @@ describe("changeFilename", () => {
     expect(state.filename).toBe("original.ipynb");
   });
   test("sets the filename if given a valid one", () => {
-    const originalState = new DocumentRecord({
+    const originalState = makeDocumentRecord({
       filename: "original.ipynb"
     });
 
