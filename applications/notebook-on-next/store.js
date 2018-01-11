@@ -7,20 +7,15 @@ import { Map as ImmutableMap } from "immutable";
 import { document, comms, config } from "@nteract/core/reducers";
 import { emptyNotebook, fromJS } from "@nteract/commutable";
 
+import type { AppState } from "@nteract/types/core/records";
+
 import {
   makeAppRecord,
+  makeDocumentRecord,
   AppRecord,
   DocumentRecord,
   CommsRecord
 } from "@nteract/types/core/records";
-
-export type AppState = {
-  app: AppRecord,
-  document: DocumentRecord,
-  comms: CommsRecord,
-  config: ImmutableMap<string, any>,
-  contents: any
-};
 
 const rootReducer = combineReducers({
   app: (state = {}) => state,
@@ -31,7 +26,7 @@ const rootReducer = combineReducers({
 
 const defaultState = {
   app: makeAppRecord(),
-  document: DocumentRecord(),
+  document: makeDocumentRecord(),
   comms: CommsRecord(),
   config: ImmutableMap({
     theme: "light"
