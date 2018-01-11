@@ -23,7 +23,7 @@ import { initGlobalHandlers } from "./global-events";
 
 import {
   makeAppRecord,
-  DocumentRecord,
+  makeDocumentRecord,
   CommsRecord
 } from "@nteract/types/core/records";
 
@@ -31,7 +31,7 @@ import "./main.css";
 
 const store = configureStore({
   app: makeAppRecord(),
-  document: DocumentRecord(),
+  document: makeDocumentRecord(),
   comms: CommsRecord(),
   config: ImmutableMap({
     theme: "light"

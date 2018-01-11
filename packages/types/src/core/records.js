@@ -156,8 +156,8 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
 });
 export type AppRecord = RecordOf<AppRecordProps>;
 
-export type DocumentState = {
-  notebook: Notebook,
+type DocumentRecordProps = {
+  notebook: ?Notebook,
   transient: Immutable.Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)
   // right now it's keypaths and then it looks like it's able to handle any per
@@ -169,7 +169,7 @@ export type DocumentState = {
   copied: Immutable.Map<any, any>
 };
 
-export const DocumentRecord = Immutable.Record({
+export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
   notebook: null,
   savedNotebook: null,
   // $FlowFixMe: Immutable
@@ -183,6 +183,7 @@ export const DocumentRecord = Immutable.Record({
   copied: new Immutable.Map(),
   filename: ""
 });
+export type DocumentRecord = RecordOf<DocumentRecordProps>;
 
 export const CommsRecord = Immutable.Record({
   targets: new Immutable.Map(),

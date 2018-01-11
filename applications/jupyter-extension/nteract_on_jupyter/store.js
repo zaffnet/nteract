@@ -11,6 +11,7 @@ import { document, comms, config } from "@nteract/core/reducers";
 import {
   makeAppRecord,
   AppRecord,
+  makeDocumentRecord,
   DocumentRecord,
   CommsRecord
 } from "@nteract/types/core/records";
@@ -45,7 +46,7 @@ const rootReducer = combineReducers({
 
 const defaultState = {
   app: makeAppRecord(),
-  document: DocumentRecord(),
+  document: makeDocumentRecord(),
   comms: CommsRecord(),
   config: ImmutableMap({
     theme: "light"
