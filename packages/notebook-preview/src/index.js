@@ -48,7 +48,7 @@ type State = {
   notebook: any
 };
 
-export class NotebookPreview extends React.PureComponent<Props, State> {
+export class NotebookPreview extends React.Component<Props, State> {
   static defaultProps = {
     displayOrder,
     transforms,

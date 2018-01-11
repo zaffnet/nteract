@@ -99,7 +99,7 @@ const mapStateToProps = (state: Object) => ({
   )
 });
 
-export class NotebookApp extends React.PureComponent<Props> {
+export class NotebookApp extends React.Component<Props> {
   static defaultProps = {
     displayOrder,
     transforms,
