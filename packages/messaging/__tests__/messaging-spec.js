@@ -66,7 +66,8 @@ describe("childOf", () => {
       .then(val => {
         expect(val).toEqual(3);
       }));
-  it("throws an error if msg_id is not present", done =>
+  // They now get logged instead if bad messages, instead of bombing the stream
+  it.skip("throws an error if msg_id is not present", done =>
     from([
       { parent_header: { msg_id_bad: "100" } },
       { parent_header: { msg_id_test: "100" } },
