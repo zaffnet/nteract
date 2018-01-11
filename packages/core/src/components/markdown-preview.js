@@ -45,7 +45,7 @@ const noop = function() {};
 //       only I (@rgbkrk) understand, I'll wait for others to reflect on this
 //       within the code base (or leave it alone, which is totally cool too). :)
 
-export default class MarkdownCell extends React.PureComponent<any, State> {
+export default class MarkdownCell extends React.Component<any, State> {
   rendered: ?HTMLElement;
 
   static defaultProps = {

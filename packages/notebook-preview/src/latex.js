@@ -21,7 +21,7 @@ function isMathJaxOkYet(): boolean {
   );
 }
 
-export default class LatexRenderer extends React.PureComponent<Props> {
+export default class LatexRenderer extends React.Component<Props> {
   rendered: ?HTMLElement;
 
   componentDidMount(): void {

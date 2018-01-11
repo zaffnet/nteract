@@ -6,7 +6,7 @@
 // TODO: Fix up a11y eslint here
 // TODO: All the `<li>` below that have role button should just be `<button>` with proper styling
 
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 
 import {
   DropdownMenu,
@@ -33,7 +33,7 @@ declare type ToolbarProps = {|
   changeCellType: () => void
 |};
 
-export default class Toolbar extends PureComponent<ToolbarProps> {
+export default class Toolbar extends Component<ToolbarProps> {
   clearOutputs: () => void;
   changeInputVisibility: () => void;
   changeOutputVisibility: () => void;
