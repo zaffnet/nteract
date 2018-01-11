@@ -6,30 +6,16 @@ import { shutdownKernel } from "../kernel/shutdown";
 
 import {
   makeAppRecord,
-  makeLocalKernelRecord
+  makeLocalKernelRecord,
+  AppRecord
 } from "@nteract/types/core/records";
 
 import type { Channels } from "@nteract/types/channels";
 
-// TODO: This should be coming from @nteract/types/core/records
-declare class AppState {
-  channels: Channels;
-  spawn: ChildProcess;
-  connectionFile: string;
-  kernelSpecName: string;
-  kernelSpecDisplayName: string;
-  kernelSpec: Object;
-  executionState: string;
-  githubToken: string;
-  notificationSystem: Object;
-  set(string, any): AppState;
-  withMutations(any): AppState;
-}
-
-function cleanupKernel(state: AppState): AppState {
+function cleanupKernel(state: AppRecord): AppRecord {
   shutdownKernel(state.kernel);
 
-  return state.withMutations((ctx: AppState) =>
+  return state.withMutations((ctx: AppRecord) =>
     ctx
       .set("kernel", null)
       .set("kernelSpecName", null)
@@ -48,14 +34,14 @@ type NewKernelAction = {
   kernelSpec: Object
 };
 
-function newKernel(state: AppState, action: NewKernelAction) {
+function newKernel(state: AppRecord, action: NewKernelAction) {
   const kernel = makeLocalKernelRecord({
     channels: action.channels,
     spawn: action.spawn,
     connectionFile: action.connectionFile
   });
 
-  return cleanupKernel(state).withMutations((ctx: AppState) =>
+  return cleanupKernel(state).withMutations((ctx: AppRecord) =>
     ctx
       .set("kernel", kernel)
       .set("kernelSpecName", action.kernelSpecName)
@@ -64,16 +50,16 @@ function newKernel(state: AppState, action: NewKernelAction) {
       .set("executionState", "starting")
   );
 }
-function exit(state: AppState) {
+function exit(state: AppRecord) {
   return cleanupKernel(state);
 }
 
-function interruptKernel(state: AppState) {
+function interruptKernel(state: AppRecord) {
   state.kernel.spawn.kill("SIGINT");
   return state;
 }
 
-function startSaving(state: AppState) {
+function startSaving(state: AppRecord) {
   return state.set("isSaving", true);
 }
 
@@ -81,15 +67,15 @@ type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
   executionState: string
 };
-function setExecutionState(state: AppState, action: SetExecutionStateAction) {
+function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
   return state.set("executionState", action.executionState);
 }
 
-function doneSaving(state: AppState) {
+function doneSaving(state: AppRecord) {
   return state.set("isSaving", false).set("lastSaved", new Date());
 }
 
-function doneSavingConfig(state: AppState) {
+function doneSavingConfig(state: AppRecord) {
   return state.set("configLastSaved", new Date());
 }
 
@@ -98,14 +84,14 @@ type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 function setNotificationsSystem(
-  state: AppState,
+  state: AppRecord,
   action: SetNotificationSystemAction
 ) {
   return state.set("notificationSystem", action.notificationSystem);
 }
 
 type SetGithubTokenAction = { type: "SET_GITHUB_TOKEN", githubToken: string };
-function setGithubToken(state: AppState, action: SetGithubTokenAction) {
+function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   const { githubToken } = action;
   return state.set("githubToken", githubToken);
 }
@@ -129,10 +115,8 @@ type AppAction =
   | DoneSavingAction
   | DoneSavingConfigAction;
 
-const defaultAppState = makeAppRecord();
-
 export default function handleApp(
-  state: AppState = defaultAppState,
+  state: AppRecord = makeAppRecord(),
   action: AppAction
 ) {
   switch (action.type) {
