@@ -60,3 +60,9 @@ export type Position = {
   ch: number,
   line: number
 };
+
+export type Options = {
+  cursorBlinkRate: number,
+  mode: string,
+  preserveScrollPosition: boolean
+};

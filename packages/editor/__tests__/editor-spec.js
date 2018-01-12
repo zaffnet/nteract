@@ -60,11 +60,11 @@ describe("Editor", () => {
     expect(callback).not.toHaveBeenCalled();
   });
   it("handles cursor blinkery changes", () => {
-    const editorWrapper = mount(<Editor cursorBlinkRate={530} />);
+    const editorWrapper = mount(<Editor options={{ cursorBlinkRate: 530 }} />);
     const instance = editorWrapper.instance();
     const cm = instance.cm;
     expect(cm.options.cursorBlinkRate).toBe(530);
-    editorWrapper.setProps({ cursorBlinkRate: 0 });
+    editorWrapper.setProps({ options: { cursorBlinkRate: 0 } });
     expect(cm.options.cursorBlinkRate).toBe(0);
   });
 });

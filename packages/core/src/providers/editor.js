@@ -18,14 +18,15 @@ type Props = {
   focusBelow: () => void,
   theme: string,
   channels: any,
-  cursorBlinkRate: number,
   executionState: "idle" | "starting" | "not connected",
-  language: string
+  options: Object
 };
 
 function mapStateToProps(state: Object): Object {
   return {
-    cursorBlinkRate: state.config.get("cursorBlinkRate"),
+    options: {
+      cursorBlinkRate: state.config.get("cursorBlinkRate")
+    },
     channels: state.app.kernel ? state.app.kernel.channels : null,
     executionState: state.app.executionState
   };

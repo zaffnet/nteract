@@ -18,7 +18,7 @@ import { tool } from "./jupyter/tooltip";
 
 import { debounce, merge } from "lodash";
 
-import type { EditorChange, ScrollInfo, CMI, CMDoc } from "./types";
+import type { Options, EditorChange, ScrollInfo, CMI, CMDoc } from "./types";
 
 import styles from "./styles";
 
@@ -40,17 +40,13 @@ export type CodeMirrorEditorProps = {
   focusBelow: () => void,
   theme: string,
   channels: any,
-  cursorBlinkRate: number,
   executionState: "idle" | "starting" | "not connected",
-  language?: string,
-  mode?: string | Object,
   onChange: (value: string, change: EditorChange) => void,
   onFocusChange: (focused: boolean) => void,
   onScroll: (scrollInfo: ScrollInfo) => any,
-  preserveScrollPosition: boolean,
   value: string,
   defaultValue?: string,
-  options: any
+  options: Options
 };
 
 type CodeMirrorEditorState = {
@@ -73,8 +69,9 @@ class CodeMirrorEditor extends React.Component<
   static defaultProps = {
     // Workaround a flow limitation
     onScroll: () => {},
-    preserveScrollPosition: false,
-    options: {}
+    options: {
+      preserveScrollPosition: false
+    }
   };
 
   constructor(props: CodeMirrorEditorProps): void {
@@ -94,34 +91,35 @@ class CodeMirrorEditor extends React.Component<
     // TODO: Merge in default options with custom options
     // For now we'll do the old way of passing it in below
     // Which means we likely won't respond to updates properly
-    this.defaultOptions = {
-      autoCloseBrackets: true,
-      mode: props.mode || props.language || "python",
-      lineNumbers: false,
-      matchBrackets: true,
-      theme: "composition",
-      autofocus: false,
-      hintOptions: {
-        hint: this.hint,
-        completeSingle: false, // In automatic autocomplete mode we don't want override
+    this.defaultOptions = Object.assign(
+      {
+        autoCloseBrackets: true,
+        lineNumbers: false,
+        matchBrackets: true,
+        theme: "composition",
+        autofocus: false,
+        hintOptions: {
+          hint: this.hint,
+          completeSingle: false, // In automatic autocomplete mode we don't want override
+          extraKeys: {
+            Right: pick
+          }
+        },
         extraKeys: {
-          Right: pick
-        }
+          "Ctrl-Space": "autocomplete",
+          Tab: this.executeTab,
+          "Shift-Tab": editor => editor.execCommand("indentLess"),
+          Up: this.goLineUpOrEmit,
+          Down: this.goLineDownOrEmit,
+          "Cmd-/": "toggleComment",
+          "Ctrl-/": "toggleComment",
+          "Cmd-.": this.tips,
+          "Ctrl-.": this.tips
+        },
+        indentUnit: 4
       },
-      extraKeys: {
-        "Ctrl-Space": "autocomplete",
-        Tab: this.executeTab,
-        "Shift-Tab": editor => editor.execCommand("indentLess"),
-        Up: this.goLineUpOrEmit,
-        Down: this.goLineDownOrEmit,
-        "Cmd-/": "toggleComment",
-        "Ctrl-/": "toggleComment",
-        "Cmd-.": this.tips,
-        "Ctrl-.": this.tips
-      },
-      indentUnit: 4,
-      cursorBlinkRate: props.cursorBlinkRate
-    };
+      props.options
+    );
   }
 
   componentWillMount() {
@@ -163,7 +161,7 @@ class CodeMirrorEditor extends React.Component<
 
     this.cm = require("codemirror").fromTextArea(
       this.textarea,
-      merge({}, this.props.options, this.defaultOptions)
+      this.defaultOptions
     );
 
     this.cm.setValue(this.props.defaultValue || this.props.value || "");
@@ -207,7 +205,8 @@ class CodeMirrorEditor extends React.Component<
 
   componentDidUpdate(prevProps: CodeMirrorEditorProps): void {
     if (!this.cm) return;
-    const { cursorBlinkRate, editorFocused, theme } = this.props;
+    const { editorFocused, theme } = this.props;
+    const { cursorBlinkRate } = this.props.options;
 
     if (prevProps.theme !== theme) {
       this.cm.refresh();
@@ -217,7 +216,7 @@ class CodeMirrorEditor extends React.Component<
       editorFocused ? this.cm.focus() : this.cm.getInputField().blur();
     }
 
-    if (prevProps.cursorBlinkRate !== cursorBlinkRate) {
+    if (prevProps.options.cursorBlinkRate !== cursorBlinkRate) {
       this.cm.setOption("cursorBlinkRate", cursorBlinkRate);
       if (editorFocused) {
         // code mirror doesn't change the blink rate immediately, we have to
@@ -228,12 +227,8 @@ class CodeMirrorEditor extends React.Component<
       }
     }
 
-    if (prevProps.language !== this.props.language && !prevProps.mode) {
-      this.cm.setOption("mode", this.props.language);
-    }
-
-    if (prevProps.mode !== this.props.mode) {
-      this.cm.setOption("mode", this.props.mode);
+    if (prevProps.options.mode !== this.props.options.mode) {
+      this.cm.setOption("mode", this.props.options.mode);
     }
   }
 
@@ -244,7 +239,7 @@ class CodeMirrorEditor extends React.Component<
       normalizeLineEndings(this.cm.getValue()) !==
         normalizeLineEndings(nextProps.value)
     ) {
-      if (this.props.preserveScrollPosition) {
+      if (this.props.options.preserveScrollPosition) {
         var prevScrollPosition = this.cm.getScrollInfo();
         this.cm.setValue(nextProps.value);
         this.cm.scrollTo(prevScrollPosition.left, prevScrollPosition.top);
