@@ -15,10 +15,12 @@ import type {
   KernelSpecsRef,
   HostRef,
   RemoteKernelProps,
-  LocalKernelProps
+  LocalKernelProps,
+  JupyterHostRecordProps,
+  DesktopHostRecordProps
 } from "./hosts";
 
-export { makeLocalKernelRecord } from "./hosts";
+export { makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
 
 /*
 
@@ -138,6 +140,7 @@ export type Notebook = {
 // Basically, anything that's only for desktop should have its own record & reducers
 type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
+  host: ?RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>,
   executionState: "not connected" | "busy" | "idle" | "starting",
   githubToken: ?string,
   notificationSystem: ?Object,
@@ -149,8 +152,10 @@ type AppRecordProps = {
   configLastSaved: ?Date,
   error: any
 };
+
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   kernel: null,
+  host: null,
   executionState: "not connected",
   githubToken: null, // Electron specific (ish...)
   notificationSystem: null, // Should be available for all I assume

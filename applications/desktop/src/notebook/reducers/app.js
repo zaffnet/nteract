@@ -7,6 +7,7 @@ import { shutdownKernel } from "../kernel/shutdown";
 import {
   makeAppRecord,
   makeLocalKernelRecord,
+  makeDesktopHostRecord,
   AppRecord
 } from "@nteract/types/core/records";
 
@@ -116,7 +117,9 @@ type AppAction =
   | DoneSavingConfigAction;
 
 export default function handleApp(
-  state: AppRecord = makeAppRecord(),
+  state: AppRecord = makeAppRecord({
+    host: makeDesktopHostRecord()
+  }),
   action: AppAction
 ) {
   switch (action.type) {

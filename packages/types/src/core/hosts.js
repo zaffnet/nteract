@@ -99,4 +99,13 @@ export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
   connectionFile: null
 });
 
+export const makeRemoteKernelRecord: RecordFactory<RemoteKernelProps> = Record({
+  id: null,
+  ref: null,
+  name: null,
+  lastActivity: null,
+  channels: null,
+  status: null
+});
+
 export type LocalKernelRecord = RecordOf<LocalKernelProps>;
