@@ -22,11 +22,11 @@ type Props = {
   options: Object
 };
 
-function mapStateToProps(state: Object): Object {
+function mapStateToProps(state: Object, ownProps: Props): Object {
   return {
-    options: {
+    options: Object.assign(ownProps.options, {
       cursorBlinkRate: state.config.get("cursorBlinkRate")
-    },
+    }),
     channels: state.app.kernel ? state.app.kernel.channels : null,
     executionState: state.app.executionState
   };

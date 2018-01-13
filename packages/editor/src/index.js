@@ -68,10 +68,7 @@ class CodeMirrorEditor extends React.Component<
 
   static defaultProps = {
     // Workaround a flow limitation
-    onScroll: () => {},
-    options: {
-      preserveScrollPosition: false
-    }
+    onScroll: () => {}
   };
 
   constructor(props: CodeMirrorEditorProps): void {
@@ -80,18 +77,7 @@ class CodeMirrorEditor extends React.Component<
     this.tips = this.tips.bind(this);
     this.hint.async = true;
 
-    (this: any).scrollChanged = this.scrollChanged.bind(this);
-    (this: any).focusChanged = this.focusChanged;
-    (this: any).codemirrorValueChanged = this.codemirrorValueChanged;
-
-    this.state = {
-      isFocused: false
-    };
-
-    // TODO: Merge in default options with custom options
-    // For now we'll do the old way of passing it in below
-    // Which means we likely won't respond to updates properly
-    this.defaultOptions = Object.assign(
+    defaultOptions = Object.assign(
       {
         autoCloseBrackets: true,
         lineNumbers: false,
@@ -116,7 +102,8 @@ class CodeMirrorEditor extends React.Component<
           "Cmd-.": this.tips,
           "Ctrl-.": this.tips
         },
-        indentUnit: 4
+        indentUnit: 4,
+        preserveScrollPosition: false
       },
       props.options
     );
