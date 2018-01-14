@@ -91,9 +91,6 @@ export type RemoveCellAction = { type: "REMOVE_CELL", id: CellID };
 // TODO: Properly type this action type, which is consumed only by epics
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 
-// TODO: Delete unused action
-export const READ_NOTEBOOK = "READ_NOTEBOOK";
-
 export const NEW_CELL_AFTER = "NEW_CELL_AFTER";
 export type NewCellAfterAction = {
   type: "NEW_CELL_AFTER",
@@ -120,9 +117,6 @@ export type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
 
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
-
-// TODO: Delete this unused action type (we now defer to SET_IN_CELL)
-export const UPDATE_CELL_EXECUTION_COUNT = "UPDATE_CELL_EXECUTION_COUNT";
 
 export const APPEND_OUTPUT = "APPEND_OUTPUT";
 export type AppendOutputAction = {
@@ -230,22 +224,12 @@ export type DeleteMetadataFieldAction = {
   field: string
 };
 
-export const STARTED_UPLOADING = "STARTED_UPLOADING";
-export const DONE_UPLOADING = "DONE_UPLOADING";
-
-// TODO: Relocate the action type from desktop's app.js
-export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
-
 export const UPDATE_CELL_STATUS = "UPDATE_CELL_STATUS";
 export type UpdateCellStatusAction = {
   type: "UPDATE_CELL_STATUS",
   id: CellID,
   status: string
 };
-
-export const SET_MODIFIED = "SET_MODIFIED";
-
-export const SET_THEME = "SET_THEME";
 
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
 export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
@@ -260,7 +244,6 @@ export type RegisterCommTargetAction = {
 };
 
 export const COMM_OPEN = "COMM_OPEN";
-
 export type CommOpenAction = {
   type: "COMM_OPEN",
   target_name: string,
