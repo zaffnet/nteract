@@ -497,7 +497,7 @@ function sendExecuteRequest(
   }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
-function setInCell(state: DocumentRecord, action: SetInCellAction) {
+function setInCell(state: DocumentRecord, action: SetInCellAction<*>) {
   return state.setIn(
     ["notebook", "cellMap", action.id].concat(action.path),
     action.value
@@ -683,7 +683,7 @@ type DocumentAction =
   | SetNotebookCheckpointAction
   | AcceptPayloadMessageAction
   | SendExecuteMessageAction
-  | SetInCellAction;
+  | SetInCellAction<*>;
 
 const defaultDocument: DocumentRecord = makeDocumentRecord();
 

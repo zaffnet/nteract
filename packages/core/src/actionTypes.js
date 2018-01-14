@@ -29,11 +29,11 @@ export type ChangeFilenameAction = {
 };
 
 export const SET_IN_CELL = "SET_IN_CELL";
-export type SetInCellAction = {
+export type SetInCellAction<T> = {
   type: "SET_IN_CELL",
   id: CellID,
   path: Array<string>,
-  value: any
+  value: T
 };
 
 export const MOVE_CELL = "MOVE_CELL";

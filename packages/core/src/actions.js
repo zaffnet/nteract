@@ -12,8 +12,46 @@ import type {
   MimeBundle
 } from "@nteract/commutable/src/types";
 
+import type {
+  PasteCellAction,
+  ChangeFilenameAction,
+  ToggleCellExpansionAction,
+  ChangeCellTypeAction,
+  CutCellAction,
+  CopyCellAction,
+  DeleteMetadataFieldAction,
+  OverwriteMetadataFieldAction,
+  AcceptPayloadMessageAction,
+  SetNotebookAction,
+  NewCellAfterAction,
+  NewCellBeforeAction,
+  ClearOutputsAction,
+  AppendOutputAction,
+  SetNotebookCheckpointAction,
+  UpdateDisplayAction,
+  FocusNextCellAction,
+  FocusCellEditorAction,
+  FocusNextCellEditorAction,
+  FocusPreviousCellEditorAction,
+  RemoveCellAction,
+  FocusCellAction,
+  NewCellAppendAction,
+  MergeCellAfterAction,
+  MoveCellAction,
+  ToggleStickyCellAction,
+  FocusPreviousCellAction,
+  SetKernelInfoAction,
+  SetLanguageInfoAction,
+  UpdateCellStatusAction,
+  ToggleCellInputVisibilityAction,
+  ToggleCellOutputVisibilityAction,
+  SetInCellAction,
+  SendExecuteMessageAction
+} from "../actionTypes";
+
 import { createExecuteRequest } from "@nteract/messaging";
 
+// TODO: This is one of the untyped actions currently
 export function newKernel(kernelSpec: any, cwd: string) {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -22,6 +60,7 @@ export function newKernel(kernelSpec: any, cwd: string) {
   };
 }
 
+// TODO: This is one of the untyped actions currently
 export function newKernelByName(kernelSpecName: any, cwd: string) {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,
@@ -30,7 +69,7 @@ export function newKernelByName(kernelSpecName: any, cwd: string) {
   };
 }
 
-export function setNotebookKernelInfo(kernelInfo: any) {
+export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
   return {
     type: actionTypes.SET_KERNEL_INFO,
     kernelInfo
@@ -38,6 +77,7 @@ export function setNotebookKernelInfo(kernelInfo: any) {
 }
 
 // TODO: Lock this type down to a proper enum
+// TODO: Create a proper flow type in actionTypes
 export function setExecutionState(executionState: string) {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
@@ -45,15 +85,18 @@ export function setExecutionState(executionState: string) {
   };
 }
 
-export function clearOutputs(id: string) {
+export function clearOutputs(id: string): ClearOutputsAction {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
     id
   };
 }
 
-// TODO: above doesn't appear to get used for a MoveCellAction
-export function moveCell(id: string, destinationId: string, above: boolean) {
+export function moveCell(
+  id: string,
+  destinationId: string,
+  above: boolean
+): MoveCellAction {
   return {
     type: actionTypes.MOVE_CELL,
     id,
@@ -62,7 +105,7 @@ export function moveCell(id: string, destinationId: string, above: boolean) {
   };
 }
 
-export function removeCell(id: string) {
+export function removeCell(id: string): RemoveCellAction {
   return {
     type: actionTypes.REMOVE_CELL,
     id
@@ -73,7 +116,7 @@ export function createCellAfter(
   cellType: CellType,
   id: string,
   source: string = ""
-) {
+): NewCellAfterAction {
   return {
     type: actionTypes.NEW_CELL_AFTER,
     source,
@@ -82,7 +125,10 @@ export function createCellAfter(
   };
 }
 
-export function createCellBefore(cellType: CellType, id: string) {
+export function createCellBefore(
+  cellType: CellType,
+  id: string
+): NewCellBeforeAction {
   return {
     type: actionTypes.NEW_CELL_BEFORE,
     cellType,
@@ -90,14 +136,14 @@ export function createCellBefore(cellType: CellType, id: string) {
   };
 }
 
-export function createCellAppend(cellType: CellType) {
+export function createCellAppend(cellType: CellType): NewCellAppendAction {
   return {
     type: actionTypes.NEW_CELL_APPEND,
     cellType
   };
 }
 
-export function mergeCellAfter(id: string) {
+export function mergeCellAfter(id: string): MergeCellAfterAction {
   return {
     type: actionTypes.MERGE_CELL_AFTER,
     id
@@ -125,7 +171,11 @@ export function mergeCellAfter(id: string) {
  * }
  *
  */
-export function setInCell(id: CellID, path: Array<string>, value: any) {
+export function setInCell<T>(
+  id: CellID,
+  path: Array<string>,
+  value: T
+): SetInCellAction<T> {
   return {
     type: actionTypes.SET_IN_CELL,
     id,
@@ -134,11 +184,17 @@ export function setInCell(id: CellID, path: Array<string>, value: any) {
   };
 }
 
-export function updateCellSource(id: string, source: string) {
+export function updateCellSource(
+  id: string,
+  source: string
+): SetInCellAction<string> {
   return setInCell(id, ["source"], source);
 }
 
-export function updateCellExecutionCount(id: string, count: number) {
+export function updateCellExecutionCount(
+  id: string,
+  count: number
+): SetInCellAction<number> {
   return setInCell(id, ["execution_count"], count);
 }
 
