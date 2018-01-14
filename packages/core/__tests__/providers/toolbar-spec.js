@@ -103,7 +103,7 @@ describe.skip("toolbar provider", () => {
       .find("ToolbarView")
       .childAt(0)
       .getElement()
-      .changeInputVisibility(dropdown);
+      .toggleCellInputVisibility(dropdown);
   });
 
   test("change Output Visibility works", done => {
@@ -118,7 +118,7 @@ describe.skip("toolbar provider", () => {
       .find("ToolbarView")
       .childAt(0)
       .getElement()
-      .changeOutputVisibility(dropdown);
+      .toggleCellOutputVisibility(dropdown);
   });
 
   test("change Cell Type works", done => {

@@ -198,14 +198,18 @@ export function updateCellExecutionCount(
   return setInCell(id, ["execution_count"], count);
 }
 
-export function changeOutputVisibility(id: string) {
+export function toggleCellOutputVisibility(
+  id: string
+): ToggleCellOutputVisibilityAction {
   return {
     type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
     id
   };
 }
 
-export function changeInputVisibility(id: string) {
+export function toggleCellInputVisibility(
+  id: string
+): ToggleCellInputVisibilityAction {
   return {
     type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
     id

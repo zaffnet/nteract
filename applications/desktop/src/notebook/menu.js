@@ -12,7 +12,7 @@ import { load, newNotebook } from "./epics/loading";
 import { loadConfig } from "./epics/config";
 
 import {
-  changeInputVisibility,
+  toggleCellInputVisibility,
   clearOutputs,
   copyCell,
   createCellAfter,
@@ -204,7 +204,7 @@ export function dispatchUnhideAll(store) {
   notebook
     .get("cellOrder")
     .filter(cellID => cells.getIn([cellID, "metadata", "inputHidden"]))
-    .map(cellID => store.dispatch(changeInputVisibility(cellID)));
+    .map(cellID => store.dispatch(toggleCellInputVisibility(cellID)));
 }
 
 export function dispatchKillKernel(store) {

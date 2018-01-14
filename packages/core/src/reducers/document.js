@@ -504,7 +504,7 @@ function setInCell(state: DocumentRecord, action: SetInCellAction<*>) {
   );
 }
 
-function changeOutputVisibility(
+function toggleCellOutputVisibility(
   state: DocumentRecord,
   action: ToggleCellOutputVisibilityAction
 ) {
@@ -515,7 +515,7 @@ function changeOutputVisibility(
   );
 }
 
-function changeInputVisibility(
+function toggleCellInputVisibility(
   state: DocumentRecord,
   action: ToggleCellInputVisibilityAction
 ) {
@@ -733,9 +733,9 @@ function handleDocument(
     case actionTypes.NEW_CELL_APPEND:
       return newCellAppend(state, action);
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:
-      return changeOutputVisibility(state, action);
+      return toggleCellOutputVisibility(state, action);
     case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:
-      return changeInputVisibility(state, action);
+      return toggleCellInputVisibility(state, action);
     case actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION:
       return acceptPayloadMessage(state, action);
     case actionTypes.UPDATE_CELL_STATUS:

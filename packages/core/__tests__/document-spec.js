@@ -636,7 +636,7 @@ describe("deleteMetadata", () => {
   });
 });
 
-describe("changeOutputVisibility", () => {
+describe("toggleCellOutputVisibility", () => {
   test("changes the visibility on a single cell", () => {
     const originalState = monocellDocument.updateIn(
       ["notebook", "cellMap"],
@@ -655,7 +655,7 @@ describe("changeOutputVisibility", () => {
   });
 });
 
-describe("changeInputVisibility", () => {
+describe("toggleCellInputVisibility", () => {
   test("changes the input visibility on a single cell", () => {
     const originalState = monocellDocument.updateIn(
       ["notebook", "cellMap"],

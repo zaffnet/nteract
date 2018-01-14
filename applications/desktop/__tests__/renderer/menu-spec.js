@@ -258,7 +258,7 @@ describe("menu", () => {
   });
 
   describe("dispatchUnhideAll", () => {
-    test("dispatches changeInputVisibility for hidden code cells", () => {
+    test("dispatches toggleCellInputVisibility for hidden code cells", () => {
       const store = dummyStore({ hideAll: true });
       store.dispatch = jest.fn();
 

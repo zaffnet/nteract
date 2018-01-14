@@ -263,18 +263,18 @@ describe("cutCell", () => {
   });
 });
 
-describe("changeOutputVisibility", () => {
+describe("toggleCellOutputVisibility", () => {
   test("creates a TOGGLE_CELL_OUTPUT_VISIBILITY action", () => {
-    expect(actions.changeOutputVisibility("235")).toEqual({
+    expect(actions.toggleCellOutputVisibility("235")).toEqual({
       type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
       id: "235"
     });
   });
 });
 
-describe("changeInputVisibility", () => {
+describe("toggleCellInputVisibility", () => {
   test("creates a TOGGLE_CELL_INPUT_VISIBILITY action", () => {
-    expect(actions.changeInputVisibility("235")).toEqual({
+    expect(actions.toggleCellInputVisibility("235")).toEqual({
       type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
       id: "235"
     });
