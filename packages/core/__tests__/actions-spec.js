@@ -2,6 +2,78 @@
 import * as actions from "../src/actions";
 import * as actionTypes from "../src/actionTypes";
 
+describe("commOpenAction", () => {
+  test("creates a COMM_OPEN action", () => {
+    const message = {
+      content: {
+        data: "DATA",
+        metadata: "0",
+        comm_id: "0123",
+        target_name: "daredevil",
+        target_module: "murdock"
+      },
+      buffers: new Uint8Array()
+    };
+    const action = actions.commOpenAction(message);
+
+    expect(action).toEqual({
+      type: actionTypes.COMM_OPEN,
+      data: "DATA",
+      metadata: "0",
+      comm_id: "0123",
+      target_name: "daredevil",
+      target_module: "murdock",
+      buffers: new Uint8Array()
+    });
+  });
+});
+
+describe("commMessageAction", () => {
+  test("creates a COMM_MESSAGE action", () => {
+    const message = {
+      content: { data: "DATA", comm_id: "0123" },
+      buffers: new Uint8Array()
+    };
+    const action = actions.commMessageAction(message);
+
+    expect(action).toEqual({
+      type: actionTypes.COMM_MESSAGE,
+      data: "DATA",
+      comm_id: "0123",
+      buffers: new Uint8Array()
+    });
+  });
+});
+
+describe("load", () => {
+  test("loads a notebook", () => {
+    expect(actions.load("mytest.ipynb")).toEqual({
+      type: actionTypes.LOAD,
+      filename: "mytest.ipynb"
+    });
+  });
+});
+
+describe("newNotebook", () => {
+  test("creates a new notebook", () => {
+    expect(actions.newNotebook({ spec: "hokey" }, "/tmp")).toEqual({
+      type: actionTypes.NEW_NOTEBOOK,
+      kernelSpec: { spec: "hokey" },
+      cwd: "/tmp"
+    });
+  });
+});
+
+describe("setNotebook", () => {
+  test("sets a notebook", () => {
+    expect(actions.setNotebook("test", { nbformat: 4, cells: [] })).toEqual({
+      type: actionTypes.SET_NOTEBOOK,
+      filename: "test",
+      notebook: { nbformat: 4, cells: [] }
+    });
+  });
+});
+
 describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
     expect(actions.setExecutionState("idle")).toEqual({

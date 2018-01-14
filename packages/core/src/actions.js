@@ -1,6 +1,8 @@
 // @flow
 import * as actionTypes from "./actionTypes";
 
+import type { Notebook } from "@nteract/commutable";
+
 import type {
   ImmutableCell,
   ImmutableNotebook,
@@ -433,5 +435,85 @@ export function doneSaving(notebook: any) {
   return {
     type: actionTypes.DONE_SAVING,
     notebook
+  };
+}
+
+export function load(filename: string) {
+  return {
+    type: actionTypes.LOAD,
+    filename
+  };
+}
+
+// TODO: Use a kernel spec type
+export function newNotebook(kernelSpec: Object, cwd: string) {
+  return {
+    type: actionTypes.NEW_NOTEBOOK,
+    kernelSpec,
+    cwd:
+      cwd ||
+      // TODO: Does it matter that this is our fallback when targeting the web app
+      process.cwd()
+  };
+}
+
+// Expects notebook to be JS Object or Immutable.js
+export const setNotebook = (
+  filename: string,
+  notebook: Notebook
+): SetNotebookAction => ({
+  type: actionTypes.SET_NOTEBOOK,
+  filename,
+  notebook
+});
+
+export const loadConfig = () => ({ type: actionTypes.LOAD_CONFIG });
+export const saveConfig = () => ({ type: actionTypes.SAVE_CONFIG });
+export const doneSavingConfig = () => ({
+  type: actionTypes.DONE_SAVING_CONFIG
+});
+
+export const configLoaded = (config: any) => ({
+  type: actionTypes.MERGE_CONFIG,
+  config
+});
+
+/**
+ * Action creator for comm_open messages
+ * @param  {jmp.Message} a comm_open message
+ * @return {Object}      COMM_OPEN action
+ */
+export function commOpenAction(message: any) {
+  // invariant: expects a comm_open message
+  return {
+    type: actionTypes.COMM_OPEN,
+    data: message.content.data,
+    metadata: message.content.metadata,
+    comm_id: message.content.comm_id,
+    target_name: message.content.target_name,
+    target_module: message.content.target_module,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
+  };
+}
+
+/**
+ * Action creator for comm_msg messages
+ * @param  {jmp.Message} a comm_msg
+ * @return {Object}      COMM_MESSAGE action
+ */
+export function commMessageAction(message: any) {
+  return {
+    type: actionTypes.COMM_MESSAGE,
+    comm_id: message.content.comm_id,
+    data: message.content.data,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
   };
 }

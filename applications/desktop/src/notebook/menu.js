@@ -7,9 +7,9 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { load, newNotebook } from "./epics/loading";
+import { load, newNotebook } from "@nteract/core/actions";
 
-import { loadConfig } from "./epics/config";
+import { loadConfig } from "@nteract/core/actions";
 
 import {
   toggleCellInputVisibility,

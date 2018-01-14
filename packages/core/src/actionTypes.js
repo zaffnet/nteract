@@ -217,6 +217,15 @@ export type MergeConfigAction = {
   config: Map<string, ImmutableJSONType>
 };
 
+export const LOAD_CONFIG = "LOAD_CONFIG";
+export type LoadConfigAction = { type: "LOAD_CONFIG" };
+
+export const SAVE_CONFIG = "SAVE_CONFIG";
+export type SaveConfigAction = { type: "SAVE_CONFIG" };
+
+export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
+export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
+
 export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
 export type ToggleCellExpansionAction = {
   type: "TOGGLE_OUTPUT_EXPANSION",
@@ -239,6 +248,28 @@ export type ChangeCellTypeAction = {
   to: string
 };
 
+export const NEW_KERNEL = "NEW_KERNEL";
+type NewKernelAction = {
+  type: "NEW_KERNEL",
+  channels: Channels,
+  connectionFile: string,
+  spawn: ChildProcess,
+  kernelSpecName: string,
+  kernelSpec: Object
+};
+
+export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
+type SetExecutionStateAction = {
+  type: "SET_EXECUTION_STATE",
+  executionState: string
+};
+
+export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
+type SetNotificationSystemAction = {
+  type: "SET_NOTIFICATION_SYSTEM",
+  notificationSystem: Object
+};
+
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)
 // TODO: Determine the "right" name for this action creator (?)
@@ -258,33 +289,11 @@ export type SetNotebookAction = {
   filename?: string
 };
 
-type NewKernelAction = {
-  type: "NEW_KERNEL",
-  channels: Channels,
-  connectionFile: string,
-  spawn: ChildProcess,
-  kernelSpecName: string,
-  kernelSpec: Object
-};
-
-type SetExecutionStateAction = {
-  type: "SET_EXECUTION_STATE",
-  executionState: string
-};
-
-type SetNotificationSystemAction = {
-  type: "SET_NOTIFICATION_SYSTEM",
-  notificationSystem: Object
-};
-
 export const EXIT = "EXIT";
 export type ExitAction = { type: "EXIT" };
 
 export const START_SAVING = "START_SAVING";
 export type StartSavingAction = { type: "START_SAVING" };
-
-export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
-export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
 
 export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 export type InterruptKernelAction = { type: "INTERRUPT_KERNEL" };
@@ -309,14 +318,6 @@ export const SAVE = "SAVE";
 export const SAVE_AS = "SAVE_AS";
 // TODO: Relocate this action type from desktop's app.js
 export const LOAD = "LOAD";
-// TODO: Relocate the action type from desktop's app.js
-export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
-
-// TODO: Relocate this action type from desktop's config.js
-export const LOAD_CONFIG = "LOAD_CONFIG";
-// TODO: Relocate this action type from desktop's config.js
-export const SAVE_CONFIG = "SAVE_CONFIG";
-// TODO: Relocate this action type from desktop's config.js
 
 // TODO: Properly type this action, which is only produced, never consumed
 export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
@@ -329,15 +330,10 @@ export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 // TODO: Properly type this action type, which is consumed only by epics
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
-// TODO: Properly type this action type, which is consumed only by epics
-export const NEW_KERNEL = "NEW_KERNEL";
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
-// TODO: Relocate the action type from desktop's app.js
-export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
 
 // TODO: Properly type these ERROR action types
 export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
 export const ERROR_EXECUTING = "ERROR_EXECUTING";
 export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";
-export const COMM_ERROR = "COMM_ERROR";

@@ -7,7 +7,7 @@ import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import { readFileObservable } from "fs-observable";
-import { newKernelByName, newKernel } from "@nteract/core/actions";
+import { newKernelByName, newKernel, setNotebook } from "@nteract/core/actions";
 
 const path = require("path");
 
@@ -15,29 +15,6 @@ import { of } from "rxjs/observable/of";
 import { map, tap, mergeMap, switchMap, catchError } from "rxjs/operators";
 
 import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/actionTypes";
-
-export function load(filename: string) {
-  return {
-    type: LOAD,
-    filename
-  };
-}
-
-// TODO: Use a kernel spec type
-export function newNotebook(kernelSpec: Object, cwd: string) {
-  return {
-    type: NEW_NOTEBOOK,
-    kernelSpec,
-    cwd: cwd || process.cwd()
-  };
-}
-
-// Expects notebook to be JS Object or Immutable.js
-export const notebookLoaded = (filename: string, notebook: Notebook) => ({
-  type: SET_NOTEBOOK,
-  filename,
-  notebook
-});
 
 /**
  * Creates a new kernel based on the language info in the notebook.
@@ -97,7 +74,7 @@ export const loadEpic = (actions: ActionsObservable<*>) =>
         mergeMap(({ filename, notebook }) => {
           const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
           return of(
-            notebookLoaded(filename, notebook),
+            setNotebook(filename, notebook),
             // Find kernel based on kernel name
             // NOTE: Conda based kernels and remote kernels will need
             // special handling
