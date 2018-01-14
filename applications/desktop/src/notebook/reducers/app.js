@@ -11,6 +11,8 @@ import {
   AppRecord
 } from "@nteract/types/core/records";
 
+// TODO: These action types need moved out
+
 import type { Channels } from "@nteract/types/channels";
 
 function cleanupKernel(state: AppRecord): AppRecord {

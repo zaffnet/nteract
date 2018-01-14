@@ -64,7 +64,7 @@ describe("clearOutputs", () => {
 });
 
 describe("updateCellExecutionCount", () => {
-  test("creates a UPDATE_CELL_EXECUTION_COUNT action", () => {
+  test("creates a SET_IN_CELL action with the right path", () => {
     expect(actions.updateCellExecutionCount("1234", 3)).toEqual({
       type: "SET_IN_CELL",
       id: "1234",

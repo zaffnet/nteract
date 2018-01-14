@@ -2,8 +2,7 @@
 
 import { Map } from "immutable";
 
-type SetConfigAction = { type: "SET_CONFIG_KEY", key: string, value: string };
-type MergeConfigAction = { type: "MERGE_CONFIG", config: Map<any, any> };
+import type { SetConfigAction, MergeConfigAction } from "../actionTypes";
 
 type ConfigAction = SetConfigAction | MergeConfigAction;
 
@@ -29,6 +28,7 @@ export default function handleConfig(
     case "MERGE_CONFIG":
       return mergeConfig(state, action);
     default:
+      (action: empty);
       return state;
   }
 }
