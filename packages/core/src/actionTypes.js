@@ -28,30 +28,6 @@ export type ChangeFilenameAction = {
   filename: string
 };
 
-// TODO: Make this action JSON serializable (don't use the Immutable.js version
-//       of the notebook in this action)
-// TODO: Determine the "right" name for this action creator (?)
-export const DONE_SAVING = "DONE_SAVING";
-export type SetNotebookCheckpointAction = {
-  type: "DONE_SAVING",
-  notebook: ImmutableNotebook
-};
-
-// TODO: Make this action JSON serializable (don't use the Immutable.js version
-//       of the notebook in this action)
-export const SET_NOTEBOOK = "SET_NOTEBOOK";
-export type SetNotebookAction = {
-  type: "SET_NOTEBOOK",
-  notebook: ImmutableNotebook,
-  filename?: string
-};
-
-// TODO: Properly type these ERROR action types
-export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
-export const ERROR_EXECUTING = "ERROR_EXECUTING";
-export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";
-export const COMM_ERROR = "COMM_ERROR";
-
 export const SET_IN_CELL = "SET_IN_CELL";
 export type SetInCellAction = {
   type: "SET_IN_CELL",
@@ -202,11 +178,6 @@ export type UpdateCellStatusAction = {
   status: string
 };
 
-export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
-export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
-
-export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
-
 export const REGISTER_COMM_TARGET = "REGISTER_COMM_TARGET";
 export type RegisterCommTargetAction = {
   type: "REGISTER_COMM_TARGET",
@@ -265,6 +236,31 @@ export type ChangeCellTypeAction = {
   to: string
 };
 
+// TODO: Make this action JSON serializable (don't use the Immutable.js version
+//       of the notebook in this action)
+// TODO: Determine the "right" name for this action creator (?)
+export const DONE_SAVING = "DONE_SAVING";
+export type SetNotebookCheckpointAction = {
+  type: "DONE_SAVING",
+  notebook: ImmutableNotebook
+};
+
+// TODO: Make this action JSON serializable (don't use the Immutable.js version
+//       of the notebook in this action)
+export const SET_NOTEBOOK = "SET_NOTEBOOK";
+export type SetNotebookAction = {
+  type: "SET_NOTEBOOK",
+  notebook: ImmutableNotebook,
+  filename?: string
+};
+
+// TODO: This action needs a proper flow type, its from desktop's github store
+export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
+// TODO: This action needs a proper flow type, its from desktop's github store
+export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
+// TODO: This action needs a proper flow type, its from desktop's github store
+export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
+
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE = "SAVE";
 // TODO: Relocate this action type from desktop's app.js
@@ -273,7 +269,6 @@ export const SAVE_AS = "SAVE_AS";
 export const START_SAVING = "START_SAVING";
 // TODO: Relocate this action type from desktop's app.js
 export const LOAD = "LOAD";
-
 // TODO: Relocate the action type from desktop's app.js
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 
@@ -307,3 +302,9 @@ export const ABORT_EXECUTION = "ABORT_EXECUTION";
 export const EXIT = "EXIT";
 // TODO: Relocate the action type from desktop's app.js
 export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
+
+// TODO: Properly type these ERROR action types
+export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
+export const ERROR_EXECUTING = "ERROR_EXECUTING";
+export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";
+export const COMM_ERROR = "COMM_ERROR";
