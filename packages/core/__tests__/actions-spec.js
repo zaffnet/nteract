@@ -264,18 +264,18 @@ describe("cutCell", () => {
 });
 
 describe("changeOutputVisibility", () => {
-  test("creates a CHANGE_OUTPUT_VISIBILITY action", () => {
+  test("creates a TOGGLE_CELL_OUTPUT_VISIBILITY action", () => {
     expect(actions.changeOutputVisibility("235")).toEqual({
-      type: actionTypes.CHANGE_OUTPUT_VISIBILITY,
+      type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
       id: "235"
     });
   });
 });
 
 describe("changeInputVisibility", () => {
-  test("creates a CHANGE_INPUT_VISIBILITY action", () => {
+  test("creates a TOGGLE_CELL_INPUT_VISIBILITY action", () => {
     expect(actions.changeInputVisibility("235")).toEqual({
-      type: actionTypes.CHANGE_INPUT_VISIBILITY,
+      type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
       id: "235"
     });
   });

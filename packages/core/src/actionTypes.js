@@ -8,6 +8,7 @@ import type {
   ImmutableCellOrder,
   ImmutableOutput,
   ImmutableOutputs,
+  ImmutableJSONType,
   MimeBundle
 } from "@nteract/types/commutable";
 
@@ -27,46 +28,13 @@ export type ChangeFilenameAction = {
   filename: string
 };
 
-// TODO: Relocate the action type from desktop's app.js
-export const START_SAVING = "START_SAVING";
-
-// TODO: Is there a name mismatch here?
+// TODO: Make this action JSON serializable (don't use the Immutable.js version
+//       of the notebook in this action)
+// TODO: Determine the "right" name for this action creator (?)
 export const DONE_SAVING = "DONE_SAVING";
 export type SetNotebookCheckpointAction = {
   type: "DONE_SAVING",
   notebook: ImmutableNotebook
-};
-
-// TODO: Properly type these ERROR action types
-export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
-export const ERROR_EXECUTING = "ERROR_EXECUTING";
-export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";
-export const COMM_ERROR = "COMM_ERROR";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const NEW_KERNEL = "NEW_KERNEL";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const KILL_KERNEL = "KILL_KERNEL";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const EXIT = "EXIT";
-
-export const SET_IN_CELL = "SET_IN_CELL";
-export type SetInCellAction = {
-  type: "SET_IN_CELL",
-  id: CellID,
-  path: Array<string>,
-  value: any
 };
 
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
@@ -78,6 +46,20 @@ export type SetNotebookAction = {
   filename?: string
 };
 
+// TODO: Properly type these ERROR action types
+export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
+export const ERROR_EXECUTING = "ERROR_EXECUTING";
+export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";
+export const COMM_ERROR = "COMM_ERROR";
+
+export const SET_IN_CELL = "SET_IN_CELL";
+export type SetInCellAction = {
+  type: "SET_IN_CELL",
+  id: CellID,
+  path: Array<string>,
+  value: any
+};
+
 export const MOVE_CELL = "MOVE_CELL";
 export type MoveCellAction = {
   type: "MOVE_CELL",
@@ -87,9 +69,6 @@ export type MoveCellAction = {
 
 export const REMOVE_CELL = "REMOVE_CELL";
 export type RemoveCellAction = { type: "REMOVE_CELL", id: CellID };
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 
 export const NEW_CELL_AFTER = "NEW_CELL_AFTER";
 export type NewCellAfterAction = {
@@ -115,9 +94,6 @@ export type NewCellAppendAction = {
 export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
 export type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
 
-// TODO: This needs a proper flow type, is only consumed by the epics
-export const ABORT_EXECUTION = "ABORT_EXECUTION";
-
 export const APPEND_OUTPUT = "APPEND_OUTPUT";
 export type AppendOutputAction = {
   type: "APPEND_OUTPUT",
@@ -128,17 +104,15 @@ export type AppendOutputAction = {
 export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
 export type UpdateDisplayAction = { type: "UPDATE_DISPLAY", output: Output };
 
-// TODO: Rename this TOGGLE_OUTPUT_VISIBILITY
-export const CHANGE_OUTPUT_VISIBILITY = "CHANGE_OUTPUT_VISIBILITY";
-export type ChangeOutputVisibilityAction = {
-  type: "CHANGE_OUTPUT_VISIBILITY",
+export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
+export type ToggleCellOutputVisibilityAction = {
+  type: "TOGGLE_CELL_OUTPUT_VISIBILITY",
   id: CellID
 };
 
-// TODO: Rename this TOGGLE_INPUT_VISIBILITY
-export const CHANGE_INPUT_VISIBILITY = "CHANGE_INPUT_VISIBILITY";
-export type ChangeInputVisibilityAction = {
-  type: "CHANGE_INPUT_VISIBILITY",
+export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
+export type ToggleCellInputVisibilityAction = {
+  type: "TOGGLE_CELL_INPUT_VISIBILITY",
   id: CellID
 };
 
@@ -164,9 +138,6 @@ export type SendExecuteMessageAction = {
   id: CellID,
   message: ExecuteRequest
 };
-
-// TODO: Relocate the action type from desktop's app.js
-export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 
 export const FOCUS_CELL = "FOCUS_CELL";
 export type FocusCellAction = { type: "FOCUS_CELL", id: CellID };
@@ -267,10 +238,10 @@ export type SetConfigAction = {
 };
 
 export const MERGE_CONFIG = "MERGE_CONFIG";
-export type MergeConfigAction = { type: "MERGE_CONFIG", config: Map<any, any> };
-
-// TODO: Relocate the action type from desktop's config.js
-export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
+export type MergeConfigAction = {
+  type: "MERGE_CONFIG",
+  config: Map<string, ImmutableJSONType>
+};
 
 export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
 export type ToggleCellExpansionAction = {
@@ -294,20 +265,45 @@ export type ChangeCellTypeAction = {
   to: string
 };
 
-// TODO: Relocate the action type from desktop's app.js
+// TODO: Relocate this action type from desktop's app.js
 export const SAVE = "SAVE";
-// TODO: Relocate the action type from desktop's app.js
+// TODO: Relocate this action type from desktop's app.js
 export const SAVE_AS = "SAVE_AS";
-
-// TODO: Relocate the action type from desktop's app.js
+// TODO: Relocate this action type from desktop's app.js
+export const START_SAVING = "START_SAVING";
+// TODO: Relocate this action type from desktop's app.js
 export const LOAD = "LOAD";
 
-// TODO: Relocate the action type from desktop's config.js
-export const LOAD_CONFIG = "LOAD_CONFIG";
-// TODO: Relocate the action type from desktop's config.js
-export const SAVE_CONFIG = "SAVE_CONFIG";
+// TODO: Relocate the action type from desktop's app.js
+export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 
-// TODO: Properly type this action type, which is only produced, never consumed
+// TODO: Relocate this action type from desktop's config.js
+export const LOAD_CONFIG = "LOAD_CONFIG";
+// TODO: Relocate this action type from desktop's config.js
+export const SAVE_CONFIG = "SAVE_CONFIG";
+// TODO: Relocate this action type from desktop's config.js
+export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
+
+// TODO: Properly type this action, which is only produced, never consumed
 export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
-// TODO: Properly type this action type, which is only produced, never consumed
+// TODO: Properly type this action, which is only produced, never consumed
 export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
+
+// TODO: Properly type this action type, which is consumed only by epics
+export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
+// TODO: Properly type this action type, which is consumed only by epics
+export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
+// TODO: Properly type this action type, which is consumed only by epics
+export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
+// TODO: Properly type this action type, which is consumed only by epics
+export const NEW_KERNEL = "NEW_KERNEL";
+// TODO: Properly type this action type, which is consumed only by epics
+export const KILL_KERNEL = "KILL_KERNEL";
+// TODO: Properly type this action type, which is consumed only by epics
+export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
+// TODO: This needs a proper flow type, is only consumed by the epics
+export const ABORT_EXECUTION = "ABORT_EXECUTION";
+// TODO: Properly type this action type, which is consumed only by epics
+export const EXIT = "EXIT";
+// TODO: Relocate the action type from desktop's app.js
+export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";

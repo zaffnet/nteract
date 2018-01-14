@@ -11,8 +11,8 @@ import {
   REMOVE_CELL,
   SEND_EXECUTE_REQUEST,
   CLEAR_OUTPUTS,
-  CHANGE_INPUT_VISIBILITY,
-  CHANGE_OUTPUT_VISIBILITY,
+  TOGGLE_CELL_INPUT_VISIBILITY,
+  TOGGLE_CELL_OUTPUT_VISIBILITY,
   CHANGE_CELL_TYPE,
   TOGGLE_OUTPUT_EXPANSION
 } from "../../src/actionTypes";
@@ -94,7 +94,7 @@ describe.skip("toolbar provider", () => {
   test("change Input Visibility works", done => {
     const dispatch = action => {
       expect(action.id).toBe("cell");
-      expect(action.type).toBe(CHANGE_INPUT_VISIBILITY);
+      expect(action.type).toBe(TOGGLE_CELL_INPUT_VISIBILITY);
       done();
     };
     store.dispatch = dispatch;
@@ -109,7 +109,7 @@ describe.skip("toolbar provider", () => {
   test("change Output Visibility works", done => {
     const dispatch = action => {
       expect(action.id).toBe("cell");
-      expect(action.type).toBe(CHANGE_OUTPUT_VISIBILITY);
+      expect(action.type).toBe(TOGGLE_CELL_OUTPUT_VISIBILITY);
       done();
     };
     store.dispatch = dispatch;

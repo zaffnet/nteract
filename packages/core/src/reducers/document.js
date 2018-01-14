@@ -40,8 +40,8 @@ import type {
   SetKernelInfoAction,
   SetLanguageInfoAction,
   UpdateCellStatusAction,
-  ChangeInputVisibilityAction,
-  ChangeOutputVisibilityAction,
+  ToggleCellInputVisibilityAction,
+  ToggleCellOutputVisibilityAction,
   SetInCellAction,
   SendExecuteMessageAction
 } from "../actionTypes";
@@ -506,7 +506,7 @@ function setInCell(state: DocumentRecord, action: SetInCellAction) {
 
 function changeOutputVisibility(
   state: DocumentRecord,
-  action: ChangeOutputVisibilityAction
+  action: ToggleCellOutputVisibilityAction
 ) {
   const { id } = action;
   return state.setIn(
@@ -517,7 +517,7 @@ function changeOutputVisibility(
 
 function changeInputVisibility(
   state: DocumentRecord,
-  action: ChangeInputVisibilityAction
+  action: ToggleCellInputVisibilityAction
 ) {
   const { id } = action;
   return state.setIn(
@@ -668,8 +668,8 @@ type DocumentAction =
   | NewCellBeforeAction
   | NewCellAppendAction
   | MergeCellAfterAction
-  | ChangeOutputVisibilityAction
-  | ChangeInputVisibilityAction
+  | ToggleCellOutputVisibilityAction
+  | ToggleCellInputVisibilityAction
   | UpdateCellStatusAction
   | SetLanguageInfoAction
   | SetKernelInfoAction
@@ -732,9 +732,9 @@ function handleDocument(
       return mergeCellAfter(state, action);
     case actionTypes.NEW_CELL_APPEND:
       return newCellAppend(state, action);
-    case actionTypes.CHANGE_OUTPUT_VISIBILITY:
+    case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:
       return changeOutputVisibility(state, action);
-    case actionTypes.CHANGE_INPUT_VISIBILITY:
+    case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:
       return changeInputVisibility(state, action);
     case actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION:
       return acceptPayloadMessage(state, action);

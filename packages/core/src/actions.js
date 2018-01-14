@@ -144,14 +144,14 @@ export function updateCellExecutionCount(id: string, count: number) {
 
 export function changeOutputVisibility(id: string) {
   return {
-    type: actionTypes.CHANGE_OUTPUT_VISIBILITY,
+    type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
     id
   };
 }
 
 export function changeInputVisibility(id: string) {
   return {
-    type: actionTypes.CHANGE_INPUT_VISIBILITY,
+    type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
     id
   };
 }

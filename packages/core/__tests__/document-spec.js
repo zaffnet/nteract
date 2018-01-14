@@ -646,7 +646,7 @@ describe("changeOutputVisibility", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: actionTypes.CHANGE_OUTPUT_VISIBILITY, id };
+    const action = { type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
     expect(
@@ -665,7 +665,7 @@ describe("changeInputVisibility", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: actionTypes.CHANGE_INPUT_VISIBILITY, id };
+    const action = { type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
     expect(

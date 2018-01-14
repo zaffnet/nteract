@@ -268,7 +268,10 @@ describe("menu", () => {
         .getState()
         .document.getIn(["notebook", "cellOrder"])
         .first();
-      const expectedAction = { type: "CHANGE_INPUT_VISIBILITY", id: first };
+      const expectedAction = {
+        type: "TOGGLE_CELL_INPUT_VISIBILITY",
+        id: first
+      };
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
     });
   });
