@@ -1,5 +1,8 @@
 /* @flow */
 
+import type { Channels } from "@nteract/types/channels";
+import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
+
 import type {
   ImmutableCell,
   ImmutableNotebook,
@@ -201,9 +204,9 @@ export type CommMessageAction = {
   comm_id: string
 };
 
-export const SET_CONFIG_KEY = "SET_CONFIG_KEY";
+export const SET_CONFIG_AT_KEY = "SET_CONFIG_AT_KEY";
 export type SetConfigAction = {
-  type: "SET_CONFIG_KEY",
+  type: "SET_CONFIG_AT_KEY",
   key: string,
   value: string
 };
@@ -240,6 +243,7 @@ export type ChangeCellTypeAction = {
 //       of the notebook in this action)
 // TODO: Determine the "right" name for this action creator (?)
 export const DONE_SAVING = "DONE_SAVING";
+export type DoneSavingAction = { type: "DONE_SAVING" };
 export type SetNotebookCheckpointAction = {
   type: "DONE_SAVING",
   notebook: ImmutableNotebook
@@ -254,19 +258,55 @@ export type SetNotebookAction = {
   filename?: string
 };
 
+type NewKernelAction = {
+  type: "NEW_KERNEL",
+  channels: Channels,
+  connectionFile: string,
+  spawn: ChildProcess,
+  kernelSpecName: string,
+  kernelSpec: Object
+};
+
+type SetExecutionStateAction = {
+  type: "SET_EXECUTION_STATE",
+  executionState: string
+};
+
+type SetNotificationSystemAction = {
+  type: "SET_NOTIFICATION_SYSTEM",
+  notificationSystem: Object
+};
+
+export const EXIT = "EXIT";
+export type ExitAction = { type: "EXIT" };
+
+export const START_SAVING = "START_SAVING";
+export type StartSavingAction = { type: "START_SAVING" };
+
+export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
+export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
+
+export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
+export type InterruptKernelAction = { type: "INTERRUPT_KERNEL" };
+
+export const KILL_KERNEL = "KILL_KERNEL";
+export type KillKernelAction = { type: "KILL_KERNEL" };
+
+export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
+export type SetGithubTokenAction = {
+  type: "SET_GITHUB_TOKEN",
+  githubToken: string
+};
+
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
-// TODO: This action needs a proper flow type, its from desktop's github store
-export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
 
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE = "SAVE";
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE_AS = "SAVE_AS";
-// TODO: Relocate this action type from desktop's app.js
-export const START_SAVING = "START_SAVING";
 // TODO: Relocate this action type from desktop's app.js
 export const LOAD = "LOAD";
 // TODO: Relocate the action type from desktop's app.js
@@ -277,7 +317,6 @@ export const LOAD_CONFIG = "LOAD_CONFIG";
 // TODO: Relocate this action type from desktop's config.js
 export const SAVE_CONFIG = "SAVE_CONFIG";
 // TODO: Relocate this action type from desktop's config.js
-export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
 
 // TODO: Properly type this action, which is only produced, never consumed
 export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
@@ -292,14 +331,8 @@ export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 // TODO: Properly type this action type, which is consumed only by epics
 export const NEW_KERNEL = "NEW_KERNEL";
-// TODO: Properly type this action type, which is consumed only by epics
-export const KILL_KERNEL = "KILL_KERNEL";
-// TODO: Properly type this action type, which is consumed only by epics
-export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
-// TODO: Properly type this action type, which is consumed only by epics
-export const EXIT = "EXIT";
 // TODO: Relocate the action type from desktop's app.js
 export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
 

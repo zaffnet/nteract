@@ -46,7 +46,18 @@ import type {
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
-  SendExecuteMessageAction
+  SendExecuteMessageAction,
+  NewKernelAction,
+  SetGithubTokenAction,
+  SetNotificationSystemAction,
+  SetExecutionStateAction,
+  ExitAction,
+  StartSavingAction,
+  InterruptKernelAction,
+  KillKernelAction,
+  DoneSavingAction,
+  DoneSavingConfigAction,
+  SetConfigAction
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
@@ -216,8 +227,10 @@ export function toggleCellInputVisibility(
   };
 }
 
-// TODO de-anyify this signature
-export function updateCellStatus(id: string, status: any) {
+export function updateCellStatus(
+  id: string,
+  status: string
+): UpdateCellStatusAction {
   return {
     type: actionTypes.UPDATE_CELL_STATUS,
     id,
@@ -225,15 +238,17 @@ export function updateCellStatus(id: string, status: any) {
   };
 }
 
-// TODO de-anyify this signature
-export function focusCell(id: string) {
+export function focusCell(id: string): FocusCellAction {
   return {
     type: actionTypes.FOCUS_CELL,
     id
   };
 }
 
-export function focusNextCell(id: string, createCellIfUndefined: boolean) {
+export function focusNextCell(
+  id: string,
+  createCellIfUndefined: boolean
+): FocusNextCellAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
     id,
@@ -241,42 +256,47 @@ export function focusNextCell(id: string, createCellIfUndefined: boolean) {
   };
 }
 
-export function focusPreviousCell(id: string) {
+export function focusPreviousCell(id: string): FocusPreviousCellAction {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL,
     id
   };
 }
 
-export function focusCellEditor(id: string | null) {
+export function focusCellEditor(id: string | null): FocusCellEditorAction {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
     id
   };
 }
 
-export function focusNextCellEditor(id: string) {
+export function focusNextCellEditor(id: string): FocusNextCellEditorAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
     id
   };
 }
 
-export function focusPreviousCellEditor(id: string) {
+export function focusPreviousCellEditor(
+  id: string
+): FocusPreviousCellEditorAction {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
     id
   };
 }
 
-export function toggleStickyCell(id: string) {
+export function toggleStickyCell(id: string): ToggleStickyCellAction {
   return {
     type: actionTypes.TOGGLE_STICKY_CELL,
     id
   };
 }
 
-export function overwriteMetadata(field: string, value: any) {
+export function overwriteMetadata(
+  field: string,
+  value: any
+): OverwriteMetadataFieldAction {
   return {
     type: actionTypes.OVERWRITE_METADATA_FIELD,
     field,
@@ -284,49 +304,51 @@ export function overwriteMetadata(field: string, value: any) {
   };
 }
 
-export function deleteMetadata(field: string) {
+export function deleteMetadata(field: string): DeleteMetadataFieldAction {
   return {
     type: actionTypes.DELETE_METADATA_FIELD,
     field
   };
 }
 
-export const killKernel = {
+export const killKernel: KillKernelAction = {
   type: actionTypes.KILL_KERNEL
 };
 
-export const interruptKernel = {
+export const interruptKernel: InterruptKernelAction = {
   type: actionTypes.INTERRUPT_KERNEL
 };
 
-export function setNotificationSystem(notificationSystem: any) {
+export function setNotificationSystem(
+  notificationSystem: any
+): SetNotificationSystemAction {
   return {
     type: actionTypes.SET_NOTIFICATION_SYSTEM,
     notificationSystem
   };
 }
 
-export function copyCell(id: CellID) {
+export function copyCell(id: CellID): CopyCellAction {
   return {
     type: actionTypes.COPY_CELL,
     id
   };
 }
 
-export function cutCell(id: CellID) {
+export function cutCell(id: CellID): CutCellAction {
   return {
     type: actionTypes.CUT_CELL,
     id
   };
 }
 
-export function pasteCell() {
+export function pasteCell(): PasteCellAction {
   return {
     type: actionTypes.PASTE_CELL
   };
 }
 
-export function changeCellType(id: CellID, to: CellType) {
+export function changeCellType(id: CellID, to: CellType): ChangeCellTypeAction {
   return {
     type: actionTypes.CHANGE_CELL_TYPE,
     id,
@@ -334,30 +356,30 @@ export function changeCellType(id: CellID, to: CellType) {
   };
 }
 
-export function setGithubToken(githubToken: string) {
+export function setGithubToken(githubToken: string): SetGithubTokenAction {
   return {
     type: actionTypes.SET_GITHUB_TOKEN,
     githubToken
   };
 }
 
-export function setConfigKey(key: string, value: any) {
+export function setConfigAtKey(key: string, value: any): SetConfigAction {
   return {
-    type: actionTypes.SET_CONFIG_KEY,
+    type: actionTypes.SET_CONFIG_AT_KEY,
     key,
     value
   };
 }
 
 export function setTheme(theme: string) {
-  return setConfigKey("theme", (theme: string));
+  return setConfigAtKey("theme", (theme: string));
 }
 
 export function setCursorBlink(value: string) {
-  return setConfigKey("cursorBlinkRate", value);
+  return setConfigAtKey("cursorBlinkRate", value);
 }
 
-export function toggleOutputExpansion(id: string) {
+export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
   return {
     type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
     id
@@ -371,7 +393,10 @@ export function toggleOutputExpansion(id: string) {
  * @param {Object} source - Source code to executed.
  * @return {Object} executeCellAction - Action to be dispatched to reducer.
  */
-export function executeCell(id: string, source: string) {
+export function executeCell(
+  id: string,
+  source: string
+): SendExecuteMessageAction {
   const message = createExecuteRequest(source);
 
   return {
@@ -381,7 +406,7 @@ export function executeCell(id: string, source: string) {
   };
 }
 
-export function changeFilename(filename: string) {
+export function changeFilename(filename: string): ChangeFilenameAction {
   return {
     type: actionTypes.CHANGE_FILENAME,
     filename

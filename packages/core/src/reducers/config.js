@@ -8,7 +8,7 @@ type ConfigAction = SetConfigAction | MergeConfigAction;
 
 type ConfigState = Map<any, any>;
 
-export function setConfigKey(state: ConfigState, action: SetConfigAction) {
+export function setConfigAtKey(state: ConfigState, action: SetConfigAction) {
   const { key, value } = action;
   return state.set(key, value);
 }
@@ -23,8 +23,8 @@ export default function handleConfig(
   action: ConfigAction
 ) {
   switch (action.type) {
-    case "SET_CONFIG_KEY":
-      return setConfigKey(state, action);
+    case "SET_CONFIG_AT_KEY":
+      return setConfigAtKey(state, action);
     case "MERGE_CONFIG":
       return mergeConfig(state, action);
     default:

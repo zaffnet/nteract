@@ -79,28 +79,28 @@ describe("menu", () => {
   });
 
   describe("dispatchSetTheme", () => {
-    test("dispatches a SET_CONFIG_KEY action", () => {
+    test("dispatches a SET_CONFIG_AT_KEY action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
       menu.dispatchSetTheme(store, {}, "test_theme");
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.SET_CONFIG_KEY,
+        type: actionTypes.SET_CONFIG_AT_KEY,
         key: "theme",
         value: "test_theme"
       });
     });
   });
   describe("dispatchSetCursorBlink", () => {
-    test("dispatches a SET_CONFIG_KEY action", () => {
+    test("dispatches a SET_CONFIG_AT_KEY action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
       menu.dispatchSetCursorBlink(store, {}, 42);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.SET_CONFIG_KEY,
+        type: actionTypes.SET_CONFIG_AT_KEY,
         key: "cursorBlinkRate",
         value: 42
       });

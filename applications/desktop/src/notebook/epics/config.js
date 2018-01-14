@@ -3,7 +3,7 @@ import { remote } from "electron";
 
 import {
   MERGE_CONFIG,
-  SET_CONFIG_KEY,
+  SET_CONFIG_AT_KEY,
   DONE_SAVING_CONFIG,
   LOAD_CONFIG,
   SAVE_CONFIG
@@ -50,11 +50,11 @@ export const loadConfigEpic = (actions: ActionsObservable<*>) =>
 /**
  * An epic that saves the configuration if it has been changed.
  *
- * @param  {ActionObservable}  actions ActionObservable for SET_CONFIG_KEY action
+ * @param  {ActionObservable}  actions ActionObservable for SET_CONFIG_AT_KEY action
  * @return {ActionObservable}  ActionObservable with SAVE_CONFIG type
  */
 export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
-  actions.pipe(ofType(SET_CONFIG_KEY), mapTo({ type: SAVE_CONFIG }));
+  actions.pipe(ofType(SET_CONFIG_AT_KEY), mapTo({ type: SAVE_CONFIG }));
 
 /**
  * An epic that saves the configuration.
