@@ -12,7 +12,7 @@ import {
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
 
-import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/constants";
+import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/actionTypes";
 
 import { toArray } from "rxjs/operators";
 

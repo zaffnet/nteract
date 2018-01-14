@@ -13,7 +13,7 @@ import {
   COMM_MESSAGE,
   COMM_ERROR,
   NEW_KERNEL
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 /**
  * creates a comm open message

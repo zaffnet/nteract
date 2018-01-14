@@ -5,7 +5,7 @@ import * as uuid from "uuid";
 
 import { escapeCarriageReturnSafe } from "escape-carriage";
 
-import * as constants from "../constants";
+import * as actionTypes from "../actionTypes";
 
 import type {
   LanguageInfoMetadata,
@@ -477,7 +477,7 @@ function acceptPayloadMessage(
     } else {
       // create the next cell
       return newCellAfter(state, {
-        type: constants.NEW_CELL_AFTER,
+        type: actionTypes.NEW_CELL_AFTER,
         cellType: "code",
         source: payload.text,
         id
@@ -760,73 +760,73 @@ function handleDocument(
   action: DocumentAction
 ) {
   switch (action.type) {
-    case constants.SEND_EXECUTE_REQUEST:
+    case actionTypes.SEND_EXECUTE_REQUEST:
       return sendExecuteRequest(state, action);
-    case constants.SET_NOTEBOOK:
+    case actionTypes.SET_NOTEBOOK:
       return setNotebook(state, action);
-    case constants.DONE_SAVING:
+    case actionTypes.DONE_SAVING:
       return setNotebookCheckpoint(state, action);
-    case constants.FOCUS_CELL:
+    case actionTypes.FOCUS_CELL:
       return focusCell(state, action);
-    case constants.CLEAR_OUTPUTS:
+    case actionTypes.CLEAR_OUTPUTS:
       return clearOutputs(state, action);
-    case constants.APPEND_OUTPUT:
+    case actionTypes.APPEND_OUTPUT:
       return appendOutput(state, action);
-    case constants.UPDATE_DISPLAY:
+    case actionTypes.UPDATE_DISPLAY:
       return updateDisplay(state, action);
-    case constants.FOCUS_NEXT_CELL:
+    case actionTypes.FOCUS_NEXT_CELL:
       return focusNextCell(state, action);
-    case constants.FOCUS_PREVIOUS_CELL:
+    case actionTypes.FOCUS_PREVIOUS_CELL:
       return focusPreviousCell(state, action);
-    case constants.FOCUS_CELL_EDITOR:
+    case actionTypes.FOCUS_CELL_EDITOR:
       return focusCellEditor(state, action);
-    case constants.FOCUS_NEXT_CELL_EDITOR:
+    case actionTypes.FOCUS_NEXT_CELL_EDITOR:
       return focusNextCellEditor(state, action);
-    case constants.FOCUS_PREVIOUS_CELL_EDITOR:
+    case actionTypes.FOCUS_PREVIOUS_CELL_EDITOR:
       return focusPreviousCellEditor(state, action);
-    case constants.TOGGLE_STICKY_CELL:
+    case actionTypes.TOGGLE_STICKY_CELL:
       return toggleStickyCell(state, action);
-    case constants.SET_IN_CELL:
+    case actionTypes.SET_IN_CELL:
       return setInCell(state, action);
-    case constants.MOVE_CELL:
+    case actionTypes.MOVE_CELL:
       return moveCell(state, action);
-    case constants.REMOVE_CELL:
+    case actionTypes.REMOVE_CELL:
       return removeCellFromState(state, action);
-    case constants.NEW_CELL_AFTER:
+    case actionTypes.NEW_CELL_AFTER:
       return newCellAfter(state, action);
-    case constants.NEW_CELL_BEFORE:
+    case actionTypes.NEW_CELL_BEFORE:
       return newCellBefore(state, action);
-    case constants.MERGE_CELL_AFTER:
+    case actionTypes.MERGE_CELL_AFTER:
       return mergeCellAfter(state, action);
-    case constants.NEW_CELL_APPEND:
+    case actionTypes.NEW_CELL_APPEND:
       return newCellAppend(state, action);
-    case constants.CHANGE_OUTPUT_VISIBILITY:
+    case actionTypes.CHANGE_OUTPUT_VISIBILITY:
       return changeOutputVisibility(state, action);
-    case constants.CHANGE_INPUT_VISIBILITY:
+    case actionTypes.CHANGE_INPUT_VISIBILITY:
       return changeInputVisibility(state, action);
-    case constants.ACCEPT_PAYLOAD_MESSAGE_ACTION:
+    case actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION:
       return acceptPayloadMessage(state, action);
-    case constants.UPDATE_CELL_STATUS:
+    case actionTypes.UPDATE_CELL_STATUS:
       return updateCellStatus(state, action);
-    case constants.SET_LANGUAGE_INFO:
+    case actionTypes.SET_LANGUAGE_INFO:
       return setLanguageInfo(state, action);
-    case constants.SET_KERNEL_INFO:
+    case actionTypes.SET_KERNEL_INFO:
       return setKernelSpec(state, action);
-    case constants.OVERWRITE_METADATA_FIELD:
+    case actionTypes.OVERWRITE_METADATA_FIELD:
       return overwriteMetadata(state, action);
-    case constants.DELETE_METADATA_FIELD:
+    case actionTypes.DELETE_METADATA_FIELD:
       return deleteMetadata(state, action);
-    case constants.COPY_CELL:
+    case actionTypes.COPY_CELL:
       return copyCell(state, action);
-    case constants.CUT_CELL:
+    case actionTypes.CUT_CELL:
       return cutCell(state, action);
-    case constants.PASTE_CELL:
+    case actionTypes.PASTE_CELL:
       return pasteCell(state);
-    case constants.CHANGE_CELL_TYPE:
+    case actionTypes.CHANGE_CELL_TYPE:
       return changeCellType(state, action);
-    case constants.TOGGLE_OUTPUT_EXPANSION:
+    case actionTypes.TOGGLE_OUTPUT_EXPANSION:
       return toggleOutputExpansion(state, action);
-    case constants.CHANGE_FILENAME:
+    case actionTypes.CHANGE_FILENAME:
       return changeFilename(state, action);
     default:
       return state;

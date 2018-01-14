@@ -4,7 +4,7 @@ import { shell } from "electron";
 import {
   PUBLISH_USER_GIST,
   PUBLISH_ANONYMOUS_GIST
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 import { overwriteMetadata, deleteMetadata } from "@nteract/core/actions";
 

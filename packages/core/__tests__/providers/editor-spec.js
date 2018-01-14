@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 
 import Editor from "../../src/providers/editor";
 import { dummyStore } from "../../src/dummy";
-import { UPDATE_CELL_SOURCE, FOCUS_CELL_EDITOR } from "../../src/constants";
+import { UPDATE_CELL_SOURCE, FOCUS_CELL_EDITOR } from "../../src/actionTypes";
 
 describe("EditorProvider", () => {
   const store = dummyStore();

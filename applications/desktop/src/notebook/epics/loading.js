@@ -14,7 +14,7 @@ const path = require("path");
 import { of } from "rxjs/observable/of";
 import { map, tap, mergeMap, switchMap, catchError } from "rxjs/operators";
 
-import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/constants";
+import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/actionTypes";
 
 export function load(filename: string) {
   return {

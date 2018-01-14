@@ -1,4 +1,4 @@
-import * as constants from "@nteract/core/constants";
+import * as actionTypes from "@nteract/core/actionTypes";
 import reducers from "../../../src/notebook/reducers";
 import {
   AppRecord,
@@ -20,7 +20,7 @@ describe("cleanupKernel", () => {
       })
     };
 
-    const action = { type: constants.KILL_KERNEL };
+    const action = { type: actionTypes.KILL_KERNEL };
 
     const state = reducers(originalState, action);
     expect(state.app.kernel).toBeNull();
@@ -39,7 +39,7 @@ describe("setNotificationSystem", () => {
       })
     };
 
-    const action = { type: constants.SET_NOTIFICATION_SYSTEM };
+    const action = { type: actionTypes.SET_NOTIFICATION_SYSTEM };
 
     const state = reducers(originalState, action);
     expect(state.app.notificationSystem).toBeNull();
@@ -56,7 +56,7 @@ describe("setNotificationSystem", () => {
     };
 
     const action = {
-      type: constants.SET_NOTIFICATION_SYSTEM,
+      type: actionTypes.SET_NOTIFICATION_SYSTEM,
       notificationSystem: ""
     };
 
@@ -77,7 +77,7 @@ describe("startSaving", () => {
       })
     };
 
-    const action = { type: constants.START_SAVING };
+    const action = { type: actionTypes.START_SAVING };
 
     const state = reducers(originalState, action);
     expect(state.app.isSaving).toBe(true);
@@ -96,7 +96,7 @@ describe("doneSaving", () => {
       })
     };
 
-    const action = { type: constants.DONE_SAVING };
+    const action = { type: actionTypes.DONE_SAVING };
 
     const state = reducers(originalState, action);
     expect(state.app.isSaving).toBe(false);
@@ -116,7 +116,7 @@ describe("setExecutionState", () => {
     };
 
     const action = {
-      type: constants.SET_EXECUTION_STATE,
+      type: actionTypes.SET_EXECUTION_STATE,
       executionState: "idle"
     };
 
@@ -137,7 +137,7 @@ describe("killKernel", () => {
       })
     };
 
-    const action = { type: constants.KILL_KERNEL };
+    const action = { type: actionTypes.KILL_KERNEL };
 
     const state = reducers(originalState, action);
     expect(state.app.kernel).toBeNull();
@@ -158,7 +158,7 @@ describe("interruptKernel", () => {
       })
     };
 
-    const action = { type: constants.INTERRUPT_KERNEL };
+    const action = { type: actionTypes.INTERRUPT_KERNEL };
 
     const state = reducers(originalState, action);
     expect(state.app).toEqual(originalState.app);
@@ -178,7 +178,7 @@ describe("newKernel", () => {
     };
 
     const action = {
-      type: constants.NEW_KERNEL,
+      type: actionTypes.NEW_KERNEL,
       channels: "test_channels",
       spawn: "test_spawn",
       kernelSpecName: "test_name",
@@ -207,7 +207,7 @@ describe("setGithubToken", () => {
       })
     };
 
-    const action = { type: constants.SET_GITHUB_TOKEN, githubToken: "TOKEN" };
+    const action = { type: actionTypes.SET_GITHUB_TOKEN, githubToken: "TOKEN" };
 
     const state = reducers(originalState, action);
     // this is a crappy way of testing this
@@ -228,7 +228,7 @@ describe("exit", () => {
       })
     };
 
-    const action = { type: constants.EXIT };
+    const action = { type: actionTypes.EXIT };
 
     const state = reducers(originalState, action);
     expect(state.app.kernel).toBeNull();
@@ -241,7 +241,7 @@ describe("doneSavingConfig", () => {
   test("updates when the config was saved", () => {
     const originalState = { app: makeAppRecord({ configLastSaved: null }) };
 
-    const action = { type: constants.DONE_SAVING_CONFIG };
+    const action = { type: actionTypes.DONE_SAVING_CONFIG };
 
     const state = reducers(originalState, action);
     expect(state.app.configLastSaved).toEqual(expect.any(Date));

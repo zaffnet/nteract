@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import { List, Map, Set, is } from "immutable";
 
-import * as constants from "../src/constants";
+import * as actionTypes from "../src/actionTypes";
 import { document as reducers } from "../src/reducers";
 
 import {
@@ -163,7 +163,7 @@ describe("setNotebook", () => {
   test("converts a JSON notebook to our commutable notebook and puts in state", () => {
     const notebook = fromJS(dummyJSON);
     const state = reducers(initialDocument, {
-      type: constants.SET_NOTEBOOK,
+      type: actionTypes.SET_NOTEBOOK,
       notebook
     });
     expect(state.getIn(["notebook", "nbformat"])).toBe(4);
@@ -173,7 +173,7 @@ describe("setNotebook", () => {
 describe("setNotebookCheckpoint", () => {
   test("stores saved notebook", () => {
     const state = reducers(initialDocument, {
-      type: constants.DONE_SAVING,
+      type: actionTypes.DONE_SAVING,
       notebook: dummyCommutable
     });
     expect(is(state.get("notebook"), initialDocument.get("notebook"))).toBe(
@@ -190,7 +190,7 @@ describe("setLanguageInfo", () => {
       spec: { language: "french", display_name: "français" }
     };
     const state = reducers(initialDocument, {
-      type: constants.SET_KERNEL_INFO,
+      type: actionTypes.SET_KERNEL_INFO,
       kernelInfo
     });
     const metadata = state.getIn(["notebook", "metadata"]);
@@ -204,7 +204,7 @@ describe("focusCell", () => {
   test("should set cellFocused to the appropriate cell ID", () => {
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.FOCUS_CELL, id };
+    const action = { type: actionTypes.FOCUS_CELL, id };
 
     const state = reducers(monocellDocument, action);
     expect(state.get("cellFocused")).toBe(id);
@@ -217,7 +217,7 @@ describe("focusNextCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.FOCUS_NEXT_CELL, id };
+    const action = { type: actionTypes.FOCUS_NEXT_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.get("cellFocused")).not.toBeNull();
@@ -227,7 +227,7 @@ describe("focusNextCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.FOCUS_NEXT_CELL, id };
+    const action = { type: actionTypes.FOCUS_NEXT_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.get("cellFocused")).not.toBeNull();
@@ -242,7 +242,7 @@ describe("focusNextCell", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
     const action = {
-      type: constants.FOCUS_NEXT_CELL,
+      type: actionTypes.FOCUS_NEXT_CELL,
       id,
       createCellIfUndefined: true
     };
@@ -269,7 +269,7 @@ describe("focusNextCell", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
     const action = {
-      type: constants.FOCUS_NEXT_CELL,
+      type: actionTypes.FOCUS_NEXT_CELL,
       id,
       createCellIfUndefined: true
     };
@@ -296,7 +296,7 @@ describe("focusPreviousCell", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.FOCUS_PREVIOUS_CELL, id };
+    const action = { type: actionTypes.FOCUS_PREVIOUS_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.get("cellFocused")).toBe(previousId);
@@ -309,7 +309,7 @@ describe("focusCellEditor", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.FOCUS_CELL_EDITOR, id };
+    const action = { type: actionTypes.FOCUS_CELL_EDITOR, id };
 
     const state = reducers(originalState, action);
     expect(state.get("editorFocused")).toBe(id);
@@ -322,7 +322,7 @@ describe("focusNextCellEditor", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.FOCUS_NEXT_CELL_EDITOR, id };
+    const action = { type: actionTypes.FOCUS_NEXT_CELL_EDITOR, id };
 
     const state = reducers(originalState, action);
     expect(state.get("editorFocused")).not.toBeNull();
@@ -336,7 +336,7 @@ describe("focusPreviousCellEditor", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.FOCUS_PREVIOUS_CELL_EDITOR, id };
+    const action = { type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR, id };
 
     const state = reducers(originalState, action);
     expect(state.get("editorFocused")).toBe(previousId);
@@ -352,7 +352,7 @@ describe("toggleStickyCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.TOGGLE_STICKY_CELL, id };
+    const action = { type: actionTypes.TOGGLE_STICKY_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.hasIn(["stickyCells", id])).toBe(true);
@@ -365,7 +365,7 @@ describe("toggleStickyCell", () => {
 
     const originalState = doc;
 
-    const action = { type: constants.TOGGLE_STICKY_CELL, id };
+    const action = { type: actionTypes.TOGGLE_STICKY_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.hasIn(["stickyCells", id])).toBe(false);
@@ -400,7 +400,7 @@ describe("moveCell", () => {
     const id = cellOrder.last();
     const destinationId = cellOrder.first();
 
-    const action = { type: constants.MOVE_CELL, id, destinationId };
+    const action = { type: actionTypes.MOVE_CELL, id, destinationId };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(id);
@@ -414,7 +414,7 @@ describe("moveCell", () => {
     const destinationId = cellOrder.first();
 
     const action = {
-      type: constants.MOVE_CELL,
+      type: actionTypes.MOVE_CELL,
       id,
       destinationId,
       above: true
@@ -438,7 +438,7 @@ describe("moveCell", () => {
     const cellOrder = originalState.getIn(["notebook", "cellOrder"]);
 
     const action = {
-      type: constants.MOVE_CELL,
+      type: actionTypes.MOVE_CELL,
       id: cellOrder.get(0),
       destinationId: cellOrder.get(1)
     };
@@ -452,7 +452,7 @@ describe("moveCell", () => {
     ]);
 
     const action2 = {
-      type: constants.MOVE_CELL,
+      type: actionTypes.MOVE_CELL,
       id: cellOrder.get(0),
       destinationId: cellOrder.get(1),
       above: true
@@ -473,7 +473,7 @@ describe("removeCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.REMOVE_CELL, id };
+    const action = { type: actionTypes.REMOVE_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(2);
@@ -497,7 +497,7 @@ describe("clearOutputs", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.CLEAR_OUTPUTS, id };
+    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
 
     const state = reducers(originalState, action);
     const outputs = state.getIn(["notebook", "cellMap", id, "outputs"]);
@@ -511,7 +511,7 @@ describe("clearOutputs", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.CLEAR_OUTPUTS, id };
+    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
 
     const state = reducers(originalState, action);
     const outputs = state.getIn(["notebook", "cellMap", id, "outputs"]);
@@ -524,7 +524,11 @@ describe("newCellAfter", () => {
     const originalState = monocellDocument;
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.NEW_CELL_AFTER, id, cellType: "markdown" };
+    const action = {
+      type: actionTypes.NEW_CELL_AFTER,
+      id,
+      cellType: "markdown"
+    };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(4);
@@ -541,7 +545,7 @@ describe("newCellBefore", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
     const action = {
-      type: constants.NEW_CELL_BEFORE,
+      type: actionTypes.NEW_CELL_BEFORE,
       id,
       cellType: "markdown"
     };
@@ -557,7 +561,7 @@ describe("mergeCellAfter", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-    const action = { type: constants.MERGE_CELL_AFTER, id };
+    const action = { type: actionTypes.MERGE_CELL_AFTER, id };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(1);
@@ -567,7 +571,7 @@ describe("mergeCellAfter", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-    const action = { type: constants.MERGE_CELL_AFTER, id };
+    const action = { type: actionTypes.MERGE_CELL_AFTER, id };
 
     const state = reducers(originalState, action);
     expect(state).toEqual(originalState);
@@ -578,7 +582,7 @@ describe("newCellAppend", () => {
   test("appends a new code cell at the end", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
 
-    const action = { type: constants.NEW_CELL_APPEND, cellType: "code" };
+    const action = { type: actionTypes.NEW_CELL_APPEND, cellType: "code" };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
@@ -610,7 +614,7 @@ describe("overwriteMetadata", () => {
     const originalState = monocellDocument;
 
     const action = {
-      type: constants.OVERWRITE_METADATA_FIELD,
+      type: actionTypes.OVERWRITE_METADATA_FIELD,
       field: "name",
       value: "javascript"
     };
@@ -626,7 +630,7 @@ describe("deleteMetadata", () => {
       ["notebook", "metadata", "name"],
       "johnwashere"
     );
-    const action = { type: constants.DELETE_METADATA_FIELD, field: "name" };
+    const action = { type: actionTypes.DELETE_METADATA_FIELD, field: "name" };
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "metadata", "name"])).toBe(undefined);
   });
@@ -642,7 +646,7 @@ describe("changeOutputVisibility", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.CHANGE_OUTPUT_VISIBILITY, id };
+    const action = { type: actionTypes.CHANGE_OUTPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
     expect(
@@ -661,7 +665,7 @@ describe("changeInputVisibility", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.CHANGE_INPUT_VISIBILITY, id };
+    const action = { type: actionTypes.CHANGE_INPUT_VISIBILITY, id };
 
     const state = reducers(originalState, action);
     expect(
@@ -676,7 +680,7 @@ describe("clearOutputs", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.CLEAR_OUTPUTS, id };
+    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "cellMap", id, "outputs"]).count()).toBe(0);
@@ -690,7 +694,7 @@ describe("updateCellStatus", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
     const action = {
-      type: constants.UPDATE_CELL_STATUS,
+      type: actionTypes.UPDATE_CELL_STATUS,
       id,
       status: "test status"
     };
@@ -706,7 +710,7 @@ describe("setLanguageInfo", () => {
   test("sets the language object", () => {
     const originalState = monocellDocument;
 
-    const action = { type: constants.SET_LANGUAGE_INFO, langInfo: "test" };
+    const action = { type: actionTypes.SET_LANGUAGE_INFO, langInfo: "test" };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "metadata", "language_info"])).toBe("test");
@@ -720,7 +724,7 @@ describe("copyCell", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
     const cell = originalState.getIn(["notebook", "cellMap", id]);
 
-    const action = { type: constants.COPY_CELL, id };
+    const action = { type: actionTypes.COPY_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["copied", "cell"])).toBe(cell);
@@ -735,7 +739,7 @@ describe("cutCell", () => {
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
     const cell = originalState.getIn(["notebook", "cellMap", id]);
 
-    const action = { type: constants.CUT_CELL, id };
+    const action = { type: actionTypes.CUT_CELL, id };
 
     const state = reducers(originalState, action);
     expect(state.getIn(["copied", "cell"])).toBe(cell);
@@ -757,7 +761,7 @@ describe("pasteCell", () => {
       })
     );
 
-    const action = { type: constants.PASTE_CELL };
+    const action = { type: actionTypes.PASTE_CELL };
 
     const state = reducers(originalState, action);
     const copiedId = state.getIn(["notebook", "cellOrder", 1]);
@@ -776,7 +780,7 @@ describe("changeCellType", () => {
 
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: constants.CHANGE_CELL_TYPE, id, to: "markdown" };
+    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "markdown" };
 
     const state = reducers(originalState, action);
 
@@ -789,7 +793,7 @@ describe("changeCellType", () => {
 
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.CHANGE_CELL_TYPE, id, to: "code" };
+    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "code" };
 
     const state = reducers(originalState, action);
 
@@ -801,7 +805,7 @@ describe("changeCellType", () => {
 
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.CHANGE_CELL_TYPE, id, to: "markdown" };
+    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "markdown" };
 
     const state = reducers(originalState, action);
     expect(state).toBe(originalState);
@@ -818,7 +822,7 @@ describe("toggleOutputExpansion", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
 
-    const action = { type: constants.TOGGLE_OUTPUT_EXPANSION, id };
+    const action = { type: actionTypes.TOGGLE_OUTPUT_EXPANSION, id };
 
     const state = reducers(originalState, action);
     expect(
@@ -833,7 +837,7 @@ describe("appendOutput", () => {
     const id = originalState.getIn(["notebook", "cellOrder", 2]);
 
     const action = {
-      type: constants.APPEND_OUTPUT,
+      type: actionTypes.APPEND_OUTPUT,
       id,
       output: {
         output_type: "display_data",
@@ -864,7 +868,7 @@ describe("appendOutput", () => {
     const id = originalState.getIn(["notebook", "cellOrder", 2]);
 
     const action = {
-      type: constants.APPEND_OUTPUT,
+      type: actionTypes.APPEND_OUTPUT,
       id,
       output: {
         output_type: "display_data",
@@ -902,7 +906,7 @@ describe("updateDisplay", () => {
 
     const actions = [
       {
-        type: constants.APPEND_OUTPUT,
+        type: actionTypes.APPEND_OUTPUT,
         id,
         output: {
           output_type: "display_data",
@@ -911,7 +915,7 @@ describe("updateDisplay", () => {
         }
       },
       {
-        type: constants.UPDATE_DISPLAY,
+        type: actionTypes.UPDATE_DISPLAY,
         output: {
           output_type: "display_data",
           data: { "text/html": "<marquee>WOO</marquee>" },
@@ -989,7 +993,7 @@ describe("changeFilename", () => {
       filename: "original.ipynb"
     });
 
-    const action = { type: constants.CHANGE_FILENAME };
+    const action = { type: actionTypes.CHANGE_FILENAME };
 
     const state = reducers(originalState, action);
     expect(state.filename).toBe("original.ipynb");
@@ -999,7 +1003,10 @@ describe("changeFilename", () => {
       filename: "original.ipynb"
     });
 
-    const action = { type: constants.CHANGE_FILENAME, filename: "test.ipynb" };
+    const action = {
+      type: actionTypes.CHANGE_FILENAME,
+      filename: "test.ipynb"
+    };
 
     const state = reducers(originalState, action);
     expect(state.filename).toBe("test.ipynb");
@@ -1009,7 +1016,7 @@ describe("changeFilename", () => {
 describe("sendExecuteRequest", () => {
   test("cleans up the outputs, pagers, and status", () => {
     const state = reducers(initialDocument, {
-      type: constants.SEND_EXECUTE_REQUEST,
+      type: actionTypes.SEND_EXECUTE_REQUEST,
       id: firstCellId,
       message: {}
     });
@@ -1025,7 +1032,7 @@ describe("sendExecuteRequest", () => {
 describe("acceptPayloadMessage", () => {
   test("processes jupyter payload message types", () => {
     const state = reducers(initialDocument, {
-      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      type: actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION,
       id: firstCellId,
       payload: {
         source: "page",
@@ -1038,7 +1045,7 @@ describe("acceptPayloadMessage", () => {
     );
 
     const nextState = reducers(state, {
-      type: constants.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+      type: actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION,
       id: firstCellId,
       payload: {
         source: "set_next_input",

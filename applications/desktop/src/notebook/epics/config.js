@@ -7,7 +7,7 @@ import {
   DONE_SAVING_CONFIG,
   LOAD_CONFIG,
   SAVE_CONFIG
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 import { readFileObservable, writeFileObservable } from "fs-observable";
 import { mapTo, mergeMap, map, switchMap } from "rxjs/operators";

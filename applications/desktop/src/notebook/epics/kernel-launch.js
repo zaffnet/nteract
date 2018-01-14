@@ -49,7 +49,7 @@ import {
   ERROR_KERNEL_LAUNCH_FAILED,
   KERNEL_RAW_STDOUT,
   KERNEL_RAW_STDERR
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 export function setLanguageInfo(langInfo: LanguageInfoMetadata) {
   return {

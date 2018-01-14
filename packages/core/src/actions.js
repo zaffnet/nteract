@@ -1,5 +1,5 @@
 // @flow
-import * as constants from "./constants";
+import * as actionTypes from "./actionTypes";
 
 import type {
   ImmutableCell,
@@ -16,7 +16,7 @@ import { createExecuteRequest } from "@nteract/messaging";
 
 export function newKernel(kernelSpec: any, cwd: string) {
   return {
-    type: constants.LAUNCH_KERNEL,
+    type: actionTypes.LAUNCH_KERNEL,
     kernelSpec,
     cwd
   };
@@ -24,7 +24,7 @@ export function newKernel(kernelSpec: any, cwd: string) {
 
 export function newKernelByName(kernelSpecName: any, cwd: string) {
   return {
-    type: constants.LAUNCH_KERNEL_BY_NAME,
+    type: actionTypes.LAUNCH_KERNEL_BY_NAME,
     kernelSpecName,
     cwd
   };
@@ -32,7 +32,7 @@ export function newKernelByName(kernelSpecName: any, cwd: string) {
 
 export function setNotebookKernelInfo(kernelInfo: any) {
   return {
-    type: constants.SET_KERNEL_INFO,
+    type: actionTypes.SET_KERNEL_INFO,
     kernelInfo
   };
 }
@@ -40,14 +40,14 @@ export function setNotebookKernelInfo(kernelInfo: any) {
 // TODO: Lock this type down to a proper enum
 export function setExecutionState(executionState: string) {
   return {
-    type: constants.SET_EXECUTION_STATE,
+    type: actionTypes.SET_EXECUTION_STATE,
     executionState
   };
 }
 
 export function clearOutputs(id: string) {
   return {
-    type: constants.CLEAR_OUTPUTS,
+    type: actionTypes.CLEAR_OUTPUTS,
     id
   };
 }
@@ -55,7 +55,7 @@ export function clearOutputs(id: string) {
 // TODO: above doesn't appear to get used for a MoveCellAction
 export function moveCell(id: string, destinationId: string, above: boolean) {
   return {
-    type: constants.MOVE_CELL,
+    type: actionTypes.MOVE_CELL,
     id,
     destinationId,
     above
@@ -64,7 +64,7 @@ export function moveCell(id: string, destinationId: string, above: boolean) {
 
 export function removeCell(id: string) {
   return {
-    type: constants.REMOVE_CELL,
+    type: actionTypes.REMOVE_CELL,
     id
   };
 }
@@ -75,7 +75,7 @@ export function createCellAfter(
   source: string = ""
 ) {
   return {
-    type: constants.NEW_CELL_AFTER,
+    type: actionTypes.NEW_CELL_AFTER,
     source,
     cellType,
     id
@@ -84,7 +84,7 @@ export function createCellAfter(
 
 export function createCellBefore(cellType: CellType, id: string) {
   return {
-    type: constants.NEW_CELL_BEFORE,
+    type: actionTypes.NEW_CELL_BEFORE,
     cellType,
     id
   };
@@ -92,14 +92,14 @@ export function createCellBefore(cellType: CellType, id: string) {
 
 export function createCellAppend(cellType: CellType) {
   return {
-    type: constants.NEW_CELL_APPEND,
+    type: actionTypes.NEW_CELL_APPEND,
     cellType
   };
 }
 
 export function mergeCellAfter(id: string) {
   return {
-    type: constants.MERGE_CELL_AFTER,
+    type: actionTypes.MERGE_CELL_AFTER,
     id
   };
 }
@@ -127,7 +127,7 @@ export function mergeCellAfter(id: string) {
  */
 export function setInCell(id: CellID, path: Array<string>, value: any) {
   return {
-    type: constants.SET_IN_CELL,
+    type: actionTypes.SET_IN_CELL,
     id,
     path,
     value
@@ -144,14 +144,14 @@ export function updateCellExecutionCount(id: string, count: number) {
 
 export function changeOutputVisibility(id: string) {
   return {
-    type: constants.CHANGE_OUTPUT_VISIBILITY,
+    type: actionTypes.CHANGE_OUTPUT_VISIBILITY,
     id
   };
 }
 
 export function changeInputVisibility(id: string) {
   return {
-    type: constants.CHANGE_INPUT_VISIBILITY,
+    type: actionTypes.CHANGE_INPUT_VISIBILITY,
     id
   };
 }
@@ -159,7 +159,7 @@ export function changeInputVisibility(id: string) {
 // TODO de-anyify this signature
 export function updateCellStatus(id: string, status: any) {
   return {
-    type: constants.UPDATE_CELL_STATUS,
+    type: actionTypes.UPDATE_CELL_STATUS,
     id,
     status
   };
@@ -168,14 +168,14 @@ export function updateCellStatus(id: string, status: any) {
 // TODO de-anyify this signature
 export function focusCell(id: string) {
   return {
-    type: constants.FOCUS_CELL,
+    type: actionTypes.FOCUS_CELL,
     id
   };
 }
 
 export function focusNextCell(id: string, createCellIfUndefined: boolean) {
   return {
-    type: constants.FOCUS_NEXT_CELL,
+    type: actionTypes.FOCUS_NEXT_CELL,
     id,
     createCellIfUndefined
   };
@@ -183,42 +183,42 @@ export function focusNextCell(id: string, createCellIfUndefined: boolean) {
 
 export function focusPreviousCell(id: string) {
   return {
-    type: constants.FOCUS_PREVIOUS_CELL,
+    type: actionTypes.FOCUS_PREVIOUS_CELL,
     id
   };
 }
 
 export function focusCellEditor(id: string | null) {
   return {
-    type: constants.FOCUS_CELL_EDITOR,
+    type: actionTypes.FOCUS_CELL_EDITOR,
     id
   };
 }
 
 export function focusNextCellEditor(id: string) {
   return {
-    type: constants.FOCUS_NEXT_CELL_EDITOR,
+    type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
     id
   };
 }
 
 export function focusPreviousCellEditor(id: string) {
   return {
-    type: constants.FOCUS_PREVIOUS_CELL_EDITOR,
+    type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
     id
   };
 }
 
 export function toggleStickyCell(id: string) {
   return {
-    type: constants.TOGGLE_STICKY_CELL,
+    type: actionTypes.TOGGLE_STICKY_CELL,
     id
   };
 }
 
 export function overwriteMetadata(field: string, value: any) {
   return {
-    type: constants.OVERWRITE_METADATA_FIELD,
+    type: actionTypes.OVERWRITE_METADATA_FIELD,
     field,
     value
   };
@@ -226,49 +226,49 @@ export function overwriteMetadata(field: string, value: any) {
 
 export function deleteMetadata(field: string) {
   return {
-    type: constants.DELETE_METADATA_FIELD,
+    type: actionTypes.DELETE_METADATA_FIELD,
     field
   };
 }
 
 export const killKernel = {
-  type: constants.KILL_KERNEL
+  type: actionTypes.KILL_KERNEL
 };
 
 export const interruptKernel = {
-  type: constants.INTERRUPT_KERNEL
+  type: actionTypes.INTERRUPT_KERNEL
 };
 
 export function setNotificationSystem(notificationSystem: any) {
   return {
-    type: constants.SET_NOTIFICATION_SYSTEM,
+    type: actionTypes.SET_NOTIFICATION_SYSTEM,
     notificationSystem
   };
 }
 
 export function copyCell(id: CellID) {
   return {
-    type: constants.COPY_CELL,
+    type: actionTypes.COPY_CELL,
     id
   };
 }
 
 export function cutCell(id: CellID) {
   return {
-    type: constants.CUT_CELL,
+    type: actionTypes.CUT_CELL,
     id
   };
 }
 
 export function pasteCell() {
   return {
-    type: constants.PASTE_CELL
+    type: actionTypes.PASTE_CELL
   };
 }
 
 export function changeCellType(id: CellID, to: CellType) {
   return {
-    type: constants.CHANGE_CELL_TYPE,
+    type: actionTypes.CHANGE_CELL_TYPE,
     id,
     to
   };
@@ -276,14 +276,14 @@ export function changeCellType(id: CellID, to: CellType) {
 
 export function setGithubToken(githubToken: string) {
   return {
-    type: constants.SET_GITHUB_TOKEN,
+    type: actionTypes.SET_GITHUB_TOKEN,
     githubToken
   };
 }
 
 export function setConfigKey(key: string, value: any) {
   return {
-    type: constants.SET_CONFIG_KEY,
+    type: actionTypes.SET_CONFIG_KEY,
     key,
     value
   };
@@ -299,7 +299,7 @@ export function setCursorBlink(value: string) {
 
 export function toggleOutputExpansion(id: string) {
   return {
-    type: constants.TOGGLE_OUTPUT_EXPANSION,
+    type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
     id
   };
 }
@@ -315,7 +315,7 @@ export function executeCell(id: string, source: string) {
   const message = createExecuteRequest(source);
 
   return {
-    type: constants.SEND_EXECUTE_REQUEST,
+    type: actionTypes.SEND_EXECUTE_REQUEST,
     id,
     message
   };
@@ -323,14 +323,14 @@ export function executeCell(id: string, source: string) {
 
 export function changeFilename(filename: string) {
   return {
-    type: constants.CHANGE_FILENAME,
+    type: actionTypes.CHANGE_FILENAME,
     filename
   };
 }
 
 export function save(filename: string, notebook: any) {
   return {
-    type: constants.SAVE,
+    type: actionTypes.SAVE,
     filename,
     notebook
   };
@@ -338,7 +338,7 @@ export function save(filename: string, notebook: any) {
 
 export function saveAs(filename: string, notebook: any) {
   return {
-    type: constants.SAVE_AS,
+    type: actionTypes.SAVE_AS,
     filename,
     notebook
   };
@@ -346,7 +346,7 @@ export function saveAs(filename: string, notebook: any) {
 
 export function doneSaving(notebook: any) {
   return {
-    type: constants.DONE_SAVING,
+    type: actionTypes.DONE_SAVING,
     notebook
   };
 }

@@ -10,7 +10,7 @@ import {
   NEW_CELL_BEFORE,
   NEW_CELL_APPEND,
   MERGE_CELL_AFTER
-} from "../../constants";
+} from "../../actionTypes";
 
 describe("CellCreatorProvider", () => {
   const store = dummyStore();

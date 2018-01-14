@@ -15,7 +15,7 @@ import {
   CHANGE_OUTPUT_VISIBILITY,
   CHANGE_CELL_TYPE,
   TOGGLE_OUTPUT_EXPANSION
-} from "../../src/constants";
+} from "../../src/actionTypes";
 
 describe.skip("toolbar provider", () => {
   const store = dummyStore();

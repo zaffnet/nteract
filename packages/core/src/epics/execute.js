@@ -54,7 +54,7 @@ import {
   ERROR_EXECUTING,
   ERROR_UPDATE_DISPLAY,
   SEND_EXECUTE_REQUEST
-} from "../constants";
+} from "../actionTypes";
 
 const Immutable = require("immutable");
 

@@ -2,7 +2,7 @@ import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
 import { dummyStore } from "@nteract/core/dummy";
 import * as menu from "../../src/notebook/menu";
-import * as constants from "@nteract/core/constants";
+import * as actionTypes from "@nteract/core/actionTypes";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
@@ -13,7 +13,7 @@ describe("menu", () => {
       menu.dispatchCreateCellAfter(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.NEW_CELL_AFTER,
+        type: actionTypes.NEW_CELL_AFTER,
         cellType: "code",
         source: "",
         id: null
@@ -29,7 +29,7 @@ describe("menu", () => {
       menu.dispatchCreateTextCellAfter(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.NEW_CELL_AFTER,
+        type: actionTypes.NEW_CELL_AFTER,
         cellType: "markdown",
         source: "",
         id: null
@@ -45,7 +45,7 @@ describe("menu", () => {
       menu.dispatchPasteCell(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.PASTE_CELL
+        type: actionTypes.PASTE_CELL
       });
     });
   });
@@ -58,7 +58,7 @@ describe("menu", () => {
       menu.dispatchCutCell(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.CUT_CELL,
+        type: actionTypes.CUT_CELL,
         id: null
       });
     });
@@ -72,7 +72,7 @@ describe("menu", () => {
       menu.dispatchCopyCell(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.COPY_CELL,
+        type: actionTypes.COPY_CELL,
         id: null
       });
     });
@@ -86,7 +86,7 @@ describe("menu", () => {
       menu.dispatchSetTheme(store, {}, "test_theme");
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.SET_CONFIG_KEY,
+        type: actionTypes.SET_CONFIG_KEY,
         key: "theme",
         value: "test_theme"
       });
@@ -100,7 +100,7 @@ describe("menu", () => {
       menu.dispatchSetCursorBlink(store, {}, 42);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.SET_CONFIG_KEY,
+        type: actionTypes.SET_CONFIG_KEY,
         key: "cursorBlinkRate",
         value: 42
       });
@@ -152,7 +152,7 @@ describe("menu", () => {
       menu.dispatchRestartClearAll(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.KILL_KERNEL
+        type: actionTypes.KILL_KERNEL
       });
     });
   });
@@ -165,7 +165,7 @@ describe("menu", () => {
       menu.dispatchRestartKernel(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.KILL_KERNEL
+        type: actionTypes.KILL_KERNEL
       });
     });
   });
@@ -179,7 +179,7 @@ describe("menu", () => {
 
       if (process.platform !== "win32") {
         expect(store.dispatch).toHaveBeenCalledWith({
-          type: constants.INTERRUPT_KERNEL
+          type: actionTypes.INTERRUPT_KERNEL
         });
       }
     });
@@ -193,7 +193,7 @@ describe("menu", () => {
       menu.dispatchKillKernel(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.KILL_KERNEL
+        type: actionTypes.KILL_KERNEL
       });
     });
   });
@@ -206,7 +206,7 @@ describe("menu", () => {
       menu.dispatchClearAll(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.CLEAR_OUTPUTS,
+        type: actionTypes.CLEAR_OUTPUTS,
         id: store
           .getState()
           .document.getIn(["notebook", "cellOrder"])
@@ -309,7 +309,7 @@ describe("menu", () => {
       menu.dispatchNewKernel(store, {}, { spec: "hokey" });
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: constants.LAUNCH_KERNEL,
+        type: actionTypes.LAUNCH_KERNEL,
         kernelSpec: { spec: "hokey" },
         cwd: process.cwd()
       });

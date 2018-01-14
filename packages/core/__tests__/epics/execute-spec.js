@@ -8,7 +8,7 @@ import {
   UPDATE_CELL_STATUS,
   UPDATE_DISPLAY,
   NEW_KERNEL
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 
