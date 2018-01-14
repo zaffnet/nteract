@@ -363,7 +363,7 @@ export function setGithubToken(githubToken: string): SetGithubTokenAction {
   };
 }
 
-export function setConfigAtKey(key: string, value: any): SetConfigAction {
+export function setConfigAtKey<T>(key: string, value: T): SetConfigAction<T> {
   return {
     type: actionTypes.SET_CONFIG_AT_KEY,
     key,
@@ -371,11 +371,11 @@ export function setConfigAtKey(key: string, value: any): SetConfigAction {
   };
 }
 
-export function setTheme(theme: string) {
-  return setConfigAtKey("theme", (theme: string));
+export function setTheme(theme: string): SetConfigAction<string> {
+  return setConfigAtKey("theme", theme);
 }
 
-export function setCursorBlink(value: string) {
+export function setCursorBlink(value: string): SetConfigAction<string> {
   return setConfigAtKey("cursorBlinkRate", value);
 }
 
