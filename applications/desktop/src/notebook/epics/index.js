@@ -13,11 +13,13 @@ import {
   newKernelByNameEpic
 } from "./kernel-launch";
 
-import { executeCellEpic, updateDisplayEpic } from "@nteract/core/epics";
+import {
+  executeCellEpic,
+  updateDisplayEpic,
+  commListenEpic
+} from "@nteract/core/epics";
 
 import { publishEpic } from "./github-publish";
-
-import { commListenEpic } from "./comm";
 
 import {
   loadConfigEpic,
