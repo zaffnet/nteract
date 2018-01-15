@@ -41,7 +41,10 @@ import {
   createCellAfter,
   updateCellExecutionCount,
   updateCellStatus,
-  clearOutputs
+  acceptPayloadMessage,
+  clearOutputs,
+  appendOutput,
+  updateDisplay
 } from "../actions";
 
 import type { Subject } from "rxjs/Subject";
@@ -86,13 +89,7 @@ export function executeCellStream(
   const payloadStream = cellMessages.pipe(payloads());
 
   const cellAction$ = merge(
-    payloadStream.pipe(
-      map(payload => ({
-        id,
-        payload,
-        type: "ACCEPT_PAYLOAD_MESSAGE_ACTION"
-      }))
-    ),
+    payloadStream.pipe(map(payload => acceptPayloadMessage(id, payload))),
 
     // All actions for updating cell status
     cellMessages.pipe(
@@ -107,10 +104,7 @@ export function executeCellStream(
     ),
 
     // All actions for new outputs
-    cellMessages.pipe(
-      outputs(),
-      map(output => ({ type: "APPEND_OUTPUT", id, output }))
-    ),
+    cellMessages.pipe(outputs(), map(output => appendOutput(id, output))),
 
     // clear_output display message
     cellMessages.pipe(ofMessageType("clear_output"), mapTo(clearOutputs(id)))
@@ -196,8 +190,8 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
     ofType(NEW_KERNEL),
     switchMap(({ channels }) =>
       channels.pipe(
-        updatedOutputs(),
-        map(output => ({ type: "UPDATE_DISPLAY", output })),
+        ofMessageType("update_display_data"),
+        map(msg => updateDisplay(msg.content)),
         catchError(err =>
           of({ type: ERROR_UPDATE_DISPLAY, payload: err, error: true })
         )

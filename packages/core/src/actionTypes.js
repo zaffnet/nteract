@@ -12,7 +12,8 @@ import type {
   ImmutableOutput,
   ImmutableOutputs,
   ImmutableJSONType,
-  MimeBundle
+  MimeBundle,
+  JSONObject
 } from "@nteract/types/commutable";
 
 import type {
@@ -81,7 +82,14 @@ export type AppendOutputAction = {
 };
 
 export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
-export type UpdateDisplayAction = { type: "UPDATE_DISPLAY", output: Output };
+export type UpdateDisplayAction = {
+  type: "UPDATE_DISPLAY",
+  content: {
+    data: MimeBundle,
+    metadata: JSONObject,
+    transient: { display_id: string }
+  }
+};
 
 export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
 export type ToggleCellOutputVisibilityAction = {

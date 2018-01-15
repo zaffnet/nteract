@@ -3,6 +3,8 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
+import type { JSONObject } from "@nteract/types/commutable";
+
 import type {
   ImmutableCell,
   ImmutableNotebook,
@@ -14,6 +16,8 @@ import type {
   MimeBundle
 } from "@nteract/commutable/src/types";
 
+import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+
 import type {
   PasteCellAction,
   ChangeFilenameAction,
@@ -23,13 +27,17 @@ import type {
   CopyCellAction,
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
+  // TODO: Not here...
   AcceptPayloadMessageAction,
   SetNotebookAction,
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearOutputsAction,
+  // TODO: Not here...
   AppendOutputAction,
+  // TODO: Not here...
   SetNotebookCheckpointAction,
+  // TODO: Not here...
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -43,21 +51,30 @@ import type {
   ToggleStickyCellAction,
   FocusPreviousCellAction,
   SetKernelInfoAction,
+  // TODO: Not here...
   SetLanguageInfoAction,
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
   SendExecuteMessageAction,
+  // TODO: Not here...
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
+  // TODO: Not here...
   SetExecutionStateAction,
+  // TODO: Not here...
   ExitAction,
+  // TODO: Not here...
   StartSavingAction,
+  // TODO: Not here...
   InterruptKernelAction,
+  // TODO: Not here...
   KillKernelAction,
+  // TODO: Not here...
   DoneSavingAction,
+  // TODO: Not here...
   DoneSavingConfigAction,
   SetConfigAction
 } from "../actionTypes";
@@ -515,5 +532,35 @@ export function commMessageAction(message: any) {
     // NOTE: Naming inconsistent between jupyter notebook and jmp
     //       see https://github.com/n-riesco/jmp/issues/14
     //       We just expect either one
+  };
+}
+
+export function appendOutput(id: CellID, output: Output): AppendOutputAction {
+  return {
+    type: actionTypes.APPEND_OUTPUT,
+    id,
+    output
+  };
+}
+
+export function acceptPayloadMessage(
+  id: CellID,
+  payload: *
+): AcceptPayloadMessageAction {
+  return {
+    type: actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION,
+    id,
+    payload
+  };
+}
+
+export function updateDisplay(content: {
+  data: MimeBundle,
+  metadata: JSONObject,
+  transient: { display_id: string }
+}): UpdateDisplayAction {
+  return {
+    type: actionTypes.UPDATE_DISPLAY,
+    content
   };
 }
