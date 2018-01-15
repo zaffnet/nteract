@@ -38,8 +38,6 @@ import type {
   NewCellBeforeAction,
   ClearOutputsAction,
   AppendOutputAction,
-  // TODO: Not here...
-  SetNotebookCheckpointAction,
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -63,10 +61,8 @@ import type {
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
-  // TODO: Not here...
   SetExecutionStateAction,
-  // TODO: Not here...
-  ExitAction,
+  SetConfigAction,
   InterruptKernelAction,
   KillKernelAction,
   // TODO: Not here...
@@ -75,7 +71,8 @@ import type {
   DoneSavingAction,
   // TODO: Not here...
   DoneSavingConfigAction,
-  SetConfigAction
+  // TODO: Not here...
+  SetNotebookCheckpointAction
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
@@ -105,9 +102,9 @@ export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
   };
 }
 
-// TODO: Lock this type down to a proper enum
-// TODO: Create a proper flow type in actionTypes
-export function setExecutionState(executionState: string) {
+export function setExecutionState(
+  executionState: string
+): SetExecutionStateAction {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
     executionState

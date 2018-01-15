@@ -293,6 +293,7 @@ export type SetNotebookAction = {
   filename?: string
 };
 
+// TODO: There's a reducer for this but it's not triggered anywhere
 export const EXIT = "EXIT";
 export type ExitAction = { type: "EXIT" };
 
