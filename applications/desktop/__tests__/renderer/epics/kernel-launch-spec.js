@@ -6,9 +6,9 @@ import {
   setLanguageInfo,
   acquireKernelInfo,
   watchExecutionStateEpic,
-  newKernelObservable,
-  newKernelEpic,
-  newKernelByNameEpic
+  launchKernelObservable,
+  launchKernelEpic,
+  launchKernelByNameEpic
 } from "../../../src/notebook/epics/kernel-launch";
 
 import { createMessage } from "@nteract/messaging";
@@ -72,20 +72,20 @@ describe("watchExecutionStateEpic", () => {
   });
 });
 
-describe("newKernelObservable", () => {
+describe("launchKernelObservable", () => {
   test("returns an observable", () => {
-    const obs = newKernelObservable("python3", process.cwd());
+    const obs = launchKernelObservable("python3", process.cwd());
     expect(obs.subscribe).toBeTruthy();
   });
 });
 
-describe("newKernelEpic", () => {
+describe("launchKernelEpic", () => {
   test("throws an error if given a bad action", done => {
     const actionBuffer = [];
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL
     }).pipe(share());
-    const obs = newKernelEpic(action$);
+    const obs = launchKernelEpic(action$);
     obs.subscribe(
       x => {
         expect(x.type).toEqual(actionTypes.ERROR_KERNEL_LAUNCH_FAILED);
@@ -95,14 +95,14 @@ describe("newKernelEpic", () => {
       err => done.fail(err)
     );
   });
-  test("calls newKernelObservable if given the correct action", done => {
+  test("calls launchKernelObservable if given the correct action", done => {
     const actionBuffer = [];
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL,
       kernelSpec: { spec: "hokey" },
       cwd: "~"
     });
-    const obs = newKernelEpic(action$);
+    const obs = launchKernelEpic(action$);
     obs.subscribe(
       x => {
         actionBuffer.push(x.type);
@@ -119,14 +119,14 @@ describe("newKernelEpic", () => {
   });
 });
 
-describe("newKernelByNameEpic", () => {
+describe("launchKernelByNameEpic", () => {
   test("creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action", done => {
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL_BY_NAME,
       kernelSpecName: "python3",
       cwd: "~"
     });
-    const obs = newKernelByNameEpic(action$);
+    const obs = launchKernelByNameEpic(action$);
     obs.pipe(toArray()).subscribe(
       actions => {
         const types = actions.map(({ type }) => type);

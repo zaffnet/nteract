@@ -253,7 +253,7 @@ export type ChangeCellTypeAction = {
 };
 
 export const NEW_KERNEL = "NEW_KERNEL";
-type NewKernelAction = {
+export type NewKernelAction = {
   type: "NEW_KERNEL",
   channels: Channels,
   connectionFile: string,
@@ -263,13 +263,13 @@ type NewKernelAction = {
 };
 
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
-type SetExecutionStateAction = {
+export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
   executionState: string
 };
 
 export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
-type SetNotificationSystemAction = {
+export type SetNotificationSystemAction = {
   type: "SET_NOTIFICATION_SYSTEM",
   notificationSystem: Object
 };
@@ -312,6 +312,20 @@ export type SetGithubTokenAction = {
   githubToken: string
 };
 
+export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
+export type LaunchKernelAction = {
+  type: "LAUNCH_KERNEL",
+  kernelSpec: Object,
+  cwd: string
+};
+
+export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
+export type LaunchKernelByNameAction = {
+  type: "LAUNCH_KERNEL_BY_NAME",
+  kernelSpecName: string,
+  cwd: string
+};
+
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
 // TODO: This action needs a proper flow type, its from desktop's github store
@@ -331,10 +345,7 @@ export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
 
 // TODO: Properly type this action type, which is consumed only by epics
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
-// TODO: Properly type this action type, which is consumed only by epics
-export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
-// TODO: Properly type this action type, which is consumed only by epics
-export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
+
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
 

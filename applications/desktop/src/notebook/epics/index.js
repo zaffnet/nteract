@@ -7,10 +7,10 @@ import { loadEpic, newNotebookEpic } from "./loading";
 import type { ActionsObservable, Epic } from "redux-observable";
 
 import {
-  newKernelEpic,
+  launchKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
-  newKernelByNameEpic
+  launchKernelByNameEpic
 } from "./kernel-launch";
 
 import {
@@ -43,8 +43,8 @@ const epics = [
   newNotebookEpic,
   executeCellEpic,
   updateDisplayEpic,
-  newKernelEpic,
-  newKernelByNameEpic,
+  launchKernelEpic,
+  launchKernelByNameEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   loadConfigEpic,

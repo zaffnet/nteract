@@ -102,9 +102,9 @@ describe("setExecutionState", () => {
   });
 });
 
-describe("newKernel", () => {
+describe("launchKernel", () => {
   test("creates a LAUNCH_KERNEL action", () => {
-    expect(actions.newKernel({ spec: "hokey" }, ".")).toEqual({
+    expect(actions.launchKernel({ spec: "hokey" }, ".")).toEqual({
       type: actionTypes.LAUNCH_KERNEL,
       kernelSpec: { spec: "hokey" },
       cwd: "."
@@ -112,9 +112,9 @@ describe("newKernel", () => {
   });
 });
 
-describe("newKernelByName", () => {
+describe("launchKernelByName", () => {
   test("creates a LAUNCH_KERNEL_BY_NAME action", () => {
-    expect(actions.newKernelByName("python2", ".")).toEqual({
+    expect(actions.launchKernelByName("python2", ".")).toEqual({
       type: actionTypes.LAUNCH_KERNEL_BY_NAME,
       kernelSpecName: "python2",
       cwd: "."

@@ -87,11 +87,11 @@ describe("commActionObservable", () => {
       buffers: new Uint8Array()
     };
 
-    const newKernelAction = {
+    const launchKernelAction = {
       channels: of(commOpenMessage, commMessage)
     };
 
-    commActionObservable(newKernelAction)
+    commActionObservable(launchKernelAction)
       .pipe(toArray())
       .subscribe(
         actions => {
