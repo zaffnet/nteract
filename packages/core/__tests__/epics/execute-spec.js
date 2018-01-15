@@ -197,7 +197,7 @@ describe("executeCellEpic", () => {
 });
 
 describe("updateDisplayEpic", () => {
-  test("creates an epic that handles update_display_data messages", done => {
+  test("handles update_display_data messages", done => {
     const messages = [
       // Should be processed
       {
@@ -243,16 +243,14 @@ describe("updateDisplayEpic", () => {
         expect(responseActions).toEqual([
           {
             type: UPDATE_DISPLAY,
-            output: {
-              output_type: "display_data",
+            content: {
               data: { "text/html": "<marquee>wee</marquee>" },
               transient: { display_id: "1234" }
             }
           },
           {
             type: UPDATE_DISPLAY,
-            output: {
-              output_type: "display_data",
+            content: {
               data: { "text/plain": "i am text" },
               transient: { display_id: "here" }
             }

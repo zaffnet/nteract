@@ -916,8 +916,8 @@ describe("updateDisplay", () => {
       },
       {
         type: actionTypes.UPDATE_DISPLAY,
-        output: {
-          output_type: "display_data",
+        content: {
+          output_type: "update_display_data",
           data: { "text/html": "<marquee>WOO</marquee>" },
           transient: { display_id: "1234" }
         }
@@ -928,17 +928,16 @@ describe("updateDisplay", () => {
       (s, action) => reducers(s, action),
       originalState
     );
-    expect(
-      is(
-        state.getIn(["notebook", "cellMap", id, "outputs"]),
-        Immutable.fromJS([
-          {
-            output_type: "display_data",
-            data: { "text/html": "<marquee>WOO</marquee>" }
-          }
-        ])
-      )
-    ).toBe(true);
+
+    expect(state.getIn(["notebook", "cellMap", id, "outputs"])).toEqual(
+      Immutable.fromJS([
+        {
+          output_type: "display_data",
+          data: { "text/html": "<marquee>WOO</marquee>" },
+          metadata: {}
+        }
+      ])
+    );
   });
 });
 

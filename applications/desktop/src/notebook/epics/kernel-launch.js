@@ -177,13 +177,7 @@ export const kernelSpecsObservable = Observable.create(observer => {
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(NEW_KERNEL),
-    switchMap(action => {
-      /* istanbul ignore if -- used for interactive debugging */
-      if (process.env.DEBUG) {
-        window.channels = action.channels;
-      }
-      return acquireKernelInfo(action.channels);
-    })
+    switchMap(action => acquireKernelInfo(action.channels))
   );
 
 export const newKernelByNameEpic = (action$: ActionsObservable<*>) =>

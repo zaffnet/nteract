@@ -60,7 +60,8 @@ import {
   insertCellAt,
   insertCellAfter,
   removeCell,
-  createImmutableOutput
+  createImmutableOutput,
+  createImmutableMimeBundle
 } from "@nteract/commutable";
 
 import type {
@@ -259,19 +260,26 @@ function appendOutput(state: DocumentRecord, action: AppendOutputAction) {
 }
 
 function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
-  const { output } = action;
-  if (!(output && output.transient && output.transient.display_id)) {
+  const { content } = action;
+  if (!(content && content.transient && content.transient.display_id)) {
     return state;
   }
-  const displayID = output.transient.display_id;
-  const immOutput: ImmutableOutput = createImmutableOutput(output);
+  const displayID = content.transient.display_id;
 
   const keyPaths: KeyPaths = state.getIn(
     ["transient", "keyPathsForDisplays", displayID],
     new Immutable.List()
   );
+  const updatedContent = {
+    data: createImmutableMimeBundle(content.data || {}),
+    metadata: Immutable.fromJS(content.metadata || {})
+  };
+
   return keyPaths.reduce(
-    (currState: DocumentRecord, kp: KeyPath) => currState.setIn(kp, immOutput),
+    (currState: DocumentRecord, kp: KeyPath) =>
+      currState.updateIn(kp, output => {
+        return output.merge(updatedContent);
+      }),
     state
   );
 }
