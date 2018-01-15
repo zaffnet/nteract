@@ -75,22 +75,27 @@ export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
 export type BaseKernelProps = {
   ref: ?KernelRef,
   name: ?string,
+  kernelSpecName: ?string,
   lastActivity: ?Date,
   channels: ?rxjs$Subject<*, *>,
   status: ?string
 };
 
 export type RemoteKernelProps = BaseKernelProps & {
+  type: "websocket",
   id: ?Id
 };
 
 export type LocalKernelProps = BaseKernelProps & {
+  type: "zeromq",
   spawn: ?ChildProcess,
   connectionFile: ?string
 };
 
 export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
+  type: "zeromq",
   ref: null,
+  kernelSpecName: null,
   name: null,
   lastActivity: null,
   channels: null,
@@ -100,8 +105,10 @@ export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
 });
 
 export const makeRemoteKernelRecord: RecordFactory<RemoteKernelProps> = Record({
+  type: "websocket",
   id: null,
   ref: null,
+  kernelSpecName: null,
   name: null,
   lastActivity: null,
   channels: null,
