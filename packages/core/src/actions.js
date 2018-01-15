@@ -27,17 +27,14 @@ import type {
   CopyCellAction,
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
-  // TODO: Not here...
   AcceptPayloadMessageAction,
   SetNotebookAction,
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearOutputsAction,
-  // TODO: Not here...
   AppendOutputAction,
   // TODO: Not here...
   SetNotebookCheckpointAction,
-  // TODO: Not here...
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -68,9 +65,7 @@ import type {
   ExitAction,
   // TODO: Not here...
   StartSavingAction,
-  // TODO: Not here...
   InterruptKernelAction,
-  // TODO: Not here...
   KillKernelAction,
   // TODO: Not here...
   DoneSavingAction,
