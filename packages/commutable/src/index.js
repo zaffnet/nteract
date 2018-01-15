@@ -101,7 +101,8 @@ module.exports = {
   removeCell,
   appendCell,
   appendCellToNotebook,
-  createImmutableOutput: v4.createImmutableOutput
+  createImmutableOutput: v4.createImmutableOutput,
+  createImmutableMimeBundle: v4.createImmutableMimeBundle
 };
 
 export type { ImmutableNotebook };

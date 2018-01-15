@@ -60,7 +60,8 @@ import {
   insertCellAt,
   insertCellAfter,
   removeCell,
-  createImmutableOutput
+  createImmutableOutput,
+  createImmutableMimeBundle
 } from "@nteract/commutable";
 
 import type {
@@ -269,15 +270,15 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
     ["transient", "keyPathsForDisplays", displayID],
     new Immutable.List()
   );
+  const updatedContent = {
+    data: createImmutableMimeBundle(content.data || {}),
+    metadata: Immutable.fromJS(content.metadata || {})
+  };
+
   return keyPaths.reduce(
     (currState: DocumentRecord, kp: KeyPath) =>
       currState.updateIn(kp, output => {
-        return {
-          output_type: output.output_type,
-          data: content.data,
-          metadata: content.metadata,
-          transient: content.transient
-        };
+        return output.merge(updatedContent);
       }),
     state
   );

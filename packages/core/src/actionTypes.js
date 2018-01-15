@@ -4,13 +4,9 @@ import type { Channels } from "@nteract/types/channels";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
 
 import type {
-  ImmutableCell,
   ImmutableNotebook,
   CellID,
   CellType,
-  ImmutableCellOrder,
-  ImmutableOutput,
-  ImmutableOutputs,
   ImmutableJSONType,
   MimeBundle,
   JSONObject
