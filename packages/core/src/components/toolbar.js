@@ -27,16 +27,16 @@ declare type ToolbarProps = {|
   removeCell: () => void,
   toggleStickyCell: () => void,
   clearOutputs: () => void,
-  changeInputVisibility: () => void,
-  changeOutputVisibility: () => void,
+  toggleCellInputVisibility: () => void,
+  toggleCellOutputVisibility: () => void,
   toggleOutputExpansion: () => void,
   changeCellType: () => void
 |};
 
 export default class Toolbar extends Component<ToolbarProps> {
   clearOutputs: () => void;
-  changeInputVisibility: () => void;
-  changeOutputVisibility: () => void;
+  toggleCellInputVisibility: () => void;
+  toggleCellOutputVisibility: () => void;
   changeCellType: () => void;
   toggleOutputExpansion: () => void;
   dropdown: any;
@@ -48,8 +48,10 @@ export default class Toolbar extends Component<ToolbarProps> {
   constructor(props: ToolbarProps) {
     super(props);
     this.clearOutputs = this.clearOutputs.bind(this);
-    this.changeInputVisibility = this.changeInputVisibility.bind(this);
-    this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
+    this.toggleCellInputVisibility = this.toggleCellInputVisibility.bind(this);
+    this.toggleCellOutputVisibility = this.toggleCellOutputVisibility.bind(
+      this
+    );
     this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
     this.changeCellType = this.changeCellType.bind(this);
   }
@@ -58,12 +60,12 @@ export default class Toolbar extends Component<ToolbarProps> {
     this.props.clearOutputs();
   }
 
-  changeOutputVisibility(): void {
-    this.props.changeOutputVisibility();
+  toggleCellOutputVisibility(): void {
+    this.props.toggleCellOutputVisibility();
   }
 
-  changeInputVisibility(): void {
-    this.props.changeInputVisibility();
+  toggleCellInputVisibility(): void {
+    this.props.toggleCellInputVisibility();
   }
 
   toggleOutputExpansion(): void {
@@ -128,7 +130,7 @@ export default class Toolbar extends Component<ToolbarProps> {
                   <a>Clear Cell Output</a>
                 </li>
                 <li
-                  onClick={() => this.changeInputVisibility()}
+                  onClick={() => this.toggleCellInputVisibility()}
                   className="inputVisibility"
                   role="option"
                   aria-selected="false"
@@ -137,7 +139,7 @@ export default class Toolbar extends Component<ToolbarProps> {
                   <a>Toggle Input Visibility</a>
                 </li>
                 <li
-                  onClick={() => this.changeOutputVisibility()}
+                  onClick={() => this.toggleCellOutputVisibility()}
                   className="outputVisibility"
                   role="option"
                   aria-selected="false"

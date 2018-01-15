@@ -4,7 +4,7 @@ import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 import { toArray } from "rxjs/operators";
 
-import { PUBLISH_USER_GIST } from "@nteract/core/constants";
+import { PUBLISH_USER_GIST } from "@nteract/core/actionTypes";
 import {
   publishNotebookObservable,
   createGistCallback,

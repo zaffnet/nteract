@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import * as constants from "@nteract/core/constants";
+import * as actionTypes from "@nteract/core/actionTypes";
 
 import {
   setLanguageInfo,
@@ -30,7 +30,7 @@ describe("setLanguageInfo", () => {
     };
 
     expect(setLanguageInfo(langInfo)).toEqual({
-      type: constants.SET_LANGUAGE_INFO,
+      type: actionTypes.SET_LANGUAGE_INFO,
       langInfo
     });
   });
@@ -59,7 +59,7 @@ describe("acquireKernelInfo", () => {
     obs.subscribe(langAction => {
       expect(langAction).toEqual({
         langInfo: { language: "python" },
-        type: constants.SET_LANGUAGE_INFO
+        type: actionTypes.SET_LANGUAGE_INFO
       });
       done();
     });
@@ -69,7 +69,7 @@ describe("acquireKernelInfo", () => {
 describe("watchExecutionStateEpic", () => {
   test("returns an Observable with an initial state of idle", done => {
     const action$ = ActionsObservable.of({
-      type: constants.NEW_KERNEL,
+      type: actionTypes.NEW_KERNEL,
       channels: of({
         header: { msg_type: "status" },
         content: { execution_state: "idle" }
@@ -81,8 +81,8 @@ describe("watchExecutionStateEpic", () => {
       actions => {
         const types = actions.map(({ type }) => type);
         expect(types).toEqual([
-          constants.SET_EXECUTION_STATE,
-          constants.SET_EXECUTION_STATE
+          actionTypes.SET_EXECUTION_STATE,
+          actionTypes.SET_EXECUTION_STATE
         ]);
       },
       err => done.fail(err), // It should not error in the stream
@@ -102,12 +102,12 @@ describe("newKernelEpic", () => {
   test("throws an error if given a bad action", done => {
     const actionBuffer = [];
     const action$ = ActionsObservable.of({
-      type: constants.LAUNCH_KERNEL
+      type: actionTypes.LAUNCH_KERNEL
     }).pipe(share());
     const obs = newKernelEpic(action$);
     obs.subscribe(
       x => {
-        expect(x.type).toEqual(constants.ERROR_KERNEL_LAUNCH_FAILED);
+        expect(x.type).toEqual(actionTypes.ERROR_KERNEL_LAUNCH_FAILED);
         actionBuffer.push(x.type);
         done();
       },
@@ -117,7 +117,7 @@ describe("newKernelEpic", () => {
   test("calls newKernelObservable if given the correct action", done => {
     const actionBuffer = [];
     const action$ = ActionsObservable.of({
-      type: constants.LAUNCH_KERNEL,
+      type: actionTypes.LAUNCH_KERNEL,
       kernelSpec: { spec: "hokey" },
       cwd: "~"
     });
@@ -127,8 +127,8 @@ describe("newKernelEpic", () => {
         actionBuffer.push(x.type);
         if (actionBuffer.length === 2) {
           expect(actionBuffer).toEqual([
-            constants.SET_KERNEL_INFO,
-            constants.NEW_KERNEL
+            actionTypes.SET_KERNEL_INFO,
+            actionTypes.NEW_KERNEL
           ]);
           done();
         }
@@ -141,7 +141,7 @@ describe("newKernelEpic", () => {
 describe("newKernelByNameEpic", () => {
   test("creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action", done => {
     const action$ = ActionsObservable.of({
-      type: constants.LAUNCH_KERNEL_BY_NAME,
+      type: actionTypes.LAUNCH_KERNEL_BY_NAME,
       kernelSpecName: "python3",
       cwd: "~"
     });
@@ -149,7 +149,7 @@ describe("newKernelByNameEpic", () => {
     obs.pipe(toArray()).subscribe(
       actions => {
         const types = actions.map(({ type }) => type);
-        expect(types).toEqual([constants.LAUNCH_KERNEL]);
+        expect(types).toEqual([actionTypes.LAUNCH_KERNEL]);
         done();
       },
       err => done.fail(err)

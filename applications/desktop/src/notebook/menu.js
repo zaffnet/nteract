@@ -7,12 +7,12 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { load, newNotebook } from "./epics/loading";
+import { load, newNotebook } from "@nteract/core/actions";
 
-import { loadConfig } from "./epics/config";
+import { loadConfig } from "@nteract/core/actions";
 
 import {
-  changeInputVisibility,
+  toggleCellInputVisibility,
   clearOutputs,
   copyCell,
   createCellAfter,
@@ -204,7 +204,7 @@ export function dispatchUnhideAll(store) {
   notebook
     .get("cellOrder")
     .filter(cellID => cells.getIn([cellID, "metadata", "inputHidden"]))
-    .map(cellID => store.dispatch(changeInputVisibility(cellID)));
+    .map(cellID => store.dispatch(toggleCellInputVisibility(cellID)));
 }
 
 export function dispatchKillKernel(store) {

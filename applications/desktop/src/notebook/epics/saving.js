@@ -5,7 +5,7 @@ import {
   ofType
 } from "redux-observable"; /* eslint-disable no-unused-vars */
 import { writeFileObservable } from "fs-observable";
-import { SAVE, SAVE_AS } from "@nteract/core/constants";
+import { SAVE, SAVE_AS } from "@nteract/core/actionTypes";
 
 import { changeFilename, save, doneSaving } from "@nteract/core/actions";
 

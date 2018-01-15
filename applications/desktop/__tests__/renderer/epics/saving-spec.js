@@ -9,7 +9,7 @@ import {
   SAVE_AS,
   DONE_SAVING,
   CHANGE_FILENAME
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
 
 import { saveEpic, saveAsEpic } from "../../../src/notebook/epics/saving";
 

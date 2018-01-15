@@ -2,12 +2,12 @@
 import { remote } from "electron";
 
 import {
-  MERGE_CONFIG,
-  SET_CONFIG_KEY,
-  DONE_SAVING_CONFIG,
+  SET_CONFIG_AT_KEY,
   LOAD_CONFIG,
   SAVE_CONFIG
-} from "@nteract/core/constants";
+} from "@nteract/core/actionTypes";
+
+import { doneSavingConfig, configLoaded } from "@nteract/core/actions";
 
 import { readFileObservable, writeFileObservable } from "fs-observable";
 import { mapTo, mergeMap, map, switchMap } from "rxjs/operators";
@@ -16,15 +16,6 @@ import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
 
 const path = require("path");
-
-export const loadConfig = () => ({ type: LOAD_CONFIG });
-export const saveConfig = () => ({ type: SAVE_CONFIG });
-export const doneSavingConfig = () => ({ type: DONE_SAVING_CONFIG });
-
-export const configLoaded = (config: any) => ({
-  type: MERGE_CONFIG,
-  config
-});
 
 const HOME = remote.app.getPath("home");
 
@@ -50,11 +41,11 @@ export const loadConfigEpic = (actions: ActionsObservable<*>) =>
 /**
  * An epic that saves the configuration if it has been changed.
  *
- * @param  {ActionObservable}  actions ActionObservable for SET_CONFIG_KEY action
+ * @param  {ActionObservable}  actions ActionObservable for SET_CONFIG_AT_KEY action
  * @return {ActionObservable}  ActionObservable with SAVE_CONFIG type
  */
 export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
-  actions.pipe(ofType(SET_CONFIG_KEY), mapTo({ type: SAVE_CONFIG }));
+  actions.pipe(ofType(SET_CONFIG_AT_KEY), mapTo({ type: SAVE_CONFIG }));
 
 /**
  * An epic that saves the configuration.

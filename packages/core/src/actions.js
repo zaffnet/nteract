@@ -1,5 +1,7 @@
 // @flow
-import * as constants from "./constants";
+import * as actionTypes from "./actionTypes";
+
+import type { Notebook } from "@nteract/commutable";
 
 import type {
   ImmutableCell,
@@ -12,59 +14,113 @@ import type {
   MimeBundle
 } from "@nteract/commutable/src/types";
 
+import type {
+  PasteCellAction,
+  ChangeFilenameAction,
+  ToggleCellExpansionAction,
+  ChangeCellTypeAction,
+  CutCellAction,
+  CopyCellAction,
+  DeleteMetadataFieldAction,
+  OverwriteMetadataFieldAction,
+  AcceptPayloadMessageAction,
+  SetNotebookAction,
+  NewCellAfterAction,
+  NewCellBeforeAction,
+  ClearOutputsAction,
+  AppendOutputAction,
+  SetNotebookCheckpointAction,
+  UpdateDisplayAction,
+  FocusNextCellAction,
+  FocusCellEditorAction,
+  FocusNextCellEditorAction,
+  FocusPreviousCellEditorAction,
+  RemoveCellAction,
+  FocusCellAction,
+  NewCellAppendAction,
+  MergeCellAfterAction,
+  MoveCellAction,
+  ToggleStickyCellAction,
+  FocusPreviousCellAction,
+  SetKernelInfoAction,
+  SetLanguageInfoAction,
+  UpdateCellStatusAction,
+  ToggleCellInputVisibilityAction,
+  ToggleCellOutputVisibilityAction,
+  SetInCellAction,
+  SendExecuteMessageAction,
+  NewKernelAction,
+  SetGithubTokenAction,
+  SetNotificationSystemAction,
+  SetExecutionStateAction,
+  ExitAction,
+  StartSavingAction,
+  InterruptKernelAction,
+  KillKernelAction,
+  DoneSavingAction,
+  DoneSavingConfigAction,
+  SetConfigAction
+} from "../actionTypes";
+
 import { createExecuteRequest } from "@nteract/messaging";
 
+// TODO: This is one of the untyped actions currently
 export function newKernel(kernelSpec: any, cwd: string) {
   return {
-    type: constants.LAUNCH_KERNEL,
+    type: actionTypes.LAUNCH_KERNEL,
     kernelSpec,
     cwd
   };
 }
 
+// TODO: This is one of the untyped actions currently
 export function newKernelByName(kernelSpecName: any, cwd: string) {
   return {
-    type: constants.LAUNCH_KERNEL_BY_NAME,
+    type: actionTypes.LAUNCH_KERNEL_BY_NAME,
     kernelSpecName,
     cwd
   };
 }
 
-export function setNotebookKernelInfo(kernelInfo: any) {
+export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
   return {
-    type: constants.SET_KERNEL_INFO,
+    type: actionTypes.SET_KERNEL_INFO,
     kernelInfo
   };
 }
 
 // TODO: Lock this type down to a proper enum
+// TODO: Create a proper flow type in actionTypes
 export function setExecutionState(executionState: string) {
   return {
-    type: constants.SET_EXECUTION_STATE,
+    type: actionTypes.SET_EXECUTION_STATE,
     executionState
   };
 }
 
-export function clearOutputs(id: string) {
+export function clearOutputs(id: string): ClearOutputsAction {
   return {
-    type: constants.CLEAR_OUTPUTS,
+    type: actionTypes.CLEAR_OUTPUTS,
     id
   };
 }
 
-// TODO: above doesn't appear to get used for a MoveCellAction
-export function moveCell(id: string, destinationId: string, above: boolean) {
+export function moveCell(
+  id: string,
+  destinationId: string,
+  above: boolean
+): MoveCellAction {
   return {
-    type: constants.MOVE_CELL,
+    type: actionTypes.MOVE_CELL,
     id,
     destinationId,
     above
   };
 }
 
-export function removeCell(id: string) {
+export function removeCell(id: string): RemoveCellAction {
   return {
-    type: constants.REMOVE_CELL,
+    type: actionTypes.REMOVE_CELL,
     id
   };
 }
@@ -73,33 +129,36 @@ export function createCellAfter(
   cellType: CellType,
   id: string,
   source: string = ""
-) {
+): NewCellAfterAction {
   return {
-    type: constants.NEW_CELL_AFTER,
+    type: actionTypes.NEW_CELL_AFTER,
     source,
     cellType,
     id
   };
 }
 
-export function createCellBefore(cellType: CellType, id: string) {
+export function createCellBefore(
+  cellType: CellType,
+  id: string
+): NewCellBeforeAction {
   return {
-    type: constants.NEW_CELL_BEFORE,
+    type: actionTypes.NEW_CELL_BEFORE,
     cellType,
     id
   };
 }
 
-export function createCellAppend(cellType: CellType) {
+export function createCellAppend(cellType: CellType): NewCellAppendAction {
   return {
-    type: constants.NEW_CELL_APPEND,
+    type: actionTypes.NEW_CELL_APPEND,
     cellType
   };
 }
 
-export function mergeCellAfter(id: string) {
+export function mergeCellAfter(id: string): MergeCellAfterAction {
   return {
-    type: constants.MERGE_CELL_AFTER,
+    type: actionTypes.MERGE_CELL_AFTER,
     id
   };
 }
@@ -125,181 +184,206 @@ export function mergeCellAfter(id: string) {
  * }
  *
  */
-export function setInCell(id: CellID, path: Array<string>, value: any) {
+export function setInCell<T>(
+  id: CellID,
+  path: Array<string>,
+  value: T
+): SetInCellAction<T> {
   return {
-    type: constants.SET_IN_CELL,
+    type: actionTypes.SET_IN_CELL,
     id,
     path,
     value
   };
 }
 
-export function updateCellSource(id: string, source: string) {
+export function updateCellSource(
+  id: string,
+  source: string
+): SetInCellAction<string> {
   return setInCell(id, ["source"], source);
 }
 
-export function updateCellExecutionCount(id: string, count: number) {
+export function updateCellExecutionCount(
+  id: string,
+  count: number
+): SetInCellAction<number> {
   return setInCell(id, ["execution_count"], count);
 }
 
-export function changeOutputVisibility(id: string) {
+export function toggleCellOutputVisibility(
+  id: string
+): ToggleCellOutputVisibilityAction {
   return {
-    type: constants.CHANGE_OUTPUT_VISIBILITY,
+    type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
     id
   };
 }
 
-export function changeInputVisibility(id: string) {
+export function toggleCellInputVisibility(
+  id: string
+): ToggleCellInputVisibilityAction {
   return {
-    type: constants.CHANGE_INPUT_VISIBILITY,
+    type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
     id
   };
 }
 
-// TODO de-anyify this signature
-export function updateCellStatus(id: string, status: any) {
+export function updateCellStatus(
+  id: string,
+  status: string
+): UpdateCellStatusAction {
   return {
-    type: constants.UPDATE_CELL_STATUS,
+    type: actionTypes.UPDATE_CELL_STATUS,
     id,
     status
   };
 }
 
-// TODO de-anyify this signature
-export function focusCell(id: string) {
+export function focusCell(id: string): FocusCellAction {
   return {
-    type: constants.FOCUS_CELL,
+    type: actionTypes.FOCUS_CELL,
     id
   };
 }
 
-export function focusNextCell(id: string, createCellIfUndefined: boolean) {
+export function focusNextCell(
+  id: string,
+  createCellIfUndefined: boolean
+): FocusNextCellAction {
   return {
-    type: constants.FOCUS_NEXT_CELL,
+    type: actionTypes.FOCUS_NEXT_CELL,
     id,
     createCellIfUndefined
   };
 }
 
-export function focusPreviousCell(id: string) {
+export function focusPreviousCell(id: string): FocusPreviousCellAction {
   return {
-    type: constants.FOCUS_PREVIOUS_CELL,
+    type: actionTypes.FOCUS_PREVIOUS_CELL,
     id
   };
 }
 
-export function focusCellEditor(id: string | null) {
+export function focusCellEditor(id: string | null): FocusCellEditorAction {
   return {
-    type: constants.FOCUS_CELL_EDITOR,
+    type: actionTypes.FOCUS_CELL_EDITOR,
     id
   };
 }
 
-export function focusNextCellEditor(id: string) {
+export function focusNextCellEditor(id: string): FocusNextCellEditorAction {
   return {
-    type: constants.FOCUS_NEXT_CELL_EDITOR,
+    type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
     id
   };
 }
 
-export function focusPreviousCellEditor(id: string) {
+export function focusPreviousCellEditor(
+  id: string
+): FocusPreviousCellEditorAction {
   return {
-    type: constants.FOCUS_PREVIOUS_CELL_EDITOR,
+    type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
     id
   };
 }
 
-export function toggleStickyCell(id: string) {
+export function toggleStickyCell(id: string): ToggleStickyCellAction {
   return {
-    type: constants.TOGGLE_STICKY_CELL,
+    type: actionTypes.TOGGLE_STICKY_CELL,
     id
   };
 }
 
-export function overwriteMetadata(field: string, value: any) {
+export function overwriteMetadata(
+  field: string,
+  value: any
+): OverwriteMetadataFieldAction {
   return {
-    type: constants.OVERWRITE_METADATA_FIELD,
+    type: actionTypes.OVERWRITE_METADATA_FIELD,
     field,
     value
   };
 }
 
-export function deleteMetadata(field: string) {
+export function deleteMetadata(field: string): DeleteMetadataFieldAction {
   return {
-    type: constants.DELETE_METADATA_FIELD,
+    type: actionTypes.DELETE_METADATA_FIELD,
     field
   };
 }
 
-export const killKernel = {
-  type: constants.KILL_KERNEL
+export const killKernel: KillKernelAction = {
+  type: actionTypes.KILL_KERNEL
 };
 
-export const interruptKernel = {
-  type: constants.INTERRUPT_KERNEL
+export const interruptKernel: InterruptKernelAction = {
+  type: actionTypes.INTERRUPT_KERNEL
 };
 
-export function setNotificationSystem(notificationSystem: any) {
+export function setNotificationSystem(
+  notificationSystem: any
+): SetNotificationSystemAction {
   return {
-    type: constants.SET_NOTIFICATION_SYSTEM,
+    type: actionTypes.SET_NOTIFICATION_SYSTEM,
     notificationSystem
   };
 }
 
-export function copyCell(id: CellID) {
+export function copyCell(id: CellID): CopyCellAction {
   return {
-    type: constants.COPY_CELL,
+    type: actionTypes.COPY_CELL,
     id
   };
 }
 
-export function cutCell(id: CellID) {
+export function cutCell(id: CellID): CutCellAction {
   return {
-    type: constants.CUT_CELL,
+    type: actionTypes.CUT_CELL,
     id
   };
 }
 
-export function pasteCell() {
+export function pasteCell(): PasteCellAction {
   return {
-    type: constants.PASTE_CELL
+    type: actionTypes.PASTE_CELL
   };
 }
 
-export function changeCellType(id: CellID, to: CellType) {
+export function changeCellType(id: CellID, to: CellType): ChangeCellTypeAction {
   return {
-    type: constants.CHANGE_CELL_TYPE,
+    type: actionTypes.CHANGE_CELL_TYPE,
     id,
     to
   };
 }
 
-export function setGithubToken(githubToken: string) {
+export function setGithubToken(githubToken: string): SetGithubTokenAction {
   return {
-    type: constants.SET_GITHUB_TOKEN,
+    type: actionTypes.SET_GITHUB_TOKEN,
     githubToken
   };
 }
 
-export function setConfigKey(key: string, value: any) {
+export function setConfigAtKey<T>(key: string, value: T): SetConfigAction<T> {
   return {
-    type: constants.SET_CONFIG_KEY,
+    type: actionTypes.SET_CONFIG_AT_KEY,
     key,
     value
   };
 }
 
-export function setTheme(theme: string) {
-  return setConfigKey("theme", (theme: string));
+export function setTheme(theme: string): SetConfigAction<string> {
+  return setConfigAtKey("theme", theme);
 }
 
-export function setCursorBlink(value: string) {
-  return setConfigKey("cursorBlinkRate", value);
+export function setCursorBlink(value: string): SetConfigAction<string> {
+  return setConfigAtKey("cursorBlinkRate", value);
 }
 
-export function toggleOutputExpansion(id: string) {
+export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
   return {
-    type: constants.TOGGLE_OUTPUT_EXPANSION,
+    type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
     id
   };
 }
@@ -311,26 +395,29 @@ export function toggleOutputExpansion(id: string) {
  * @param {Object} source - Source code to executed.
  * @return {Object} executeCellAction - Action to be dispatched to reducer.
  */
-export function executeCell(id: string, source: string) {
+export function executeCell(
+  id: string,
+  source: string
+): SendExecuteMessageAction {
   const message = createExecuteRequest(source);
 
   return {
-    type: constants.SEND_EXECUTE_REQUEST,
+    type: actionTypes.SEND_EXECUTE_REQUEST,
     id,
     message
   };
 }
 
-export function changeFilename(filename: string) {
+export function changeFilename(filename: string): ChangeFilenameAction {
   return {
-    type: constants.CHANGE_FILENAME,
+    type: actionTypes.CHANGE_FILENAME,
     filename
   };
 }
 
 export function save(filename: string, notebook: any) {
   return {
-    type: constants.SAVE,
+    type: actionTypes.SAVE,
     filename,
     notebook
   };
@@ -338,7 +425,7 @@ export function save(filename: string, notebook: any) {
 
 export function saveAs(filename: string, notebook: any) {
   return {
-    type: constants.SAVE_AS,
+    type: actionTypes.SAVE_AS,
     filename,
     notebook
   };
@@ -346,7 +433,87 @@ export function saveAs(filename: string, notebook: any) {
 
 export function doneSaving(notebook: any) {
   return {
-    type: constants.DONE_SAVING,
+    type: actionTypes.DONE_SAVING,
     notebook
+  };
+}
+
+export function load(filename: string) {
+  return {
+    type: actionTypes.LOAD,
+    filename
+  };
+}
+
+// TODO: Use a kernel spec type
+export function newNotebook(kernelSpec: Object, cwd: string) {
+  return {
+    type: actionTypes.NEW_NOTEBOOK,
+    kernelSpec,
+    cwd:
+      cwd ||
+      // TODO: Does it matter that this is our fallback when targeting the web app
+      process.cwd()
+  };
+}
+
+// Expects notebook to be JS Object or Immutable.js
+export const setNotebook = (
+  filename: string,
+  notebook: Notebook
+): SetNotebookAction => ({
+  type: actionTypes.SET_NOTEBOOK,
+  filename,
+  notebook
+});
+
+export const loadConfig = () => ({ type: actionTypes.LOAD_CONFIG });
+export const saveConfig = () => ({ type: actionTypes.SAVE_CONFIG });
+export const doneSavingConfig = () => ({
+  type: actionTypes.DONE_SAVING_CONFIG
+});
+
+export const configLoaded = (config: any) => ({
+  type: actionTypes.MERGE_CONFIG,
+  config
+});
+
+/**
+ * Action creator for comm_open messages
+ * @param  {jmp.Message} a comm_open message
+ * @return {Object}      COMM_OPEN action
+ */
+export function commOpenAction(message: any) {
+  // invariant: expects a comm_open message
+  return {
+    type: actionTypes.COMM_OPEN,
+    data: message.content.data,
+    metadata: message.content.metadata,
+    comm_id: message.content.comm_id,
+    target_name: message.content.target_name,
+    target_module: message.content.target_module,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
+  };
+}
+
+/**
+ * Action creator for comm_msg messages
+ * @param  {jmp.Message} a comm_msg
+ * @return {Object}      COMM_MESSAGE action
+ */
+export function commMessageAction(message: any) {
+  return {
+    type: actionTypes.COMM_MESSAGE,
+    comm_id: message.content.comm_id,
+    data: message.content.data,
+    // Pass through the buffers
+    buffers: message.blob || message.buffers
+    // NOTE: Naming inconsistent between jupyter notebook and jmp
+    //       see https://github.com/n-riesco/jmp/issues/14
+    //       We just expect either one
   };
 }

@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 
-import * as constants from "../src/constants";
+import * as actionTypes from "../src/actionTypes";
 import { config as reducers } from "../src/reducers";
 
 describe("setKey", () => {
@@ -8,7 +8,7 @@ describe("setKey", () => {
     const initialState = new Map({ theme: null });
 
     const state = reducers(initialState, {
-      type: constants.SET_CONFIG_KEY,
+      type: actionTypes.SET_CONFIG_AT_KEY,
       key: "theme",
       value: "light"
     });
@@ -22,7 +22,7 @@ describe("mergeConfig", () => {
 
     const config = { theme: "dark" };
     const state = reducers(initialState, {
-      type: constants.MERGE_CONFIG,
+      type: actionTypes.MERGE_CONFIG,
       config
     });
     expect(state.get("theme")).toBe("dark");

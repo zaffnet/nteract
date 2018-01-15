@@ -5,47 +5,18 @@ import { dummyCommutable, dummy } from "@nteract/core/dummy";
 import {
   load,
   newNotebook,
-  notebookLoaded,
+  setNotebook,
   extractNewKernel,
   convertRawNotebook,
   loadEpic,
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
 
-import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/constants";
+import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/actionTypes";
 
 import { toArray } from "rxjs/operators";
 
 const path = require("path");
-
-describe("load", () => {
-  test("loads a notebook", () => {
-    expect(load("mytest.ipynb")).toEqual({
-      type: LOAD,
-      filename: "mytest.ipynb"
-    });
-  });
-});
-
-describe("newNotebook", () => {
-  test("creates a new notebook", () => {
-    expect(newNotebook({ spec: "hokey" }, "/tmp")).toEqual({
-      type: NEW_NOTEBOOK,
-      kernelSpec: { spec: "hokey" },
-      cwd: "/tmp"
-    });
-  });
-});
-
-describe("notebookLoaded", () => {
-  test("sets a notebook", () => {
-    expect(notebookLoaded("test", dummyCommutable)).toEqual({
-      type: SET_NOTEBOOK,
-      filename: "test",
-      notebook: dummyCommutable
-    });
-  });
-});
 
 describe("extractNewKernel", () => {
   test("extracts and launches the kernel from a notebook", () => {

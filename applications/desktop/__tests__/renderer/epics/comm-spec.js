@@ -2,13 +2,12 @@ import {
   createCommMessage,
   createCommCloseMessage,
   createCommOpenMessage,
-  createCommErrorAction,
-  commOpenAction,
-  commMessageAction,
   commActionObservable
 } from "../../../src/notebook/epics/comm";
 
-import { COMM_OPEN, COMM_MESSAGE, COMM_ERROR } from "@nteract/core/constants";
+import { commOpenAction, commMessageAction } from "@nteract/core/actions";
+
+import { COMM_OPEN, COMM_MESSAGE, COMM_ERROR } from "@nteract/core/actionTypes";
 
 import { of } from "rxjs/observable/of";
 import { toArray } from "rxjs/operators";
@@ -64,62 +63,6 @@ describe("createCommCloseMessage", () => {
     expect(commMessage.content.comm_id).toBe("0000");
     expect(commMessage.header.msg_type).toBe("comm_close");
     expect(commMessage.parent_header).toEqual(parent_header);
-  });
-});
-
-describe("createCommErrorAction", () => {
-  test("creates a COMM_ERROR action with an error", () => {
-    const err = new Error();
-    return createCommErrorAction(err)
-      .toPromise()
-      .then(action => {
-        expect(action.type).toBe(COMM_ERROR);
-        expect(action.payload).toBe(err);
-        expect(action.error).toBe(true);
-      });
-  });
-});
-
-describe("commOpenAction", () => {
-  test("creates a COMM_OPEN action", () => {
-    const message = {
-      content: {
-        data: "DATA",
-        metadata: "0",
-        comm_id: "0123",
-        target_name: "daredevil",
-        target_module: "murdock"
-      },
-      buffers: new Uint8Array()
-    };
-    const action = commOpenAction(message);
-
-    expect(action).toEqual({
-      type: COMM_OPEN,
-      data: "DATA",
-      metadata: "0",
-      comm_id: "0123",
-      target_name: "daredevil",
-      target_module: "murdock",
-      buffers: new Uint8Array()
-    });
-  });
-});
-
-describe("commMessageAction", () => {
-  test("creates a COMM_MESSAGE action", () => {
-    const message = {
-      content: { data: "DATA", comm_id: "0123" },
-      buffers: new Uint8Array()
-    };
-    const action = commMessageAction(message);
-
-    expect(action).toEqual({
-      type: COMM_MESSAGE,
-      data: "DATA",
-      comm_id: "0123",
-      buffers: new Uint8Array()
-    });
   });
 });
 

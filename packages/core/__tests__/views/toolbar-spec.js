@@ -18,19 +18,19 @@ describe("Toolbar View", () => {
     toolbar.find(".clearOutput").simulate("click");
     expect(dummyFunc).toHaveBeenCalled();
   });
-  test("changeInputVisibility can be clicked", () => {
+  test("toggleCellInputVisibility can be clicked", () => {
     const dummyFunc = jest.fn();
     const toolbar = mount(
-      <Toolbar type="code" changeInputVisibility={dummyFunc} />
+      <Toolbar type="code" toggleCellInputVisibility={dummyFunc} />
     );
     toolbar.find(".toggle-menu").simulate("click");
     toolbar.find(".inputVisibility").simulate("click");
     expect(dummyFunc).toHaveBeenCalled();
   });
-  test("changeOutputVisibility can be clicked", () => {
+  test("toggleCellOutputVisibility can be clicked", () => {
     const dummyFunc = jest.fn();
     const toolbar = mount(
-      <Toolbar type="code" changeOutputVisibility={dummyFunc} />
+      <Toolbar type="code" toggleCellOutputVisibility={dummyFunc} />
     );
     toolbar.find(".toggle-menu").simulate("click");
     toolbar.find(".outputVisibility").simulate("click");

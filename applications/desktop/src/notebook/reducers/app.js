@@ -1,7 +1,4 @@
 // @flow
-
-import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
-
 import { shutdownKernel } from "../kernel/shutdown";
 
 import {
@@ -11,7 +8,18 @@ import {
   AppRecord
 } from "@nteract/types/core/records";
 
-import type { Channels } from "@nteract/types/channels";
+import type {
+  NewKernelAction,
+  SetGithubTokenAction,
+  SetNotificationSystemAction,
+  SetExecutionStateAction,
+  ExitAction,
+  StartSavingAction,
+  InterruptKernelAction,
+  KillKernelAction,
+  DoneSavingAction,
+  DoneSavingConfigAction
+} from "@nteract/core/actionTypes";
 
 function cleanupKernel(state: AppRecord): AppRecord {
   shutdownKernel(state.kernel);
@@ -25,15 +33,6 @@ function cleanupKernel(state: AppRecord): AppRecord {
       .set("executionState", "not connected")
   );
 }
-
-type NewKernelAction = {
-  type: "NEW_KERNEL",
-  channels: Channels,
-  connectionFile: string,
-  spawn: ChildProcess,
-  kernelSpecName: string,
-  kernelSpec: Object
-};
 
 function newKernel(state: AppRecord, action: NewKernelAction) {
   const kernel = makeLocalKernelRecord({
@@ -64,10 +63,6 @@ function startSaving(state: AppRecord) {
   return state.set("isSaving", true);
 }
 
-type SetExecutionStateAction = {
-  type: "SET_EXECUTION_STATE",
-  executionState: string
-};
 function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
   return state.set("executionState", action.executionState);
 }
@@ -80,10 +75,6 @@ function doneSavingConfig(state: AppRecord) {
   return state.set("configLastSaved", new Date());
 }
 
-type SetNotificationSystemAction = {
-  type: "SET_NOTIFICATION_SYSTEM",
-  notificationSystem: Object
-};
 function setNotificationsSystem(
   state: AppRecord,
   action: SetNotificationSystemAction
@@ -91,18 +82,10 @@ function setNotificationsSystem(
   return state.set("notificationSystem", action.notificationSystem);
 }
 
-type SetGithubTokenAction = { type: "SET_GITHUB_TOKEN", githubToken: string };
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   const { githubToken } = action;
   return state.set("githubToken", githubToken);
 }
-
-type ExitAction = { type: "EXIT" };
-type StartSavingAction = { type: "START_SAVING" };
-type DoneSavingAction = { type: "DONE_SAVING" };
-type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
-type InterruptKernelAction = { type: "INTERRUPT_KERNEL" };
-type KillKernelAction = { type: "KILL_KERNEL" };
 
 type AppAction =
   | NewKernelAction

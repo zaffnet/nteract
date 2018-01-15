@@ -8,8 +8,8 @@ import {
   removeCell,
   toggleStickyCell,
   clearOutputs,
-  changeOutputVisibility,
-  changeInputVisibility,
+  toggleCellOutputVisibility,
+  toggleCellInputVisibility,
   changeCellType,
   toggleOutputExpansion
 } from "../actions";
@@ -29,8 +29,8 @@ class Toolbar extends Component<Props> {
   executeCell: () => void;
   clearOutputs: () => void;
   toggleStickyCell: () => void;
-  changeInputVisibility: () => void;
-  changeOutputVisibility: () => void;
+  toggleCellInputVisibility: () => void;
+  toggleCellOutputVisibility: () => void;
   changeCellType: () => void;
   toggleOutputExpansion: () => void;
 
@@ -40,8 +40,10 @@ class Toolbar extends Component<Props> {
     this.executeCell = this.executeCell.bind(this);
     this.clearOutputs = this.clearOutputs.bind(this);
     this.toggleStickyCell = this.toggleStickyCell.bind(this);
-    this.changeInputVisibility = this.changeInputVisibility.bind(this);
-    this.changeOutputVisibility = this.changeOutputVisibility.bind(this);
+    this.toggleCellInputVisibility = this.toggleCellInputVisibility.bind(this);
+    this.toggleCellOutputVisibility = this.toggleCellOutputVisibility.bind(
+      this
+    );
     this.changeCellType = this.changeCellType.bind(this);
     this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
   }
@@ -66,14 +68,14 @@ class Toolbar extends Component<Props> {
     dispatch(clearOutputs(this.props.id));
   }
 
-  changeInputVisibility(): void {
+  toggleCellInputVisibility(): void {
     const { dispatch } = this.props;
-    dispatch(changeInputVisibility(this.props.id));
+    dispatch(toggleCellInputVisibility(this.props.id));
   }
 
-  changeOutputVisibility(): void {
+  toggleCellOutputVisibility(): void {
     const { dispatch } = this.props;
-    dispatch(changeOutputVisibility(this.props.id));
+    dispatch(toggleCellOutputVisibility(this.props.id));
   }
 
   changeCellType(): void {
@@ -95,8 +97,8 @@ class Toolbar extends Component<Props> {
         removeCell={this.removeCell}
         toggleStickyCell={this.toggleStickyCell}
         clearOutputs={this.clearOutputs}
-        changeInputVisibility={this.changeInputVisibility}
-        changeOutputVisibility={this.changeOutputVisibility}
+        toggleCellInputVisibility={this.toggleCellInputVisibility}
+        toggleCellOutputVisibility={this.toggleCellOutputVisibility}
         toggleOutputExpansion={this.toggleOutputExpansion}
         changeCellType={this.changeCellType}
       />

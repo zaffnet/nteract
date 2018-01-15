@@ -1,6 +1,12 @@
 /* @flow */
 import * as Immutable from "immutable";
 
+import type {
+  RegisterCommTargetAction,
+  CommOpenAction,
+  CommMessageAction
+} from "../actionTypes";
+
 type CommState = Immutable.Map<string, any>;
 
 const defaultCommState: CommState = Immutable.Map({
@@ -9,25 +15,12 @@ const defaultCommState: CommState = Immutable.Map({
   info: Immutable.Map()
 });
 
-type RegisterCommTargetAction = {
-  type: "REGISTER_COMM_TARGET",
-  name: string,
-  handler: string
-};
 function registerCommTarget(
   state: CommState,
   action: RegisterCommTargetAction
 ): CommState {
   return state.setIn(["targets", action.name], action.handler);
 }
-
-type CommOpenAction = {
-  type: "COMM_OPEN",
-  target_name: string,
-  target_module: string,
-  data: any,
-  comm_id: string
-};
 
 function processCommOpen(state: CommState, action: CommOpenAction): CommState {
   const { target_name, target_module, data, comm_id } = action;
@@ -42,7 +35,6 @@ function processCommOpen(state: CommState, action: CommOpenAction): CommState {
     .setIn(["models", comm_id], Immutable.fromJS(data));
 }
 
-type CommMessageAction = { type: "COMM_MESSAGE", data: any, comm_id: string };
 function processCommMessage(
   state: CommState,
   action: CommMessageAction
@@ -81,6 +73,7 @@ export default function(
     case "COMM_MESSAGE":
       return processCommMessage(state, action);
     default:
+      (action: empty);
       return state;
   }
 }
