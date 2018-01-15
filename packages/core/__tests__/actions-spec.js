@@ -2,6 +2,25 @@
 import * as actions from "../src/actions";
 import * as actionTypes from "../src/actionTypes";
 
+describe("setLanguageInfo", () => {
+  test("creates a SET_LANGUAGE_INFO action", () => {
+    const langInfo = {
+      codemirror_mode: { name: "ipython", version: 3 },
+      file_extension: ".py",
+      mimetype: "text/x-python",
+      name: "python",
+      nbconvert_exporter: "python",
+      pygments_lexer: "ipython3",
+      version: "3.5.1"
+    };
+
+    expect(actions.setLanguageInfo(langInfo)).toEqual({
+      type: actionTypes.SET_LANGUAGE_INFO,
+      langInfo
+    });
+  });
+});
+
 describe("commOpenAction", () => {
   test("creates a COMM_OPEN action", () => {
     const message = {

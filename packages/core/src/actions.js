@@ -6,6 +6,11 @@ import type { Notebook } from "@nteract/commutable";
 import type { JSONObject } from "@nteract/types/commutable";
 
 import type {
+  LanguageInfoMetadata,
+  KernelInfo
+} from "@nteract/types/core/records";
+
+import type {
   ImmutableCell,
   ImmutableNotebook,
   CellID,
@@ -27,17 +32,12 @@ import type {
   CopyCellAction,
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
-  // TODO: Not here...
   AcceptPayloadMessageAction,
   SetNotebookAction,
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearOutputsAction,
-  // TODO: Not here...
   AppendOutputAction,
-  // TODO: Not here...
-  SetNotebookCheckpointAction,
-  // TODO: Not here...
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -51,7 +51,6 @@ import type {
   ToggleStickyCellAction,
   FocusPreviousCellAction,
   SetKernelInfoAction,
-  // TODO: Not here...
   SetLanguageInfoAction,
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
@@ -62,21 +61,18 @@ import type {
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
-  // TODO: Not here...
   SetExecutionStateAction,
-  // TODO: Not here...
-  ExitAction,
+  SetConfigAction,
+  InterruptKernelAction,
+  KillKernelAction,
   // TODO: Not here...
   StartSavingAction,
-  // TODO: Not here...
-  InterruptKernelAction,
-  // TODO: Not here...
-  KillKernelAction,
   // TODO: Not here...
   DoneSavingAction,
   // TODO: Not here...
   DoneSavingConfigAction,
-  SetConfigAction
+  // TODO: Not here...
+  SetNotebookCheckpointAction
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
@@ -106,9 +102,9 @@ export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
   };
 }
 
-// TODO: Lock this type down to a proper enum
-// TODO: Create a proper flow type in actionTypes
-export function setExecutionState(executionState: string) {
+export function setExecutionState(
+  executionState: string
+): SetExecutionStateAction {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
     executionState
@@ -562,5 +558,14 @@ export function updateDisplay(content: {
   return {
     type: actionTypes.UPDATE_DISPLAY,
     content
+  };
+}
+
+export function setLanguageInfo(
+  langInfo: LanguageInfoMetadata
+): SetLanguageInfoAction {
+  return {
+    type: actionTypes.SET_LANGUAGE_INFO,
+    langInfo
   };
 }
