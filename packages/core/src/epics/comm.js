@@ -4,13 +4,13 @@ import { merge } from "rxjs/observable/merge";
 import { map, retry, switchMap } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
-import { commOpenAction, commMessageAction } from "@nteract/core/actions";
+import { commOpenAction, commMessageAction } from "../actions";
 
 import { createMessage, ofMessageType, childOf } from "@nteract/messaging";
 
 import type { ActionsObservable } from "redux-observable";
 
-import { NEW_KERNEL } from "@nteract/core/actionTypes";
+import { NEW_KERNEL } from "../actionTypes";
 
 /**
  * creates a comm open message

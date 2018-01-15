@@ -1,13 +1,14 @@
+// @flow
 import {
   createCommMessage,
   createCommCloseMessage,
   createCommOpenMessage,
   commActionObservable
-} from "../../../src/notebook/epics/comm";
+} from "../../src/epics/comm";
 
-import { commOpenAction, commMessageAction } from "@nteract/core/actions";
+import { commOpenAction, commMessageAction } from "../../src/actions";
 
-import { COMM_OPEN, COMM_MESSAGE, COMM_ERROR } from "@nteract/core/actionTypes";
+import { COMM_OPEN, COMM_MESSAGE, COMM_ERROR } from "../../src/actionTypes";
 
 import { of } from "rxjs/observable/of";
 import { toArray } from "rxjs/operators";
