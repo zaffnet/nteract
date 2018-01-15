@@ -57,28 +57,36 @@ import type {
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
   SendExecuteMessageAction,
-  // TODO: Not here...
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
   SetExecutionStateAction,
   SetConfigAction,
+  LaunchKernelAction,
+  LaunchKernelByNameAction,
   InterruptKernelAction,
   KillKernelAction,
-  // TODO: Not here...
+  // TODO: Needs an action creator
   StartSavingAction,
-  // TODO: Not here...
+  // TODO: Needs an action creator
   DoneSavingAction,
-  // TODO: Not here...
+  // TODO: Needs an action creator
   DoneSavingConfigAction,
-  // TODO: Not here...
+  // TODO: Needs an action creator
   SetNotebookCheckpointAction
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 
-// TODO: This is one of the untyped actions currently
-export function newKernel(kernelSpec: any, cwd: string) {
+export function launchKernelSuccessful(payload: *): NewKernelAction {
+  // TODO: Use our new kernel types instead of only matching the old setup
+  return {
+    type: actionTypes.NEW_KERNEL,
+    ...payload
+  };
+}
+
+export function launchKernel(kernelSpec: any, cwd: string): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
     kernelSpec,
@@ -86,8 +94,10 @@ export function newKernel(kernelSpec: any, cwd: string) {
   };
 }
 
-// TODO: This is one of the untyped actions currently
-export function newKernelByName(kernelSpecName: any, cwd: string) {
+export function launchKernelByName(
+  kernelSpecName: any,
+  cwd: string
+): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,
     kernelSpecName,

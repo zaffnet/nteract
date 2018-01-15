@@ -165,7 +165,7 @@ describe("interruptKernel", () => {
   });
 });
 
-describe("newKernel", () => {
+describe("launchKernel", () => {
   test("creates a new kernel", () => {
     const originalState = {
       app: makeAppRecord({

@@ -34,7 +34,7 @@ function cleanupKernel(state: AppRecord): AppRecord {
   );
 }
 
-function newKernel(state: AppRecord, action: NewKernelAction) {
+function launchKernel(state: AppRecord, action: NewKernelAction) {
   const kernel = makeLocalKernelRecord({
     channels: action.channels,
     spawn: action.spawn,
@@ -107,7 +107,7 @@ export default function handleApp(
 ) {
   switch (action.type) {
     case "NEW_KERNEL":
-      return newKernel(state, action);
+      return launchKernel(state, action);
     case "EXIT":
       return exit(state);
     case "KILL_KERNEL":

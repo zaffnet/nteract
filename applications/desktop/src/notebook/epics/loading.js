@@ -7,7 +7,11 @@ import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import { readFileObservable } from "fs-observable";
-import { newKernelByName, newKernel, setNotebook } from "@nteract/core/actions";
+import {
+  launchKernelByName,
+  launchKernel,
+  setNotebook
+} from "@nteract/core/actions";
 
 const path = require("path");
 
@@ -78,7 +82,7 @@ export const loadEpic = (actions: ActionsObservable<*>) =>
             // Find kernel based on kernel name
             // NOTE: Conda based kernels and remote kernels will need
             // special handling
-            newKernelByName(kernelSpecName, cwd)
+            launchKernelByName(kernelSpecName, cwd)
           );
         }),
         catchError(err => of({ type: "ERROR", payload: err, error: true }))
@@ -100,7 +104,7 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
           type: SET_NOTEBOOK,
           notebook: monocellNotebook
         },
-        newKernel(action.kernelSpec, action.cwd)
+        launchKernel(action.kernelSpec, action.cwd)
       )
     )
   );

@@ -38,7 +38,8 @@ import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 import {
   setExecutionState,
   setNotebookKernelInfo,
-  newKernel,
+  launchKernelSuccessful,
+  launchKernel,
   setLanguageInfo
 } from "@nteract/core/actions";
 
@@ -82,7 +83,7 @@ export function acquireKernelInfo(channels: Channels) {
  * @param  {KernelInfo}  kernelSpec The kernel specs - name,language, etc
  * @param  {String}  cwd The working directory to launch the kernel in
  */
-export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
+export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
   const spec = kernelSpec.spec;
 
   return Observable.create(observer => {
@@ -104,14 +105,15 @@ export function newKernelObservable(kernelSpec: KernelInfo, cwd: string) {
         .then(channels => {
           observer.next(setNotebookKernelInfo(kernelSpec));
 
-          observer.next({
-            type: NEW_KERNEL,
-            channels,
-            connectionFile,
-            spawn,
-            kernelSpecName,
-            kernelSpec
-          });
+          observer.next(
+            launchKernelSuccessful({
+              channels,
+              connectionFile,
+              spawn,
+              kernelSpecName,
+              kernelSpec
+            })
+          );
         })
         .catch(error => {
           observer.error({ type: "ERROR", payload: error, err: true });
@@ -174,18 +176,18 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
     switchMap(action => acquireKernelInfo(action.channels))
   );
 
-export const newKernelByNameEpic = (action$: ActionsObservable<*>) =>
+export const launchKernelByNameEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_BY_NAME),
     tap(action => {
       if (!action.kernelSpecName) {
-        throw new Error("newKernelByNameEpic requires a kernel name");
+        throw new Error("launchKernelByNameEpic requires a kernel name");
       }
     }),
     mergeMap(action =>
       kernelSpecsObservable.pipe(
         mergeMap(specs =>
-          of(newKernel(specs[action.kernelSpecName], action.cwd))
+          of(launchKernel(specs[action.kernelSpecName], action.cwd))
         )
       )
     )
@@ -196,16 +198,16 @@ export const newKernelByNameEpic = (action$: ActionsObservable<*>) =>
  *
  * @param  {ActionObservable} action$  ActionObservable for LAUNCH_KERNEL action
  */
-export const newKernelEpic = (action$: ActionsObservable<*>) =>
+export const launchKernelEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL),
     tap(action => {
       if (!action.kernelSpec) {
-        throw new Error("newKernel needs a kernelSpec");
+        throw new Error("launchKernel needs a kernelSpec");
       }
       ipc.send("nteract:ping:kernel", action.kernelSpec);
     }),
-    mergeMap(action => newKernelObservable(action.kernelSpec, action.cwd)),
+    mergeMap(action => launchKernelObservable(action.kernelSpec, action.cwd)),
     catchError((error, source) =>
       merge(
         of({
