@@ -77,7 +77,7 @@ class CodeMirrorEditor extends React.Component<
     this.tips = this.tips.bind(this);
     this.hint.async = true;
 
-    defaultOptions = Object.assign(
+    this.defaultOptions = Object.assign(
       {
         autoCloseBrackets: true,
         lineNumbers: false,
