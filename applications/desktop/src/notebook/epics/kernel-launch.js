@@ -38,7 +38,8 @@ import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 import {
   setExecutionState,
   setNotebookKernelInfo,
-  newKernel
+  newKernel,
+  setLanguageInfo
 } from "@nteract/core/actions";
 
 import {
@@ -50,13 +51,6 @@ import {
   KERNEL_RAW_STDOUT,
   KERNEL_RAW_STDERR
 } from "@nteract/core/actionTypes";
-
-export function setLanguageInfo(langInfo: LanguageInfoMetadata) {
-  return {
-    type: SET_LANGUAGE_INFO,
-    langInfo
-  };
-}
 
 /**
  * Send a kernel_info_request to the kernel.

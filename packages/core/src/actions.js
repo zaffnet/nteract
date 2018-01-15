@@ -6,6 +6,11 @@ import type { Notebook } from "@nteract/commutable";
 import type { JSONObject } from "@nteract/types/commutable";
 
 import type {
+  LanguageInfoMetadata,
+  KernelInfo
+} from "@nteract/types/core/records";
+
+import type {
   ImmutableCell,
   ImmutableNotebook,
   CellID,
@@ -48,7 +53,6 @@ import type {
   ToggleStickyCellAction,
   FocusPreviousCellAction,
   SetKernelInfoAction,
-  // TODO: Not here...
   SetLanguageInfoAction,
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
@@ -63,10 +67,10 @@ import type {
   SetExecutionStateAction,
   // TODO: Not here...
   ExitAction,
-  // TODO: Not here...
-  StartSavingAction,
   InterruptKernelAction,
   KillKernelAction,
+  // TODO: Not here...
+  StartSavingAction,
   // TODO: Not here...
   DoneSavingAction,
   // TODO: Not here...
@@ -557,5 +561,14 @@ export function updateDisplay(content: {
   return {
     type: actionTypes.UPDATE_DISPLAY,
     content
+  };
+}
+
+export function setLanguageInfo(
+  langInfo: LanguageInfoMetadata
+): SetLanguageInfoAction {
+  return {
+    type: actionTypes.SET_LANGUAGE_INFO,
+    langInfo
   };
 }

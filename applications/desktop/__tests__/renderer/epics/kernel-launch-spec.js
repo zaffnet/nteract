@@ -17,25 +17,6 @@ import { Subject } from "rxjs/Subject";
 import { of } from "rxjs/observable/of";
 import { toArray, share } from "rxjs/operators";
 
-describe("setLanguageInfo", () => {
-  test("creates a SET_LANGUAGE_INFO action", () => {
-    const langInfo = {
-      codemirror_mode: { name: "ipython", version: 3 },
-      file_extension: ".py",
-      mimetype: "text/x-python",
-      name: "python",
-      nbconvert_exporter: "python",
-      pygments_lexer: "ipython3",
-      version: "3.5.1"
-    };
-
-    expect(setLanguageInfo(langInfo)).toEqual({
-      type: actionTypes.SET_LANGUAGE_INFO,
-      langInfo
-    });
-  });
-});
-
 describe("acquireKernelInfo", () => {
   test("sends a kernel_info_request and processes kernel_info_reply", done => {
     const sent = new Subject();
@@ -59,7 +40,7 @@ describe("acquireKernelInfo", () => {
     obs.subscribe(langAction => {
       expect(langAction).toEqual({
         langInfo: { language: "python" },
-        type: actionTypes.SET_LANGUAGE_INFO
+        type: "SET_LANGUAGE_INFO"
       });
       done();
     });
