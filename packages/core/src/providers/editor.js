@@ -6,23 +6,21 @@ import { focusCell, focusCellEditor, updateCellSource } from "../actions";
 
 import EditorView from "@nteract/editor";
 
-type Props = {
+import type { CodeMirrorEditorProps } from "@nteract/editor";
+
+type Props = CodeMirrorEditorProps & {
   dispatch: Dispatch<*>,
   id: string,
-  value: string,
-  editorFocused: boolean,
   cellFocused: boolean,
-  completion: boolean,
-  tip: boolean,
-  focusAbove: () => void,
-  focusBelow: () => void,
-  theme: string,
   channels: any,
   executionState: "idle" | "starting" | "not connected",
   options: Object
 };
 
-function mapStateToProps(state: Object, ownProps: Props): Object {
+function mapStateToProps(
+  state: Object,
+  ownProps: CodeMirrorEditorProps
+): Object {
   return {
     options: ownProps.options
       ? Object.assign(ownProps.options, {
@@ -65,7 +63,6 @@ class Editor extends React.Component<Props> {
   render(): React$Element<any> {
     const props = {
       ...this.props,
-      value: this.props.value,
       onChange: this.onChange,
       onFocusChange: this.onFocusChange
     };

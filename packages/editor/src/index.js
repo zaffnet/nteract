@@ -67,7 +67,6 @@ class CodeMirrorEditor extends React.Component<
   tips: (editor: Object) => void;
 
   static defaultProps = {
-    // Workaround a flow limitation
     onScroll: () => {}
   };
 
