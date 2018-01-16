@@ -193,9 +193,6 @@ class Main extends React.Component<*, *> {
             tip
             completion
             theme="light"
-            // TODO: This property needs to be excised from the editor, as it belongs
-            //       in codemirror options below
-            cursorBlinkRate={0}
             // TODO: This is the notebook implementation leaking into the editor
             //       component. It shouldn't be here, I won't refactor it as part
             //       of the current play PR though.
@@ -203,7 +200,6 @@ class Main extends React.Component<*, *> {
             onFocusChange={() => {}}
             focusAbove={() => {}}
             focusBelow={() => {}}
-            mode={codeMirrorMode}
             // END TODO for notebook leakage
             // TODO: executionState should be allowed to be null or undefined,
             //       resulting in thought of as either idle or not connected by
@@ -218,7 +214,9 @@ class Main extends React.Component<*, *> {
                 "Ctrl-Space": "autocomplete",
                 "Ctrl-Enter": this.handleSourceSubmit,
                 "Cmd-Enter": this.handleSourceSubmit
-              }
+              },
+              cursorBlinkRate: 0,
+              mode: codeMirrorMode
             }}
             value={sourceValue}
             onChange={this.handleEditorChange}
