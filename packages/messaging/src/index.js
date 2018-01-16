@@ -52,7 +52,7 @@ export const childOf = (parentMessage: JupyterMessage<*, *>) => (
     source.subscribe(
       msg => {
         if (!msg.parent_header || !msg.parent_header.msg_id) {
-          subscriber.error(new Error("no parent_header.msg_id on message"));
+          console.error("no parent_header.msg_id on message", msg);
           return;
         }
 
