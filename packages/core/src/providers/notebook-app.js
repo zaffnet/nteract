@@ -63,41 +63,49 @@ type Props = {
   editorFocused: string,
   theme: string,
   lastSaved: Date,
-  kernelSpecDisplayName: string,
+  languageDisplayName: string,
   executionState: string,
   models: ImmutableMap<string, any>,
   language: string
 };
 
-export function getLanguageMode(metadata: ImmutableMap<*, *>): string {
+export function getLanguageMode(languageInfo: ImmutableMap<*, *>): string {
   // First try codemirror_mode, then name, and fallback to 'text'
-  const language = metadata.getIn(
-    ["language_info", "codemirror_mode", "name"],
-    metadata.getIn(
-      ["language_info", "codemirror_mode"],
-      metadata.getIn(["language_info", "name"], "text")
+  const language = languageInfo.getIn(
+    ["codemirror_mode", "name"],
+    languageInfo.getIn(
+      ["codemirror_mode"],
+      languageInfo.getIn(["name"], "text")
     )
   );
   return language;
 }
 
-const mapStateToProps = (state: Object) => ({
-  theme: state.config.get("theme"),
-  lastSaved: state.app.get("lastSaved"),
-  kernelSpecDisplayName: state.app.get("kernelSpecDisplayName"),
-  cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
-  cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
-  transient: state.document.get("transient"),
-  cellPagers: state.document.get("cellPagers", ImmutableMap()),
-  cellFocused: state.document.get("cellFocused"),
-  editorFocused: state.document.get("editorFocused"),
-  stickyCells: state.document.get("stickyCells"),
-  executionState: state.app.get("executionState"),
-  models: state.comms.get("models"),
-  language: getLanguageMode(
-    state.document.getIn(["notebook", "metadata"], ImmutableMap())
-  )
-});
+const mapStateToProps = (state: Object): Props => {
+  const language_info = state.document.getIn(
+    ["notebook", "metadata", "language_info"],
+    ImmutableMap()
+  );
+
+  return {
+    theme: state.config.get("theme"),
+    lastSaved: state.app.get("lastSaved"),
+    cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
+    cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
+    transient: state.document.get("transient"),
+    cellPagers: state.document.get("cellPagers", ImmutableMap()),
+    cellFocused: state.document.get("cellFocused"),
+    editorFocused: state.document.get("editorFocused"),
+    stickyCells: state.document.get("stickyCells"),
+    executionState: state.app.get("executionState"),
+    models: state.comms.get("models"),
+    language: getLanguageMode(languageInfo),
+    languageDisplayName: state.document.getIn(
+      ["notebook", "metadata", "kernelspec", "display_name"],
+      ""
+    )
+  };
+};
 
 export class NotebookApp extends React.Component<Props> {
   static defaultProps = {
