@@ -81,8 +81,8 @@ export function getLanguageMode(languageInfo: ImmutableMap<*, *>): string {
   return language;
 }
 
-const mapStateToProps = (state: Object): Props => {
-  const language_info = state.document.getIn(
+const mapStateToProps = (state: Object, ownProps: Props): Props => {
+  const languageInfo = state.document.getIn(
     ["notebook", "metadata", "language_info"],
     ImmutableMap()
   );
@@ -103,7 +103,9 @@ const mapStateToProps = (state: Object): Props => {
     languageDisplayName: state.document.getIn(
       ["notebook", "metadata", "kernelspec", "display_name"],
       ""
-    )
+    ),
+    transforms: ownProps.transforms || transforms,
+    displayOrder: ownProps.displayOrder || displayOrder
   };
 };
 
@@ -402,7 +404,7 @@ export class NotebookApp extends React.Component<Props> {
         </div>
         <StatusBar
           lastSaved={this.props.lastSaved}
-          kernelSpecDisplayName={this.props.kernelSpecDisplayName}
+          kernelSpecDisplayName={this.props.languageDisplayName}
           executionState={this.props.executionState}
         />
         <style jsx>{`
