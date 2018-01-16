@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import {
   List as ImmutableList,
   Map as ImmutableMap,
-  Set as ImmutableSet
+  Set as ImmutableSet,
+  isImmutable
 } from "immutable";
 
 import LatexRenderer from "../components/latex";
@@ -66,25 +67,33 @@ type Props = {
   languageDisplayName: string,
   executionState: string,
   models: ImmutableMap<string, any>,
-  language: string
+  codeMirrorMode: string | ImmutableMap<string, *>
 };
 
-export function getLanguageMode(languageInfo: ImmutableMap<*, *>): string {
-  // First try codemirror_mode, then name, and fallback to 'text'
-  const language = languageInfo.getIn(
-    ["codemirror_mode", "name"],
-    languageInfo.getIn(
-      ["codemirror_mode"],
-      languageInfo.getIn(["name"], "text")
+export function getCodeMirrorMode(
+  metadata: ImmutableMap<string, *>
+): string | ImmutableMap<string, *> {
+  let mode = metadata.getIn(
+    // CodeMirror mode should be most valid
+    ["language_info", "codemirror_mode"],
+    metadata.getIn(
+      // Kernel_info's language is the next best
+      ["kernel_info", "language"],
+      // If the kernelspec is encoded, grab the language
+      metadata.getIn(
+        ["kernelspec", "language"],
+        // Otherwise just fallback to "text"
+        "text"
+      )
     )
   );
-  return language;
+
+  return mode;
 }
 
 const mapStateToProps = (state: Object, ownProps: Props): Props => {
-  const languageInfo = state.document.getIn(
-    ["notebook", "metadata", "language_info"],
-    ImmutableMap()
+  const codeMirrorMode = getCodeMirrorMode(
+    state.document.getIn(["notebook", "metadata"], ImmutableMap())
   );
 
   return {
@@ -99,13 +108,13 @@ const mapStateToProps = (state: Object, ownProps: Props): Props => {
     stickyCells: state.document.get("stickyCells"),
     executionState: state.app.get("executionState"),
     models: state.comms.get("models"),
-    language: getLanguageMode(languageInfo),
     languageDisplayName: state.document.getIn(
       ["notebook", "metadata", "kernelspec", "display_name"],
       ""
     ),
     transforms: ownProps.transforms || transforms,
-    displayOrder: ownProps.displayOrder || displayOrder
+    displayOrder: ownProps.displayOrder || displayOrder,
+    codeMirrorMode
   };
 };
 
@@ -113,8 +122,7 @@ export class NotebookApp extends React.Component<Props> {
   static defaultProps = {
     displayOrder,
     transforms,
-    models: ImmutableMap(),
-    language: "python"
+    models: ImmutableMap()
   };
 
   static contextTypes = {
@@ -273,12 +281,16 @@ export class NotebookApp extends React.Component<Props> {
                   completion
                   id={id}
                   value={cell.get("source")}
-                  language={this.props.language}
                   cellFocused={cellFocused}
                   editorFocused={editorFocused}
                   theme={this.props.theme}
                   focusAbove={focusAboveCell}
                   focusBelow={focusBelowCell}
+                  options={{
+                    mode: isImmutable(this.props.codeMirrorMode)
+                      ? this.props.codeMirrorMode.toJS()
+                      : this.props.codeMirrorMode
+                  }}
                 />
               </Editor>
             </Input>
@@ -328,7 +340,6 @@ export class NotebookApp extends React.Component<Props> {
           >
             <Editor>
               <CodeMirror
-                language="markdown"
                 id={id}
                 value={cell.get("source")}
                 theme={this.props.theme}
@@ -338,7 +349,14 @@ export class NotebookApp extends React.Component<Props> {
                 editorFocused={editorFocused}
                 options={{
                   // Markdown should always be line wrapped
-                  lineWrapping: true
+                  lineWrapping: true,
+                  // Rely _directly_ on the codemirror mode
+                  mode: {
+                    name: "gfm",
+                    tokenTypeOverrides: {
+                      emoji: "emoji"
+                    }
+                  }
                 }}
               />
             </Editor>
