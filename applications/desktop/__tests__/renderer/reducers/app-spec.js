@@ -178,7 +178,7 @@ describe("launchKernel", () => {
     };
 
     const action = {
-      type: actionTypes.NEW_KERNEL,
+      type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
       channels: "test_channels",
       spawn: "test_spawn",
       kernelSpecName: "test_name",

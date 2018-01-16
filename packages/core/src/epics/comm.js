@@ -11,7 +11,7 @@ import { createMessage, ofMessageType, childOf } from "@nteract/messaging";
 import type { ActionsObservable } from "redux-observable";
 
 import type { NewKernelAction } from "../actionTypes";
-import { NEW_KERNEL } from "../actionTypes";
+import { LAUNCH_KERNEL_SUCCESSFUL } from "../actionTypes";
 
 /**
  * creates a comm open message
@@ -71,7 +71,7 @@ export function createCommCloseMessage(
 
 /**
  * creates all comm related actions given a new kernel action
- * @param  {Object} launchKernelAction a NEW_KERNEL action
+ * @param  {Object} launchKernelAction a LAUNCH_KERNEL_SUCCESSFUL action
  * @return {ActionsObservable}          all actions resulting from comm messages on this kernel
  */
 export function commActionObservable({ channels }: NewKernelAction) {
@@ -95,4 +95,7 @@ export function commActionObservable({ channels }: NewKernelAction) {
  * @return {ActionsObservable}         Comm actions
  */
 export const commListenEpic = (action$: ActionsObservable<*>) =>
-  action$.pipe(ofType(NEW_KERNEL), switchMap(commActionObservable)); // We have a new channel
+  action$.pipe(
+    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    switchMap(commActionObservable)
+  ); // We have a new channel

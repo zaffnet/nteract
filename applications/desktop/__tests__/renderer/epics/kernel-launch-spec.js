@@ -50,7 +50,7 @@ describe("acquireKernelInfo", () => {
 describe("watchExecutionStateEpic", () => {
   test("returns an Observable with an initial state of idle", done => {
     const action$ = ActionsObservable.of({
-      type: actionTypes.NEW_KERNEL,
+      type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
       channels: of({
         header: { msg_type: "status" },
         content: { execution_state: "idle" }
@@ -109,7 +109,7 @@ describe("launchKernelEpic", () => {
         if (actionBuffer.length === 2) {
           expect(actionBuffer).toEqual([
             actionTypes.SET_KERNEL_INFO,
-            actionTypes.NEW_KERNEL
+            actionTypes.LAUNCH_KERNEL_SUCCESSFUL
           ]);
           done();
         }

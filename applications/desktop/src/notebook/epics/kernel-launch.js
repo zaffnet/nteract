@@ -44,7 +44,7 @@ import {
 } from "@nteract/core/actions";
 
 import {
-  NEW_KERNEL,
+  LAUNCH_KERNEL_SUCCESSFUL,
   LAUNCH_KERNEL,
   LAUNCH_KERNEL_BY_NAME,
   SET_LANGUAGE_INFO,
@@ -137,11 +137,11 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 /**
  * Sets the execution state after a kernel has been launched.
  *
- * @oaram  {ActionObservable}  action$ ActionObservable for NEW_KERNEL action
+ * @oaram  {ActionObservable}  action$ ActionObservable for LAUNCH_KERNEL_SUCCESSFUL action
  */
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(NEW_KERNEL),
+    ofType(LAUNCH_KERNEL_SUCCESSFUL),
     switchMap(action =>
       merge(
         action.channels.pipe(
@@ -172,7 +172,7 @@ export const kernelSpecsObservable = Observable.create(observer => {
  */
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(NEW_KERNEL),
+    ofType(LAUNCH_KERNEL_SUCCESSFUL),
     switchMap(action => acquireKernelInfo(action.channels))
   );
 
