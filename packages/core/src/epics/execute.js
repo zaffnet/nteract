@@ -51,7 +51,7 @@ import type { Subject } from "rxjs/Subject";
 import type { ActionsObservable } from "redux-observable";
 
 import {
-  NEW_KERNEL,
+  LAUNCH_KERNEL_SUCCESSFUL,
   REMOVE_CELL,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
@@ -187,7 +187,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
-    ofType(NEW_KERNEL),
+    ofType(LAUNCH_KERNEL_SUCCESSFUL),
     switchMap(({ channels }) =>
       channels.pipe(
         ofMessageType("update_display_data"),

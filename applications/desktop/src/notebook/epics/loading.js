@@ -26,7 +26,7 @@ import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/actionTypes";
  * @param  {String}  filename  The filename of the notebook being loaded
  * @param  {Immutable<Map>}  notebook  The notebook to extract langauge info from
  *
- * @returns  {ActionObservable}  ActionObservable for a NEW_KERNEL action
+ * @returns  {ActionObservable}  ActionObservable for a LAUNCH_KERNEL_SUCCESSFUL action
  */
 export const extractNewKernel = (
   filename: string,

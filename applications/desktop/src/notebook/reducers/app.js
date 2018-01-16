@@ -106,7 +106,7 @@ export default function handleApp(
   action: AppAction
 ) {
   switch (action.type) {
-    case "NEW_KERNEL":
+    case "LAUNCH_KERNEL_SUCCESSFUL":
       return launchKernel(state, action);
     case "EXIT":
       return exit(state);

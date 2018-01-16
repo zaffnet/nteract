@@ -81,7 +81,7 @@ import { createExecuteRequest } from "@nteract/messaging";
 export function launchKernelSuccessful(payload: *): NewKernelAction {
   // TODO: Use our new kernel types instead of only matching the old setup
   return {
-    type: actionTypes.NEW_KERNEL,
+    type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
     ...payload
   };
 }

@@ -158,7 +158,7 @@ describe("menu", () => {
   });
 
   describe("dispatchRestartKernel", () => {
-    test("dispatches KILL_KERNEL and NEW_KERNEL actions", () => {
+    test("dispatches KILL_KERNEL and LAUNCH_KERNEL_SUCCESSFUL actions", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 

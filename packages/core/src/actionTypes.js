@@ -252,9 +252,9 @@ export type ChangeCellTypeAction = {
   to: string
 };
 
-export const NEW_KERNEL = "NEW_KERNEL";
+export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
-  type: "NEW_KERNEL",
+  type: "LAUNCH_KERNEL_SUCCESSFUL",
   channels: Channels,
   connectionFile: string,
   spawn: ChildProcess,
