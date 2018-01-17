@@ -20,18 +20,16 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm install -g codecov
       - run: npm install
 
       - save_cache:
           paths:
-            - node_modules
-            - ~/.npm
+            - ./node_modules
             - ~/.jestcache
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm run test -- --coverage --cacheDirectory=~/.jestcache
+      - run: npm run test -- --cacheDirectory=~/.jestcache
       - run: npm run build:apps
       - run: npm run test:lint
       - run: npm run test:flow
