@@ -448,5 +448,4 @@ export class NotebookApp extends React.Component<Props> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
-// $FlowFixMe: Flow can't figure out what to do with connect with one param.
 export default connect(mapStateToProps)(ConnectedNotebook);
