@@ -106,7 +106,7 @@ const mapStateToProps = (state: Object, ownProps: Props): Props => {
     cellFocused: state.document.get("cellFocused"),
     editorFocused: state.document.get("editorFocused"),
     stickyCells: state.document.get("stickyCells"),
-    executionState: state.app.get("executionState"),
+    executionState: state.app.getIn(["kernel", "status"], "not connected"),
     models: state.comms.get("models"),
     languageDisplayName: state.document.getIn(
       ["notebook", "metadata", "kernelspec", "display_name"],

@@ -63,10 +63,7 @@ describe("watchExecutionStateEpic", () => {
       // Every action that goes through should get stuck on an array
       actions => {
         const types = actions.map(({ type }) => type);
-        expect(types).toEqual([
-          actionTypes.SET_EXECUTION_STATE,
-          actionTypes.SET_EXECUTION_STATE
-        ]);
+        expect(types).toEqual([actionTypes.SET_EXECUTION_STATE]);
       },
       err => done.fail(err), // It should not error in the stream
       () => done()

@@ -59,9 +59,9 @@ describe("createExecuteCellStream", () => {
       },
       state: {
         app: {
-          executionState: "not connected",
           kernel: {
-            channels
+            channels,
+            status: "not connected"
           },
           notificationSystem: { addNotification: jest.fn() }
         }
@@ -91,9 +91,9 @@ describe("createExecuteCellStream", () => {
       },
       state: {
         app: {
-          executionState: "connected",
           kernel: {
-            channels
+            channels,
+            status: "connected"
           },
           notificationSystem: { addNotification: jest.fn() }
         }
@@ -137,9 +137,9 @@ describe("executeCellEpic", () => {
     },
     state: {
       app: {
-        executionState: "idle",
         kernel: {
-          channels: "errorInExecuteCellObservable"
+          channels: "errorInExecuteCellObservable",
+          status: "idle"
         },
         notificationSystem: { addNotification: jest.fn() },
         githubToken: "blah"

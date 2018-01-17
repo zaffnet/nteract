@@ -23,20 +23,15 @@ import type {
 
 function cleanupKernel(state: AppRecord): AppRecord {
   shutdownKernel(state.kernel);
-
-  return state.withMutations((ctx: AppRecord) =>
-    ctx.set("kernel", null).set("executionState", "not connected")
-  );
+  return state;
 }
 
 function launchKernel(state: AppRecord, action: NewKernelAction) {
   const kernel = makeLocalKernelRecord(action.kernel);
-
-  return cleanupKernel(state).withMutations((ctx: AppRecord) =>
-    // TODO: set the executionState inside the kernel (?)
-    //       was that what the status field was for?
-    ctx.set("kernel", kernel).set("executionState", "starting")
-  );
+  if (!kernel) {
+    return state.set("kernel", kernel);
+  }
+  return cleanupKernel(state).set("kernel", kernel);
 }
 function exit(state: AppRecord) {
   return cleanupKernel(state);
@@ -57,7 +52,7 @@ function startSaving(state: AppRecord) {
 }
 
 function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
-  return state.set("executionState", action.executionState);
+  return state.setIn(["kernel", "status"], action.executionState);
 }
 
 function doneSaving(state: AppRecord) {

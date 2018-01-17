@@ -40,7 +40,7 @@ export type CodeMirrorEditorProps = {
   focusBelow: () => void,
   theme: string,
   channels: any,
-  executionState: "idle" | "starting" | "not connected",
+  executionState: string,
   onChange: (value: string, change: EditorChange) => void,
   onFocusChange: (focused: boolean) => void,
   onScroll: (scrollInfo: ScrollInfo) => any,

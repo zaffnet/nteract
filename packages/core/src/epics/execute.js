@@ -127,14 +127,14 @@ export function createExecuteCellStream(
   id: string
 ) {
   const state = store.getState();
-  const channels = state.app.kernel ? state.app.kernel.channels : null;
+
+  const kernel = state.app.kernel;
+  const channels = kernel ? kernel.channels : null;
 
   const kernelConnected =
+    kernel &&
     channels &&
-    !(
-      state.app.executionState === "starting" ||
-      state.app.executionState === "not connected"
-    );
+    !(kernel.status === "starting" || kernel.status === "not connected");
 
   if (!kernelConnected) {
     return of({

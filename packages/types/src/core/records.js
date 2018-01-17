@@ -141,12 +141,8 @@ export type Notebook = {
 type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
   host: ?RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>,
-  executionState: "not connected" | "busy" | "idle" | "starting",
   githubToken: ?string,
   notificationSystem: ?Object,
-  kernelSpecName: ?string,
-  kernelSpecDisplayName: ?string,
-  kernelSpec: ?Object,
   isSaving: boolean,
   lastSaved: ?Date,
   configLastSaved: ?Date,
@@ -156,12 +152,8 @@ type AppRecordProps = {
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   kernel: null,
   host: null,
-  executionState: "not connected",
   githubToken: null, // Electron specific (ish...)
   notificationSystem: null, // Should be available for all I assume
-  kernelSpecName: null, // All
-  kernelSpecDisplayName: null, // All
-  kernelSpec: null, // All
   isSaving: false, // All -- ?
   lastSaved: null, // All
   configLastSaved: null, // ?

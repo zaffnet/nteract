@@ -146,12 +146,9 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
-      merge(
-        action.kernel.channels.pipe(
-          filter(msg => msg.header.msg_type === "status"),
-          map(msg => setExecutionState(msg.content.execution_state))
-        ),
-        of(setExecutionState("idle"))
+      action.kernel.channels.pipe(
+        filter(msg => msg.header.msg_type === "status"),
+        map(msg => setExecutionState(msg.content.execution_state))
       )
     )
   );

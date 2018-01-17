@@ -75,7 +75,7 @@ export function createTitleFeed(state$) {
   );
 
   const executionState$ = state$.pipe(
-    map(state => state.app.get("executionState")),
+    map(state => state.app.getIn(["kernel", "status"], "not connected")),
     debounceTime(200)
   );
 
