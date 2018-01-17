@@ -78,7 +78,11 @@ export type BaseKernelProps = {
   kernelSpecName: ?string,
   lastActivity: ?Date,
   channels: ?rxjs$Subject<*, *>,
-  // TODO: Determine what stauses we'll set here
+  // Canonically: idle, busy, starting
+  // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
+  //
+  // We also use this for other bits of lifecycle, including: launching,
+  //   shutting down, not connected.
   status: ?string
 };
 

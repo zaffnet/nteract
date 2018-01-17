@@ -83,7 +83,6 @@ import { createExecuteRequest } from "@nteract/messaging";
 export function launchKernelSuccessful(
   kernel: LocalKernelProps | RemoteKernelProps
 ): NewKernelAction {
-  // TODO: Use our new kernel types instead of only matching the old setup
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
     kernel
