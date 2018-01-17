@@ -56,7 +56,10 @@ import {
   ABORT_EXECUTION,
   ERROR_EXECUTING,
   ERROR_UPDATE_DISPLAY,
-  SEND_EXECUTE_REQUEST
+  SEND_EXECUTE_REQUEST,
+  KILL_KERNEL,
+  LAUNCH_KERNEL_BY_NAME,
+  LAUNCH_KERNEL
 } from "../actionTypes";
 
 import type { NewKernelAction } from "../actionTypes";
@@ -146,9 +149,12 @@ export function createExecuteCellStream(
 
   return executeCellStream(channels, id, message).pipe(
     takeUntil(
-      action$.pipe(
-        filter(laterAction => laterAction.id === id),
-        ofType(ABORT_EXECUTION, REMOVE_CELL)
+      merge(
+        action$.pipe(
+          filter(laterAction => laterAction.id === id),
+          ofType(ABORT_EXECUTION, REMOVE_CELL)
+        ),
+        action$.pipe(ofType(LAUNCH_KERNEL, LAUNCH_KERNEL_BY_NAME, KILL_KERNEL))
       )
     )
   );
