@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import {
   List as ImmutableList,
   Map as ImmutableMap,
-  Set as ImmutableSet
+  Set as ImmutableSet,
+  isImmutable
 } from "immutable";
 
 import LatexRenderer from "../components/latex";
@@ -63,48 +64,65 @@ type Props = {
   editorFocused: string,
   theme: string,
   lastSaved: Date,
-  kernelSpecDisplayName: string,
+  languageDisplayName: string,
   executionState: string,
   models: ImmutableMap<string, any>,
-  language: string
+  codeMirrorMode: string | ImmutableMap<string, *>
 };
 
-export function getLanguageMode(metadata: ImmutableMap<*, *>): string {
-  // First try codemirror_mode, then name, and fallback to 'text'
-  const language = metadata.getIn(
-    ["language_info", "codemirror_mode", "name"],
+export function getCodeMirrorMode(
+  metadata: ImmutableMap<string, *>
+): string | ImmutableMap<string, *> {
+  let mode = metadata.getIn(
+    // CodeMirror mode should be most valid
+    ["language_info", "codemirror_mode"],
     metadata.getIn(
-      ["language_info", "codemirror_mode"],
-      metadata.getIn(["language_info", "name"], "text")
+      // Kernel_info's language is the next best
+      ["kernel_info", "language"],
+      // If the kernelspec is encoded, grab the language
+      metadata.getIn(
+        ["kernelspec", "language"],
+        // Otherwise just fallback to "text"
+        "text"
+      )
     )
   );
-  return language;
+
+  return mode;
 }
 
-const mapStateToProps = (state: Object) => ({
-  theme: state.config.get("theme"),
-  lastSaved: state.app.get("lastSaved"),
-  kernelSpecDisplayName: state.app.get("kernelSpecDisplayName"),
-  cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
-  cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
-  transient: state.document.get("transient"),
-  cellPagers: state.document.get("cellPagers", ImmutableMap()),
-  cellFocused: state.document.get("cellFocused"),
-  editorFocused: state.document.get("editorFocused"),
-  stickyCells: state.document.get("stickyCells"),
-  executionState: state.app.get("executionState"),
-  models: state.comms.get("models"),
-  language: getLanguageMode(
+const mapStateToProps = (state: Object, ownProps: Props): Props => {
+  const codeMirrorMode = getCodeMirrorMode(
     state.document.getIn(["notebook", "metadata"], ImmutableMap())
-  )
-});
+  );
+
+  return {
+    theme: state.config.get("theme"),
+    lastSaved: state.app.get("lastSaved"),
+    cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
+    cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
+    transient: state.document.get("transient"),
+    cellPagers: state.document.get("cellPagers", ImmutableMap()),
+    cellFocused: state.document.get("cellFocused"),
+    editorFocused: state.document.get("editorFocused"),
+    stickyCells: state.document.get("stickyCells"),
+    executionState: state.app.get("executionState"),
+    models: state.comms.get("models"),
+    languageDisplayName: state.document.getIn(
+      ["notebook", "metadata", "kernelspec", "display_name"],
+      ""
+    ),
+    transforms: ownProps.transforms || transforms,
+    displayOrder: ownProps.displayOrder || displayOrder,
+    codeMirrorMode
+  };
+};
 
 export class NotebookApp extends React.Component<Props> {
   static defaultProps = {
     displayOrder,
     transforms,
-    models: ImmutableMap(),
-    language: "python"
+    models: ImmutableMap()
   };
 
   static contextTypes = {
@@ -263,12 +281,16 @@ export class NotebookApp extends React.Component<Props> {
                   completion
                   id={id}
                   value={cell.get("source")}
-                  language={this.props.language}
                   cellFocused={cellFocused}
                   editorFocused={editorFocused}
                   theme={this.props.theme}
                   focusAbove={focusAboveCell}
                   focusBelow={focusBelowCell}
+                  options={{
+                    mode: isImmutable(this.props.codeMirrorMode)
+                      ? this.props.codeMirrorMode.toJS()
+                      : this.props.codeMirrorMode
+                  }}
                 />
               </Editor>
             </Input>
@@ -318,7 +340,6 @@ export class NotebookApp extends React.Component<Props> {
           >
             <Editor>
               <CodeMirror
-                language="markdown"
                 id={id}
                 value={cell.get("source")}
                 theme={this.props.theme}
@@ -328,7 +349,14 @@ export class NotebookApp extends React.Component<Props> {
                 editorFocused={editorFocused}
                 options={{
                   // Markdown should always be line wrapped
-                  lineWrapping: true
+                  lineWrapping: true,
+                  // Rely _directly_ on the codemirror mode
+                  mode: {
+                    name: "gfm",
+                    tokenTypeOverrides: {
+                      emoji: "emoji"
+                    }
+                  }
                 }}
               />
             </Editor>
@@ -394,7 +422,7 @@ export class NotebookApp extends React.Component<Props> {
         </div>
         <StatusBar
           lastSaved={this.props.lastSaved}
-          kernelSpecDisplayName={this.props.kernelSpecDisplayName}
+          kernelSpecDisplayName={this.props.languageDisplayName}
           executionState={this.props.executionState}
         />
         <style jsx>{`
@@ -420,5 +448,4 @@ export class NotebookApp extends React.Component<Props> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
-// $FlowFixMe: Flow can't figure out what to do with connect with one param.
 export default connect(mapStateToProps)(ConnectedNotebook);

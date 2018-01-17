@@ -7,7 +7,10 @@ import { shallow, mount } from "enzyme";
 import renderer from "react-test-renderer";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import { NotebookApp, getLanguageMode } from "../../src/providers/notebook-app";
+import {
+  NotebookApp,
+  getCodeMirrorMode
+} from "../../src/providers/notebook-app";
 
 import { dummyStore, dummyCommutable } from "../../src/dummy";
 
@@ -44,17 +47,17 @@ describe("NotebookApp", () => {
     expect(component).not.toBeNull();
   });
 
-  describe("getLanguageMode", () => {
-    test("determines the right language from the notebook metadata", () => {
-      const lang = getLanguageMode(dummyCommutable.get("metadata"));
-      expect(lang).toBe("ipython");
+  describe("getCodeMirrorMode", () => {
+    test("determines the right mode from the notebook metadata", () => {
+      const mode = getCodeMirrorMode(dummyCommutable.get("metadata"));
+      expect(mode).toEqual(Immutable.fromJS({ name: "ipython", version: 3 }));
 
-      const lang2 = getLanguageMode(
+      const lang2 = getCodeMirrorMode(
         dummyCommutable
           .setIn(["metadata", "language_info", "codemirror_mode", "name"], "r")
           .get("metadata")
       );
-      expect(lang2).toBe("r");
+      expect(lang2).toEqual(Immutable.fromJS({ name: "r", version: 3 }));
     });
   });
 
