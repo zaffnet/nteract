@@ -101,12 +101,14 @@ export function dummyStore(config: *) {
       filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
     app: makeAppRecord({
-      executionState: "not connected",
       notificationSystem: {
         addNotification: () => {} // most of the time you'll want to mock this
       },
       githubToken: "TOKEN",
-      channels: "channelInfo"
+      kernel: {
+        channels: "channelInfo",
+        status: "not connected"
+      }
     }),
     config: Immutable.Map({
       theme: "light"

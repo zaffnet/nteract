@@ -51,20 +51,19 @@ describe("watchExecutionStateEpic", () => {
   test("returns an Observable with an initial state of idle", done => {
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      channels: of({
-        header: { msg_type: "status" },
-        content: { execution_state: "idle" }
-      })
+      kernel: {
+        channels: of({
+          header: { msg_type: "status" },
+          content: { execution_state: "idle" }
+        })
+      }
     });
     const obs = watchExecutionStateEpic(action$);
     obs.pipe(toArray()).subscribe(
       // Every action that goes through should get stuck on an array
       actions => {
         const types = actions.map(({ type }) => type);
-        expect(types).toEqual([
-          actionTypes.SET_EXECUTION_STATE,
-          actionTypes.SET_EXECUTION_STATE
-        ]);
+        expect(types).toEqual([actionTypes.SET_EXECUTION_STATE]);
       },
       err => done.fail(err), // It should not error in the stream
       () => done()

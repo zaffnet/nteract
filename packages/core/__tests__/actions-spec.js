@@ -97,7 +97,7 @@ describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
     expect(actions.setExecutionState("idle")).toEqual({
       type: actionTypes.SET_EXECUTION_STATE,
-      executionState: "idle"
+      kernelStatus: "idle"
     });
   });
 });

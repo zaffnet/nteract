@@ -23,39 +23,27 @@ import type {
 
 function cleanupKernel(state: AppRecord): AppRecord {
   shutdownKernel(state.kernel);
-
-  return state.withMutations((ctx: AppRecord) =>
-    ctx
-      .set("kernel", null)
-      .set("kernelSpecName", null)
-      .set("kernelSpecDisplayName", null)
-      .set("kernelSpec", null)
-      .set("executionState", "not connected")
-  );
+  return state;
 }
 
 function launchKernel(state: AppRecord, action: NewKernelAction) {
-  const kernel = makeLocalKernelRecord({
-    channels: action.channels,
-    spawn: action.spawn,
-    connectionFile: action.connectionFile
-  });
-
-  return cleanupKernel(state).withMutations((ctx: AppRecord) =>
-    ctx
-      .set("kernel", kernel)
-      .set("kernelSpecName", action.kernelSpecName)
-      .set("kernelSpecDisplayName", action.kernelSpec.spec.display_name)
-      .set("kernelSpec", action.kernelSpec)
-      .set("executionState", "starting")
-  );
+  const kernel = makeLocalKernelRecord(action.kernel);
+  if (!kernel) {
+    return state.set("kernel", kernel);
+  }
+  return cleanupKernel(state).set("kernel", kernel);
 }
 function exit(state: AppRecord) {
   return cleanupKernel(state);
 }
 
 function interruptKernel(state: AppRecord) {
-  state.kernel.spawn.kill("SIGINT");
+  // TODO: This should be an epic instead
+  if (state.kernel.type === "zeromq") {
+    state.kernel.spawn.kill("SIGINT");
+  } else {
+    console.log("cant interrupt non-zeromq kernels currently");
+  }
   return state;
 }
 
@@ -64,7 +52,7 @@ function startSaving(state: AppRecord) {
 }
 
 function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
-  return state.set("executionState", action.executionState);
+  return state.setIn(["kernel", "status"], action.kernelStatus);
 }
 
 function doneSaving(state: AppRecord) {

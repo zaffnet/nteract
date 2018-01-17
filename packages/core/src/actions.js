@@ -7,7 +7,9 @@ import type { JSONObject } from "@nteract/types/commutable";
 
 import type {
   LanguageInfoMetadata,
-  KernelInfo
+  KernelInfo,
+  LocalKernelProps,
+  RemoteKernelProps
 } from "@nteract/types/core/records";
 
 import type {
@@ -78,11 +80,12 @@ import type {
 
 import { createExecuteRequest } from "@nteract/messaging";
 
-export function launchKernelSuccessful(payload: *): NewKernelAction {
-  // TODO: Use our new kernel types instead of only matching the old setup
+export function launchKernelSuccessful(
+  kernel: LocalKernelProps | RemoteKernelProps
+): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-    ...payload
+    kernel
   };
 }
 
@@ -113,11 +116,11 @@ export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
 }
 
 export function setExecutionState(
-  executionState: string
+  kernelStatus: string
 ): SetExecutionStateAction {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
-    executionState
+    kernelStatus
   };
 }
 

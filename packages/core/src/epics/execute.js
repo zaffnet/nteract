@@ -7,7 +7,7 @@ import {
   updatedOutputs,
   outputs,
   payloads,
-  executionStates,
+  kernelStatuses,
   executionCounts
 } from "@nteract/messaging";
 
@@ -59,6 +59,8 @@ import {
   SEND_EXECUTE_REQUEST
 } from "../actionTypes";
 
+import type { NewKernelAction } from "../actionTypes";
+
 const Immutable = require("immutable");
 
 /**
@@ -93,7 +95,7 @@ export function executeCellStream(
 
     // All actions for updating cell status
     cellMessages.pipe(
-      executionStates(),
+      kernelStatuses(),
       map(status => updateCellStatus(id, status))
     ),
 
@@ -125,14 +127,14 @@ export function createExecuteCellStream(
   id: string
 ) {
   const state = store.getState();
-  const channels = state.app.kernel ? state.app.kernel.channels : null;
+
+  const kernel = state.app.kernel;
+  const channels = kernel ? kernel.channels : null;
 
   const kernelConnected =
+    kernel &&
     channels &&
-    !(
-      state.app.executionState === "starting" ||
-      state.app.executionState === "not connected"
-    );
+    !(kernel.status === "starting" || kernel.status === "not connected");
 
   if (!kernelConnected) {
     return of({
@@ -188,8 +190,8 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
     ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(({ channels }) =>
-      channels.pipe(
+    switchMap((action: NewKernelAction) =>
+      action.kernel.channels.pipe(
         ofMessageType("update_display_data"),
         map(msg => updateDisplay(msg.content)),
         catchError(err =>

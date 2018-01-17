@@ -26,9 +26,12 @@ import { ipcRenderer as ipc } from "electron";
 import { createMainChannel } from "enchannel-zmq-backend";
 import * as jmp from "jmp";
 
+import type { NewKernelAction } from "@nteract/core/actionTypes";
+
 import type {
   LanguageInfoMetadata,
-  KernelInfo
+  KernelInfo,
+  LocalKernelProps
 } from "@nteract/types/core/records";
 
 import type { Channels } from "@nteract/types/channels";
@@ -89,7 +92,6 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
   return Observable.create(observer => {
     launchSpec(spec, { cwd, stdio: ["ignore", "pipe", "pipe"] }).then(c => {
       const { config, spawn, connectionFile } = c;
-      const kernelSpecName = kernelSpec.name;
 
       spawn.stdout.on("data", data => {
         const action = { type: KERNEL_RAW_STDOUT, payload: data.toString() };
@@ -105,15 +107,16 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
         .then(channels => {
           observer.next(setNotebookKernelInfo(kernelSpec));
 
-          observer.next(
-            launchKernelSuccessful({
-              channels,
-              connectionFile,
-              spawn,
-              kernelSpecName,
-              kernelSpec
-            })
-          );
+          const kernel: LocalKernelProps = {
+            // TODO: Include the ref when we need it here
+            channels,
+            connectionFile,
+            spawn,
+            kernelSpecName: kernelSpec.name,
+            status: "launched" // TODO: Determine our taxonomy
+          };
+
+          observer.next(launchKernelSuccessful(kernel));
         })
         .catch(error => {
           observer.error({ type: "ERROR", payload: error, err: true });
@@ -142,13 +145,10 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(action =>
-      merge(
-        action.channels.pipe(
-          filter(msg => msg.header.msg_type === "status"),
-          map(msg => setExecutionState(msg.content.execution_state))
-        ),
-        of(setExecutionState("idle"))
+    switchMap((action: NewKernelAction) =>
+      action.kernel.channels.pipe(
+        filter(msg => msg.header.msg_type === "status"),
+        map(msg => setExecutionState(msg.content.execution_state))
       )
     )
   );
@@ -173,7 +173,7 @@ export const kernelSpecsObservable = Observable.create(observer => {
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(action => acquireKernelInfo(action.channels))
+    switchMap(action => acquireKernelInfo(action.kernel.channels))
   );
 
 export const launchKernelByNameEpic = (action$: ActionsObservable<*>) =>
@@ -187,6 +187,7 @@ export const launchKernelByNameEpic = (action$: ActionsObservable<*>) =>
     mergeMap(action =>
       kernelSpecsObservable.pipe(
         mergeMap(specs =>
+          // Defer to a LAUNCH_KERNEL action to _actually_ launch
           of(launchKernel(specs[action.kernelSpecName], action.cwd))
         )
       )

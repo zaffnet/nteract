@@ -8,25 +8,6 @@ import {
 
 const Github = require("github");
 
-describe("cleanupKernel", () => {
-  test("nullifies entries for the kernel in originalState", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.KILL_KERNEL };
-
-    const state = reducers(originalState, action);
-    expect(state.app.kernel).toBeNull();
-  });
-});
-
 describe("setNotificationSystem", () => {
   test("returns the same originalState if notificationSystem is undefined", () => {
     const originalState = {
@@ -117,30 +98,11 @@ describe("setExecutionState", () => {
 
     const action = {
       type: actionTypes.SET_EXECUTION_STATE,
-      executionState: "idle"
+      kernelStatus: "idle"
     };
 
     const state = reducers(originalState, action);
-    expect(state.app.executionState).toBe("idle");
-  });
-});
-
-describe("killKernel", () => {
-  test("clears out kernel configuration", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.KILL_KERNEL };
-
-    const state = reducers(originalState, action);
-    expect(state.app.kernel).toBeNull();
+    expect(state.app.kernel.status).toBe("idle");
   });
 });
 
@@ -179,20 +141,17 @@ describe("launchKernel", () => {
 
     const action = {
       type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      channels: "test_channels",
-      spawn: "test_spawn",
-      kernelSpecName: "test_name",
-      kernelSpec: { spec: { display_name: "Test Name" } },
-      executionState: "starting"
+      kernel: {
+        channels: "test_channels",
+        spawn: "test_spawn",
+        kernelSpecName: "test_name",
+        status: "starting"
+      }
     };
 
     const state = reducers(originalState, action);
-    expect(state.app.executionState).toBe("starting");
-    expect(state.app.kernelSpecName).toBe("test_name");
-    expect(state.app.kernelSpec).toEqual({
-      spec: { display_name: "Test Name" }
-    });
-    expect(state.app.kernelSpecDisplayName).toBe("Test Name");
+    expect(state.app.kernel.status).toBe("starting");
+    expect(state.app.kernel.kernelSpecName).toBe("test_name");
     expect(state.app.kernel.spawn).toBe("test_spawn");
     expect(state.app.kernel.channels).toBe("test_channels");
   });
@@ -213,27 +172,6 @@ describe("setGithubToken", () => {
     // this is a crappy way of testing this
     expect(state.app.github).not.toBeNull();
     expect(state.app.githubToken).not.toBeNull();
-  });
-});
-
-describe("exit", () => {
-  test("calls cleanupKernel", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.EXIT };
-
-    const state = reducers(originalState, action);
-    expect(state.app.kernel).toBeNull();
-    expect(state.app.kernelSpecName).toBeNull();
-    expect(state.app.executionState).toBe("not connected");
   });
 });
 

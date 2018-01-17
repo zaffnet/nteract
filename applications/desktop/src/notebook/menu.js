@@ -21,6 +21,7 @@ import {
   interruptKernel,
   killKernel,
   launchKernel,
+  launchKernelByName,
   pasteCell,
   save,
   saveAs,
@@ -72,8 +73,10 @@ export function triggerWindowRefresh(store, filename) {
 }
 
 export function dispatchRestartKernel(store) {
+  // TODO: Make this an action to dispatch that an epic consumes, which will stop the
+  //       current kernel and launch a new kernel of the same type
   const state = store.getState();
-  const notificationSystem = state.app.get("notificationSystem");
+  const notificationSystem = state.app.notificationSystem;
 
   let cwd = cwdKernelFallback();
   if (state && state.document && state.document.get("filename")) {
@@ -81,11 +84,29 @@ export function dispatchRestartKernel(store) {
   }
 
   store.dispatch(killKernel);
-  store.dispatch(launchKernel(state.app.kernelSpec, cwd));
+  // TODO: Use the kernelspec directly, requires us having the kernelspecs available
+  //       in the store.
+  const kernelName =
+    state && state.app && state.app.kernel && state.app.kernel.kernelSpecName
+      ? state.app.kernel.kernelSpecName
+      : null;
+
+  if (!kernelName) {
+    notificationSystem.addNotification({
+      title: "Failure to Restart",
+      message: `Unable to restart kernel, please select a new kernel.`,
+      dismissible: true,
+      position: "tr",
+      level: "error"
+    });
+
+    return;
+  }
+  store.dispatch(launchKernelByName(kernelName, cwd));
 
   notificationSystem.addNotification({
     title: "Kernel Restarted",
-    message: `Kernel ${state.app.kernelSpecDisplayName} has been restarted.`,
+    message: `Kernel ${state.app.kernel.kernelSpecName} has been restarted.`,
     dismissible: true,
     position: "tr",
     level: "success"

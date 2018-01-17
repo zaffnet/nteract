@@ -201,11 +201,11 @@ class Main extends React.Component<*, *> {
             focusAbove={() => {}}
             focusBelow={() => {}}
             // END TODO for notebook leakage
-            // TODO: executionState should be allowed to be null or undefined,
+            // TODO: kernelStatus should be allowed to be null or undefined,
             //       resulting in thought of as either idle or not connected by
             //       default. This is primarily used for determining if code
             //       completion should be enabled
-            executionState={
+            kernelStatus={
               currentKernel ? currentKernel.status : "not connected"
             }
             options={{

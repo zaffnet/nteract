@@ -5,14 +5,14 @@ import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 type Props = {
   lastSaved: Date,
   kernelSpecDisplayName: string,
-  executionState: string
+  kernelStatus: string
 };
 
 export default class StatusBar extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     if (
       this.props.lastSaved !== nextProps.lastSaved ||
-      this.props.executionState !== nextProps.executionState
+      this.props.kernelStatus !== nextProps.kernelStatus
     ) {
       return true;
     }
@@ -33,7 +33,7 @@ export default class StatusBar extends React.Component<Props> {
         </span>
         <span className="pull-left">
           <p>
-            {name} | {this.props.executionState}
+            {name} | {this.props.kernelStatus}
           </p>
         </span>
         <style jsx>{`
