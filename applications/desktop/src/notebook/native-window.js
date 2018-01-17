@@ -34,7 +34,7 @@ export function tildify(p) {
 
 export function setTitleFromAttributes(attributes) {
   const filename = tildify(attributes.fullpath);
-  const { executionState } = attributes;
+  const { kernelStatus } = attributes;
 
   try {
     const win = remote.getCurrentWindow();
@@ -42,7 +42,7 @@ export function setTitleFromAttributes(attributes) {
       win.setRepresentedFilename(attributes.fullpath);
       win.setDocumentEdited(attributes.modified);
     }
-    const title = `${filename} - ${executionState}`;
+    const title = `${filename} - ${kernelStatus}`;
     win.setTitle(title);
   } catch (e) {
     /* istanbul ignore next */
@@ -74,7 +74,7 @@ export function createTitleFeed(state$) {
     map(state => state.document.get("filename") || "Untitled")
   );
 
-  const executionState$ = state$.pipe(
+  const kernelStatus$ = state$.pipe(
     map(state => state.app.getIn(["kernel", "status"], "not connected")),
     debounceTime(200)
   );
@@ -82,11 +82,11 @@ export function createTitleFeed(state$) {
   return combineLatest(
     modified$,
     fullpath$,
-    executionState$,
-    (modified, fullpath, executionState) => ({
+    kernelStatus$,
+    (modified, fullpath, kernelStatus) => ({
       modified,
       fullpath,
-      executionState
+      kernelStatus
     })
   ).pipe(distinctUntilChanged(), switchMap(i => of(i)));
 }

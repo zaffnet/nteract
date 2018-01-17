@@ -37,7 +37,7 @@ describe("setTitleFromAttributes", () => {
 
     const titleObject = {
       fullpath: "/tmp/test.ipynb",
-      executionState: "busy",
+      kernelStatus: "busy",
       modified: true
     };
     nativeWindow.setTitleFromAttributes(titleObject);
@@ -58,7 +58,7 @@ describe("createTitleFeed", () => {
         filename: "titled.ipynb"
       }),
       app: makeAppRecord({
-        executionState: "not connected"
+        kernelStatus: "not connected"
       })
     };
 
@@ -75,7 +75,7 @@ describe("createTitleFeed", () => {
           {
             modified: process.platform === "darwin" ? true : false,
             fullpath: "titled.ipynb",
-            executionState: "not connected"
+            kernelStatus: "not connected"
           }
         ]);
         done();
@@ -95,7 +95,7 @@ describe("createTitleFeed", () => {
         filename: "titled.ipynb"
       }),
       app: makeAppRecord({
-        executionState: "not connected"
+        kernelStatus: "not connected"
       })
     };
 
@@ -112,7 +112,7 @@ describe("createTitleFeed", () => {
           {
             modified: false,
             fullpath: "titled.ipynb",
-            executionState: "not connected"
+            kernelStatus: "not connected"
           }
         ]);
         done();

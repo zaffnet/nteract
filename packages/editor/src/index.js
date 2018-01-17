@@ -40,7 +40,7 @@ export type CodeMirrorEditorProps = {
   focusBelow: () => void,
   theme: string,
   channels: any,
-  executionState: string,
+  kernelStatus: string,
   onChange: (value: string, change: EditorChange) => void,
   onFocusChange: (focused: boolean) => void,
   onScroll: (scrollInfo: ScrollInfo) => any,
@@ -116,12 +116,7 @@ class CodeMirrorEditor extends React.Component<
   }
 
   componentDidMount(): void {
-    const {
-      editorFocused,
-      executionState,
-      focusAbove,
-      focusBelow
-    } = this.props;
+    const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
 
     require("codemirror/addon/hint/show-hint");
     require("codemirror/addon/hint/anyword-hint");
@@ -182,7 +177,7 @@ class CodeMirrorEditor extends React.Component<
           token.string === " " ||
           token.string === "<" ||
           token.string === "/") &&
-        executionState === "idle"
+        kernelStatus === "idle"
       ) {
         editor.execCommand("autocomplete", { completeSingle: false });
       }

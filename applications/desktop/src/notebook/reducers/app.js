@@ -52,7 +52,7 @@ function startSaving(state: AppRecord) {
 }
 
 function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
-  return state.setIn(["kernel", "status"], action.executionState);
+  return state.setIn(["kernel", "status"], action.kernelStatus);
 }
 
 function doneSaving(state: AppRecord) {

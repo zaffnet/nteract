@@ -174,7 +174,7 @@ export const executionCounts = () => (
     pluck("content", "execution_count")
   );
 
-export const executionStates = () => (
+export const kernelStatuses = () => (
   source: rxjs$Observable<JupyterMessage<*, *>>
 ): rxjs$Observable<JupyterMessage<*, *>> =>
   source.pipe(ofMessageType("status"), pluck("content", "execution_state"));

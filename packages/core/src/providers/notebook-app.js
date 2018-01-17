@@ -65,7 +65,7 @@ type Props = {
   theme: string,
   lastSaved: Date,
   languageDisplayName: string,
-  executionState: string,
+  kernelStatus: string,
   models: ImmutableMap<string, any>,
   codeMirrorMode: string | ImmutableMap<string, *>
 };
@@ -106,7 +106,7 @@ const mapStateToProps = (state: Object, ownProps: Props): Props => {
     cellFocused: state.document.get("cellFocused"),
     editorFocused: state.document.get("editorFocused"),
     stickyCells: state.document.get("stickyCells"),
-    executionState: state.app.getIn(["kernel", "status"], "not connected"),
+    kernelStatus: state.app.getIn(["kernel", "status"], "not connected"),
     models: state.comms.get("models"),
     languageDisplayName: state.document.getIn(
       ["notebook", "metadata", "kernelspec", "display_name"],
@@ -423,7 +423,7 @@ export class NotebookApp extends React.Component<Props> {
         <StatusBar
           lastSaved={this.props.lastSaved}
           kernelSpecDisplayName={this.props.languageDisplayName}
-          executionState={this.props.executionState}
+          kernelStatus={this.props.kernelStatus}
         />
         <style jsx>{`
           .cells {

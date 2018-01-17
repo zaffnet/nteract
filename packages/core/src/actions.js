@@ -116,11 +116,11 @@ export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
 }
 
 export function setExecutionState(
-  executionState: string
+  kernelStatus: string
 ): SetExecutionStateAction {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
-    executionState
+    kernelStatus
   };
 }
 

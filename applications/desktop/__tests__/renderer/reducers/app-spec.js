@@ -98,7 +98,7 @@ describe("setExecutionState", () => {
 
     const action = {
       type: actionTypes.SET_EXECUTION_STATE,
-      executionState: "idle"
+      kernelStatus: "idle"
     };
 
     const state = reducers(originalState, action);

@@ -13,7 +13,7 @@ type Props = CodeMirrorEditorProps & {
   id: string,
   cellFocused: boolean,
   channels: any,
-  executionState: string,
+  kernelStatus: string,
   options: Object
 };
 
@@ -28,7 +28,7 @@ function mapStateToProps(
         })
       : { cursorBlinkRate: state.config.get("cursorBlinkRate") },
     channels: state.app.kernel ? state.app.kernel.channels : null,
-    executionState: state.app.getIn(["kernel", "status"], "not connected")
+    kernelStatus: state.app.getIn(["kernel", "status"], "not connected")
   };
 }
 

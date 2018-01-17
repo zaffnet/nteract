@@ -7,7 +7,7 @@ import {
   updatedOutputs,
   outputs,
   payloads,
-  executionStates,
+  kernelStatuses,
   executionCounts
 } from "@nteract/messaging";
 
@@ -95,7 +95,7 @@ export function executeCellStream(
 
     // All actions for updating cell status
     cellMessages.pipe(
-      executionStates(),
+      kernelStatuses(),
       map(status => updateCellStatus(id, status))
     ),
 

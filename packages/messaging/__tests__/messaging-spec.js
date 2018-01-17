@@ -10,7 +10,7 @@ import {
   outputs,
   payloads,
   executionCounts,
-  executionStates
+  kernelStatuses
 } from "../";
 
 import {
@@ -273,7 +273,7 @@ describe("executionCounts", () => {
   });
 });
 
-describe("executionStates", () => {
+describe("kernelStatuses", () => {
   it("extracts all the execution states from status messages", () => {
     return of(
       status("starting"),
@@ -283,7 +283,7 @@ describe("executionStates", () => {
       displayData({ data: { "text/plain": "hoo" } }),
       status("idle")
     )
-      .pipe(executionStates(), toArray())
+      .pipe(kernelStatuses(), toArray())
       .toPromise()
       .then(arr => {
         expect(arr).toEqual(["starting", "idle", "busy", "idle"]);

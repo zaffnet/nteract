@@ -263,7 +263,7 @@ export type NewKernelAction = {
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
-  executionState: string
+  kernelStatus: string
 };
 
 export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
