@@ -231,7 +231,9 @@ describe("updateDisplayEpic", () => {
     const channels = from(messages);
     const action$ = ActionsObservable.of({
       type: LAUNCH_KERNEL_SUCCESSFUL,
-      channels
+      kernel: {
+        channels
+      }
     });
 
     const epic = updateDisplayEpic(action$);

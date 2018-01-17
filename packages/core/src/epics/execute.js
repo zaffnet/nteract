@@ -59,6 +59,8 @@ import {
   SEND_EXECUTE_REQUEST
 } from "../actionTypes";
 
+import type { NewKernelAction } from "../actionTypes";
+
 const Immutable = require("immutable");
 
 /**
@@ -188,8 +190,8 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
     ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(({ channels }) =>
-      channels.pipe(
+    switchMap((action: NewKernelAction) =>
+      action.kernel.channels.pipe(
         ofMessageType("update_display_data"),
         map(msg => updateDisplay(msg.content)),
         catchError(err =>

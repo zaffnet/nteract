@@ -78,6 +78,7 @@ export type BaseKernelProps = {
   kernelSpecName: ?string,
   lastActivity: ?Date,
   channels: ?rxjs$Subject<*, *>,
+  // TODO: Determine what stauses we'll set here
   status: ?string
 };
 

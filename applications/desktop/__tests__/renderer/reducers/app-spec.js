@@ -179,20 +179,17 @@ describe("launchKernel", () => {
 
     const action = {
       type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      channels: "test_channels",
-      spawn: "test_spawn",
-      kernelSpecName: "test_name",
-      kernelSpec: { spec: { display_name: "Test Name" } },
-      executionState: "starting"
+      kernel: {
+        channels: "test_channels",
+        spawn: "test_spawn",
+        kernelSpecName: "test_name",
+        executionState: "starting"
+      }
     };
 
     const state = reducers(originalState, action);
     expect(state.app.executionState).toBe("starting");
-    expect(state.app.kernelSpecName).toBe("test_name");
-    expect(state.app.kernelSpec).toEqual({
-      spec: { display_name: "Test Name" }
-    });
-    expect(state.app.kernelSpecDisplayName).toBe("Test Name");
+    expect(state.app.kernel.kernelSpecName).toBe("test_name");
     expect(state.app.kernel.spawn).toBe("test_spawn");
     expect(state.app.kernel.channels).toBe("test_channels");
   });

@@ -15,7 +15,9 @@ import type {
 import type {
   LanguageInfoMetadata,
   KernelInfo,
-  DocumentRecord
+  DocumentRecord,
+  LocalKernelProps,
+  RemoteKernelProps
 } from "@nteract/types/core/records";
 
 import type { ExecuteRequest } from "@nteract/types/messaging";
@@ -255,11 +257,7 @@ export type ChangeCellTypeAction = {
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
-  channels: Channels,
-  connectionFile: string,
-  spawn: ChildProcess,
-  kernelSpecName: string,
-  kernelSpec: Object
+  kernel: LocalKernelProps | RemoteKernelProps
 };
 
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";

@@ -51,10 +51,12 @@ describe("watchExecutionStateEpic", () => {
   test("returns an Observable with an initial state of idle", done => {
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      channels: of({
-        header: { msg_type: "status" },
-        content: { execution_state: "idle" }
-      })
+      kernel: {
+        channels: of({
+          header: { msg_type: "status" },
+          content: { execution_state: "idle" }
+        })
+      }
     });
     const obs = watchExecutionStateEpic(action$);
     obs.pipe(toArray()).subscribe(

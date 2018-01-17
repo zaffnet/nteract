@@ -25,29 +25,17 @@ function cleanupKernel(state: AppRecord): AppRecord {
   shutdownKernel(state.kernel);
 
   return state.withMutations((ctx: AppRecord) =>
-    ctx
-      .set("kernel", null)
-      .set("kernelSpecName", null)
-      .set("kernelSpecDisplayName", null)
-      .set("kernelSpec", null)
-      .set("executionState", "not connected")
+    ctx.set("kernel", null).set("executionState", "not connected")
   );
 }
 
 function launchKernel(state: AppRecord, action: NewKernelAction) {
-  const kernel = makeLocalKernelRecord({
-    channels: action.channels,
-    spawn: action.spawn,
-    connectionFile: action.connectionFile
-  });
+  const kernel = makeLocalKernelRecord(action.kernel);
 
   return cleanupKernel(state).withMutations((ctx: AppRecord) =>
-    ctx
-      .set("kernel", kernel)
-      .set("kernelSpecName", action.kernelSpecName)
-      .set("kernelSpecDisplayName", action.kernelSpec.spec.display_name)
-      .set("kernelSpec", action.kernelSpec)
-      .set("executionState", "starting")
+    // TODO: set the executionState inside the kernel (?)
+    //       was that what the status field was for?
+    ctx.set("kernel", kernel).set("executionState", "starting")
   );
 }
 function exit(state: AppRecord) {
@@ -55,7 +43,12 @@ function exit(state: AppRecord) {
 }
 
 function interruptKernel(state: AppRecord) {
-  state.kernel.spawn.kill("SIGINT");
+  // TODO: This should be an epic instead
+  if (state.kernel.type === "zeromq") {
+    state.kernel.spawn.kill("SIGINT");
+  } else {
+    console.log("cant interrupt non-zeromq kernels currently");
+  }
   return state;
 }
 

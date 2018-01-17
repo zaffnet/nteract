@@ -88,7 +88,9 @@ describe("commActionObservable", () => {
     };
 
     const launchKernelAction = {
-      channels: of(commOpenMessage, commMessage)
+      kernel: {
+        channels: of(commOpenMessage, commMessage)
+      }
     };
 
     commActionObservable(launchKernelAction)
