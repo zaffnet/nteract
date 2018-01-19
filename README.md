@@ -88,6 +88,15 @@ Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-
 3. `cd` to the directory where you `clone`d it
 4. `npm install`
 
+To keep up-to-date with changes to the root nteract/nteract branch:
+
+5. Set the root as a remote: `git remote add upstream https://github.com/nteract/nteract.git`
+
+When changes are made, they can then be pulled from the master branch:
+
+6. `git pull upstream master`
+7. npm install
+
 #### Building a specific package
 
 In some cases you'll want to modify an individual base package (i.e. commutable
