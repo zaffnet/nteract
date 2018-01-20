@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 import fetch from "isomorphic-fetch";
-import { emptyNotebook, fromJS } from "@nteract/commutable";
+import { emptyNotebook, fromJS, toJS } from "@nteract/commutable";
 import { NotebookApp } from "@nteract/core/providers";
 import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
@@ -12,6 +12,7 @@ const store = configureStore();
 
 async function fetchFromGist(gistId): ?Object {
   const path = `https://api.github.com/gists/${gistId}`;
+
   return fetch(path)
     .then(async response => {
       if (response.status !== 200) return null;
@@ -26,7 +27,7 @@ async function fetchFromGist(gistId): ?Object {
         }
       }
     })
-    .catch(err => null);
+    .catch(err => toJS(emptyNotebook));
 }
 
 const Error = () => (

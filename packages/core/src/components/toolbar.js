@@ -21,7 +21,7 @@ import {
   TriangleRightOcticon
 } from "@nteract/octicons";
 
-declare type ToolbarProps = {|
+export type ToolbarProps = {|
   type: "markdown" | "code" | "raw",
   executeCell: () => void,
   removeCell: () => void,

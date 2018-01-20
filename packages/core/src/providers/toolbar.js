@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from "react";
+import * as React from "react";
 import { connect } from "react-redux";
 import ToolbarView from "../components/toolbar";
 
@@ -17,14 +17,13 @@ import {
 import type { Action } from "@nteract/types/redux";
 
 type Props = {
-  cell: any,
   id: string,
-  // TODO: Create a flow type for cell type
+  source: string,
   type: "markdown" | "code" | "raw",
   dispatch: Dispatch<Action>
 };
 
-class Toolbar extends Component<Props> {
+class Toolbar extends React.PureComponent<Props> {
   removeCell: () => void;
   executeCell: () => void;
   clearOutputs: () => void;
@@ -60,7 +59,7 @@ class Toolbar extends Component<Props> {
 
   executeCell(): void {
     const { dispatch } = this.props;
-    dispatch(executeCell(this.props.id, this.props.cell.get("source")));
+    dispatch(executeCell(this.props.id, this.props.source));
   }
 
   clearOutputs(): void {

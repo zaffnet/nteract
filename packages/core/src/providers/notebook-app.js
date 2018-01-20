@@ -51,6 +51,234 @@ const PropTypes = require("prop-types");
 
 const themes = require("../themes");
 
+type AnyCellProps = {
+  id: string,
+  cellType: "markdown" | "code" | "raw",
+  theme: string,
+  source: string,
+  executionCount: *,
+  outputs: ImmutableList<*>,
+  pager: ImmutableList<*>,
+  cellStatus: string,
+  cellFocused: boolean, // not the ID of which is focused
+  editorFocused: boolean,
+  sourceHidden: boolean,
+  outputHidden: boolean,
+  outputExpanded: boolean,
+  displayOrder: typeof displayOrder,
+  transforms: typeof transforms,
+  models: ImmutableMap<string, *>,
+  codeMirrorMode: *
+};
+
+const mapStateToCellProps = (state: Object, ownProps: *): AnyCellProps => {
+  const id = ownProps.id;
+  const cell = state.document.getIn(["notebook", "cellMap", id]);
+
+  if (!cell) {
+    throw new Error("you best have a cell for me");
+  }
+
+  const cellType = cell.get("cell_type");
+  const outputs = cell.get("outputs", ImmutableList());
+
+  const sourceHidden =
+    cellType === "code" &&
+    (cell.getIn(["metadata", "inputHidden"], false) ||
+      cell.getIn(["metadata", "hide_input"], false));
+
+  const outputHidden =
+    cellType === "code" &&
+    (outputs.size === 0 || cell.getIn(["metadata", "outputHidden"]));
+
+  const outputExpanded =
+    cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
+
+  return {
+    ...ownProps,
+    id,
+    cellType,
+    source: cell.get("source", ""),
+    theme: state.config.get("theme"),
+    executionCount: cell.get("execution_count"),
+    outputs,
+    models: state.comms.get("models"),
+    pager: state.document.getIn(["cellPagers", id], ImmutableList()),
+    sourceHidden,
+    outputHidden,
+    outputExpanded,
+    cellStatus: state.document.getIn(["transient", "cellMap", id, "status"])
+  };
+};
+
+class AnyCell extends React.PureComponent<AnyCellProps, *> {
+  static contextTypes = {
+    store: PropTypes.object
+  };
+
+  selectCell = () => {
+    this.context.store.dispatch(focusCell(this.props.id));
+  };
+  focusEditor = () => {
+    this.context.store.dispatch(focusCellEditor(this.props.id));
+  };
+
+  unfocusEditor = () => {
+    this.context.store.dispatch(focusCellEditor(null));
+  };
+
+  focusAboveCell = () => {
+    this.context.store.dispatch(focusPreviousCell(this.props.id));
+    this.context.store.dispatch(focusPreviousCellEditor(this.props.id));
+  };
+
+  focusBelowCell = () => {
+    this.context.store.dispatch(focusNextCell(this.props.id, true));
+    this.context.store.dispatch(focusNextCellEditor(this.props.id));
+  };
+
+  render(): ?React$Element<any> {
+    const id = this.props.id;
+    const cellStatus = this.props.cellStatus;
+
+    const running = cellStatus === "busy";
+    const queued = cellStatus === "queued";
+
+    const cellType = this.props.cellType;
+
+    const cellFocused = this.props.cellFocused;
+    const editorFocused = this.props.editorFocused;
+
+    let element = null;
+
+    switch (cellType) {
+      case "code":
+        element = (
+          <React.Fragment>
+            <Input hidden={this.props.sourceHidden}>
+              <Prompt
+                counter={this.props.executionCount}
+                running={running}
+                queued={queued}
+              />
+              <Editor>
+                <CodeMirror
+                  tip
+                  completion
+                  id={id}
+                  value={this.props.source}
+                  cellFocused={cellFocused}
+                  editorFocused={editorFocused}
+                  theme={this.props.theme}
+                  focusAbove={this.focusAboveCell}
+                  focusBelow={this.focusBelowCell}
+                  options={{
+                    mode: isImmutable(this.props.codeMirrorMode)
+                      ? this.props.codeMirrorMode.toJS()
+                      : this.props.codeMirrorMode
+                  }}
+                />
+              </Editor>
+            </Input>
+            <Pagers>
+              {this.props.pager.map((pager, key) => (
+                <RichestMime
+                  expanded
+                  className="pager"
+                  displayOrder={this.props.displayOrder}
+                  transforms={this.props.transforms}
+                  bundle={pager}
+                  theme={this.props.theme}
+                  key={key}
+                />
+              ))}
+            </Pagers>
+            <LatexRenderer>
+              <Outputs
+                hidden={this.props.outputHidden}
+                expanded={this.props.outputExpanded}
+              >
+                <Display
+                  className="outputs-display"
+                  outputs={this.props.outputs.toJS()}
+                  displayOrder={this.props.displayOrder}
+                  transforms={this.props.transforms}
+                  theme={this.props.theme}
+                  expanded={this.props.outputExpanded}
+                  isHidden={this.props.outputHidden}
+                  models={this.props.models.toJS()}
+                />
+              </Outputs>
+            </LatexRenderer>
+          </React.Fragment>
+        );
+
+        break;
+      case "markdown":
+        element = (
+          <MarkdownPreviewer
+            focusAbove={this.focusAboveCell}
+            focusBelow={this.focusBelowCell}
+            focusEditor={this.focusEditor}
+            cellFocused={cellFocused}
+            editorFocused={editorFocused}
+            unfocusEditor={this.unfocusEditor}
+            source={this.props.source}
+          >
+            <Editor>
+              <CodeMirror
+                id={id}
+                value={this.props.source}
+                theme={this.props.theme}
+                focusAbove={this.focusAboveCell}
+                focusBelow={this.focusBelowCell}
+                cellFocused={cellFocused}
+                editorFocused={editorFocused}
+                options={{
+                  // Markdown should always be line wrapped
+                  lineWrapping: true,
+                  // Rely _directly_ on the codemirror mode
+                  mode: {
+                    name: "gfm",
+                    tokenTypeOverrides: {
+                      emoji: "emoji"
+                    }
+                  }
+                }}
+              />
+            </Editor>
+          </MarkdownPreviewer>
+        );
+        break;
+
+      default:
+        element = <pre>{this.props.source}</pre>;
+        break;
+    }
+
+    return (
+      <HijackScroll focused={cellFocused} onClick={this.selectCell}>
+        <Cell isSelected={cellFocused}>
+          <Toolbar type={cellType} id={id} source={this.props.source} />
+          {element}
+          <style jsx>{`
+            /*
+           * Show the cell-toolbar-mask if hovering on cell,
+           * or cell was the last clicked (has .focused class).
+           */
+            :global(.cell:hover .cell-toolbar-mask),
+            :global(.cell.focused .cell-toolbar-mask) {
+              display: block;
+            }
+          `}</style>
+        </Cell>
+      </HijackScroll>
+    );
+  }
+}
+
+export const ConnectedCell = connect(mapStateToCellProps)(AnyCell);
+
 type Props = {
   displayOrder: Array<string>,
   // TODO: Make types stricter, we have definitions _somewhere_
@@ -217,175 +445,16 @@ export class NotebookApp extends React.Component<Props> {
   }
 
   renderCell(id: string): ?React$Element<any> {
-    const cell = this.props.cellMap.get(id);
-
-    if (!cell) {
-      return null;
-    }
-
-    const cellStatus = this.props.transient.getIn(["cellMap", id, "status"]);
-
-    const running = cellStatus === "busy";
-    const queued = cellStatus === "queued";
-
-    const cellType = cell.get("cell_type");
-
-    // TODO: Figure out nomenclature
-    const cellFocused = this.props.cellFocused === id;
-    const editorFocused = this.props.editorFocused === id;
-
-    let element = null;
-
-    const selectCell = () => {
-      this.context.store.dispatch(focusCell(id));
-    };
-    const focusEditor = () => {
-      this.context.store.dispatch(focusCellEditor(id));
-    };
-
-    const unfocusEditor = () => {
-      this.context.store.dispatch(focusCellEditor(null));
-    };
-
-    const focusAboveCell = () => {
-      this.context.store.dispatch(focusPreviousCell(id));
-      this.context.store.dispatch(focusPreviousCellEditor(id));
-    };
-    const focusBelowCell = () => {
-      this.context.store.dispatch(focusNextCell(id, true));
-      this.context.store.dispatch(focusNextCellEditor(id));
-    };
-
-    switch (cellType) {
-      case "code":
-        const sourceHidden =
-          cell.getIn(["metadata", "inputHidden"], false) ||
-          cell.getIn(["metadata", "hide_input"], false);
-
-        const outputHidden =
-          cell.get("outputs").size === 0 ||
-          cell.getIn(["metadata", "outputHidden"]);
-        const outputExpanded = cell.getIn(["metadata", "outputExpanded"]);
-
-        element = (
-          <React.Fragment>
-            <Input hidden={sourceHidden}>
-              <Prompt
-                counter={cell.get("execution_count")}
-                running={running}
-                queued={queued}
-              />
-              <Editor>
-                <CodeMirror
-                  tip
-                  completion
-                  id={id}
-                  value={cell.get("source")}
-                  cellFocused={cellFocused}
-                  editorFocused={editorFocused}
-                  theme={this.props.theme}
-                  focusAbove={focusAboveCell}
-                  focusBelow={focusBelowCell}
-                  options={{
-                    mode: isImmutable(this.props.codeMirrorMode)
-                      ? this.props.codeMirrorMode.toJS()
-                      : this.props.codeMirrorMode
-                  }}
-                />
-              </Editor>
-            </Input>
-            <Pagers>
-              {this.props.cellPagers
-                .get(id, ImmutableList())
-                .map((pager, key) => (
-                  <RichestMime
-                    expanded
-                    className="pager"
-                    displayOrder={this.props.displayOrder}
-                    transforms={this.props.transforms}
-                    bundle={pager}
-                    theme={this.props.theme}
-                    key={key}
-                  />
-                ))}
-            </Pagers>
-            <LatexRenderer>
-              <Outputs hidden={outputHidden} expanded={outputExpanded}>
-                <Display
-                  className="outputs-display"
-                  outputs={cell.get("outputs").toJS()}
-                  displayOrder={this.props.displayOrder}
-                  transforms={this.props.transforms}
-                  theme={this.props.theme}
-                  expanded={outputExpanded}
-                  isHidden={outputHidden}
-                  models={this.props.models.toJS()}
-                />
-              </Outputs>
-            </LatexRenderer>
-          </React.Fragment>
-        );
-
-        break;
-      case "markdown":
-        element = (
-          <MarkdownPreviewer
-            focusAbove={focusAboveCell}
-            focusBelow={focusBelowCell}
-            focusEditor={focusEditor}
-            cellFocused={cellFocused}
-            editorFocused={editorFocused}
-            unfocusEditor={unfocusEditor}
-            source={cell.get("source", "")}
-          >
-            <Editor>
-              <CodeMirror
-                id={id}
-                value={cell.get("source")}
-                theme={this.props.theme}
-                focusAbove={focusAboveCell}
-                focusBelow={focusBelowCell}
-                cellFocused={cellFocused}
-                editorFocused={editorFocused}
-                options={{
-                  // Markdown should always be line wrapped
-                  lineWrapping: true,
-                  // Rely _directly_ on the codemirror mode
-                  mode: {
-                    name: "gfm",
-                    tokenTypeOverrides: {
-                      emoji: "emoji"
-                    }
-                  }
-                }}
-              />
-            </Editor>
-          </MarkdownPreviewer>
-        );
-        break;
-
-      default:
-        element = <pre>{cell.get("source")}</pre>;
-        break;
-    }
-
     return (
-      <HijackScroll focused={cellFocused} onClick={selectCell}>
-        <Cell isSelected={cellFocused}>
-          <Toolbar type={cellType} cell={cell} id={id} />
-          {element}
-          <style jsx>{`
-            /*
-           * Show the cell-toolbar-mask if hovering on cell,
-           * or cell was the last clicked (has .focused class).
-           */
-            :global(.cell:hover .cell-toolbar-mask),
-            :global(.cell.focused .cell-toolbar-mask) {
-              display: block;
-            }
-          `}</style>
-        </Cell>
-      </HijackScroll>
+      <ConnectedCell
+        id={id}
+        transforms={this.props.transforms}
+        displayOrder={this.props.displayOrder}
+        selectCell={this.selectCell}
+        cellFocused={this.props.cellFocused === id}
+        editorFocused={this.props.editorFocused === id}
+        codeMirrorMode={this.props.codeMirrorMode}
+      />
     );
   }
 
