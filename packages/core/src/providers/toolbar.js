@@ -18,7 +18,6 @@ import type { Action } from "@nteract/types/redux";
 
 type Props = {
   id: string,
-  source: string,
   type: "markdown" | "code" | "raw",
   dispatch: Dispatch<Action>
 };
@@ -59,7 +58,7 @@ class Toolbar extends React.PureComponent<Props> {
 
   executeCell(): void {
     const { dispatch } = this.props;
-    dispatch(executeCell(this.props.id, this.props.source));
+    dispatch(executeCell(this.props.id));
   }
 
   clearOutputs(): void {

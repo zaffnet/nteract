@@ -420,7 +420,7 @@ export class NotebookApp extends React.Component<Props> {
     }
 
     if (cell.get("cell_type") === "code") {
-      this.context.store.dispatch(executeCell(id, cell.get("source")));
+      this.context.store.dispatch(executeCell(id));
     }
   }
 

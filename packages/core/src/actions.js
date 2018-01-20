@@ -26,6 +26,7 @@ import type {
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
+  ExecuteCellAction,
   PasteCellAction,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
@@ -421,12 +422,17 @@ export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
  * @param {Object} source - Source code to executed.
  * @return {Object} executeCellAction - Action to be dispatched to reducer.
  */
-export function executeCell(
-  id: string,
-  source: string
-): SendExecuteMessageAction {
-  const message = createExecuteRequest(source);
+export function executeCell(id: string): ExecuteCellAction {
+  return {
+    type: actionTypes.EXECUTE_CELL,
+    id
+  };
+}
 
+export function sendExecuteMessage(
+  id: string,
+  message: *
+): SendExecuteMessageAction {
   return {
     type: actionTypes.SEND_EXECUTE_REQUEST,
     id,

@@ -124,6 +124,11 @@ export type SendExecuteMessageAction = {
   message: ExecuteRequest
 };
 
+export const EXECUTE_CELL = "EXECUTE_CELL";
+export type ExecuteCellAction = {
+  id: CellID
+};
+
 export const FOCUS_CELL = "FOCUS_CELL";
 export type FocusCellAction = { type: "FOCUS_CELL", id: CellID };
 

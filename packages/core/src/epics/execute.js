@@ -44,13 +44,15 @@ import {
   acceptPayloadMessage,
   clearOutputs,
   appendOutput,
-  updateDisplay
+  updateDisplay,
+  sendExecuteMessage
 } from "../actions";
 
 import type { Subject } from "rxjs/Subject";
 import type { ActionsObservable } from "redux-observable";
 
 import {
+  EXECUTE_CELL,
   LAUNCH_KERNEL_SUCCESSFUL,
   REMOVE_CELL,
   ABORT_EXECUTION,
@@ -166,7 +168,7 @@ export function createExecuteCellStream(
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
-    ofType(SEND_EXECUTE_REQUEST),
+    ofType(EXECUTE_CELL),
     tap(action => {
       if (!action.id) {
         throw new Error("execute cell needs an id");
@@ -177,11 +179,19 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     // Work on each cell's stream
     map(cellActionStream =>
       cellActionStream.pipe(
-        // When a new SEND_EXECUTE_REQUEST comes in with the current ID, we create a
+        // When a new EXECUTE_CELL comes in with the current ID, we create a
         // a new stream and unsubscribe from the old one.
-        switchMap(({ message, id }) =>
-          createExecuteCellStream(action$, store, message, id)
-        )
+        switchMap(({ id }) => {
+          const state = store.getState();
+          const source = state.getIn(["document", "cellMap", id, "source"], "");
+
+          const message = createExecuteRequest(source);
+
+          return merge(
+            of(sendExecuteMessage(id, message)),
+            createExecuteCellStream(action$, store, message, id)
+          );
+        })
       )
     ),
     // Bring back all the inner Observables into one stream
