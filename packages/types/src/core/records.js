@@ -10,7 +10,8 @@ import type {
 
 import { List, Map, Record, Set } from "immutable";
 
-export { makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
+export { HostRef, makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
+export { KernelspecsRef } from "./kernelspecs";
 
 /*
 
