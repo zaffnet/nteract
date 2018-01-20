@@ -11,7 +11,12 @@ import type {
 import { List, Map, Record, Set } from "immutable";
 
 export { HostRef, makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
-export { KernelspecsRef } from "./kernelspecs";
+export {
+  KernelspecsRef,
+  communicationKernelspecsFactory,
+  entitiesKernelspecsSpecFactory,
+  entitiesKernelspecsFactory
+} from "./kernelspecs";
 
 /*
 
