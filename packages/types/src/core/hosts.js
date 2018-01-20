@@ -1,24 +1,20 @@
 // @flow
 import type { ChildProcess } from "child_process";
+import type { Id } from "./id";
+import type { RecordFactory, RecordOf } from "immutable";
+import type { Ref } from "./ref";
+import type { KernelspecsRef } from "./kernelspecs";
 
-// The Id type is for external resources, e.g. with /api/kernels/9092-7679-9978-8822,
-// 9092-7679-9978-8822 is the Id
-export opaque type Id = string;
-// A ref is an internal Id, used for kernels, hosts, kernelspec collections, etc.
-export opaque type Ref = string;
+import { Record, List } from "immutable";
 
 export opaque type KernelRef = Ref;
 export opaque type HostRef = Ref;
-export opaque type KernelSpecsRef = Ref;
-
-import type { RecordFactory, RecordOf } from "immutable";
-import { Record, List } from "immutable";
 
 export type BaseHostProps = {
   id: ?Id,
   ref: ?HostRef,
   selectedKernelRef: ?KernelRef,
-  kernelSpecsRef: ?KernelSpecsRef, // reference to a collection of kernelspecs
+  kernelspecsRef: ?KernelspecsRef, // reference to a collection of kernelspecs
   defaultKernelName: ?string,
   // In the desktop case, this _should_ be only one, pending
   // kernel cleanup
@@ -39,7 +35,7 @@ export const makeJupyterHostRecord: RecordFactory<
   ref: null,
   id: null,
   selectedKernelRef: null,
-  kernelSpecsRef: null,
+  kernelspecsRef: null,
   defaultKernelName: null,
   activeKernelRefs: List(),
   token: null,
@@ -65,7 +61,7 @@ export const makeDesktopHostRecord: RecordFactory<
   ref: null,
   id: null,
   selectedKernelRef: null,
-  kernelSpecsRef: null,
+  kernelspecsRef: null,
   defaultKernelName: null,
   activeKernelRefs: List()
 });

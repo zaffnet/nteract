@@ -1,26 +1,22 @@
 /* @flow */
-
-import type { Subject } from "rxjs";
-
-const Immutable = require("immutable");
 import type { RecordFactory, RecordOf } from "immutable";
-import type { ChildProcess } from "child_process";
-import { Record } from "immutable";
-import type { Channels } from "../channels";
-
+import type { Subject } from "rxjs";
 import type {
-  Id,
-  Ref,
-  KernelRef,
-  KernelSpecsRef,
-  HostRef,
-  RemoteKernelProps,
-  LocalKernelProps,
+  DesktopHostRecordProps,
   JupyterHostRecordProps,
-  DesktopHostRecordProps
+  LocalKernelProps,
+  RemoteKernelProps
 } from "./hosts";
 
-export { makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
+import { List, Map, Record, Set } from "immutable";
+
+export { HostRef, makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
+export {
+  KernelspecsRef,
+  communicationKernelspecsFactory,
+  entitiesKernelspecsSpecFactory,
+  entitiesKernelspecsFactory
+} from "./kernelspecs";
 
 /*
 
@@ -40,12 +36,14 @@ export type ImmutableJSON =
   | null
   | ImmutableJSONMap
   | ImmutableJSONList; // eslint-disable-line no-use-before-define
-export type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
-export type ImmutableJSONList = Immutable.List<ImmutableJSON>;
+
+export type ImmutableJSONMap = Map<string, ImmutableJSON>;
+
+export type ImmutableJSONList = List<ImmutableJSON>;
 
 export type ExecutionCount = number | null;
 
-export type MimeBundle = Immutable.Map<string, ImmutableJSON>;
+export type MimeBundle = Map<string, ImmutableJSON>;
 
 export type ExecuteResult = {
   output_type: "execute_result",
@@ -70,7 +68,7 @@ export type ErrorOutput = {
   output_type: "error",
   ename: string,
   evalue: string,
-  traceback: Immutable.List<string>
+  traceback: List<string>
 };
 
 export type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
@@ -80,7 +78,7 @@ export type CodeCell = {
   metadata: ImmutableJSONMap,
   execution_count: ExecutionCount,
   source: string,
-  outputs: Immutable.List<Output>
+  outputs: List<Output>
 };
 
 export type MarkdownCell = {
@@ -128,8 +126,8 @@ export type NotebookMetadata = {
 };
 
 export type Notebook = {
-  cellMap: Immutable.Map<string, Cell>,
-  cellOrder: Immutable.List<string>,
+  cellMap: Map<string, Cell>,
+  cellOrder: List<string>,
   nbformat: 4,
   nbformat_minor: 0 | 1 | 2 | 3 | 4,
   metadata: NotebookMetadata
@@ -159,52 +157,53 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   configLastSaved: null, // ?
   error: null // All
 });
+
 export type AppRecord = RecordOf<AppRecordProps>;
 
 type DocumentRecordProps = {
   notebook: ?Notebook,
-  transient: Immutable.Map<string, any>, // has the keypaths for updating displays
+  transient: Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)
   // right now it's keypaths and then it looks like it's able to handle any per
   // cell transient data that will be deleted when the kernel is restarted
   cellPagers: any,
-  stickyCells: ?Immutable.Set<any>,
+  stickyCells: ?Set<any>,
   editorFocused: any,
   cellFocused: any,
-  copied: Immutable.Map<any, any>
+  copied: Map<any, any>
 };
 
 export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
   notebook: null,
   savedNotebook: null,
   // $FlowFixMe: Immutable
-  transient: new Immutable.Map({
-    keyPathsForDisplays: new Immutable.Map()
+  transient: new Map({
+    keyPathsForDisplays: new Map()
   }),
-  cellPagers: new Immutable.Map(),
-  stickyCells: new Immutable.Set(),
+  cellPagers: new Map(),
+  stickyCells: new Set(),
   editorFocused: null,
   cellFocused: null,
-  copied: new Immutable.Map(),
+  copied: new Map(),
   filename: ""
 });
 export type DocumentRecord = RecordOf<DocumentRecordProps>;
 
 type CommsRecordProps = {
-  targets: Immutable.Map<any, any>,
-  info: Immutable.Map<any, any>,
-  models: Immutable.Map<any, any>
+  targets: Map<any, any>,
+  info: Map<any, any>,
+  models: Map<any, any>
 };
 
-export const CommsRecord = Immutable.Record({
-  targets: new Immutable.Map(),
-  info: new Immutable.Map(),
-  models: new Immutable.Map()
+export const CommsRecord = Record({
+  targets: new Map(),
+  info: new Map(),
+  models: new Map()
 });
 
 export type AppState = {
   app: RecordOf<AppRecordProps>,
   document: RecordOf<DocumentRecordProps>,
   comms: RecordOf<CommsRecordProps>,
-  config: Immutable.Map<string, any>
+  config: Map<string, any>
 };
