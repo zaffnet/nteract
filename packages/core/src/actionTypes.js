@@ -1,5 +1,9 @@
 /* @flow */
 
+import type {
+  KernelspecsRef,
+  KernelspecProps
+} from "@nteract/types/core/records";
 import type { Channels } from "@nteract/types/channels";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
 
@@ -23,6 +27,33 @@ import type {
 import type { ExecuteRequest } from "@nteract/types/messaging";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+
+export const FETCH_KERNELSPECS = "CORE/FETCH_KERNELSPECS";
+export type FetchKernelspecs = {
+  type: "CORE/FETCH_KERNELSPECS",
+  payload: {
+    kernelspecsRef: KernelspecsRef
+  }
+};
+
+export const FETCH_KERNELSPECS_FULFILLED = "CORE/FETCH_KERNELSPECS_FULFILLED";
+export type FetchKernelspecsFulfilled = {
+  type: "CORE/FETCH_KERNELSPECS_FULFILLED",
+  payload: {
+    kernelspecsRef: KernelspecsRef,
+    defaultKernelName: string,
+    kernelspecs: { [string]: KernelspecProps }
+  }
+};
+
+export const FETCH_KERNELSPECS_FAILED = "CORE/FETCH_KERNELSPECS_FAILED";
+export type FetchKernelspecsFailed = {
+  type: "CORE/FETCH_KERNELSPECS_FAILED",
+  payload: {
+    kernelspecsRef: KernelspecsRef,
+    error: Object
+  }
+};
 
 export const CHANGE_FILENAME = "CHANGE_FILENAME";
 export type ChangeFilenameAction = {

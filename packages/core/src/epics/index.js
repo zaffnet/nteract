@@ -7,3 +7,5 @@ export {
   acquireKernelInfoEpic,
   watchExecutionStateEpic
 } from "./kernel-lifecycle";
+
+export { fetchKernelspecsEpic } from "./kernelspecs";
