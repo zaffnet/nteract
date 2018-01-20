@@ -104,6 +104,8 @@ const mapStateToCellProps = (state: Object, ownProps: *): AnyCellProps => {
     outputs,
     models: state.comms.get("models"),
     pager: state.document.getIn(["cellPagers", id], ImmutableList()),
+    cellFocused: state.document.get("cellFocused") === id,
+    editorFocused: state.document.get("editorFocused") === id,
     sourceHidden,
     outputHidden,
     outputExpanded,
@@ -279,22 +281,15 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
 
 export const ConnectedCell = connect(mapStateToCellProps)(AnyCell);
 
-type Props = {
+type NotebookProps = {
   displayOrder: Array<string>,
-  // TODO: Make types stricter, we have definitions _somewhere_
   cellOrder: ImmutableList<any>,
-  cellMap: ImmutableMap<string, any>,
   transforms: Object,
-  cellPagers: ImmutableMap<string, any>,
   stickyCells: ImmutableSet<string>,
-  transient: ImmutableMap<string, any>,
-  cellFocused: string,
-  editorFocused: string,
   theme: string,
   lastSaved: Date,
   languageDisplayName: string,
   kernelStatus: string,
-  models: ImmutableMap<string, any>,
   codeMirrorMode: string | ImmutableMap<string, *>
 };
 
@@ -319,7 +314,10 @@ export function getCodeMirrorMode(
   return mode;
 }
 
-const mapStateToProps = (state: Object, ownProps: Props): Props => {
+const mapStateToProps = (
+  state: Object,
+  ownProps: NotebookProps
+): NotebookProps => {
   const codeMirrorMode = getCodeMirrorMode(
     state.document.getIn(["notebook", "metadata"], ImmutableMap())
   );
@@ -328,14 +326,8 @@ const mapStateToProps = (state: Object, ownProps: Props): Props => {
     theme: state.config.get("theme"),
     lastSaved: state.app.get("lastSaved"),
     cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
-    cellMap: state.document.getIn(["notebook", "cellMap"], ImmutableMap()),
-    transient: state.document.get("transient"),
-    cellPagers: state.document.get("cellPagers", ImmutableMap()),
-    cellFocused: state.document.get("cellFocused"),
-    editorFocused: state.document.get("editorFocused"),
     stickyCells: state.document.get("stickyCells"),
     kernelStatus: state.app.getIn(["kernel", "status"], "not connected"),
-    models: state.comms.get("models"),
     languageDisplayName: state.document.getIn(
       ["notebook", "metadata", "kernelspec", "display_name"],
       ""
@@ -346,11 +338,10 @@ const mapStateToProps = (state: Object, ownProps: Props): Props => {
   };
 };
 
-export class NotebookApp extends React.Component<Props> {
+export class NotebookApp extends React.PureComponent<NotebookProps> {
   static defaultProps = {
     displayOrder,
-    transforms,
-    models: ImmutableMap()
+    transforms
   };
 
   static contextTypes = {
@@ -406,27 +397,28 @@ export class NotebookApp extends React.Component<Props> {
 
     e.preventDefault();
 
-    const cellMap = this.props.cellMap;
-    const id = this.props.cellFocused;
-    const cell = cellMap.get(id);
+    return;
 
-    if (!cell) {
-      return;
-    }
+    /*
+    const id = this.props.cellFocused;
 
     if (e.shiftKey && !this.props.stickyCells.has(id)) {
+      // Couldn't focusNextCell just do it, no need to have this here
       this.context.store.dispatch(focusNextCell(this.props.cellFocused, true));
       this.context.store.dispatch(focusNextCellEditor(id));
     }
 
-    if (cell.get("cell_type") === "code") {
-      this.context.store.dispatch(executeCell(id));
-    }
+    // Could become "executeFocusedCell"
+    this.context.store.dispatch(executeCell(id));
+    */
   }
 
   renderStickyCells(): React.Node {
     const cellOrder = this.props.cellOrder;
     const stickyCells = cellOrder.filter(id => this.props.stickyCells.get(id));
+    if (stickyCells.size === 0) {
+      return null;
+    }
 
     return (
       <StickyCellContainer>
@@ -451,8 +443,6 @@ export class NotebookApp extends React.Component<Props> {
         transforms={this.props.transforms}
         displayOrder={this.props.displayOrder}
         selectCell={this.selectCell}
-        cellFocused={this.props.cellFocused === id}
-        editorFocused={this.props.editorFocused === id}
         codeMirrorMode={this.props.codeMirrorMode}
       />
     );
