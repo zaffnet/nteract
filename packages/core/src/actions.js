@@ -27,6 +27,7 @@ import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
   ExecuteCellAction,
+  ExecuteFocusedCellAction,
   PasteCellAction,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
@@ -275,13 +276,20 @@ export function focusCell(id: string): FocusCellAction {
 }
 
 export function focusNextCell(
-  id: string,
-  createCellIfUndefined: boolean
+  id?: string,
+  createCellIfUndefined: boolean = true
 ): FocusNextCellAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
     id,
     createCellIfUndefined
+  };
+}
+
+export function focusNextCellEditor(id?: string): FocusNextCellEditorAction {
+  return {
+    type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
+    id
   };
 }
 
@@ -295,13 +303,6 @@ export function focusPreviousCell(id: string): FocusPreviousCellAction {
 export function focusCellEditor(id: string | null): FocusCellEditorAction {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
-    id
-  };
-}
-
-export function focusNextCellEditor(id: string): FocusNextCellEditorAction {
-  return {
-    type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
     id
   };
 }
@@ -415,17 +416,16 @@ export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
   };
 }
 
-/**
- * Execute Cell action.
- *
- * @param {String} id - Universally Unique Identifier of cell to be executed.
- * @param {Object} source - Source code to executed.
- * @return {Object} executeCellAction - Action to be dispatched to reducer.
- */
 export function executeCell(id: string): ExecuteCellAction {
   return {
     type: actionTypes.EXECUTE_CELL,
     id
+  };
+}
+
+export function executeFocusedCell(): ExecuteFocusedCellAction {
+  return {
+    type: actionTypes.EXECUTE_FOCUSED_CELL
   };
 }
 

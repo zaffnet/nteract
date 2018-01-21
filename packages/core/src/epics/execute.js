@@ -15,6 +15,7 @@ import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
+import { empty } from "rxjs/observable/empty";
 import { _throw } from "rxjs/observable/throw";
 
 import type { Channels } from "@nteract/types/channels";
@@ -28,6 +29,7 @@ import {
   map,
   mapTo,
   switchMap,
+  mergeMap,
   startWith,
   mergeAll,
   takeUntil,
@@ -45,7 +47,8 @@ import {
   clearOutputs,
   appendOutput,
   updateDisplay,
-  sendExecuteMessage
+  sendExecuteMessage,
+  executeCell
 } from "../actions";
 
 import type { Subject } from "rxjs/Subject";
@@ -53,6 +56,7 @@ import type { ActionsObservable } from "redux-observable";
 
 import {
   EXECUTE_CELL,
+  EXECUTE_FOCUSED_CELL,
   LAUNCH_KERNEL_SUCCESSFUL,
   REMOVE_CELL,
   ABORT_EXECUTION,
@@ -149,7 +153,7 @@ export function createExecuteCellStream(
     });
   }
 
-  return executeCellStream(channels, id, message).pipe(
+  const cellStream = executeCellStream(channels, id, message).pipe(
     takeUntil(
       merge(
         action$.pipe(
@@ -160,6 +164,14 @@ export function createExecuteCellStream(
       )
     )
   );
+
+  return merge(
+    // We make sure to propagate back to "ourselves" the actual message
+    // that we sent to the kernel with the sendExecuteMessage action
+    of(sendExecuteMessage(id, message)),
+    // Merging it in with the actual stream
+    cellStream
+  );
 }
 
 /**
@@ -168,7 +180,18 @@ export function createExecuteCellStream(
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
-    ofType(EXECUTE_CELL),
+    ofType(EXECUTE_CELL, EXECUTE_FOCUSED_CELL),
+    mergeMap(action => {
+      if (action.type === EXECUTE_FOCUSED_CELL) {
+        const state = store.getState();
+        const id = state.document.get("cellFocused");
+        if (!id) {
+          throw new Error("attempted to execute without an id");
+        }
+        return of(executeCell(id));
+      }
+      return of(action);
+    }),
     tap(action => {
       if (!action.id) {
         throw new Error("execute cell needs an id");
@@ -183,14 +206,22 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         // a new stream and unsubscribe from the old one.
         switchMap(({ id }) => {
           const state = store.getState();
-          const source = state.getIn(["document", "cellMap", id, "source"], "");
+
+          const cell = state.document.getIn(
+            ["notebook", "cellMap", id],
+            Immutable.Map()
+          );
+
+          // We only execute code cells
+          if (cell.get("cell_type") !== "code") {
+            return empty();
+          }
+
+          const source = cell.get("source", "");
 
           const message = createExecuteRequest(source);
 
-          return merge(
-            of(sendExecuteMessage(id, message)),
-            createExecuteCellStream(action$, store, message, id)
-          );
+          return createExecuteCellStream(action$, store, message, id);
         })
       )
     ),

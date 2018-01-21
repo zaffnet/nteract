@@ -286,13 +286,16 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
 
 function focusNextCell(state: DocumentRecord, action: FocusNextCellAction) {
   const cellOrder = state.getIn(["notebook", "cellOrder"], Immutable.List());
-  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
-  const curCellType = state.getIn([
-    "notebook",
-    "cellMap",
-    action.id,
-    "cell_type"
-  ]);
+
+  const id = action.id ? action.id : state.get("cellFocused");
+  // If for some reason we neither have an ID here or a focused cell, we just
+  // keep the state consistent
+  if (!id) {
+    return state;
+  }
+
+  const curIndex = cellOrder.findIndex((foundId: CellID) => id === foundId);
+  const curCellType = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
   const nextIndex = curIndex + 1;
 
@@ -339,7 +342,16 @@ function focusNextCellEditor(
     ["notebook", "cellOrder"],
     Immutable.List()
   );
-  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+
+  const id = action.id ? action.id : state.get("editorFocused");
+
+  // If for some reason we neither have an ID here or a focused editor, we just
+  // keep the state consistent
+  if (!id) {
+    return state;
+  }
+
+  const curIndex = cellOrder.findIndex((foundId: CellID) => id === foundId);
   const nextIndex = curIndex + 1;
 
   return state.set("editorFocused", cellOrder.get(nextIndex));

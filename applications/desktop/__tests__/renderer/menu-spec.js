@@ -229,16 +229,15 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledTimes(3);
       markdownCells.forEach(cellId => {
         expect(store.dispatch).not.toHaveBeenCalledWith({
-          type: "SEND_EXECUTE_REQUEST",
-          id: cellId,
-          source: ""
+          type: "EXECUTE_CELL",
+          id: cellId
         });
       });
     });
   });
 
   describe("dispatchRunAll", () => {
-    test("dispatches SEND_EXECUTE_REQUEST for all cells action", () => {
+    test("dispatches EXECUTE_CELL for all cells action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
@@ -250,9 +249,8 @@ describe("menu", () => {
         .first();
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: "SEND_EXECUTE_REQUEST",
-        id: first,
-        message: expect.any(Object)
+        type: "EXECUTE_CELL",
+        id: first
       });
     });
   });

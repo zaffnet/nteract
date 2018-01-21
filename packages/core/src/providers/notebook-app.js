@@ -43,7 +43,8 @@ import {
   focusNextCellEditor,
   moveCell,
   focusCell,
-  executeCell
+  executeCell,
+  executeFocusedCell
 } from "../actions";
 
 // NOTE: PropTypes are required for the sake of contextTypes
@@ -76,7 +77,7 @@ const mapStateToCellProps = (state: Object, ownProps: *): AnyCellProps => {
   const cell = state.document.getIn(["notebook", "cellMap", id]);
 
   if (!cell) {
-    throw new Error("you best have a cell for me");
+    throw new Error("cell not found inside cell map");
   }
 
   const cellType = cell.get("cell_type");
@@ -391,26 +392,17 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
       return;
     }
 
-    if (!this.props.cellFocused) {
-      return;
-    }
-
     e.preventDefault();
 
-    return;
+    // NOTE: Order matters here because we need it to execute _before_ we
+    // focus the next cell
+    this.context.store.dispatch(executeFocusedCell());
 
-    /*
-    const id = this.props.cellFocused;
-
-    if (e.shiftKey && !this.props.stickyCells.has(id)) {
-      // Couldn't focusNextCell just do it, no need to have this here
-      this.context.store.dispatch(focusNextCell(this.props.cellFocused, true));
-      this.context.store.dispatch(focusNextCellEditor(id));
+    if (e.shiftKey) {
+      // Couldn't focusNextCell just do focusing of both?
+      this.context.store.dispatch(focusNextCell());
+      this.context.store.dispatch(focusNextCellEditor());
     }
-
-    // Could become "executeFocusedCell"
-    this.context.store.dispatch(executeCell(id));
-    */
   }
 
   renderStickyCells(): React.Node {

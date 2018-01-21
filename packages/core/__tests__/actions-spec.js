@@ -206,10 +206,10 @@ describe("focusCell", () => {
 
 describe("focusNextCell", () => {
   test("creates a FOCUS_NEXT_CELL action", () => {
-    expect(actions.focusNextCell("1234")).toEqual({
+    expect(actions.focusNextCell("1234", false)).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL,
       id: "1234",
-      createCellIfUndefined: undefined
+      createCellIfUndefined: false
     });
   });
   test("creates a FOCUS_NEXT_CELL action with cell creation flag", () => {
