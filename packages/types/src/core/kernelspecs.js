@@ -9,47 +9,39 @@ type CommunicationKernelspecsProps = {
   error: ?Object
 };
 
-export type CommunicationKernelspecsRecord = RecordOf<
-  CommunicationKernelspecsProps
->;
+export type CommunicationKernelspecs = RecordOf<CommunicationKernelspecsProps>;
 
-export const communicationKernelspecsFactory: RecordFactory<
+export const makeCommunicationKernelspecs: RecordFactory<
   CommunicationKernelspecsProps
 > = Record({
   loading: false,
   error: null
 });
 
-type EntitiesKernelspecsSpecProps = {
-  language: string,
+type KernelspecProps = {
+  language: ?string,
   argv: List<string>,
   env: Map
 };
 
-export type EntitiesKernelspecsSpecRecord = RecordOf<
-  EntitiesKernelspecsSpecProps
->;
+export type Kernelspec = RecordOf<KernelspecProps>;
 
-export const entitiesKernelspecsSpecFactory: RecordFactory<
-  EntitiesKernelspecsSpecProps
-> = Record({
-  language: "", // TODO: what's a reasonable default?
+export const makeKernelspec: RecordFactory<KernelspecProps> = Record({
+  language: null,
   argv: List(),
   env: Map()
 });
 
-type EntitiesKernelspecsProps = {
-  name: string,
+type KernelspecsProps = {
+  name: ?string,
   resources: Map,
-  spec: RecordOf<EntitiesKernelspecsSpecProps>
+  spec: RecordOf<KernelspecProps>
 };
 
-export type EntitiesKernelspecsRecord = RecordOf<EntitiesKernelspecsProps>;
+export type Kernelspecs = RecordOf<KernelspecsProps>;
 
-export const entitiesKernelspecsFactory: RecordFactory<
-  EntitiesKernelspecsProps
-> = Record({
-  name: "", // TODO: what's a reasonable default?
+export const makeKernelspecs: RecordFactory<KernelspecsProps> = Record({
+  name: null,
   resources: Map(),
-  spec: entitiesKernelspecsSpecFactory()
+  spec: makeKernelspec()
 });

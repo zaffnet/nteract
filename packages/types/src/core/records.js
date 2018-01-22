@@ -13,9 +13,9 @@ import { List, Map, Record, Set } from "immutable";
 export { HostRef, makeLocalKernelRecord, makeDesktopHostRecord } from "./hosts";
 export {
   KernelspecsRef,
-  communicationKernelspecsFactory,
-  entitiesKernelspecsSpecFactory,
-  entitiesKernelspecsFactory
+  makeCommunicationKernelspecs,
+  makeKernelspec,
+  makeKernelspecs
 } from "./kernelspecs";
 
 /*
