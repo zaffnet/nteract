@@ -23,13 +23,22 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+      {
+        test: /\.js$/,
+        exclude: /node_modules\/(?!(@nteract|rx-jupyter|rx-binder))/,
+        loader: "babel-loader"
+      },
       { test: /\.json$/, loader: "json-loader" }
     ]
   },
   resolve: {
-    mainFields: ["nteractDesktop", "main"],
-    extensions: [".js", ".jsx"]
+    mainFields: ["nteractDesktop", "module", "main"],
+    extensions: [".js", ".jsx"],
+    alias: {
+      "@nteract/core": "@nteract/core/src",
+      "rx-jupyter": "rx-jupyter/src",
+      "rx-binder": "rx-binder/src"
+    }
   },
   plugins: [
     new LodashModuleReplacementPlugin(),
