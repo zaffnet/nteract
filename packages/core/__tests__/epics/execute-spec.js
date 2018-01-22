@@ -110,37 +110,38 @@ describe("createExecuteCellStream", () => {
             channels,
             status: "connected"
           },
-          notificationSystem: { addNotification: jest.fn() }
+          notificationSystem: { addNotification: jest.fn() },
+          document: Immutable.fromJS({
+            notebook: {
+              cellMap: {
+                first: {
+                  source: "woo",
+                  cell_type: "code"
+                },
+                second: {
+                  source: "eh",
+                  cell_type: "code"
+                }
+              },
+              cellOrder: ["first", "second"]
+            }
+          })
         }
       }
     };
-    const action$ = ActionsObservable.of(
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id",
-        message: createExecuteRequest("this")
-      },
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id_2",
-        message: createExecuteRequest("is")
-      },
-      { type: ABORT_EXECUTION, id: "id_2" },
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id",
-        message: createExecuteRequest("kind of")
-      }
-    );
-    const observable = createExecuteCellStream(
-      action$,
-      store,
-      createExecuteRequest("source"),
-      "id"
-    );
+    const action$ = ActionsObservable.from([]);
+    const message = createExecuteRequest("source");
+
+    const observable = createExecuteCellStream(action$, store, message, "id");
     const actionBuffer = [];
-    observable.subscribe(x => actionBuffer.push(x.type), err => done.fail(err));
-    expect(actionBuffer).toEqual([]);
+    observable.subscribe(x => actionBuffer.push(x), err => done.fail(err));
+    expect(actionBuffer).toEqual([
+      {
+        type: "SEND_EXECUTE_REQUEST",
+        id: "id",
+        message
+      }
+    ]);
     done();
   });
 });
@@ -196,7 +197,7 @@ describe("executeCellEpic", () => {
       err => done.fail(err)
     );
   });
-  test.only("Informs about disconnected kernels, allows reconnection", done => {
+  test("Informs about disconnected kernels, allows reconnection", done => {
     const store = {
       getState() {
         return this.state;
