@@ -51,8 +51,12 @@ export const childOf = (parentMessage: JupyterMessage<*, *>) => (
   return new Observable(subscriber =>
     source.subscribe(
       msg => {
-        if (!msg.parent_header || !msg.parent_header.msg_id) {
-          console.error("no parent_header.msg_id on message", msg);
+        // strictly speaking, in order for the message to be a child of the parent
+        // message, it has to both be a message and have a parent to begin with
+        if (!msg || !msg.parent_header || !msg.parent_header.msg_id) {
+          if (process.env.DEBUG === "true") {
+            console.warn("no parent_header.msg_id on message", msg);
+          }
           return;
         }
 
