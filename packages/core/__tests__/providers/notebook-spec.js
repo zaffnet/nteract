@@ -91,9 +91,7 @@ describe("NotebookApp", () => {
       inst.keyDown(evt);
 
       expect(context.store.dispatch).toHaveBeenCalledWith({
-        type: "SEND_EXECUTE_REQUEST",
-        id: focusedCell,
-        message: expect.any(Object)
+        type: "EXECUTE_FOCUSED_CELL"
       });
     });
     test("detects a focus to next cell keypress", () => {
@@ -125,9 +123,7 @@ describe("NotebookApp", () => {
       inst.keyDown(evt);
 
       expect(context.store.dispatch).toHaveBeenCalledWith({
-        type: "FOCUS_NEXT_CELL",
-        id: focusedCell,
-        createCellIfUndefined: true
+        type: "FOCUS_NEXT_CELL_EDITOR"
       });
     });
     test("handles a focus to next cell keypress on a sticky cell", () => {

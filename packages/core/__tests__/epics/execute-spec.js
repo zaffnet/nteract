@@ -4,6 +4,7 @@ import {
   SEND_EXECUTE_REQUEST,
   ABORT_EXECUTION,
   ERROR_EXECUTING,
+  EXECUTE_CELL,
   CLEAR_OUTPUTS,
   UPDATE_CELL_STATUS,
   UPDATE_DISPLAY,
@@ -28,10 +29,9 @@ import { toArray, share, catchError, bufferCount } from "rxjs/operators";
 
 describe("executeCell", () => {
   test("returns an executeCell action", () => {
-    expect(executeCell("0-0-0-0", "import random; random.random()")).toEqual({
-      type: SEND_EXECUTE_REQUEST,
-      id: "0-0-0-0",
-      message: expect.any(Object)
+    expect(executeCell("0-0-0-0")).toEqual({
+      type: EXECUTE_CELL,
+      id: "0-0-0-0"
     });
   });
 });
@@ -64,7 +64,22 @@ describe("createExecuteCellStream", () => {
             status: "not connected"
           },
           notificationSystem: { addNotification: jest.fn() }
-        }
+        },
+        document: Immutable.fromJS({
+          notebook: {
+            cellMap: {
+              first: {
+                source: "woo",
+                cell_type: "code"
+              },
+              second: {
+                source: "eh",
+                cell_type: "code"
+              }
+            },
+            cellOrder: ["first", "second"]
+          }
+        })
       }
     };
     const action$ = ActionsObservable.of({ type: SEND_EXECUTE_REQUEST });
@@ -95,37 +110,38 @@ describe("createExecuteCellStream", () => {
             channels,
             status: "connected"
           },
-          notificationSystem: { addNotification: jest.fn() }
+          notificationSystem: { addNotification: jest.fn() },
+          document: Immutable.fromJS({
+            notebook: {
+              cellMap: {
+                first: {
+                  source: "woo",
+                  cell_type: "code"
+                },
+                second: {
+                  source: "eh",
+                  cell_type: "code"
+                }
+              },
+              cellOrder: ["first", "second"]
+            }
+          })
         }
       }
     };
-    const action$ = ActionsObservable.of(
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id",
-        message: createExecuteRequest("this")
-      },
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id_2",
-        message: createExecuteRequest("is")
-      },
-      { type: ABORT_EXECUTION, id: "id_2" },
-      {
-        type: SEND_EXECUTE_REQUEST,
-        id: "id",
-        message: createExecuteRequest("kind of")
-      }
-    );
-    const observable = createExecuteCellStream(
-      action$,
-      store,
-      createExecuteRequest("source"),
-      "id"
-    );
+    const action$ = ActionsObservable.from([]);
+    const message = createExecuteRequest("source");
+
+    const observable = createExecuteCellStream(action$, store, message, "id");
     const actionBuffer = [];
-    observable.subscribe(x => actionBuffer.push(x.type), err => done.fail(err));
-    expect(actionBuffer).toEqual([]);
+    observable.subscribe(x => actionBuffer.push(x), err => done.fail(err));
+    expect(actionBuffer).toEqual([
+      {
+        type: "SEND_EXECUTE_REQUEST",
+        id: "id",
+        message
+      }
+    ]);
     done();
   });
 });
@@ -149,7 +165,7 @@ describe("executeCellEpic", () => {
   test("Errors on a bad action", done => {
     // Make one hot action
     const badAction$ = ActionsObservable.of({
-      type: SEND_EXECUTE_REQUEST
+      type: EXECUTE_CELL
     }).pipe(share());
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
@@ -182,13 +198,41 @@ describe("executeCellEpic", () => {
     );
   });
   test("Informs about disconnected kernels, allows reconnection", done => {
-    const action$ = ActionsObservable.of(executeCell("id", "source")).pipe(
-      share()
-    );
+    const store = {
+      getState() {
+        return this.state;
+      },
+      state: {
+        app: {
+          kernel: {
+            status: "not connected"
+          },
+          channels: false,
+          notificationSystem: { addNotification: jest.fn() }
+        },
+        document: Immutable.fromJS({
+          notebook: {
+            cellMap: {
+              first: {
+                source: "woo",
+                cell_type: "code"
+              },
+              second: {
+                source: "eh",
+                cell_type: "code"
+              }
+            },
+            cellOrder: ["first", "second"]
+          }
+        })
+      }
+    };
+
+    const action$ = ActionsObservable.of(executeCell("first")).pipe(share());
     const responseActions = executeCellEpic(action$, store);
     responseActions.subscribe(
       x => {
-        expect(x.payload.toString()).toEqual("Error: kernel not connected");
+        expect(x.payload.toString()).toEqual("Kernel not connected!");
         done();
       },
       err => done.fail(err)
