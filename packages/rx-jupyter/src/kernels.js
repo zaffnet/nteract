@@ -9,6 +9,7 @@ import { Subscriber } from "rxjs/Subscriber";
 
 import { createAJAXSettings } from "./base";
 
+const urljoin = require("url-join");
 const URLSearchParams = require("url-search-params");
 
 /**
@@ -123,9 +124,10 @@ export function formWebSocketURL(
   const q = params.toString();
   const suffix = q !== "" ? `?${q}` : "";
 
-  const url = `${
-    serverConfig.endpoint
-  }/api/kernels/${kernelID}/channels${suffix}`;
+  const url = urljoin(
+    serverConfig.endpoint,
+    `/api/kernels/${kernelID}/channels${suffix}`
+  );
 
   return url.replace(/^http(s)?/, "ws$1");
 }

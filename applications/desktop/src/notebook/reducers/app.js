@@ -33,6 +33,7 @@ function launchKernel(state: AppRecord, action: NewKernelAction) {
   }
   return cleanupKernel(state).set("kernel", kernel);
 }
+
 function exit(state: AppRecord) {
   return cleanupKernel(state);
 }

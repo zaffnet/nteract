@@ -6,7 +6,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import { document, comms, config } from "@nteract/core/reducers";
+import { document, comms, config, app } from "@nteract/core/reducers";
 
 import {
   makeAppRecord,
@@ -36,7 +36,7 @@ export type AppState = {
 };
 
 const rootReducer = combineReducers({
-  app: (state = {}) => state,
+  app,
   document,
   comms,
   config
@@ -66,9 +66,7 @@ export default function configureStore({
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
-    // $FlowFixMe: Types incompatible, we've got to align what our app stores will be like
     rootReducer,
-    // $FlowFixMe: Types incompatible, we've got to align what our app stores will be like
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
