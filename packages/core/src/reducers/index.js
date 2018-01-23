@@ -2,6 +2,6 @@
 import document from "./document";
 import comms from "./comms";
 import config from "./config";
+import app from "./app";
 
-// We'll export our specific reducers here
-export { document, comms, config };
+export { document, comms, config, app };
