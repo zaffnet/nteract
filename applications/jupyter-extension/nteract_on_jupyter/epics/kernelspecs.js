@@ -48,10 +48,11 @@ export function listKernelSpecsEpic(
   return action$.pipe(
     ofType("LIST_KERNELSPECS"),
     switchMap((action: LIST_KERNELSPECS) => {
-      const config = store.getState().webApp.config;
-      // Normalizing to match rx-jupyter vs. the jupyter server config
+      const host = store.getState().app.host;
+      // Normalizing to match rx-jupyter vs. host record
       const serverConfig = {
-        endpoint: config.baseUrl,
+        endpoint: host.serverUrl,
+        token: host.token,
         crossDomain: false
       };
 

@@ -27,16 +27,6 @@ export type JupyterConfigData = {
   appVersion: string
 };
 
-const webAppReducer = (state = {}, action) => {
-  switch (action.type) {
-    case "LOADED":
-      return Object.assign({}, state, { contents: action.payload });
-    case "KERNELSPECS_LISTED":
-      return Object.assign({}, state, { kernelspecs: action.payload });
-  }
-  return state;
-};
-
 export type AppState = {
   app: AppRecord,
   document: DocumentRecord,
@@ -46,7 +36,6 @@ export type AppState = {
 };
 
 const rootReducer = combineReducers({
-  webApp: webAppReducer,
   app: (state = {}) => state,
   document,
   comms,
@@ -70,8 +59,7 @@ export default function configureStore({
     comms: CommsRecord(),
     config: ImmutableMap({
       theme: "light"
-    }),
-    webApp: { config }
+    })
   };
 
   const rootEpic = combineEpics(...epics);

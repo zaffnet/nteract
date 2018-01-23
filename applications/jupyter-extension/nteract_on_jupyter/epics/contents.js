@@ -61,10 +61,11 @@ export function loadEpic(
       }
     }),
     switchMap((action: LOAD_ACTION) => {
-      const config = store.getState().webApp.config;
-      // Normalizing to match rx-jupyter vs. the jupyter server config
+      const host = store.getState().app.host;
+      // Normalizing to match rx-jupyter vs. host record
       const serverConfig = {
-        endpoint: config.baseUrl,
+        endpoint: host.serverUrl,
+        token: host.token,
         crossDomain: false
       };
 
