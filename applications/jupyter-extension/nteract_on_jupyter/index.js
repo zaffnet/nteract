@@ -8,13 +8,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-type JupyterConfigData = {
-  token: string,
-  page: "tree" | "view" | "edit",
-  contentsPath: string,
-  baseUrl: string,
-  appVersion: string
-};
+import type { JupyterConfigData } from "./store";
 
 import { NotebookApp } from "@nteract/core/providers";
 

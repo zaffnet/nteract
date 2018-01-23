@@ -13,10 +13,19 @@ import {
   AppRecord,
   makeDocumentRecord,
   DocumentRecord,
-  CommsRecord
+  CommsRecord,
+  makeJupyterHostRecord
 } from "@nteract/types/core/records";
 
 import epics from "./epics";
+
+export type JupyterConfigData = {
+  token: string,
+  page: "tree" | "view" | "edit",
+  contentsPath: string,
+  baseUrl: string,
+  appVersion: string
+};
 
 const webAppReducer = (state = {}, action) => {
   switch (action.type) {
@@ -44,17 +53,26 @@ const rootReducer = combineReducers({
   config
 });
 
-const defaultState = {
-  app: makeAppRecord(),
-  document: makeDocumentRecord(),
-  comms: CommsRecord(),
-  config: ImmutableMap({
-    theme: "light"
-  })
-};
-
-export default function configureStore(config: any) {
-  const initialState = Object.assign({}, { webApp: config }, defaultState);
+export default function configureStore({
+  config
+}: {
+  config: JupyterConfigData
+}) {
+  const initialState = {
+    app: makeAppRecord({
+      host: makeJupyterHostRecord({
+        token: config.token,
+        // TODO: Use URL join, even though we know these are right
+        serverUrl: location.origin + config.baseUrl
+      })
+    }),
+    document: makeDocumentRecord(),
+    comms: CommsRecord(),
+    config: ImmutableMap({
+      theme: "light"
+    }),
+    webApp: { config }
+  };
 
   const rootEpic = combineEpics(...epics);
   const middlewares = [createEpicMiddleware(rootEpic)];
@@ -62,6 +80,7 @@ export default function configureStore(config: any) {
   return createStore(
     // $FlowFixMe: Types incompatible, we've got to align what our app stores will be like
     rootReducer,
+    // $FlowFixMe: Types incompatible, we've got to align what our app stores will be like
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
   );
