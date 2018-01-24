@@ -2,7 +2,7 @@
 import type { RecordFactory, RecordOf } from "immutable";
 import { List, Map, Record } from "immutable";
 
-type CommunicationKernelspecsProps = {
+export type CommunicationKernelspecsProps = {
   loading: boolean,
   error: ?Object
 };
@@ -16,30 +16,24 @@ export const makeCommunicationKernelspecs: RecordFactory<
   error: null
 });
 
-type KernelspecProps = {
+export type KernelspecProps = {
+  name: ?string,
+  resources: Map<string, *>,
   language: ?string,
   argv: List<string>,
-  env: Map<string, *>
+  env: Map<string, *>,
+  interrupt_mode: ?string
 };
+
+export type Kernelspecs = Map<string, RecordOf<KernelspecProps>>;
 
 export type Kernelspec = RecordOf<KernelspecProps>;
 
 export const makeKernelspec: RecordFactory<KernelspecProps> = Record({
-  language: null,
-  argv: List(),
-  env: Map()
-});
-
-type KernelspecsProps = {
-  name: ?string,
-  resources: Map<string, *>,
-  spec: RecordOf<KernelspecProps>
-};
-
-export type Kernelspecs = RecordOf<KernelspecsProps>;
-
-export const makeKernelspecs: RecordFactory<KernelspecsProps> = Record({
   name: null,
   resources: Map(),
-  spec: makeKernelspec()
+  language: null,
+  argv: List(),
+  env: Map(),
+  interrupt_mode: null
 });
