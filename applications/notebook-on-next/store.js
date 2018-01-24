@@ -4,8 +4,7 @@ import { createEpicMiddleware, combineEpics } from "redux-observable";
 
 import { Map as ImmutableMap } from "immutable";
 
-import { document, comms, config } from "@nteract/core/reducers";
-import { emptyNotebook, fromJS } from "@nteract/commutable";
+import { app, document, comms, config } from "@nteract/core/reducers";
 
 import type { AppState } from "@nteract/types/core/records";
 
@@ -17,8 +16,27 @@ import {
   CommsRecord
 } from "@nteract/types/core/records";
 
+import {
+  executeCellEpic,
+  updateDisplayEpic,
+  commListenEpic,
+  launchWebSocketKernelEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic
+} from "@nteract/core/epics";
+
+// TODO: Bring desktop's wrapEpic over to @nteract/core so we can use it here
+const epics = [
+  executeCellEpic,
+  updateDisplayEpic,
+  commListenEpic,
+  launchWebSocketKernelEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic
+];
+
 const rootReducer = combineReducers({
-  app: (state = {}) => state,
+  app,
   document,
   comms,
   config
@@ -39,7 +57,7 @@ const composeEnhancers =
   compose;
 
 export default function configureStore() {
-  const rootEpic = combineEpics(...[]);
+  const rootEpic = combineEpics(...epics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
