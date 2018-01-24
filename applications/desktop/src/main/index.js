@@ -43,7 +43,7 @@ const path = require("path");
 
 const yargs = require("yargs/yargs");
 const argv = yargs()
-  .version(() => require("./../../package.json").version)
+  .version((() => require("./../../package.json").version)())
   .usage("Usage: nteract <notebooks> [options]")
   .example("nteract notebook1.ipynb notebook2.ipynb", "Open notebooks")
   .example("nteract --kernel javascript", "Launch a kernel")
