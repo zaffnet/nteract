@@ -48,11 +48,25 @@ export default class Edit extends React.Component<*> {
   static async getInitialProps(context: Object) {
     const query = context.query;
     const isServer = context.isServer;
-    const serverNotebook = await fetchFromGist(query.gistid);
-    if (!serverNotebook) return {};
+
+    let serverNotebook;
+    if (query.gistid) {
+      serverNotebook = await fetchFromGist(query.gistid);
+    }
+
+    if (!serverNotebook) {
+      // TODO: make this a notebook with one cell
+      serverNotebook = toJS(emptyNotebook);
+    }
+
     store.dispatch({
+      // TODO: This action _will_ set off a kernel kick off with our current
+      //       setup so as we start activating servers and kernels we'll want
+      //       to change how we do "SET_NOTEBOOK"
       type: "SET_NOTEBOOK",
-      notebook: serverNotebook ? fromJS(serverNotebook) : null
+      // TODO: We still need to adapt this action to use a raw json notebook
+      //       object
+      notebook: fromJS(serverNotebook)
     });
     return { serverNotebook, isServer };
   }
