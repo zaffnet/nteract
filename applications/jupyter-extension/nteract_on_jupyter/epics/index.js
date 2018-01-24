@@ -7,7 +7,9 @@ import {
   executeCellEpic,
   updateDisplayEpic,
   commListenEpic,
-  launchWebSocketKernelEpic
+  launchWebSocketKernelEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic
 } from "@nteract/core/epics";
 
 // TODO: Bring desktop's wrapEpic over to @nteract/core so we can use it here
@@ -18,7 +20,9 @@ const epics = [
   launchWebSocketKernelEpic,
   loadEpic,
   listKernelSpecsEpic,
-  setNotebookEpic
+  setNotebookEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic
 ];
 
 export default epics;
