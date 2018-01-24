@@ -1,6 +1,5 @@
 // @flow
 import { loadEpic } from "./contents";
-import { listKernelSpecsEpic } from "./kernelspecs";
 import { setNotebookEpic } from "./notebook";
 import { fetchKernelspecsEpic } from "@nteract/core/epics";
 
@@ -21,7 +20,6 @@ const epics = [
   commListenEpic,
   launchWebSocketKernelEpic,
   loadEpic,
-  listKernelSpecsEpic,
   setNotebookEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic
