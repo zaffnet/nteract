@@ -1,8 +1,11 @@
+// @flow
 import type { RecordFactory, RecordOf } from "immutable";
-import type { Ref } from "./ref";
 import { List, Map, Record } from "immutable";
+import { v4 as uuid } from "uuid";
 
-export opaque type KernelspecsRef = Ref;
+export opaque type KernelspecsRef = string;
+
+export const createKernelspecsRef = (): KernelspecsRef => uuid();
 
 type CommunicationKernelspecsProps = {
   loading: boolean,
@@ -21,7 +24,7 @@ export const makeCommunicationKernelspecs: RecordFactory<
 type KernelspecProps = {
   language: ?string,
   argv: List<string>,
-  env: Map
+  env: Map<string, *>
 };
 
 export type Kernelspec = RecordOf<KernelspecProps>;
@@ -34,7 +37,7 @@ export const makeKernelspec: RecordFactory<KernelspecProps> = Record({
 
 type KernelspecsProps = {
   name: ?string,
-  resources: Map,
+  resources: Map<string, *>,
   spec: RecordOf<KernelspecProps>
 };
 

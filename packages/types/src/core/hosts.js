@@ -1,14 +1,10 @@
 // @flow
 import type { ChildProcess } from "child_process";
-import type { Id } from "./id";
+import type { Id } from "./ids";
 import type { RecordFactory, RecordOf } from "immutable";
-import type { Ref } from "./ref";
-import type { KernelspecsRef } from "./kernelspecs";
+import type { HostRef, KernelRef, KernelspecsRef } from "./refs";
 
 import { Record, List } from "immutable";
-
-export opaque type KernelRef = Ref;
-export opaque type HostRef = Ref;
 
 export type BaseHostProps = {
   id: ?Id,
