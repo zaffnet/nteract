@@ -1,6 +1,6 @@
 {
   "name": "@nteract/core",
-  "version": "1.0.7",
+  "version": "2.0.0",
   "description": "core modules and components for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -15,14 +15,14 @@
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
   "dependencies": {
-    "@nteract/commutable": "^3.0.4",
-    "@nteract/display-area": "^3.1.8",
+    "@nteract/commutable": "^3.1.0",
+    "@nteract/display-area": "^3.1.9",
     "@nteract/dropdown-menu": "^0.0.6",
-    "@nteract/editor": "^5.0.7",
-    "@nteract/octicons": "^0.0.6",
-    "@nteract/messaging": "^3.0.5",
-    "@nteract/transforms": "^3.1.5",
-    "@nteract/types": "^1.0.4",
+    "@nteract/editor": "^6.0.0",
+    "@nteract/messaging": "^3.0.6",
+    "@nteract/octicons": "^0.1.0",
+    "@nteract/transforms": "^3.2.0",
+    "@nteract/types": "^1.1.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "date-fns": "^1.29.0",
@@ -35,9 +35,9 @@
     "react-syntax-highlighter": "^6.0.0",
     "redux": "^3.7.2",
     "redux-immutable": "^4.0.0",
-    "rxjs": "^5.5.6",
     "rx-binder": "^1.0.9",
-    "rx-jupyter": "^2.3.4",
+    "rx-jupyter": "^2.3.5",
+    "rxjs": "^5.5.6",
     "uuid": "^3.1.0"
   },
   "peerDependencies": {

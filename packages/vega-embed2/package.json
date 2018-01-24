@@ -1,6 +1,6 @@
 {
   "name": "@nteract/vega-embed2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Direct vega2 and vega-lite 1 embed",
   "main": "lib/",
   "nteractDesktop": "src/index.js",

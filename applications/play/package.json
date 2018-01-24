@@ -1,6 +1,6 @@
 {
   "name": "@nteract/play",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "a playground for execution",
   "main": "index.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/play",
@@ -15,10 +15,10 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/core": "^1.0.7",
-    "@nteract/display-area": "^3.1.8",
-    "@nteract/editor": "^5.0.7",
-    "@nteract/messaging": "^3.0.5",
+    "@nteract/core": "^2.0.0",
+    "@nteract/display-area": "^3.1.9",
+    "@nteract/editor": "^6.0.0",
+    "@nteract/messaging": "^3.0.6",
     "deepmerge": "^2.0.1",
     "lodash": "^4.17.4",
     "next": "^4.2.1",
@@ -30,7 +30,7 @@
     "redux": "^3.7.2",
     "redux-observable": "^0.17.0",
     "rx-binder": "^1.0.9",
-    "rx-jupyter": "^2.3.4",
+    "rx-jupyter": "^2.3.5",
     "rxjs": "^5.5.6",
     "uuid": "^3.1.0"
   }
