@@ -16,7 +16,23 @@ export function launchKernelSuccessful(
   state: AppRecord,
   action: NewKernelAction
 ) {
-  const kernel = makeRemoteKernelRecord(action.kernel);
+  if (!action.kernel || !action.kernel.type) {
+    // unset on lack of kernel
+    return state.set("kernel", null);
+  }
+
+  let kernel;
+
+  // We create a record based on the kernel type
+  switch (action.kernel.type) {
+    case "websocket":
+      kernel = makeRemoteKernelRecord(action.kernel);
+      break;
+    case "zeromq":
+      kernel = makeLocalKernelRecord(action.kernel);
+    default:
+      kernel = null;
+  }
 
   // TODO: implement cleanup kernel within an epic
   //       our old practice was to do the cleanup in the reducer which is an
