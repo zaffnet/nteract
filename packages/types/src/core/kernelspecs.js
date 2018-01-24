@@ -1,11 +1,6 @@
 // @flow
 import type { RecordFactory, RecordOf } from "immutable";
 import { List, Map, Record } from "immutable";
-import { v4 as uuid } from "uuid";
-
-export opaque type KernelspecsRef = string;
-
-export const createKernelspecsRef = (): KernelspecsRef => uuid();
 
 type CommunicationKernelspecsProps = {
   loading: boolean,
