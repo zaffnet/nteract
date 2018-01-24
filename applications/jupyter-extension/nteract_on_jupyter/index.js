@@ -12,6 +12,8 @@ import type { JupyterConfigData } from "./store";
 
 import { NotebookApp } from "@nteract/core/providers";
 
+import { fetchKernelspecs } from "@nteract/core/actions";
+
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
   window.store = store;
@@ -19,8 +21,14 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
+    // TODO: the kernelspecsRef is hard-coded to be 'single-server' in this
+    // application because we only anticipate _one_ set of possible kernelspecs.
+    // However, since `/core` assumes that a generic notebook application may
+    // be able to connect to multiple servers and thus have many kernelspecs,
+    // it needs a ref to complete the action.
     componentDidMount(): void {
       store.dispatch({ type: "LOAD", path: jupyterConfigData.contentsPath });
+      store.dispatch(fetchKernelspecs({ kernelspecsRef: "single-server" }));
     }
 
     render(): React$Element<any> {

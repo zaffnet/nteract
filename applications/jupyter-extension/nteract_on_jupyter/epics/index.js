@@ -1,7 +1,7 @@
 // @flow
 import { loadEpic } from "./contents";
-import { listKernelSpecsEpic } from "./kernelspecs";
 import { setNotebookEpic } from "./notebook";
+import { fetchKernelspecsEpic } from "@nteract/core/epics";
 
 import {
   executeCellEpic,
@@ -14,12 +14,12 @@ import {
 
 // TODO: Bring desktop's wrapEpic over to @nteract/core so we can use it here
 const epics = [
+  fetchKernelspecsEpic,
   executeCellEpic,
   updateDisplayEpic,
   commListenEpic,
   launchWebSocketKernelEpic,
   loadEpic,
-  listKernelSpecsEpic,
   setNotebookEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic

@@ -4,6 +4,10 @@ import * as actionTypes from "./actionTypes";
 import type { Notebook } from "@nteract/commutable";
 
 import type { JSONObject } from "@nteract/types/commutable";
+import type {
+  KernelspecsRef,
+  KernelspecProps
+} from "@nteract/types/core/records";
 
 import type {
   LanguageInfoMetadata,
@@ -28,6 +32,9 @@ import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import type {
   ExecuteCellAction,
   ExecuteFocusedCellAction,
+  FetchKernelspecs,
+  FetchKernelspecsFulfilled,
+  FetchKernelspecsFailed,
   PasteCellAction,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
@@ -81,6 +88,30 @@ import type {
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
+
+export const fetchKernelspecs = (payload: {
+  kernelspecsRef: KernelspecsRef
+}): FetchKernelspecs => ({
+  type: actionTypes.FETCH_KERNELSPECS,
+  payload
+});
+
+export const fetchKernelspecsFulfilled = (payload: {
+  kernelspecsRef: KernelspecsRef,
+  defaultKernelName: string,
+  kernelspecs: { [string]: KernelspecProps }
+}): FetchKernelspecsFulfilled => ({
+  type: actionTypes.FETCH_KERNELSPECS_FULFILLED,
+  payload
+});
+
+export const fetchKernelspecsFailed = (payload: {
+  kernelspecsRef: KernelspecsRef,
+  error: Object
+}): FetchKernelspecsFailed => ({
+  type: actionTypes.FETCH_KERNELSPECS_FAILED,
+  payload
+});
 
 export function launchKernelSuccessful(
   kernel: LocalKernelProps | RemoteKernelProps

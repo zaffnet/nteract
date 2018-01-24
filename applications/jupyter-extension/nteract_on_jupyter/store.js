@@ -6,7 +6,13 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import { document, comms, config, app } from "@nteract/core/reducers";
+import {
+  document,
+  comms,
+  config,
+  app,
+  entitiesKernelspecsByRef
+} from "@nteract/core/reducers";
 
 import {
   makeAppRecord,
@@ -39,7 +45,10 @@ const rootReducer = combineReducers({
   app,
   document,
   comms,
-  config
+  config,
+  entities: combineReducers({
+    kernelspecsByRef: entitiesKernelspecsByRef
+  })
 });
 
 export default function configureStore({
