@@ -28,13 +28,7 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/actionTypes";
 
-import type {
-  LanguageInfoMetadata,
-  KernelInfo,
-  LocalKernelProps
-} from "@nteract/types/core/records";
-
-import type { Channels } from "@nteract/types/channels";
+import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -55,30 +49,6 @@ import {
   KERNEL_RAW_STDOUT,
   KERNEL_RAW_STDERR
 } from "@nteract/core/actionTypes";
-
-/**
- * Send a kernel_info_request to the kernel.
- *
- * @param  {Object}  channels  A object containing the kernel channels
- * @returns  {Observable}  The reply from the server
- */
-export function acquireKernelInfo(channels: Channels) {
-  const message = createMessage("kernel_info_request");
-
-  const obs = channels.pipe(
-    childOf(message),
-    ofMessageType("kernel_info_reply"),
-    first(),
-    pluck("content", "language_info"),
-    map(setLanguageInfo)
-  );
-
-  return Observable.create(observer => {
-    const subscription = obs.subscribe(observer);
-    channels.next(message);
-    return subscription;
-  });
-}
 
 /**
  * Instantiate a connection to a new kernel.
@@ -138,21 +108,6 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 }
 
 /**
- * Sets the execution state after a kernel has been launched.
- *
- * @oaram  {ActionObservable}  action$ ActionObservable for LAUNCH_KERNEL_SUCCESSFUL action
- */
-export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
-  action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap((action: NewKernelAction) =>
-      action.kernel.channels.pipe(
-        filter(msg => msg.header.msg_type === "status"),
-        map(msg => setExecutionState(msg.content.execution_state))
-      )
-    )
-  );
-/**
  * Get kernel specs from main process
  *
  * @returns  {Observable}  The reply from main process
@@ -164,17 +119,6 @@ export const kernelSpecsObservable = Observable.create(observer => {
   });
   ipc.send("kernel_specs_request");
 });
-
-/**
- * Gets information about newly launched kernel.
- *
- * @param  {ActionObservable}  The action type
- */
-export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
-  action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(action => acquireKernelInfo(action.kernel.channels))
-  );
 
 export const launchKernelByNameEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(

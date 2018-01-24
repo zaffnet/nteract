@@ -6,12 +6,12 @@ import { loadEpic, newNotebookEpic } from "./loading";
 
 import type { ActionsObservable, Epic } from "redux-observable";
 
+import { launchKernelEpic, launchKernelByNameEpic } from "./kernel-launch";
+
 import {
-  launchKernelEpic,
   acquireKernelInfoEpic,
-  watchExecutionStateEpic,
-  launchKernelByNameEpic
-} from "./kernel-launch";
+  watchExecutionStateEpic
+} from "@nteract/core/epics";
 
 import {
   executeCellEpic,
