@@ -14,6 +14,8 @@ import { NotebookApp } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
+import { NotebookMenu } from "@nteract/core/components";
+
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
   window.store = store;
@@ -35,6 +37,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
       return (
         <Provider store={store}>
           <div>
+            <NotebookMenu />
             <NotebookApp />
             <NotificationSystem
               ref={notificationSystem => {

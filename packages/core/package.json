@@ -29,6 +29,7 @@
     "escape-carriage": "^1.2.0",
     "mathjax-electron": "^2.0.1",
     "prop-types": "^15.5.10",
+    "rc-menu": "6.2.6",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
     "react-redux": "^5.0.6",
