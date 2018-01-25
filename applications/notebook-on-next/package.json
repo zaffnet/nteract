@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-on-next",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A notebook on next.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/notebook-on-next",
   "scripts": {
@@ -15,7 +15,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@nteract/commutable": "^3.1.1",
-    "@nteract/core": "^2.1.0",
+    "@nteract/core": "^2.1.1",
     "@nteract/types": "^1.2.0",
     "isomorphic-fetch": "^2.2.1",
     "next": "^4.2.1",
