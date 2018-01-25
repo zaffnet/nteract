@@ -5,7 +5,8 @@ export { launchWebSocketKernelEpic } from "./websocket-kernel";
 
 export {
   acquireKernelInfoEpic,
-  watchExecutionStateEpic
+  watchExecutionStateEpic,
+  launchKernelWhenNotebookSetEpic
 } from "./kernel-lifecycle";
 
 export { fetchKernelspecsEpic } from "./kernelspecs";
