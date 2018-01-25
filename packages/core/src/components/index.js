@@ -4,6 +4,8 @@ import * as React from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import syntax from "../themes/syntax-highlighting";
 
+export { default as NotebookMenu } from "./notebook-menu";
+
 export type PagersProps = {
   children: React.Node,
   hidden: boolean
