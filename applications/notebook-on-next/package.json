@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-on-next",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A notebook on next.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/notebook-on-next",
   "scripts": {
@@ -14,9 +14,9 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@nteract/commutable": "^3.1.0",
-    "@nteract/core": "^2.0.0",
-    "@nteract/types": "^1.1.0",
+    "@nteract/commutable": "^3.1.1",
+    "@nteract/core": "^2.1.0",
+    "@nteract/types": "^1.2.0",
     "isomorphic-fetch": "^2.2.1",
     "next": "^4.2.1",
     "next-routes": "^1.2.0",

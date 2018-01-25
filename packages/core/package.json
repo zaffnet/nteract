@@ -1,6 +1,6 @@
 {
   "name": "@nteract/core",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "core modules and components for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -15,14 +15,14 @@
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
   "dependencies": {
-    "@nteract/commutable": "^3.1.0",
+    "@nteract/commutable": "^3.1.1",
     "@nteract/display-area": "^3.1.9",
     "@nteract/dropdown-menu": "^0.0.6",
-    "@nteract/editor": "^6.0.0",
-    "@nteract/messaging": "^3.0.6",
+    "@nteract/editor": "^6.0.1",
+    "@nteract/messaging": "^3.0.7",
     "@nteract/octicons": "^0.1.0",
     "@nteract/transforms": "^3.2.0",
-    "@nteract/types": "^1.1.0",
+    "@nteract/types": "^1.2.0",
     "commonmark": "^0.28.0",
     "commonmark-react-renderer": "^4.3.3",
     "date-fns": "^1.29.0",
