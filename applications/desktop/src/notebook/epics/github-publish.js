@@ -126,9 +126,10 @@ export function publishNotebookObservable(
     });
     // Already in a gist belonging to the user, update the gist
 
-    const gistRequest = notebook.hasIn(["metadata", "gist_id"])
-      ? { files, id: notebook.getIn(["metadata", "gist_id"]), public: false }
-      : { files, public: false };
+    const gistRequest =
+      notebook.hasIn(["metadata", "gist_id"]) && publishAsUser
+        ? { files, id: notebook.getIn(["metadata", "gist_id"]), public: false }
+        : { files, public: false };
     if (gistRequest.id) {
       github.gists.edit(
         gistRequest,
