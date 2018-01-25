@@ -110,17 +110,23 @@ describe("publishNotebookObservable", () => {
       notebook,
       "./test.ipynb",
       notificationSystem,
-      false,
+      true,
       store
     );
     const edit = jest.spyOn(github.gists, "edit");
+    let types = [];
     publishNotebookObs.subscribe(
       x => {
-        expect(x.type).toBe("OVERWRITE_METADATA_FIELD");
+        types.push(x.type);
       },
       done.fail,
       () => {
         expect(edit).toHaveBeenCalled();
+        expect(types).toMatchObject([
+          "OVERWRITE_METADATA_FIELD",
+          "DELETE_METADATA_FIELD",
+          "OVERWRITE_METADATA_FIELD"
+        ]);
         done();
       }
     );
