@@ -5,7 +5,7 @@ import { localCss } from "./styles";
 import { connect } from "react-redux";
 import * as Immutable from "immutable";
 import * as actions from "../../actions";
-import { ACTIONS, MENUS } from "./constants";
+import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 
 // To allow actions that can take dynamic arguments (like selecting a kernel
 // based on the host's kernelspecs), we have some simple utility functions to
@@ -71,45 +71,45 @@ class PureNotebookMenu extends React.Component<Props> {
   handleClick = ({ key }: { key: string }) => {
     const [action, ...args] = parseActionKey(key);
     switch (action) {
-      case ACTIONS.COPY_CELL:
+      case MENU_ITEM_ACTIONS.COPY_CELL:
         if (this.props.copyCell) {
           this.props.copyCell(this.props.cellFocused);
         }
         break;
-      case ACTIONS.CUT_CELL:
+      case MENU_ITEM_ACTIONS.CUT_CELL:
         if (this.props.cutCell) {
           this.props.cutCell(this.props.cellFocused);
         }
         break;
-      case ACTIONS.PASTE_CELL:
+      case MENU_ITEM_ACTIONS.PASTE_CELL:
         if (this.props.pasteCell) {
           this.props.pasteCell();
         }
         break;
-      case ACTIONS.CREATE_CODE_CELL:
+      case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
         if (this.props.createCodeCell) {
           this.props.createCodeCell(this.props.cellFocused);
         }
         break;
-      case ACTIONS.CREATE_MARKDOWN_CELL:
+      case MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL:
         if (this.props.createMarkdownCell) {
           this.props.createMarkdownCell(this.props.cellFocused);
         }
         break;
-      case ACTIONS.SET_CELL_TYPE_CODE:
+      case MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE:
         if (this.props.setCellTypeCode) {
           this.props.setCellTypeCode(this.props.cellFocused);
         }
         break;
-      case ACTIONS.SET_CELL_TYPE_MARKDOWN:
+      case MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN:
         if (this.props.setCellTypeMarkdown) {
           this.props.setCellTypeMarkdown(this.props.cellFocused);
         }
         break;
-      case ACTIONS.EXECUTE_ALL_CELLS:
+      case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS:
         this.executeAllCells();
         break;
-      case ACTIONS.EXECUTE_ALL_CELLS_BELOW:
+      case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW:
         this.executeAllCellsBelow();
         break;
       default:
@@ -127,38 +127,50 @@ class PureNotebookMenu extends React.Component<Props> {
           selectable={false}
         >
           <SubMenu key={MENUS.EDIT} title="Edit">
-            <MenuItem key={createActionKey(ACTIONS.CUT_CELL)}>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.CUT_CELL)}>
               Cut Cell
             </MenuItem>
-            <MenuItem key={createActionKey(ACTIONS.COPY_CELL)}>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.COPY_CELL)}>
               Copy Cell
             </MenuItem>
-            <MenuItem key={createActionKey(ACTIONS.PASTE_CELL)}>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.PASTE_CELL)}>
               Paste Cell Below
             </MenuItem>
             <Divider />
             <SubMenu key={MENUS.EDIT_SET_CELL_TYPE} title="Cell Type">
-              <MenuItem key={createActionKey(ACTIONS.SET_CELL_TYPE_CODE)}>
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE)}
+              >
                 Code
               </MenuItem>
-              <MenuItem key={createActionKey(ACTIONS.SET_CELL_TYPE_MARKDOWN)}>
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN)}
+              >
                 Markdown
               </MenuItem>
             </SubMenu>
           </SubMenu>
           <SubMenu key={MENUS.CELL} title="Cell">
-            <MenuItem key={createActionKey(ACTIONS.EXECUTE_ALL_CELLS)}>
+            <MenuItem
+              key={createActionKey(MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS)}
+            >
               Run All Cells
             </MenuItem>
-            <MenuItem key={createActionKey(ACTIONS.EXECUTE_ALL_CELLS_BELOW)}>
+            <MenuItem
+              key={createActionKey(MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW)}
+            >
               Run All Cells Below
             </MenuItem>
             <Divider />
             <SubMenu key={MENUS.CELL_CREATE_CELL} title="New Cell">
-              <MenuItem key={createActionKey(ACTIONS.CREATE_CODE_CELL)}>
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.CREATE_CODE_CELL)}
+              >
                 Code
               </MenuItem>
-              <MenuItem key={createActionKey(ACTIONS.CREATE_MARKDOWN_CELL)}>
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL)}
+              >
                 Markdown
               </MenuItem>
             </SubMenu>

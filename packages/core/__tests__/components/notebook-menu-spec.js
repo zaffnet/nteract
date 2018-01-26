@@ -6,7 +6,10 @@ import * as Immutable from "immutable";
 import { shallow, mount } from "enzyme";
 
 import { PureNotebookMenu } from "../../src/components/notebook-menu";
-import { ACTIONS, MENUS } from "../../src/components/notebook-menu/constants";
+import {
+  MENU_ITEM_ACTIONS,
+  MENUS
+} from "../../src/components/notebook-menu/constants";
 
 describe("PureNotebookMenu ", () => {
   describe("snapshots", () => {
@@ -56,7 +59,7 @@ describe("PureNotebookMenu ", () => {
 
       // Test that we call executeAllCells
       const executeAllCellsItem = wrapper
-        .find({ eventKey: ACTIONS.EXECUTE_ALL_CELLS })
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS })
         .first();
       expect(props.executeCell).not.toHaveBeenCalled();
       executeAllCellsItem.simulate("click");
@@ -67,7 +70,7 @@ describe("PureNotebookMenu ", () => {
       props.executeCell.mockClear();
 
       const executeAllCellsBelowItem = wrapper
-        .find({ eventKey: ACTIONS.EXECUTE_ALL_CELLS_BELOW })
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
         .first();
       expect(props.executeCell).not.toHaveBeenCalled();
       executeAllCellsBelowItem.simulate("click");
@@ -76,48 +79,50 @@ describe("PureNotebookMenu ", () => {
       expect(props.executeCell).toHaveBeenCalledWith("d");
       props.executeCell.mockClear();
 
-      const cutCellItem = wrapper.find({ eventKey: ACTIONS.CUT_CELL }).first();
+      const cutCellItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.CUT_CELL })
+        .first();
       expect(props.cutCell).not.toHaveBeenCalled();
       cutCellItem.simulate("click");
       expect(props.cutCell).toHaveBeenCalled();
 
       const copyCellItem = wrapper
-        .find({ eventKey: ACTIONS.COPY_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.COPY_CELL })
         .first();
       expect(props.copyCell).not.toHaveBeenCalled();
       copyCellItem.simulate("click");
       expect(props.copyCell).toHaveBeenCalled();
 
       const pasteCellItem = wrapper
-        .find({ eventKey: ACTIONS.PASTE_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.PASTE_CELL })
         .first();
       expect(props.pasteCell).not.toHaveBeenCalled();
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalled();
 
       const createMarkdownCellItem = wrapper
-        .find({ eventKey: ACTIONS.CREATE_MARKDOWN_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })
         .first();
       expect(props.createMarkdownCell).not.toHaveBeenCalled();
       createMarkdownCellItem.simulate("click");
       expect(props.createMarkdownCell).toHaveBeenCalled();
 
       const createCodeCellItem = wrapper
-        .find({ eventKey: ACTIONS.CREATE_CODE_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_CODE_CELL })
         .first();
       expect(props.createCodeCell).not.toHaveBeenCalled();
       createCodeCellItem.simulate("click");
       expect(props.createCodeCell).toHaveBeenCalled();
 
       const setCellTypeCodeItem = wrapper
-        .find({ eventKey: ACTIONS.SET_CELL_TYPE_CODE })
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE })
         .first();
       expect(props.setCellTypeCode).not.toHaveBeenCalled();
       setCellTypeCodeItem.simulate("click");
       expect(props.setCellTypeCode).toHaveBeenCalled();
 
       const setCellTypeMarkdownItem = wrapper
-        .find({ eventKey: ACTIONS.SET_CELL_TYPE_MARKDOWN })
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN })
         .first();
       expect(props.setCellTypeMarkdown).not.toHaveBeenCalled();
       setCellTypeMarkdownItem.simulate("click");
