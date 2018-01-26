@@ -2,7 +2,7 @@
 
 // These actions map to a case in a switch handler. They are meant to cause a
 // unique action from the menu.
-export const ACTIONS = {
+export const MENU_ITEM_ACTIONS = {
   EXECUTE_ALL_CELLS: "execute-all-cells",
   EXECUTE_ALL_CELLS_BELOW: "execute-all-cells-below",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",

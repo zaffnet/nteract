@@ -1,12 +1,16 @@
 // @flow
+jest.mock("../../src/components/notebook-menu/extra-handlers");
+
 import React from "react";
 import renderer from "react-test-renderer";
 import * as Immutable from "immutable";
-
+import * as extraHandlers from "../../src/components/notebook-menu/extra-handlers";
 import { shallow, mount } from "enzyme";
-
 import { PureNotebookMenu } from "../../src/components/notebook-menu";
-import { ACTIONS, MENUS } from "../../src/components/notebook-menu/constants";
+import {
+  MENU_ITEM_ACTIONS,
+  MENUS
+} from "../../src/components/notebook-menu/constants";
 
 describe("PureNotebookMenu ", () => {
   describe("snapshots", () => {
@@ -39,15 +43,11 @@ describe("PureNotebookMenu ", () => {
         setCellTypeCode: jest.fn(),
         setCellTypeMarkdown: jest.fn(),
 
-        // document state
-        cellFocused: "b",
-        cellMap: Immutable.Map({
-          a: Immutable.Map({ cell_type: "code" }),
-          b: Immutable.Map({ cell_type: "code" }),
-          c: Immutable.Map({ cell_type: "markdown" }),
-          d: Immutable.Map({ cell_type: "code" })
-        }),
-        cellOrder: Immutable.List(["a", "b", "c", "d"]),
+        // document state (we mock out the implementation, so these are just
+        // dummy variables.
+        cellFocused: "fake",
+        cellMap: Immutable.Map(),
+        cellOrder: Immutable.List(),
 
         // menu props, note that we force all menus to be open to click.
         defaultOpenKeys: Object.values(MENUS)
@@ -56,72 +56,85 @@ describe("PureNotebookMenu ", () => {
 
       // Test that we call executeAllCells
       const executeAllCellsItem = wrapper
-        .find({ eventKey: ACTIONS.EXECUTE_ALL_CELLS })
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS })
         .first();
-      expect(props.executeCell).not.toHaveBeenCalled();
+      expect(extraHandlers.executeAllCells).not.toHaveBeenCalled();
       executeAllCellsItem.simulate("click");
-      expect(props.executeCell).toHaveBeenCalledTimes(3);
-      expect(props.executeCell).toHaveBeenCalledWith("a");
-      expect(props.executeCell).toHaveBeenCalledWith("b");
-      expect(props.executeCell).toHaveBeenCalledWith("d");
-      props.executeCell.mockClear();
+      expect(extraHandlers.executeAllCells).toHaveBeenCalledTimes(1);
+      expect(extraHandlers.executeAllCells).toHaveBeenCalledWith(
+        props.executeCell,
+        props.cellMap,
+        props.cellOrder
+      );
 
       const executeAllCellsBelowItem = wrapper
-        .find({ eventKey: ACTIONS.EXECUTE_ALL_CELLS_BELOW })
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
         .first();
-      expect(props.executeCell).not.toHaveBeenCalled();
+      expect(extraHandlers.executeAllCellsBelow).not.toHaveBeenCalled();
       executeAllCellsBelowItem.simulate("click");
-      expect(props.executeCell).toHaveBeenCalledTimes(2);
-      expect(props.executeCell).toHaveBeenCalledWith("b");
-      expect(props.executeCell).toHaveBeenCalledWith("d");
-      props.executeCell.mockClear();
+      expect(extraHandlers.executeAllCells).toHaveBeenCalledTimes(1);
+      expect(extraHandlers.executeAllCellsBelow).toHaveBeenCalledWith(
+        props.executeCell,
+        props.cellMap,
+        props.cellOrder,
+        props.cellFocused
+      );
 
-      const cutCellItem = wrapper.find({ eventKey: ACTIONS.CUT_CELL }).first();
+      const cutCellItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.CUT_CELL })
+        .first();
       expect(props.cutCell).not.toHaveBeenCalled();
       cutCellItem.simulate("click");
-      expect(props.cutCell).toHaveBeenCalled();
+      expect(props.cutCell).toHaveBeenCalledTimes(1);
+      expect(props.cutCell).toHaveBeenCalledWith(props.cellFocused);
 
       const copyCellItem = wrapper
-        .find({ eventKey: ACTIONS.COPY_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.COPY_CELL })
         .first();
       expect(props.copyCell).not.toHaveBeenCalled();
       copyCellItem.simulate("click");
-      expect(props.copyCell).toHaveBeenCalled();
+      expect(props.copyCell).toHaveBeenCalledTimes(1);
+      expect(props.copyCell).toHaveBeenCalledWith(props.cellFocused);
 
       const pasteCellItem = wrapper
-        .find({ eventKey: ACTIONS.PASTE_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.PASTE_CELL })
         .first();
       expect(props.pasteCell).not.toHaveBeenCalled();
       pasteCellItem.simulate("click");
-      expect(props.pasteCell).toHaveBeenCalled();
+      expect(props.pasteCell).toHaveBeenCalledTimes(1);
+      expect(props.pasteCell).toHaveBeenCalledWith();
 
       const createMarkdownCellItem = wrapper
-        .find({ eventKey: ACTIONS.CREATE_MARKDOWN_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })
         .first();
       expect(props.createMarkdownCell).not.toHaveBeenCalled();
       createMarkdownCellItem.simulate("click");
-      expect(props.createMarkdownCell).toHaveBeenCalled();
+      expect(props.createMarkdownCell).toHaveBeenCalledTimes(1);
+      expect(props.createMarkdownCell).toHaveBeenCalledWith(props.cellFocused);
 
       const createCodeCellItem = wrapper
-        .find({ eventKey: ACTIONS.CREATE_CODE_CELL })
+        .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_CODE_CELL })
         .first();
       expect(props.createCodeCell).not.toHaveBeenCalled();
       createCodeCellItem.simulate("click");
-      expect(props.createCodeCell).toHaveBeenCalled();
+      expect(props.createCodeCell).toHaveBeenCalledTimes(1);
+      expect(props.createCodeCell).toHaveBeenCalledWith(props.cellFocused);
 
       const setCellTypeCodeItem = wrapper
-        .find({ eventKey: ACTIONS.SET_CELL_TYPE_CODE })
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE })
         .first();
       expect(props.setCellTypeCode).not.toHaveBeenCalled();
       setCellTypeCodeItem.simulate("click");
-      expect(props.setCellTypeCode).toHaveBeenCalled();
+      expect(props.setCellTypeCode).toHaveBeenCalledTimes(1);
+      expect(props.setCellTypeCode).toHaveBeenCalledWith(props.cellFocused);
 
       const setCellTypeMarkdownItem = wrapper
-        .find({ eventKey: ACTIONS.SET_CELL_TYPE_MARKDOWN })
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN })
         .first();
       expect(props.setCellTypeMarkdown).not.toHaveBeenCalled();
       setCellTypeMarkdownItem.simulate("click");
-      expect(props.setCellTypeMarkdown).toHaveBeenCalled();
+      expect(props.setCellTypeMarkdown).toHaveBeenCalledTimes(1);
+      expect(props.setCellTypeMarkdown).toHaveBeenCalledWith(props.cellFocused);
     });
   });
 });
