@@ -40,6 +40,7 @@ describe("PureNotebookMenu ", () => {
         pasteCell: jest.fn(),
         createCodeCell: jest.fn(),
         createMarkdownCell: jest.fn(),
+        mergeCellAfter: jest.fn(),
         setCellTypeCode: jest.fn(),
         setCellTypeMarkdown: jest.fn(),
 
@@ -116,6 +117,14 @@ describe("PureNotebookMenu ", () => {
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalledTimes(1);
       expect(props.pasteCell).toHaveBeenCalledWith();
+
+      const mergeCellAfterItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.MERGE_CELL_AFTER })
+        .first();
+      expect(props.mergeCellAfter).not.toHaveBeenCalled();
+      mergeCellAfterItem.simulate("click");
+      expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
+      expect(props.mergeCellAfter).toHaveBeenCalledWith(props.cellFocused);
 
       const createMarkdownCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })

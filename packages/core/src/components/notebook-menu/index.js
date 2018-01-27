@@ -23,6 +23,7 @@ type Props = {
   executeCell: ?(cellId: ?string) => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
+  mergeCellAfter: ?(cellId: ?string) => void,
   filename: ?string,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?() => void,
@@ -40,6 +41,7 @@ class PureNotebookMenu extends React.Component<Props> {
     executeCell: null,
     cutCell: null,
     copyCell: null,
+    mergeCellAfter: null,
     notebook: null,
     pasteCell: null,
     createCodeCell: null,
@@ -58,6 +60,7 @@ class PureNotebookMenu extends React.Component<Props> {
       cutCell,
       executeCell,
       filename,
+      mergeCellAfter,
       notebook,
       pasteCell,
       setCellTypeCode,
@@ -85,6 +88,11 @@ class PureNotebookMenu extends React.Component<Props> {
       case MENU_ITEM_ACTIONS.PASTE_CELL:
         if (pasteCell) {
           pasteCell();
+        }
+        break;
+      case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
+        if (mergeCellAfter) {
+          mergeCellAfter(cellFocused);
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
@@ -148,6 +156,9 @@ class PureNotebookMenu extends React.Component<Props> {
             </MenuItem>
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.PASTE_CELL)}>
               Paste Cell Below
+            </MenuItem>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.MERGE_CELL_AFTER)}>
+              Merge With Cell Below
             </MenuItem>
             <Divider />
             <SubMenu key={MENUS.EDIT_SET_CELL_TYPE} title="Cell Type">
@@ -221,6 +232,7 @@ const mapDispatchToProps = dispatch => ({
   cutCell: cellId => dispatch(actions.cutCell(cellId)),
   copyCell: cellId => dispatch(actions.copyCell(cellId)),
   pasteCell: () => dispatch(actions.pasteCell()),
+  mergeCellAfter: cellId => dispatch(actions.mergeCellAfter(cellId)),
   createCodeCell: cellId => dispatch(actions.createCellAfter("code", cellId)),
   createMarkdownCell: cellId =>
     dispatch(actions.createCellAfter("markdown", cellId)),
