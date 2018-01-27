@@ -30,7 +30,8 @@ type Props = {
   createCodeCell: ?(cellId: ?string) => void,
   createMarkdownCell: ?(cellId: ?string) => void,
   setCellTypeCode: ?(cellId: ?string) => void,
-  setCellTypeMarkdown: ?(cellId: ?string) => void
+  setCellTypeMarkdown: ?(cellId: ?string) => void,
+  setTheme: ?(theme: ?string) => void
 };
 
 class PureNotebookMenu extends React.Component<Props> {
@@ -47,7 +48,8 @@ class PureNotebookMenu extends React.Component<Props> {
     createCodeCell: null,
     createMarkdownCell: null,
     setCellTypeCode: null,
-    setCellTypeMarkdown: null
+    setCellTypeMarkdown: null,
+    setTheme: null
   };
   handleClick = ({ key }: { key: string }) => {
     const {
@@ -64,7 +66,8 @@ class PureNotebookMenu extends React.Component<Props> {
       notebook,
       pasteCell,
       setCellTypeCode,
-      setCellTypeMarkdown
+      setCellTypeMarkdown,
+      setTheme
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
@@ -125,6 +128,16 @@ class PureNotebookMenu extends React.Component<Props> {
           cellOrder,
           cellFocused
         );
+        break;
+      case MENU_ITEM_ACTIONS.SET_THEME_DARK:
+        if (setTheme) {
+          setTheme("dark");
+        }
+        break;
+      case MENU_ITEM_ACTIONS.SET_THEME_LIGHT:
+        if (setTheme) {
+          setTheme("light");
+        }
         break;
       default:
         console.log(`unhandled action: ${action}`);
@@ -199,6 +212,18 @@ class PureNotebookMenu extends React.Component<Props> {
               </MenuItem>
             </SubMenu>
           </SubMenu>
+          <SubMenu key={MENUS.VIEW} title="View">
+            <SubMenu key={MENUS.VIEW_THEMES} title="themes">
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_LIGHT)}
+              >
+                light
+              </MenuItem>
+              <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_DARK)}>
+                dark
+              </MenuItem>
+            </SubMenu>
+          </SubMenu>
         </Menu>
         <style global jsx>
           {localCss}
@@ -238,7 +263,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.createCellAfter("markdown", cellId)),
   setCellTypeCode: cellId => dispatch(actions.changeCellType(cellId, "code")),
   setCellTypeMarkdown: cellId =>
-    dispatch(actions.changeCellType(cellId, "markdown"))
+    dispatch(actions.changeCellType(cellId, "markdown")),
+  setTheme: theme => dispatch(actions.setTheme(theme))
 });
 
 const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(

@@ -14,7 +14,9 @@ export const MENU_ITEM_ACTIONS = {
   COPY_CELL: "copy-cell",
   CUT_CELL: "cut-cell",
   PASTE_CELL: "paste-cell",
-  MERGE_CELL_AFTER: "merge-cell-after"
+  MERGE_CELL_AFTER: "merge-cell-after",
+  SET_THEME_DARK: "set-theme-dark",
+  SET_THEME_LIGHT: "set-theme-light"
 };
 
 // These are top-level-menu or sub-menu keys in case we need interim look-ups
@@ -25,5 +27,7 @@ export const MENUS = {
   EDIT_SET_CELL_TYPE: "cell-set-cell-type",
   INSERT: "insert",
   CELL: "cell",
-  CELL_CREATE_CELL: "cell-create-cell"
+  CELL_CREATE_CELL: "cell-create-cell",
+  VIEW: "view",
+  VIEW_THEMES: "view-themes"
 };
