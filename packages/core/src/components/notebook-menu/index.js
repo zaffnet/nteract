@@ -23,6 +23,8 @@ type Props = {
   executeCell: ?(cellId: ?string) => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
+  filename: ?string,
+  notebook: Immutable.Map<string, *>,
   pasteCell: ?() => void,
   createCodeCell: ?(cellId: ?string) => void,
   createMarkdownCell: ?(cellId: ?string) => void,
@@ -38,6 +40,7 @@ class PureNotebookMenu extends React.Component<Props> {
     executeCell: null,
     cutCell: null,
     copyCell: null,
+    notebook: null,
     pasteCell: null,
     createCodeCell: null,
     createMarkdownCell: null,
@@ -54,12 +57,21 @@ class PureNotebookMenu extends React.Component<Props> {
       createMarkdownCell,
       cutCell,
       executeCell,
+      filename,
+      notebook,
       pasteCell,
       setCellTypeCode,
       setCellTypeMarkdown
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
+      case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
+        // This gets us around a Flow fail on document.body.
+        const body = document.body;
+        if (body) {
+          extraHandlers.downloadNotebook(notebook, filename);
+        }
+        break;
       case MENU_ITEM_ACTIONS.COPY_CELL:
         if (copyCell) {
           copyCell(cellFocused);
@@ -120,6 +132,13 @@ class PureNotebookMenu extends React.Component<Props> {
           defaultOpenKeys={defaultOpenKeys}
           selectable={false}
         >
+          <SubMenu key={MENUS.FILE} title="File">
+            <MenuItem
+              key={createActionKey(MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK)}
+            >
+              Download (.ipynb)
+            </MenuItem>
+          </SubMenu>
           <SubMenu key={MENUS.EDIT} title="Edit">
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.CUT_CELL)}>
               Cut Cell
@@ -192,7 +211,9 @@ class PureNotebookMenu extends React.Component<Props> {
 const mapStateToProps = state => ({
   cellFocused: state.document.cellFocused,
   cellMap: state.document.getIn(["notebook", "cellMap"]),
-  cellOrder: state.document.getIn(["notebook", "cellOrder"])
+  cellOrder: state.document.getIn(["notebook", "cellOrder"]),
+  filename: state.document.get("filename"),
+  notebook: state.document.get("notebook")
 });
 
 const mapDispatchToProps = dispatch => ({

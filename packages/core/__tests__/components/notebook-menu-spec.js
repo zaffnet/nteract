@@ -48,6 +48,8 @@ describe("PureNotebookMenu ", () => {
         cellFocused: "fake",
         cellMap: Immutable.Map(),
         cellOrder: Immutable.List(),
+        notebook: Immutable.Map(),
+        filename: "fake.ipynb",
 
         // menu props, note that we force all menus to be open to click.
         defaultOpenKeys: Object.values(MENUS)
@@ -72,12 +74,23 @@ describe("PureNotebookMenu ", () => {
         .first();
       expect(extraHandlers.executeAllCellsBelow).not.toHaveBeenCalled();
       executeAllCellsBelowItem.simulate("click");
-      expect(extraHandlers.executeAllCells).toHaveBeenCalledTimes(1);
+      expect(extraHandlers.executeAllCellsBelow).toHaveBeenCalledTimes(1);
       expect(extraHandlers.executeAllCellsBelow).toHaveBeenCalledWith(
         props.executeCell,
         props.cellMap,
         props.cellOrder,
         props.cellFocused
+      );
+
+      const downloadNotebookItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK })
+        .first();
+      expect(extraHandlers.downloadNotebook).not.toHaveBeenCalled();
+      downloadNotebookItem.simulate("click");
+      expect(extraHandlers.downloadNotebook).toHaveBeenCalledTimes(1);
+      expect(extraHandlers.downloadNotebook).toHaveBeenCalledWith(
+        props.notebook,
+        props.filename
       );
 
       const cutCellItem = wrapper
