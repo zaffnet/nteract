@@ -504,19 +504,16 @@ export function changeFilename(filename: string): ChangeFilenameAction {
   };
 }
 
-export function save(filename: string, notebook: any) {
+export function save() {
   return {
-    type: actionTypes.SAVE,
-    filename,
-    notebook
+    type: actionTypes.SAVE
   };
 }
 
-export function saveAs(filename: string, notebook: any) {
+export function saveAs(filename: string) {
   return {
     type: actionTypes.SAVE_AS,
-    filename,
-    notebook
+    filename
   };
 }
 

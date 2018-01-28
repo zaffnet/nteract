@@ -34,9 +34,7 @@ import {
 import { defaultPathFallback, cwdKernelFallback } from "./path";
 
 export function dispatchSaveAs(store, evt, filename) {
-  const state = store.getState();
-  const notebook = state.document.get("notebook");
-  store.dispatch(saveAs(filename, notebook));
+  store.dispatch(saveAs(filename));
 }
 
 const dialog = remote.dialog;
@@ -67,9 +65,7 @@ export function triggerWindowRefresh(store, filename) {
   if (!filename) {
     return;
   }
-  const state = store.getState();
-  const notebook = state.document.get("notebook");
-  store.dispatch(saveAs(filename, notebook));
+  store.dispatch(saveAs(filename));
 }
 
 export function dispatchRestartKernel(store) {
@@ -146,12 +142,11 @@ export function triggerSaveAs(store) {
 
 export function dispatchSave(store) {
   const state = store.getState();
-  const notebook = state.document.get("notebook");
   const filename = state.document.get("filename");
   if (!filename) {
     triggerSaveAs(store);
   } else {
-    store.dispatch(save(filename, notebook));
+    store.dispatch(save());
   }
 }
 

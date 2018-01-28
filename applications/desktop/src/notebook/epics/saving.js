@@ -27,11 +27,15 @@ export function saveEpic(
 ) {
   return action$.pipe(
     ofType(SAVE),
-    tap(action => {
-      // If there isn't a filename, save-as it instead
-      if (!action.filename) {
-        throw new Error("save needs a filename");
-      }
+    map(action => {
+      const state = store.getState();
+      const notebook = state.document.get("notebook");
+      const filename = state.document.get("filename");
+
+      return {
+        notebook,
+        filename
+      };
     }),
     mergeMap(action =>
       writeFileObservable(
@@ -66,9 +70,6 @@ export function saveEpic(
         })
       )
     )
-    // .startWith({ type: START_SAVING })
-    // since SAVE effectively acts as the same as START_SAVING
-    // you could just look for that in your reducers instead of START_SAVING
   );
 }
 
@@ -77,12 +78,22 @@ export function saveEpic(
  *
  * @param  {ActionObservable}  action$ The SAVE_AS action with the filename and notebook
  */
-export function saveAsEpic(action$: ActionsObservable<*>) {
+export function saveAsEpic(
+  action$: ActionsObservable<*>,
+  store: Store<any, any>
+) {
   return action$.pipe(
     ofType(SAVE_AS),
-    mergeMap(action => [
-      changeFilename(action.filename),
-      save(action.filename, action.notebook)
-    ])
+    mergeMap(action => {
+      const state = store.getState();
+      const notebook = state.document.get("notebook");
+
+      return [
+        // order matters here, since we need the filename set in the state
+        // before we save the document
+        changeFilename(action.filename),
+        save()
+      ];
+    })
   );
 }

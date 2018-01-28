@@ -408,24 +408,19 @@ describe("toggleOutputExpansion", () => {
 
 describe("save", () => {
   test("creates a SAVE action", () => {
-    const fakeNotebook = { nbformat: "eh" };
-    expect(actions.save("foo.ipynb", fakeNotebook)).toEqual({
-      type: actionTypes.SAVE,
-      filename: "foo.ipynb",
-      notebook: fakeNotebook
+    expect(actions.save()).toEqual({
+      type: actionTypes.SAVE
     });
   });
 
   test("creates a SAVE_AS action", () => {
-    const fakeNotebook = { nbformat: "eh" };
-    expect(actions.saveAs("foo.ipynb", fakeNotebook)).toEqual({
+    expect(actions.saveAs("foo.ipynb")).toEqual({
       type: actionTypes.SAVE_AS,
-      filename: "foo.ipynb",
-      notebook: fakeNotebook
+      filename: "foo.ipynb"
     });
   });
 
-  test("creates a SAVE_AS action", () => {
+  test("creates a DONE_SAVING action", () => {
     const fakeNotebook = { nbformat: "eh" };
     expect(actions.doneSaving(fakeNotebook)).toEqual({
       type: actionTypes.DONE_SAVING,
