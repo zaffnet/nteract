@@ -11,4 +11,4 @@ export {
 
 export { fetchKernelspecsEpic } from "./kernelspecs";
 
-export { fetchContentEpic, setNotebookEpic } from "./contents";
+export { fetchContentEpic, setNotebookEpic, saveContentEpic } from "./contents";

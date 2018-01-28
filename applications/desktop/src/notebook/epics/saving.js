@@ -38,8 +38,7 @@ export function saveEpic(
           toJS(
             notebook.setIn(
               ["metadata", "nteract", "version"],
-              // TODO: set this in the state tree once on startup
-              remote.app.getVersion()
+              state.app.get("version", "0.0.0-beta")
             )
           )
         )
