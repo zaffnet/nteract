@@ -13,7 +13,8 @@ export const MENU_ITEM_ACTIONS = {
   SET_CELL_TYPE_MARKDOWN: "set-cell-type-markdown",
   COPY_CELL: "copy-cell",
   CUT_CELL: "cut-cell",
-  PASTE_CELL: "paste-cell"
+  PASTE_CELL: "paste-cell",
+  MERGE_CELL_AFTER: "merge-cell-after"
 };
 
 // These are top-level-menu or sub-menu keys in case we need interim look-ups
