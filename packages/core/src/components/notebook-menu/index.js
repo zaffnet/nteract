@@ -20,6 +20,7 @@ type Props = {
   cellFocused: ?string,
   cellMap: Immutable.Map<string, *>,
   cellOrder: Immutable.List<string>,
+  saveNotebook: ?() => void,
   executeCell: ?(cellId: ?string) => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
@@ -39,6 +40,7 @@ class PureNotebookMenu extends React.Component<Props> {
     cellFocused: null,
     cellMap: Immutable.Map(),
     cellOrder: Immutable.List(),
+    saveNotebook: null,
     executeCell: null,
     cutCell: null,
     copyCell: null,
@@ -53,6 +55,7 @@ class PureNotebookMenu extends React.Component<Props> {
   };
   handleClick = ({ key }: { key: string }) => {
     const {
+      saveNotebook,
       cellFocused,
       cellMap,
       cellOrder,
@@ -71,6 +74,11 @@ class PureNotebookMenu extends React.Component<Props> {
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
+      case MENU_ITEM_ACTIONS.SAVE_NOTEBOOK:
+        if (saveNotebook) {
+          saveNotebook();
+        }
+        break;
       case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
         // This gets us around a Flow fail on document.body.
         const body = document.body;
@@ -154,6 +162,9 @@ class PureNotebookMenu extends React.Component<Props> {
           selectable={false}
         >
           <SubMenu key={MENUS.FILE} title="File">
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SAVE_NOTEBOOK)}>
+              Save
+            </MenuItem>
             <MenuItem
               key={createActionKey(MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK)}
             >
@@ -253,6 +264,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  saveNotebook: () => dispatch(actions.save()),
   executeCell: cellId => dispatch(actions.executeCell(cellId)),
   cutCell: cellId => dispatch(actions.cutCell(cellId)),
   copyCell: cellId => dispatch(actions.copyCell(cellId)),

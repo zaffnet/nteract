@@ -3,6 +3,7 @@
 // These actions map to a case in a switch handler. They are meant to cause a
 // unique action from the menu.
 export const MENU_ITEM_ACTIONS = {
+  SAVE_NOTEBOOK: "save-notebook",
   DOWNLOAD_NOTEBOOK: "download-notebook",
   EXECUTE_ALL_CELLS: "execute-all-cells",
   EXECUTE_ALL_CELLS_BELOW: "execute-all-cells-below",
