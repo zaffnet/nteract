@@ -81,7 +81,7 @@ export const localCss = css`
     position: absolute;
   }
   .rc-menu-submenu > .rc-menu {
-    background-color: #fff;
+    background-color: var(--cell-bg-hover);
   }
   .rc-menu .rc-menu-submenu-title .anticon,
   .rc-menu .rc-menu-item .anticon {

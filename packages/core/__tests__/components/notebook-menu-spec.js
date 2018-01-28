@@ -43,6 +43,7 @@ describe("PureNotebookMenu ", () => {
         mergeCellAfter: jest.fn(),
         setCellTypeCode: jest.fn(),
         setCellTypeMarkdown: jest.fn(),
+        setTheme: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
@@ -157,6 +158,23 @@ describe("PureNotebookMenu ", () => {
       setCellTypeMarkdownItem.simulate("click");
       expect(props.setCellTypeMarkdown).toHaveBeenCalledTimes(1);
       expect(props.setCellTypeMarkdown).toHaveBeenCalledWith(props.cellFocused);
+
+      const setThemeLightItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_THEME_LIGHT })
+        .first();
+      expect(props.setTheme).not.toHaveBeenCalled();
+      setThemeLightItem.simulate("click");
+      expect(props.setTheme).toHaveBeenCalledTimes(1);
+      expect(props.setTheme).toHaveBeenCalledWith("light");
+
+      props.setTheme.mockClear();
+      const setThemeDarkItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.SET_THEME_DARK })
+        .first();
+      expect(props.setTheme).not.toHaveBeenCalled();
+      setThemeDarkItem.simulate("click");
+      expect(props.setTheme).toHaveBeenCalledTimes(1);
+      expect(props.setTheme).toHaveBeenCalledWith("dark");
     });
   });
 });
