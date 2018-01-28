@@ -27,9 +27,7 @@ describe("saveEpic", () => {
     // TODO: This should be testing that the mocks for fs were called with the
     // filename and notebook from the state tree
 
-    expect(responses).toEqual([
-      { type: "DONE_SAVING", notebook: expect.anything() }
-    ]);
+    expect(responses).toEqual([{ type: "DONE_SAVING" }]);
   });
 });
 

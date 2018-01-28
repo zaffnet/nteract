@@ -422,9 +422,8 @@ describe("save", () => {
 
   test("creates a DONE_SAVING action", () => {
     const fakeNotebook = { nbformat: "eh" };
-    expect(actions.doneSaving(fakeNotebook)).toEqual({
-      type: actionTypes.DONE_SAVING,
-      notebook: fakeNotebook
+    expect(actions.doneSaving()).toEqual({
+      type: actionTypes.DONE_SAVING
     });
   });
 });

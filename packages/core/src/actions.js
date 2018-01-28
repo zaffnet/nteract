@@ -517,10 +517,9 @@ export function saveAs(filename: string) {
   };
 }
 
-export function doneSaving(notebook: any) {
+export function doneSaving() {
   return {
-    type: actionTypes.DONE_SAVING,
-    notebook
+    type: actionTypes.DONE_SAVING
   };
 }
 

@@ -346,10 +346,6 @@ export type SetNotificationSystemAction = {
 // TODO: Determine the "right" name for this action creator (?)
 export const DONE_SAVING = "DONE_SAVING";
 export type DoneSavingAction = { type: "DONE_SAVING" };
-export type SetNotebookCheckpointAction = {
-  type: "DONE_SAVING",
-  notebook: ImmutableNotebook
-};
 
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)

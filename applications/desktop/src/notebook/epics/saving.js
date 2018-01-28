@@ -33,29 +33,20 @@ export function saveEpic(
       const filename = state.document.get("filename");
 
       return {
-        notebook,
-        filename
-      };
-    }),
-    mergeMap(action =>
-      writeFileObservable(
-        action.filename,
-        stringifyNotebook(
+        filename,
+        notebook: stringifyNotebook(
           toJS(
-            action.notebook.setIn(
+            notebook.setIn(
               ["metadata", "nteract", "version"],
+              // TODO: set this in the state tree once on startup
               remote.app.getVersion()
             )
           )
         )
-      ).pipe(
-        catchError((error: Error) =>
-          of({
-            type: "ERROR",
-            payload: error,
-            error: true
-          })
-        ),
+      };
+    }),
+    mergeMap(action =>
+      writeFileObservable(action.filename, action.notebook).pipe(
         map(() => {
           if (process.platform !== "darwin") {
             const state = store.getState();
@@ -66,8 +57,15 @@ export function saveEpic(
               level: "success"
             });
           }
-          return doneSaving(action.notebook);
-        })
+          return doneSaving();
+        }),
+        catchError((error: Error) =>
+          of({
+            type: "ERROR",
+            payload: error,
+            error: true
+          })
+        )
       )
     )
   );
