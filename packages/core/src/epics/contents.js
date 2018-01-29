@@ -21,6 +21,8 @@ import {
 
 import { FETCH_CONTENT_FULFILLED } from "../actionTypes";
 
+import { getServerConfig } from "../selectors";
+
 import type { ActionsObservable } from "redux-observable";
 
 import { contents } from "rx-jupyter";
@@ -42,13 +44,7 @@ export function fetchContentEpic(
       }
     }),
     switchMap((action: FetchContent) => {
-      // TODO: Use the selector from the kernelspecs work
-      const host = store.getState().app.host;
-      const serverConfig = {
-        endpoint: host.serverUrl,
-        token: host.token,
-        crossDomain: host.crossDomain
-      };
+      const serverConfig = getServerConfig(store.getState());
 
       return contents
         .get(serverConfig, action.payload.path, action.payload.params)
@@ -93,13 +89,7 @@ export function saveContentEpic(
           .setIn(["metadata", "nteract", "version"], version)
       );
 
-      // TODO: Use the selector from the kernelspecs work
-      const host = store.getState().app.host;
-      const serverConfig = {
-        endpoint: host.serverUrl,
-        token: host.token,
-        crossDomain: host.crossDomain
-      };
+      const serverConfig = getServerConfig(state);
 
       const model = {
         content: notebook,

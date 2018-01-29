@@ -14,6 +14,8 @@ import type { AppState, RemoteKernelProps } from "@nteract/types/core/records";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
 
+import { getServerConfig } from "../selectors";
+
 import {
   LAUNCH_KERNEL,
   LAUNCH_KERNEL_BY_NAME,
@@ -25,21 +27,16 @@ import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 export const launchWebSocketKernelEpic = (action$: *, store: *) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_BY_NAME),
-    map(action => {
-      const state: AppState = store.getState();
-      return { host: state.app.host, ...action };
-    }),
     // Only accept jupyter servers for the host with this epic
-    filter(({ host }) => host && host.type === "jupyter" && host.serverUrl),
+    filter(action => {
+      const host = store.getState().app.host;
+      return host && host.type === "jupyter" && host.serverUrl;
+    }),
     // TODO: When a switchMap happens, we need to close down the originating
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
-    switchMap(({ kernelSpecName, host, cwd }) => {
-      const config = {
-        crossDomain: host.crossDomain,
-        token: host.token,
-        endpoint: host.serverUrl
-      };
+    switchMap(({ kernelSpecName, cwd }) => {
+      const config = getServerConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
         mergeMap(data => {
