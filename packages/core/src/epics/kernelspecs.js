@@ -8,13 +8,7 @@ import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
 import type { KernelspecProps, Kernelspecs } from "@nteract/types/core/records";
 
-// TODO: this should also be immutable.
-// TODO: this assumes a jupyter host for now.
-const getServerConfig = state => ({
-  endpoint: state.app.host.serverUrl,
-  crossDomain: state.app.host.crossDomain,
-  token: state.app.host.token
-});
+import { getServerConfig } from "../selectors";
 
 export const fetchKernelspecsEpic = (
   action$: ActionsObservable<*>,
