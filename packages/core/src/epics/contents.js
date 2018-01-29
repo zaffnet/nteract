@@ -47,7 +47,7 @@ export function fetchContentEpic(
       const serverConfig = {
         endpoint: host.serverUrl,
         token: host.token,
-        crossDomain: false
+        crossDomain: host.crossDomain
       };
 
       return contents
@@ -101,7 +101,7 @@ export function saveContentEpic(
       const serverConfig = {
         endpoint: host.serverUrl,
         token: host.token,
-        crossDomain: false
+        crossDomain: host.crossDomain
       };
 
       const model = {
