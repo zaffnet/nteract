@@ -1,7 +1,5 @@
 /* @flow */
 
-import { fromJS } from "@nteract/commutable";
-
 import { of } from "rxjs/observable/of";
 import {
   tap,
@@ -27,7 +25,7 @@ import type { ActionsObservable } from "redux-observable";
 
 import { contents } from "rx-jupyter";
 
-import { toJS, stringifyNotebook } from "@nteract/commutable";
+import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
 
 import { FETCH_CONTENT, SAVE } from "../actionTypes";
 import type { FetchContent } from "../actionTypes";
