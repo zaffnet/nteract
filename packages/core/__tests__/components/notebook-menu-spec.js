@@ -44,6 +44,7 @@ describe("PureNotebookMenu ", () => {
         setCellTypeCode: jest.fn(),
         setCellTypeMarkdown: jest.fn(),
         setTheme: jest.fn(),
+        saveNotebook: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
@@ -175,6 +176,13 @@ describe("PureNotebookMenu ", () => {
       setThemeDarkItem.simulate("click");
       expect(props.setTheme).toHaveBeenCalledTimes(1);
       expect(props.setTheme).toHaveBeenCalledWith("dark");
+
+      const saveNotebookItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.SAVE_NOTEBOOK })
+        .first();
+      expect(props.saveNotebook).not.toHaveBeenCalled();
+      saveNotebookItem.simulate("click");
+      expect(props.saveNotebook).toHaveBeenCalledTimes(1);
     });
   });
 });
