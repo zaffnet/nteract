@@ -11,8 +11,6 @@ import { changeFilename, save, doneSaving } from "@nteract/core/actions";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 
-import { remote } from "electron";
-
 import { of } from "rxjs/observable/of";
 import { tap, mergeMap, catchError, map } from "rxjs/operators";
 

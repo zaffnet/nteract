@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 import ReactDOM from "react-dom";
-import { ipcRenderer as ipc } from "electron";
+import { ipcRenderer as ipc, remote } from "electron";
 
 import { Provider } from "react-redux";
 
@@ -23,6 +23,7 @@ import { initGlobalHandlers } from "./global-events";
 
 import {
   makeAppRecord,
+  makeDesktopHostRecord,
   makeDocumentRecord,
   CommsRecord
 } from "@nteract/types/core/records";
@@ -30,7 +31,10 @@ import {
 import "./main.css";
 
 const store = configureStore({
-  app: makeAppRecord(),
+  app: makeAppRecord({
+    host: makeDesktopHostRecord(),
+    version: remote.app.getVersion()
+  }),
   document: makeDocumentRecord(),
   comms: CommsRecord(),
   config: ImmutableMap({

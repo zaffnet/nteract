@@ -8,6 +8,8 @@ import type {
   RemoteKernelProps
 } from "./hosts";
 
+const version = require("../../package.json").version;
+
 import { List, Map, Record, Set } from "immutable";
 
 export type { HostRef, KernelRef, KernelspecsRef } from "./refs";
@@ -155,7 +157,9 @@ type AppRecordProps = {
   isSaving: boolean,
   lastSaved: ?Date,
   configLastSaved: ?Date,
-  error: any
+  error: any,
+  // The version number should be provided by an app on boot
+  version: string
 };
 
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
@@ -166,7 +170,9 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   isSaving: false, // All -- ?
   lastSaved: null, // All
   configLastSaved: null, // ?
-  error: null // All
+  error: null, // All
+  // set the default version to @nteract/core's version
+  version: `@nteract/core@${version}`
 });
 
 export type AppRecord = RecordOf<AppRecordProps>;

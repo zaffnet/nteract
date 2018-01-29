@@ -1,6 +1,8 @@
 // @flow
 import { shutdownKernel } from "../kernel/shutdown";
 
+import { remote } from "electron";
+
 import { app } from "@nteract/core/reducers";
 
 import {
@@ -80,7 +82,8 @@ type AppAction =
 
 export default function handleApp(
   state: AppRecord = makeAppRecord({
-    host: makeDesktopHostRecord()
+    host: makeDesktopHostRecord(),
+    version: remote.app.getVersion()
   }),
   action: AppAction
 ) {
