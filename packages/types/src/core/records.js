@@ -16,6 +16,10 @@ export type { HostRef, KernelRef, KernelspecsRef } from "./refs";
 
 export { createHostRef, createKernelRef, createKernelspecsRef } from "./refs";
 
+export type HostRecord = RecordOf<
+  DesktopHostRecordProps | JupyterHostRecordProps
+>;
+
 export {
   makeLocalKernelRecord,
   makeDesktopHostRecord,
@@ -151,7 +155,7 @@ export type Notebook = {
 // Basically, anything that's only for desktop should have its own record & reducers
 type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
-  host: ?RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>,
+  host: ?HostRecord,
   githubToken: ?string,
   notificationSystem: ?Object,
   isSaving: boolean,
