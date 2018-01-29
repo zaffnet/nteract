@@ -46,66 +46,6 @@ describe("setNotificationSystem", () => {
   });
 });
 
-describe("startSaving", () => {
-  test("should set isSaving to false", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.START_SAVING };
-
-    const state = reducers(originalState, action);
-    expect(state.app.isSaving).toBe(true);
-  });
-});
-
-describe("doneSaving", () => {
-  test("should set isSaving to false", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.DONE_SAVING };
-
-    const state = reducers(originalState, action);
-    expect(state.app.isSaving).toBe(false);
-  });
-});
-
-describe("setExecutionState", () => {
-  test("should set the exeuction state to the given value", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = {
-      type: actionTypes.SET_EXECUTION_STATE,
-      kernelStatus: "idle"
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.app.kernel.status).toBe("idle");
-  });
-});
-
 describe("interruptKernel", () => {
   test("sends a SIGINT and clears the kernel", () => {
     const originalState = {

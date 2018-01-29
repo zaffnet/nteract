@@ -1,6 +1,8 @@
 // @flow
 import { shutdownKernel } from "../kernel/shutdown";
 
+import { app } from "@nteract/core/reducers";
+
 import {
   makeAppRecord,
   makeLocalKernelRecord,
@@ -48,18 +50,6 @@ function interruptKernel(state: AppRecord) {
   return state;
 }
 
-function startSaving(state: AppRecord) {
-  return state.set("isSaving", true);
-}
-
-function setExecutionState(state: AppRecord, action: SetExecutionStateAction) {
-  return state.setIn(["kernel", "status"], action.kernelStatus);
-}
-
-function doneSaving(state: AppRecord) {
-  return state.set("isSaving", false).set("lastSaved", new Date());
-}
-
 function doneSavingConfig(state: AppRecord) {
   return state.set("configLastSaved", new Date());
 }
@@ -95,6 +85,9 @@ export default function handleApp(
   action: AppAction
 ) {
   switch (action.type) {
+    // This action is _also_ handled in @nteract/core's app
+    // however, the desktop one still has some kernel cleanup logic
+    // that needs to be refactored into an epic
     case "LAUNCH_KERNEL_SUCCESSFUL":
       return launchKernel(state, action);
     case "EXIT":
@@ -103,12 +96,6 @@ export default function handleApp(
       return cleanupKernel(state);
     case "INTERRUPT_KERNEL":
       return interruptKernel(state);
-    case "START_SAVING":
-      return startSaving(state);
-    case "SET_EXECUTION_STATE":
-      return setExecutionState(state, action);
-    case "DONE_SAVING":
-      return doneSaving(state);
     case "DONE_SAVING_CONFIG":
       return doneSavingConfig(state);
     case "SET_NOTIFICATION_SYSTEM":
@@ -116,6 +103,7 @@ export default function handleApp(
     case "SET_GITHUB_TOKEN":
       return setGithubToken(state, action);
     default:
-      return state;
+      // We defer to core for the rest as we move more into @nteract/core
+      return app(state, action);
   }
 }

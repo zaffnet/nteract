@@ -12,6 +12,14 @@ import * as actionTypes from "../actionTypes";
 
 import type { NewKernelAction, SetExecutionStateAction } from "../actionTypes";
 
+function startSaving(state: AppRecord) {
+  return state.set("isSaving", true);
+}
+
+function doneSaving(state: AppRecord) {
+  return state.set("isSaving", false).set("lastSaved", new Date());
+}
+
 export function launchKernelSuccessful(
   state: AppRecord,
   action: NewKernelAction
@@ -56,6 +64,10 @@ export default function handleApp(
       return launchKernelSuccessful(state, action);
     case actionTypes.SET_EXECUTION_STATE:
       return setExecutionState(state, action);
+    case actionTypes.START_SAVING:
+      return startSaving(state);
+    case actionTypes.DONE_SAVING:
+      return doneSaving(state);
     default:
       return state;
   }
