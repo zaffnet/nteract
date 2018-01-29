@@ -25,25 +25,22 @@ export function saveEpic(
 ) {
   return action$.pipe(
     ofType(SAVE),
-    map(action => {
+    mergeMap(action => {
       const state = store.getState();
-      const notebook = state.document.get("notebook");
-      const filename = state.document.get("filename");
-
-      return {
-        filename,
-        notebook: stringifyNotebook(
-          toJS(
-            notebook.setIn(
+      const notebook = stringifyNotebook(
+        toJS(
+          state.document
+            .get("notebook")
+            .setIn(
               ["metadata", "nteract", "version"],
               state.app.get("version", "0.0.0-beta")
             )
-          )
         )
-      };
-    }),
-    mergeMap(action =>
-      writeFileObservable(action.filename, action.notebook).pipe(
+      );
+
+      const filename = state.document.get("filename");
+
+      return writeFileObservable(filename, notebook).pipe(
         map(() => {
           if (process.platform !== "darwin") {
             const state = store.getState();
@@ -63,8 +60,8 @@ export function saveEpic(
             error: true
           })
         )
-      )
-    )
+      );
+    })
   );
 }
 

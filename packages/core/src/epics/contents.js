@@ -80,22 +80,19 @@ export function saveContentEpic(
 ) {
   return action$.pipe(
     ofType(SAVE),
-    map(action => {
+    mergeMap(action => {
       const state = store.getState();
-      const notebook = state.document.get("notebook");
-      const filename = state.document.get("filename");
 
+      const filename = state.document.get("filename");
       const version = state.app.get("version", "0.0.0-beta");
 
-      return {
-        filename,
-        // contents API takes notebook as raw JSON
-        notebook: toJS(
-          notebook.setIn(["metadata", "nteract", "version"], version)
-        )
-      };
-    }),
-    mergeMap(({ filename, notebook }) => {
+      // contents API takes notebook as raw JSON
+      const notebook = toJS(
+        state.document
+          .get("notebook")
+          .setIn(["metadata", "nteract", "version"], version)
+      );
+
       // TODO: Use the selector from the kernelspecs work
       const host = store.getState().app.host;
       const serverConfig = {
