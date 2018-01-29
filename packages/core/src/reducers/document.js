@@ -24,7 +24,7 @@ import type {
   NewCellBeforeAction,
   ClearOutputsAction,
   AppendOutputAction,
-  SetNotebookCheckpointAction,
+  DoneSavingAction,
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -170,9 +170,10 @@ function setNotebook(state: DocumentRecord, action: SetNotebookAction) {
 
 function setNotebookCheckpoint(
   state: DocumentRecord,
-  action: SetNotebookCheckpointAction
+  action: DoneSavingAction
 ) {
-  return state.set("savedNotebook", action.notebook);
+  // Use the current version of the notebook document
+  return state.set("savedNotebook", state.get("notebook"));
 }
 
 function focusCell(state: DocumentRecord, action: FocusCellAction) {
@@ -700,9 +701,9 @@ type DocumentAction =
   | PasteCellAction
   | ChangeCellTypeAction
   | ToggleCellExpansionAction
-  | SetNotebookCheckpointAction
   | AcceptPayloadMessageAction
   | SendExecuteMessageAction
+  | DoneSavingAction
   | SetInCellAction<*>;
 
 const defaultDocument: DocumentRecord = makeDocumentRecord();

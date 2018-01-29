@@ -176,10 +176,7 @@ describe("setNotebookCheckpoint", () => {
       type: actionTypes.DONE_SAVING,
       notebook: dummyCommutable
     });
-    expect(is(state.get("notebook"), initialDocument.get("notebook"))).toBe(
-      true
-    );
-    expect(is(state.get("savedNotebook"), dummyCommutable)).toBe(true);
+    expect(state.get("notebook")).toEqual(state.get("savedNotebook"));
   });
 });
 

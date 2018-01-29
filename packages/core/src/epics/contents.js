@@ -1,13 +1,20 @@
 /* @flow */
 
-import { fromJS } from "@nteract/commutable";
-
 import { of } from "rxjs/observable/of";
-import { tap, filter, map, switchMap, catchError } from "rxjs/operators";
+import {
+  tap,
+  filter,
+  map,
+  mergeMap,
+  mapTo,
+  switchMap,
+  catchError
+} from "rxjs/operators";
 import { ofType } from "redux-observable";
 
 import {
   setNotebook,
+  doneSaving,
   fetchContentFailed,
   fetchContentFulfilled
 } from "../actions";
@@ -18,9 +25,9 @@ import type { ActionsObservable } from "redux-observable";
 
 import { contents } from "rx-jupyter";
 
-import { toJS, stringifyNotebook } from "@nteract/commutable";
+import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
 
-import { FETCH_CONTENT } from "../actionTypes";
+import { FETCH_CONTENT, SAVE } from "../actionTypes";
 import type { FetchContent } from "../actionTypes";
 
 export function fetchContentEpic(
@@ -40,7 +47,7 @@ export function fetchContentEpic(
       const serverConfig = {
         endpoint: host.serverUrl,
         token: host.token,
-        crossDomain: false
+        crossDomain: host.crossDomain
       };
 
       return contents
@@ -63,6 +70,52 @@ export function fetchContentEpic(
             )
           )
         );
+    })
+  );
+}
+
+export function saveContentEpic(
+  action$: ActionsObservable<*>,
+  store: Store<*, *>
+) {
+  return action$.pipe(
+    ofType(SAVE),
+    mergeMap(action => {
+      const state = store.getState();
+
+      const filename = state.document.get("filename");
+      const version = state.app.get("version", "0.0.0-beta");
+
+      // contents API takes notebook as raw JSON
+      const notebook = toJS(
+        state.document
+          .get("notebook")
+          .setIn(["metadata", "nteract", "version"], version)
+      );
+
+      // TODO: Use the selector from the kernelspecs work
+      const host = store.getState().app.host;
+      const serverConfig = {
+        endpoint: host.serverUrl,
+        token: host.token,
+        crossDomain: host.crossDomain
+      };
+
+      const model = {
+        content: notebook,
+        type: "notebook"
+      };
+
+      return contents.save(serverConfig, filename, model).pipe(
+        mapTo(doneSaving()),
+        catchError((error: Error) =>
+          of({
+            type: "ERROR",
+            payload: error,
+            error: true
+          })
+        )
+      );
     })
   );
 }

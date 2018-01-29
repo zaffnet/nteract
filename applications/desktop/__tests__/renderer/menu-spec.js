@@ -325,9 +325,7 @@ describe("menu", () => {
       menu.dispatchSave(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: "SAVE",
-        filename: store.getState().document.get("filename"),
-        notebook: store.getState().document.get("notebook")
+        type: "SAVE"
       });
     });
   });
@@ -340,8 +338,7 @@ describe("menu", () => {
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "SAVE_AS",
-        filename: "test-ipynb.ipynb",
-        notebook: store.getState().document.get("notebook")
+        filename: "test-ipynb.ipynb"
       });
     });
   });
@@ -424,7 +421,6 @@ describe("menu", () => {
 
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "SAVE_AS",
-        notebook: store.getState().document.get("notebook"),
         filename
       });
     });

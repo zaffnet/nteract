@@ -62,7 +62,8 @@ export default function configureStore({
         token: config.token,
         // TODO: Use URL join, even though we know these are right
         serverUrl: location.origin + config.baseUrl
-      })
+      }),
+      version: `nteract-on-jupyter@${config.appVersion}`
     }),
     document: makeDocumentRecord(),
     comms: CommsRecord(),
