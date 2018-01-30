@@ -2,7 +2,14 @@
 
 import { ofType } from "redux-observable";
 
-import { catchError, map, mergeMap, switchMap, filter } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  mergeMap,
+  switchMap,
+  concatMap,
+  filter
+} from "rxjs/operators";
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
@@ -19,7 +26,8 @@ import { getServerConfig } from "../selectors";
 import {
   LAUNCH_KERNEL,
   LAUNCH_KERNEL_BY_NAME,
-  LAUNCH_KERNEL_SUCCESSFUL
+  LAUNCH_KERNEL_SUCCESSFUL,
+  INTERRUPT_KERNEL
 } from "../actionTypes";
 
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
@@ -53,5 +61,34 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
           return of(launchKernelSuccessful(kernel));
         })
       );
+    })
+  );
+
+export const interruptKernelEpic = (action$: *, store: *) =>
+  action$.pipe(
+    ofType(INTERRUPT_KERNEL),
+    filter(action => {
+      const state = store.getState();
+      const host = state.app.host;
+      const kernel = state.app.kernel;
+
+      // This epic can only interrupt kernels on jupyter websockets
+      return (
+        host &&
+        kernel &&
+        host.type === "jupyter" &&
+        host.serverUrl &&
+        kernel.id &&
+        kernel.type === "websocket"
+      );
+    }),
+    // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
+    // interrupt, instead doing it after the last one happens
+    concatMap(() => {
+      const state = store.getState();
+      const serverConfig = getServerConfig(state);
+      const id = state.app.kernel.id;
+
+      return kernels.interrupt(serverConfig, id).mapTo({ type: "INTERRUPTED" });
     })
   );
