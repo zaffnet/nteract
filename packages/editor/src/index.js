@@ -50,7 +50,8 @@ export type CodeMirrorEditorProps = {
 };
 
 type CodeMirrorEditorState = {
-  isFocused: boolean
+  isFocused: boolean,
+  tipElement: ?any
 };
 
 class CodeMirrorEditor extends React.Component<
@@ -65,6 +66,7 @@ class CodeMirrorEditor extends React.Component<
   executeTab: (editor: Object) => void;
   hint: (editor: Object, cb: Function) => void;
   tips: (editor: Object) => void;
+  deleteTip: () => void;
 
   static defaultProps = {
     onScroll: () => {}
@@ -74,7 +76,9 @@ class CodeMirrorEditor extends React.Component<
     super(props);
     this.hint = this.completions.bind(this);
     this.tips = this.tips.bind(this);
+    this.deleteTip = this.deleteTip.bind(this);
     this.hint.async = true;
+    this.state = { isFocused: true, tipElement: null };
 
     this.defaultOptions = Object.assign(
       {
@@ -265,18 +269,14 @@ class CodeMirrorEditor extends React.Component<
     }
   }
 
+  deleteTip() {
+    this.setState({ tipElement: null });
+  }
+
   // TODO: Rely on ReactDOM.createPortal, create a space for tooltips to go
   tips(editor: Object): void {
     const { tip, channels } = this.props;
-    const currentTip = document.getElementById(
-      "tooltip-that-should-be-done-with-react-portals-now"
-    );
-    const body = document.body;
-    if (currentTip && body != null) {
-      body.removeChild(currentTip);
-      editor.setSize("auto", "auto");
-      return;
-    }
+
     if (tip) {
       tool(channels, editor).subscribe(resp => {
         const bundle = resp.dict;
@@ -285,19 +285,12 @@ class CodeMirrorEditor extends React.Component<
           return;
         }
 
-        const node = document.createElement("div");
-        node.id = "tooltip-that-should-be-done-with-react-portals-now";
+        const node = document.getElementsByClassName("tip-holder")[0];
 
-        function deleteTip() {
-          if (node.parentNode) {
-            node.parentNode.removeChild(node);
-          }
-        }
-
-        ReactDOM.render(
+        const tipElement = ReactDOM.createPortal(
           <div className="CodeMirror-hint tip">
             <RichestMime bundle={bundle} expanded />
-            <button className="bt" onClick={deleteTip}>{`\u2715`}</button>
+            <button className="bt" onClick={this.deleteTip}>{`\u2715`}</button>
             <style jsx>{`
               .bt {
                 float: right;
@@ -321,8 +314,11 @@ class CodeMirrorEditor extends React.Component<
           node
         );
 
+        this.setState({ tipElement });
+
         editor.addWidget({ line: editor.getCursor().line, ch: 0 }, node, true);
 
+        const body = document.body;
         if (node != null && body != null) {
           const pos = node.getBoundingClientRect();
           body.appendChild(node);
@@ -373,6 +369,7 @@ class CodeMirrorEditor extends React.Component<
   render(): React$Element<any> {
     return (
       <div className="CodeMirror cm-s-composition ">
+        <div className="tip-holder" />
         <textarea
           ref={ta => {
             this.textarea = ta;
@@ -384,6 +381,7 @@ class CodeMirrorEditor extends React.Component<
         <style jsx>{showHintStyles}</style>
         <style jsx>{codemirrorStyles}</style>
         <style jsx>{styles}</style>
+        {this.state.tipElement}
       </div>
     );
   }
