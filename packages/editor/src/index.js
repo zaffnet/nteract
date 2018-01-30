@@ -66,6 +66,7 @@ class CodeMirrorEditor extends React.Component<
   executeTab: (editor: Object) => void;
   hint: (editor: Object, cb: Function) => void;
   tips: (editor: Object) => void;
+  deleteTip: () => void;
 
   static defaultProps = {
     onScroll: () => {}
@@ -75,6 +76,7 @@ class CodeMirrorEditor extends React.Component<
     super(props);
     this.hint = this.completions.bind(this);
     this.tips = this.tips.bind(this);
+    this.deleteTip = this.deleteTip.bind(this);
     this.hint.async = true;
     this.state = { isFocused: true, tipElement: null };
 
@@ -267,22 +269,14 @@ class CodeMirrorEditor extends React.Component<
     }
   }
 
-  deleteTip = function() {
+  deleteTip() {
     this.setState({ tipElement: null });
-  };
+  }
 
   // TODO: Rely on ReactDOM.createPortal, create a space for tooltips to go
   tips(editor: Object): void {
     const { tip, channels } = this.props;
-    const currentTip = document.getElementById(
-      "tooltip-that-should-be-done-with-react-portals-now"
-    );
-    const body = document.body;
-    if (currentTip && body != null) {
-      body.removeChild(currentTip);
-      editor.setSize("auto", "auto");
-      return;
-    }
+
     if (tip) {
       tool(channels, editor).subscribe(resp => {
         const bundle = resp.dict;
@@ -324,6 +318,7 @@ class CodeMirrorEditor extends React.Component<
 
         editor.addWidget({ line: editor.getCursor().line, ch: 0 }, node, true);
 
+        const body = document.body;
         if (node != null && body != null) {
           const pos = node.getBoundingClientRect();
           body.appendChild(node);
