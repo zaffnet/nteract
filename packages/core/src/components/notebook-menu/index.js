@@ -7,6 +7,7 @@ import * as Immutable from "immutable";
 import * as actions from "../../actions";
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import * as extraHandlers from "./extra-handlers";
+import { MODAL_TYPES } from "../modal-controller";
 
 // To allow actions that can take dynamic arguments (like selecting a kernel
 // based on the host's kernelspecs), we have some simple utility functions to
@@ -32,7 +33,8 @@ type Props = {
   createMarkdownCell: ?(cellId: ?string) => void,
   setCellTypeCode: ?(cellId: ?string) => void,
   setCellTypeMarkdown: ?(cellId: ?string) => void,
-  setTheme: ?(theme: ?string) => void
+  setTheme: ?(theme: ?string) => void,
+  openAboutModal: ?() => void
 };
 
 class PureNotebookMenu extends React.Component<Props> {
@@ -51,7 +53,8 @@ class PureNotebookMenu extends React.Component<Props> {
     createMarkdownCell: null,
     setCellTypeCode: null,
     setCellTypeMarkdown: null,
-    setTheme: null
+    setTheme: null,
+    openAboutModal: null
   };
   handleClick = ({ key }: { key: string }) => {
     const {
@@ -67,6 +70,7 @@ class PureNotebookMenu extends React.Component<Props> {
       filename,
       mergeCellAfter,
       notebook,
+      openAboutModal,
       pasteCell,
       setCellTypeCode,
       setCellTypeMarkdown,
@@ -145,6 +149,11 @@ class PureNotebookMenu extends React.Component<Props> {
       case MENU_ITEM_ACTIONS.SET_THEME_LIGHT:
         if (setTheme) {
           setTheme("light");
+        }
+        break;
+      case MENU_ITEM_ACTIONS.OPEN_ABOUT:
+        if (openAboutModal) {
+          openAboutModal();
         }
         break;
       default:
@@ -235,6 +244,11 @@ class PureNotebookMenu extends React.Component<Props> {
               </MenuItem>
             </SubMenu>
           </SubMenu>
+          <SubMenu key={MENUS.HELP} title="Help">
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.OPEN_ABOUT)}>
+              About
+            </MenuItem>
+          </SubMenu>
         </Menu>
         <style global jsx>
           {localCss}
@@ -276,7 +290,9 @@ const mapDispatchToProps = dispatch => ({
   setCellTypeCode: cellId => dispatch(actions.changeCellType(cellId, "code")),
   setCellTypeMarkdown: cellId =>
     dispatch(actions.changeCellType(cellId, "markdown")),
-  setTheme: theme => dispatch(actions.setTheme(theme))
+  setTheme: theme => dispatch(actions.setTheme(theme)),
+  openAboutModal: () =>
+    dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT }))
 });
 
 const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(

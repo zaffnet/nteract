@@ -11,7 +11,8 @@ import {
   comms,
   config,
   app,
-  entitiesKernelspecsByRef
+  entitiesKernelspecsByRef,
+  modals
 } from "@nteract/core/reducers";
 
 import {
@@ -38,7 +39,8 @@ export type AppState = {
   document: DocumentRecord,
   comms: CommsRecord,
   config: ImmutableMap<string, any>,
-  contents: any
+  contents: any,
+  modals: any
 };
 
 const rootReducer = combineReducers({
@@ -46,6 +48,7 @@ const rootReducer = combineReducers({
   document,
   comms,
   config,
+  modals,
   entities: combineReducers({
     kernelspecsByRef: entitiesKernelspecsByRef
   })

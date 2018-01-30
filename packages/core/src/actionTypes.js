@@ -28,6 +28,19 @@ import type { ExecuteRequest } from "@nteract/types/messaging";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
+export const OPEN_MODAL = "CORE/OPEN_MPODAL";
+export type OpenModal = {
+  type: "CORE/OPEN_MPODAL",
+  payload: {
+    modalType: string
+  }
+};
+
+export const CLOSE_MODAL = "CORE/CLOSE_MODAL";
+export type CloseModal = {
+  type: "CORE/CLOSE_MODAL"
+};
+
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",

@@ -6,6 +6,8 @@ import syntax from "../themes/syntax-highlighting";
 
 export { default as NotebookMenu } from "./notebook-menu";
 
+export { default as ModalController } from "./modal-controller";
+
 export type PagersProps = {
   children: React.Node,
   hidden: boolean

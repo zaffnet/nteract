@@ -14,7 +14,7 @@ import { NotebookApp } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
-import { NotebookMenu } from "@nteract/core/components";
+import { ModalController, NotebookMenu } from "@nteract/core/components";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
@@ -44,6 +44,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
                 this.notificationSystem = notificationSystem;
               }}
             />
+            <ModalController />
             <style jsx global>{`
               body {
                 font-family: "Source Sans Pro";
