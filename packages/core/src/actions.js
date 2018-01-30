@@ -85,12 +85,23 @@ import type {
   DoneSavingConfigAction,
   // TODO: Needs an action creator
   SetNotebookCheckpointAction,
+  OpenModal,
+  CloseModal,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
+
+export const openModal = (payload: { modalType: string }) => ({
+  type: actionTypes.OPEN_MODAL,
+  payload
+});
+
+export const closeModal = () => ({
+  type: actionTypes.CLOSE_MODAL
+});
 
 export const fetchContent = (
   payload: { path: string, params: Object } = { path: "/", params: {} }

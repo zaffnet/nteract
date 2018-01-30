@@ -45,6 +45,7 @@ describe("PureNotebookMenu ", () => {
         setCellTypeMarkdown: jest.fn(),
         setTheme: jest.fn(),
         saveNotebook: jest.fn(),
+        openAboutModal: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
@@ -183,6 +184,13 @@ describe("PureNotebookMenu ", () => {
       expect(props.saveNotebook).not.toHaveBeenCalled();
       saveNotebookItem.simulate("click");
       expect(props.saveNotebook).toHaveBeenCalledTimes(1);
+
+      const openAboutItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.OPEN_ABOUT })
+        .first();
+      expect(props.openAboutModal).not.toHaveBeenCalled();
+      openAboutItem.simulate("click");
+      expect(props.openAboutModal).toHaveBeenCalledTimes(1);
     });
   });
 });
