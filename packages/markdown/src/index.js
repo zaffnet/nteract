@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import MathJax from "react-mathjax";
+import MathJax from "./mathjax";
 import RemarkMathPlugin from "remark-math";
 
 const MarkdownRender = (props: ReactMarkdown.ReactMarkdownProps) => {

@@ -21,9 +21,12 @@ height between texels.
 >
   <Context
     delay={0}
+    didFinishTypeset={null}
     input="tex"
     loading={null}
     noGate={false}
+    onError={[Function]}
+    onLoad={null}
     options={Object {}}
     script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"
   />
