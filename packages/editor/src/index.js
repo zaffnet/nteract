@@ -74,6 +74,7 @@ class CodeMirrorEditor extends React.Component<
     super(props);
     this.hint = this.completions.bind(this);
     this.tips = this.tips.bind(this);
+    this.deleteTip = this.deleteTip.bind(this);
     this.hint.async = true;
     this.state = { tipElement: null };
 
@@ -266,6 +267,10 @@ class CodeMirrorEditor extends React.Component<
     }
   }
 
+  deleteTip() {
+    this.setState({ tipElement: null });
+  }
+
   // TODO: Rely on ReactDOM.createPortal, create a space for tooltips to go
   tips(editor: Object): void {
     const { tip, channels } = this.props;
@@ -291,7 +296,7 @@ class CodeMirrorEditor extends React.Component<
         const tipElement = ReactDOM.createPortal(
           <div className="CodeMirror-hint tip">
             <RichestMime bundle={bundle} expanded />
-            <button className="bt" onClick={deleteTooltip}>{`\u2715`}</button>
+            <button className="bt" onClick={this.deleteTip}>{`\u2715`}</button>
             <style jsx>{`
               .bt {
                 float: right;
