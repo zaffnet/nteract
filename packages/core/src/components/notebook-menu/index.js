@@ -34,7 +34,8 @@ type Props = {
   setCellTypeCode: ?(cellId: ?string) => void,
   setCellTypeMarkdown: ?(cellId: ?string) => void,
   setTheme: ?(theme: ?string) => void,
-  openAboutModal: ?() => void
+  openAboutModal: ?() => void,
+  interruptKernel: ?() => void
 };
 
 class PureNotebookMenu extends React.Component<Props> {
@@ -54,7 +55,8 @@ class PureNotebookMenu extends React.Component<Props> {
     setCellTypeCode: null,
     setCellTypeMarkdown: null,
     setTheme: null,
-    openAboutModal: null
+    openAboutModal: null,
+    interruptKernel: null
   };
   handleClick = ({ key }: { key: string }) => {
     const {
@@ -74,7 +76,8 @@ class PureNotebookMenu extends React.Component<Props> {
       pasteCell,
       setCellTypeCode,
       setCellTypeMarkdown,
-      setTheme
+      setTheme,
+      interruptKernel
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
@@ -156,6 +159,12 @@ class PureNotebookMenu extends React.Component<Props> {
           openAboutModal();
         }
         break;
+      case MENU_ITEM_ACTIONS.INTERRUPT_KERNEL:
+        if (interruptKernel) {
+          interruptKernel();
+        }
+        break;
+
       default:
         console.log(`unhandled action: ${action}`);
     }
@@ -249,6 +258,12 @@ class PureNotebookMenu extends React.Component<Props> {
               About
             </MenuItem>
           </SubMenu>
+
+          <SubMenu key={MENUS.RUNTIME} title="Runtime">
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.INTERRUPT_KERNEL)}>
+              Interrupt
+            </MenuItem>
+          </SubMenu>
         </Menu>
         <style global jsx>
           {localCss}
@@ -292,7 +307,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.changeCellType(cellId, "markdown")),
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
-    dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT }))
+    dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),
+  interruptKernel: () => dispatch(actions.interruptKernel)
 });
 
 const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(
