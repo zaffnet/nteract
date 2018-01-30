@@ -31,8 +31,7 @@
   "dependencies": {
     "@nteract/transform-vdom": "^2.1.0",
     "ansi-to-react": "^2.0.6",
-    "commonmark": "^0.28.0",
-    "commonmark-react-renderer": "^4.3.3",
+    "@nteract/markdown": "^0.0.1",
     "mathjax-electron": "^2.0.1",
     "react-json-tree": "^0.11.0"
   },

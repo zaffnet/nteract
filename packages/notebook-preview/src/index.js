@@ -22,10 +22,8 @@ import {
   Cells
 } from "@nteract/core/components";
 
-import LatexRenderer from "./latex";
 import { PapermillView } from "./papermill";
 
-// Markdown/MathJax Renderer
 import Markdown from "@nteract/markdown";
 
 const themes = require("@nteract/core/themes");
@@ -136,12 +134,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                 return (
                   <Cell key={cellID}>
                     <div className="content-margin">
-                      {/* TODO: embed mathjax on the page here, otherwise LaTeX
-                              rendering doesn't actually happen
-                    */}
-                      <LatexRenderer>
-                        <Markdown source={source} />
-                      </LatexRenderer>
+                      <Markdown source={source} />
                     </div>
                     <style jsx>{`
                       .content-margin {

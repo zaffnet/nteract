@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
-import { MarkdownTransform } from "@nteract/transforms";
+import Markdown from "@nteract/markdown";
 
 import DirectoryListing from "./directory-listing";
 
@@ -64,7 +64,7 @@ class File extends React.Component<*> {
       case "md":
       case "markdown":
       case "rmd":
-        return <MarkdownTransform data={this.props.entry.content} />;
+        return <Markdown source={this.props.entry.content} />;
       case "gif":
       case "jpeg":
       case "jpg":

@@ -14,14 +14,12 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
       <div
         className="jsx-2299737332 jsx-2299737332 content-margin"
       >
-        <LatexRenderer>
-          <MarkdownRender
-            source="## The Notable Nteract Notebook
+        <MarkdownRender
+          source="## The Notable Nteract Notebook
 
 **It's a notebook!**
 "
-          />
-        </LatexRenderer>
+        />
       </div>
       <JSXStyle
         css=".content-margin.jsx-2299737332{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"
@@ -191,14 +189,12 @@ exports[`Notebook accepts an Object of cells 1`] = `
       <div
         className="jsx-2299737332 jsx-2299737332 content-margin"
       >
-        <LatexRenderer>
-          <MarkdownRender
-            source="## The Notable Nteract Notebook
+        <MarkdownRender
+          source="## The Notable Nteract Notebook
 
 **It's a notebook!**
 "
-          />
-        </LatexRenderer>
+        />
       </div>
       <JSXStyle
         css=".content-margin.jsx-2299737332{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"

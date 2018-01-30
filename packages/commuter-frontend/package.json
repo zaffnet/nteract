@@ -30,6 +30,7 @@
     "@nteract/transform-dataresource": "^3.0.0",
     "@nteract/transform-vega": "^3.1.0",
     "@nteract/transforms": "^3.2.0",
+    "@nteract/markdown": "^0.0.1",
     "babel-preset-flow": "^6.23.0",
     "d3-dsv": "^1.0.7",
     "isomorphic-fetch": "^2.2.1",

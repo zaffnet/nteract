@@ -11,8 +11,6 @@ import {
   isImmutable
 } from "immutable";
 
-import LatexRenderer from "../components/latex";
-
 import { HijackScroll } from "../components/hijack-scroll";
 
 import MarkdownPreviewer from "../components/markdown-preview";
@@ -196,23 +194,21 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                 />
               ))}
             </Pagers>
-            <LatexRenderer>
-              <Outputs
-                hidden={this.props.outputHidden}
+            <Outputs
+              hidden={this.props.outputHidden}
+              expanded={this.props.outputExpanded}
+            >
+              <Display
+                className="outputs-display"
+                outputs={this.props.outputs.toJS()}
+                displayOrder={this.props.displayOrder}
+                transforms={this.props.transforms}
+                theme={this.props.theme}
                 expanded={this.props.outputExpanded}
-              >
-                <Display
-                  className="outputs-display"
-                  outputs={this.props.outputs.toJS()}
-                  displayOrder={this.props.displayOrder}
-                  transforms={this.props.transforms}
-                  theme={this.props.theme}
-                  expanded={this.props.outputExpanded}
-                  isHidden={this.props.outputHidden}
-                  models={this.props.models.toJS()}
-                />
-              </Outputs>
-            </LatexRenderer>
+                isHidden={this.props.outputHidden}
+                models={this.props.models.toJS()}
+              />
+            </Outputs>
           </React.Fragment>
         );
 
