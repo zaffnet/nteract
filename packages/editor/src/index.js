@@ -50,7 +50,8 @@ export type CodeMirrorEditorProps = {
 };
 
 type CodeMirrorEditorState = {
-  isFocused: boolean
+  isFocused: boolean,
+  tipElement: ?any
 };
 
 class CodeMirrorEditor extends React.Component<
@@ -74,9 +75,7 @@ class CodeMirrorEditor extends React.Component<
     super(props);
     this.hint = this.completions.bind(this);
     this.tips = this.tips.bind(this);
-    this.deleteTip = this.deleteTip.bind(this);
     this.hint.async = true;
-    this.state = { tipElement: null };
 
     this.defaultOptions = Object.assign(
       {
@@ -267,9 +266,9 @@ class CodeMirrorEditor extends React.Component<
     }
   }
 
-  deleteTip() {
+  deleteTip = function() {
     this.setState({ tipElement: null });
-  }
+  };
 
   // TODO: Rely on ReactDOM.createPortal, create a space for tooltips to go
   tips(editor: Object): void {
