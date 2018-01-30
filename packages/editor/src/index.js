@@ -76,6 +76,7 @@ class CodeMirrorEditor extends React.Component<
     this.hint = this.completions.bind(this);
     this.tips = this.tips.bind(this);
     this.hint.async = true;
+    this.state = { isFocused: true, tipElement: null };
 
     this.defaultOptions = Object.assign(
       {
