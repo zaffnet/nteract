@@ -46,6 +46,7 @@ describe("PureNotebookMenu ", () => {
         setTheme: jest.fn(),
         saveNotebook: jest.fn(),
         openAboutModal: jest.fn(),
+        interruptKernel: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
@@ -191,6 +192,13 @@ describe("PureNotebookMenu ", () => {
       expect(props.openAboutModal).not.toHaveBeenCalled();
       openAboutItem.simulate("click");
       expect(props.openAboutModal).toHaveBeenCalledTimes(1);
+
+      const interruptKernelItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.INTERRUPT_KERNEL })
+        .first();
+      expect(props.interruptKernel).not.toHaveBeenCalled();
+      interruptKernelItem.simulate("click");
+      expect(props.interruptKernel).toHaveBeenCalledTimes(1);
     });
   });
 });
