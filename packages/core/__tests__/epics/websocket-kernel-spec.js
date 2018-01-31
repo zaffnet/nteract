@@ -1,7 +1,10 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
-import { launchKernelByName } from "../../src/actions";
-import { launchWebSocketKernelEpic } from "../../src/epics";
+import { launchKernelByName, interruptKernel } from "../../src/actions";
+import {
+  launchWebSocketKernelEpic,
+  interruptKernelEpic
+} from "../../src/epics";
 
 import { toArray } from "rxjs/operators";
 
@@ -58,6 +61,50 @@ describe("launchWebSocketKernelEpic", () => {
           kernelSpecName: "fancy",
           id: "0"
         }
+      }
+    ]);
+  });
+});
+
+describe("interruptKernelEpic", () => {
+  test("", async function() {
+    const store = {
+      getState() {
+        return this.state;
+      },
+      state: {
+        app: {
+          host: {
+            type: "jupyter",
+            token: "eh",
+            serverUrl: "http://localhost:8888/"
+          },
+          kernel: {
+            type: "websocket",
+            channels: jest.fn(),
+            kernelSpecName: "fancy",
+            id: "0"
+          },
+          notificationSystem: { addNotification: jest.fn() }
+        },
+        document: Immutable.fromJS({
+          notebook: {
+            cellMap: {},
+            cellOrder: []
+          }
+        })
+      }
+    };
+
+    const action$ = ActionsObservable.of(interruptKernel);
+
+    const responseActions = await interruptKernelEpic(action$, store)
+      .pipe(toArray())
+      .toPromise();
+
+    expect(responseActions).toEqual([
+      {
+        type: "INTERRUPTED"
       }
     ]);
   });

@@ -5,6 +5,7 @@ import { ofType } from "redux-observable";
 import {
   catchError,
   map,
+  mapTo,
   mergeMap,
   switchMap,
   concatMap,
@@ -89,6 +90,8 @@ export const interruptKernelEpic = (action$: *, store: *) =>
       const serverConfig = getServerConfig(state);
       const id = state.app.kernel.id;
 
-      return kernels.interrupt(serverConfig, id).mapTo({ type: "INTERRUPTED" });
+      return kernels
+        .interrupt(serverConfig, id)
+        .pipe(mapTo({ type: "INTERRUPTED" }));
     })
   );
