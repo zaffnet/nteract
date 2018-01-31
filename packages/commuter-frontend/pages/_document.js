@@ -81,10 +81,6 @@ class MyDocument extends Document {
               )
             }}
           />
-          <script
-            type="text/javascript"
-            src="/static/mathjax-electron/resources/MathJax/MathJax.js?config=electron"
-          />
         </Head>
         <body>
           <Main />
