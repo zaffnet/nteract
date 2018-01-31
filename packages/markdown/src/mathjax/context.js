@@ -48,6 +48,9 @@ class Context extends React.Component<Props, *> {
 
   getChildContext() {
     return {
+      // Here we see if MathJax is defined globally by running a typeof on a
+      // potentially not set value then explicitly setting the MathJax context
+      // to undefined.
       MathJax: typeof MathJax === "undefined" ? undefined : MathJax,
       input: this.props.input,
       MathJaxContext: true
