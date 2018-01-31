@@ -4,10 +4,8 @@
 /* eslint jsx-a11y/no-noninteractive-tabindex: 0 */
 
 import React from "react";
-import CommonMark from "commonmark";
-import MarkdownRenderer from "commonmark-react-renderer";
 
-import LatexRenderer from "./latex";
+import Markdown from "@nteract/markdown";
 
 import { Outputs, PromptBuffer, Input } from "./";
 
@@ -25,14 +23,6 @@ type Props = {
 type State = {
   view: boolean
 };
-
-// TODO: Standardize this as @nteract/markdown-renderer
-//       and keep it consistent amongst the markdown transform and in the
-//       rendered view of markdown cells
-type MDRender = (input: string) => string;
-const parser = new CommonMark.Parser();
-const renderer = new MarkdownRenderer();
-const mdRender: MDRender = input => renderer.render(parser.parse(input));
 
 const noop = function() {};
 
@@ -165,13 +155,13 @@ export default class MarkdownCell extends React.Component<any, State> {
         }}
       >
         <Outputs>
-          <LatexRenderer>
-            {mdRender(
+          <Markdown
+            source={
               source
                 ? source
                 : "*Empty markdown cell, double click me to add content.*"
-            )}
-          </LatexRenderer>
+            }
+          />
         </Outputs>
       </div>
     ) : (
@@ -182,7 +172,13 @@ export default class MarkdownCell extends React.Component<any, State> {
           {this.props.children}
         </Input>
         <Outputs hidden={source === ""}>
-          <LatexRenderer>{mdRender(source)}</LatexRenderer>
+          <Markdown
+            source={
+              source
+                ? source
+                : "*Empty markdown cell, double click me to add content.*"
+            }
+          />
         </Outputs>
       </div>
     );

@@ -7,9 +7,6 @@
     "dev": "next",
     "build": "next build",
     "start": "echo \"This must be run with the commuter server\"",
-    "test": "echo \"no test for now\"",
-    "copy-static": "node copy-static.js",
-    "prepare": "npm run copy-static",
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {
@@ -30,14 +27,14 @@
     "@nteract/transform-dataresource": "^3.0.0",
     "@nteract/transform-vega": "^3.1.0",
     "@nteract/transforms": "^3.2.0",
+    "@nteract/markdown": "^0.0.1",
     "babel-preset-flow": "^6.23.0",
     "d3-dsv": "^1.0.7",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
-    "mathjax-electron": "^2.0.1",
     "next": "^4.2.1",
     "nprogress": "^0.2.0",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

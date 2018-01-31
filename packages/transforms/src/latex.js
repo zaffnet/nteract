@@ -1,38 +1,39 @@
 /* @flow */
 import React from "react";
-import mathjaxHelper from "mathjax-electron";
+import PropTypes from "prop-types";
+
+import { MathJax } from "@nteract/markdown";
 
 type Props = {
   data: string
 };
 
-export default class LaTeXDisplay extends React.Component<Props> {
-  el: ?HTMLElement;
-  static MIMETYPE = "text/latex";
+type Context = {
+  MathJax?: Object,
+  MathJaxContext?: boolean
+};
 
-  componentDidMount(): void {
-    if (!this.el) return;
-    this.el.innerHTML = this.props.data;
-    mathjaxHelper.loadAndTypeset(document, this.el);
+export const LaTeXDisplay = (props: Props, context: Context) => {
+  // If there's a MathJaxContext as a parent, rely on it being
+  // available for the individual MathJax.Node
+  if (context && context.MathJaxContext) {
+    return <MathJax.Node>{props.data}</MathJax.Node>;
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
-    return this.props.data !== nextProps.data;
-  }
+  return (
+    <MathJax.Context input="tex">
+      <MathJax.Node>{props.data}</MathJax.Node>
+    </MathJax.Context>
+  );
+};
 
-  componentDidUpdate() {
-    if (!this.el) return;
-    this.el.innerHTML = this.props.data;
-    mathjaxHelper.loadAndTypeset(document, this.el);
-  }
+LaTeXDisplay.MIMETYPE = "text/latex";
 
-  render(): ?React$Element<any> {
-    return (
-      <div
-        ref={el => {
-          this.el = el;
-        }}
-      />
-    );
-  }
-}
+LaTeXDisplay.contextTypes = {
+  // Opt in to updates to the MathJax object even though
+  // Not explicitly used
+  MathJax: PropTypes.object,
+  MathJaxContext: PropTypes.bool
+};
+
+export default LaTeXDisplay;
