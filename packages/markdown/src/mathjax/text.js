@@ -4,7 +4,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 
 class Text extends React.Component<*, *> {
-  div: ?HTMLElement;
+  el: ?HTMLElement;
 
   componentDidMount() {
     this.refreshMathJax();
@@ -22,21 +22,19 @@ class Text extends React.Component<*, *> {
       );
     }
 
-    MathJax.Hub.Queue(MathJax.Hub.Typeset(this.div, this.props.onRender));
+    MathJax.Hub.Queue(MathJax.Hub.Typeset(this.el, this.props.onRender));
   }
 
   render() {
-    const { classes, options } = this.props;
-
     return (
-      <div
+      <pre
         key={this.props.text}
-        ref={div => {
-          this.div = div;
+        ref={el => {
+          this.el = el;
         }}
       >
         {this.props.text}
-      </div>
+      </pre>
     );
   }
 }
