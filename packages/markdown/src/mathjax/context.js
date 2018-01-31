@@ -15,8 +15,7 @@ export type Props = {
   input: "ascii" | "tex",
   delay: number,
   options: Object,
-  // TODO: This was a PropTypes.node, not sure what it needs to be
-  loading: any,
+  loading: React.Node,
   noGate: boolean,
   onError: (err: Error) => void,
   onLoad: ?Function
