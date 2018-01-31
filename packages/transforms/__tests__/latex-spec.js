@@ -1,13 +1,15 @@
 import React from "react";
 import renderer from "react-test-renderer";
 
+import { shallow } from "enzyme";
+import toJson from "enzyme-to-json";
+
 import LaTeXDisplay from "../src/latex";
 
 describe("LaTeXDisplay", () => {
   it("processes basic LaTeX", () => {
-    const tree = renderer
-      .create(<LaTeXDisplay data={"x^2 + y = 3"} />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = shallow(<LaTeXDisplay data={"x^2 + y = 3"} />);
+
+    expect(toJson(wrapper)).toMatchSnapshot();
   });
 });
