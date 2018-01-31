@@ -10,7 +10,7 @@ import configureStore from "./store";
 
 import type { JupyterConfigData } from "./store";
 
-import { NotebookApp } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
@@ -36,15 +36,17 @@ function createApp(jupyterConfigData: JupyterConfigData) {
     render(): React$Element<any> {
       return (
         <Provider store={store}>
-          <div>
-            <NotebookMenu />
-            <NotebookApp />
-            <NotificationSystem
-              ref={notificationSystem => {
-                this.notificationSystem = notificationSystem;
-              }}
-            />
-            <ModalController />
+          <React.Fragment>
+            <Styles>
+              <NotebookMenu />
+              <NotebookApp />
+              <NotificationSystem
+                ref={notificationSystem => {
+                  this.notificationSystem = notificationSystem;
+                }}
+              />
+              <ModalController />
+            </Styles>
             <style jsx global>{`
               body {
                 font-family: "Source Sans Pro";
@@ -75,7 +77,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
                 animation-fill-mode: forwards;
               }
             `}</style>
-          </div>
+          </React.Fragment>
         </Provider>
       );
     }
