@@ -25,6 +25,7 @@
   "author": "Trevor Lyon <github.com/tlyon3>",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "prop-types": "^15.6.0",
     "react-markdown": "^3.1.4"
   }
 }

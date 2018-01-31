@@ -28,7 +28,7 @@ class Context extends React.Component<Props, *> {
   static defaultProps = {
     script:
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
-    input: "ascii",
+    input: "tex",
     didFinishTypeset: null,
     delay: 0,
     options: {},
@@ -49,7 +49,8 @@ class Context extends React.Component<Props, *> {
   getChildContext() {
     return {
       MathJax: typeof MathJax === "undefined" ? undefined : MathJax,
-      input: this.props.input
+      input: this.props.input,
+      MathJaxContext: true
     };
   }
 
@@ -117,7 +118,8 @@ class Context extends React.Component<Props, *> {
 
 Context.childContextTypes = {
   MathJax: PropTypes.object,
-  input: PropTypes.string
+  input: PropTypes.string,
+  MathJaxContext: PropTypes.bool
 };
 
 export default Context;

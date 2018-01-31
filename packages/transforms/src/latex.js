@@ -1,5 +1,6 @@
 /* @flow */
 import React from "react";
+import PropTypes from "prop-types";
 
 import { MathJax } from "@nteract/markdown";
 
@@ -7,18 +8,32 @@ type Props = {
   data: string
 };
 
-export default class LaTeXDisplay extends React.Component<Props> {
-  static MIMETYPE = "text/latex";
+type Context = {
+  MathJax?: Object,
+  MathJaxContext?: boolean
+};
 
-  shouldComponentUpdate(nextProps: Props): boolean {
-    return this.props.data !== nextProps.data;
+export const LaTeXDisplay = (props: Props, context: Context) => {
+  // If there's a MathJaxContext as a parent, rely on it being
+  // available for the individual MathJax.Node
+  if (context && context.MathJaxContext) {
+    return <MathJax.Node>{props.data}</MathJax.Node>;
   }
 
-  render(): ?React$Element<any> {
-    return (
-      <MathJax.Context input="tex">
-        <MathJax.Node>{this.props.data}</MathJax.Node>
-      </MathJax.Context>
-    );
-  }
-}
+  return (
+    <MathJax.Context input="tex">
+      <MathJax.Node>{props.data}</MathJax.Node>
+    </MathJax.Context>
+  );
+};
+
+LaTeXDisplay.MIMETYPE = "text/latex";
+
+LaTeXDisplay.contextTypes = {
+  // Opt in to updates to the MathJax object even though
+  // Not explicitly used
+  MathJax: PropTypes.object,
+  MathJaxContext: PropTypes.bool
+};
+
+export default LaTeXDisplay;

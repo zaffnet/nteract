@@ -2,8 +2,9 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
-
 import { Provider } from "react-redux";
+
+import { MathJax } from "@nteract/markdown";
 
 import { Map as ImmutableMap } from "immutable";
 
@@ -62,7 +63,10 @@ export default class App extends React.PureComponent<Object, Object> {
     return (
       <Provider store={store}>
         <React.Fragment>
-          <NotebookApp transforms={transforms} displayOrder={displayOrder} />
+          <MathJax.Context input="tex">
+            <NotebookApp transforms={transforms} displayOrder={displayOrder} />
+          </MathJax.Context>
+
           <NotificationSystem
             ref={notificationSystem => {
               this.notificationSystem = notificationSystem;

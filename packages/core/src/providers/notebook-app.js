@@ -13,6 +13,8 @@ import {
 
 import { HijackScroll } from "../components/hijack-scroll";
 
+import { MathJax } from "@nteract/markdown";
+
 import MarkdownPreviewer from "../components/markdown-preview";
 import Toolbar from "./toolbar";
 

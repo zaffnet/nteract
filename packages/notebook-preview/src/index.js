@@ -24,7 +24,7 @@ import {
 
 import { PapermillView } from "./papermill";
 
-import Markdown from "@nteract/markdown";
+import Markdown, { MathJax } from "@nteract/markdown";
 
 const themes = require("@nteract/core/themes");
 
@@ -84,100 +84,102 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
     const cellMap = notebook.get("cellMap");
 
     return (
-      <div className="notebook-preview">
-        <Cells>
-          {cellOrder.map(cellID => {
-            const cell = cellMap.get(cellID);
-            const cellType = cell.get("cell_type");
-            const source = cell.get("source");
+      <MathJax.Context>
+        <div className="notebook-preview">
+          <Cells>
+            {cellOrder.map(cellID => {
+              const cell = cellMap.get(cellID);
+              const cellType = cell.get("cell_type");
+              const source = cell.get("source");
 
-            switch (cellType) {
-              case "code":
-                const sourceHidden =
-                  allSourceHidden ||
-                  cell.getIn(["metadata", "inputHidden"]) ||
-                  cell.getIn(["metadata", "hide_input"]);
+              switch (cellType) {
+                case "code":
+                  const sourceHidden =
+                    allSourceHidden ||
+                    cell.getIn(["metadata", "inputHidden"]) ||
+                    cell.getIn(["metadata", "hide_input"]);
 
-                const outputHidden =
-                  cell.get("outputs").size === 0 ||
-                  cell.getIn(["metadata", "outputHidden"]);
+                  const outputHidden =
+                    cell.get("outputs").size === 0 ||
+                    cell.getIn(["metadata", "outputHidden"]);
 
-                return (
-                  <Cell key={cellID}>
-                    <PapermillView
-                      {...cell
-                        .getIn(["metadata", "papermill"], ImmutableMap())
-                        .toJS()}
-                    />
-                    <Input hidden={sourceHidden}>
-                      <Prompt />
-                      <Editor language={language} theme={this.props.theme}>
-                        {source}
-                      </Editor>
-                    </Input>
-                    <Outputs
-                      hidden={outputHidden}
-                      expanded={cell.getIn(
-                        ["metadata", "outputExpanded"],
-                        true
-                      )}
-                    >
-                      <Display
-                        outputs={cell.get("outputs").toJS()}
-                        transforms={transforms}
-                        displayOrder={displayOrder}
+                  return (
+                    <Cell key={cellID}>
+                      <PapermillView
+                        {...cell
+                          .getIn(["metadata", "papermill"], ImmutableMap())
+                          .toJS()}
                       />
-                    </Outputs>
-                  </Cell>
-                );
-              case "markdown":
-                return (
-                  <Cell key={cellID}>
-                    <div className="content-margin">
-                      <Markdown source={source} />
-                    </div>
-                    <style jsx>{`
-                      .content-margin {
-                        padding-left: calc(var(--prompt-width, 50px) + 10px);
-                        padding-top: 10px;
-                        padding-bottom: 10px;
-                        padding-right: 10px;
-                      }
-                    `}</style>
-                  </Cell>
-                );
-              case "raw":
-                return (
-                  <Cell key={cellID}>
-                    <pre className="raw-cell">
-                      {source}
+                      <Input hidden={sourceHidden}>
+                        <Prompt />
+                        <Editor language={language} theme={this.props.theme}>
+                          {source}
+                        </Editor>
+                      </Input>
+                      <Outputs
+                        hidden={outputHidden}
+                        expanded={cell.getIn(
+                          ["metadata", "outputExpanded"],
+                          true
+                        )}
+                      >
+                        <Display
+                          outputs={cell.get("outputs").toJS()}
+                          transforms={transforms}
+                          displayOrder={displayOrder}
+                        />
+                      </Outputs>
+                    </Cell>
+                  );
+                case "markdown":
+                  return (
+                    <Cell key={cellID}>
+                      <div className="content-margin">
+                        <Markdown source={source} />
+                      </div>
                       <style jsx>{`
-                        raw-cell {
-                          background: repeating-linear-gradient(
-                            -45deg,
-                            transparent,
-                            transparent 10px,
-                            #efefef 10px,
-                            #f1f1f1 20px
-                          );
+                        .content-margin {
+                          padding-left: calc(var(--prompt-width, 50px) + 10px);
+                          padding-top: 10px;
+                          padding-bottom: 10px;
+                          padding-right: 10px;
                         }
                       `}</style>
-                    </pre>
-                  </Cell>
-                );
+                    </Cell>
+                  );
+                case "raw":
+                  return (
+                    <Cell key={cellID}>
+                      <pre className="raw-cell">
+                        {source}
+                        <style jsx>{`
+                          raw-cell {
+                            background: repeating-linear-gradient(
+                              -45deg,
+                              transparent,
+                              transparent 10px,
+                              #efefef 10px,
+                              #f1f1f1 20px
+                            );
+                          }
+                        `}</style>
+                      </pre>
+                    </Cell>
+                  );
 
-              default:
-                return (
-                  <Cell key={cellID}>
-                    <Outputs>
-                      <pre>{`Cell Type "${cellType}" is not implemented`}</pre>
-                    </Outputs>
-                  </Cell>
-                );
-            }
-          })}
-        </Cells>
-        <style>{`:root {
+                default:
+                  return (
+                    <Cell key={cellID}>
+                      <Outputs>
+                        <pre
+                        >{`Cell Type "${cellType}" is not implemented`}</pre>
+                      </Outputs>
+                    </Cell>
+                  );
+              }
+            })}
+          </Cells>
+          <style>{`:root {
           ${themes[this.props.theme]}
             --cell-shadow-hover-1: none;
             --cell-shadow-hover-2: none;
@@ -187,7 +189,8 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
             --cell-bg-focus: var(--prompt-bg);
           }
         `}</style>
-      </div>
+        </div>
+      </MathJax.Context>
     );
   }
 }
