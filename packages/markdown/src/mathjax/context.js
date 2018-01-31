@@ -3,8 +3,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-// TODO: bring in this dep
-import loadScript from "load-script";
+import loadScript from "./load-script";
 
 // MathJax expected to be a global and may be undefined
 declare var MathJax: ?Object;
