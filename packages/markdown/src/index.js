@@ -2,7 +2,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import MathJax from "./mathjax";
-import RemarkMathPlugin from "remark-math";
+import RemarkMathPlugin from "./remark-math";
 
 const math = (props: { value: string }) => (
   <MathJax.Node>{props.value}</MathJax.Node>
