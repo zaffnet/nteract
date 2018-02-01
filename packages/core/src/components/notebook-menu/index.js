@@ -216,6 +216,18 @@ class PureNotebookMenu extends React.Component<Props> {
               </MenuItem>
             </SubMenu>
           </SubMenu>
+          <SubMenu key={MENUS.VIEW} title="View">
+            <SubMenu key={MENUS.VIEW_THEMES} title="themes">
+              <MenuItem
+                key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_LIGHT)}
+              >
+                light
+              </MenuItem>
+              <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_DARK)}>
+                dark
+              </MenuItem>
+            </SubMenu>
+          </SubMenu>
           <SubMenu key={MENUS.CELL} title="Cell">
             <MenuItem
               key={createActionKey(MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS)}
@@ -241,27 +253,16 @@ class PureNotebookMenu extends React.Component<Props> {
               </MenuItem>
             </SubMenu>
           </SubMenu>
-          <SubMenu key={MENUS.VIEW} title="View">
-            <SubMenu key={MENUS.VIEW_THEMES} title="themes">
-              <MenuItem
-                key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_LIGHT)}
-              >
-                light
-              </MenuItem>
-              <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SET_THEME_DARK)}>
-                dark
-              </MenuItem>
-            </SubMenu>
-          </SubMenu>
-          <SubMenu key={MENUS.HELP} title="Help">
-            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.OPEN_ABOUT)}>
-              About
-            </MenuItem>
-          </SubMenu>
 
           <SubMenu key={MENUS.RUNTIME} title="Runtime">
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.INTERRUPT_KERNEL)}>
               Interrupt
+            </MenuItem>
+          </SubMenu>
+
+          <SubMenu key={MENUS.HELP} title="Help">
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.OPEN_ABOUT)}>
+              About
             </MenuItem>
           </SubMenu>
         </Menu>
