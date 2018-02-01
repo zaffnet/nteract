@@ -10,7 +10,11 @@ import {
 
 import * as actionTypes from "../actionTypes";
 
-import type { NewKernelAction, SetExecutionStateAction } from "../actionTypes";
+import type {
+  NewKernelAction,
+  SetExecutionStateAction,
+  SetNotificationSystemAction
+} from "../actionTypes";
 
 function startSaving(state: AppRecord) {
   return state.set("isSaving", true);
@@ -55,6 +59,13 @@ export function setExecutionState(
   return state.setIn(["kernel", "status"], action.kernelStatus);
 }
 
+function setNotificationsSystem(
+  state: AppRecord,
+  action: SetNotificationSystemAction
+) {
+  return state.set("notificationSystem", action.notificationSystem);
+}
+
 export default function handleApp(
   state: AppRecord = makeAppRecord(),
   action: *
@@ -68,6 +79,8 @@ export default function handleApp(
       return startSaving(state);
     case actionTypes.DONE_SAVING:
       return doneSaving(state);
+    case actionTypes.SET_NOTIFICATION_SYSTEM:
+      return setNotificationsSystem(state, action);
     default:
       return state;
   }

@@ -15,7 +15,6 @@ import {
 import type {
   NewKernelAction,
   SetGithubTokenAction,
-  SetNotificationSystemAction,
   SetExecutionStateAction,
   ExitAction,
   StartSavingAction,
@@ -52,17 +51,6 @@ function interruptKernel(state: AppRecord) {
   return state;
 }
 
-function doneSavingConfig(state: AppRecord) {
-  return state.set("configLastSaved", new Date());
-}
-
-function setNotificationsSystem(
-  state: AppRecord,
-  action: SetNotificationSystemAction
-) {
-  return state.set("notificationSystem", action.notificationSystem);
-}
-
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   const { githubToken } = action;
   return state.set("githubToken", githubToken);
@@ -71,14 +59,12 @@ function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
 type AppAction =
   | NewKernelAction
   | SetGithubTokenAction
-  | SetNotificationSystemAction
   | SetExecutionStateAction
   | ExitAction
   | StartSavingAction
   | InterruptKernelAction
   | KillKernelAction
-  | DoneSavingAction
-  | DoneSavingConfigAction;
+  | DoneSavingAction;
 
 export default function handleApp(
   state: AppRecord = makeAppRecord({
@@ -99,10 +85,6 @@ export default function handleApp(
       return cleanupKernel(state);
     case "INTERRUPT_KERNEL":
       return interruptKernel(state);
-    case "DONE_SAVING_CONFIG":
-      return doneSavingConfig(state);
-    case "SET_NOTIFICATION_SYSTEM":
-      return setNotificationsSystem(state, action);
     case "SET_GITHUB_TOKEN":
       return setGithubToken(state, action);
     default:
