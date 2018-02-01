@@ -1,6 +1,15 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
 import { launchKernelByName, interruptKernel } from "../../src/actions";
+
+import {
+  makeAppRecord,
+  makeJupyterHostRecord,
+  makeRemoteKernelRecord,
+  makeDocumentRecord
+} from "@nteract/types/core/records";
+
+import { emptyNotebook } from "@nteract/commutable";
 import {
   launchWebSocketKernelEpic,
   interruptKernelEpic
@@ -19,29 +28,17 @@ describe("launchWebSocketKernelEpic", () => {
         return this.state;
       },
       state: {
-        app: {
-          host: {
+        app: makeAppRecord({
+          host: makeJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
-          },
+          }),
           kernel: null,
           notificationSystem: { addNotification: jest.fn() }
-        },
+        }),
         document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
+          notebook: emptyNotebook
         })
       }
     };
@@ -73,25 +70,22 @@ describe("interruptKernelEpic", () => {
         return this.state;
       },
       state: {
-        app: {
-          host: {
+        app: makeAppRecord({
+          host: makeJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
-          },
-          kernel: {
+          }),
+          kernel: makeRemoteKernelRecord({
             type: "websocket",
             channels: jest.fn(),
             kernelSpecName: "fancy",
             id: "0"
-          },
+          }),
           notificationSystem: { addNotification: jest.fn() }
-        },
-        document: Immutable.fromJS({
-          notebook: {
-            cellMap: {},
-            cellOrder: []
-          }
+        }),
+        document: makeDocumentRecord({
+          notebook: emptyNotebook
         })
       }
     };
