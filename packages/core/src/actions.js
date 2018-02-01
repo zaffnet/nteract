@@ -75,7 +75,9 @@ import type {
   SetConfigAction,
   LaunchKernelAction,
   LaunchKernelByNameAction,
-  InterruptKernelAction,
+  InterruptKernel,
+  InterruptKernelSuccessful,
+  InterruptKernelFailed,
   KillKernelAction,
   // TODO: Needs an action creator
   StartSavingAction,
@@ -413,9 +415,25 @@ export const killKernel: KillKernelAction = {
   type: actionTypes.KILL_KERNEL
 };
 
-export const interruptKernel: InterruptKernelAction = {
-  type: actionTypes.INTERRUPT_KERNEL
-};
+export function interruptKernel(): InterruptKernel {
+  return {
+    type: actionTypes.INTERRUPT_KERNEL
+  };
+}
+
+export function interruptKernelSuccessful(): InterruptKernelSuccessful {
+  return {
+    type: actionTypes.INTERRUPT_KERNEL_SUCCESSFUL
+  };
+}
+
+export function interruptKernelFailed(error: Error): interruptKernelFailed {
+  return {
+    type: actionTypes.INTERRUPT_KERNEL_FAILED,
+    payload: error,
+    error: true
+  };
+}
 
 export function setNotificationSystem(
   notificationSystem: any

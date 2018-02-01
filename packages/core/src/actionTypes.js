@@ -377,7 +377,17 @@ export const START_SAVING = "START_SAVING";
 export type StartSavingAction = { type: "START_SAVING" };
 
 export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
-export type InterruptKernelAction = { type: "INTERRUPT_KERNEL" };
+export type InterruptKernel = { type: "INTERRUPT_KERNEL" };
+
+export const INTERRUPT_KERNEL_SUCCESSFUL = "INTERRUPT_KERNEL_SUCCESSFUL";
+export type InterruptKernelSuccessful = { type: "INTERRUPT_KERNEL_SUCCESSFUL" };
+
+export const INTERRUPT_KERNEL_FAILED = "INTERRUPT_KERNEL_FAILED";
+export type InterruptKernelFailed = {
+  type: "INTERRUPT_KERNEL_FAILED",
+  payload: Error,
+  error: true
+};
 
 export const KILL_KERNEL = "KILL_KERNEL";
 export type KillKernelAction = { type: "KILL_KERNEL" };

@@ -15,7 +15,11 @@ import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 
-import { launchKernelSuccessful } from "../actions";
+import {
+  launchKernelSuccessful,
+  interruptKernelSuccessful,
+  interruptKernelFailed
+} from "../actions";
 
 import type { AppState, RemoteKernelProps } from "@nteract/types/core/records";
 
@@ -68,7 +72,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 export const interruptKernelEpic = (action$: *, store: *) =>
   action$.pipe(
     ofType(INTERRUPT_KERNEL),
-    filter(action => {
+    filter(() => {
       const state = store.getState();
       const host = state.app.host;
       const kernel = state.app.kernel;
@@ -92,6 +96,9 @@ export const interruptKernelEpic = (action$: *, store: *) =>
 
       return kernels
         .interrupt(serverConfig, id)
-        .pipe(mapTo({ type: "INTERRUPTED" }));
+        .pipe(
+          map(() => interruptKernelSuccessful()),
+          catchError(err => interruptKernelFailed(err))
+        );
     })
   );

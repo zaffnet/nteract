@@ -308,7 +308,7 @@ const mapDispatchToProps = dispatch => ({
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),
-  interruptKernel: () => dispatch(actions.interruptKernel)
+  interruptKernel: () => dispatch(actions.interruptKernel())
 });
 
 const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(

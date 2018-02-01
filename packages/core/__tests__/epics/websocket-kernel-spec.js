@@ -96,7 +96,7 @@ describe("interruptKernelEpic", () => {
       }
     };
 
-    const action$ = ActionsObservable.of(interruptKernel);
+    const action$ = ActionsObservable.of(interruptKernel());
 
     const responseActions = await interruptKernelEpic(action$, store)
       .pipe(toArray())
@@ -104,7 +104,7 @@ describe("interruptKernelEpic", () => {
 
     expect(responseActions).toEqual([
       {
-        type: "INTERRUPTED"
+        type: "INTERRUPT_KERNEL_SUCCESSFUL"
       }
     ]);
   });
