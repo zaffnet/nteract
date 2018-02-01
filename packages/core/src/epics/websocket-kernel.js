@@ -5,7 +5,6 @@ import { ofType } from "redux-observable";
 import {
   catchError,
   map,
-  mapTo,
   mergeMap,
   switchMap,
   concatMap,
@@ -23,7 +22,7 @@ import {
 
 import type { AppState, RemoteKernelProps } from "@nteract/types/core/records";
 
-import { kernels, shutdown, kernelspecs } from "rx-jupyter";
+import { kernels, shutdown } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
 
 import { getServerConfig } from "../selectors";
