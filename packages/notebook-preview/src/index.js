@@ -181,12 +181,12 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
           </Cells>
           <style>{`:root {
           ${themes[this.props.theme]}
-            --cell-shadow-hover-1: none;
-            --cell-shadow-hover-2: none;
-            --cell-shadow-focus-1: none;
-            --cell-shadow-focus-2: none;
-            --cell-bg-hover: var(--prompt-bg);
-            --cell-bg-focus: var(--prompt-bg);
+            --theme-cell-shadow-hover: none;
+            --theme-cell-shadow-focus: none;
+            --theme-cell-prompt-bg-hover: var(--theme-cell-prompt-bg);
+            --theme-cell-prompt-bg-focus: var(--theme-cell-prompt-bg);
+            --theme-cell-prompt-fg-hover: var(--theme-cell-prompt-fg);
+            --theme-cell-prompt-fg-focus: var(--theme-cell-prompt-fg);
           }
         `}</style>
         </div>

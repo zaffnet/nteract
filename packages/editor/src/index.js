@@ -306,7 +306,7 @@ class CodeMirrorEditor extends React.Component<
                 margin: 30px 20px 50px 20px;
                 box-shadow: 2px 2px 50px rgba(0, 0, 0, 0.2);
                 white-space: pre-wrap;
-                background-color: var(--main-bg-color);
+                background-color: var(--theme-app-bg);
                 z-index: 9999999;
               }
             `}</style>

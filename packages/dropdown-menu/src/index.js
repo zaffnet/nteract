@@ -119,7 +119,7 @@ export class DropdownContent extends React.Component<{
             font-size: 12px;
             line-height: 1.5;
             margin: 20px 0;
-            background-color: var(--dropdown-content, #eeedee);
+            background-color: var(--theme-cell-menu-bg);
           }
 
           ul {
@@ -135,7 +135,7 @@ export class DropdownContent extends React.Component<{
           }
 
           :global(li:hover) {
-            background-color: var(--dropdown-content-hover, #e2dfe3);
+            background-color: var(--theme-cell-menu-bg-hover, #e2dfe3);
             cursor: pointer;
           }
         `}</style>

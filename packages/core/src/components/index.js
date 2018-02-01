@@ -105,7 +105,7 @@ export class Outputs extends React.Component<OutputsProps> {
             .outputs :global(.th),
             /* for legacy output handling */ .outputs :global(.td) {
               padding: 0.5em 1em;
-              border: 1px solid var(--primary-border, #cbcbcb);
+              border: 1px solid var(--theme-app-border, #cbcbcb);
             }
 
             .outputs :global(th) {
@@ -114,7 +114,7 @@ export class Outputs extends React.Component<OutputsProps> {
 
             .outputs :global(blockquote) {
               padding: 0.75em 0.5em 0.75em 1em;
-              background: var(--main-bg-color, white);
+              background: var(--theme-cell-output-bg, white);
               border-left: 0.5em solid #ddd;
             }
 
@@ -124,7 +124,7 @@ export class Outputs extends React.Component<OutputsProps> {
               content: "“";
               margin-left: -0.95em;
               font: italic 400%/1 Open Serif, Georgia, "Times New Roman", serif;
-              color: solid var(--primary-border, #cbcbcb);
+              color: solid var(--theme-app-border, #cbcbcb);
             }
 
             /* for nested paragraphs in block quotes */
@@ -308,8 +308,8 @@ export class Input extends React.Component<InputProps> {
 
             text-align: center;
 
-            color: var(--input-color, black);
-            background-color: var(--prompt-bg, #fafafa);
+            color: var(--theme-cell-prompt-fg, black);
+            background-color: var(--theme-cell-prompt-bg, #fafafa);
 
             flex: 0 0 auto;
           }
@@ -317,7 +317,7 @@ export class Input extends React.Component<InputProps> {
           .input-container :global(.input) {
             flex: 1 1 auto;
             overflow: auto;
-            background-color: var(--cm-background, #fafafa);
+            background-color: var(--theme-cell-input-bg, #fafafa);
           }
         `}</style>
       </div>
@@ -332,40 +332,28 @@ export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
       <style jsx>{`
         .cell {
           position: relative;
-          background: var(--cell-bg, white);
+          background: var(--theme-cell-bg, white);
           transition: all 0.1s ease-in-out;
         }
 
-        /*
-         TODO: Create a "cell-hover-shadow" var and cell-focused-shadow var
-         For now, assume that it will have to be overridden somehow.
-
-         One issue we currently have is that these are each two properties.
-
-         Basically it's
-         --cell-shadow-hover-1 and --cell--shadow-hover-2
-         */
-
         .cell:hover {
-          /* prettier-ignore */
-          box-shadow: var(--cell-shadow-hover-1,  1px  1px 3px rgba(0, 0, 0, 0.12)),
-                      var(--cell-shadow-hover-2, -1px -1px 3px rgba(0, 0, 0, 0.12));
+          box-shadow: var(--theme-cell-shadow-hover);
         }
 
         .cell.focused {
-          /* prettier-ignore */
-          box-shadow: var(--cell-focus-hover-1,  3px  3px 9px rgba(0, 0, 0, 0.12)),
-                      var(--cell-focus-hover-2, -3px -3px 9px rgba(0, 0, 0, 0.12));
+          box-shadow: var(--theme-cell-shadow-focus);
         }
 
         .cell:hover :global(.prompt),
         .cell:active :global(.prompt) {
-          background-color: var(--cell-bg-hover, #eeedee);
+          background-color: var(--theme-cell-prompt-bg-hover);
+          color: var(--theme-cell-prompt-fg-hover);
         }
 
         .cell:focus :global(.prompt),
         .cell.focused :global(.prompt) {
-          background-color: var(--cell-bg-focus, #e2dfe3);
+          background-color: var(--theme-cell-prompt-bg-focus);
+          color: var(--theme-cell-prompt-fg-focus);
         }
       `}</style>
       {children}
@@ -411,8 +399,8 @@ export const Cells = (props: {
           font-family: "Source Sans Pro", Helvetica Neue, Helvetica, Arial,
             sans-serif;
           font-size: 16px;
-          background-color: var(--main-bg-color, white);
-          color: var(--main-fg-color, rgb(51, 51, 51));
+          background-color: var(--theme-app-bg);
+          color: var(--theme-app-fg);
 
           padding-bottom: 10px;
         }
