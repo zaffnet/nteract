@@ -6,7 +6,11 @@ import { loadEpic, newNotebookEpic } from "./loading";
 
 import type { ActionsObservable, Epic } from "redux-observable";
 
-import { launchKernelEpic, launchKernelByNameEpic } from "./kernel-launch";
+import {
+  launchKernelEpic,
+  launchKernelByNameEpic,
+  interruptKernelEpic
+} from "./zeromq-kernels";
 
 import {
   acquireKernelInfoEpic,
@@ -45,6 +49,7 @@ const epics = [
   updateDisplayEpic,
   launchKernelEpic,
   launchKernelByNameEpic,
+  interruptKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   loadConfigEpic,

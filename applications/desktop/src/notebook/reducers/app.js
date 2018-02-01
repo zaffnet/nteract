@@ -15,12 +15,8 @@ import {
 import type {
   NewKernelAction,
   SetGithubTokenAction,
-  SetExecutionStateAction,
   ExitAction,
-  StartSavingAction,
-  InterruptKernelAction,
   KillKernelAction,
-  DoneSavingAction,
   DoneSavingConfigAction
 } from "@nteract/core/actionTypes";
 
@@ -41,16 +37,6 @@ function exit(state: AppRecord) {
   return cleanupKernel(state);
 }
 
-function interruptKernel(state: AppRecord) {
-  // TODO: This should be an epic instead
-  if (state.kernel.type === "zeromq") {
-    state.kernel.spawn.kill("SIGINT");
-  } else {
-    console.log("cant interrupt non-zeromq kernels currently");
-  }
-  return state;
-}
-
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   const { githubToken } = action;
   return state.set("githubToken", githubToken);
@@ -59,12 +45,8 @@ function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
 type AppAction =
   | NewKernelAction
   | SetGithubTokenAction
-  | SetExecutionStateAction
   | ExitAction
-  | StartSavingAction
-  | InterruptKernelAction
-  | KillKernelAction
-  | DoneSavingAction;
+  | KillKernelAction;
 
 export default function handleApp(
   state: AppRecord = makeAppRecord({
@@ -83,8 +65,6 @@ export default function handleApp(
       return exit(state);
     case "KILL_KERNEL":
       return cleanupKernel(state);
-    case "INTERRUPT_KERNEL":
-      return interruptKernel(state);
     case "SET_GITHUB_TOKEN":
       return setGithubToken(state, action);
     default:

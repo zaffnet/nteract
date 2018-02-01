@@ -8,7 +8,7 @@ import {
   launchKernelObservable,
   launchKernelEpic,
   launchKernelByNameEpic
-} from "../../../src/notebook/epics/kernel-launch";
+} from "../../../src/notebook/epics/zeromq-kernels";
 
 import { of } from "rxjs/observable/of";
 import { toArray, share } from "rxjs/operators";
