@@ -114,14 +114,3 @@ describe("setGithubToken", () => {
     expect(state.app.githubToken).not.toBeNull();
   });
 });
-
-describe("doneSavingConfig", () => {
-  test("updates when the config was saved", () => {
-    const originalState = { app: makeAppRecord({ configLastSaved: null }) };
-
-    const action = { type: actionTypes.DONE_SAVING_CONFIG };
-
-    const state = reducers(originalState, action);
-    expect(state.app.configLastSaved).toEqual(expect.any(Date));
-  });
-});
