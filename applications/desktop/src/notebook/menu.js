@@ -237,7 +237,7 @@ export function dispatchInterruptKernel(store) {
       level: "error"
     });
   } else {
-    store.dispatch(interruptKernel);
+    store.dispatch(interruptKernel());
   }
 }
 

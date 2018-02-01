@@ -152,6 +152,34 @@ exports[`PureNotebookMenu  snapshots renders the default 1`] = `
         />
       </div>
     </li>
+    <li
+      className="rc-menu-submenu rc-menu-submenu-horizontal"
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={undefined}
+    >
+      <div
+        aria-expanded={false}
+        aria-haspopup="true"
+        aria-owns="runtime$Menu"
+        className="rc-menu-submenu-title"
+        onBlur={undefined}
+        onClick={[Function]}
+        onContextMenu={undefined}
+        onFocus={undefined}
+        onMouseDown={undefined}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onTouchStart={undefined}
+        style={Object {}}
+        title="Runtime"
+      >
+        Runtime
+        <i
+          className="rc-menu-submenu-arrow"
+        />
+      </div>
+    </li>
   </ul>
 </div>
 `;

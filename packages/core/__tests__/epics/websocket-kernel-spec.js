@@ -1,7 +1,19 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
-import { launchKernelByName } from "../../src/actions";
-import { launchWebSocketKernelEpic } from "../../src/epics";
+import { launchKernelByName, interruptKernel } from "../../src/actions";
+
+import {
+  makeAppRecord,
+  makeJupyterHostRecord,
+  makeRemoteKernelRecord,
+  makeDocumentRecord
+} from "@nteract/types/core/records";
+
+import { emptyNotebook } from "@nteract/commutable";
+import {
+  launchWebSocketKernelEpic,
+  interruptKernelEpic
+} from "../../src/epics";
 
 import { toArray } from "rxjs/operators";
 
@@ -16,29 +28,17 @@ describe("launchWebSocketKernelEpic", () => {
         return this.state;
       },
       state: {
-        app: {
-          host: {
+        app: makeAppRecord({
+          host: makeJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
-          },
+          }),
           kernel: null,
           notificationSystem: { addNotification: jest.fn() }
-        },
+        }),
         document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
+          notebook: emptyNotebook
         })
       }
     };
@@ -58,6 +58,47 @@ describe("launchWebSocketKernelEpic", () => {
           kernelSpecName: "fancy",
           id: "0"
         }
+      }
+    ]);
+  });
+});
+
+describe("interruptKernelEpic", () => {
+  test("", async function() {
+    const store = {
+      getState() {
+        return this.state;
+      },
+      state: {
+        app: makeAppRecord({
+          host: makeJupyterHostRecord({
+            type: "jupyter",
+            token: "eh",
+            serverUrl: "http://localhost:8888/"
+          }),
+          kernel: makeRemoteKernelRecord({
+            type: "websocket",
+            channels: jest.fn(),
+            kernelSpecName: "fancy",
+            id: "0"
+          }),
+          notificationSystem: { addNotification: jest.fn() }
+        }),
+        document: makeDocumentRecord({
+          notebook: emptyNotebook
+        })
+      }
+    };
+
+    const action$ = ActionsObservable.of(interruptKernel());
+
+    const responseActions = await interruptKernelEpic(action$, store)
+      .pipe(toArray())
+      .toPromise();
+
+    expect(responseActions).toEqual([
+      {
+        type: "INTERRUPT_KERNEL_SUCCESSFUL"
       }
     ]);
   });

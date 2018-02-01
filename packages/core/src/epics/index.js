@@ -1,7 +1,10 @@
 // @flow
 export { executeCellEpic, updateDisplayEpic } from "./execute";
 export { commListenEpic } from "./comm";
-export { launchWebSocketKernelEpic } from "./websocket-kernel";
+export {
+  launchWebSocketKernelEpic,
+  interruptKernelEpic
+} from "./websocket-kernel";
 
 export {
   acquireKernelInfoEpic,
