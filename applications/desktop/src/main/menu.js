@@ -568,20 +568,20 @@ export function loadFullMenu(store = global.store) {
   };
 
   const languageMenu = {
-    label: "&Language",
+    label: "&Runtime",
     submenu: [
       {
-        label: "&Kill Running Kernel",
+        label: "&Kill",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:kill-kernel")
       },
       {
-        label: "&Interrupt Running Kernel",
+        label: "&Interrupt",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:interrupt-kernel")
       },
       {
-        label: "Restart Running Kernel",
+        label: "Restart",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:restart-kernel")
       },
