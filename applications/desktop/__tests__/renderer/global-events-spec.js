@@ -1,17 +1,5 @@
 import { dummyStore } from "@nteract/core/dummy";
 import * as globalEvents from "../../src/notebook/global-events";
-import * as kernel from "../../src/notebook/kernel/shutdown";
-
-describe("unload", () => {
-  test("should force a kernel shutdown", () => {
-    const store = dummyStore();
-    kernel.forceShutdownKernel = jest.fn();
-
-    globalEvents.unload(store);
-
-    expect(kernel.forceShutdownKernel).toHaveBeenCalled();
-  });
-});
 
 describe("beforeUnload", () => {
   test("should set event.returnValue if notebook is modified to prevent unload", () => {

@@ -336,12 +336,6 @@ export type ChangeCellTypeAction = {
   to: string
 };
 
-export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
-export type NewKernelAction = {
-  type: "LAUNCH_KERNEL_SUCCESSFUL",
-  kernel: LocalKernelProps | RemoteKernelProps
-};
-
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
@@ -368,10 +362,6 @@ export type SetNotebookAction = {
   notebook: ImmutableNotebook,
   filename?: string
 };
-
-// TODO: There's a reducer for this but it's not triggered anywhere
-export const EXIT = "EXIT";
-export type ExitAction = { type: "EXIT" };
 
 export const START_SAVING = "START_SAVING";
 export type StartSavingAction = { type: "START_SAVING" };
@@ -405,11 +395,50 @@ export type LaunchKernelAction = {
   cwd: string
 };
 
+export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
+export type LaunchKernelFailed = {
+  type: "LAUNCH_KERNEL_FAILED",
+  payload: Error,
+  error: true
+};
+
+export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
+export type NewKernelAction = {
+  type: "LAUNCH_KERNEL_SUCCESSFUL",
+  kernel: LocalKernelProps | RemoteKernelProps
+};
+
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",
   kernelSpecName: string,
   cwd: string
+};
+
+export const DELETE_CONNECTION_FILE_FAILED = "DELETE_CONNECTION_FILE_FAILED";
+export type DeleteConnectionFileFailedAction = {
+  type: "DELETE_CONNECTION_FILE_FAILED",
+  payload: Error,
+  error: true
+};
+
+export const DELETE_CONNECTION_FILE_SUCCESSFUL =
+  "DELETE_CONNECTION_FILE_SUCCESSFUL";
+export type DeleteConnectionFileSuccessfulAction = {
+  type: "DELETE_CONNECTION_FILE_SUCCESSFUL"
+};
+
+export const SHUTDOWN_REPLY_SUCCEEDED = "SHUTDOWN_REPLY_SUCCEEDED";
+export type ShutdownReplySucceeded = {
+  type: "SHUTDOWN_REPLY_SUCCEEDED",
+  payload: Object
+};
+
+export const SHUTDOWN_REPLY_TIMED_OUT = "SHUTDOWN_REPLY_TIMED_OUT";
+export type ShutdownReplyTimedOut = {
+  type: "SHUTDOWN_REPLY_TIMED_OUT",
+  payload: Error,
+  error: true
 };
 
 // TODO: This action needs a proper flow type, its from desktop's github store

@@ -29,34 +29,58 @@ describe("launchKernelEpic", () => {
     const obs = launchKernelEpic(action$);
     obs.subscribe(
       x => {
-        expect(x.type).toEqual(actionTypes.ERROR_KERNEL_LAUNCH_FAILED);
+        expect(x.type).toEqual(actionTypes.LAUNCH_KERNEL_FAILED);
         actionBuffer.push(x.type);
         done();
       },
       err => done.fail(err)
     );
   });
-  test("calls launchKernelObservable if given the correct action", done => {
+  test("calls launchKernelObservable if given the correct action", async function() {
     const actionBuffer = [];
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL,
-      kernelSpec: { spec: "hokey" },
+      kernelSpec: { spec: "hokey", name: "woohoo" },
       cwd: "~"
     });
-    const obs = launchKernelEpic(action$);
-    obs.subscribe(
-      x => {
-        actionBuffer.push(x.type);
-        if (actionBuffer.length === 2) {
-          expect(actionBuffer).toEqual([
-            actionTypes.SET_KERNEL_INFO,
-            actionTypes.LAUNCH_KERNEL_SUCCESSFUL
-          ]);
-          done();
+
+    const state = {
+      app: {
+        kernel: null
+      }
+    };
+
+    const store = {
+      getState: () => {
+        return state;
+      }
+    };
+
+    const responses = await launchKernelEpic(action$, store)
+      .pipe(toArray())
+      .toPromise();
+
+    expect(responses).toEqual([
+      {
+        type: actionTypes.SET_KERNEL_INFO,
+        kernelInfo: { spec: "hokey", name: "woohoo" }
+      },
+      {
+        type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
+        kernel: {
+          type: "zeromq",
+          channels: expect.anything(),
+          spawn: expect.anything(),
+          connectionFile: "connectionFile.json",
+          kernelSpecName: "woohoo",
+          status: "launched"
         }
       },
-      err => done.fail(err)
-    );
+      {
+        type: "SET_EXECUTION_STATE",
+        kernelStatus: "launched"
+      }
+    ]);
   });
 });
 

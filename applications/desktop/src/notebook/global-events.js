@@ -5,17 +5,19 @@ import type { AppState } from "@nteract/types/core/records";
 
 import { dialog } from "electron";
 import { is } from "immutable";
-import { forceShutdownKernel } from "./kernel/shutdown";
+
+import { killKernelImmediately } from "./epics/zeromq-kernels";
+
 import type { Action } from "@nteract/types/redux";
 
 export function unload(store: Store<AppState, Action>) {
   const state = store.getState();
-  const kernel = {
-    channels: state.app.channels,
-    spawn: state.app.spawn,
-    connectionFile: state.app.connectionFile
-  };
-  forceShutdownKernel(kernel);
+
+  const kernel = state.app.kernel;
+  if (kernel) {
+    killKernelImmediately(kernel);
+  }
+  return;
 }
 
 export function beforeUnload(store: Store<AppState, Action>, e: any) {
