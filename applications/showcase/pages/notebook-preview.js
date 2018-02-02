@@ -7,6 +7,8 @@ import { emptyNotebook, fromJS } from "@nteract/commutable";
 
 import { light, dark } from "@nteract/core/themes";
 
+import { Styles } from "@nteract/core/providers";
+
 import { ajax } from "rxjs/observable/dom/ajax";
 
 function frozenReviver(key, value) {
@@ -82,10 +84,12 @@ class StaticNotebookApp extends React.Component<
           <button onClick={() => this.toggleTheme()} className="theme-toggle">
             Toggle Theme
           </button>
-          <NotebookPreview
-            notebook={this.state.notebook}
-            theme={this.state.theme}
-          />
+          <Styles>
+            <NotebookPreview
+              notebook={this.state.notebook}
+              theme={this.state.theme}
+            />
+          </Styles>
           <style jsx>{`
             /* Dark Button CSS */
             .theme-toggle {
