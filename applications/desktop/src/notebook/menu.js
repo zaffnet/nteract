@@ -49,13 +49,16 @@ export function showSaveAsDialog() {
       defaultPathFallback()
     );
 
+    // TODO: make the call be asynchronous by passing a callback
     const filename = dialog.showSaveDialog(opts);
 
     if (filename && path.extname(filename) === "") {
       resolve(`${filename}.ipynb`);
+      return;
     }
     if (filename === undefined) {
-      reject();
+      resolve(filename); // adhere to the electron api
+      return;
     }
     resolve(filename);
   });
@@ -135,8 +138,10 @@ export function triggerKernelRefresh(store) {
 
 export function triggerSaveAs(store) {
   showSaveAsDialog().then(filename => {
-    triggerWindowRefresh(store, filename);
-    triggerKernelRefresh(store);
+    if (filename) {
+      triggerWindowRefresh(store, filename);
+      triggerKernelRefresh(store);
+    }
   });
 }
 
@@ -359,13 +364,14 @@ export function exportPDF(
 
 export function triggerSaveAsPDF(store) {
   showSaveAsDialog()
-    .then(filename =>
-      Promise.all([
-        triggerWindowRefresh(store, filename),
-        triggerKernelRefresh(store)
-      ])
-    )
-    .then(() => storeToPDF(store))
+    .then(filename => {
+      if (filename) {
+        return Promise.all([
+          triggerWindowRefresh(store, filename),
+          triggerKernelRefresh(store)
+        ]).then(() => storeToPDF(store));
+      }
+    })
     .catch(e =>
       store.dispatch({ type: "ERROR", payload: e.message, error: true })
     );
