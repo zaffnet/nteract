@@ -12,7 +12,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { NotebookApp } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { setNotificationSystem } from "@nteract/core/actions";
 
@@ -63,15 +63,20 @@ export default class App extends React.PureComponent<Object, Object> {
     return (
       <Provider store={store}>
         <React.Fragment>
-          <MathJax.Context input="tex">
-            <NotebookApp transforms={transforms} displayOrder={displayOrder} />
-          </MathJax.Context>
+          <Styles>
+            <MathJax.Context input="tex">
+              <NotebookApp
+                transforms={transforms}
+                displayOrder={displayOrder}
+              />
+            </MathJax.Context>
 
-          <NotificationSystem
-            ref={notificationSystem => {
-              this.notificationSystem = notificationSystem;
-            }}
-          />
+            <NotificationSystem
+              ref={notificationSystem => {
+                this.notificationSystem = notificationSystem;
+              }}
+            />
+          </Styles>
           <style jsx global>{`
             body {
               font-family: "Source Sans Pro";
