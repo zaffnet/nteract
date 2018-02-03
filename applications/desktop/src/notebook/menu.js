@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-unused-vars, no-use-before-define */
 import { ipcRenderer as ipc, webFrame, remote, shell } from "electron";
 
@@ -33,15 +34,16 @@ import {
 
 import { defaultPathFallback, cwdKernelFallback } from "./path";
 
-export function dispatchSaveAs(store, evt, filename) {
+export function dispatchSaveAs(store: *, evt: Event, filename: string) {
   store.dispatch(saveAs(filename));
 }
 
 const dialog = remote.dialog;
 
-export function showSaveAsDialog() {
+export function showSaveAsDialog(): Promise<string> {
   return new Promise((resolve, reject) => {
     const opts = Object.assign(
+      {},
       {
         title: "Save Notebook",
         filters: [{ name: "Notebooks", extensions: ["ipynb"] }]
@@ -64,14 +66,14 @@ export function showSaveAsDialog() {
   });
 }
 
-export function triggerWindowRefresh(store, filename) {
+export function triggerWindowRefresh(store: *, filename: string) {
   if (!filename) {
     return;
   }
   store.dispatch(saveAs(filename));
 }
 
-export function dispatchRestartKernel(store) {
+export function dispatchRestartKernel(store: *) {
   // TODO: Make this an action to dispatch that an epic consumes, which will stop the
   //       current kernel and launch a new kernel of the same type
   const state = store.getState();
@@ -112,7 +114,7 @@ export function dispatchRestartKernel(store) {
   });
 }
 
-export function triggerKernelRefresh(store) {
+export function triggerKernelRefresh(store: *): Promise<*> {
   return new Promise(resolve => {
     dialog.showMessageBox(
       {
@@ -136,7 +138,7 @@ export function triggerKernelRefresh(store) {
   });
 }
 
-export function triggerSaveAs(store) {
+export function triggerSaveAs(store: *) {
   showSaveAsDialog().then(filename => {
     if (filename) {
       triggerWindowRefresh(store, filename);
@@ -145,7 +147,7 @@ export function triggerSaveAs(store) {
   });
 }
 
-export function dispatchSave(store) {
+export function dispatchSave(store: *) {
   const state = store.getState();
   const filename = state.document.get("filename");
   if (!filename) {
@@ -155,7 +157,7 @@ export function dispatchSave(store) {
   }
 }
 
-export function dispatchNewKernel(store, evt, spec) {
+export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const state = store.getState();
   let cwd = cwdKernelFallback();
   if (state && state.document && state.document.get("filename")) {
@@ -164,11 +166,15 @@ export function dispatchNewKernel(store, evt, spec) {
   store.dispatch(launchKernel(spec, cwd));
 }
 
-export function dispatchPublishAnonGist(store) {
+export function dispatchPublishAnonGist(store: *) {
   store.dispatch({ type: "PUBLISH_ANONYMOUS_GIST" });
 }
 
-export function dispatchPublishUserGist(store, event, githubToken) {
+export function dispatchPublishUserGist(
+  store: *,
+  event: Event,
+  githubToken: string
+) {
   if (githubToken) {
     store.dispatch(setGithubToken(githubToken));
   }
@@ -183,7 +189,7 @@ export function dispatchPublishUserGist(store, event, githubToken) {
  * @exports
  * @param {Object} store - The Redux store
  */
-export function dispatchRunAllBelow(store) {
+export function dispatchRunAllBelow(store: *) {
   const state = store.getState();
   const focusedCellId = state.document.get("cellFocused");
   const notebook = state.document.get("notebook");
@@ -200,7 +206,8 @@ export function dispatchRunAllBelow(store) {
     );
 }
 
-export function dispatchRunAll(store) {
+// TODO: This should be an epic
+export function dispatchRunAll(store: *) {
   const state = store.getState();
   const notebook = state.document.get("notebook");
   const cells = notebook.get("cellMap");
@@ -212,13 +219,13 @@ export function dispatchRunAll(store) {
     );
 }
 
-export function dispatchClearAll(store) {
+export function dispatchClearAll(store: *) {
   const state = store.getState();
   const notebook = state.document.get("notebook");
   notebook.get("cellOrder").map(value => store.dispatch(clearOutputs(value)));
 }
 
-export function dispatchUnhideAll(store) {
+export function dispatchUnhideAll(store: *) {
   const state = store.getState();
   const notebook = state.document.get("notebook");
   const cells = notebook.get("cellMap");
@@ -228,11 +235,11 @@ export function dispatchUnhideAll(store) {
     .map(cellID => store.dispatch(toggleCellInputVisibility(cellID)));
 }
 
-export function dispatchKillKernel(store) {
+export function dispatchKillKernel(store: *) {
   store.dispatch(killKernel);
 }
 
-export function dispatchInterruptKernel(store) {
+export function dispatchInterruptKernel(store: *) {
   const state = store.getState();
   const notificationSystem = state.app.get("notificationSystem");
   if (process.platform === "win32") {
@@ -246,7 +253,7 @@ export function dispatchInterruptKernel(store) {
   }
 }
 
-export function dispatchRestartClearAll(store) {
+export function dispatchRestartClearAll(store: *) {
   dispatchRestartKernel(store);
   dispatchClearAll(store);
 }
@@ -263,47 +270,51 @@ export function dispatchZoomReset() {
   webFrame.setZoomLevel(0);
 }
 
-export function dispatchSetTheme(store, evt, theme) {
+export function dispatchSetTheme(store: *, evt: Event, theme: string) {
   store.dispatch(setTheme(theme));
 }
 
-export function dispatchSetCursorBlink(store, evt, value) {
+export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
   store.dispatch(setCursorBlink(value));
 }
 
-export function dispatchCopyCell(store) {
+export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
   store.dispatch(copyCell(focused));
 }
 
-export function dispatchCutCell(store) {
+export function dispatchCutCell(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
   store.dispatch(cutCell(focused));
 }
 
-export function dispatchPasteCell(store) {
+export function dispatchPasteCell(store: *) {
   store.dispatch(pasteCell());
 }
 
-export function dispatchCreateCellAfter(store) {
+export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
   store.dispatch(createCellAfter("code", focused));
 }
 
-export function dispatchCreateTextCellAfter(store) {
+export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
   store.dispatch(createCellAfter("markdown", focused));
 }
 
-export function dispatchLoad(store, event, filename) {
+export function dispatchLoad(store: *, event: Event, filename: string) {
   store.dispatch(load(filename));
 }
 
-export function dispatchNewNotebook(store, event, kernelSpec) {
+export function dispatchNewNotebook(
+  store: *,
+  event: Event,
+  kernelSpec: Object
+) {
   store.dispatch(newNotebook(kernelSpec, cwdKernelFallback()));
 }
 
@@ -316,9 +327,9 @@ export function dispatchNewNotebook(store, event, kernelSpec) {
  * @param {any} notificationSystem - reference to global notification system
  */
 export function exportPDF(
-  store: object,
+  store: *,
   filename: string,
-  notificationSystem
+  notificationSystem: *
 ): void {
   const state = store.getState();
   const notebook = state.document.get("notebook");
@@ -362,7 +373,7 @@ export function exportPDF(
   );
 }
 
-export function triggerSaveAsPDF(store) {
+export function triggerSaveAsPDF(store: *) {
   showSaveAsDialog()
     .then(filename => {
       if (filename) {
@@ -377,7 +388,7 @@ export function triggerSaveAsPDF(store) {
     );
 }
 
-export function storeToPDF(store) {
+export function storeToPDF(store: *) {
   const state = store.getState();
   let filename = path.basename(state.document.get("filename"), ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
@@ -407,11 +418,11 @@ export function storeToPDF(store) {
   }
 }
 
-export function dispatchLoadConfig(store) {
+export function dispatchLoadConfig(store: *) {
   store.dispatch(loadConfig());
 }
 
-export function initMenuHandlers(store) {
+export function initMenuHandlers(store: *) {
   ipc.on("main:new", dispatchNewNotebook.bind(null, store));
   ipc.on("menu:new-kernel", dispatchNewKernel.bind(null, store));
   ipc.on("menu:run-all", dispatchRunAll.bind(null, store));
@@ -433,9 +444,9 @@ export function initMenuHandlers(store) {
     dispatchRestartClearAll.bind(null, store)
   );
   ipc.on("menu:publish:gist", dispatchPublishAnonGist.bind(null, store));
-  ipc.on("menu:zoom-in", dispatchZoomIn.bind(null, store));
-  ipc.on("menu:zoom-out", dispatchZoomOut.bind(null, store));
-  ipc.on("menu:zoom-reset", dispatchZoomReset.bind(null, store));
+  ipc.on("menu:zoom-in", dispatchZoomIn);
+  ipc.on("menu:zoom-out", dispatchZoomOut);
+  ipc.on("menu:zoom-reset", dispatchZoomReset);
   ipc.on("menu:theme", dispatchSetTheme.bind(null, store));
   ipc.on("menu:set-blink-rate", dispatchSetCursorBlink.bind(null, store));
   ipc.on("menu:github:auth", dispatchPublishUserGist.bind(null, store));

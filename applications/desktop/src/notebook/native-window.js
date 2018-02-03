@@ -1,9 +1,11 @@
+// @flow
 import { remote } from "electron";
 import { is } from "immutable";
 
 import path from "path";
 
 import { of } from "rxjs/observable/of";
+// $FlowFixMe: This exists, we're missing a flow definition
 import { combineLatest } from "rxjs/observable/combineLatest";
 import { from } from "rxjs/observable/from";
 
@@ -21,7 +23,7 @@ const HOME = remote.app.getPath("home");
  * @param  {string} p the full path to a file
  * @return {string}   tildified path
  */
-export function tildify(p) {
+export function tildify(p: ?string) {
   if (!p) {
     return "";
   }
@@ -32,7 +34,7 @@ export function tildify(p) {
   ).slice(0, -1);
 }
 
-export function setTitleFromAttributes(attributes) {
+export function setTitleFromAttributes(attributes: *) {
   const filename = tildify(attributes.fullpath);
   const { kernelStatus } = attributes;
 
@@ -56,7 +58,7 @@ export function setTitleFromAttributes(attributes) {
   }
 }
 
-export function createTitleFeed(state$) {
+export function createTitleFeed(state$: *) {
   const modified$ = state$.pipe(
     map(
       state =>
@@ -91,7 +93,7 @@ export function createTitleFeed(state$) {
   ).pipe(distinctUntilChanged(), switchMap(i => of(i)));
 }
 
-export function initNativeHandlers(store) {
+export function initNativeHandlers(store: *) {
   const state$ = from(store);
 
   return createTitleFeed(state$).subscribe(setTitleFromAttributes, err =>
