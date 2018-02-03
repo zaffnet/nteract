@@ -1,3 +1,4 @@
+// @flow
 import { catchError, mergeMap } from "rxjs/operators";
 import { merge } from "rxjs/observable/merge";
 
@@ -5,6 +6,13 @@ import { join } from "path";
 import { dialog } from "electron";
 import { spawn } from "spawn-rx";
 import { writeFileObservable, createSymlinkObservable } from "fs-observable";
+
+// Overwrite the type for `process` to match Electron's process
+// https://electronjs.org/docs/api/process
+declare var ElectronProcess: typeof process & {
+  resourcesPath: string
+};
+declare var process: ElectronProcess;
 
 const fs = require("fs");
 
@@ -24,7 +32,7 @@ const getStartCommand = () => {
     const rootDir = dir.split("node_modules")[0];
     return [electronPath, rootDir, join(rootDir, "bin", win)];
   }
-  return [null, null, null];
+  return null;
 };
 
 const setWinPathObservable = (exe, rootDir, binDir) => {
@@ -41,7 +49,11 @@ const setWinPathObservable = (exe, rootDir, binDir) => {
   );
 };
 
-const installShellCommandsObservable = (exe, rootDir, binDir) => {
+const installShellCommandsObservable = (
+  exe: string,
+  rootDir: string,
+  binDir: string
+) => {
   if (process.platform === "win32") {
     return setWinPathObservable(exe, rootDir, binDir);
   }
@@ -63,14 +75,16 @@ const installShellCommandsObservable = (exe, rootDir, binDir) => {
 };
 
 export const installShellCommand = () => {
-  const [exe, rootDir, binDir] = getStartCommand();
-  if (!exe) {
+  const directories = getStartCommand();
+  if (!directories) {
     dialog.showErrorBox(
       "nteract application not found.",
       "Could not locate nteract executable."
     );
     return;
   }
+
+  const [exe, rootDir, binDir] = directories;
 
   installShellCommandsObservable(exe, rootDir, binDir).subscribe(
     () => {},
