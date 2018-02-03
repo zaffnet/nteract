@@ -1,3 +1,4 @@
+// @flow
 import { ipcMain as ipc } from "electron";
 import { join } from "path";
 
@@ -28,7 +29,7 @@ const KERNEL_SPECS = {
   }
 };
 
-export default function initializeKernelSpecs(kernelSpecs) {
+export default function initializeKernelSpecs(kernelSpecs: *) {
   Object.assign(KERNEL_SPECS, kernelSpecs);
   return KERNEL_SPECS;
 }

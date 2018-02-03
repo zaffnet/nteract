@@ -1,3 +1,4 @@
+// @flow
 import { empty } from "rxjs/observable/empty";
 import {
   mapTo,
@@ -17,7 +18,7 @@ const path = require("path");
  * @param  {Object} env - Current environment
  * @returns {Observable}  Source environment
  */
-export function ipyKernelTryObservable(env) {
+export function ipyKernelTryObservable(env: { prefix: string }) {
   const executable = path.join(env.prefix, "bin", "python");
   return spawn(executable, ["-m", "ipykernel", "--version"], {
     split: true
@@ -43,7 +44,7 @@ export function condaInfoObservable() {
  * @param {Observable} condaInfo$ - Environmental information
  * @returns {Observable}  List of envionmental variables
  */
-export function condaEnvsObservable(condaInfo$) {
+export function condaEnvsObservable(condaInfo$: *) {
   return condaInfo$.pipe(
     map(info => {
       const envs = info.envs.map(env => ({
@@ -66,7 +67,7 @@ export function condaEnvsObservable(condaInfo$) {
  * @param {Object} envs - Environmental elements
  * @returns {Object}   Dictionary containing supported langauges paths.
  */
-export function createKernelSpecsFromEnvs(envs) {
+export function createKernelSpecsFromEnvs(envs: *) {
   const displayPrefix = "Python"; // Or R
   const languageKey = "py"; // or r
 
