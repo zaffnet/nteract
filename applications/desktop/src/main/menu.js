@@ -1,3 +1,4 @@
+// @flow
 import {
   dialog,
   app,
@@ -9,6 +10,13 @@ import {
 import * as path from "path";
 import { launch, launchNewNotebook } from "./launch";
 import { installShellCommand } from "./cli";
+
+// Overwrite the type for `process` to match Electron's process
+// https://electronjs.org/docs/api/process
+declare var ElectronProcess: typeof process & {
+  resourcesPath: string
+};
+declare var process: ElectronProcess;
 
 function getExampleNotebooksDir() {
   if (process.env.NODE_ENV === "development") {
@@ -33,7 +41,7 @@ function createSender(eventName, obj) {
   };
 }
 
-export function authAndPublish(item, focusedWindow) {
+export function authAndPublish(item: *, focusedWindow: *) {
   const win = new BrowserWindow({
     show: false,
     webPreferences: { zoomFactor: 0.75 }
@@ -205,7 +213,7 @@ export const named = {
   ]
 };
 
-export function loadFullMenu(store = global.store) {
+export function loadFullMenu(store: * = global.store) {
   const state = store.getState();
   const kernelSpecs = state.get("kernelSpecs") ? state.get("kernelSpecs") : {};
 
@@ -234,7 +242,8 @@ export function loadFullMenu(store = global.store) {
         const opts = {
           title: "Open a notebook",
           filters: [{ name: "Notebooks", extensions: ["ipynb"] }],
-          properties: ["openFile"]
+          properties: ["openFile"],
+          defaultPath: undefined
         };
         if (process.cwd() === "/") {
           opts.defaultPath = app.getPath("home");
@@ -342,7 +351,8 @@ export function loadFullMenu(store = global.store) {
       click: (item, focusedWindow) => {
         const opts = {
           title: "Save Notebook As",
-          filters: [{ name: "Notebooks", extensions: ["ipynb"] }]
+          filters: [{ name: "Notebooks", extensions: ["ipynb"] }],
+          defaultPath: undefined
         };
 
         if (process.cwd() === "/") {

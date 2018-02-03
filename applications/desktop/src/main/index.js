@@ -1,3 +1,4 @@
+// @flow
 import { Menu, dialog, app, ipcMain as ipc, BrowserWindow } from "electron";
 import { resolve, join } from "path";
 import { existsSync } from "fs";
@@ -138,7 +139,9 @@ export function createSplashSubscriber() {
         win.show();
       });
     },
-    null,
+    err => {
+      console.error(err);
+    },
     () => {
       // Close the splash page when completed
       if (win) {

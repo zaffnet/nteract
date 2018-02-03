@@ -1,4 +1,5 @@
-import path from "path";
+// @flow
+import * as path from "path";
 
 import { Menu, shell, BrowserWindow, dialog, ipcMain as ipc } from "electron";
 
@@ -6,12 +7,12 @@ import { loadFullMenu } from "./menu";
 
 let launchIpynb;
 
-export function getPath(url) {
-  const nUrl = url.substring(url.indexOf("static"), path.length);
+export function getPath(url: string) {
+  const nUrl = url.substring(url.indexOf("static"));
   return path.join(__dirname, "..", "..", nUrl.replace("static/", ""));
 }
 
-export function deferURL(event, url) {
+export function deferURL(event: Event, url: string) {
   event.preventDefault();
   if (!url.startsWith("file:")) {
     shell.openExternal(url);
@@ -27,8 +28,8 @@ const initContextMenu = require("electron-context-menu");
 // Setup right-click context menu for all BrowserWindows
 initContextMenu();
 
-export function launch(filename) {
-  let win = new BrowserWindow({
+export function launch(filename: ?string) {
+  const win = new BrowserWindow({
     width: 800,
     height: 1000,
     icon: iconPath,
@@ -79,13 +80,12 @@ export function launch(filename) {
   win.on("closed", () => {
     const menu = loadFullMenu();
     Menu.setApplicationMenu(menu);
-    win = null;
   });
   return win;
 }
 launchIpynb = launch;
 
-export function launchNewNotebook(kernelSpec) {
+export function launchNewNotebook(kernelSpec: Object) {
   const win = launch();
   win.webContents.on("did-finish-load", () => {
     win.webContents.send("main:new", kernelSpec);

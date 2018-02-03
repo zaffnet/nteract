@@ -1,3 +1,5 @@
+// @flow
+
 import { autoUpdater } from "electron-updater";
 
 export function initAutoUpdater() {
