@@ -1,9 +1,10 @@
+// @flow
 import * as React from "react";
 import { MODAL_TYPES } from "./constants";
 import AboutModal from "./about-modal";
 import { connect } from "react-redux";
 
-class ModalController extends React.Component {
+class ModalController extends React.Component<*, *> {
   getModal = () => {
     const { modalType } = this.props;
     switch (modalType) {
@@ -19,7 +20,9 @@ class ModalController extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+import type { MapStateToProps } from "react-redux";
+
+const mapStateToProps: MapStateToProps<*, *, *> = (state: *) => ({
   modalType: state.modals.modalType
 });
 

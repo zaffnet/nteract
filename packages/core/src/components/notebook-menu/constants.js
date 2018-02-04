@@ -1,3 +1,4 @@
+// @flow
 // Note, we can reuse keys, but all paths need to be unique in the menu.
 
 // These actions map to a case in a switch handler. They are meant to cause a
