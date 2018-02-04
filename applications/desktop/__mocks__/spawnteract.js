@@ -1,14 +1,10 @@
+// @flow
+function writeConnectionFile(config) {
+  return Promise.resolve({ config, connectionFile: "connectionFile.json" });
+}
+
 module.exports = {
-  launchSpec: kernelSpec => {
-    function writeConnectionFile(config) {
-      return new Promise((resolve, reject) => {
-        try {
-          resolve({ config, connectionFile: "connectionFile" });
-        } catch (err) {
-          reject(err);
-        }
-      });
-    }
+  launchSpec: (kernelSpec: Object): Promise<*> => {
     return writeConnectionFile("config").then(c => {
       return {
         spawn: {
@@ -22,16 +18,7 @@ module.exports = {
       };
     });
   },
-  launch: kernelSpecName => {
-    function writeConnectionFile(config) {
-      return new Promise((resolve, reject) => {
-        try {
-          resolve({ config, connectionFile: "connectionFile" });
-        } catch (err) {
-          reject(err);
-        }
-      });
-    }
+  launch: (kernelSpecName: string): Promise<*> => {
     return writeConnectionFile("config").then(c => {
       return {
         spawn: "runningKernel",
