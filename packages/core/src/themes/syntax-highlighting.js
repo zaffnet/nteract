@@ -1,3 +1,4 @@
+// @flow
 module.exports = {
   hljs: {
     display: "block",

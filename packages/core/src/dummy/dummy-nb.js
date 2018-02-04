@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-multi-str */
 import { fromJS } from "@nteract/commutable";
 

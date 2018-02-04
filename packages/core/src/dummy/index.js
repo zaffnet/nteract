@@ -1,5 +1,5 @@
-/* eslint-disable no-plusplus */
 // @flow
+/* eslint-disable no-plusplus */
 
 import * as Immutable from "immutable";
 

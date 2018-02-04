@@ -1,3 +1,4 @@
+// @flow
 module.exports = `
   --main-bg-color: #2b2b2b;
   --main-fg-color: #ccc;
