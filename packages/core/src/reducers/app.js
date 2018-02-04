@@ -33,7 +33,7 @@ export function launchKernelSuccessful(
     return state.set("kernel", null);
   }
 
-  let kernel;
+  let kernel = null;
 
   // We create a record based on the kernel type
   switch (action.kernel.type) {
@@ -42,6 +42,7 @@ export function launchKernelSuccessful(
       break;
     case "zeromq":
       kernel = makeLocalKernelRecord(action.kernel);
+      break;
     default:
       kernel = null;
   }
