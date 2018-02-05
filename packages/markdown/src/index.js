@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import MathJax from "./mathjax";
+import MathJax from "@nteract/mathjax";
 import RemarkMathPlugin from "./remark-math";
 
 import PropTypes from "prop-types";
@@ -47,7 +47,5 @@ MarkdownRender.contextTypes = {
   MathJax: PropTypes.object,
   MathJaxContext: PropTypes.bool
 };
-
-export { MathJax };
 
 export default MarkdownRender;

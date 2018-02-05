@@ -24,7 +24,8 @@ import {
 
 import { PapermillView } from "./papermill";
 
-import Markdown, { MathJax } from "@nteract/markdown";
+import Markdown from "@nteract/markdown";
+import MathJax from "@nteract/mathjax";
 
 const themes = require("@nteract/core/themes");
 

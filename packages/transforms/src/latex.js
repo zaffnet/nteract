@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { MathJax } from "@nteract/markdown";
+import MathJax from "@nteract/mathjax";
 
 type Props = {
   data: string

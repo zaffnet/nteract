@@ -18,12 +18,13 @@ exports[`App renders app 1`] = `
         delay={0}
         didFinishTypeset={null}
         input="tex"
+        loader={null}
         loading={null}
         noGate={false}
         onError={[Function]}
         onLoad={null}
         options={Object {}}
-        script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"
       >
         <Connect(DragDropContext(NotebookApp))
           displayOrder={

@@ -1,9 +1,12 @@
 {
-  "name": "@nteract/transforms",
-  "version": "3.2.0",
-  "description": "Common transforms for Jupyter",
+  "name": "@nteract/mathjax",
+  "version": "0.0.1",
+  "description": "React components for MathJax",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm run build:flow",
@@ -14,29 +17,13 @@
     "build:lib:watch": "npm run build:lib -- --watch",
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/transforms",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/mathjax",
   "keywords": [
-    "nteract",
-    "transforms",
-    "notebook"
+    "mathjax"
   ],
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
-  "bugs": {
-    "url": "https://github.com/nteract/nteract/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
-    "@nteract/transform-vdom": "^2.1.0",
-    "ansi-to-react": "^2.0.6",
-    "@nteract/markdown": "^0.0.1",
-    "@nteract/mathjax": "^0.0.1",
-    "prop-types": "^15.6.0",
-    "react-json-tree": "^0.11.0"
-  },
-  "peerDependencies": {
-    "react": "^16.2.0"
+    "prop-types": "^15.6.0"
   }
 }

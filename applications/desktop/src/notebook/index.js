@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
 import { Provider } from "react-redux";
 
-import { MathJax } from "@nteract/markdown";
+import MathJax from "@nteract/mathjax";
 
 import { Map as ImmutableMap } from "immutable";
 
