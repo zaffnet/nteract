@@ -120,6 +120,7 @@
     "@nteract/display-area": "^3.1.9",
     "@nteract/editor": "^6.0.1",
     "@nteract/markdown": "^0.0.1",
+    "@nteract/mathjax": "^0.0.1",
     "@nteract/messaging": "^3.0.7",
     "@nteract/transforms-full": "^4.1.0",
     "@nteract/types": "^1.2.0",
