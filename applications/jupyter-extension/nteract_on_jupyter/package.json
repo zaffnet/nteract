@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "next": "^4.2.1",
+    "next": "^5.0.0",
     "styled-jsx": "^2.2.1"
   }
 }
