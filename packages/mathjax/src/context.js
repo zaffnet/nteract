@@ -9,9 +9,15 @@ import loadScript from "./load-script";
 declare var MathJax: ?Object;
 
 export type Props = {
+  src: ?string,
   children: React.Node,
   didFinishTypeset: ?() => void,
-  script: string | false,
+  // Provide a way to override how we load MathJax and callback to the onLoad
+  // For Hydrogen, for instance we can set
+  //
+  //  loader={(onLoad) => loadMathJax(document, onLoad)}
+  //
+  loader: ?(cb: Function) => void,
   input: "ascii" | "tex",
   delay: number,
   options: Object,
@@ -26,10 +32,11 @@ export type Props = {
  */
 class Context extends React.Component<Props, *> {
   static defaultProps = {
-    script:
+    src:
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     input: "tex",
     didFinishTypeset: null,
+    loader: null,
     delay: 0,
     options: {},
     loading: null,
@@ -58,13 +65,17 @@ class Context extends React.Component<Props, *> {
   }
 
   componentDidMount() {
-    const script = this.props.script;
+    const src = this.props.src;
 
-    if (!script) {
+    if (!src) {
       return this.onLoad();
     }
 
-    loadScript(script, this.onLoad);
+    if (!this.props.loader) {
+      loadScript(src, this.onLoad);
+    } else {
+      this.props.loader(this.onLoad);
+    }
   }
 
   onLoad() {
