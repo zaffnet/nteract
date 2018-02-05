@@ -33,7 +33,7 @@ module.exports = `
   --theme-menu-fg-hover: var(--theme-app-fg);
   --theme-menu-fg-focus: var(--theme-app-fg);
 
-  --theme-cell-bg: var(--theme-primary-bg);
+  --theme-cell-bg: var(--theme-app-bg);
   --theme-cell-shadow-hover: var(--theme-primary-shadow-hover);
   --theme-cell-shadow-focus: var(--theme-primary-shadow-focus);
 
