@@ -12,7 +12,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { NotebookApp } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { setNotificationSystem } from "@nteract/core/actions";
 
@@ -63,22 +63,27 @@ export default class App extends React.PureComponent<Object, Object> {
     return (
       <Provider store={store}>
         <React.Fragment>
-          <MathJax.Context input="tex">
-            <NotebookApp transforms={transforms} displayOrder={displayOrder} />
-          </MathJax.Context>
+          <Styles>
+            <MathJax.Context input="tex">
+              <NotebookApp
+                transforms={transforms}
+                displayOrder={displayOrder}
+              />
+            </MathJax.Context>
 
-          <NotificationSystem
-            ref={notificationSystem => {
-              this.notificationSystem = notificationSystem;
-            }}
-          />
+            <NotificationSystem
+              ref={notificationSystem => {
+                this.notificationSystem = notificationSystem;
+              }}
+            />
+          </Styles>
           <style jsx global>{`
             body {
               font-family: "Source Sans Pro";
               font-size: 16px;
               line-height: 22px;
-              background-color: var(--main-bg-color);
-              color: var(--main-fg-color);
+              background-color: var(--theme-app-bg);
+              color: var(--theme-app-fg);
               /* All the old theme setups declared this, putting it back for consistency */
               line-height: 1.3 !important;
             }

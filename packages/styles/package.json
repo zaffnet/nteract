@@ -1,0 +1,26 @@
+{
+  "name": "@nteract/styles",
+  "version": "0.0.1",
+  "description": "Root style package to supply custom CSS Properties.",
+  "main": "index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build && npm run build:flow",
+    "build": "npm run build:clean && npm run build:lib",
+    "build:clean": "rimraf lib",
+    "build:lib": "node buildStyles.js && npm run build:copy-files && babel -d lib src --ignore '**/__tests__/**'",
+    "build:copy-files": "mkdir -p ./lib && mkdir -p ./build && cp ./src/*.json ./lib/ && cp ./build/* ./lib/",
+    "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
+    "build:lib:watch": "npm run build:lib -- --watch",
+    "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
+  },
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/styles",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Andrew Seier <andseier@gmail.com>",
+  "license": "BSD-3-Clause"
+}

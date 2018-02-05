@@ -3,6 +3,7 @@ import * as React from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
 import Markdown from "@nteract/markdown";
+import { Styles } from "@nteract/core/providers";
 
 import DirectoryListing from "./directory-listing";
 
@@ -106,11 +107,13 @@ export const Entry = (props: EntryProps) => {
       return <File entry={props.entry} pathname={props.pathname} />;
     case "notebook":
       return (
-        <NotebookPreview
-          notebook={props.entry.content}
-          displayOrder={displayOrder}
-          transforms={transforms}
-        />
+        <Styles>
+          <NotebookPreview
+            notebook={props.entry.content}
+            displayOrder={displayOrder}
+            transforms={transforms}
+          />
+        </Styles>
       );
     default:
       console.log("Unknown contents ");

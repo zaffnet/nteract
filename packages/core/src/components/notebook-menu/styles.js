@@ -8,10 +8,10 @@ export const localCss = css`
     margin: 0;
     padding-left: 0;
     list-style: none;
-    border: 1px solid var(--primary-border);
-    box-shadow: 0 0 4px var(--primary-border);
+    border: 1px solid var(--theme-app-border);
+    box-shadow: var(--theme-menu-shadow);
     border-radius: 3px;
-    color: var(--main-fg-color);
+    color: var(--theme-menu-fg);
   }
   .rc-menu-hidden {
     display: none;
@@ -34,14 +34,14 @@ export const localCss = css`
   }
   .rc-menu-item-active,
   .rc-menu-submenu-active > .rc-menu-submenu-title {
-    background-color: var(--cell-bg-focus);
+    background-color: var(--theme-menu-bg-focus);
   }
   .rc-menu-item-selected {
-    background-color: var(--cell-bg-focus);
+    background-color: var(--theme-menu-bg-focus);
     transform: translateZ(0);
   }
   .rc-menu-submenu-selected {
-    background-color: var(--cell-bg-focus);
+    background-color: var(--theme-menu-bg-focus);
   }
   .rc-menu > li.rc-menu-submenu {
     padding: 0;
@@ -81,7 +81,7 @@ export const localCss = css`
     position: absolute;
   }
   .rc-menu-submenu > .rc-menu {
-    background-color: var(--cell-bg-hover);
+    background-color: var(--theme-menu-bg);
   }
   .rc-menu .rc-menu-submenu-title .anticon,
   .rc-menu .rc-menu-item .anticon {
@@ -99,9 +99,9 @@ export const localCss = css`
     z-index: 1000;
   }
   .rc-menu-horizontal {
-    background-color: var(--status-bar);
+    background-color: var(--theme-menu-bg);
     border: none;
-    border-bottom: 1px solid var(--primary-border);
+    border-bottom: 1px solid var(--theme-app-border);
     box-shadow: none;
   }
   .rc-menu-horizontal > .rc-menu-item,

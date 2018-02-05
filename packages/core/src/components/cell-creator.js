@@ -66,7 +66,7 @@ export default (props: Props) => (
 
       .cell-creator {
         display: none;
-        background: var(--main-bg-color, white);
+        background: var(--theme-cell-creator-bg);
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
         pointer-events: all;
         position: relative;
@@ -91,11 +91,11 @@ export default (props: Props) => (
         font-size: 15px;
         line-height: 1;
 
-        color: var(--toolbar-button, #aaa);
+        color: var(--theme-cell-creator-fg);
       }
 
       .cell-creator button span:hover {
-        color: var(--toolbar-button-hover, #555);
+        color: var(--theme-cell-creator-fg-hover);
       }
 
       .creator-hover-region:hover > .cell-creator {

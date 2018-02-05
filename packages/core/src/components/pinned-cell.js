@@ -10,9 +10,8 @@ export const PinnedPlaceHolderCell = () => (
     <style jsx>{`
       .cell-placeholder {
         text-align: center;
-        color: var(--main-fg-color);
+        color: var(--theme-secondary-fg);
         padding: 10px;
-        opacity: var(--cell-placeholder-opacity, 0.3);
       }
 
       .octicon {
@@ -61,8 +60,8 @@ export class StickyCellContainer extends React.Component<*, *> {
         </div>
         <style jsx>{`
           .sticky-cell-container {
-            background: var(--main-bg-color, white);
-            border-bottom: dashed var(--primary-border, #cbcbcb) 1px;
+            background: var(--theme-app-bg);
+            border-bottom: dashed var(--theme-app-border) 1px;
 
             top: 0px;
             position: fixed;

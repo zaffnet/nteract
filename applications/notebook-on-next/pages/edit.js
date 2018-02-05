@@ -2,7 +2,7 @@
 import * as React from "react";
 import fetch from "isomorphic-fetch";
 import { monocellNotebook, fromJS, toJS } from "@nteract/commutable";
-import { NotebookApp } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core/providers";
 import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
@@ -103,11 +103,11 @@ export default class Edit extends React.Component<*> {
           }
           .cell.focused {
             border: none;
-            background: var(--cell-bg, white) !important;
+            background: var(--theme-cell-bg, white) !important;
           }
           .cell:focus .prompt,
           .cell.focused .prompt {
-            background: var(--pager-bg, #fafafa) !important;
+            background: var(--theme-pager-bg, #fafafa) !important;
           }
           .draggable-cell {
             padding: 0px !important;
@@ -138,7 +138,9 @@ export default class Edit extends React.Component<*> {
         />
         <Provider store={store}>
           <div>
-            <NotebookApp />;
+            <Styles>
+              <NotebookApp />;
+            </Styles>
           </div>
         </Provider>
       </React.Fragment>

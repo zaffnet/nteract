@@ -188,7 +188,7 @@ export default class Toolbar extends Component<ToolbarProps> {
           }
 
           .cell-toolbar {
-            background-color: var(--toolbar-bg, rgba(255, 255, 255, 0.5));
+            background-color: var(--theme-cell-toolbar-bg);
             opacity: 0.4;
             transition: opacity 0.4s;
           }
@@ -214,11 +214,11 @@ export default class Toolbar extends Component<ToolbarProps> {
           .cell-toolbar button span {
             font-size: 15px;
             line-height: 1;
-            color: var(--toolbar-button, #aaa);
+            color: var(--theme-cell-toolbar-fg);
           }
 
           .cell-toolbar button span:hover {
-            color: var(--toolbar-button-hover, #555);
+            color: var(--theme-cell-toolbar-fg-hover);
           }
 
           .cell-toolbar-mask {

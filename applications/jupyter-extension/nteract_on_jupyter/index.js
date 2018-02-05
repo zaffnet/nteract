@@ -10,7 +10,7 @@ import configureStore from "./store";
 
 import type { JupyterConfigData } from "./store";
 
-import { NotebookApp } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
@@ -36,22 +36,24 @@ function createApp(jupyterConfigData: JupyterConfigData) {
     render(): React$Element<any> {
       return (
         <Provider store={store}>
-          <div>
-            <NotebookMenu />
-            <NotebookApp />
-            <NotificationSystem
-              ref={notificationSystem => {
-                this.notificationSystem = notificationSystem;
-              }}
-            />
-            <ModalController />
+          <React.Fragment>
+            <Styles>
+              <NotebookMenu />
+              <NotebookApp />
+              <NotificationSystem
+                ref={notificationSystem => {
+                  this.notificationSystem = notificationSystem;
+                }}
+              />
+              <ModalController />
+            </Styles>
             <style jsx global>{`
               body {
                 font-family: "Source Sans Pro";
                 font-size: 16px;
                 line-height: 22px;
-                background-color: var(--main-bg-color);
-                color: var(--main-fg-color);
+                background-color: var(--theme-app-bg);
+                color: var(--theme-app-fg);
                 /* All the old theme setups declared this, putting it back for consistency */
                 line-height: 1.3 !important;
               }
@@ -75,7 +77,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
                 animation-fill-mode: forwards;
               }
             `}</style>
-          </div>
+          </React.Fragment>
         </Provider>
       );
     }

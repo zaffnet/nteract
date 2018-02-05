@@ -9,6 +9,10 @@ import {
   Cells
 } from "@nteract/core/components";
 
+import { Styles } from "@nteract/core/providers";
+
+import { light } from "@nteract/core/themes";
+
 import * as React from "react";
 
 import ReactMarkdown from "react-markdown";
@@ -259,18 +263,21 @@ const ExampleCell = () => (
 
 export default () => (
   <div className="root">
-    <Example />
-    <div className="explainer">
-      <h1>On the left is a notebook</h1>
-      <p>It was built with compound components like this</p>
-      <SyntaxHighlighter style={agate}>{cellText}</SyntaxHighlighter>
-      <p>The result of which is this component</p>
-      <ExampleCell />
-      <p>Neat, huh?</p>
-    </div>
+    <Styles>
+      <Example />
+      <div className="explainer">
+        <h1>On the left is a notebook</h1>
+        <p>It was built with compound components like this</p>
+        <SyntaxHighlighter style={agate}>{cellText}</SyntaxHighlighter>
+        <p>The result of which is this component</p>
+        <ExampleCell />
+        <p>Neat, huh?</p>
+      </div>
+    </Styles>
     <style jsx>{`
       .root {
         display: flex;
+        ${light};
       }
       .root > :global(.cells) {
         width: 50%;
