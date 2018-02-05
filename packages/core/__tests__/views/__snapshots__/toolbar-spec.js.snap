@@ -380,10 +380,10 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
             onItemClick={[Function]}
           >
             <div
-              className="jsx-30005146"
+              className="jsx-2679435720"
             >
               <ul
-                className="jsx-30005146"
+                className="jsx-2679435720"
               >
                 <li
                   aria-selected="false"
@@ -457,8 +457,8 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                 </li>
               </ul>
               <JSXStyle
-                css="div.jsx-30005146{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;opacity:1;position:absolute;top:0.2em;right:0;border-style:none;padding:0;font-family:\\"Source Sans Pro\\";font-size:12px;line-height:1.5;margin:20px 0;background-color:var(--color-bg-secondary,#eeedee);}ul.jsx-30005146{list-style:none;text-align:left;padding:0;margin:0;opacity:1;}li{padding:0.5rem;}li:hover{background-color:var(--color-bg-tertiary,#e2dfe3);cursor:pointer;}"
-                styleId="30005146"
+                css="div.jsx-2679435720{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0px;padding:0px;opacity:1;position:absolute;top:0.2em;right:0;border-style:none;padding:0;font-family:\\"Source Sans Pro\\";font-size:12px;line-height:1.5;margin:20px 0;background-color:var(--theme-cell-menu-bg);}ul.jsx-2679435720{list-style:none;text-align:left;padding:0;margin:0;opacity:1;}li{padding:0.5rem;}li:hover{background-color:var(--theme-cell-menu-bg-hover,#e2dfe3);cursor:pointer;}"
+                styleId="2679435720"
               />
             </div>
           </DropdownContent>
