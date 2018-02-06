@@ -150,9 +150,6 @@ export type Notebook = {
   metadata: NotebookMetadata
 };
 
-// Parts of AppRecord should become
-// ElectronAppRecord
-// Basically, anything that's only for desktop should have its own record & reducers
 type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
   host: ?HostRecord,
@@ -169,12 +166,12 @@ type AppRecordProps = {
 export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   kernel: null,
   host: null,
-  githubToken: null, // Electron specific (ish...)
-  notificationSystem: null, // Should be available for all I assume
-  isSaving: false, // All -- ?
-  lastSaved: null, // All
-  configLastSaved: null, // ?
-  error: null, // All
+  githubToken: null,
+  notificationSystem: null,
+  isSaving: false,
+  lastSaved: null,
+  configLastSaved: null,
+  error: null,
   // set the default version to @nteract/core's version
   version: `@nteract/core@${version}`
 });

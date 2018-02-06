@@ -30,6 +30,10 @@ import type {
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
+  ShutdownReplyTimedOut,
+  ShutdownReplySucceeded,
+  DeleteConnectionFileFailedAction,
+  DeleteConnectionFileSuccessfulAction,
   ExecuteCellAction,
   ExecuteFocusedCellAction,
   FetchKernelspecs,
@@ -151,6 +155,14 @@ export const fetchKernelspecsFailed = (payload: {
   type: actionTypes.FETCH_KERNELSPECS_FAILED,
   payload
 });
+
+export function launchKernelFailed(error: Error) {
+  return {
+    type: actionTypes.LAUNCH_KERNEL_FAILED,
+    payload: error,
+    error: true
+  };
+}
 
 export function launchKernelSuccessful(
   kernel: LocalKernelProps | RemoteKernelProps
@@ -668,5 +680,38 @@ export function setLanguageInfo(
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
     langInfo
+  };
+}
+
+export function deleteConnectionFileFailed(
+  error: Error
+): DeleteConnectionFileFailedAction {
+  return {
+    type: actionTypes.DELETE_CONNECTION_FILE_FAILED,
+    payload: error,
+    error: true
+  };
+}
+
+export function deleteConnectionFileSuccessful(): deleteConnectionFileSuccessful {
+  return {
+    type: actionTypes.DELETE_CONNECTION_FILE_SUCCESSFUL
+  };
+}
+
+export function shutdownReplySucceeded(
+  payload: Object
+): ShutdownReplySucceeded {
+  return {
+    type: actionTypes.SHUTDOWN_REPLY_SUCCEEDED,
+    payload
+  };
+}
+
+export function shutdownReplyTimedOut(error: Error): ShutdownReplyTimedOut {
+  return {
+    type: actionTypes.SHUTDOWN_REPLY_TIMED_OUT,
+    payload: error,
+    error: true
   };
 }

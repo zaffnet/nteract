@@ -46,57 +46,6 @@ describe("setNotificationSystem", () => {
   });
 });
 
-describe("interruptKernel", () => {
-  test("sends a SIGINT and clears the kernel", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: {
-            kill: () => {}
-          },
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = { type: actionTypes.INTERRUPT_KERNEL };
-
-    const state = reducers(originalState, action);
-    expect(state.app).toEqual(originalState.app);
-  });
-});
-
-describe("launchKernel", () => {
-  test("creates a new kernel", () => {
-    const originalState = {
-      app: makeAppRecord({
-        kernel: makeLocalKernelRecord({
-          channels: false,
-          spawn: false,
-          connectionFile: false
-        })
-      })
-    };
-
-    const action = {
-      type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      kernel: {
-        channels: "test_channels",
-        spawn: "test_spawn",
-        kernelSpecName: "test_name",
-        status: "starting"
-      }
-    };
-
-    const state = reducers(originalState, action);
-    expect(state.app.kernel.status).toBe("starting");
-    expect(state.app.kernel.kernelSpecName).toBe("test_name");
-    expect(state.app.kernel.spawn).toBe("test_spawn");
-    expect(state.app.kernel.channels).toBe("test_channels");
-  });
-});
-
 describe("setGithubToken", () => {
   test("calls setGithubToken", () => {
     const originalState = {

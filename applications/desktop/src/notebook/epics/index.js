@@ -9,7 +9,9 @@ import type { ActionsObservable, Epic } from "redux-observable";
 import {
   launchKernelEpic,
   launchKernelByNameEpic,
-  interruptKernelEpic
+  interruptKernelEpic,
+  killKernelEpic,
+  watchSpawn
 } from "./zeromq-kernels";
 
 import {
@@ -39,6 +41,7 @@ export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics = [
+  watchSpawn,
   commListenEpic,
   publishEpic,
   saveEpic,
@@ -50,6 +53,7 @@ const epics = [
   launchKernelEpic,
   launchKernelByNameEpic,
   interruptKernelEpic,
+  killKernelEpic,
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   loadConfigEpic,
