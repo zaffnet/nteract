@@ -22,10 +22,10 @@ export const modalCss = css`
   }
   .modal--content {
     align-items: stretch;
-    background-color: var(--main-bg-color);
-    color: var(--main-fg-color);
+    background-color: var(--theme-app-bg);
+    color: var(--theme-app-fg);
     border-radius: 4px;
-    border: var(--primary-border) 1px solid;
+    border: var(--theme-app-border) 1px solid;
     box-sizing: border-box;
     display: flex;
     flex-flow: column nowrap;
@@ -60,7 +60,7 @@ export const modalCss = css`
   }
   .modal--content--header {
     padding: 0 20px 20px 20px;
-    border-bottom: var(--primary-border) 1px solid;
+    border-bottom: var(--theme-app-border) 1px solid;
   }
   .modal--content--body {
     padding: 20px;
