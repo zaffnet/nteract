@@ -4,7 +4,6 @@ import type {
   KernelspecsRef,
   KernelspecProps
 } from "@nteract/types/core/records";
-import type { Channels } from "@nteract/types/channels";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
 
 import type {

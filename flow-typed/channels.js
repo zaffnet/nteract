@@ -1,5 +1,6 @@
 // @flow
-export type JupyterMessageHeader<MT: string> = {
+
+declare type JupyterMessageHeader<MT: string> = {
   msg_id: string,
   username: string,
   date: string, // ISO 8601 timestamp
@@ -7,7 +8,7 @@ export type JupyterMessageHeader<MT: string> = {
   version: string // this could be an enum
 };
 
-export type JupyterMessage<MT, C> = {
+declare type JupyterMessage<MT, C> = {
   header: JupyterMessageHeader<MT>,
   parent_header: JupyterMessageHeader<*> | {},
   metadata: Object,
@@ -15,7 +16,7 @@ export type JupyterMessage<MT, C> = {
   buffers?: Array<any> | null
 };
 
-export type ExecuteMessageContent = {
+declare type ExecuteMessageContent = {
   code: string,
   silent: boolean,
   store_history: boolean,
@@ -24,7 +25,9 @@ export type ExecuteMessageContent = {
   stop_on_error: boolean
 };
 
-export type ExecuteRequest = JupyterMessage<
+declare type ExecuteRequest = JupyterMessage<
   "execute_request",
   ExecuteMessageContent
 >;
+
+declare type Channels = rxjs$Subject<JupyterMessage<*, *>>;

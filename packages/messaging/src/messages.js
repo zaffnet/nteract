@@ -1,11 +1,5 @@
 // @flow
 
-import type {
-  JupyterMessage,
-  ExecuteRequest,
-  JupyterMessageHeader
-} from "./types";
-
 import * as uuid from "uuid";
 
 function whichChannel(messageType?: string) {

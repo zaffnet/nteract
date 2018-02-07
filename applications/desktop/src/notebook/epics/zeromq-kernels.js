@@ -105,7 +105,7 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 
       // do dependency injection of jmp to make it match our ABI version of node
       createMainChannel(config, undefined, undefined, jmp)
-        .then(channels => {
+        .then((channels: Channels) => {
           observer.next(setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {

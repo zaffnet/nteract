@@ -25,12 +25,6 @@ import {
 
 import { message, executeRequest } from "./messages";
 
-import type {
-  JupyterMessage,
-  ExecuteRequest,
-  JupyterMessageHeader
-} from "./types";
-
 export type { JupyterMessage, ExecuteRequest, JupyterMessageHeader };
 
 // TODO: Deprecate
