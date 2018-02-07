@@ -78,15 +78,15 @@ export function saveContentEpic(
     ofType(SAVE),
     mergeMap(action => {
       const state = store.getState();
+      const currentNotebook = selectors.currentNotebook(state);
 
-      const filename = state.document.get("filename");
-      const version = state.app.get("version", "0.0.0-beta");
+      const filename = selectors.currentFilename(state);
+      // TODO: this default version should probably not be here.
+      const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
       // contents API takes notebook as raw JSON
       const notebook = toJS(
-        state.document
-          .get("notebook")
-          .setIn(["metadata", "nteract", "version"], version)
+        currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
       );
 
       const serverConfig = selectors.serverConfig(state);

@@ -11,6 +11,7 @@ import React from "react";
 import { modalCss } from "./styles";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
+import * as selectors from "../../selectors";
 
 type Props = {
   appVersion?: string,
@@ -77,8 +78,8 @@ class PureAboutModal extends React.Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  appVersion: state.app.version,
-  hostType: state.app.host.type
+  appVersion: selectors.appVersion(state),
+  hostType: selectors.currentHostType(state)
 });
 
 const mapDispatchToProps = {

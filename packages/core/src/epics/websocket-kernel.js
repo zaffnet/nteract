@@ -75,7 +75,8 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     concatMap(() => {
       const state = store.getState();
       const serverConfig = selectors.serverConfig(state);
-      const id = state.app.kernel.id;
+      const kernel = selectors.currentKernel(state);
+      const id = kernel.id;
 
       return kernels
         .interrupt(serverConfig, id)

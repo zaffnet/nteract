@@ -31,6 +31,7 @@ import {
   toggleOutputExpansion
 } from "@nteract/core/actions";
 
+import * as selectors from "@nteract/core/selectors";
 import { defaultPathFallback, cwdKernelFallback } from "./path";
 
 export function dispatchSaveAs(store: *, evt: Event, filename: string) {
@@ -77,19 +78,19 @@ export function dispatchRestartKernel(store: *) {
   //       current kernel and launch a new kernel of the same type
   const state = store.getState();
   const notificationSystem = state.app.notificationSystem;
+  const filename = selectors.currentFilename(state);
+  const kernel = selectors.currentKernel(state);
 
-  let cwd = cwdKernelFallback();
-  if (state && state.document && state.document.get("filename")) {
-    cwd = path.dirname(path.resolve(state.document.filename));
-  }
+  const cwd = filename
+    ? path.dirname(path.resolve(filename))
+    : cwdKernelFallback();
 
   store.dispatch(killKernel);
   // TODO: Use the kernelspec directly, requires us having the kernelspecs available
   //       in the store.
+  // TODO: `kernel &&` may be redundant if Record default is `null` for this.
   const kernelName =
-    state && state.app && state.app.kernel && state.app.kernel.kernelSpecName
-      ? state.app.kernel.kernelSpecName
-      : null;
+    kernel && kernel.kernelSpecName ? kernel.kernelSpecName : null;
 
   if (!kernelName) {
     notificationSystem.addNotification({
@@ -106,7 +107,7 @@ export function dispatchRestartKernel(store: *) {
 
   notificationSystem.addNotification({
     title: "Kernel Restarted",
-    message: `Kernel ${state.app.kernel.kernelSpecName} has been restarted.`,
+    message: `Kernel ${kernelName} has been restarted.`,
     dismissible: true,
     position: "tr",
     level: "success"
@@ -147,8 +148,7 @@ export function triggerSaveAs(store: *) {
 }
 
 export function dispatchSave(store: *) {
-  const state = store.getState();
-  const filename = state.document.get("filename");
+  const filename = selectors.currentFilename(store.getState());
   if (!filename) {
     triggerSaveAs(store);
   } else {
@@ -157,11 +157,10 @@ export function dispatchSave(store: *) {
 }
 
 export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
-  const state = store.getState();
-  let cwd = cwdKernelFallback();
-  if (state && state.document && state.document.get("filename")) {
-    cwd = path.dirname(path.resolve(state.document.get("filename")));
-  }
+  const filename = selectors.currentFilename(store.getState());
+  const cwd = filename
+    ? path.dirname(path.resolve(filename))
+    : cwdKernelFallback();
   store.dispatch(launchKernel(spec, cwd));
 }
 
@@ -190,48 +189,32 @@ export function dispatchPublishUserGist(
  */
 export function dispatchRunAllBelow(store: *) {
   const state = store.getState();
-  const focusedCellId = state.document.get("cellFocused");
-  const notebook = state.document.get("notebook");
-  const indexOfFocusedCell = notebook.get("cellOrder").indexOf(focusedCellId);
-  const cellsBelowFocusedId = notebook
-    .get("cellOrder")
-    .skip(indexOfFocusedCell);
-  const cells = notebook.get("cellMap");
+  const cellMap = selectors.currentCellMap(state);
+  const codeCellIdsBelow = selectors.currentCodeCellIdsBelow(state);
 
-  cellsBelowFocusedId
-    .filter(cellID => cells.getIn([cellID, "cell_type"]) === "code")
-    .map(cellID =>
-      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"])))
-    );
+  codeCellIdsBelow.forEach(id =>
+    store.dispatch(executeCell(id, cellMap.getIn([id, "source"])))
+  );
 }
 
 // TODO: This should be an epic
 export function dispatchRunAll(store: *) {
   const state = store.getState();
-  const notebook = state.document.get("notebook");
-  const cells = notebook.get("cellMap");
-  notebook
-    .get("cellOrder")
-    .filter(cellID => cells.getIn([cellID, "cell_type"]) === "code")
-    .map(cellID =>
-      store.dispatch(executeCell(cellID, cells.getIn([cellID, "source"])))
-    );
+  const cellMap = selectors.currentCellMap(state);
+  const codeCellIds = selectors.currentCodeCellIds(state);
+  codeCellIds.forEach(id =>
+    store.dispatch(executeCell(id, cellMap.getIn([id, "source"])))
+  );
 }
 
 export function dispatchClearAll(store: *) {
-  const state = store.getState();
-  const notebook = state.document.get("notebook");
-  notebook.get("cellOrder").map(value => store.dispatch(clearOutputs(value)));
+  const cellOrder = selectors.currentCellOrder(store.getState());
+  cellOrder.forEach(id => store.dispatch(clearOutputs(id)));
 }
 
 export function dispatchUnhideAll(store: *) {
-  const state = store.getState();
-  const notebook = state.document.get("notebook");
-  const cells = notebook.get("cellMap");
-  notebook
-    .get("cellOrder")
-    .filter(cellID => cells.getIn([cellID, "metadata", "inputHidden"]))
-    .map(cellID => store.dispatch(toggleCellInputVisibility(cellID)));
+  const hiddenCellIds = selectors.currentHiddenCellIds(store.getState());
+  hiddenCellIds.forEach(id => store.dispatch(toggleCellInputVisibility(id)));
 }
 
 export function dispatchKillKernel(store: *) {

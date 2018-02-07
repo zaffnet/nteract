@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
+import { dummy, dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 import { toArray } from "rxjs/operators";
 
@@ -54,7 +54,9 @@ describe("publishNotebookObservable", () => {
     const notificationSystem = createNotificationSystem();
     const publishNotebookObs = publishNotebookObservable(
       GitHub(),
-      dummyCommutable,
+      dummy,
+      "fake-github-username",
+      "fake-gist-id",
       "./test.ipynb",
       notificationSystem,
       false,
@@ -68,7 +70,9 @@ describe("publishNotebookObservable", () => {
     const notificationSystem = createNotificationSystem();
     const publishNotebookObs = publishNotebookObservable(
       GitHub(),
-      dummyCommutable,
+      dummy,
+      "fake-github-username",
+      "fake-gist-id",
       "./test.ipynb",
       notificationSystem,
       false,
@@ -88,7 +92,9 @@ describe("publishNotebookObservable", () => {
     const notificationSystem = createNotificationSystem();
     const publishNotebookObs = publishNotebookObservable(
       github,
-      dummyCommutable,
+      dummy,
+      "fake-github-username",
+      "fake-gist-id",
       "./test.ipynb",
       notificationSystem,
       false,
@@ -103,11 +109,12 @@ describe("publishNotebookObservable", () => {
   test("edits gist that is already made", done => {
     const github = GitHub();
     const store = dummyStore();
-    const notebook = dummyCommutable.setIn(["metadata", "gist_id"], "ID123");
     const notificationSystem = createNotificationSystem();
     const publishNotebookObs = publishNotebookObservable(
       github,
-      notebook,
+      dummy,
+      "fake-github-username",
+      "fake-gist-id",
       "./test.ipynb",
       notificationSystem,
       true,
@@ -140,7 +147,9 @@ describe("createGistCallback", () => {
     const notificationSystem = createNotificationSystem();
     const publishNotebookObs = publishNotebookObservable(
       github,
-      dummyCommutable,
+      dummy,
+      "fake-github-username",
+      "fake-gist-id",
       "./test.ipynb",
       notificationSystem,
       false,
