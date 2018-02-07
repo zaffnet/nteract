@@ -7,6 +7,7 @@ import * as components from "./components";
 import * as providers from "./providers";
 import * as themes from "./themes";
 import * as epics from "./epics";
+import * as selectors from "./selectors";
 
 // keeping with backwards compatiblity for now
 const constants = actionTypes;
@@ -20,5 +21,6 @@ export {
   components,
   providers,
   themes,
+  selectors,
   epics
 };

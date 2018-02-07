@@ -44,6 +44,12 @@ import type { NewKernelAction } from "@nteract/core/actionTypes";
 import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
 
 import {
+  getCurrentKernel,
+  getCurrentHost,
+  isCurrentKernelZeroMQ
+} from "@nteract/core/selectors";
+
+import {
   createMessage,
   childOf,
   ofMessageType,
@@ -179,8 +185,7 @@ export const launchKernelEpic = (
     // We must kill the previous kernel now
     // Then launch the next one
     switchMap(action => {
-      const state = store.getState();
-      const kernel = state.app.kernel;
+      const kernel = getCurrentKernel(store.getState());
 
       return merge(
         launchKernelObservable(action.kernelSpec, action.cwd),
@@ -196,25 +201,12 @@ export const launchKernelEpic = (
 export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
   action$.pipe(
     ofType(INTERRUPT_KERNEL),
-    filter(() => {
-      const state = store.getState();
-      const host = state.app.host;
-      const kernel = state.app.kernel;
-
-      // This epic can only interrupt direct zeromq connected kernels
-      return (
-        host &&
-        kernel &&
-        host.type === "local" &&
-        kernel.type === "zeromq" &&
-        kernel.spawn
-      );
-    }),
+    // This epic can only interrupt direct zeromq connected kernels
+    filter(() => isCurrentKernelZeroMQ(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
     concatMap(() => {
-      const state = store.getState();
-      const kernel = state.app.kernel;
+      const kernel = getCurrentKernel(store.getState());
 
       const spawn = kernel.spawn;
 
@@ -314,25 +306,10 @@ function killKernel(kernel): Observable<Action> {
 export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
   action$.pipe(
     ofType(KILL_KERNEL),
-    filter(() => {
-      const state = store.getState();
-      const host = state.app.host;
-      const kernel = state.app.kernel;
-
-      // This epic can only interrupt direct zeromq connected kernels
-      return (
-        host &&
-        kernel &&
-        host.type === "local" &&
-        kernel.type === "zeromq" &&
-        kernel.spawn &&
-        kernel.channels
-      );
-    }),
+    // This epic can only interrupt direct zeromq connected kernels
+    filter(() => isCurrentKernelZeroMQ(store.getState())),
     concatMap(action => {
-      const app = store.getState().app;
-      const kernel = app.kernel;
-
+      const kernel = getCurrentKernel(store.getState());
       return killKernel(kernel);
     })
   );

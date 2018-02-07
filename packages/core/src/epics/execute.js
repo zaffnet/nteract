@@ -11,6 +11,8 @@ import {
   executionCounts
 } from "@nteract/messaging";
 
+import { getCurrentKernel } from "../selectors";
+
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
@@ -135,9 +137,8 @@ export function createExecuteCellStream(
   message: ExecuteRequest,
   id: string
 ) {
-  const state = store.getState();
+  const kernel = getCurrentKernel(store.getState());
 
-  const kernel = state.app.kernel;
   const channels = kernel ? kernel.channels : null;
 
   const kernelConnected =
