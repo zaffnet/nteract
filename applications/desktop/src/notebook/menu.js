@@ -8,10 +8,6 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { load, newNotebook } from "@nteract/core/actions";
-
-import { loadConfig } from "@nteract/core/actions";
-
 import {
   toggleCellInputVisibility,
   clearOutputs,
@@ -23,6 +19,9 @@ import {
   killKernel,
   launchKernel,
   launchKernelByName,
+  load,
+  loadConfig,
+  newNotebook,
   pasteCell,
   save,
   saveAs,
