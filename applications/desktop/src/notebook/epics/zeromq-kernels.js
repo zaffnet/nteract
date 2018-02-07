@@ -287,7 +287,7 @@ function killKernel(kernel): Observable<Action> {
         // Pass on our intermediate action
         of(action),
         // Inform about the state
-        setExecutionState("shutting down"),
+        of(setExecutionState("shutting down")),
         // and our connection file deletion
         del$
       );
