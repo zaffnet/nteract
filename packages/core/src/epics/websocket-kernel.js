@@ -45,7 +45,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap(({ kernelSpecName, cwd }) => {
-      const config = selectors.getServerConfig(store.getState());
+      const config = selectors.serverConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
         mergeMap(data => {
@@ -74,7 +74,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     // interrupt, instead doing it after the last one happens
     concatMap(() => {
       const state = store.getState();
-      const serverConfig = selectors.getServerConfig(state);
+      const serverConfig = selectors.serverConfig(state);
       const id = state.app.kernel.id;
 
       return kernels

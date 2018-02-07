@@ -181,7 +181,7 @@ export const launchKernelEpic = (
     // We must kill the previous kernel now
     // Then launch the next one
     switchMap(action => {
-      const kernel = selectors.getCurrentKernel(store.getState());
+      const kernel = selectors.currentKernel(store.getState());
 
       return merge(
         launchKernelObservable(action.kernelSpec, action.cwd),
@@ -202,7 +202,7 @@ export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
     concatMap(() => {
-      const kernel = selectors.getCurrentKernel(store.getState());
+      const kernel = selectors.currentKernel(store.getState());
 
       const spawn = kernel.spawn;
 
@@ -305,7 +305,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
     // This epic can only interrupt direct zeromq connected kernels
     filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
     concatMap(action => {
-      const kernel = selectors.getCurrentKernel(store.getState());
+      const kernel = selectors.currentKernel(store.getState());
       return killKernel(kernel);
     })
   );

@@ -44,7 +44,7 @@ export function fetchContentEpic(
       }
     }),
     switchMap((action: FetchContent) => {
-      const serverConfig = selectors.getServerConfig(store.getState());
+      const serverConfig = selectors.serverConfig(store.getState());
 
       return contents
         .get(serverConfig, action.payload.path, action.payload.params)
@@ -89,7 +89,7 @@ export function saveContentEpic(
           .setIn(["metadata", "nteract", "version"], version)
       );
 
-      const serverConfig = selectors.getServerConfig(state);
+      const serverConfig = selectors.serverConfig(state);
 
       const model = {
         content: notebook,

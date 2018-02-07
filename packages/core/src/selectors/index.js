@@ -7,7 +7,7 @@ const serverUrl = (state: AppState) => state.app.host.serverUrl;
 const crossDomain = (state: AppState) => state.app.host.crossDomain;
 const token = (state: AppState) => state.app.host.token;
 
-export const getServerConfig = createSelector(
+export const serverConfig = createSelector(
   [serverUrl, crossDomain, token],
   (serverUrl, crossDomain, token) => ({
     endpoint: serverUrl,
@@ -20,27 +20,24 @@ export const getServerConfig = createSelector(
 //
 // Intended to be useful for a core app and be future proof for when we have
 // both refs and selected/current hosts and kernels
-export const getCurrentHost = createSelector(
+export const currentHost = createSelector(
   (state: AppState) => state.app.host,
   host => host
 );
 
-export const getCurrentKernel = createSelector(
+export const currentKernel = createSelector(
   (state: AppState) => state.app.kernel,
   kernel => kernel
 );
 
-export const getCurrentKernelType = createSelector(
-  [getCurrentKernel],
-  kernel => {
-    if (kernel && kernel.type) {
-      return kernel.type;
-    }
-    return null;
+export const currentKernelType = createSelector([currentKernel], kernel => {
+  if (kernel && kernel.type) {
+    return kernel.type;
   }
-);
+  return null;
+});
 
-export const getCurrentHostType = createSelector([getCurrentHost], host => {
+export const currentHostType = createSelector([currentHost], host => {
   if (host && host.type) {
     return host.type;
   }
@@ -48,19 +45,19 @@ export const getCurrentHostType = createSelector([getCurrentHost], host => {
 });
 
 export const isCurrentKernelZeroMQ = createSelector(
-  [getCurrentHostType, getCurrentKernelType],
+  [currentHostType, currentKernelType],
   (hostType, kernelType) => {
     return hostType === "local" && kernelType === "zeromq";
   }
 );
 
 export const isCurrentHostJupyter = createSelector(
-  [getCurrentHostType],
+  [currentHostType],
   hostType => hostType === "jupyter"
 );
 
 export const isCurrentKernelJupyterWebsocket = createSelector(
-  [getCurrentHostType, getCurrentKernelType],
+  [currentHostType, currentKernelType],
   (hostType, kernelType) => {
     return hostType === "jupyter" && kernelType === "websocket";
   }

@@ -137,7 +137,7 @@ export function createExecuteCellStream(
   message: ExecuteRequest,
   id: string
 ) {
-  const kernel = selectors.getCurrentKernel(store.getState());
+  const kernel = selectors.currentKernel(store.getState());
 
   const channels = kernel ? kernel.channels : null;
 
