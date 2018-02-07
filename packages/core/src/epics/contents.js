@@ -21,7 +21,7 @@ import {
 
 import { FETCH_CONTENT_FULFILLED } from "../actionTypes";
 
-import { getServerConfig } from "../selectors";
+import * as selectors from "../selectors";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -44,7 +44,7 @@ export function fetchContentEpic(
       }
     }),
     switchMap((action: FetchContent) => {
-      const serverConfig = getServerConfig(store.getState());
+      const serverConfig = selectors.getServerConfig(store.getState());
 
       return contents
         .get(serverConfig, action.payload.path, action.payload.params)
@@ -89,7 +89,7 @@ export function saveContentEpic(
           .setIn(["metadata", "nteract", "version"], version)
       );
 
-      const serverConfig = getServerConfig(state);
+      const serverConfig = selectors.getServerConfig(state);
 
       const model = {
         content: notebook,

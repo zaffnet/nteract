@@ -8,7 +8,7 @@ import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
 import type { KernelspecProps, Kernelspecs } from "@nteract/types/core/records";
 
-import { getServerConfig } from "../selectors";
+import * as selectors from "../selectors";
 
 export const fetchKernelspecsEpic = (
   action$: ActionsObservable<*>,
@@ -17,7 +17,7 @@ export const fetchKernelspecsEpic = (
   action$.pipe(
     ofType(actionTypes.FETCH_KERNELSPECS),
     mergeMap(({ payload: { kernelspecsRef } }) => {
-      const serverConfig = getServerConfig(store.getState());
+      const serverConfig = selectors.getServerConfig(store.getState());
       // $FlowFixMe: this should be ok, once rebased this should work out
       return kernelspecs.list(serverConfig).pipe(
         map(data => {
