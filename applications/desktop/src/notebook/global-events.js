@@ -8,8 +8,6 @@ import { is } from "immutable";
 
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
-import type { Action } from "@nteract/types/redux";
-
 export function unload(store: Store<AppState, Action>) {
   const state = store.getState();
 

@@ -2,8 +2,6 @@
 
 import { unlinkObservable } from "fs-observable";
 
-import type { Action } from "@nteract/types/redux";
-
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";

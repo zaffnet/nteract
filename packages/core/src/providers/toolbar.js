@@ -14,8 +14,6 @@ import {
   toggleOutputExpansion
 } from "../actions";
 
-import type { Action } from "@nteract/types/redux";
-
 type Props = {
   id: string,
   type: "markdown" | "code" | "raw",
