@@ -22,7 +22,7 @@ import { _throw } from "rxjs/observable/throw";
 
 import type { Channels } from "@nteract/types/channels";
 
-import type { ExecuteRequest } from "@nteract/types/messaging";
+import type { ExecuteRequest } from "@nteract/messaging";
 
 import {
   groupBy,

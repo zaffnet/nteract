@@ -1,4 +1,5 @@
-export type JupyterMessageHeader<MT> = {
+// @flow
+export type JupyterMessageHeader<MT: string> = {
   msg_id: string,
   username: string,
   date: string, // ISO 8601 timestamp
@@ -8,7 +9,7 @@ export type JupyterMessageHeader<MT> = {
 
 export type JupyterMessage<MT, C> = {
   header: JupyterMessageHeader<MT>,
-  parent_header: JupyterMessageHeader<*>,
+  parent_header: JupyterMessageHeader<*> | {},
   metadata: Object,
   content: C,
   buffers?: Array<any> | null

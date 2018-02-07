@@ -24,7 +24,7 @@ import type {
   RemoteKernelProps
 } from "@nteract/types/core/records";
 
-import type { ExecuteRequest } from "@nteract/types/messaging";
+import type { ExecuteRequest } from "@nteract/messaging";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
