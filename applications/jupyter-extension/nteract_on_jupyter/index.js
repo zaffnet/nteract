@@ -56,6 +56,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
                 color: var(--theme-app-fg);
                 /* All the old theme setups declared this, putting it back for consistency */
                 line-height: 1.3 !important;
+                margin: 0;
               }
 
               #app {
