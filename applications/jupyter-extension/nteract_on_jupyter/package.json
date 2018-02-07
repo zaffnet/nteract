@@ -28,7 +28,7 @@
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
-    "redux-observable": "^0.17.0",
+    "redux-observable": "^0.18.0",
     "rx-jupyter": "^2.4.0",
     "rxjs": "^5.5.6"
   },
