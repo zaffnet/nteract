@@ -55,17 +55,15 @@ opaque type Id = string;
 opaque type Ref = string;
 
 type state = {
-  // The top level of core state can be considered a notebook, but we formalize
-  // that by nesting it under `notebook`..
-  notebook: {
+  // The top level of core state can be considered a entry (which can be a 
+  // "notebook", "directory", or plain "file").
+  app: {
       // On desktop we'll have the one built-in local host that connects to
       // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
       // different hosts.
       selectedHostRef: Ref,
       hostRefs: Array<Ref>,
-      lastSaved: Date
-      
-      // TODO: language information? Does this belong at the notebook level?
+      selectedContentRef: Ref
   },
   
   preferences: {
@@ -229,10 +227,17 @@ type state = {
           path: string,
           name: string,
           created: Date,
-          last_modified: Date,
+          lastSaved: Date,
+          modified: boolean,
           writable: bool,
-          format: null | "json" | "text" | "base64" // "json" for dir / nb
-          content: ?Array<Ref> | string // Array<Ref> is for directory-type
+          format: null | "json" | "text" | "base64", // "json" for dir / nb
+          // The model is a little confusing. Think of it as the in-memory, app
+          // version of the content string that you get back from the contents
+          // api. So, for a plain file, which we don't necessarily know how to
+          // handle, the model will just be a string still. However, for a
+          // notebook, we basically flesh out all the references to cells in
+          // here.
+          model: ?Object, // null | DirectoryModel | NotebookModel | FileModel
         }
       }
     },
