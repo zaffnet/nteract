@@ -107,7 +107,7 @@ function _guessType(values) {
   // Get winner type
   let winner = "any";
   let count = 0;
-  for (const [itemType, itemCount] of Object.entries(lodash.countBy(matches))) {
+  for (const [itemType, itemCount] of lodash.toPairs(lodash.countBy(matches))) {
     if (itemCount > count) {
       winner = itemType;
       count = itemCount;
