@@ -1,5 +1,5 @@
 /* @flow */
-
+import { empty } from "rxjs/observable/empty";
 import { of } from "rxjs/observable/of";
 import {
   tap,
@@ -14,6 +14,7 @@ import { ofType } from "redux-observable";
 
 import {
   setNotebook,
+  saveFailed,
   doneSaving,
   fetchContentFailed,
   fetchContentFulfilled
@@ -80,6 +81,12 @@ export function saveContentEpic(
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
 
+      // TODO: this will likely make more sense when this becomes less
+      // notebook-centric.
+      if (!currentNotebook) {
+        return of(saveFailed(new Error("Notebook was not set.")));
+      }
+
       const filename = selectors.currentFilename(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
@@ -96,16 +103,12 @@ export function saveContentEpic(
         type: "notebook"
       };
 
-      return contents.save(serverConfig, filename, model).pipe(
-        mapTo(doneSaving()),
-        catchError((error: Error) =>
-          of({
-            type: "ERROR",
-            payload: error,
-            error: true
-          })
-        )
-      );
+      return contents
+        .save(serverConfig, filename, model)
+        .pipe(
+          mapTo(doneSaving()),
+          catchError((error: Error) => of(saveFailed(error)))
+        );
     })
   );
 }

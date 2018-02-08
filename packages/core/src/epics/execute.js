@@ -202,6 +202,14 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         // a new stream and unsubscribe from the old one.
         switchMap(({ id }) => {
           const cellMap = selectors.currentCellMap(store.getState());
+
+          // If for some reason this is run *outside* the context of viewing
+          // a notebook (stray async task or something), it's possible that the
+          // cellMap will be null;
+          if (!cellMap) {
+            return empty();
+          }
+
           const cell = cellMap.get(id, Immutable.Map());
 
           // We only execute code cells
