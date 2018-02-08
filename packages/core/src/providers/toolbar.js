@@ -1,105 +1,50 @@
 // @flow
 import * as React from "react";
-import { connect } from "react-redux";
+import * as actions from "../actions";
 import ToolbarView from "../components/toolbar";
-
-import {
-  executeCell,
-  removeCell,
-  toggleStickyCell,
-  clearOutputs,
-  toggleCellOutputVisibility,
-  toggleCellInputVisibility,
-  changeCellType,
-  toggleOutputExpansion
-} from "../actions";
+import { connect } from "react-redux";
 
 type Props = {
   id: string,
   type: "markdown" | "code" | "raw",
-  dispatch: Dispatch<Action>
+  executeCell: () => void,
+  removeCell: () => void,
+  toggleStickyCell: () => void,
+  clearOutputs: () => void,
+  toggleCellOutputVisibility: () => void,
+  toggleCellInputVisibility: () => void,
+  changeCellType: () => void,
+  toggleOutputExpansion: () => void
 };
 
-class Toolbar extends React.PureComponent<Props> {
-  removeCell: () => void;
-  executeCell: () => void;
-  clearOutputs: () => void;
-  toggleStickyCell: () => void;
-  toggleCellInputVisibility: () => void;
-  toggleCellOutputVisibility: () => void;
-  changeCellType: () => void;
-  toggleOutputExpansion: () => void;
+const Toolbar = (props: Props) => (
+  <ToolbarView
+    type={props.type}
+    executeCell={props.executeCell}
+    removeCell={props.removeCell}
+    toggleStickyCell={props.toggleStickyCell}
+    clearOutputs={props.clearOutputs}
+    toggleCellInputVisibility={props.toggleCellInputVisibility}
+    toggleCellOutputVisibility={props.toggleCellOutputVisibility}
+    toggleOutputExpansion={props.toggleOutputExpansion}
+    changeCellType={props.changeCellType}
+  />
+);
 
-  constructor(props: Props): void {
-    super(props);
-    this.removeCell = this.removeCell.bind(this);
-    this.executeCell = this.executeCell.bind(this);
-    this.clearOutputs = this.clearOutputs.bind(this);
-    this.toggleStickyCell = this.toggleStickyCell.bind(this);
-    this.toggleCellInputVisibility = this.toggleCellInputVisibility.bind(this);
-    this.toggleCellOutputVisibility = this.toggleCellOutputVisibility.bind(
-      this
-    );
-    this.changeCellType = this.changeCellType.bind(this);
-    this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
-  }
+const mapDispatchToProps = (dispatch, { id, type }) => ({
+  toggleStickyCell: () => dispatch(actions.toggleStickyCell(id)),
+  removeCell: () => dispatch(actions.removeCell(id)),
+  executeCell: () => dispatch(actions.executeCell(id)),
+  clearOutputs: () => dispatch(actions.clearOutputs(id)),
+  toggleCellInputVisibility: () =>
+    dispatch(actions.toggleCellInputVisibility(id)),
+  toggleCellOutputVisibility: () =>
+    dispatch(actions.toggleCellOutputVisibility(id)),
+  changeCellType: () =>
+    dispatch(
+      actions.changeCellType(id, type === "markdown" ? "code" : "markdown")
+    ),
+  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion(id))
+});
 
-  toggleStickyCell(): void {
-    const { dispatch } = this.props;
-    dispatch(toggleStickyCell(this.props.id));
-  }
-
-  removeCell(): void {
-    const { dispatch } = this.props;
-    dispatch(removeCell(this.props.id));
-  }
-
-  executeCell(): void {
-    const { dispatch } = this.props;
-    dispatch(executeCell(this.props.id));
-  }
-
-  clearOutputs(): void {
-    const { dispatch } = this.props;
-    dispatch(clearOutputs(this.props.id));
-  }
-
-  toggleCellInputVisibility(): void {
-    const { dispatch } = this.props;
-    dispatch(toggleCellInputVisibility(this.props.id));
-  }
-
-  toggleCellOutputVisibility(): void {
-    const { dispatch } = this.props;
-    dispatch(toggleCellOutputVisibility(this.props.id));
-  }
-
-  changeCellType(): void {
-    const { dispatch } = this.props;
-    const to = this.props.type === "markdown" ? "code" : "markdown";
-    dispatch(changeCellType(this.props.id, to));
-  }
-
-  toggleOutputExpansion(): void {
-    const { dispatch } = this.props;
-    dispatch(toggleOutputExpansion(this.props.id));
-  }
-
-  render(): ?React$Element<any> {
-    return (
-      <ToolbarView
-        type={this.props.type}
-        executeCell={this.executeCell}
-        removeCell={this.removeCell}
-        toggleStickyCell={this.toggleStickyCell}
-        clearOutputs={this.clearOutputs}
-        toggleCellInputVisibility={this.toggleCellInputVisibility}
-        toggleCellOutputVisibility={this.toggleCellOutputVisibility}
-        toggleOutputExpansion={this.toggleOutputExpansion}
-        changeCellType={this.changeCellType}
-      />
-    );
-  }
-}
-
-export default connect()(Toolbar);
+export default connect(null, mapDispatchToProps)(Toolbar);

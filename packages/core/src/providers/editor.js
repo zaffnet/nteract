@@ -1,6 +1,7 @@
 // @flow
 import * as React from "react";
 import { connect } from "react-redux";
+import * as selectors from "../selectors";
 
 import { focusCell, focusCellEditor, updateCellSource } from "../actions";
 
@@ -21,14 +22,14 @@ function mapStateToProps(
   state: Object,
   ownProps: CodeMirrorEditorProps
 ): Object {
+  const kernel = selectors.currentKernel(state);
+  const { cursorBlinkRate } = selectors.userPreferences(state);
   return {
     options: ownProps.options
-      ? Object.assign(ownProps.options, {
-          cursorBlinkRate: state.config.get("cursorBlinkRate")
-        })
-      : { cursorBlinkRate: state.config.get("cursorBlinkRate") },
-    channels: state.app.kernel ? state.app.kernel.channels : null,
-    kernelStatus: state.app.getIn(["kernel", "status"], "not connected")
+      ? Object.assign(ownProps.options, { cursorBlinkRate })
+      : { cursorBlinkRate },
+    channels: kernel ? kernel.channels : null,
+    kernelStatus: selectors.currentKernelStatus(state)
   };
 }
 

@@ -1,7 +1,7 @@
 // @flow
 import type { AppState } from "@nteract/types/core/records";
 import { toJS, stringifyNotebook } from "@nteract/commutable";
-
+import * as Immutable from "immutable";
 import { createSelector } from "reselect";
 
 const identity = thing => thing;
@@ -49,6 +49,13 @@ export const currentKernelType = createSelector([currentKernel], kernel => {
   return null;
 });
 
+export const currentKernelStatus = createSelector([currentKernel], kernel => {
+  if (kernel && kernel.status) {
+    return kernel.status;
+  }
+  return "not connected";
+});
+
 export const currentHostType = createSelector([currentHost], host => {
   if (host && host.type) {
     return host.type;
@@ -75,10 +82,14 @@ export const isCurrentKernelJupyterWebsocket = createSelector(
   }
 );
 
+export const comms = createSelector((state: AppState) => state.comms, identity);
+
+export const models = createSelector([comms], comms => comms.get("models"));
+
 // TODO: if we're not looking at a notebook in the UI, there may not _be_ a
 // notebook object to get. Do we return null? Throw an error?
 export const currentNotebook = createSelector(
-  (state: AppState) => state.document.get("notebook"),
+  (state: AppState) => state.document.get("notebook", null),
   identity
 );
 
@@ -87,23 +98,67 @@ export const currentSavedNotebook = createSelector(
   identity
 );
 
+export const currentStickyCells = createSelector(
+  (state: AppState) => state.document.get("stickyCells"),
+  identity
+);
+
+export const cellPagers = createSelector(
+  (state: AppState) => state.document.get("cellPagers"),
+  identity
+);
+
+export const currentLastSaved = createSelector(
+  (state: AppState) => state.app.get("lastSaved"),
+  identity
+);
+
+export const currentNotebookMetadata = createSelector(
+  (state: AppState) =>
+    state.document.getIn(["notebook", "metadata"], Immutable.Map()),
+  identity
+);
+
+const CODE_MIRROR_MODE_DEFAULT = "text";
+export const codeMirrorMode = createSelector(
+  [currentNotebookMetadata],
+  metadata =>
+    metadata.getIn(["language_info", "codemirror_mode"]) ||
+    metadata.getIn(["kernel_info", "language"]) ||
+    metadata.getIn(["kernelspec", "language"]) ||
+    CODE_MIRROR_MODE_DEFAULT
+);
+
+export const currentDisplayName = createSelector(
+  [currentNotebookMetadata],
+  metadata => metadata.getIn(["kernelspec", "display_name"], "")
+);
+
 export const currentNotebookGithubUsername = createSelector(
-  [currentNotebook],
-  notebook => notebook.getIn(["metadata", "github_username"])
+  [currentNotebookMetadata],
+  metadata => metadata.get("github_username", null)
 );
 
 export const currentNotebookGistId = createSelector(
-  [currentNotebook],
-  notebook => notebook.getIn(["metadata", "gist_id"])
+  [currentNotebookMetadata],
+  metadata => metadata.get("gist_id", null)
 );
 
-export const currentNotebookJS = createSelector([currentNotebook], notebook =>
-  toJS(notebook)
-);
+export const currentNotebookJS = createSelector([currentNotebook], notebook => {
+  if (notebook) {
+    return toJS(notebook);
+  }
+  return null;
+});
 
 export const currentNotebookString = createSelector(
   [currentNotebookJS],
-  notebookJS => stringifyNotebook(notebookJS)
+  notebookJS => {
+    if (notebookJS) {
+      return stringifyNotebook(notebookJS);
+    }
+    return "";
+  }
 );
 
 export const currentFocusedCellId = createSelector(
@@ -111,38 +166,74 @@ export const currentFocusedCellId = createSelector(
   identity
 );
 
-export const currentCellMap = createSelector([currentNotebook], notebook =>
-  notebook.get("cellMap")
+export const currentFocusedEditorId = createSelector(
+  (state: AppState) => state.document.get("editorFocused"),
+  identity
 );
 
-export const currentCellOrder = createSelector([currentNotebook], notebook =>
-  notebook.get("cellOrder")
+export const transientCellMap = createSelector(
+  (state: AppState) =>
+    state.document.getIn(["transient", "cellMap"], Immutable.Map()),
+  identity
 );
+
+export const currentCellMap = createSelector([currentNotebook], notebook => {
+  if (notebook) {
+    return notebook.get("cellMap");
+  }
+  return null;
+});
+
+export const currentCellOrder = createSelector([currentNotebook], notebook => {
+  if (notebook) {
+    return notebook.get("cellOrder");
+  }
+  return null;
+});
 
 export const currentCodeCellIds = createSelector(
   [currentCellMap, currentCellOrder],
   (cellMap, cellOrder) => {
-    return cellOrder.filter(id => cellMap.getIn([id, "cell_type"]) === "code");
+    if (cellMap && cellOrder) {
+      return cellOrder.filter(
+        id => cellMap.getIn([id, "cell_type"]) === "code"
+      );
+    }
+    return null;
   }
 );
 
 export const currentCodeCellIdsBelow = createSelector(
   [currentFocusedCellId, currentCellMap, currentCellOrder],
   (focusedCellId, cellMap, cellOrder) => {
-    const index = cellOrder.indexOf(focusedCellId);
-    return cellOrder
-      .skip(index)
-      .filter(id => cellMap.getIn([id, "cell_type"]) === "code");
+    if (cellMap && cellOrder) {
+      const index = cellOrder.indexOf(focusedCellId);
+      return cellOrder
+        .skip(index)
+        .filter(id => cellMap.getIn([id, "cell_type"]) === "code");
+    }
+    return null;
   }
 );
 
 export const currentHiddenCellIds = createSelector(
   [currentCellMap, currentCellOrder],
-  (cellMap, cellOrder) =>
-    cellOrder.filter(id => cellMap.getIn([id, "metadata", "inputHidden"]))
+  (cellMap, cellOrder) => {
+    if (cellMap && cellOrder) {
+      return cellOrder.filter(id =>
+        cellMap.getIn([id, "metadata", "inputHidden"])
+      );
+    }
+    return null;
+  }
 );
 
 export const currentFilename = createSelector(
   (state: AppState) => state.document.get("filename"),
+  identity
+);
+
+export const modalType = createSelector(
+  (state: AppState) => state.modals.modalType,
   identity
 );

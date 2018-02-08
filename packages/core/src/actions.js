@@ -551,6 +551,14 @@ export function save() {
   };
 }
 
+export function saveFailed(error: Error) {
+  return {
+    type: actionTypes.SAVE_FAILED,
+    payload: error,
+    error: true
+  };
+}
+
 export function saveAs(filename: string) {
   return {
     type: actionTypes.SAVE_AS,

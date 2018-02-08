@@ -447,6 +447,7 @@ export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
 
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE = "SAVE";
+export const SAVE_FAILED = "SAVE_FAILED";
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE_AS = "SAVE_AS";
 // TODO: Relocate this action type from desktop's app.js

@@ -1,18 +1,15 @@
 // @flow
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import {
-  createCellAfter,
-  createCellAppend,
-  createCellBefore,
-  mergeCellAfter
-} from "../actions";
+import * as actions from "../actions";
 import CellCreatorView from "../components/cell-creator";
 
 type Props = {
   above: boolean,
-  dispatch: Dispatch<*>,
+  createCellAppend: (type: string) => void,
+  createCellBefore: (type: string, id: string) => void,
+  createCellAfter: (type: string, id: string) => void,
+  mergeCellAfter: (id: string) => void,
   id?: string
 };
 
@@ -27,24 +24,28 @@ class CellCreator extends Component<Props> {
   }
 
   createCell(type: "code" | "markdown"): void {
-    const { dispatch, above, id } = this.props;
+    const {
+      above,
+      createCellAfter,
+      createCellAppend,
+      createCellBefore,
+      id
+    } = this.props;
 
     if (!id) {
-      dispatch(createCellAppend(type));
+      createCellAppend(type);
       return;
     }
 
-    above
-      ? dispatch(createCellBefore(type, id))
-      : dispatch(createCellAfter(type, id));
+    above ? createCellBefore(type, id) : createCellAfter(type, id);
   }
 
   mergeCell(): void {
-    const { dispatch, id } = this.props;
+    const { mergeCellAfter, id } = this.props;
 
     // We can't merge cells if we don't have a cell ID
     if (id) {
-      dispatch(mergeCellAfter(id));
+      mergeCellAfter(id);
     }
   }
 
@@ -59,4 +60,11 @@ class CellCreator extends Component<Props> {
   }
 }
 
-export default connect()(CellCreator);
+const mapDispatchToProps = dispatch => ({
+  createCellAppend: type => dispatch(actions.createCellAppend(type)),
+  createCellBefore: (type, id) => dispatch(actions.createCellBefore(type, id)),
+  createCellAfter: (type, id) => dispatch(actions.createCellAfter(type, id)),
+  mergeCellAfter: id => dispatch(actions.mergeCellAfter(id))
+});
+
+export default connect(null, mapDispatchToProps)(CellCreator);

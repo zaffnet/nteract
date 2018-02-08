@@ -5,6 +5,7 @@ import { localCss } from "./styles";
 import { connect } from "react-redux";
 import * as Immutable from "immutable";
 import * as actions from "../../actions";
+import * as selectors from "../../selectors";
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import * as extraHandlers from "./extra-handlers";
 import { MODAL_TYPES } from "../modal-controller";
@@ -286,11 +287,11 @@ class PureNotebookMenu extends React.Component<Props> {
 // information about the current document to decide which menu items are
 // available...
 const mapStateToProps = state => ({
-  cellFocused: state.document.cellFocused,
-  cellMap: state.document.getIn(["notebook", "cellMap"]),
-  cellOrder: state.document.getIn(["notebook", "cellOrder"]),
-  filename: state.document.get("filename"),
-  notebook: state.document.get("notebook")
+  cellFocused: selectors.currentFocusedCellId(state),
+  cellMap: selectors.currentCellMap(state),
+  cellOrder: selectors.currentCellOrder(state),
+  filename: selectors.currentFilename(state),
+  notebook: selectors.currentNotebook(state)
 });
 
 const mapDispatchToProps = dispatch => ({
