@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 
 import { of } from "rxjs/observable/of";
 import { fromEvent } from "rxjs/observable/fromEvent";
+import type { Subscription } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
 import { Map as ImmutableMap } from "immutable";
@@ -67,6 +68,7 @@ class CodeMirrorEditor extends React.Component<
   hint: (editor: Object, cb: Function) => void;
   tips: (editor: Object) => void;
   deleteTip: () => void;
+  keyupEventsSubscriber: Subscription;
 
   static defaultProps = {
     onScroll: () => {}
@@ -169,23 +171,27 @@ class CodeMirrorEditor extends React.Component<
       ev
     }));
 
-    keyupEvents.pipe(switchMap(i => of(i))).subscribe(({ editor, ev }) => {
-      const cursor = editor.getDoc().getCursor();
-      const token = editor.getTokenAt(cursor);
+    this.keyupEventsSubscriber = keyupEvents
+      .pipe(switchMap(i => of(i)))
+      .subscribe(({ editor, ev }) => {
+        const cursor = editor.getDoc().getCursor();
+        const token = editor.getTokenAt(cursor);
 
-      if (
-        !editor.state.completionActive &&
-        !excludedIntelliSenseTriggerKeys[(ev.keyCode || ev.which).toString()] &&
-        (token.type === "tag" ||
-          token.type === "variable" ||
-          token.string === " " ||
-          token.string === "<" ||
-          token.string === "/") &&
-        kernelStatus === "idle"
-      ) {
-        editor.execCommand("autocomplete", { completeSingle: false });
-      }
-    });
+        if (
+          !editor.state.completionActive &&
+          !excludedIntelliSenseTriggerKeys[
+            (ev.keyCode || ev.which).toString()
+          ] &&
+          (token.type === "tag" ||
+            token.type === "variable" ||
+            token.string === " " ||
+            token.string === "<" ||
+            token.string === "/") &&
+          kernelStatus === "idle"
+        ) {
+          editor.execCommand("autocomplete", { completeSingle: false });
+        }
+      });
   }
 
   componentDidUpdate(prevProps: CodeMirrorEditorProps): void {
@@ -249,6 +255,7 @@ class CodeMirrorEditor extends React.Component<
     if (this.cm) {
       this.cm.toTextArea();
     }
+    this.keyupEventsSubscriber.unsubscribe();
   }
 
   focusChanged(focused: boolean) {
