@@ -9,6 +9,7 @@ import {
 
 import { doneSavingConfig, configLoaded } from "@nteract/core/actions";
 
+import * as selectors from "@nteract/core/selectors";
 import { readFileObservable, writeFileObservable } from "fs-observable";
 import { mapTo, mergeMap, map, switchMap } from "rxjs/operators";
 import { ofType } from "redux-observable";
@@ -59,7 +60,7 @@ export const saveConfigEpic = (actions: ActionsObservable<*>, store: any) =>
     mergeMap(() =>
       writeFileObservable(
         CONFIG_FILE_PATH,
-        JSON.stringify(store.getState().config.toJS())
+        JSON.stringify(selectors.userPreferences(store.getState()))
       ).pipe(map(doneSavingConfig))
     )
   );

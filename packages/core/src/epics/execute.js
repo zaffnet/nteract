@@ -11,7 +11,7 @@ import {
   executionCounts
 } from "@nteract/messaging";
 
-import { getCurrentKernel } from "../selectors";
+import * as selectors from "../selectors";
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
@@ -137,7 +137,7 @@ export function createExecuteCellStream(
   message: ExecuteRequest,
   id: string
 ) {
-  const kernel = getCurrentKernel(store.getState());
+  const kernel = selectors.currentKernel(store.getState());
 
   const channels = kernel ? kernel.channels : null;
 
@@ -184,8 +184,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     ofType(EXECUTE_CELL, EXECUTE_FOCUSED_CELL),
     mergeMap(action => {
       if (action.type === EXECUTE_FOCUSED_CELL) {
-        const state = store.getState();
-        const id = state.document.get("cellFocused");
+        const id = selectors.currentFocusedCellId(store.getState());
         if (!id) {
           throw new Error("attempted to execute without an id");
         }
@@ -206,12 +205,8 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         // When a new EXECUTE_CELL comes in with the current ID, we create a
         // a new stream and unsubscribe from the old one.
         switchMap(({ id }) => {
-          const state = store.getState();
-
-          const cell = state.document.getIn(
-            ["notebook", "cellMap", id],
-            Immutable.Map()
-          );
+          const cellMap = selectors.currentCellMap(store.getState());
+          const cell = cellMap.get(id, Immutable.Map());
 
           // We only execute code cells
           if (cell.get("cell_type") !== "code") {

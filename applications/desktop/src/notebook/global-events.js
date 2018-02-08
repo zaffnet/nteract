@@ -5,15 +5,14 @@ import type { AppState } from "@nteract/types/core/records";
 
 import { dialog } from "electron";
 import { is } from "immutable";
+import * as selectors from "@nteract/core/selectors";
 
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
 import type { Action } from "@nteract/types/redux";
 
 export function unload(store: Store<AppState, Action>) {
-  const state = store.getState();
-
-  const kernel = state.app.kernel;
+  const kernel = selectors.currentKernel(store.getState());
   if (kernel) {
     killKernelImmediately(kernel);
   }
@@ -23,8 +22,8 @@ export function unload(store: Store<AppState, Action>) {
 export function beforeUnload(store: Store<AppState, Action>, e: any) {
   const state = store.getState();
   const saved = is(
-    state.document.get("notebook"),
-    state.document.get("savedNotebook")
+    selectors.currentNotebook(state),
+    selectors.currentSavedNotebook(state)
   );
   if (!saved) {
     // Will prevent closing "will-prevent-unload"

@@ -25,11 +25,7 @@ import type { AppState, RemoteKernelProps } from "@nteract/types/core/records";
 import { kernels, shutdown } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
 
-import {
-  getServerConfig,
-  isCurrentHostJupyter,
-  isCurrentKernelJupyterWebsocket
-} from "../selectors";
+import * as selectors from "../selectors";
 
 import {
   LAUNCH_KERNEL,
@@ -44,12 +40,12 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
   action$.pipe(
     ofType(LAUNCH_KERNEL_BY_NAME),
     // Only accept jupyter servers for the host with this epic
-    filter(() => isCurrentHostJupyter(store.getState())),
+    filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // TODO: When a switchMap happens, we need to close down the originating
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap(({ kernelSpecName, cwd }) => {
-      const config = getServerConfig(store.getState());
+      const config = selectors.serverConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
         mergeMap(data => {
@@ -73,13 +69,14 @@ export const interruptKernelEpic = (action$: *, store: *) =>
   action$.pipe(
     ofType(INTERRUPT_KERNEL),
     // This epic can only interrupt kernels on jupyter websockets
-    filter(() => isCurrentKernelJupyterWebsocket(store.getState())),
+    filter(() => selectors.isCurrentKernelJupyterWebsocket(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
     concatMap(() => {
       const state = store.getState();
-      const serverConfig = getServerConfig(state);
-      const id = state.app.kernel.id;
+      const serverConfig = selectors.serverConfig(state);
+      const kernel = selectors.currentKernel(state);
+      const id = kernel.id;
 
       return kernels
         .interrupt(serverConfig, id)

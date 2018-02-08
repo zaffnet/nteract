@@ -8,7 +8,7 @@ import {
 
 import { overwriteMetadata, deleteMetadata } from "@nteract/core/actions";
 
-import { toJS, stringifyNotebook } from "@nteract/commutable";
+import * as selectors from "@nteract/core/selectors";
 
 const path = require("path");
 
@@ -90,14 +90,14 @@ export function createGistCallback(
  */
 export function publishNotebookObservable(
   github: any,
-  notebook: any,
+  notebookString: string,
+  githubUsername?: string,
+  gistId?: string,
   filepath: string,
   notificationSystem: any,
   publishAsUser: boolean
 ) {
   return Observable.create(observer => {
-    const notebookString = stringifyNotebook(toJS(notebook));
-
     const filename = filepath ? path.parse(filepath).base : "Untitled.ipynb";
     const files = {};
     files[filename] = { content: notebookString };
@@ -110,10 +110,7 @@ export function publishNotebookObservable(
           message: `Authenticated as ${res.data.login}`,
           level: "info"
         });
-        if (
-          notebook.getIn(["metadata", "github_username"]) !==
-          (res.data.login || undefined)
-        ) {
+        if (githubUsername !== (res.data.login || undefined)) {
           observer.next(overwriteMetadata("github_username", res.data.login));
           observer.next(deleteMetadata("gist_id"));
         }
@@ -127,8 +124,8 @@ export function publishNotebookObservable(
     // Already in a gist belonging to the user, update the gist
 
     const gistRequest =
-      notebook.hasIn(["metadata", "gist_id"]) && publishAsUser
-        ? { files, id: notebook.getIn(["metadata", "gist_id"]), public: false }
+      gistId && publishAsUser
+        ? { files, id: gistId, public: false }
         : { files, public: false };
     if (gistRequest.id) {
       github.gists.edit(
@@ -162,8 +159,10 @@ export function handleGistError(err: Error) {
 export function handleGistAction(store: any, action: any) {
   const github = new Github();
   const state = store.getState();
-  const notebook = state.document.get("notebook");
-  const filename = state.document.get("filename");
+  const notebookString = selectors.currentNotebookString(state);
+  const githubUsername = selectors.currentNotebookGithubUsername(state);
+  const gistId = selectors.currentNotebookGistId(state);
+  const filename = selectors.currentFilename(state);
   const notificationSystem = state.app.get("notificationSystem");
   let publishAsUser = false;
   if (action.type === PUBLISH_USER_GIST) {
@@ -173,7 +172,9 @@ export function handleGistAction(store: any, action: any) {
   }
   return publishNotebookObservable(
     github,
-    notebook,
+    notebookString,
+    githubUsername,
+    gistId,
     filename,
     notificationSystem,
     publishAsUser
