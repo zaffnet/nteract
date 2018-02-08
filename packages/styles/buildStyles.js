@@ -15,10 +15,12 @@ const makeName = name => {
   return `--${config.prefix}-${dashName}`;
 };
 
+const lodash = require("lodash");
+
 function makeDeclarationSet(groupKey, isAlias) {
   const modifiers = config.theme.modifiers[groupKey];
   if (isAlias) {
-    Object.entries(config.theme.alias[groupKey]).forEach(([jsAlias, jsKey]) => {
+    lodash.toPairs(config.theme.alias[groupKey]).forEach(([jsAlias, jsKey]) => {
       if (modifiers) {
         modifiers.order.forEach(modifierValue => {
           const variableName = makeName(
@@ -40,7 +42,7 @@ function makeDeclarationSet(groupKey, isAlias) {
       }
     });
   } else {
-    Object.entries(config.theme.base[groupKey]).forEach(([jsKey, value]) => {
+    lodash.toPairs(config.theme.base[groupKey]).forEach(([jsKey, value]) => {
       if (modifiers) {
         const modifierObject =
           typeof value === "object" ? value : { [modifiers.default]: value };
@@ -89,7 +91,7 @@ fs.writeFileSync(
   "// This file is auto-generated. See buildStyles.js for details.\n\n"
 );
 fs.appendFileSync(CSS_PATH, "module.exports = `\n:root {\n");
-Object.entries(declarations).forEach(([cssProperty, cssValue]) => {
+lodash.toPairs(declarations).forEach(([cssProperty, cssValue]) => {
   fs.appendFileSync(CSS_PATH, `  ${cssProperty}: ${cssValue};\n`);
 });
 fs.appendFileSync(CSS_PATH, "}\n`;\n");
@@ -103,5 +105,5 @@ fs.writeFileSync(
 // Generate declarations json file.
 fs.writeFileSync(
   DECLARATIONS_PATH,
-  JSON.stringify(Object.entries(declarations), null, "  ")
+  JSON.stringify(lodash.toPairs(declarations), null, "  ")
 );
