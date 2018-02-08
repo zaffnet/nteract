@@ -37,17 +37,7 @@ import {
   StickyCellContainer
 } from "../components/pinned-cell";
 
-import {
-  focusCellEditor,
-  focusPreviousCell,
-  focusPreviousCellEditor,
-  focusNextCell,
-  focusNextCellEditor,
-  moveCell,
-  focusCell,
-  executeCell,
-  executeFocusedCell
-} from "../actions";
+import * as actions from "../actions";
 
 // NOTE: PropTypes are required for the sake of contextTypes
 const PropTypes = require("prop-types");
@@ -71,7 +61,12 @@ type AnyCellProps = {
   displayOrder: typeof displayOrder,
   transforms: typeof transforms,
   models: ImmutableMap<string, *>,
-  codeMirrorMode: *
+  codeMirrorMode: *,
+  selectCell: () => void,
+  focusEditor: () => void,
+  unfocusEditor: () => void,
+  focusAboveCell: () => void,
+  focusBelowCell: () => void
 };
 
 const mapStateToCellProps = (state, { id }) => {
@@ -113,44 +108,41 @@ const mapStateToCellProps = (state, { id }) => {
   };
 };
 
+const mapDispatchToCellProps = (dispatch, { id }) => ({
+  selectCell: () => dispatch(actions.focusCell(id)),
+  focusEditor: () => dispatch(actions.focusCellEditor(id)),
+  unfocusEditor: () => dispatch(actions.focusCellEditor(null)),
+  focusAboveCell: () => {
+    dispatch(actions.focusPreviousCell(id));
+    dispatch(actions.focusPreviousCellEditor(id));
+  },
+  focusBelowCell: () => {
+    dispatch(actions.focusNextCell(id));
+    dispatch(actions.focusNextCellEditor(id));
+  }
+});
+
 class AnyCell extends React.PureComponent<AnyCellProps, *> {
   static contextTypes = {
     store: PropTypes.object
   };
 
-  selectCell = () => {
-    this.context.store.dispatch(focusCell(this.props.id));
-  };
-  focusEditor = () => {
-    this.context.store.dispatch(focusCellEditor(this.props.id));
-  };
-
-  unfocusEditor = () => {
-    this.context.store.dispatch(focusCellEditor(null));
-  };
-
-  focusAboveCell = () => {
-    this.context.store.dispatch(focusPreviousCell(this.props.id));
-    this.context.store.dispatch(focusPreviousCellEditor(this.props.id));
-  };
-
-  focusBelowCell = () => {
-    this.context.store.dispatch(focusNextCell(this.props.id, true));
-    this.context.store.dispatch(focusNextCellEditor(this.props.id));
-  };
-
   render(): ?React$Element<any> {
-    const id = this.props.id;
-    const cellStatus = this.props.cellStatus;
+    const {
+      cellFocused,
+      cellStatus,
+      cellType,
+      editorFocused,
+      focusAboveCell,
+      focusBelowCell,
+      focusEditor,
+      id,
+      selectCell,
+      unfocusEditor
+    } = this.props;
 
     const running = cellStatus === "busy";
     const queued = cellStatus === "queued";
-
-    const cellType = this.props.cellType;
-
-    const cellFocused = this.props.cellFocused;
-    const editorFocused = this.props.editorFocused;
-
     let element = null;
 
     switch (cellType) {
@@ -172,8 +164,8 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                   cellFocused={cellFocused}
                   editorFocused={editorFocused}
                   theme={this.props.theme}
-                  focusAbove={this.focusAboveCell}
-                  focusBelow={this.focusBelowCell}
+                  focusAbove={focusAboveCell}
+                  focusBelow={focusBelowCell}
                   options={{
                     mode: isImmutable(this.props.codeMirrorMode)
                       ? this.props.codeMirrorMode.toJS()
@@ -217,12 +209,12 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
       case "markdown":
         element = (
           <MarkdownPreviewer
-            focusAbove={this.focusAboveCell}
-            focusBelow={this.focusBelowCell}
-            focusEditor={this.focusEditor}
+            focusAbove={focusAboveCell}
+            focusBelow={focusBelowCell}
+            focusEditor={focusEditor}
             cellFocused={cellFocused}
             editorFocused={editorFocused}
-            unfocusEditor={this.unfocusEditor}
+            unfocusEditor={unfocusEditor}
             source={this.props.source}
           >
             <Editor>
@@ -230,8 +222,8 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                 id={id}
                 value={this.props.source}
                 theme={this.props.theme}
-                focusAbove={this.focusAboveCell}
-                focusBelow={this.focusBelowCell}
+                focusAbove={focusAboveCell}
+                focusBelow={focusBelowCell}
                 cellFocused={cellFocused}
                 editorFocused={editorFocused}
                 options={{
@@ -257,7 +249,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
     }
 
     return (
-      <HijackScroll focused={cellFocused} onClick={this.selectCell}>
+      <HijackScroll focused={cellFocused} onClick={selectCell}>
         <Cell isSelected={cellFocused}>
           <Toolbar type={cellType} id={id} source={this.props.source} />
           {element}
@@ -277,8 +269,10 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
   }
 }
 
-// $FlowFixMe
-export const ConnectedCell = connect(mapStateToCellProps)(AnyCell);
+export const ConnectedCell = connect(
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(AnyCell);
 
 type NotebookProps = {
   displayOrder: Array<string>,
@@ -289,13 +283,15 @@ type NotebookProps = {
   lastSaved: Date,
   languageDisplayName: string,
   kernelStatus: string,
-  codeMirrorMode: string | ImmutableMap<string, *>
+  codeMirrorMode: string | ImmutableMap<string, *>,
+  moveCell: (sourceId: string, destinationId: string, above: boolean) => void,
+  selectCell: (id: string) => void,
+  executeFocusedCell: () => void,
+  focusNextCell: () => void,
+  focusNextCellEditor: () => void
 };
 
-const mapStateToProps = (
-  state: Object,
-  ownProps: NotebookProps
-): NotebookProps => {
+const mapStateToProps = (state: Object, ownProps: NotebookProps) => {
   return {
     theme: selectors.userPreferences(state).theme,
     lastSaved: selectors.currentLastSaved(state),
@@ -308,6 +304,15 @@ const mapStateToProps = (
     codeMirrorMode: selectors.codeMirrorMode(state)
   };
 };
+
+const mapDispatchToProps = dispatch => ({
+  moveCell: (sourceId: string, destinationId: string, above: boolean) =>
+    dispatch(actions.moveCell(sourceId, destinationId, above)),
+  selectCell: (id: string) => dispatch(actions.focusCell(id)),
+  executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
+  focusNextCell: () => dispatch(actions.focusNextCell()),
+  focusNextCellEditor: () => dispatch(actions.focusNextCellEditor())
+});
 
 export class NotebookApp extends React.PureComponent<NotebookProps> {
   static defaultProps = {
@@ -323,8 +328,6 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     super();
     (this: any).createCellElement = this.createCellElement.bind(this);
     (this: any).keyDown = this.keyDown.bind(this);
-    (this: any).moveCell = this.moveCell.bind(this);
-    (this: any).selectCell = this.selectCell.bind(this);
     (this: any).renderCell = this.renderCell.bind(this);
   }
 
@@ -336,19 +339,17 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     document.removeEventListener("keydown", this.keyDown);
   }
 
-  moveCell(sourceId: string, destinationId: string, above: boolean): void {
-    this.context.store.dispatch(moveCell(sourceId, destinationId, above));
-  }
-
-  selectCell(id: string): void {
-    this.context.store.dispatch(focusCell(id));
-  }
-
   keyDown(e: KeyboardEvent): void {
     // If enter is not pressed, do nothing
     if (e.keyCode !== 13) {
       return;
     }
+
+    const {
+      executeFocusedCell,
+      focusNextCell,
+      focusNextCellEditor
+    } = this.props;
 
     let ctrlKeyPressed = e.ctrlKey;
     // Allow cmd + enter (macOS) to operate like ctrl + enter
@@ -366,12 +367,12 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
     // NOTE: Order matters here because we need it to execute _before_ we
     // focus the next cell
-    this.context.store.dispatch(executeFocusedCell());
+    executeFocusedCell();
 
     if (e.shiftKey) {
       // Couldn't focusNextCell just do focusing of both?
-      this.context.store.dispatch(focusNextCell());
-      this.context.store.dispatch(focusNextCellEditor());
+      focusNextCell();
+      focusNextCellEditor();
     }
   }
 
@@ -399,12 +400,13 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
   }
 
   renderCell(id: string): ?React$Element<any> {
+    const { selectCell } = this.props;
     return (
       <ConnectedCell
         id={id}
         transforms={this.props.transforms}
         displayOrder={this.props.displayOrder}
-        selectCell={this.selectCell}
+        selectCell={selectCell}
         codeMirrorMode={this.props.codeMirrorMode}
       />
     );
@@ -412,17 +414,13 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
   createCellElement(id: string): React$Element<*> {
     const isStickied = this.props.stickyCells.get(id);
-
+    const { moveCell, selectCell } = this.props;
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
         {isStickied ? (
           <PinnedPlaceHolderCell />
         ) : (
-          <DraggableCell
-            moveCell={this.moveCell}
-            id={id}
-            selectCell={this.selectCell}
-          >
+          <DraggableCell moveCell={moveCell} id={id} selectCell={selectCell}>
             {this.renderCell(id)}
           </DraggableCell>
         )}
@@ -469,4 +467,4 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
-export default connect(mapStateToProps)(ConnectedNotebook);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNotebook);
