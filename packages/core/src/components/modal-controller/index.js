@@ -3,6 +3,7 @@ import * as React from "react";
 import { MODAL_TYPES } from "./constants";
 import AboutModal from "./about-modal";
 import { connect } from "react-redux";
+import * as selectors from "../../selectors";
 
 class ModalController extends React.Component<*, *> {
   getModal = () => {
@@ -23,7 +24,7 @@ class ModalController extends React.Component<*, *> {
 import type { MapStateToProps } from "react-redux";
 
 const mapStateToProps: MapStateToProps<*, *, *> = (state: *) => ({
-  modalType: state.modals.modalType
+  modalType: selectors.modalType(state)
 });
 
 export { MODAL_TYPES };

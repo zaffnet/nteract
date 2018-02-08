@@ -1,6 +1,8 @@
 /* eslint-disable no-return-assign */
 /* @flow */
+import * as Immutable from "immutable";
 import * as React from "react";
+import * as selectors from "../selectors";
 import { DragDropContext as dragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { connect } from "react-redux";
@@ -72,10 +74,9 @@ type AnyCellProps = {
   codeMirrorMode: *
 };
 
-const mapStateToCellProps = (state: Object, ownProps: *): AnyCellProps => {
-  const id = ownProps.id;
-  const cell = state.document.getIn(["notebook", "cellMap", id]);
-
+const mapStateToCellProps = (state, { id }) => {
+  const cellMap = selectors.currentCellMap(state);
+  const cell = cellMap && cellMap.get(id);
   if (!cell) {
     throw new Error("cell not found inside cell map");
   }
@@ -96,21 +97,19 @@ const mapStateToCellProps = (state: Object, ownProps: *): AnyCellProps => {
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
   return {
-    ...ownProps,
-    id,
     cellType,
     source: cell.get("source", ""),
-    theme: state.config.get("theme"),
+    theme: selectors.userPreferences(state).theme,
     executionCount: cell.get("execution_count"),
     outputs,
-    models: state.comms.get("models"),
-    pager: state.document.getIn(["cellPagers", id], ImmutableList()),
-    cellFocused: state.document.get("cellFocused") === id,
-    editorFocused: state.document.get("editorFocused") === id,
+    models: selectors.models(state),
+    pager: selectors.cellPagers(state).get(id, ImmutableList()),
+    cellFocused: selectors.currentFocusedCellId(state) === id,
+    editorFocused: selectors.currentFocusedEditorId(state) === id,
     sourceHidden,
     outputHidden,
     outputExpanded,
-    cellStatus: state.document.getIn(["transient", "cellMap", id, "status"])
+    cellStatus: selectors.transientCellMap(state).getIn([id, "status"])
   };
 };
 
@@ -278,6 +277,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
   }
 }
 
+// $FlowFixMe
 export const ConnectedCell = connect(mapStateToCellProps)(AnyCell);
 
 type NotebookProps = {
@@ -292,48 +292,20 @@ type NotebookProps = {
   codeMirrorMode: string | ImmutableMap<string, *>
 };
 
-export function getCodeMirrorMode(
-  metadata: ImmutableMap<string, *>
-): string | ImmutableMap<string, *> {
-  let mode = metadata.getIn(
-    // CodeMirror mode should be most valid
-    ["language_info", "codemirror_mode"],
-    metadata.getIn(
-      // Kernel_info's language is the next best
-      ["kernel_info", "language"],
-      // If the kernelspec is encoded, grab the language
-      metadata.getIn(
-        ["kernelspec", "language"],
-        // Otherwise just fallback to "text"
-        "text"
-      )
-    )
-  );
-
-  return mode;
-}
-
 const mapStateToProps = (
   state: Object,
   ownProps: NotebookProps
 ): NotebookProps => {
-  const codeMirrorMode = getCodeMirrorMode(
-    state.document.getIn(["notebook", "metadata"], ImmutableMap())
-  );
-
   return {
-    theme: state.config.get("theme"),
-    lastSaved: state.app.get("lastSaved"),
-    cellOrder: state.document.getIn(["notebook", "cellOrder"], ImmutableList()),
-    stickyCells: state.document.get("stickyCells"),
-    kernelStatus: state.app.getIn(["kernel", "status"], "not connected"),
-    languageDisplayName: state.document.getIn(
-      ["notebook", "metadata", "kernelspec", "display_name"],
-      ""
-    ),
+    theme: selectors.userPreferences(state).theme,
+    lastSaved: selectors.currentLastSaved(state),
+    cellOrder: selectors.currentCellOrder(state) || Immutable.List(),
+    stickyCells: selectors.currentStickyCells(state),
+    kernelStatus: selectors.currentKernelStatus(state),
+    languageDisplayName: selectors.currentDisplayName(state),
     transforms: ownProps.transforms || transforms,
     displayOrder: ownProps.displayOrder || displayOrder,
-    codeMirrorMode
+    codeMirrorMode: selectors.codeMirrorMode(state)
   };
 };
 
