@@ -23,8 +23,6 @@ import { v4 as uuid } from "uuid";
 
 export type CHANNEL_NAME = "iopub" | "stdin" | "shell" | "control";
 
-import type { Channels } from "@nteract/types/channels";
-
 export type JUPYTER_CONNECTION_INFO = {
   iopub_port: number,
   shell_port: number,
@@ -133,7 +131,7 @@ export async function createMainChannel(
     username: getUsername()
   },
   jmp = moduleJMP
-): Channels {
+): Promise<Channels> {
   const sockets = await createSockets(config, subscription, identity, jmp);
   const main = createMainChannelFromSockets(sockets, header, jmp);
   return main;

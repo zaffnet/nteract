@@ -9,8 +9,6 @@ import * as selectors from "@nteract/core/selectors";
 
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
-import type { Action } from "@nteract/types/redux";
-
 export function unload(store: Store<AppState, Action>) {
   const kernel = selectors.currentKernel(store.getState());
   if (kernel) {

@@ -1,11 +1,5 @@
 // @flow
 
-import type {
-  JupyterMessage,
-  ExecuteRequest,
-  JupyterMessageHeader
-} from "@nteract/types/messaging";
-
 import * as uuid from "uuid";
 
 function whichChannel(messageType?: string) {
@@ -54,8 +48,8 @@ function whichChannel(messageType?: string) {
   return "shell";
 }
 
-export function message(
-  header: { msg_type?: string, username?: string, session?: string } = {},
+export function message<MT: string>(
+  header: { msg_type: MT, username?: string, session?: string },
   content?: Object = {}
 ): JupyterMessage<*, *> {
   const channel = whichChannel(header.msg_type);
@@ -68,17 +62,29 @@ export function message(
 
       // These fields _should_ get overridden by those provided in `header`
       // We supply them as a fallback here
-      username: "nteract",
-      msg_type: "__OVERWRITE_THE_MESSAGE_TYPE__",
-      session: uuid.v4(),
-
-      ...header
+      username: header.username || "nteract",
+      msg_type: header.msg_type,
+      session: header.session || uuid.v4()
     },
     metadata: {},
     parent_header: {},
     content,
     channel,
     buffers: []
+  };
+}
+
+function createHeader<MT: string>(msg_type: MT): JupyterMessageHeader<MT> {
+  return {
+    msg_id: uuid.v4(),
+    date: new Date().toISOString(),
+    version: "5.2",
+    msg_type: msg_type,
+
+    // These fields get overriden by enchannel implementations, we supply them
+    // as a fallback here
+    username: "nteract",
+    session: uuid.v4()
   };
 }
 
@@ -112,15 +118,15 @@ export function executeRequest(
     user_expressions?: Object,
     allow_stdin?: boolean,
     stop_on_error?: boolean
-  }
+  } = {}
 ): ExecuteRequest {
-  return message(
-    // Header
-    {
-      msg_type: "execute_request"
-    },
-    // Content
-    {
+  const channel = whichChannel("execute_request");
+
+  return {
+    header: createHeader("execute_request"),
+    metadata: {},
+    parent_header: {},
+    content: {
       code,
       silent: false,
       store_history: true,
@@ -128,8 +134,10 @@ export function executeRequest(
       allow_stdin: false,
       stop_on_error: false,
       ...options
-    }
-  );
+    },
+    channel,
+    buffers: []
+  };
 }
 
 ////// OUTPUT MESSAGE TYPES //////

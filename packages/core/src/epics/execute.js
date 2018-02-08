@@ -20,10 +20,6 @@ import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
 import { _throw } from "rxjs/observable/throw";
 
-import type { Channels } from "@nteract/types/channels";
-
-import type { ExecuteRequest } from "@nteract/types/messaging";
-
 import {
   groupBy,
   filter,
@@ -146,7 +142,7 @@ export function createExecuteCellStream(
     channels &&
     !(kernel.status === "starting" || kernel.status === "not connected");
 
-  if (!kernelConnected) {
+  if (!kernelConnected || !channels) {
     return of({
       type: ERROR_EXECUTING,
       payload: "Kernel not connected!",

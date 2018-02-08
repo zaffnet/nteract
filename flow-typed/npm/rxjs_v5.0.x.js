@@ -638,6 +638,90 @@ declare class rxjs$Observable<+T> {
     op5: rxjs$OperatorFunctionLast<D, E>
   ): E;
 
+  pipe<A, B, C, D, E, F>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunctionLast<E, F>
+  ): F;
+
+  pipe<A, B, C, D, E, F, G>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunctionLast<F, G>
+  ): G;
+
+  pipe<A, B, C, D, E, F, G, H>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunction<F, G>,
+    op8: rxjs$OperatorFunctionLast<G, H>
+  ): H;
+
+  pipe<A, B, C, D, E, F, G, H, I>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunction<F, G>,
+    op8: rxjs$OperatorFunction<G, H>,
+    op9: rxjs$OperatorFunctionLast<H, I>
+  ): I;
+
+  pipe<A, B, C, D, E, F, G, H, I, J>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunction<F, G>,
+    op8: rxjs$OperatorFunction<G, H>,
+    op9: rxjs$OperatorFunction<H, I>,
+    op10: rxjs$OperatorFunctionLast<I, J>
+  ): J;
+
+  pipe<A, B, C, D, E, F, G, H, I, J, K>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunction<F, G>,
+    op8: rxjs$OperatorFunction<G, H>,
+    op9: rxjs$OperatorFunction<H, I>,
+    op10: rxjs$OperatorFunction<I, J>,
+    op11: rxjs$OperatorFunctionLast<J, K>
+  ): K;
+
+  pipe<A, B, C, D, E, F, G, H, I, J, K, L>(
+    op1: rxjs$OperatorFunction<T, A>,
+    op2: rxjs$OperatorFunction<A, B>,
+    op3: rxjs$OperatorFunction<B, C>,
+    op4: rxjs$OperatorFunction<C, D>,
+    op5: rxjs$OperatorFunction<D, E>,
+    op6: rxjs$OperatorFunction<E, F>,
+    op7: rxjs$OperatorFunction<F, G>,
+    op8: rxjs$OperatorFunction<G, H>,
+    op9: rxjs$OperatorFunction<H, I>,
+    op10: rxjs$OperatorFunction<I, J>,
+    op11: rxjs$OperatorFunction<J, K>,
+    op12: rxjs$OperatorFunctionLast<K, L>
+  ): L;
+
   publish(): rxjs$ConnectableObservable<T>;
 
   publishLast(): rxjs$ConnectableObservable<T>;

@@ -25,13 +25,13 @@ import {
 
 import { message, executeRequest } from "./messages";
 
-import type { JupyterMessage, ExecuteRequest } from "@nteract/types/messaging";
+export type { JupyterMessage, ExecuteRequest, JupyterMessageHeader };
 
 // TODO: Deprecate
-export function createMessage(
-  msg_type: string,
+export function createMessage<MT: string>(
+  msg_type: MT,
   fields: Object = {}
-): JupyterMessage<*, *> {
+): JupyterMessage<MT, *> {
   return { ...message({ msg_type }), ...fields };
 }
 

@@ -1,19 +1,11 @@
 // @flow
 
-const Immutable = require("immutable");
-const ImmutableMap = Immutable.Map;
-const ImmutableList = Immutable.List;
-
-type PrimitiveImmutable = string | number | boolean | null;
-
-export type JSONType = PrimitiveImmutable | JSONObject | JSONArray; // eslint-disable-line no-use-before-define
-export type JSONObject = { [key: string]: JSONType };
-export type JSONArray = Array<JSONType>;
+import type { Map, List } from "immutable";
 
 export type ImmutableJSONType =
   | PrimitiveImmutable
-  | ImmutableMap<string, ImmutableJSONType>
-  | ImmutableList<ImmutableJSONType>;
+  | Map<string, ImmutableJSONType>
+  | List<ImmutableJSONType>;
 
 export type ExecutionCount = number | null;
 
@@ -23,15 +15,15 @@ export type CellType = "markdown" | "code";
 export type CellID = string;
 
 // These are very unserious types, since Records are not quite typable
-export type ImmutableNotebook = ImmutableMap<string, any>;
-export type ImmutableCodeCell = ImmutableMap<string, any>;
-export type ImmutableMarkdownCell = ImmutableMap<string, any>;
-export type ImmutableRawCell = ImmutableMap<string, any>;
+export type ImmutableNotebook = Map<string, any>;
+export type ImmutableCodeCell = Map<string, any>;
+export type ImmutableMarkdownCell = Map<string, any>;
+export type ImmutableRawCell = Map<string, any>;
 export type ImmutableCell = ImmutableCodeCell | ImmutableMarkdownCell;
-export type ImmutableOutput = ImmutableMap<string, any>;
-export type ImmutableOutputs = ImmutableList<ImmutableOutput>;
+export type ImmutableOutput = Map<string, any>;
+export type ImmutableOutputs = List<ImmutableOutput>;
 
-export type ImmutableMimeBundle = ImmutableMap<string, any>;
+export type ImmutableMimeBundle = Map<string, any>;
 
-export type ImmutableCellOrder = ImmutableList<CellID>;
-export type ImmutableCellMap = ImmutableMap<CellID, ImmutableCell>;
+export type ImmutableCellOrder = List<CellID>;
+export type ImmutableCellMap = Map<CellID, ImmutableCell>;

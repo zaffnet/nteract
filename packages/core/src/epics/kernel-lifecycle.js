@@ -25,8 +25,6 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
-import type { Channels } from "@nteract/types/channels";
-
 import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
