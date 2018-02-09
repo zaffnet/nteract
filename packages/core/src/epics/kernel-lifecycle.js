@@ -2,7 +2,9 @@
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
+import { empty } from "rxjs/observable/empty";
 import { merge } from "rxjs/observable/merge";
+import { from } from "rxjs/observable/from";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -15,6 +17,7 @@ import {
   map,
   tap,
   mergeMap,
+  concatMap,
   catchError,
   first,
   pluck,
@@ -29,15 +32,9 @@ import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
 
-import {
-  setExecutionState,
-  setNotebookKernelInfo,
-  launchKernel,
-  setLanguageInfo,
-  launchKernelByName
-} from "../actions";
-
-import { LAUNCH_KERNEL_SUCCESSFUL, SET_NOTEBOOK } from "../actionTypes";
+import * as selectors from "../selectors";
+import * as actions from "../actions";
+import * as actionTypes from "../actionTypes";
 
 /**
  * Sets the execution state after a kernel has been launched.
@@ -46,11 +43,11 @@ import { LAUNCH_KERNEL_SUCCESSFUL, SET_NOTEBOOK } from "../actionTypes";
  */
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
       action.kernel.channels.pipe(
         filter(msg => msg.header.msg_type === "status"),
-        map(msg => setExecutionState(msg.content.execution_state))
+        map(msg => actions.setExecutionState(msg.content.execution_state))
       )
     )
   );
@@ -69,7 +66,7 @@ export function acquireKernelInfo(channels: Channels) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
-    map(setLanguageInfo)
+    map(actions.setLanguageInfo)
   );
 
   return Observable.create(observer => {
@@ -86,7 +83,7 @@ export function acquireKernelInfo(channels: Channels) {
  */
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap(action => acquireKernelInfo(action.kernel.channels))
   );
 
@@ -112,13 +109,53 @@ export const launchKernelWhenNotebookSetEpic = (
   action$: ActionsObservable<*>
 ) =>
   action$.pipe(
-    ofType(SET_NOTEBOOK),
+    ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebookAction) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.filename,
         action.notebook
       );
 
-      return launchKernelByName(kernelSpecName, cwd);
+      return actions.launchKernelByName(kernelSpecName, cwd);
+    })
+  );
+
+export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
+  action$.pipe(
+    ofType(actionTypes.RESTART_KERNEL),
+    concatMap(action => {
+      const state = store.getState();
+      const kernel = selectors.currentKernel(state);
+      const notificationSystem = state.app.notificationSystem;
+
+      if (!kernel) {
+        notificationSystem.addNotification({
+          title: "Failure to Restart",
+          message: `Unable to restart kernel, please select a new kernel.`,
+          dismissible: true,
+          position: "tr",
+          level: "error"
+        });
+
+        // TODO: Wow do we need to send notifcations through our store for
+        // consistency
+        return empty();
+      }
+
+      // TODO: Incorporate this into each of the launchKernelByName
+      //       actions...
+      //       This only mirrors the old behavior of restart kernel (for now)
+      notificationSystem.addNotification({
+        title: "Kernel Restarted",
+        message: `Kernel ${kernel.kernelSpecName} has been restarted.`,
+        dismissible: true,
+        position: "tr",
+        level: "success"
+      });
+
+      return of(
+        actions.killKernel({ restarting: true }),
+        actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
+      );
     })
   );

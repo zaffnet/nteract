@@ -30,6 +30,9 @@ import type {
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
+  RestartKernel,
+  RestartKernelFailed,
+  RestartKernelSuccessful,
   ShutdownReplyTimedOut,
   ShutdownReplySucceeded,
   DeleteConnectionFileFailedAction,
@@ -51,6 +54,7 @@ import type {
   SetNotebookAction,
   NewCellAfterAction,
   NewCellBeforeAction,
+  ClearAllOutputs,
   ClearOutputsAction,
   AppendOutputAction,
   UpdateDisplayAction,
@@ -212,6 +216,12 @@ export function clearOutputs(id: string): ClearOutputsAction {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
     id
+  };
+}
+
+export function clearAllOutputs(): ClearAllOutputs {
+  return {
+    type: actionTypes.CLEAR_ALL_OUTPUTS
   };
 }
 
@@ -423,9 +433,14 @@ export function deleteMetadata(field: string): DeleteMetadataFieldAction {
   };
 }
 
-export const killKernel: KillKernelAction = {
-  type: actionTypes.KILL_KERNEL
-};
+export function killKernel(
+  payload: { restarting: boolean } = { restarting: false }
+): KillKernelAction {
+  return {
+    type: actionTypes.KILL_KERNEL,
+    payload
+  };
+}
 
 export function interruptKernel(): InterruptKernel {
   return {
@@ -721,5 +736,28 @@ export function shutdownReplyTimedOut(error: Error): ShutdownReplyTimedOut {
     type: actionTypes.SHUTDOWN_REPLY_TIMED_OUT,
     payload: error,
     error: true
+  };
+}
+
+export function restartKernel(
+  payload: { clearOutputs: boolean } = { clearOutputs: false }
+): RestartKernel {
+  return {
+    type: actionTypes.RESTART_KERNEL,
+    payload
+  };
+}
+
+export function restartKernelFailed(error: Error): RestartKernel {
+  return {
+    type: actionTypes.RESTART_KERNEL_FAILED,
+    payload: error,
+    error: true
+  };
+}
+
+export function restartKernelSuccessful(): RestartKernelSuccessful {
+  return {
+    type: actionTypes.RESTART_KERNEL_SUCCESSFUL
   };
 }

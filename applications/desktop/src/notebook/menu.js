@@ -8,34 +8,13 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import {
-  toggleCellInputVisibility,
-  clearOutputs,
-  copyCell,
-  createCellAfter,
-  cutCell,
-  executeCell,
-  interruptKernel,
-  killKernel,
-  launchKernel,
-  launchKernelByName,
-  load,
-  loadConfig,
-  newNotebook,
-  pasteCell,
-  save,
-  saveAs,
-  setCursorBlink,
-  setGithubToken,
-  setTheme,
-  toggleOutputExpansion
-} from "@nteract/core/actions";
+import * as actions from "@nteract/core/actions";
 
 import * as selectors from "@nteract/core/selectors";
 import { defaultPathFallback, cwdKernelFallback } from "./path";
 
 export function dispatchSaveAs(store: *, evt: Event, filename: string) {
-  store.dispatch(saveAs(filename));
+  store.dispatch(actions.saveAs(filename));
 }
 
 const dialog = remote.dialog;
@@ -70,51 +49,14 @@ export function triggerWindowRefresh(store: *, filename: string) {
   if (!filename) {
     return;
   }
-  store.dispatch(saveAs(filename));
+  store.dispatch(actions.saveAs(filename));
 }
 
 export function dispatchRestartKernel(store: *) {
-  // TODO: Make this an action to dispatch that an epic consumes, which will stop the
-  //       current kernel and launch a new kernel of the same type
-  const state = store.getState();
-  const notificationSystem = state.app.notificationSystem;
-  const filename = selectors.currentFilename(state);
-  const kernel = selectors.currentKernel(state);
-
-  const cwd = filename
-    ? path.dirname(path.resolve(filename))
-    : cwdKernelFallback();
-
-  store.dispatch(killKernel);
-  // TODO: Use the kernelspec directly, requires us having the kernelspecs available
-  //       in the store.
-  // TODO: `kernel &&` may be redundant if Record default is `null` for this.
-  const kernelName =
-    kernel && kernel.kernelSpecName ? kernel.kernelSpecName : null;
-
-  if (!kernelName) {
-    notificationSystem.addNotification({
-      title: "Failure to Restart",
-      message: `Unable to restart kernel, please select a new kernel.`,
-      dismissible: true,
-      position: "tr",
-      level: "error"
-    });
-
-    return;
-  }
-  store.dispatch(launchKernelByName(kernelName, cwd));
-
-  notificationSystem.addNotification({
-    title: "Kernel Restarted",
-    message: `Kernel ${kernelName} has been restarted.`,
-    dismissible: true,
-    position: "tr",
-    level: "success"
-  });
+  store.dispatch(actions.restartKernel());
 }
 
-export function triggerKernelRefresh(store: *): Promise<*> {
+export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
   return new Promise(resolve => {
     dialog.showMessageBox(
       {
@@ -130,7 +72,13 @@ export function triggerKernelRefresh(store: *): Promise<*> {
       },
       index => {
         if (index === 0) {
-          dispatchRestartKernel(store);
+          const kernel = selectors.currentKernel(store.getState());
+          const cwd = filename
+            ? path.dirname(path.resolve(filename))
+            : cwdKernelFallback();
+          store.dispatch(
+            actions.launchKernelByName(kernel.kernelSpecName, cwd)
+          );
         }
         resolve();
       }
@@ -142,7 +90,7 @@ export function triggerSaveAs(store: *) {
   showSaveAsDialog().then(filename => {
     if (filename) {
       triggerWindowRefresh(store, filename);
-      triggerKernelRefresh(store);
+      triggerKernelRefresh(store, filename);
     }
   });
 }
@@ -152,7 +100,7 @@ export function dispatchSave(store: *) {
   if (!filename) {
     triggerSaveAs(store);
   } else {
-    store.dispatch(save());
+    store.dispatch(actions.save());
   }
 }
 
@@ -161,7 +109,7 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const cwd = filename
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
-  store.dispatch(launchKernel(spec, cwd));
+  store.dispatch(actions.launchKernel(spec, cwd));
 }
 
 export function dispatchPublishAnonGist(store: *) {
@@ -174,7 +122,7 @@ export function dispatchPublishUserGist(
   githubToken: string
 ) {
   if (githubToken) {
-    store.dispatch(setGithubToken(githubToken));
+    store.dispatch(actions.setGithubToken(githubToken));
   }
   store.dispatch({ type: "PUBLISH_USER_GIST" });
 }
@@ -193,7 +141,7 @@ export function dispatchRunAllBelow(store: *) {
   const codeCellIdsBelow = selectors.currentCodeCellIdsBelow(state);
 
   codeCellIdsBelow.forEach(id =>
-    store.dispatch(executeCell(id, cellMap.getIn([id, "source"])))
+    store.dispatch(actions.executeCell(id, cellMap.getIn([id, "source"])))
   );
 }
 
@@ -203,22 +151,23 @@ export function dispatchRunAll(store: *) {
   const cellMap = selectors.currentCellMap(state);
   const codeCellIds = selectors.currentCodeCellIds(state);
   codeCellIds.forEach(id =>
-    store.dispatch(executeCell(id, cellMap.getIn([id, "source"])))
+    store.dispatch(actions.executeCell(id, cellMap.getIn([id, "source"])))
   );
 }
 
 export function dispatchClearAll(store: *) {
-  const cellOrder = selectors.currentCellOrder(store.getState());
-  cellOrder.forEach(id => store.dispatch(clearOutputs(id)));
+  store.dispatch(actions.clearAllOutputs());
 }
 
 export function dispatchUnhideAll(store: *) {
   const hiddenCellIds = selectors.currentHiddenCellIds(store.getState());
-  hiddenCellIds.forEach(id => store.dispatch(toggleCellInputVisibility(id)));
+  hiddenCellIds.forEach(id =>
+    store.dispatch(actions.toggleCellInputVisibility(id))
+  );
 }
 
 export function dispatchKillKernel(store: *) {
-  store.dispatch(killKernel);
+  store.dispatch(actions.killKernel());
 }
 
 export function dispatchInterruptKernel(store: *) {
@@ -231,13 +180,12 @@ export function dispatchInterruptKernel(store: *) {
       level: "error"
     });
   } else {
-    store.dispatch(interruptKernel());
+    store.dispatch(actions.interruptKernel());
   }
 }
 
 export function dispatchRestartClearAll(store: *) {
-  dispatchRestartKernel(store);
-  dispatchClearAll(store);
+  store.dispatch(actions.restartKernel({ clearOutputs: true }));
 }
 
 export function dispatchZoomIn() {
@@ -253,43 +201,43 @@ export function dispatchZoomReset() {
 }
 
 export function dispatchSetTheme(store: *, evt: Event, theme: string) {
-  store.dispatch(setTheme(theme));
+  store.dispatch(actions.setTheme(theme));
 }
 
 export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
-  store.dispatch(setCursorBlink(value));
+  store.dispatch(actions.setCursorBlink(value));
 }
 
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
-  store.dispatch(copyCell(focused));
+  store.dispatch(actions.copyCell(focused));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
-  store.dispatch(cutCell(focused));
+  store.dispatch(actions.cutCell(focused));
 }
 
 export function dispatchPasteCell(store: *) {
-  store.dispatch(pasteCell());
+  store.dispatch(actions.pasteCell());
 }
 
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
-  store.dispatch(createCellAfter("code", focused));
+  store.dispatch(actions.createCellAfter("code", focused));
 }
 
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const focused = state.document.get("cellFocused");
-  store.dispatch(createCellAfter("markdown", focused));
+  store.dispatch(actions.createCellAfter("markdown", focused));
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
-  store.dispatch(load(filename));
+  store.dispatch(actions.load(filename));
 }
 
 export function dispatchNewNotebook(
@@ -297,7 +245,7 @@ export function dispatchNewNotebook(
   event: Event,
   kernelSpec: Object
 ) {
-  store.dispatch(newNotebook(kernelSpec, cwdKernelFallback()));
+  store.dispatch(actions.newNotebook(kernelSpec, cwdKernelFallback()));
 }
 
 /**
@@ -322,7 +270,9 @@ export function exportPDF(
   );
 
   // Expand unexpanded cells
-  unexpandedCells.map(cellID => store.dispatch(toggleOutputExpansion(cellID)));
+  unexpandedCells.map(cellID =>
+    store.dispatch(actions.toggleOutputExpansion(cellID))
+  );
 
   remote.getCurrentWindow().webContents.printToPDF(
     {
@@ -333,7 +283,7 @@ export function exportPDF(
 
       // Restore the modified cells to their unexpanded state.
       unexpandedCells.map(cellID =>
-        store.dispatch(toggleOutputExpansion(cellID))
+        store.dispatch(actions.toggleOutputExpansion(cellID))
       );
 
       fs.writeFile(`${filename}.pdf`, data, error_fs => {
@@ -359,10 +309,9 @@ export function triggerSaveAsPDF(store: *) {
   showSaveAsDialog()
     .then(filename => {
       if (filename) {
-        return Promise.all([
-          triggerWindowRefresh(store, filename),
-          triggerKernelRefresh(store)
-        ]).then(() => storeToPDF(store));
+        return Promise.all([triggerWindowRefresh(store, filename)]).then(() =>
+          storeToPDF(store)
+        );
       }
     })
     .catch(e =>
@@ -401,7 +350,7 @@ export function storeToPDF(store: *) {
 }
 
 export function dispatchLoadConfig(store: *) {
-  store.dispatch(loadConfig());
+  store.dispatch(actions.loadConfig());
 }
 
 export function initMenuHandlers(store: *) {

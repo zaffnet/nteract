@@ -15,11 +15,9 @@ import {
 } from "./zeromq-kernels";
 
 import {
+  restartKernelEpic,
   acquireKernelInfoEpic,
-  watchExecutionStateEpic
-} from "@nteract/core/epics";
-
-import {
+  watchExecutionStateEpic,
   executeCellEpic,
   updateDisplayEpic,
   commListenEpic
@@ -41,6 +39,7 @@ export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics = [
+  restartKernelEpic,
   watchSpawn,
   commListenEpic,
   publishEpic,

@@ -174,6 +174,9 @@ export type ToggleCellInputVisibilityAction = {
 export const CLEAR_OUTPUTS = "CLEAR_OUTPUTS";
 export type ClearOutputsAction = { type: "CLEAR_OUTPUTS", id: CellID };
 
+export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
+export type ClearAllOutputs = { type: "CLEAR_ALL_OUTPUTS" };
+
 export const ACCEPT_PAYLOAD_MESSAGE_ACTION = "ACCEPT_PAYLOAD_MESSAGE_ACTION";
 export type AcceptPayloadMessageAction = {
   type: "ACCEPT_PAYLOAD_MESSAGE_ACTION",
@@ -379,12 +382,37 @@ export type InterruptKernelFailed = {
 };
 
 export const KILL_KERNEL = "KILL_KERNEL";
-export type KillKernelAction = { type: "KILL_KERNEL" };
+export type KillKernelAction = {
+  type: "KILL_KERNEL",
+  payload: {
+    restarting: boolean
+  }
+};
 
 export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
 export type SetGithubTokenAction = {
   type: "SET_GITHUB_TOKEN",
   githubToken: string
+};
+
+export const RESTART_KERNEL = "RESTART_KERNEL";
+export type RestartKernel = {
+  type: "RESTART_KERNEL",
+  payload: {
+    clearOutputs: boolean
+  }
+};
+
+export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
+export type RestartKernelFailed = {
+  type: "RESTART_KERNEL_FAILED",
+  payload: Error,
+  error: true
+};
+
+export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
+export type RestartKernelSuccessful = {
+  type: "RESTART_KERNEL_SUCCESSFUL"
 };
 
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
