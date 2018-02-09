@@ -30,6 +30,9 @@ import type {
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
+  RestartKernel,
+  RestartKernelFailed,
+  RestartKernelSuccessful,
   ShutdownReplyTimedOut,
   ShutdownReplySucceeded,
   DeleteConnectionFileFailedAction,
@@ -721,5 +724,25 @@ export function shutdownReplyTimedOut(error: Error): ShutdownReplyTimedOut {
     type: actionTypes.SHUTDOWN_REPLY_TIMED_OUT,
     payload: error,
     error: true
+  };
+}
+
+export function restartKernel(): RestartKernel {
+  return {
+    type: actionTypes.RESTART_KERNEL
+  };
+}
+
+export function restartKernelFailed(error: Error): RestartKernel {
+  return {
+    type: actionTypes.RESTART_KERNEL_FAILED,
+    payload: error,
+    error: true
+  };
+}
+
+export function restartKernelSuccessful(): RestartKernelSuccessful {
+  return {
+    type: actionTypes.RESTART_KERNEL_SUCCESSFUL
   };
 }

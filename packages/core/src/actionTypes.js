@@ -387,6 +387,23 @@ export type SetGithubTokenAction = {
   githubToken: string
 };
 
+export const RESTART_KERNEL = "RESTART_KERNEL";
+export type RestartKernel = {
+  type: "RESTART_KERNEL"
+};
+
+export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
+export type RestartKernelFailed = {
+  type: "RESTART_KERNEL_FAILED",
+  payload: Error,
+  error: true
+};
+
+export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
+export type RestartKernelSuccessful = {
+  type: "RESTART_KERNEL_SUCCESSFUL"
+};
+
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
