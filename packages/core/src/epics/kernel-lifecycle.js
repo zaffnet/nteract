@@ -25,20 +25,12 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
-import * as selectors from "../selectors";
-
 import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
 
-import {
-  setExecutionState,
-  setNotebookKernelInfo,
-  launchKernel,
-  setLanguageInfo,
-  launchKernelByName
-} from "../actions";
-
+import * as selectors from "../selectors";
+import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 
 /**
@@ -52,7 +44,7 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
     switchMap((action: NewKernelAction) =>
       action.kernel.channels.pipe(
         filter(msg => msg.header.msg_type === "status"),
-        map(msg => setExecutionState(msg.content.execution_state))
+        map(msg => actions.setExecutionState(msg.content.execution_state))
       )
     )
   );
@@ -71,7 +63,7 @@ export function acquireKernelInfo(channels: Channels) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
-    map(setLanguageInfo)
+    map(actions.setLanguageInfo)
   );
 
   return Observable.create(observer => {
@@ -121,20 +113,21 @@ export const launchKernelWhenNotebookSetEpic = (
         action.notebook
       );
 
-      return launchKernelByName(kernelSpecName, cwd);
+      return actions.launchKernelByName(kernelSpecName, cwd);
     })
   );
 
 export const restartKernel = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
-    map(x => {
+    mergeMap(x => {
       const state = store.getState();
-      const notificationSystem = state.app.notificationSystem;
-      const filename = selectors.currentFilename(state);
       const kernel = selectors.currentKernel(state);
-      // TODO: cwd into the kernel record
+      // TODO: Incorporate notification system bits
 
-      return { type: "NOT_REALLY_RESTARTED" };
+      return merge(
+        actions.killKernel,
+        actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
+      );
     })
   );
