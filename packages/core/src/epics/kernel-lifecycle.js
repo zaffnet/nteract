@@ -126,7 +126,7 @@ export const restartKernel = (action$: ActionsObservable<*>, store: *) =>
       // TODO: Incorporate notification system bits
 
       return merge(
-        actions.killKernel,
+        actions.killKernel({ restarting: true }),
         actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
       );
     })

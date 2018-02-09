@@ -66,7 +66,7 @@ export function dispatchRestartKernel(store: *) {
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
 
-  store.dispatch(actions.killKernel);
+  store.dispatch(actions.killKernel());
   // TODO: Use the kernelspec directly, requires us having the kernelspecs available
   //       in the store.
   // TODO: `kernel &&` may be redundant if Record default is `null` for this.
@@ -201,7 +201,7 @@ export function dispatchUnhideAll(store: *) {
 }
 
 export function dispatchKillKernel(store: *) {
-  store.dispatch(actions.killKernel);
+  store.dispatch(actions.killKernel());
 }
 
 export function dispatchInterruptKernel(store: *) {

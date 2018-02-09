@@ -426,9 +426,14 @@ export function deleteMetadata(field: string): DeleteMetadataFieldAction {
   };
 }
 
-export const killKernel: KillKernelAction = {
-  type: actionTypes.KILL_KERNEL
-};
+export function killKernel(
+  payload: { restarting: boolean } = { restarting: false }
+): KillKernelAction {
+  return {
+    type: actionTypes.KILL_KERNEL,
+    payload
+  };
+}
 
 export function interruptKernel(): InterruptKernel {
   return {

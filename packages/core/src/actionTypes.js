@@ -379,7 +379,12 @@ export type InterruptKernelFailed = {
 };
 
 export const KILL_KERNEL = "KILL_KERNEL";
-export type KillKernelAction = { type: "KILL_KERNEL" };
+export type KillKernelAction = {
+  type: "KILL_KERNEL",
+  payload: {
+    restarting: boolean
+  }
+};
 
 export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
 export type SetGithubTokenAction = {
