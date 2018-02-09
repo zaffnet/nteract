@@ -18,8 +18,6 @@ import {
   registerTransform
 } from "@nteract/transforms";
 
-import type { Content } from "./types";
-
 import DataResourceTransform from "@nteract/transform-dataresource";
 
 import { VegaLite1, VegaLite2, Vega2, Vega3 } from "@nteract/transform-vega";
@@ -83,7 +81,7 @@ class File extends React.Component<*> {
 }
 
 type EntryProps = {
-  entry: Content,
+  entry: JupyterApi$Content,
   pathname: string,
   basepath: string
 };

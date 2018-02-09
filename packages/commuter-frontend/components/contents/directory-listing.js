@@ -9,11 +9,10 @@ import { theme } from "../../theme";
 
 import { groupBy } from "lodash";
 
-import type { Content } from "./types";
 import TimeAgo from "@nteract/timeago";
 
 export type DirectoryListingProps = {
-  contents: Array<Content>,
+  contents: Array<JupyterApi$Content>,
   basepath: string
 };
 
