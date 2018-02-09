@@ -7,14 +7,6 @@
 const fs = require("fs-extra");
 const path = require("path");
 
-import type {
-  Content,
-  DirectoryContent,
-  FileContent,
-  NotebookContent,
-  ContentError
-} from "../base";
-
 export type DiskProviderOptions = {
   local: {
     baseDirectory: string
@@ -42,7 +34,7 @@ function createContentResponse(
     name: string
   },
   stat: fs.Stats
-): Content {
+): JupyterApi$Content {
   const name = cleanBaseDir(parsedFilePath.base);
   const filePath = cleanBaseDir(
     path.join(parsedFilePath.dir, parsedFilePath.base)
@@ -101,7 +93,7 @@ function createContentResponse(
 function createContentPromise(
   options: DiskProviderOptions,
   filePath: string
-): Promise<Content> {
+): Promise<JupyterApi$Content> {
   const fullPath = path.join(options.local.baseDirectory, filePath);
   const parsedFilePath = path.parse(filePath);
   return new Promise((resolve, reject) => {
@@ -136,7 +128,7 @@ function sanitizeFilePath(unsafeFilePath: string): string {
 function get(
   options: DiskProviderOptions,
   unsafeFilePath: string
-): Promise<Content | ContentError> {
+): Promise<JupyterApi$Content | JupyterApi$ContentError> {
   const filePath = sanitizeFilePath(unsafeFilePath);
 
   // TODO: filePath should be normalized
@@ -173,8 +165,8 @@ function post(
 
 function getDirectory(
   options: DiskProviderOptions,
-  directory: DirectoryContent
-): Promise<DirectoryContent> {
+  directory: JupyterApi$DirectoryContent
+): Promise<JupyterApi$DirectoryContent> {
   return new Promise((resolve, reject) => {
     fs.readdir(
       path.join(options.local.baseDirectory, directory.path),
@@ -217,8 +209,8 @@ function getDirectory(
 
 function getFile(
   options: DiskProviderOptions,
-  file: FileContent
-): Promise<FileContent> {
+  file: JupyterApi$FileContent
+): Promise<JupyterApi$FileContent> {
   return new Promise((resolve, reject) => {
     // TODO: Should we support a streaming interface or nah
     fs.readFile(
@@ -235,8 +227,8 @@ function getFile(
 
 function getNotebook(
   options: DiskProviderOptions,
-  notebook: NotebookContent
-): Promise<NotebookContent> {
+  notebook: JupyterApi$NotebookContent
+): Promise<JupyterApi$NotebookContent> {
   return new Promise((resolve, reject) => {
     // TODO: Should we support a streaming interface or nah
     fs.readFile(
