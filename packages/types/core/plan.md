@@ -54,30 +54,19 @@ and `cellOrder` (list of cell ids). We're taking it to the next level here.
 opaque type Id = string;
 opaque type Ref = string;
 
-type state = {
-  // The top level of core state can be considered a entry (which can be a 
-  // "notebook", "directory", or plain "file").
-  app: {
-      // On desktop we'll have the one built-in local host that connects to
-      // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
-      // different hosts.
-      selectedHostRef: Ref,
-      hostRefs: Array<Ref>,
-      selectedContentRef: Ref
-  },
-  
-  preferences: {
-    lastSaved: Date
-  },
+type core = {
+
+  // On desktop we'll have the one built-in local host that connects to
+  // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
+  // different hosts.
+  selectedHostRef: Ref,
+  hostRefs: Array<Ref>,
+  selectedContentRef: Ref
 
   // The piece of state that allows the ui to show loading/error indicators.
   // This is split apart from the entities definitions because the two parts of
   // state serve very different purposes.
   communication: {
-    notebook: {
-      isSaving: boolean,
-      error: ?Object
-    },
     preferences: {
       isSaving: boolean,
       error: ?Object
@@ -109,22 +98,25 @@ type state = {
           error: ?Object
         }
       }
-    }
-  },
-  contents: {
-    byRef: {
-      [ref: Ref]: {
-        loading: boolean,
-        error: ?Object
+    },
+    contents: {
+      byRef: {
+        [ref: Ref]: {
+          loading: boolean,
+          error: ?Object
+        }
       }
     }
-  }
+  },
 
   // These are the actual data that we get back from
   //   * API Calls
   //   * User input
   //   * Kernel output
   entities: {    
+    preferences: {
+      lastSaved: Date
+    },
     outputs: {
       byRef: {
         [ref: Ref]: {
@@ -174,6 +166,7 @@ type state = {
         [ref: Ref]: {
           name: string,
           resources: Object,
+          hostRef: Ref,
           spec: {
             displayName: string,
             language: string,
@@ -189,8 +182,7 @@ type state = {
         [ref: Ref]: {
           id: string,
           type: ("local" | "jupyter"),
-          selectedKernelRef: Ref,
-          kernelRefs: Array<Ref>,
+          kernelIds: Array<Id>,
           kernelspecsRef: Ref,
           defaultKernelName: string,
           token: string,
