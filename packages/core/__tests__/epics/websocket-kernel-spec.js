@@ -56,6 +56,7 @@ describe("launchWebSocketKernelEpic", () => {
           type: "websocket",
           channels: expect.any(Subject),
           kernelSpecName: "fancy",
+          cwd: "/",
           id: "0"
         }
       }

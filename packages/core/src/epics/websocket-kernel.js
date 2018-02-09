@@ -53,6 +53,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 
           const kernel = Object.assign({}, data.response, {
             type: "websocket",
+            cwd,
             channels: kernels.connect(config, data.response.id, session),
             kernelSpecName
           });
