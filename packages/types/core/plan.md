@@ -149,12 +149,12 @@ type core = {
       },
       refs: Array<Ref>
     },
-    
+
     hostSpec: {
       // TODO: is this something that's going to be hard-coded into an app? Or,
       // is it something that we'll indeed need to request from some api? See
       // related hostSpec in the `communication` state hunk.
-      
+
       // Else, should this be sorta top-level alongside the `notebook` hunk
       // of state?
     },
@@ -200,7 +200,7 @@ type core = {
     kernels: {
       byRef: {
         [ref: Ref]: {
-          type: ("local" | "jupyter"), // same as server, unchanging
+          type: ("local" | "jupyter"), // same as server, literal, unchanging
           name: string,
           lastActivity: Date,
           channels: rxjs$Subject,
@@ -208,6 +208,7 @@ type core = {
           id: Id, // jupyter only
           spawn: ChildProcess, // local only
           connectionFile: string, // local only
+          cwd: string, // current working directory, absolute on local, relative to server on jupyter
         }
       }
     },

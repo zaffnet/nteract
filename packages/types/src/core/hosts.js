@@ -70,6 +70,7 @@ export type BaseKernelProps = {
   kernelSpecName: ?string,
   lastActivity: ?Date,
   channels: ?rxjs$Subject<*, *>,
+  cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
   //
@@ -91,6 +92,7 @@ export type LocalKernelProps = BaseKernelProps & {
 
 export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
   type: "zeromq",
+  cwd: ".",
   ref: null,
   kernelSpecName: null,
   name: null,
@@ -103,6 +105,7 @@ export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
 
 export const makeRemoteKernelRecord: RecordFactory<RemoteKernelProps> = Record({
   type: "websocket",
+  cwd: ".",
   id: null,
   ref: null,
   kernelSpecName: null,

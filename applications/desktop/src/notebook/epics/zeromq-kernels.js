@@ -110,6 +110,7 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
             channels,
             connectionFile,
             spawn,
+            cwd,
             kernelSpecName: kernelSpec.name,
             status: "launched" // TODO: Determine our taxonomy
           };

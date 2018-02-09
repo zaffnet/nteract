@@ -69,6 +69,7 @@ describe("launchKernelEpic", () => {
         type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
         kernel: {
           type: "zeromq",
+          cwd: "~",
           channels: expect.anything(),
           spawn: expect.anything(),
           connectionFile: "connectionFile.json",

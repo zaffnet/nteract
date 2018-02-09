@@ -5,17 +5,11 @@ import { app } from "@nteract/core/reducers";
 
 import {
   makeAppRecord,
-  makeLocalKernelRecord,
   makeDesktopHostRecord,
   AppRecord
 } from "@nteract/types/core/records";
 
-import type {
-  NewKernelAction,
-  SetGithubTokenAction,
-  KillKernelAction,
-  DoneSavingConfigAction
-} from "@nteract/core/actionTypes";
+import type { SetGithubTokenAction } from "@nteract/core/actionTypes";
 
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   const { githubToken } = action;

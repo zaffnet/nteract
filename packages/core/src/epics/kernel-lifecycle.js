@@ -32,7 +32,6 @@ import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
 import {
   setExecutionState,
   setNotebookKernelInfo,
-  launchKernelSuccessful,
   launchKernel,
   setLanguageInfo,
   launchKernelByName
