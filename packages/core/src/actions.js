@@ -727,9 +727,12 @@ export function shutdownReplyTimedOut(error: Error): ShutdownReplyTimedOut {
   };
 }
 
-export function restartKernel(): RestartKernel {
+export function restartKernel(
+  payload: { clearOutputs: boolean } = { clearOutputs: false }
+): RestartKernel {
   return {
-    type: actionTypes.RESTART_KERNEL
+    type: actionTypes.RESTART_KERNEL,
+    payload
   };
 }
 

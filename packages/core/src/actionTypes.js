@@ -389,7 +389,10 @@ export type SetGithubTokenAction = {
 
 export const RESTART_KERNEL = "RESTART_KERNEL";
 export type RestartKernel = {
-  type: "RESTART_KERNEL"
+  type: "RESTART_KERNEL",
+  payload: {
+    clearOutputs: boolean
+  }
 };
 
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";

@@ -25,6 +25,8 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
+import * as selectors from "../selectors";
+
 import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
@@ -37,7 +39,7 @@ import {
   launchKernelByName
 } from "../actions";
 
-import { LAUNCH_KERNEL_SUCCESSFUL, SET_NOTEBOOK } from "../actionTypes";
+import * as actionTypes from "../actionTypes";
 
 /**
  * Sets the execution state after a kernel has been launched.
@@ -46,7 +48,7 @@ import { LAUNCH_KERNEL_SUCCESSFUL, SET_NOTEBOOK } from "../actionTypes";
  */
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
       action.kernel.channels.pipe(
         filter(msg => msg.header.msg_type === "status"),
@@ -86,7 +88,7 @@ export function acquireKernelInfo(channels: Channels) {
  */
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap(action => acquireKernelInfo(action.kernel.channels))
   );
 
@@ -112,7 +114,7 @@ export const launchKernelWhenNotebookSetEpic = (
   action$: ActionsObservable<*>
 ) =>
   action$.pipe(
-    ofType(SET_NOTEBOOK),
+    ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebookAction) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.filename,
@@ -120,5 +122,19 @@ export const launchKernelWhenNotebookSetEpic = (
       );
 
       return launchKernelByName(kernelSpecName, cwd);
+    })
+  );
+
+export const restartKernel = (action$: ActionsObservable<*>, store: *) =>
+  action$.pipe(
+    ofType(actionTypes.RESTART_KERNEL),
+    map(x => {
+      const state = store.getState();
+      const notificationSystem = state.app.notificationSystem;
+      const filename = selectors.currentFilename(state);
+      const kernel = selectors.currentKernel(state);
+      // TODO: cwd into the kernel record
+
+      return { type: "NOT_REALLY_RESTARTED" };
     })
   );

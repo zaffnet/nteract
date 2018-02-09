@@ -53,6 +53,8 @@ export function triggerWindowRefresh(store: *, filename: string) {
 }
 
 export function dispatchRestartKernel(store: *) {
+  store.dispatch(actions.restartKernel());
+
   // TODO: Make this an action to dispatch that an epic consumes, which will stop the
   //       current kernel and launch a new kernel of the same type
   const state = store.getState();
