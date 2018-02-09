@@ -17,6 +17,7 @@ import {
   map,
   tap,
   mergeMap,
+  concatMap,
   catchError,
   first,
   pluck,
@@ -122,7 +123,7 @@ export const launchKernelWhenNotebookSetEpic = (
 export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
-    mergeMap(action => {
+    concatMap(action => {
       const state = store.getState();
       const kernel = selectors.currentKernel(state);
       const notificationSystem = state.app.notificationSystem;
@@ -152,9 +153,9 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
         level: "success"
       });
 
-      return from([
+      return of(
         actions.killKernel({ restarting: true }),
         actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
-      ]);
+      );
     })
   );
