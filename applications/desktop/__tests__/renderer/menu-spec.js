@@ -152,7 +152,7 @@ describe("menu", () => {
       menu.dispatchRestartClearAll(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.KILL_KERNEL
+        type: actionTypes.RESTART_KERNEL
       });
     });
   });
@@ -165,7 +165,7 @@ describe("menu", () => {
       menu.dispatchRestartKernel(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.KILL_KERNEL
+        type: actionTypes.RESTART_KERNEL
       });
     });
   });
