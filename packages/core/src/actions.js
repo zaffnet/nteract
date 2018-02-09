@@ -54,6 +54,7 @@ import type {
   SetNotebookAction,
   NewCellAfterAction,
   NewCellBeforeAction,
+  ClearAllOutputs,
   ClearOutputsAction,
   AppendOutputAction,
   UpdateDisplayAction,
@@ -215,6 +216,12 @@ export function clearOutputs(id: string): ClearOutputsAction {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
     id
+  };
+}
+
+export function clearAllOutputs(): ClearAllOutputs {
+  return {
+    type: actionTypes.CLEAR_ALL_OUTPUTS
   };
 }
 

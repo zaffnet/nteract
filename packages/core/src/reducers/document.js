@@ -210,27 +210,29 @@ function clearAllOutputs(
     return state;
   }
 
-  return (
-    state
-      // For every cell, clear the outputs and execution counts
-      .updateIn(["notebook", "cellMap"], cellMap => {
-        // NOTE: My kingdom for a mergeMap
-        return cellMap.map(cell => {
-          cell.merge({
-            outputs: new Immutable.List(),
-            execution_count: null
-          });
+  // For every cell, clear the outputs and execution counts
+  const cellMap = state
+    .getIn(["notebook", "cellMap"], new Immutable.Map())
+    // NOTE: My kingdom for a mergeMap
+    .map(cell => {
+      if (cell.get("cell_type") === "code") {
+        return cell.merge({
+          outputs: new Immutable.List(),
+          execution_count: null
         });
-      })
-      // Clear all the transient data too
-      .set(
-        ["notebook", "transient"],
-        Immutable.Map({
-          keyPathsForDisplays: Immutable.Map(),
-          cellMap: Immutable.Map() // clear out the statuses
-        })
-      )
-  );
+      }
+      return cell;
+    });
+
+  // Clear all the transient data too
+  const transient = Immutable.Map({
+    keyPathsForDisplays: Immutable.Map(),
+    cellMap: cellMap.map(() => new Immutable.Map())
+  });
+
+  return state
+    .setIn(["notebook", "cellMap"], cellMap)
+    .set("transient", transient);
 }
 
 function appendOutput(state: DocumentRecord, action: AppendOutputAction) {

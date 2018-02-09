@@ -208,18 +208,14 @@ describe("menu", () => {
   });
 
   describe("dispatchClearAll", () => {
-    test("dispatches CLEAR_OUTPUTS actions", () => {
+    test("dispatches CLEAR_ALL_OUTPUTS actions", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
       menu.dispatchClearAll(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.CLEAR_OUTPUTS,
-        id: store
-          .getState()
-          .document.getIn(["notebook", "cellOrder"])
-          .first()
+        type: actionTypes.CLEAR_ALL_OUTPUTS
       });
     });
   });

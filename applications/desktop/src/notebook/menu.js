@@ -72,7 +72,7 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
       },
       index => {
         if (index === 0) {
-          const kernel = selectors.currentKernel();
+          const kernel = selectors.currentKernel(store.getState());
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
@@ -156,8 +156,7 @@ export function dispatchRunAll(store: *) {
 }
 
 export function dispatchClearAll(store: *) {
-  const cellOrder = selectors.currentCellOrder(store.getState());
-  cellOrder.forEach(id => store.dispatch(actions.clearOutputs(id)));
+  store.dispatch(actions.clearAllOutputs());
 }
 
 export function dispatchUnhideAll(store: *) {
