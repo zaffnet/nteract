@@ -54,45 +54,6 @@ export function triggerWindowRefresh(store: *, filename: string) {
 
 export function dispatchRestartKernel(store: *) {
   store.dispatch(actions.restartKernel());
-
-  // TODO: Make this an action to dispatch that an epic consumes, which will stop the
-  //       current kernel and launch a new kernel of the same type
-  const state = store.getState();
-  const notificationSystem = state.app.notificationSystem;
-  const filename = selectors.currentFilename(state);
-  const kernel = selectors.currentKernel(state);
-
-  const cwd = filename
-    ? path.dirname(path.resolve(filename))
-    : cwdKernelFallback();
-
-  store.dispatch(actions.killKernel());
-  // TODO: Use the kernelspec directly, requires us having the kernelspecs available
-  //       in the store.
-  // TODO: `kernel &&` may be redundant if Record default is `null` for this.
-  const kernelName =
-    kernel && kernel.kernelSpecName ? kernel.kernelSpecName : null;
-
-  if (!kernelName) {
-    notificationSystem.addNotification({
-      title: "Failure to Restart",
-      message: `Unable to restart kernel, please select a new kernel.`,
-      dismissible: true,
-      position: "tr",
-      level: "error"
-    });
-
-    return;
-  }
-  store.dispatch(actions.launchKernelByName(kernelName, cwd));
-
-  notificationSystem.addNotification({
-    title: "Kernel Restarted",
-    message: `Kernel ${kernelName} has been restarted.`,
-    dismissible: true,
-    position: "tr",
-    level: "success"
-  });
 }
 
 export function triggerKernelRefresh(store: *): Promise<*> {

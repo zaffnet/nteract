@@ -2,7 +2,9 @@
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
+import { empty } from "rxjs/observable/empty";
 import { merge } from "rxjs/observable/merge";
+import { from } from "rxjs/observable/from";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -117,17 +119,42 @@ export const launchKernelWhenNotebookSetEpic = (
     })
   );
 
-export const restartKernel = (action$: ActionsObservable<*>, store: *) =>
+export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
-    mergeMap(x => {
+    mergeMap(action => {
       const state = store.getState();
       const kernel = selectors.currentKernel(state);
-      // TODO: Incorporate notification system bits
+      const notificationSystem = state.app.notificationSystem;
 
-      return merge(
+      if (!kernel) {
+        notificationSystem.addNotification({
+          title: "Failure to Restart",
+          message: `Unable to restart kernel, please select a new kernel.`,
+          dismissible: true,
+          position: "tr",
+          level: "error"
+        });
+
+        // TODO: Wow do we need to send notifcations through our store for
+        // consistency
+        return empty();
+      }
+
+      // TODO: Incorporate this into each of the launchKernelByName
+      //       actions...
+      //       This only mirrors the old behavior of restart kernel (for now)
+      notificationSystem.addNotification({
+        title: "Kernel Restarted",
+        message: `Kernel ${kernel.kernelSpecName} has been restarted.`,
+        dismissible: true,
+        position: "tr",
+        level: "success"
+      });
+
+      return from([
         actions.killKernel({ restarting: true }),
         actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
-      );
+      ]);
     })
   );

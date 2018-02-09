@@ -9,7 +9,8 @@ export {
 export {
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
-  launchKernelWhenNotebookSetEpic
+  launchKernelWhenNotebookSetEpic,
+  restartKernelEpic
 } from "./kernel-lifecycle";
 
 export { fetchKernelspecsEpic } from "./kernelspecs";
