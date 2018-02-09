@@ -145,27 +145,33 @@ describe("menu", () => {
   });
 
   describe("dispatchRestartClearAll", () => {
-    test("dispatches KILL_KERNEL and CLEAR_OUTPUTS actions", () => {
+    test("dispatches RESTART_KERNEL with clearOutputs set to true", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
       menu.dispatchRestartClearAll(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.RESTART_KERNEL
+        type: actionTypes.RESTART_KERNEL,
+        payload: {
+          clearOutputs: true
+        }
       });
     });
   });
 
   describe("dispatchRestartKernel", () => {
-    test("dispatches KILL_KERNEL and LAUNCH_KERNEL_SUCCESSFUL actions", () => {
+    test("dispatches restart kernel with clearOutputs set to false", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
 
       menu.dispatchRestartKernel(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.RESTART_KERNEL
+        type: actionTypes.RESTART_KERNEL,
+        payload: {
+          clearOutputs: false
+        }
       });
     });
   });
@@ -193,7 +199,10 @@ describe("menu", () => {
       menu.dispatchKillKernel(store);
 
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.KILL_KERNEL
+        type: actionTypes.KILL_KERNEL,
+        payload: {
+          restarting: false
+        }
       });
     });
   });

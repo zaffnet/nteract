@@ -56,7 +56,7 @@ export function dispatchRestartKernel(store: *) {
   store.dispatch(actions.restartKernel());
 }
 
-export function triggerKernelRefresh(store: *): Promise<*> {
+export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
   return new Promise(resolve => {
     dialog.showMessageBox(
       {
@@ -72,7 +72,13 @@ export function triggerKernelRefresh(store: *): Promise<*> {
       },
       index => {
         if (index === 0) {
-          dispatchRestartKernel(store);
+          const kernel = selectors.currentKernel();
+          const cwd = filename
+            ? path.dirname(path.resolve(filename))
+            : cwdKernelFallback();
+          store.dispatch(
+            actions.launchKernelByName(kernel.kernelSpecName, cwd)
+          );
         }
         resolve();
       }
@@ -84,7 +90,7 @@ export function triggerSaveAs(store: *) {
   showSaveAsDialog().then(filename => {
     if (filename) {
       triggerWindowRefresh(store, filename);
-      triggerKernelRefresh(store);
+      triggerKernelRefresh(store, filename);
     }
   });
 }
@@ -180,8 +186,7 @@ export function dispatchInterruptKernel(store: *) {
 }
 
 export function dispatchRestartClearAll(store: *) {
-  dispatchRestartKernel(store);
-  dispatchClearAll(store);
+  store.dispatch(actions.restartKernel({ clearOutputs: true }));
 }
 
 export function dispatchZoomIn() {
@@ -305,10 +310,9 @@ export function triggerSaveAsPDF(store: *) {
   showSaveAsDialog()
     .then(filename => {
       if (filename) {
-        return Promise.all([
-          triggerWindowRefresh(store, filename),
-          triggerKernelRefresh(store)
-        ]).then(() => storeToPDF(store));
+        return Promise.all([triggerWindowRefresh(store, filename)]).then(() =>
+          storeToPDF(store)
+        );
       }
     })
     .catch(e =>

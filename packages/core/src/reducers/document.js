@@ -10,6 +10,8 @@ import * as actionTypes from "../actionTypes";
 // TODO: With the new document plan, I think it starts to make sense to decouple
 //       the document view actions and the underlying document format
 import type {
+  RestartKernel,
+  ClearAllOutputs,
   PasteCellAction,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
@@ -193,6 +195,42 @@ function clearOutputs(state: DocumentRecord, action: ClearOutputsAction) {
     );
   }
   return state;
+}
+
+function clearAllOutputs(
+  state: DocumentRecord,
+  action: ClearAllOutputs | RestartKernel
+) {
+  // If we get a restart kernel action that said to clear outputs, we'll
+  // handle it
+  if (
+    action.type === actionTypes.RESTART_KERNEL &&
+    !action.payload.clearOutputs
+  ) {
+    return state;
+  }
+
+  return (
+    state
+      // For every cell, clear the outputs and execution counts
+      .updateIn(["notebook", "cellMap"], cellMap => {
+        // NOTE: My kingdom for a mergeMap
+        return cellMap.map(cell => {
+          cell.merge({
+            outputs: new Immutable.List(),
+            execution_count: null
+          });
+        });
+      })
+      // Clear all the transient data too
+      .set(
+        ["notebook", "transient"],
+        Immutable.Map({
+          keyPathsForDisplays: Immutable.Map(),
+          cellMap: Immutable.Map() // clear out the statuses
+        })
+      )
+  );
 }
 
 function appendOutput(state: DocumentRecord, action: AppendOutputAction) {
@@ -704,6 +742,8 @@ type DocumentAction =
   | AcceptPayloadMessageAction
   | SendExecuteMessageAction
   | DoneSavingAction
+  | RestartKernel
+  | ClearAllOutputs
   | SetInCellAction<*>;
 
 const defaultDocument: DocumentRecord = makeDocumentRecord();
@@ -723,6 +763,9 @@ function handleDocument(
       return focusCell(state, action);
     case actionTypes.CLEAR_OUTPUTS:
       return clearOutputs(state, action);
+    case actionTypes.CLEAR_ALL_OUTPUTS:
+    case actionTypes.RESTART_KERNEL:
+      return clearAllOutputs(state, action);
     case actionTypes.APPEND_OUTPUT:
       return appendOutput(state, action);
     case actionTypes.UPDATE_DISPLAY:
