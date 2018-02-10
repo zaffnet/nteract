@@ -147,12 +147,7 @@ export function dispatchRunAllBelow(store: *) {
 
 // TODO: This should be an epic
 export function dispatchRunAll(store: *) {
-  const state = store.getState();
-  const cellMap = selectors.currentCellMap(state);
-  const codeCellIds = selectors.currentCodeCellIds(state);
-  codeCellIds.forEach(id =>
-    store.dispatch(actions.executeCell(id, cellMap.getIn([id, "source"])))
-  );
+  store.dispatch(actions.executeAllCells());
 }
 
 export function dispatchClearAll(store: *) {

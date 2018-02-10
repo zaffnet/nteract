@@ -536,6 +536,12 @@ export function executeCell(id: string): ExecuteCellAction {
   };
 }
 
+export function executeAllCells() {
+  return {
+    type: actionTypes.EXECUTE_ALL_CELLS
+  };
+}
+
 export function executeFocusedCell(): ExecuteFocusedCellAction {
   return {
     type: actionTypes.EXECUTE_FOCUSED_CELL
