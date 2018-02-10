@@ -208,6 +208,11 @@ export type ExecuteAllCells = {
   type: "EXECUTE_ALL_CELLS"
 };
 
+export const EXECUTE_ALL_CELLS_BELOW = "EXECUTE_ALL_CELLS_BELOW";
+export type ExecuteAllCellsBelow = {
+  type: "EXECUTE_ALL_CELLS_BELOW"
+};
+
 export const EXECUTE_FOCUSED_CELL = "EXECUTE_FOCUSED_CELL";
 export type ExecuteFocusedCellAction = {
   type: "EXECUTE_FOCUSED_CELL"

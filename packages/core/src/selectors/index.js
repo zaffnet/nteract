@@ -212,7 +212,7 @@ export const currentCodeCellIdsBelow = createSelector(
         .skip(index)
         .filter(id => cellMap.getIn([id, "cell_type"]) === "code");
     }
-    return null;
+    return Immutable.List();
   }
 );
 

@@ -163,11 +163,16 @@ export function createExecuteCellStream(
 
 export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
   return action$.pipe(
-    ofType(actionTypes.EXECUTE_ALL_CELLS),
+    ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
     concatMap(action => {
       const state = store.getState();
-      const cellMap = selectors.currentCellMap(state);
-      const codeCellIds = selectors.currentCodeCellIds(state);
+      let codeCellIds = Immutable.List();
+
+      if (action.type === actionTypes.EXECUTE_ALL_CELLS) {
+        codeCellIds = selectors.currentCodeCellIds(state);
+      } else if (action.type === actionTypes.EXECUTE_ALL_CELLS_BELOW) {
+        codeCellIds = selectors.currentCodeCellIdsBelow(state);
+      }
 
       return of(...codeCellIds.map(id => actions.executeCell(id)));
     })

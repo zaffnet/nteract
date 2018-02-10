@@ -542,6 +542,12 @@ export function executeAllCells() {
   };
 }
 
+export function executeAllCellsBelow() {
+  return {
+    type: actionTypes.EXECUTE_ALL_CELLS_BELOW
+  };
+}
+
 export function executeFocusedCell(): ExecuteFocusedCellAction {
   return {
     type: actionTypes.EXECUTE_FOCUSED_CELL
