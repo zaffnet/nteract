@@ -251,21 +251,19 @@ describe("menu", () => {
   });
 
   describe("dispatchUnhideAll", () => {
-    test("dispatches toggleCellInputVisibility for hidden code cells", () => {
+    test("", () => {
       const store = dummyStore({ hideAll: true });
       store.dispatch = jest.fn();
 
       menu.dispatchUnhideAll(store);
 
-      const first = store
-        .getState()
-        .document.getIn(["notebook", "cellOrder"])
-        .first();
-      const expectedAction = {
-        type: "TOGGLE_CELL_INPUT_VISIBILITY",
-        id: first
-      };
-      expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+      expect(store.dispatch).toHaveBeenCalledWith({
+        type: "UNHIDE_ALL",
+        payload: {
+          outputHidden: false,
+          inputHidden: false
+        }
+      });
     });
   });
 

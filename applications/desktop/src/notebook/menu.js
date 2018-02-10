@@ -148,10 +148,7 @@ export function dispatchClearAll(store: *) {
 }
 
 export function dispatchUnhideAll(store: *) {
-  const hiddenCellIds = selectors.currentHiddenCellIds(store.getState());
-  hiddenCellIds.forEach(id =>
-    store.dispatch(actions.toggleCellInputVisibility(id))
-  );
+  store.dispatch(actions.unhideAll());
 }
 
 export function dispatchKillKernel(store: *) {

@@ -497,7 +497,7 @@ export function loadFullMenu(store: * = global.store) {
         click: createSender("menu:clear-all")
       },
       {
-        label: "Unhide All Outputs",
+        label: "Unhide Input and Output in all Cells",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:unhide-all")
       }

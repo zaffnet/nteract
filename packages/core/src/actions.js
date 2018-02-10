@@ -30,6 +30,7 @@ import type {
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
 import type {
+  UnhideAll,
   RestartKernel,
   RestartKernelFailed,
   RestartKernelSuccessful,
@@ -329,6 +330,18 @@ export function updateCellExecutionCount(
   count: number
 ): SetInCellAction<number> {
   return setInCell(id, ["execution_count"], count);
+}
+
+export function unhideAll(
+  payload?: { outputHidden: boolean, inputHidden: boolean } = {
+    outputHidden: false,
+    inputHidden: false
+  }
+): UnhideAll {
+  return {
+    type: "UNHIDE_ALL",
+    payload: { outputHidden: false, inputHidden: false, ...payload }
+  };
 }
 
 export function toggleCellOutputVisibility(
