@@ -136,23 +136,11 @@ export function dispatchPublishUserGist(
  * @param {Object} store - The Redux store
  */
 export function dispatchRunAllBelow(store: *) {
-  const state = store.getState();
-  const cellMap = selectors.currentCellMap(state);
-  const codeCellIdsBelow = selectors.currentCodeCellIdsBelow(state);
-
-  codeCellIdsBelow.forEach(id =>
-    store.dispatch(actions.executeCell(id, cellMap.getIn([id, "source"])))
-  );
+  store.dispatch(actions.executeAllCellsBelow());
 }
 
-// TODO: This should be an epic
 export function dispatchRunAll(store: *) {
-  const state = store.getState();
-  const cellMap = selectors.currentCellMap(state);
-  const codeCellIds = selectors.currentCodeCellIds(state);
-  codeCellIds.forEach(id =>
-    store.dispatch(actions.executeCell(id, cellMap.getIn([id, "source"])))
-  );
+  store.dispatch(actions.executeAllCells());
 }
 
 export function dispatchClearAll(store: *) {

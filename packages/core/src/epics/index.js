@@ -1,5 +1,11 @@
 // @flow
-export { executeCellEpic, updateDisplayEpic } from "./execute";
+
+export {
+  executeCellEpic,
+  updateDisplayEpic,
+  executeAllCellsEpic
+} from "./execute";
+
 export { commListenEpic } from "./comm";
 export {
   launchWebSocketKernelEpic,

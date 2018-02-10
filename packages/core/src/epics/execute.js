@@ -11,8 +11,6 @@ import {
   executionCounts
 } from "@nteract/messaging";
 
-import * as selectors from "../selectors";
-
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
@@ -32,39 +30,17 @@ import {
   mergeAll,
   takeUntil,
   catchError,
+  concatMap,
   tap
 } from "rxjs/operators";
 
 import { ofType } from "redux-observable";
 
-import {
-  createCellAfter,
-  updateCellExecutionCount,
-  updateCellStatus,
-  acceptPayloadMessage,
-  clearOutputs,
-  appendOutput,
-  updateDisplay,
-  sendExecuteMessage,
-  executeCell
-} from "../actions";
+import * as actions from "../actions";
+import * as actionTypes from "../actionTypes";
+import * as selectors from "../selectors";
 
-import type { Subject } from "rxjs/Subject";
 import type { ActionsObservable } from "redux-observable";
-
-import {
-  EXECUTE_CELL,
-  EXECUTE_FOCUSED_CELL,
-  LAUNCH_KERNEL_SUCCESSFUL,
-  REMOVE_CELL,
-  ABORT_EXECUTION,
-  ERROR_EXECUTING,
-  ERROR_UPDATE_DISPLAY,
-  SEND_EXECUTE_REQUEST,
-  KILL_KERNEL,
-  LAUNCH_KERNEL_BY_NAME,
-  LAUNCH_KERNEL
-} from "../actionTypes";
 
 import type { NewKernelAction } from "../actionTypes";
 
@@ -98,25 +74,33 @@ export function executeCellStream(
   const payloadStream = cellMessages.pipe(payloads());
 
   const cellAction$ = merge(
-    payloadStream.pipe(map(payload => acceptPayloadMessage(id, payload))),
+    payloadStream.pipe(
+      map(payload => actions.acceptPayloadMessage(id, payload))
+    ),
 
     // All actions for updating cell status
     cellMessages.pipe(
       kernelStatuses(),
-      map(status => updateCellStatus(id, status))
+      map(status => actions.updateCellStatus(id, status))
     ),
 
     // Update the input numbering: `[ ]`
     cellMessages.pipe(
       executionCounts(),
-      map(ct => updateCellExecutionCount(id, ct))
+      map(ct => actions.updateCellExecutionCount(id, ct))
     ),
 
     // All actions for new outputs
-    cellMessages.pipe(outputs(), map(output => appendOutput(id, output))),
+    cellMessages.pipe(
+      outputs(),
+      map(output => actions.appendOutput(id, output))
+    ),
 
     // clear_output display message
-    cellMessages.pipe(ofMessageType("clear_output"), mapTo(clearOutputs(id)))
+    cellMessages.pipe(
+      ofMessageType("clear_output"),
+      mapTo(actions.clearOutputs(id))
+    )
   );
 
   // On subscription, send the message
@@ -144,7 +128,7 @@ export function createExecuteCellStream(
 
   if (!kernelConnected || !channels) {
     return of({
-      type: ERROR_EXECUTING,
+      type: actionTypes.ERROR_EXECUTING,
       payload: "Kernel not connected!",
       error: true
     });
@@ -155,9 +139,15 @@ export function createExecuteCellStream(
       merge(
         action$.pipe(
           filter(laterAction => laterAction.id === id),
-          ofType(ABORT_EXECUTION, REMOVE_CELL)
+          ofType(actionTypes.ABORT_EXECUTION, actionTypes.REMOVE_CELL)
         ),
-        action$.pipe(ofType(LAUNCH_KERNEL, LAUNCH_KERNEL_BY_NAME, KILL_KERNEL))
+        action$.pipe(
+          ofType(
+            actionTypes.LAUNCH_KERNEL,
+            actionTypes.LAUNCH_KERNEL_BY_NAME,
+            actionTypes.KILL_KERNEL
+          )
+        )
       )
     )
   );
@@ -165,9 +155,27 @@ export function createExecuteCellStream(
   return merge(
     // We make sure to propagate back to "ourselves" the actual message
     // that we sent to the kernel with the sendExecuteMessage action
-    of(sendExecuteMessage(id, message)),
+    of(actions.sendExecuteMessage(id, message)),
     // Merging it in with the actual stream
     cellStream
+  );
+}
+
+export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
+  return action$.pipe(
+    ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
+    concatMap(action => {
+      const state = store.getState();
+      let codeCellIds = Immutable.List();
+
+      if (action.type === actionTypes.EXECUTE_ALL_CELLS) {
+        codeCellIds = selectors.currentCodeCellIds(state);
+      } else if (action.type === actionTypes.EXECUTE_ALL_CELLS_BELOW) {
+        codeCellIds = selectors.currentCodeCellIdsBelow(state);
+      }
+
+      return of(...codeCellIds.map(id => actions.executeCell(id)));
+    })
   );
 }
 
@@ -177,14 +185,14 @@ export function createExecuteCellStream(
  */
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
-    ofType(EXECUTE_CELL, EXECUTE_FOCUSED_CELL),
+    ofType(actionTypes.EXECUTE_CELL, actionTypes.EXECUTE_FOCUSED_CELL),
     mergeMap(action => {
-      if (action.type === EXECUTE_FOCUSED_CELL) {
+      if (action.type === actionTypes.EXECUTE_FOCUSED_CELL) {
         const id = selectors.currentFocusedCellId(store.getState());
         if (!id) {
           throw new Error("attempted to execute without an id");
         }
-        return of(executeCell(id));
+        return of(actions.executeCell(id));
       }
       return of(action);
     }),
@@ -228,7 +236,10 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     // Bring back all the inner Observables into one stream
     mergeAll(),
     catchError((err, source) =>
-      merge(of({ type: ERROR_EXECUTING, payload: err, error: true }), source)
+      merge(
+        of({ type: actionTypes.ERROR_EXECUTING, payload: err, error: true }),
+        source
+      )
     )
   );
 }
@@ -236,13 +247,17 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
-    ofType(LAUNCH_KERNEL_SUCCESSFUL),
+    ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
       action.kernel.channels.pipe(
         ofMessageType("update_display_data"),
-        map(msg => updateDisplay(msg.content)),
+        map(msg => actions.updateDisplay(msg.content)),
         catchError(err =>
-          of({ type: ERROR_UPDATE_DISPLAY, payload: err, error: true })
+          of({
+            type: actionTypes.ERROR_UPDATE_DISPLAY,
+            payload: err,
+            error: true
+          })
         )
       )
     )

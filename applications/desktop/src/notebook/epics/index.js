@@ -20,7 +20,8 @@ import {
   watchExecutionStateEpic,
   executeCellEpic,
   updateDisplayEpic,
-  commListenEpic
+  commListenEpic,
+  executeAllCellsEpic
 } from "@nteract/core/epics";
 
 import { publishEpic } from "./github-publish";
@@ -39,6 +40,7 @@ export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics = [
+  executeAllCellsEpic,
   restartKernelEpic,
   watchSpawn,
   commListenEpic,
