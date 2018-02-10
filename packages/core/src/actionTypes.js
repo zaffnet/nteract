@@ -163,8 +163,8 @@ export const UNHIDE_ALL = "UNHIDE_ALL";
 export type UnhideAll = {
   type: "UNHIDE_ALL",
   payload: {
-    input: boolean,
-    outputs: boolean
+    inputHidden: boolean,
+    outputHidden: boolean
   }
 };
 

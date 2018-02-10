@@ -583,8 +583,8 @@ function unhideAll(state: DocumentRecord, action: UnhideAll) {
       if (cell.get("cell_type") === "code") {
         return cell.mergeIn(["metadata"], {
           // TODO: Verify that we convert to one namespace for hidden input/output
-          outputHidden: !action.payload.outputs,
-          inputHidden: !action.payload.input
+          outputHidden: action.payload.outputHidden,
+          inputHidden: action.payload.inputHidden
         });
       }
       return cell;

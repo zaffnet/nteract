@@ -21,6 +21,34 @@ describe("setLanguageInfo", () => {
   });
 });
 
+describe("unhideAll", () => {
+  test("allows being called with sets defaults for outputHidden and inputHidden", () => {
+    expect(actions.unhideAll({ outputHidden: true })).toEqual({
+      type: actionTypes.UNHIDE_ALL,
+      payload: {
+        outputHidden: true,
+        inputHidden: false
+      }
+    });
+
+    expect(actions.unhideAll({ inputHidden: true })).toEqual({
+      type: actionTypes.UNHIDE_ALL,
+      payload: {
+        outputHidden: false,
+        inputHidden: true
+      }
+    });
+
+    expect(actions.unhideAll()).toEqual({
+      type: actionTypes.UNHIDE_ALL,
+      payload: {
+        outputHidden: false,
+        inputHidden: false
+      }
+    });
+  });
+});
+
 describe("commOpenAction", () => {
   test("creates a COMM_OPEN action", () => {
     const message = {

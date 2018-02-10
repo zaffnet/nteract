@@ -270,8 +270,8 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "UNHIDE_ALL",
         payload: {
-          outputs: true,
-          input: true
+          outputHidden: false,
+          inputHidden: false
         }
       });
     });

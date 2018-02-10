@@ -333,14 +333,14 @@ export function updateCellExecutionCount(
 }
 
 export function unhideAll(
-  payload: { outputs: boolean, input: boolean } = {
-    outputs: true,
-    input: true
+  payload?: { outputHidden: boolean, inputHidden: boolean } = {
+    outputHidden: false,
+    inputHidden: false
   }
 ): UnhideAll {
   return {
     type: "UNHIDE_ALL",
-    payload
+    payload: { outputHidden: false, inputHidden: false, ...payload }
   };
 }
 
