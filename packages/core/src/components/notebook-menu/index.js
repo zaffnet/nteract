@@ -20,10 +20,10 @@ type Props = {
   defaultOpenKeys?: Array<string>,
   openKeys?: Array<string>,
   cellFocused: ?string,
-  cellMap: Immutable.Map<string, *>,
-  cellOrder: Immutable.List<string>,
   saveNotebook: ?() => void,
   executeCell: ?(cellId: ?string) => void,
+  executeAllCells: ?() => void,
+  executeAllCellsBelow: ?() => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
   mergeCellAfter: ?(cellId: ?string) => void,
@@ -42,10 +42,10 @@ type Props = {
 class PureNotebookMenu extends React.Component<Props> {
   static defaultProps = {
     cellFocused: null,
-    cellMap: Immutable.Map(),
-    cellOrder: Immutable.List(),
     saveNotebook: null,
     executeCell: null,
+    executeAllCells: null,
+    executeAllCellsBelow: null,
     cutCell: null,
     copyCell: null,
     mergeCellAfter: null,
@@ -63,13 +63,13 @@ class PureNotebookMenu extends React.Component<Props> {
     const {
       saveNotebook,
       cellFocused,
-      cellMap,
-      cellOrder,
       copyCell,
       createCodeCell,
       createMarkdownCell,
       cutCell,
       executeCell,
+      executeAllCells,
+      executeAllCellsBelow,
       filename,
       mergeCellAfter,
       notebook,
@@ -135,15 +135,14 @@ class PureNotebookMenu extends React.Component<Props> {
         }
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS:
-        extraHandlers.executeAllCells(executeCell, cellMap, cellOrder);
+        if (executeAllCells) {
+          executeAllCells();
+        }
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW:
-        extraHandlers.executeAllCellsBelow(
-          executeCell,
-          cellMap,
-          cellOrder,
-          cellFocused
-        );
+        if (executeAllCellsBelow) {
+          executeAllCellsBelow();
+        }
         break;
       case MENU_ITEM_ACTIONS.SET_THEME_DARK:
         if (setTheme) {
@@ -288,8 +287,6 @@ class PureNotebookMenu extends React.Component<Props> {
 // available...
 const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
-  cellMap: selectors.currentCellMap(state),
-  cellOrder: selectors.currentCellOrder(state),
   filename: selectors.currentFilename(state),
   notebook: selectors.currentNotebook(state)
 });
@@ -297,6 +294,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   saveNotebook: () => dispatch(actions.save()),
   executeCell: cellId => dispatch(actions.executeCell(cellId)),
+  executeAllCells: () => dispatch(actions.executeAllCells()),
+  executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
   cutCell: cellId => dispatch(actions.cutCell(cellId)),
   copyCell: cellId => dispatch(actions.copyCell(cellId)),
   pasteCell: () => dispatch(actions.pasteCell()),
