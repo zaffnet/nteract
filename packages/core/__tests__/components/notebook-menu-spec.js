@@ -35,6 +35,8 @@ describe("PureNotebookMenu ", () => {
       const props = {
         // action functions
         executeCell: jest.fn(),
+        executeAllCells: jest.fn(),
+        executeAllCellsBelow: jest.fn(),
         cutCell: jest.fn(),
         copyCell: jest.fn(),
         pasteCell: jest.fn(),
@@ -61,32 +63,6 @@ describe("PureNotebookMenu ", () => {
       };
       const wrapper = mount(<PureNotebookMenu {...props} />);
 
-      // Test that we call executeAllCells
-      const executeAllCellsItem = wrapper
-        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS })
-        .first();
-      expect(extraHandlers.executeAllCells).not.toHaveBeenCalled();
-      executeAllCellsItem.simulate("click");
-      expect(extraHandlers.executeAllCells).toHaveBeenCalledTimes(1);
-      expect(extraHandlers.executeAllCells).toHaveBeenCalledWith(
-        props.executeCell,
-        props.cellMap,
-        props.cellOrder
-      );
-
-      const executeAllCellsBelowItem = wrapper
-        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
-        .first();
-      expect(extraHandlers.executeAllCellsBelow).not.toHaveBeenCalled();
-      executeAllCellsBelowItem.simulate("click");
-      expect(extraHandlers.executeAllCellsBelow).toHaveBeenCalledTimes(1);
-      expect(extraHandlers.executeAllCellsBelow).toHaveBeenCalledWith(
-        props.executeCell,
-        props.cellMap,
-        props.cellOrder,
-        props.cellFocused
-      );
-
       const downloadNotebookItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK })
         .first();
@@ -97,6 +73,22 @@ describe("PureNotebookMenu ", () => {
         props.notebook,
         props.filename
       );
+
+      const executeAllCellsItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS })
+        .first();
+      expect(props.executeAllCells).not.toHaveBeenCalled();
+      executeAllCellsItem.simulate("click");
+      expect(props.executeAllCells).toHaveBeenCalledTimes(1);
+      expect(props.executeAllCells).toHaveBeenCalledWith();
+
+      const executeAllCellsBelowItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
+        .first();
+      expect(props.executeAllCellsBelow).not.toHaveBeenCalled();
+      executeAllCellsBelowItem.simulate("click");
+      expect(props.executeAllCellsBelow).toHaveBeenCalledTimes(1);
+      expect(props.executeAllCellsBelow).toHaveBeenCalledWith();
 
       const cutCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CUT_CELL })
