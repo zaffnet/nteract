@@ -159,6 +159,15 @@ export type UpdateDisplayAction = {
   }
 };
 
+export const UNHIDE_ALL = "UNHIDE_ALL";
+export type UnhideAll = {
+  type: "UNHIDE_ALL",
+  payload: {
+    input: boolean,
+    outputs: boolean
+  }
+};
+
 export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
 export type ToggleCellOutputVisibilityAction = {
   type: "TOGGLE_CELL_OUTPUT_VISIBILITY",

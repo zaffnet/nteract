@@ -10,6 +10,7 @@ import * as actionTypes from "../actionTypes";
 // TODO: With the new document plan, I think it starts to make sense to decouple
 //       the document view actions and the underlying document format
 import type {
+  UnhideAll,
   RestartKernel,
   ClearAllOutputs,
   PasteCellAction,
@@ -576,6 +577,21 @@ function toggleCellOutputVisibility(
   );
 }
 
+function unhideAll(state: DocumentRecord, action: UnhideAll) {
+  return state.updateIn(["notebook", "cellMap"], cellMap =>
+    cellMap.map(cell => {
+      if (cell.get("cell_type") === "code") {
+        return cell.mergeIn(["metadata"], {
+          // TODO: Verify that we convert to one namespace for hidden input/output
+          outputHidden: !action.payload.outputs,
+          inputHidden: !action.payload.input
+        });
+      }
+      return cell;
+    })
+  );
+}
+
 function toggleCellInputVisibility(
   state: DocumentRecord,
   action: ToggleCellInputVisibilityAction
@@ -586,6 +602,7 @@ function toggleCellInputVisibility(
     !state.getIn(["notebook", "cellMap", id, "metadata", "inputHidden"])
   );
 }
+
 function updateCellStatus(
   state: DocumentRecord,
   action: UpdateCellStatusAction
@@ -824,6 +841,8 @@ function handleDocument(
       return changeCellType(state, action);
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:
       return toggleOutputExpansion(state, action);
+    case actionTypes.UNHIDE_ALL:
+      return unhideAll(state, action);
     case actionTypes.CHANGE_FILENAME:
       return changeFilename(state, action);
     default:
