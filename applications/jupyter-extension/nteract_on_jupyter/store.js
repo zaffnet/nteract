@@ -24,7 +24,7 @@ import {
   makeJupyterHostRecord
 } from "@nteract/types/core/records";
 
-import epics from "./epics";
+import { allEpics as epics } from "@nteract/core/epics";
 
 export type JupyterConfigData = {
   token: string,

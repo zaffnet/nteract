@@ -1,24 +1,63 @@
 // @flow
 
-export {
+import {
   executeCellEpic,
   updateDisplayEpic,
   executeAllCellsEpic
 } from "./execute";
 
-export { commListenEpic } from "./comm";
-export {
+import { commListenEpic } from "./comm";
+
+import {
   launchWebSocketKernelEpic,
   interruptKernelEpic
 } from "./websocket-kernel";
 
-export {
+import {
   acquireKernelInfoEpic,
   watchExecutionStateEpic,
   launchKernelWhenNotebookSetEpic,
   restartKernelEpic
 } from "./kernel-lifecycle";
 
-export { fetchKernelspecsEpic } from "./kernelspecs";
+import { fetchKernelspecsEpic } from "./kernelspecs";
 
-export { fetchContentEpic, setNotebookEpic, saveContentEpic } from "./contents";
+import { fetchContentEpic, setNotebookEpic, saveContentEpic } from "./contents";
+
+// Because `@nteract/core/epics` ends up being a commonjs import, we can't currently
+// rely on a default export or a `import * as epics from ""@nteract/core/epics"`
+// as it would collide the array with the named exports
+const allEpics = [
+  executeCellEpic,
+  updateDisplayEpic,
+  executeAllCellsEpic,
+  commListenEpic,
+  launchWebSocketKernelEpic,
+  interruptKernelEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic,
+  launchKernelWhenNotebookSetEpic,
+  restartKernelEpic,
+  fetchKernelspecsEpic,
+  fetchContentEpic,
+  setNotebookEpic,
+  saveContentEpic
+];
+
+export {
+  allEpics,
+  executeCellEpic,
+  updateDisplayEpic,
+  executeAllCellsEpic,
+  commListenEpic,
+  launchWebSocketKernelEpic,
+  interruptKernelEpic,
+  acquireKernelInfoEpic,
+  watchExecutionStateEpic,
+  launchKernelWhenNotebookSetEpic,
+  restartKernelEpic,
+  fetchKernelspecsEpic,
+  fetchContentEpic,
+  setNotebookEpic,
+  saveContentEpic
+};
