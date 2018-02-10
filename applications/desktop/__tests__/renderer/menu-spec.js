@@ -231,12 +231,8 @@ describe("menu", () => {
 
       menu.dispatchRunAllBelow(store);
 
-      expect(store.dispatch).toHaveBeenCalledTimes(3);
-      markdownCells.forEach(cellId => {
-        expect(store.dispatch).not.toHaveBeenCalledWith({
-          type: "EXECUTE_CELL",
-          id: cellId
-        });
+      expect(store.dispatch).toHaveBeenCalledWith({
+        type: "EXECUTE_ALL_CELLS_BELOW"
       });
     });
   });
@@ -248,14 +244,8 @@ describe("menu", () => {
 
       menu.dispatchRunAll(store);
 
-      const first = store
-        .getState()
-        .document.getIn(["notebook", "cellOrder"])
-        .first();
-
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: "EXECUTE_CELL",
-        id: first
+        type: "EXECUTE_ALL_CELLS"
       });
     });
   });
