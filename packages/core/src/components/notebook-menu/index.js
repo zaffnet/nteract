@@ -24,6 +24,8 @@ type Props = {
   executeCell: ?(cellId: ?string) => void,
   executeAllCells: ?() => void,
   executeAllCellsBelow: ?() => void,
+  clearAllOutputs: ?() => void,
+  unhideAllCells: ?() => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
   mergeCellAfter: ?(cellId: ?string) => void,
@@ -46,6 +48,8 @@ class PureNotebookMenu extends React.Component<Props> {
     executeCell: null,
     executeAllCells: null,
     executeAllCellsBelow: null,
+    clearAllOutputs: null,
+    unhideAllCells: null,
     cutCell: null,
     copyCell: null,
     mergeCellAfter: null,
@@ -70,6 +74,8 @@ class PureNotebookMenu extends React.Component<Props> {
       executeCell,
       executeAllCells,
       executeAllCellsBelow,
+      clearAllOutputs,
+      unhideAllCells,
       filename,
       mergeCellAfter,
       notebook,
@@ -142,6 +148,16 @@ class PureNotebookMenu extends React.Component<Props> {
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW:
         if (executeAllCellsBelow) {
           executeAllCellsBelow();
+        }
+        break;
+      case MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS:
+        if (unhideAllCells) {
+          unhideAllCells();
+        }
+        break;
+      case MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS:
+        if (clearAllOutputs) {
+          clearAllOutputs();
         }
         break;
       case MENU_ITEM_ACTIONS.SET_THEME_DARK:
@@ -252,6 +268,17 @@ class PureNotebookMenu extends React.Component<Props> {
                 Markdown
               </MenuItem>
             </SubMenu>
+            <Divider />
+
+            <MenuItem
+              key={createActionKey(MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS)}
+            >
+              Clear All Outputs
+            </MenuItem>
+
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS)}>
+              Unhide All Input and Output
+            </MenuItem>
           </SubMenu>
 
           <SubMenu key={MENUS.RUNTIME} title="Runtime">
@@ -296,6 +323,8 @@ const mapDispatchToProps = dispatch => ({
   executeCell: cellId => dispatch(actions.executeCell(cellId)),
   executeAllCells: () => dispatch(actions.executeAllCells()),
   executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
+  clearAllOutputs: () => dispatch(actions.clearAllOutputs()),
+  unhideAllCells: () => dispatch(actions.unhideAll()),
   cutCell: cellId => dispatch(actions.cutCell(cellId)),
   copyCell: cellId => dispatch(actions.copyCell(cellId)),
   pasteCell: () => dispatch(actions.pasteCell()),
