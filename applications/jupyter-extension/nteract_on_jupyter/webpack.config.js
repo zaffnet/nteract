@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    app: "./index.js",
+    app: "./app/index.js",
     vendor: [
       "react",
       "react-dom",
@@ -35,6 +35,10 @@ module.exports = {
     mainFields: ["nteractDesktop", "module", "main"],
     extensions: [".js", ".jsx"],
     alias: {
+      "@nteract/transform-vdom": "@nteract/transform-vdom/src",
+      "@nteract/transforms": "@nteract/transforms/src",
+      "@nteract/markdown": "@nteract/markdown/src",
+      "@nteract/mathjax": "@nteract/mathjax/src",
       "@nteract/core": "@nteract/core/src",
       "rx-jupyter": "rx-jupyter/src",
       "rx-binder": "rx-binder/src"
