@@ -13,8 +13,14 @@ import * as actionTypes from "../actionTypes";
 import type {
   NewKernelAction,
   SetExecutionStateAction,
-  SetNotificationSystemAction
+  SetNotificationSystemAction,
+  SetGithubTokenAction
 } from "../actionTypes";
+
+function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
+  const { githubToken } = action;
+  return state.set("githubToken", githubToken);
+}
 
 function startSaving(state: AppRecord) {
   return state.set("isSaving", true);
@@ -82,6 +88,8 @@ export default function handleApp(
       return doneSaving(state);
     case actionTypes.SET_NOTIFICATION_SYSTEM:
       return setNotificationsSystem(state, action);
+    case actionTypes.SET_GITHUB_TOKEN:
+      return setGithubToken(state, action);
     default:
       return state;
   }
