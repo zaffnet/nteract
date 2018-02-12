@@ -53,9 +53,6 @@ export function launchKernelSuccessful(
       kernel = null;
   }
 
-  // TODO: implement cleanup kernel within an epic
-  //       our old practice was to do the cleanup in the reducer which is an
-  //       anti-pattern, _especially_ because it's really something that's async
   return state.set("kernel", kernel);
 }
 

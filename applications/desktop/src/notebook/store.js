@@ -1,10 +1,18 @@
 /* @flow */
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, combineReducers } from "redux";
 
 import type { AppState } from "@nteract/types/core/records";
 
 import middlewares from "./middlewares";
-import rootReducer from "./reducers";
+
+import { document, comms, config, app } from "@nteract/core/reducers";
+
+const rootReducer = combineReducers({
+  app,
+  document,
+  comms,
+  config
+});
 
 export default function configureStore(initialState: AppState) {
   return createStore(
