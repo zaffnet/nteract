@@ -9,6 +9,7 @@ export const MENU_ITEM_ACTIONS = {
   EXECUTE_ALL_CELLS: "execute-all-cells",
   EXECUTE_ALL_CELLS_BELOW: "execute-all-cells-below",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",
+  UNHIDE_ALL_CELLS: "unhide-all-cells",
   CREATE_CODE_CELL: "create-code-cell",
   CREATE_MARKDOWN_CELL: "create-markdown-cell",
   SET_CELL_TYPE_CODE: "set-cell-type-code",
