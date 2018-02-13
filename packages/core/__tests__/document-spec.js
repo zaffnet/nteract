@@ -9,7 +9,8 @@ import {
   emptyCodeCell,
   emptyMarkdownCell,
   fromJS,
-  appendCellToNotebook
+  appendCellToNotebook,
+  emptyNotebook
 } from "@nteract/commutable";
 
 import { makeDocumentRecord } from "@nteract/types/core/records";
@@ -501,10 +502,12 @@ describe("clearOutputs", () => {
     expect(outputs).toBe(List.of());
   });
   test("doesn't clear outputs on markdown cells", () => {
-    const originalState = initialDocument.set(
-      "notebook",
-      appendCellToNotebook(dummyCommutable, emptyMarkdownCell)
-    );
+    const notebook = appendCellToNotebook(emptyNotebook, emptyMarkdownCell);
+
+    const originalState = makeDocumentRecord({
+      notebook: notebook,
+      filename: "test.ipynb"
+    });
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
@@ -1011,17 +1014,36 @@ describe("changeFilename", () => {
 
 describe("sendExecuteRequest", () => {
   test("cleans up the outputs, pagers, and status", () => {
-    const state = reducers(initialDocument, {
+    const notebook = appendCellToNotebook(emptyNotebook, emptyCodeCell);
+    const id = notebook.get("cellOrder").first();
+
+    const initialState = makeDocumentRecord({
+      filename: "test.ipynb",
+      notebook,
+      cellPagers: Immutable.Map({
+        // Hokey data, we're just expecting it to be cleared
+        id: Immutable.List(["a", "b"])
+      }),
+      transient: Immutable.Map({
+        cellMap: Immutable.Map({
+          id: Immutable.Map({
+            status: "idle"
+          })
+        })
+      })
+    });
+
+    const state = reducers(initialState, {
       type: actionTypes.SEND_EXECUTE_REQUEST,
-      id: firstCellId,
+      id,
       message: {}
     });
 
-    expect(
-      state.getIn(["transient", "cellMap", firstCellId, "status"])
-    ).toEqual("queued");
+    expect(state.getIn(["transient", "cellMap", id, "status"])).toEqual(
+      "queued"
+    );
 
-    expect(state.getIn(["cellPagers", firstCellId])).toEqual(Immutable.List());
+    expect(state.getIn(["cellPagers", id])).toEqual(Immutable.List());
   });
 });
 
