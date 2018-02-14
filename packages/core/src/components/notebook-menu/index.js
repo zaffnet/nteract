@@ -38,6 +38,8 @@ type Props = {
   setCellTypeMarkdown: ?(cellId: ?string) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
+  restartKernel: ?() => void,
+  restartKernelAndClearOutputs: ?() => void,
   interruptKernel: ?() => void
 };
 
@@ -61,6 +63,7 @@ class PureNotebookMenu extends React.Component<Props> {
     setCellTypeMarkdown: null,
     setTheme: null,
     openAboutModal: null,
+    restartKernel: null,
     interruptKernel: null
   };
   handleClick = ({ key }: { key: string }) => {
@@ -84,6 +87,8 @@ class PureNotebookMenu extends React.Component<Props> {
       setCellTypeCode,
       setCellTypeMarkdown,
       setTheme,
+      restartKernel,
+      restartKernelAndClearOutputs,
       interruptKernel
     } = this.props;
     const [action, ...args] = parseActionKey(key);
@@ -178,6 +183,16 @@ class PureNotebookMenu extends React.Component<Props> {
       case MENU_ITEM_ACTIONS.INTERRUPT_KERNEL:
         if (interruptKernel) {
           interruptKernel();
+        }
+        break;
+      case MENU_ITEM_ACTIONS.RESTART_KERNEL:
+        if (restartKernel) {
+          restartKernel();
+        }
+        break;
+      case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
+        if (restartKernelAndClearOutputs) {
+          restartKernelAndClearOutputs();
         }
         break;
 
@@ -285,6 +300,18 @@ class PureNotebookMenu extends React.Component<Props> {
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.INTERRUPT_KERNEL)}>
               Interrupt
             </MenuItem>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.RESTART_KERNEL)}>
+              Restart
+            </MenuItem>
+            <MenuItem
+              key={createActionKey(MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS)}
+            >
+              Restart and Clear All Cells
+            </MenuItem>
+            {/*
+              <Divider />
+              <SwitchToKernelSpecsMenu />
+            */}
           </SubMenu>
 
           <SubMenu key={MENUS.HELP} title="Help">
@@ -338,6 +365,9 @@ const mapDispatchToProps = dispatch => ({
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),
+  restartKernel: () => dispatch(actions.restartKernel()),
+  restartKernelAndClearOutputs: () =>
+    dispatch(actions.restartKernel({ clearOutputs: true })),
   interruptKernel: () => dispatch(actions.interruptKernel())
 });
 

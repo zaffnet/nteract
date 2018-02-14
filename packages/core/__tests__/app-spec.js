@@ -73,7 +73,7 @@ describe("setNotificationSystem", () => {
     const action = { type: actionTypes.SET_NOTIFICATION_SYSTEM };
 
     const state = app(originalState, action);
-    expect(state.notificationSystem).toBeNull();
+    expect(state.notificationSystem).toEqual(originalState.notificationSystem);
   });
   test("sets the notificationSystem if given", () => {
     const originalState = makeAppRecord({
