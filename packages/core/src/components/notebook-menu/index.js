@@ -40,6 +40,7 @@ type Props = {
   openAboutModal: ?() => void,
   restartKernel: ?() => void,
   restartKernelAndClearOutputs: ?() => void,
+  killKernel: ?() => void,
   interruptKernel: ?() => void
 };
 
@@ -64,6 +65,7 @@ class PureNotebookMenu extends React.Component<Props> {
     setTheme: null,
     openAboutModal: null,
     restartKernel: null,
+    killKernel: null,
     interruptKernel: null
   };
   handleClick = ({ key }: { key: string }) => {
@@ -89,6 +91,7 @@ class PureNotebookMenu extends React.Component<Props> {
       setTheme,
       restartKernel,
       restartKernelAndClearOutputs,
+      killKernel,
       interruptKernel
     } = this.props;
     const [action, ...args] = parseActionKey(key);
@@ -190,6 +193,10 @@ class PureNotebookMenu extends React.Component<Props> {
           restartKernel();
         }
         break;
+      case MENU_ITEM_ACTIONS.KILL_KERNEL:
+        if (killKernel) {
+          killKernel();
+        }
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
           restartKernelAndClearOutputs();
@@ -300,6 +307,10 @@ class PureNotebookMenu extends React.Component<Props> {
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.INTERRUPT_KERNEL)}>
               Interrupt
             </MenuItem>
+            <Divider />
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.KILL_KERNEL)}>
+              Halt
+            </MenuItem>
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.RESTART_KERNEL)}>
               Restart
             </MenuItem>
@@ -368,6 +379,7 @@ const mapDispatchToProps = dispatch => ({
   restartKernel: () => dispatch(actions.restartKernel()),
   restartKernelAndClearOutputs: () =>
     dispatch(actions.restartKernel({ clearOutputs: true })),
+  killKernel: () => dispatch(actions.killKernel()),
   interruptKernel: () => dispatch(actions.interruptKernel())
 });
 
