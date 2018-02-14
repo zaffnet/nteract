@@ -72,7 +72,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
         .interrupt(serverConfig, id)
         .pipe(
           map(() => actions.interruptKernelSuccessful()),
-          catchError(err => actions.interruptKernelFailed(err))
+          catchError(err => of(actions.interruptKernelFailed(err)))
         );
     })
   );
@@ -94,7 +94,7 @@ export const killKernelEpic = (action$: *, store: *) =>
         .kill(serverConfig, id)
         .pipe(
           map(() => actions.killKernelSuccessful()),
-          catchError(err => actions.killKernelFailed(err))
+          catchError(err => of(actions.killKernelFailed(err)))
         );
     })
   );
