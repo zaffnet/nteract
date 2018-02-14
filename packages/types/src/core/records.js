@@ -154,7 +154,7 @@ type AppRecordProps = {
   kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
   host: ?HostRecord,
   githubToken: ?string,
-  notificationSystem: ?Object,
+  notificationSystem: { addNotification: Function },
   isSaving: boolean,
   lastSaved: ?Date,
   configLastSaved: ?Date,
@@ -167,7 +167,20 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   kernel: null,
   host: null,
   githubToken: null,
-  notificationSystem: null,
+  notificationSystem: {
+    addNotification: msg => {
+      let logger = console.log.bind(console);
+      switch (msg.level) {
+        case "error":
+          logger = console.error.bind(console);
+          break;
+        case "warning":
+          logger = console.warn.bind(console);
+          break;
+      }
+      logger(msg);
+    }
+  },
   isSaving: false,
   lastSaved: null,
   configLastSaved: null,

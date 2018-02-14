@@ -8,6 +8,8 @@ export const MENU_ITEM_ACTIONS = {
   DOWNLOAD_NOTEBOOK: "download-notebook",
   EXECUTE_ALL_CELLS: "execute-all-cells",
   EXECUTE_ALL_CELLS_BELOW: "execute-all-cells-below",
+  RESTART_KERNEL: "restart-kernel",
+  RESTART_AND_CLEAR_OUTPUTS: "restart-kernel-and-clear-outputs",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",
   UNHIDE_ALL_CELLS: "unhide-all-cells",
   CREATE_CODE_CELL: "create-code-cell",
