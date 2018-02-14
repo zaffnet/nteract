@@ -63,6 +63,7 @@ import {
   insertCellAt,
   insertCellAfter,
   removeCell,
+  emptyNotebook,
   createImmutableOutput,
   createImmutableMimeBundle
 } from "@nteract/commutable";
@@ -151,8 +152,10 @@ export function reduceOutputs(
 export function cleanCellTransient(state: DocumentRecord, id: string) {
   // Clear out key paths that should no longer be referenced
   return state
+    .setIn(["cellPagers", id], new Immutable.List())
     .updateIn(
       ["transient", "keyPathsForDisplays"],
+      Immutable.Map(),
       (kpfd: Immutable.Map<string, KeyPaths>) =>
         kpfd.map((keyPaths: KeyPaths) =>
           keyPaths.filter((keyPath: KeyPath) => keyPath.get(2) !== id)
@@ -185,17 +188,17 @@ function focusCell(state: DocumentRecord, action: FocusCellAction) {
 
 function clearOutputs(state: DocumentRecord, action: ClearOutputsAction) {
   const { id } = action;
+
   const type = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
+  const cleanedState = cleanCellTransient(state, id);
+
   if (type === "code") {
-    return cleanCellTransient(
-      state
-        .setIn(["notebook", "cellMap", id, "outputs"], new Immutable.List())
-        .setIn(["notebook", "cellMap", id, "execution_count"], null),
-      id
-    );
+    return cleanedState
+      .setIn(["notebook", "cellMap", id, "outputs"], new Immutable.List())
+      .setIn(["notebook", "cellMap", id, "execution_count"], null);
   }
-  return state;
+  return cleanedState;
 }
 
 function clearAllOutputs(
@@ -549,11 +552,9 @@ function sendExecuteRequest(
   const { id } = action;
   // TODO: Record the last execute request for this cell
 
-  // * Clear pager data (help menu)
   // * Clear outputs
   // * Set status to queued, as all we've done is submit the execution request
-  // TODO: Use a setWithMutations or otherwise to do this in an efficient way
-  return clearOutputs(state.setIn(["cellPagers", id], Immutable.List()), {
+  return clearOutputs(state, {
     type: "CLEAR_OUTPUTS",
     id
   }).setIn(["transient", "cellMap", id, "status"], "queued");
@@ -765,7 +766,9 @@ type DocumentAction =
   | ClearAllOutputs
   | SetInCellAction<*>;
 
-const defaultDocument: DocumentRecord = makeDocumentRecord();
+const defaultDocument: DocumentRecord = makeDocumentRecord({
+  notebook: emptyNotebook
+});
 
 function handleDocument(
   state: DocumentRecord = defaultDocument,
