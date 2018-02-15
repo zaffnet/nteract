@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/version-latest-blue.svg)](https://github.com/nteract/nteract)
 [![](https://img.shields.io/badge/version-stable-blue.svg)](https://github.com/nteract/nteract/releases)
 [![codecov.io](https://codecov.io/github/nteract/nteract/coverage.svg?branch=master)](https://codecov.io/github/nteract/nteract?branch=master)
-[![slack in](https://slackin-nteract.now.sh/badge.svg)](https://slackin-nteract.now.sh)
+[![slack in](https://slack.nteract.io)](https://slack.nteract.io)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![CircleCI](https://circleci.com/gh/nteract/nteract/tree/master.svg?style=svg)](https://circleci.com/gh/nteract/nteract/tree/master)
 
 || [**Basics**](#basics) • [**Users**](#users) || [**Contributors**](#contributors) • [**Development**](#development) • [**Maintainers**](#maintainers) || [**Sponsors**](#sponsors) • [**Made possible by**](#made-possible-by) ||
@@ -45,7 +45,7 @@ To learn how to contribute to nteract, head on over to our [contributing guide](
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior to rgbkrk@gmail.com.
 
-Feel free to post issues on GitHub or chat with us in [Slack](https://nteract.slack.com/) ([request an invite](https://slackin-nteract.now.sh/)) if you need help or have
+Feel free to post issues on GitHub or chat with us in [Slack](https://nteract.slack.com/) ([request an invite](https://slack.nteract.io/)) if you need help or have
 questions. If you have trouble creating an account on Slack, either email
 rgbkrk@gmail.com or post an issue on GitHub.
 
