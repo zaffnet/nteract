@@ -45,7 +45,7 @@ To learn how to contribute to nteract, head on over to our [contributing guide](
 This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior to rgbkrk@gmail.com.
 
-Feel free to post issues on GitHub or chat with us in [Slack](https://nteract.slack.com/) ([request an invite](https://slackin-nteract.now.sh/)) if you need help or have
+Feel free to post issues on GitHub or chat with us in [Slack](https://nteract.slack.com/) ([request an invite](https://slack.nteract.io/)) if you need help or have
 questions. If you have trouble creating an account on Slack, either email
 rgbkrk@gmail.com or post an issue on GitHub.
 
