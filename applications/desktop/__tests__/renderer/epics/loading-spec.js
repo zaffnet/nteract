@@ -1,5 +1,7 @@
 import { ActionsObservable } from "redux-observable";
 
+import { monocellNotebook } from "@nteract/commutable";
+
 import { dummyCommutable, dummy } from "@nteract/core/dummy";
 
 import {
@@ -27,26 +29,17 @@ describe("extractNewKernel", () => {
   });
 });
 
-describe("convertRawNotebook", () => {
-  test("converts a raw notebook", () => {
-    const converted = convertRawNotebook("/tmp/test.ipynb", dummy);
-    expect(converted.filename).toBe("/tmp/test.ipynb");
-
-    const notebook = converted.notebook;
-    expect(
-      dummyCommutable.get("metadata").equals(notebook.get("metadata"))
-    ).toBe(true);
-  });
-});
-
 describe("loadingEpic", () => {
   test("errors without a filename", done => {
-    const action$ = ActionsObservable.of({ type: LOAD });
+    const action$ = ActionsObservable.of({
+      type: "CORE/FETCH_CONTENT",
+      payload: {}
+    });
     const responseActions = loadEpic(action$);
     responseActions.subscribe(
       _ => _,
       err => {
-        expect(err.message).toBe("load needs a filename");
+        expect(err.message).toBe("fetch content needs a path");
         done();
       },
       () => {
@@ -54,31 +47,49 @@ describe("loadingEpic", () => {
       }
     );
   });
-  test("errors when file cant be read", done => {
-    const action$ = ActionsObservable.of({ type: LOAD, filename: "file" });
-    const responseActions = loadEpic(action$);
-    responseActions.pipe(toArray()).subscribe(
-      actions => {
-        const types = actions.map(({ type }) => type);
-        expect(types).toEqual(["ERROR"]);
-      },
-      err => done.fail(err),
-      () => done()
-    );
+  test("errors when file cant be read", async function() {
+    const action$ = ActionsObservable.of({
+      type: "CORE/FETCH_CONTENT",
+      payload: { path: "file" }
+    });
+
+    const responseActions = await loadEpic(action$)
+      .pipe(toArray())
+      .toPromise();
+
+    expect(responseActions).toEqual([
+      {
+        payload: {
+          error: expect.anything(),
+          path: "file"
+        },
+        type: "CORE/FETCH_CONTENT_FAILED"
+      }
+    ]);
   });
 });
 
 describe("newNotebookEpic", () => {
-  test("calls new Kernel after creating a new notebook", done => {
-    const action$ = ActionsObservable.of({ type: NEW_NOTEBOOK });
-    const responseActions = newNotebookEpic(action$);
-    responseActions.pipe(toArray()).subscribe(
-      actions => {
-        const types = actions.map(({ type }) => type);
-        expect(types).toEqual([SET_NOTEBOOK, "LAUNCH_KERNEL"]);
-      },
-      () => done.fail(),
-      () => done()
-    );
+  test("calls new Kernel after creating a new notebook", async function() {
+    const action$ = ActionsObservable.of({
+      type: NEW_NOTEBOOK,
+      kernelSpec: {
+        name: "hylang"
+      }
+    });
+    const responseActions = await newNotebookEpic(action$)
+      .pipe(toArray())
+      .toPromise();
+
+    expect(responseActions).toEqual([
+      {
+        filename: null,
+        type: "SET_NOTEBOOK",
+        notebook: monocellNotebook.setIn(
+          ["metadata", "kernel_info", "name"],
+          "hylang"
+        )
+      }
+    ]);
   });
 });
