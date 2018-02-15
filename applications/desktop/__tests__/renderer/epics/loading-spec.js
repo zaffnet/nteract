@@ -62,7 +62,7 @@ describe("loadingEpic", () => {
         const types = actions.map(({ type }) => type);
         expect(types).toEqual(["ERROR"]);
       },
-      () => done.fail(),
+      err => done.fail(err),
       () => done()
     );
   });
