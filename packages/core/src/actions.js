@@ -88,6 +88,8 @@ import type {
   InterruptKernelSuccessful,
   InterruptKernelFailed,
   KillKernelAction,
+  KillKernelFailed,
+  KillKernelSuccessful,
   // TODO: Needs an action creator
   StartSavingAction,
   // TODO: Needs an action creator
@@ -452,6 +454,20 @@ export function killKernel(
   return {
     type: actionTypes.KILL_KERNEL,
     payload
+  };
+}
+
+export function killKernelFailed(payload: Error): KillKernelFailed {
+  return {
+    type: actionTypes.KILL_KERNEL_FAILED,
+    payload,
+    error: true
+  };
+}
+
+export function killKernelSuccessful(): KillKernelSuccessful {
+  return {
+    type: actionTypes.KILL_KERNEL_SUCCESSFUL
   };
 }
 

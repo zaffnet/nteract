@@ -23,6 +23,7 @@ export const MENU_ITEM_ACTIONS = {
   SET_THEME_DARK: "set-theme-dark",
   SET_THEME_LIGHT: "set-theme-light",
   OPEN_ABOUT: "open-about",
+  KILL_KERNEL: "kill-kernel",
   INTERRUPT_KERNEL: "interrupt-kernel"
 };
 

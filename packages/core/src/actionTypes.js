@@ -27,6 +27,12 @@ import type { ExecuteRequest } from "@nteract/messaging";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
+export type ErrorAction<T: string> = {
+  type: T,
+  payload: Error,
+  error: true
+};
+
 export const OPEN_MODAL = "CORE/OPEN_MPODAL";
 export type OpenModal = {
   type: "CORE/OPEN_MPODAL",
@@ -394,11 +400,7 @@ export const INTERRUPT_KERNEL_SUCCESSFUL = "INTERRUPT_KERNEL_SUCCESSFUL";
 export type InterruptKernelSuccessful = { type: "INTERRUPT_KERNEL_SUCCESSFUL" };
 
 export const INTERRUPT_KERNEL_FAILED = "INTERRUPT_KERNEL_FAILED";
-export type InterruptKernelFailed = {
-  type: "INTERRUPT_KERNEL_FAILED",
-  payload: Error,
-  error: true
-};
+export type InterruptKernelFailed = ErrorAction<"INTERRUPT_KERNEL_FAILED">;
 
 export const KILL_KERNEL = "KILL_KERNEL";
 export type KillKernelAction = {
@@ -406,6 +408,14 @@ export type KillKernelAction = {
   payload: {
     restarting: boolean
   }
+};
+
+export const KILL_KERNEL_FAILED = "KILL_KERNEL_FAILED";
+export type KillKernelFailed = ErrorAction<"KILL_KERNEL_FAILED">;
+
+export const KILL_KERNEL_SUCCESSFUL = "KILL_KERNEL_SUCCESSFUL";
+export type KillKernelSuccessful = {
+  type: "KILL_KERNEL_SUCCESSFUL"
 };
 
 export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
@@ -423,11 +433,7 @@ export type RestartKernel = {
 };
 
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
-export type RestartKernelFailed = {
-  type: "RESTART_KERNEL_FAILED",
-  payload: Error,
-  error: true
-};
+export type RestartKernelFailed = ErrorAction<"RESTART_KERNEL_FAILED">;
 
 export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
@@ -442,11 +448,7 @@ export type LaunchKernelAction = {
 };
 
 export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
-export type LaunchKernelFailed = {
-  type: "LAUNCH_KERNEL_FAILED",
-  payload: Error,
-  error: true
-};
+export type LaunchKernelFailed = ErrorAction<"LAUNCH_KERNEL_FAILED">;
 
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
@@ -462,11 +464,9 @@ export type LaunchKernelByNameAction = {
 };
 
 export const DELETE_CONNECTION_FILE_FAILED = "DELETE_CONNECTION_FILE_FAILED";
-export type DeleteConnectionFileFailedAction = {
-  type: "DELETE_CONNECTION_FILE_FAILED",
-  payload: Error,
-  error: true
-};
+export type DeleteConnectionFileFailedAction = ErrorAction<
+  "DELETE_CONNECTION_FILE_FAILED"
+>;
 
 export const DELETE_CONNECTION_FILE_SUCCESSFUL =
   "DELETE_CONNECTION_FILE_SUCCESSFUL";
@@ -481,11 +481,7 @@ export type ShutdownReplySucceeded = {
 };
 
 export const SHUTDOWN_REPLY_TIMED_OUT = "SHUTDOWN_REPLY_TIMED_OUT";
-export type ShutdownReplyTimedOut = {
-  type: "SHUTDOWN_REPLY_TIMED_OUT",
-  payload: Error,
-  error: true
-};
+export type ShutdownReplyTimedOut = ErrorAction<"SHUTDOWN_REPLY_TIMED_OUT">;
 
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
