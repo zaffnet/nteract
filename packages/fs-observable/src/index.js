@@ -24,16 +24,32 @@ export const unlinkObservable = (path: string) =>
     }
   });
 
-export const createNewSymlinkObservable = bindNodeCallback(fs.symlink);
+export const createNewSymlinkObservable: (
+  srcpath: string,
+  dtspath: string,
+  type?: string
+) => rxjs$Observable<void> = bindNodeCallback(fs.symlink);
 
-export const createSymlinkObservable = (target: string, path: string) =>
+export const createSymlinkObservable = (
+  target: string,
+  path: string
+): rxjs$Observable<void> =>
   unlinkObservable(path).pipe(
     mergeMap(() => createNewSymlinkObservable(target, path))
   );
 
-export const readFileObservable = bindNodeCallback(fs.readFile);
+// NOTE: Flow types here match our current usage rather than inferring it,
+// due to bindNodeCallback not being typed
+export const readFileObservable: (
+  pth: string
+) => rxjs$Observable<Buffer> = bindNodeCallback(fs.readFile);
 
-export const writeFileObservable = bindNodeCallback(fs.writeFile);
+// NOTE: Flow types here match our current usage rather than inferring it,
+// due to bindNodeCallback not being typed
+export const writeFileObservable: (
+  filename: string,
+  data: Buffer | string
+) => rxjs$Observable<void> = bindNodeCallback(fs.writeFile);
 
 export const mkdirpObservable = bindNodeCallback(mkdirp);
 
@@ -78,3 +94,7 @@ export const readdirObservable = (
       fs.readdir(path, options, callback);
     }
   });
+
+export const statObservable: (
+  path: string
+) => rxjs$Observable<fs.Stats> = bindNodeCallback(fs.stat);
