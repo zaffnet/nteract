@@ -11,7 +11,15 @@ import { throttle } from "lodash";
 import * as actions from "@nteract/core/actions";
 
 import * as selectors from "@nteract/core/selectors";
-import { defaultPathFallback, cwdKernelFallback } from "./path";
+
+export function cwdKernelFallback() {
+  // HACK: If we see they're at /, we assume that was the OS launching the Application
+  //       from a launcher (launchctl on macOS)
+  if (process.cwd() === "/") {
+    return remote.app.getPath("home");
+  }
+  return process.cwd();
+}
 
 export function dispatchSaveAs(store: *, evt: Event, filename: string) {
   store.dispatch(actions.saveAs(filename));
@@ -19,19 +27,29 @@ export function dispatchSaveAs(store: *, evt: Event, filename: string) {
 
 const dialog = remote.dialog;
 
+type SaveDialogOptions = {
+  title: string,
+  filters: Array<Object>,
+  defaultPath?: string
+};
+
 export function showSaveAsDialog(): Promise<string> {
   return new Promise((resolve, reject) => {
-    const opts = Object.assign(
-      {},
-      {
-        title: "Save Notebook",
-        filters: [{ name: "Notebooks", extensions: ["ipynb"] }]
-      },
-      defaultPathFallback()
-    );
+    const options: SaveDialogOptions = {
+      title: "Save Notebook",
+      filters: [{ name: "Notebooks", extensions: ["ipynb"] }]
+    };
+
+    // In Electron, we want an object we can merge into dialog opts, falling back
+    // to the defaults from the dialog by not defining defaultPath. Electron treats
+    // a literal undefined differently than this not being set.
+    const defaultPath = cwdKernelFallback();
+    if (process.cwd() !== defaultPath) {
+      options.defaultPath = defaultPath;
+    }
 
     // TODO: make the call be asynchronous by passing a callback
-    const filename = dialog.showSaveDialog(opts);
+    const filename = dialog.showSaveDialog(options);
 
     if (filename && path.extname(filename) === "") {
       resolve(`${filename}.ipynb`);

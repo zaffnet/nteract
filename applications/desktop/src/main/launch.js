@@ -12,6 +12,8 @@ export function getPath(url: string) {
   return path.join(__dirname, "..", "..", nUrl.replace("static/", ""));
 }
 
+// Given a URL from any browser window, determine whether to launch
+// a notebook or open an external URL
 export function deferURL(event: Event, url: string) {
   event.preventDefault();
   if (!url.startsWith("file:")) {
