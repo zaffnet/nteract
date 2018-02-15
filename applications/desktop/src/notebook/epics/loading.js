@@ -5,30 +5,37 @@ import * as fs from "fs";
 
 import { of } from "rxjs/observable/of";
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { map, tap, mergeMap, switchMap, catchError } from "rxjs/operators";
+import {
+  map,
+  tap,
+  mergeMap,
+  switchMap,
+  catchError,
+  timeout
+} from "rxjs/operators";
 
 import { ActionsObservable, ofType } from "redux-observable";
 
 import { readFileObservable, statObservable } from "fs-observable";
 
+import * as Immutable from "immutable";
 import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import * as actionTypes from "@nteract/core/actionTypes";
 import * as actions from "@nteract/core/actions";
 
+import type { SetNotebookAction } from "@nteract/core/src/actionTypes";
+
 /**
- * Creates a new kernel based on the language info in the notebook.
- *
- * @param  {String}  filename  The filename of the notebook being loaded
- * @param  {Immutable<Map>}  notebook  The notebook to extract langauge info from
- *
- * @returns  {ActionObservable}  ActionObservable for a LAUNCH_KERNEL_SUCCESSFUL action
+ * Determines the right kernel to launch based on a notebook
  */
 export const extractNewKernel = (
-  filename: string,
+  filename?: string,
   notebook: ImmutableNotebook
 ) => {
+  // TODO: There's some incongruence between desktop and web app here, regarding path vs. filename
+  //       Instead, this function is slightly repeated between here and @nteract/core
   const cwd =
     (filename && path.dirname(path.resolve(filename))) || process.cwd();
   const kernelSpecName = notebook.getIn(
@@ -40,19 +47,6 @@ export const extractNewKernel = (
     kernelSpecName
   };
 };
-
-/**
- * Converts a notebook from JSON to an Immutable.Map.
- *
- * @param  {String}  filename The filename of the notebook to convert
- * @param  {String}  data  The raw JSON of the notebook
- *
- * @returns  {Object}  The filename and notebook in Immutable.Map form
- */
-export const convertRawNotebook = (filename: string, data: string) => ({
-  filename,
-  notebook: fromJS(parseNotebook(data))
-});
 
 function createContentsResponse(
   filePath: string,
@@ -84,7 +78,7 @@ function createContentsResponse(
         type: "notebook",
         mimetype: null,
         format: "json",
-        content,
+        content: content ? JSON.parse(content) : null,
         writable: true,
         name,
         path: filePath,
@@ -117,16 +111,16 @@ function createContentsResponse(
  */
 export const loadEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(actionTypes.LOAD),
+    ofType(actionTypes.FETCH_CONTENT),
     tap(action => {
       // If there isn't a filename, save-as it instead
-      if (!action.filename) {
-        throw new Error("load needs a filename");
+      if (!action.payload.path) {
+        throw new Error("fetch content needs a path");
       }
     }),
     // Switch map since we want the last load request to be the lead
     switchMap(action => {
-      const filepath = action.filename;
+      const filepath = action.payload.path;
 
       return forkJoin(
         readFileObservable(filepath),
@@ -134,21 +128,33 @@ export const loadEpic = (action$: ActionsObservable<*>) =>
         // Project onto the Contents API response
         (content, stat) => createContentsResponse(filepath, stat, content)
       ).pipe(
-        // TODO: Switch this all to a response to fetchContents instead
-        //       and handle accordingly
-        map(({ content, path }) => convertRawNotebook(path, content)),
-        mergeMap(({ filename, notebook }) => {
-          const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
-          return of(
-            actions.setNotebook(filename, notebook),
-            // Find kernel based on kernel name
-            // NOTE: Conda based kernels and remote kernels will need
-            // special handling
-            actions.launchKernelByName(kernelSpecName, cwd)
-          );
-        }),
-        catchError(err => of({ type: "ERROR", payload: err, error: true }))
+        // Timeout after one minute
+        timeout(60 * 1000),
+        map(model =>
+          actions.fetchContentFulfilled({
+            path: model.path,
+            model
+          })
+        ),
+        catchError((err: Error) =>
+          of(actions.fetchContentFailed({ path: filepath, error: err }))
+        )
       );
+    })
+  );
+
+export const launchKernelWhenNotebookSetEpic = (
+  action$: ActionsObservable<*>
+) =>
+  action$.pipe(
+    ofType(actionTypes.SET_NOTEBOOK),
+    map((action: SetNotebookAction) => {
+      const { cwd, kernelSpecName } = extractNewKernel(
+        action.filename,
+        action.notebook
+      );
+
+      return actions.launchKernelByName(kernelSpecName, cwd);
     })
   );
 
@@ -160,11 +166,19 @@ export const loadEpic = (action$: ActionsObservable<*>) =>
 export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
-    switchMap(action =>
-      of(
-        // TODO: Switch filename to an optional argument
-        actions.setNotebook(null, monocellNotebook),
-        actions.launchKernel(action.kernelSpec, action.cwd)
-      )
-    )
+    map(action => {
+      const { name, spec } = action.kernelSpec;
+
+      let notebook = monocellNotebook;
+
+      if (name) {
+        notebook = notebook.setIn(["metadata", "kernel_info", "name"], name);
+      }
+
+      if (spec) {
+        notebook = notebook.setIn(["metadata", "kernelspec"], spec);
+      }
+
+      return actions.setNotebook(null, notebook);
+    })
   );
