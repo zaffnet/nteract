@@ -1,24 +1,19 @@
 /* @flow */
 
-import { ActionsObservable, ofType } from "redux-observable";
-
-import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
-
-import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
-
-import { readFileObservable } from "fs-observable";
-import {
-  launchKernelByName,
-  launchKernel,
-  setNotebook
-} from "@nteract/core/actions";
-
-const path = require("path");
+import * as path from "path";
 
 import { of } from "rxjs/observable/of";
 import { map, tap, mergeMap, switchMap, catchError } from "rxjs/operators";
 
-import { LOAD, SET_NOTEBOOK, NEW_NOTEBOOK } from "@nteract/core/actionTypes";
+import { ActionsObservable, ofType } from "redux-observable";
+
+import { readFileObservable } from "fs-observable";
+
+import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
+import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
+
+import * as actionTypes from "@nteract/core/actionTypes";
+import * as actions from "@nteract/core/actions";
 
 /**
  * Creates a new kernel based on the language info in the notebook.
@@ -64,7 +59,7 @@ export const convertRawNotebook = (filename: string, data: string) => ({
  */
 export const loadEpic = (actions: ActionsObservable<*>) =>
   actions.pipe(
-    ofType(LOAD),
+    ofType(actionTypes.LOAD),
     tap(action => {
       // If there isn't a filename, save-as it instead
       if (!action.filename) {
@@ -78,11 +73,11 @@ export const loadEpic = (actions: ActionsObservable<*>) =>
         mergeMap(({ filename, notebook }) => {
           const { cwd, kernelSpecName } = extractNewKernel(filename, notebook);
           return of(
-            setNotebook(filename, notebook),
+            actions.setNotebook(filename, notebook),
             // Find kernel based on kernel name
             // NOTE: Conda based kernels and remote kernels will need
             // special handling
-            launchKernelByName(kernelSpecName, cwd)
+            actions.launchKernelByName(kernelSpecName, cwd)
           );
         }),
         catchError(err => of({ type: "ERROR", payload: err, error: true }))
@@ -97,14 +92,12 @@ export const loadEpic = (actions: ActionsObservable<*>) =>
  */
 export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
-    ofType(NEW_NOTEBOOK),
+    ofType(actionTypes.NEW_NOTEBOOK),
     switchMap(action =>
       of(
-        {
-          type: SET_NOTEBOOK,
-          notebook: monocellNotebook
-        },
-        launchKernel(action.kernelSpec, action.cwd)
+        // TODO: Switch filename to an optional argument
+        actions.setNotebook(null, monocellNotebook),
+        actions.launchKernel(action.kernelSpec, action.cwd)
       )
     )
   );
