@@ -1,4 +1,8 @@
-import { unlinkObservable, createSymlinkObservable } from "./..";
+import {
+  unlinkObservable,
+  createSymlinkObservable,
+  readdirObservable
+} from "./..";
 
 import { toArray } from "rxjs/operators";
 
@@ -37,5 +41,42 @@ describe("unlinkObservable", () => {
 
     expect(fs.existsSync).toBeCalledWith("path2");
     expect(fs.unlink).toBeCalled();
+  });
+});
+
+describe("readdirObservable", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  it("lists a directory with ✨  Observables ✨", async function() {
+    expect.assertions(2);
+    fs.readdir.mockImplementation((path, callback) => {
+      callback(null, ["fantastic.ipynb", "README.md"]);
+    });
+
+    const listing = await readdirObservable("/some/where").toPromise();
+    expect(listing).toEqual(["fantastic.ipynb", "README.md"]);
+
+    expect(fs.readdir).toHaveBeenCalledWith(
+      "/some/where",
+      expect.any(Function)
+    );
+  });
+  it("handles errors listing directories, passes it back directly", async function(done) {
+    expect.assertions(2);
+    fs.readdir.mockImplementation((path, callback) => {
+      callback(new Error("you can't look there"));
+    });
+
+    try {
+      const listing = await readdirObservable("/invalid").toPromise();
+      done.fail();
+    } catch (error) {
+      expect(error).toEqual(new Error("you can't look there"));
+    }
+
+    expect(fs.readdir).toHaveBeenCalledWith("/invalid", expect.any(Function));
+
+    done();
   });
 });
