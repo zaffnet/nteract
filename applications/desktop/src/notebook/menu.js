@@ -48,18 +48,22 @@ export function showSaveAsDialog(): Promise<string> {
       options.defaultPath = defaultPath;
     }
 
-    // TODO: make the call be asynchronous by passing a callback
-    const filename = dialog.showSaveDialog(options);
-
-    if (filename && path.extname(filename) === "") {
-      resolve(`${filename}.ipynb`);
-      return;
-    }
-    if (filename === undefined) {
-      resolve(filename); // adhere to the electron api
-      return;
-    }
-    resolve(filename);
+    dialog.showSaveDialog(options, filename => {
+      // If there was a filename set and the extension name for it is blank,
+      // append `.ipynb`
+      if (filename && path.extname(filename) === "") {
+        resolve(`${filename}.ipynb`);
+        return;
+      }
+      // Adhere to the electron API by resolving undefined
+      // This happens when the user cancels the dialog
+      if (filename === undefined) {
+        resolve(filename);
+        return;
+      }
+      // Assume it was a good path otherwise
+      resolve(filename);
+    });
   });
 }
 
