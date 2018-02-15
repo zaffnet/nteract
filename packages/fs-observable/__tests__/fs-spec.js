@@ -34,9 +34,3 @@ describe("unlinkObservable", () => {
     expect(fs.unlink).toBeCalled();
   });
 });
-
-describe("createSymlinkObservable", () => {
-  it("returns an observable", () => {
-    expect(createSymlinkObservable("target", "path").subscribe).not.toBeNull();
-  });
-});
