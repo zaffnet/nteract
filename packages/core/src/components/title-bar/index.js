@@ -9,7 +9,8 @@ import * as selectors from "../../selectors";
 
 type TitleBarProps = {
   title: string,
-  theme: "light" | "dark"
+  theme: "light" | "dark",
+  onTitleChange?: (title: string) => void
 };
 
 export const TitleBar = (props: TitleBarProps) => (
@@ -48,7 +49,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  titleChanged: () => {
+  onTitleChange: (title: string) => {
     // TODO: Once the content refs PR is finished use the ref to change
     // the filename, noting that the URL path should also change
     console.error("not implemented yet");
