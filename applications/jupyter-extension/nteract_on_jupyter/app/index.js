@@ -14,7 +14,11 @@ import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
-import { ModalController, NotebookMenu } from "@nteract/core/components";
+import {
+  ModalController,
+  NotebookMenu,
+  TitleBar
+} from "@nteract/core/components";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
@@ -38,6 +42,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
         <Provider store={store}>
           <React.Fragment>
             <Styles>
+              <TitleBar />
               <NotebookMenu />
               <NotebookApp />
               <NotificationSystem
