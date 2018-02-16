@@ -5,6 +5,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import syntax from "../themes/syntax-highlighting";
 
 export { default as NotebookMenu } from "./notebook-menu";
+export { default as TitleBar } from "./title-bar";
 
 export { default as ModalController } from "./modal-controller";
 

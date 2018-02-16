@@ -228,12 +228,17 @@ export const currentHiddenCellIds = createSelector(
   }
 );
 
-export const currentFilename = createSelector(
+export const currentFilename: (state: *) => string = createSelector(
   (state: AppState) => state.document.get("filename"),
   identity
 );
 
 export const modalType = createSelector(
   (state: AppState) => state.modals.modalType,
+  identity
+);
+
+export const currentTheme: (state: *) => string = createSelector(
+  (state: AppState) => state.config.get("theme", "light"),
   identity
 );
