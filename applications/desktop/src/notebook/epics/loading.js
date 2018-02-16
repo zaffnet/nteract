@@ -109,7 +109,7 @@ function createContentsResponse(
  *
  * @param  {ActionObservable}  A LOAD action with the notebook filename
  */
-export const loadEpic = (action$: ActionsObservable<*>) =>
+export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
     tap(action => {

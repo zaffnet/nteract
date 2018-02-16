@@ -628,13 +628,6 @@ export function doneSaving() {
   };
 }
 
-export function load(filename: string) {
-  return {
-    type: actionTypes.LOAD,
-    filename
-  };
-}
-
 // TODO: Use a kernel spec type
 export function newNotebook(kernelSpec: Object, cwd: string) {
   return {

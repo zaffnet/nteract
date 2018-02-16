@@ -92,15 +92,6 @@ describe("commMessageAction", () => {
   });
 });
 
-describe("load", () => {
-  test("loads a notebook", () => {
-    expect(actions.load("mytest.ipynb")).toEqual({
-      type: actionTypes.LOAD,
-      filename: "mytest.ipynb"
-    });
-  });
-});
-
 describe("newNotebook", () => {
   test("creates a new notebook", () => {
     expect(actions.newNotebook({ spec: "hokey" }, "/tmp")).toEqual({

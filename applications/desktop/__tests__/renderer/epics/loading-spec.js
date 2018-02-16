@@ -10,7 +10,7 @@ import {
   setNotebook,
   extractNewKernel,
   convertRawNotebook,
-  loadEpic,
+  fetchContentEpic,
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
 
@@ -35,7 +35,7 @@ describe("loadingEpic", () => {
       type: "CORE/FETCH_CONTENT",
       payload: {}
     });
-    const responseActions = loadEpic(action$);
+    const responseActions = fetchContentEpic(action$);
     responseActions.subscribe(
       _ => _,
       err => {
@@ -53,7 +53,7 @@ describe("loadingEpic", () => {
       payload: { path: "file" }
     });
 
-    const responseActions = await loadEpic(action$)
+    const responseActions = await fetchContentEpic(action$)
       .pipe(toArray())
       .toPromise();
 

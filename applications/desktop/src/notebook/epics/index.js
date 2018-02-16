@@ -3,7 +3,7 @@ import { catchError } from "rxjs/operators";
 import { saveEpic, saveAsEpic } from "./saving";
 
 import {
-  loadEpic,
+  fetchContentEpic,
   newNotebookEpic,
   launchKernelWhenNotebookSetEpic
 } from "./loading";
@@ -54,7 +54,7 @@ const epics = [
   publishEpic,
   saveEpic,
   saveAsEpic,
-  loadEpic,
+  fetchContentEpic,
   newNotebookEpic,
   executeCellEpic,
   updateDisplayEpic,
