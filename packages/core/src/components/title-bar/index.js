@@ -23,7 +23,7 @@ export const TitleBar = (props: TitleBarProps) => (
       header {
         display: flex;
         justify-content: flex-start;
-        background-color: var(--theme-menu-bg, rgb(250, 250, 250));
+        background-color: var(--theme-title-bar-bg, rgb(250, 250, 250));
         padding: 10px 16px;
       }
 
