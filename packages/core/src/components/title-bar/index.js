@@ -1,13 +1,17 @@
 // @flow
 import * as React from "react";
 
+import { connect } from "react-redux";
+
 import { Logo } from "./logos";
+
+import * as selectors from "../../selectors";
 
 type TitleBarProps = {
   title: string
 };
 
-const TitleBar = (props: TitleBarProps) => (
+export const TitleBar = (props: TitleBarProps) => (
   <React.Fragment>
     <header>
       <Logo height={20} />
@@ -32,8 +36,25 @@ const TitleBar = (props: TitleBarProps) => (
   </React.Fragment>
 );
 
+const mapStateToProps = state => ({
+  title: selectors
+    .currentFilename(state)
+    .split("/")
+    .pop()
+    .split(".ipynb")
+    .shift()
+});
+
+const mapDispatchToProps = dispatch => ({
+  titleChanged: () => {
+    // TODO: Once the content refs PR is finished use the ref to change
+    // the filename, noting that the URL path should also change
+    console.error("not implemented yet");
+  }
+});
+
 TitleBar.defaultProps = {
   title: ""
 };
 
-export default TitleBar;
+export default connect(mapStateToProps, mapDispatchToProps)(TitleBar);

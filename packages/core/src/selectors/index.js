@@ -228,7 +228,7 @@ export const currentHiddenCellIds = createSelector(
   }
 );
 
-export const currentFilename = createSelector(
+export const currentFilename: (state: *) => string = createSelector(
   (state: AppState) => state.document.get("filename"),
   identity
 );
