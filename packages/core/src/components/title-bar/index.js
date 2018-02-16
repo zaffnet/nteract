@@ -8,13 +8,14 @@ import { Logo } from "./logos";
 import * as selectors from "../../selectors";
 
 type TitleBarProps = {
-  title: string
+  title: string,
+  theme: "light" | "dark"
 };
 
 export const TitleBar = (props: TitleBarProps) => (
   <React.Fragment>
     <header>
-      <Logo height={20} />
+      <Logo height={20} theme={props.theme} />
       <p>{props.title}</p>
     </header>
     <style jsx>{`
@@ -42,7 +43,8 @@ const mapStateToProps = state => ({
     .split("/")
     .pop()
     .split(".ipynb")
-    .shift()
+    .shift(),
+  theme: selectors.currentTheme(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -54,7 +56,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 TitleBar.defaultProps = {
-  title: ""
+  title: "",
+  theme: "light"
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TitleBar);
