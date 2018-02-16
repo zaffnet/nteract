@@ -48,8 +48,6 @@ const rendererConfig = {
       "redux-observable",
       "immutable",
       "rxjs",
-      "commonmark",
-      "commonmark-react-renderer",
       "date-fns"
     ]
   },

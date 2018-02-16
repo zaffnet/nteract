@@ -124,8 +124,6 @@
     "@nteract/messaging": "^3.0.8",
     "@nteract/transforms-full": "^5.0.0",
     "@nteract/types": "^1.3.0",
-    "commonmark": "^0.28.0",
-    "commonmark-react-renderer": "^4.3.3",
     "cross-env": "^5.1.3",
     "date-fns": "^1.29.0",
     "electron": "1.7.12",
