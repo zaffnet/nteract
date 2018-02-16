@@ -133,9 +133,9 @@ export const fetchContentFulfilled = (payload: {
 
 export const fetchContentFailed = (payload: {
   path: string,
-  error: Object
-}): FetchContentFulfilled => ({
-  type: actionTypes.FETCH_CONTENT_FULFILLED,
+  error: Error
+}): FetchContentFailed => ({
+  type: actionTypes.FETCH_CONTENT_FAILED,
   payload
 });
 
