@@ -2,7 +2,11 @@
 import { catchError } from "rxjs/operators";
 import { saveEpic, saveAsEpic } from "./saving";
 
-import { loadEpic, newNotebookEpic } from "./loading";
+import {
+  fetchContentEpic,
+  newNotebookEpic,
+  launchKernelWhenNotebookSetEpic
+} from "./loading";
 
 import type { ActionsObservable, Epic } from "redux-observable";
 
@@ -21,7 +25,8 @@ import {
   executeCellEpic,
   updateDisplayEpic,
   commListenEpic,
-  executeAllCellsEpic
+  executeAllCellsEpic,
+  setNotebookEpic
 } from "@nteract/core/epics";
 
 import { publishEpic } from "./github-publish";
@@ -40,6 +45,8 @@ export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics = [
+  launchKernelWhenNotebookSetEpic,
+  setNotebookEpic,
   executeAllCellsEpic,
   restartKernelEpic,
   watchSpawn,
@@ -47,7 +54,7 @@ const epics = [
   publishEpic,
   saveEpic,
   saveAsEpic,
-  loadEpic,
+  fetchContentEpic,
   newNotebookEpic,
   executeCellEpic,
   updateDisplayEpic,

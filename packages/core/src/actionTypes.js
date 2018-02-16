@@ -493,8 +493,6 @@ export const SAVE = "SAVE";
 export const SAVE_FAILED = "SAVE_FAILED";
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE_AS = "SAVE_AS";
-// TODO: Relocate this action type from desktop's app.js
-export const LOAD = "LOAD";
 
 // TODO: Properly type this action, which is only produced, never consumed
 export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";

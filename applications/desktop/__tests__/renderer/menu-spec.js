@@ -343,8 +343,10 @@ describe("menu", () => {
 
       menu.dispatchLoad(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith({
-        type: "LOAD",
-        filename: "test-ipynb.ipynb"
+        type: "CORE/FETCH_CONTENT",
+        payload: {
+          path: "test-ipynb.ipynb"
+        }
       });
     });
   });

@@ -133,9 +133,9 @@ export const fetchContentFulfilled = (payload: {
 
 export const fetchContentFailed = (payload: {
   path: string,
-  error: Object
-}): FetchContentFulfilled => ({
-  type: actionTypes.FETCH_CONTENT_FULFILLED,
+  error: Error
+}): FetchContentFailed => ({
+  type: actionTypes.FETCH_CONTENT_FAILED,
   payload
 });
 
@@ -625,13 +625,6 @@ export function saveAs(filename: string) {
 export function doneSaving() {
   return {
     type: actionTypes.DONE_SAVING
-  };
-}
-
-export function load(filename: string) {
-  return {
-    type: actionTypes.LOAD,
-    filename
   };
 }
 
