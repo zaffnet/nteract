@@ -83,7 +83,6 @@ const fetchKernelSpecsEpic = (action$, store) =>
     ofType(actionTypes.FETCH_KERNEL_SPECS),
     mergeMap(({ payload: { serverId } }) => {
       const { config } = store.getState().entities.serversById[serverId].server;
-      // $FlowFixMe: this should be ok, once rebased this should work out
       return kernelspecs.list(config).pipe(
         mergeMap(data => {
           const kernelName = data.response.default;

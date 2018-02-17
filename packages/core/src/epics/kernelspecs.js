@@ -18,7 +18,6 @@ export const fetchKernelspecsEpic = (
     ofType(actionTypes.FETCH_KERNELSPECS),
     mergeMap(({ payload: { kernelspecsRef } }) => {
       const serverConfig = selectors.serverConfig(store.getState());
-      // $FlowFixMe: this should be ok, once rebased this should work out
       return kernelspecs.list(serverConfig).pipe(
         map(data => {
           const defaultKernelName = data.response.default;
