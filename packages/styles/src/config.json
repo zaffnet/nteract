@@ -71,6 +71,9 @@
         },
         "midnight": {
           "": "hsl(0, 0%, 15%)",
+          "dark": "hsl(0, 0%, 10%)",
+          "darker": "hsl(0, 0%, 5%)",
+          "darkest": "hsl(0, 0%, 0%)",
           "light": "hsl(0, 0%, 51%)",
           "lighter": "hsl(0, 0%, 75%)",
           "lightest": "hsl(0, 0%, 85%)"
