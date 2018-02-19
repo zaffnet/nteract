@@ -24,8 +24,7 @@ module.exports = `
   --theme-primary-shadow-hover: 1px  1px 3px rgba(255, 255, 255, 0.12), -1px -1px 3px rgba(255, 255, 255, 0.12);
   --theme-primary-shadow-focus: 3px  3px 9px rgba(255, 255, 255, 0.12), -3px -3px 9px rgba(255, 255, 255, 0.12);
 
-  /* Note: darker than midnight ;) */
-  --theme-title-bar-bg: black;
+  --theme-title-bar-bg: var(--nt-color-midnight-darkest);
 
   --theme-menu-bg: var(--theme-primary-bg);
   --theme-menu-bg-hover: var(--theme-primary-bg-hover);
