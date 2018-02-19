@@ -18,8 +18,6 @@ const aliases = {
   "@nteract/editor": "@nteract/editor/src",
   "@nteract/commutable": "@nteract/commutable/src",
   "@nteract/dropdown-menu": "@nteract/dropdown-menu/src",
-  "@nteract/transforms": "@nteract/transforms/src",
-  "@nteract/transform-vdom": "@nteract/transform-vdom/src",
   "@nteract/transform-model-debug": "@nteract/transform-model-debug/src",
   "rx-jupyter": "rx-jupyter/src",
   "rx-binder": "rx-binder/src",
