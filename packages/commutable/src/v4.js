@@ -17,8 +17,6 @@
  */
 
 import type {
-  JSONType,
-  JSONObject,
   ImmutableNotebook,
   ImmutableCodeCell,
   ImmutableMarkdownCell,

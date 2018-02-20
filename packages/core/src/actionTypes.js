@@ -11,9 +11,8 @@ import type {
   CellID,
   CellType,
   ImmutableJSONType,
-  MimeBundle,
-  JSONObject
-} from "@nteract/types/commutable";
+  MimeBundle
+} from "@nteract/commutable/src";
 
 import type {
   LanguageInfoMetadata,

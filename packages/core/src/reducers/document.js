@@ -77,7 +77,7 @@ import type {
   ImmutableOutput,
   ImmutableOutputs,
   MimeBundle
-} from "@nteract/types/commutable";
+} from "@nteract/commutable";
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
