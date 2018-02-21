@@ -6,7 +6,7 @@ import { kernelspecs } from "rx-jupyter";
 import { of } from "rxjs/observable/of";
 import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
-import type { KernelspecProps, Kernelspecs } from "@nteract/types/core/records";
+import type { FetchKernelspecs } from "../actionTypes";
 
 import * as selectors from "../selectors";
 
@@ -16,7 +16,8 @@ export const fetchKernelspecsEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.FETCH_KERNELSPECS),
-    mergeMap(({ payload: { kernelspecsRef } }) => {
+    mergeMap((action: FetchKernelspecs) => {
+      const { payload: { hostRef, kernelspecsRef } } = action;
       const serverConfig = selectors.serverConfig(store.getState());
       return kernelspecs.list(serverConfig).pipe(
         map(data => {
@@ -31,6 +32,7 @@ export const fetchKernelspecsEpic = (
             };
           });
           return actions.fetchKernelspecsFulfilled({
+            hostRef,
             kernelspecsRef,
             defaultKernelName,
             kernelspecs

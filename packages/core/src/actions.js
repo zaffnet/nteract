@@ -3,10 +3,8 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
-import type {
-  KernelspecsRef,
-  KernelspecProps
-} from "@nteract/types/core/records";
+import type { HostRef, KernelspecsRef } from "./types/state/refs";
+import type { KernelspecProps } from "./types/state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,
@@ -99,12 +97,14 @@ import type {
   SetNotebookCheckpointAction,
   OpenModal,
   CloseModal,
+  AddHost,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
+import type { HostRecordProps } from "./types/state/entities/hosts";
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,
@@ -113,6 +113,14 @@ export const openModal = (payload: { modalType: string }) => ({
 
 export const closeModal = () => ({
   type: actionTypes.CLOSE_MODAL
+});
+
+export const addHost = (payload: {
+  hostRef: HostRef,
+  host: HostRecordProps
+}) => ({
+  type: actionTypes.ADD_HOST,
+  payload
 });
 
 export const fetchContent = (
@@ -139,7 +147,8 @@ export const fetchContentFailed = (payload: {
 });
 
 export const fetchKernelspecs = (payload: {
-  kernelspecsRef: KernelspecsRef
+  kernelspecsRef: KernelspecsRef,
+  hostRef: HostRef
 }): FetchKernelspecs => ({
   type: actionTypes.FETCH_KERNELSPECS,
   payload
@@ -147,6 +156,7 @@ export const fetchKernelspecs = (payload: {
 
 export const fetchKernelspecsFulfilled = (payload: {
   kernelspecsRef: KernelspecsRef,
+  hostRef: HostRef,
   defaultKernelName: string,
   kernelspecs: { [string]: KernelspecProps }
 }): FetchKernelspecsFulfilled => ({

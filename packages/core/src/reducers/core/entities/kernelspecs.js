@@ -14,7 +14,7 @@ const byRef = (state = Immutable.Map(), action: *) => {
       return state.set(
         action.payload.kernelspecsRef,
         makeKernelspecsByRefRecord({
-          // TODO: provide a hostRef when it's available.
+          hostRef: action.payload.hostRef,
           defaultKernelName: action.payload.defaultKernelName,
           byName: Immutable.Map(
             Object.keys(action.payload.kernelspecs).reduce((r, k) => {

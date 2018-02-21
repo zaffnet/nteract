@@ -12,9 +12,12 @@ import type { JupyterConfigData } from "./store";
 
 import { NotebookApp, Styles } from "@nteract/core/providers";
 
-import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
+import { addHost, fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
-import { createKernelspecsRef } from "@nteract/core/src/types/state/refs";
+import {
+  createHostRef,
+  createKernelspecsRef
+} from "@nteract/core/src/types/state/refs";
 
 import {
   ModalController,
@@ -30,9 +33,28 @@ function createApp(jupyterConfigData: JupyterConfigData) {
     notificationSystem: NotificationSystem;
 
     componentDidMount(): void {
+      const hostRef = createHostRef();
       const kernelspecsRef = createKernelspecsRef();
+      store.dispatch(
+        addHost({
+          hostRef,
+
+          // TODO: are we missing some host info here?
+          host: {
+            // id: string,
+            type: "jupyter",
+            // kernelIds: Array<Id>,
+            token: jupyterConfigData.token,
+            serverUrl: location.origin + jupyterConfigData.baseUrl
+            // crossDomain: boolean,
+            // rootContentRef: Ref,
+          }
+        })
+      );
+
+      // TODO: we should likely be passing in a hostRef to fetchContent too.
       store.dispatch(fetchContent({ path: jupyterConfigData.contentsPath }));
-      store.dispatch(fetchKernelspecs({ kernelspecsRef }));
+      store.dispatch(fetchKernelspecs({ hostRef, kernelspecsRef }));
     }
 
     render(): React$Element<any> {

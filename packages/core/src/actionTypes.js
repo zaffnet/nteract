@@ -1,10 +1,9 @@
 /* @flow */
 
-import type {
-  KernelspecsRef,
-  KernelspecProps
-} from "@nteract/types/core/records";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
+import type { HostRef, KernelspecsRef } from "./types/state/refs";
+import type { HostRecord } from "./types/state/entities/hosts";
+import type { KernelspecProps } from "./types/state/entities/kernelspecs";
 
 import type {
   ImmutableNotebook,
@@ -45,6 +44,12 @@ export type CloseModal = {
   type: "CORE/CLOSE_MODAL"
 };
 
+export const ADD_HOST = "CORE/ADD_HOST";
+export type AddHost = {
+  type: "CORE/ADD_HOST",
+  payload: { hostRef: HostRef, host: HostRecord }
+};
+
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
@@ -76,7 +81,8 @@ export const FETCH_KERNELSPECS = "CORE/FETCH_KERNELSPECS";
 export type FetchKernelspecs = {
   type: "CORE/FETCH_KERNELSPECS",
   payload: {
-    kernelspecsRef: KernelspecsRef
+    kernelspecsRef: KernelspecsRef,
+    hostRef: HostRef
   }
 };
 
@@ -85,6 +91,7 @@ export type FetchKernelspecsFulfilled = {
   type: "CORE/FETCH_KERNELSPECS_FULFILLED",
   payload: {
     kernelspecsRef: KernelspecsRef,
+    hostRef: HostRef,
     defaultKernelName: string,
     kernelspecs: { [string]: KernelspecProps }
   }
