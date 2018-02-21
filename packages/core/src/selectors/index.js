@@ -1,10 +1,15 @@
 // @flow
-import type { AppState } from "@nteract/types/core/records";
+
+// import type { AppState } from "../records";
+// TODO: Super wrong
+type AppState = Object;
+
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
 import { createSelector } from "reselect";
 
 const identity = thing => thing;
+
 const serverUrl = (state: AppState) => state.app.host.serverUrl;
 const crossDomain = (state: AppState) => state.app.host.crossDomain;
 const token = (state: AppState) => state.app.host.token;

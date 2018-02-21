@@ -17,12 +17,12 @@ import {
 
 import {
   makeAppRecord,
-  AppRecord,
   makeDocumentRecord,
-  DocumentRecord,
-  CommsRecord,
+  makeCommsRecord,
   makeJupyterHostRecord
-} from "@nteract/types/core/records";
+} from "@nteract/core/records";
+
+import type { AppState } from "@nteract/core/src/records";
 
 import { allEpics as epics } from "@nteract/core/epics";
 
@@ -32,15 +32,6 @@ export type JupyterConfigData = {
   contentsPath: string,
   baseUrl: string,
   appVersion: string
-};
-
-export type AppState = {
-  app: AppRecord,
-  document: DocumentRecord,
-  comms: CommsRecord,
-  config: ImmutableMap<string, any>,
-  contents: any,
-  modals: any
 };
 
 const rootReducer = combineReducers({
@@ -67,7 +58,7 @@ export default function configureStore({
       version: `nteract-on-jupyter@${config.appVersion}`
     }),
     document: makeDocumentRecord(),
-    comms: CommsRecord(),
+    comms: makeCommsRecord(),
     config: ImmutableMap({
       theme: "light"
     })

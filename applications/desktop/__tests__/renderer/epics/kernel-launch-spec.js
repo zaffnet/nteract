@@ -68,6 +68,8 @@ describe("launchKernelEpic", () => {
       {
         type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
         kernel: {
+          ref: expect.any(String),
+          lastActivity: null,
           type: "zeromq",
           cwd: "~",
           channels: expect.anything(),

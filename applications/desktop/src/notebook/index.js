@@ -26,8 +26,8 @@ import {
   makeAppRecord,
   makeDesktopHostRecord,
   makeDocumentRecord,
-  CommsRecord
-} from "@nteract/types/core/records";
+  makeCommsRecord
+} from "@nteract/core/records";
 
 import "./main.css";
 
@@ -37,7 +37,7 @@ const store = configureStore({
     version: remote.app.getVersion()
   }),
   document: makeDocumentRecord(),
-  comms: CommsRecord(),
+  comms: makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
   })

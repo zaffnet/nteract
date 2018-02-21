@@ -7,7 +7,7 @@ import {
   makeJupyterHostRecord,
   makeRemoteKernelRecord,
   makeDocumentRecord
-} from "@nteract/types/core/records";
+} from "../../records";
 
 import { emptyNotebook } from "@nteract/commutable";
 import {

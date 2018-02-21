@@ -14,7 +14,8 @@ import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 
-import type { AppState, RemoteKernelProps } from "@nteract/types/core/records";
+import type { RemoteKernelProps } from "../records/hosts";
+import type { AppState } from "../records";
 
 import { kernels, shutdown } from "rx-jupyter";
 import { v4 as uuid } from "uuid";

@@ -6,15 +6,13 @@ import { Map as ImmutableMap } from "immutable";
 
 import { app, document, comms, config } from "@nteract/core/reducers";
 
-import type { AppState } from "@nteract/types/core/records";
+import type { AppState } from "@nteract/core/src/records";
 
 import {
   makeAppRecord,
   makeDocumentRecord,
-  AppRecord,
-  DocumentRecord,
-  CommsRecord
-} from "@nteract/types/core/records";
+  makeCommsRecord
+} from "@nteract/core/records";
 
 import {
   executeCellEpic,
@@ -45,7 +43,7 @@ const rootReducer = combineReducers({
 const defaultState = {
   app: makeAppRecord(),
   document: makeDocumentRecord(),
-  comms: CommsRecord(),
+  comms: makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
   })

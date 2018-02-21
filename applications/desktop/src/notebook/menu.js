@@ -269,6 +269,7 @@ export function exportPDF(
   notificationSystem: *
 ): void {
   const state = store.getState();
+  // $FlowFixMe: This should be using a selector first and foremost
   const notebook = state.document.get("notebook");
   const cellMap = notebook.get("cellMap");
   const cellOrder = notebook.get("cellOrder");
@@ -328,6 +329,7 @@ export function triggerSaveAsPDF(store: *) {
 
 export function storeToPDF(store: *) {
   const state = store.getState();
+  // $FlowFixMe: This should be using a selector first and foremost
   let filename = path.basename(state.document.get("filename"), ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
   if (filename === "") {
@@ -349,6 +351,7 @@ export function storeToPDF(store: *) {
     });
   } else {
     filename = path.join(
+      // $FlowFixMe: This should be using a selector first and foremost
       path.dirname(state.document.get("filename")),
       filename
     );
