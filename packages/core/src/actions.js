@@ -3,8 +3,8 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
-import type { HostRef, KernelspecsRef } from "./types/state/refs";
-import type { KernelspecProps } from "./types/state/entities/kernelspecs";
+import type { HostRef, KernelspecsRef } from "./state/refs";
+import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,
@@ -104,7 +104,7 @@ import type {
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
-import type { HostRecordProps } from "./types/state/entities/hosts";
+import type { HostRecordProps } from "./state/entities/hosts";
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,

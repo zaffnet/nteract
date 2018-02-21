@@ -2,7 +2,7 @@
 import { combineReducers } from "redux-immutable";
 import { communication } from "./communication";
 import { entities } from "./entities";
-import { makeStateRecord } from "../../types/state";
+import { makeStateRecord } from "../../state";
 
 const core = combineReducers(
   {

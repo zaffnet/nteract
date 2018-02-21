@@ -3,7 +3,7 @@ import {
   makeKernelspec,
   makeKernelspecsByRefRecord,
   makeKernelspecsRecord
-} from "../../../types/state/entities/kernelspecs";
+} from "../../../state/entities/kernelspecs";
 import * as actionTypes from "../../../actionTypes";
 import { combineReducers } from "redux-immutable";
 import * as Immutable from "immutable";
