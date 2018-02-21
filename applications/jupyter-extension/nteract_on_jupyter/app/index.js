@@ -14,6 +14,8 @@ import { NotebookApp, Styles } from "@nteract/core/providers";
 
 import { fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
+import { createKernelspecsRef } from "@nteract/core/src/types/state/refs";
+
 import {
   ModalController,
   NotebookMenu,
@@ -27,14 +29,10 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
-    // TODO: the kernelspecsRef is hard-coded to be 'single-server' in this
-    // application because we only anticipate _one_ set of possible kernelspecs.
-    // However, since `/core` assumes that a generic notebook application may
-    // be able to connect to multiple servers and thus have many kernelspecs,
-    // it needs a ref to complete the action.
     componentDidMount(): void {
+      const kernelspecsRef = createKernelspecsRef();
       store.dispatch(fetchContent({ path: jupyterConfigData.contentsPath }));
-      store.dispatch(fetchKernelspecs({ kernelspecsRef: "single-server" }));
+      store.dispatch(fetchKernelspecs({ kernelspecsRef }));
     }
 
     render(): React$Element<any> {

@@ -4,17 +4,6 @@ import comms from "./comms";
 import config from "./config";
 import app from "./app";
 import modals from "./modals";
-import {
-  communicationKernelspecsByRef,
-  entitiesKernelspecsByRef
-} from "./kernelspecs";
+import core from "./core";
 
-export {
-  document,
-  comms,
-  config,
-  app,
-  modals,
-  communicationKernelspecsByRef,
-  entitiesKernelspecsByRef
-};
+export { document, comms, config, app, modals, core };
