@@ -2,7 +2,7 @@
 import {
   makeKernelspecsByRefCommunicationRecord,
   makeKernelspecsCommunicationRecord
-} from "../../../types/state/communication/kernelspecs";
+} from "../../../state/communication/kernelspecs";
 import * as actionTypes from "../../../actionTypes";
 import { combineReducers } from "redux-immutable";
 import * as Immutable from "immutable";

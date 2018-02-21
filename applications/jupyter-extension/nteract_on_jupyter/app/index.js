@@ -17,7 +17,7 @@ import { addHost, fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 import {
   createHostRef,
   createKernelspecsRef
-} from "@nteract/core/src/types/state/refs";
+} from "@nteract/core/src/state/refs";
 
 import {
   ModalController,

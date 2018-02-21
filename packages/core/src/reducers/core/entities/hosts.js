@@ -7,7 +7,7 @@ import {
   makeHostsRecord,
   makeJupyterHostRecord,
   makeLocalHostRecord
-} from "../../../types/state/entities/hosts";
+} from "../../../state/entities/hosts";
 
 const byRef = (state = Immutable.Map(), action) => {
   switch (action.type) {
