@@ -3,6 +3,7 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
+import type { HostRef } from "./types/state/refs";
 import type {
   KernelspecsRef,
   KernelspecProps
@@ -99,12 +100,14 @@ import type {
   SetNotebookCheckpointAction,
   OpenModal,
   CloseModal,
+  AddHost,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
+import type { HostRecordProps } from "./types/state/entities/hosts";
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,
@@ -113,6 +116,14 @@ export const openModal = (payload: { modalType: string }) => ({
 
 export const closeModal = () => ({
   type: actionTypes.CLOSE_MODAL
+});
+
+export const addHost = (payload: {
+  hostRef: HostRef,
+  host: HostRecordProps
+}) => ({
+  type: actionTypes.ADD_HOST,
+  payload
 });
 
 export const fetchContent = (

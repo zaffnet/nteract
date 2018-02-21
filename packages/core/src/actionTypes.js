@@ -5,6 +5,8 @@ import type {
   KernelspecProps
 } from "@nteract/types/core/records";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
+import type { HostRef } from "./types/state/refs";
+import type { HostRecord } from "./types/state/entities/hosts";
 
 import type {
   ImmutableNotebook,
@@ -43,6 +45,12 @@ export type OpenModal = {
 export const CLOSE_MODAL = "CORE/CLOSE_MODAL";
 export type CloseModal = {
   type: "CORE/CLOSE_MODAL"
+};
+
+export const ADD_HOST = "CORE/ADD_HOST";
+export type AddHost = {
+  type: "CORE/ADD_HOST",
+  payload: { hostRef: HostRef, host: HostRecord }
 };
 
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
