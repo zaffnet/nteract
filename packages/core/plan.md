@@ -181,7 +181,8 @@ type core = {
             }
           },
         }
-      }
+      },
+      refs: List<KernelspecsRef>
     },
 
     hosts: {
