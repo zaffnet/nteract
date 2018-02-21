@@ -242,3 +242,18 @@ export const currentTheme: (state: *) => string = createSelector(
   (state: AppState) => state.config.get("theme", "light"),
   identity
 );
+
+// TODO: These selectors all have "Core" suffixes that will be removed when we
+// fully switch over to using the new state tree under state.core.
+
+export const communicationKernelspecsByRefCore = createSelector(
+  (state: AppState, { kernelspecsRef }) =>
+    state.core.getIn(["communication", "kernelspecs", "byRef", kernelspecsRef]),
+  identity
+);
+
+export const kernelspecsByRefCore = createSelector(
+  (state: AppState, { kernelspecsRef }) =>
+    state.core.getIn(["entities", "kernelspecs", "byRef", kernelspecsRef]),
+  identity
+);
