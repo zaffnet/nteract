@@ -6,7 +6,6 @@ import { kernelspecs } from "rx-jupyter";
 import { of } from "rxjs/observable/of";
 import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
-import type { KernelspecProps, Kernelspecs } from "@nteract/types/core/records";
 import type { FetchKernelspecs } from "../actionTypes";
 
 import * as selectors from "../selectors";

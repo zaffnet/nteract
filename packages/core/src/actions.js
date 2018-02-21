@@ -3,11 +3,8 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
-import type { HostRef } from "./types/state/refs";
-import type {
-  KernelspecsRef,
-  KernelspecProps
-} from "@nteract/types/core/records";
+import type { HostRef, KernelspecsRef } from "./types/state/refs";
+import type { KernelspecProps } from "./types/state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,

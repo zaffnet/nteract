@@ -1,12 +1,9 @@
 /* @flow */
 
-import type {
-  KernelspecsRef,
-  KernelspecProps
-} from "@nteract/types/core/records";
 import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
-import type { HostRef } from "./types/state/refs";
+import type { HostRef, KernelspecsRef } from "./types/state/refs";
 import type { HostRecord } from "./types/state/entities/hosts";
+import type { KernelspecProps } from "./types/state/entities/kernelspecs";
 
 import type {
   ImmutableNotebook,
