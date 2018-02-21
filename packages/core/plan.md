@@ -56,11 +56,10 @@ opaque type Ref = string;
 
 type core = {
 
-  // On desktop we'll have the one built-in local host that connects to
-  // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
-  // different hosts.
-  selectedHostRef: Ref,
-  hostRefs: Array<Ref>,
+  // The core state is meant to be document-centric. So, we basically use the
+  // currently selected document to set the context for the rest of the app.
+  // This model may need to change when twe have things like split panes and
+  // support objects in core that are not really considered *documents*.
   selectedContentRef: Ref
 
   // The piece of state that allows the ui to show loading/error indicators.
@@ -68,9 +67,12 @@ type core = {
   // state serve very different purposes.
   communication: {
     preferences: {
-      isSaving: boolean,
+      loading: boolean,
+      saving: boolean,
       error: ?Object
     },
+    
+    // TODO: what's this doing again?
     hostSpec: {
       loading: boolean,
       error: ?Object
@@ -103,6 +105,7 @@ type core = {
       byRef: {
         [ref: Ref]: {
           loading: boolean,
+          saving: boolean,
           error: ?Object
         }
       }
@@ -115,7 +118,8 @@ type core = {
   //   * Kernel output
   entities: {    
     preferences: {
-      lastSaved: Date
+      lastSaved: Date,
+      theme: "light" | "dark"
     },
     outputs: {
       byRef: {
@@ -164,30 +168,38 @@ type core = {
     kernelspecs: {
       byRef: {
         [ref: Ref]: {
-          name: string,
-          resources: Object,
+          defaultKernelName: string,
           hostRef: Ref,
-          spec: {
-            displayName: string,
-            language: string,
-            argv: Array<string>,
-            env: Object
-          }
+          byName: {
+            [name: string]: {
+              argv: Array<string>,
+              displayName: string,
+              env: Object,
+              language: string,
+              interruptMode: string,
+              resources: Object
+            }
+          },
         }
       }
     },
 
     hosts: {
+      // On desktop we'll have the one built-in local host that connects to
+      // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
+      // different hosts.
       byRef: {
         [ref: Ref]: {
           id: string,
           type: ("local" | "jupyter"),
-          kernelIds: Array<Id>,
-          kernelspecsRef: Ref,
-          defaultKernelName: string,
+          kernelIds: Array<Id>, // the list of *active* kernels for a host.
           token: string,
           serverUrl: string,
           crossDomain: boolean,
+          
+          // TODO: I think we're attempting to split apart host and document.
+          //   1. what was the purpose of this?
+          //   2. can it be provided in some other way?
           rootContentRef: Ref,
           messages: Array<string> // binder only
         }
@@ -201,6 +213,7 @@ type core = {
       byRef: {
         [ref: Ref]: {
           type: ("local" | "jupyter"), // same as server, literal, unchanging
+          hostRef: HostRef,
           name: string,
           lastActivity: Date,
           channels: rxjs$Subject,
@@ -231,6 +244,11 @@ type core = {
           // notebook, we basically flesh out all the references to cells in
           // here.
           model: ?Object, // null | DirectoryModel | NotebookModel | FileModel
+
+          // The kernelRef is nullable here because we don't necessarily need
+          // the kernel to be running to display the document. This allows us 
+          // to render a document and start up a kernel in parallel.
+          kernelRef: ?KernelRef 
         }
       }
     },
