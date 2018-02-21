@@ -23,16 +23,14 @@ const rootReducer = combineReducers({
   config
 });
 
-import type { AppState } from "@nteract/types/core/records";
-import { makeAppRecord } from "@nteract/types/core/records";
+import type { AppState } from "../records";
+import { makeAppRecord, makeDocumentRecord, makeCommsRecord } from "../records";
 
 /**
 function configureStore(initialState: AppState) {
   return createStore(rootReducer, initialState, applyMiddleware(...middlewares));
 }
 **/
-
-import { makeDocumentRecord, CommsRecord } from "@nteract/types/core/records";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
@@ -88,6 +86,7 @@ function buildDummyNotebook(config) {
 export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
+  // $FlowFixMe: dummystore should use a real record
   return createStore(rootReducer, {
     document: makeDocumentRecord({
       notebook: dummyNotebook,
@@ -105,6 +104,7 @@ export function dummyStore(config: *) {
         addNotification: () => {} // most of the time you'll want to mock this
       },
       githubToken: "TOKEN",
+      // $FlowFixMe -- use a real kernel record here
       kernel: {
         channels: "channelInfo",
         status: "not connected"
@@ -113,6 +113,6 @@ export function dummyStore(config: *) {
     config: Immutable.Map({
       theme: "light"
     }),
-    comms: CommsRecord({})
+    comms: makeCommsRecord()
   });
 }

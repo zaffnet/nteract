@@ -39,7 +39,9 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/actionTypes";
 
-import type { KernelInfo, LocalKernelProps } from "@nteract/types/core/records";
+import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/records";
+
+import { createKernelRef } from "@nteract/core/records";
 
 import * as selectors from "@nteract/core/selectors";
 
@@ -106,12 +108,14 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 
           const kernel: LocalKernelProps = {
             // TODO: Include the ref when we need it here
+            ref: createKernelRef(),
             type: "zeromq",
             channels,
             connectionFile,
             spawn,
             cwd,
             kernelSpecName: kernelSpec.name,
+            lastActivity: null,
             status: "launched" // TODO: Determine our taxonomy
           };
 

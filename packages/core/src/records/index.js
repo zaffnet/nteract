@@ -8,7 +8,15 @@ import type {
   RemoteKernelProps
 } from "./hosts";
 
-const version = require("../../package.json").version;
+export type {
+  DesktopHostRecordProps,
+  JupyterHostRecordProps,
+  LocalKernelProps,
+  RemoteKernelProps
+};
+
+// Pull version from core's package.json
+const version: string = require("../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 
@@ -142,7 +150,7 @@ export type NotebookMetadata = {
   // orig_nbformat?: number,
 };
 
-export type Notebook = {
+export type NotebookRecordProps = {
   cellMap: Map<string, Cell>,
   cellOrder: List<string>,
   nbformat: 4,
@@ -151,7 +159,7 @@ export type Notebook = {
 };
 
 type AppRecordProps = {
-  kernel: ?RecordOf<RemoteKernelProps | LocalKernelProps>,
+  kernel: ?RecordOf<RemoteKernelProps> | ?RecordOf<LocalKernelProps>,
   host: ?HostRecord,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },
@@ -168,7 +176,7 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
   host: null,
   githubToken: null,
   notificationSystem: {
-    addNotification: msg => {
+    addNotification: (msg: { level?: "error" | "warning" }) => {
       let logger = console.log.bind(console);
       switch (msg.level) {
         case "error":
@@ -192,13 +200,16 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
 export type AppRecord = RecordOf<AppRecordProps>;
 
 type DocumentRecordProps = {
-  notebook: ?Notebook,
+  // TODO: This _needs_ to become a Record
+  notebook: ?Map<string, any>,
+  savedNotebook: ?Map<string, any>,
+  filename: ?string,
   transient: Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)
   // right now it's keypaths and then it looks like it's able to handle any per
   // cell transient data that will be deleted when the kernel is restarted
   cellPagers: any,
-  stickyCells: ?Set<any>,
+  stickyCells: Set<any>,
   editorFocused: any,
   cellFocused: any,
   copied: Map<any, any>
@@ -226,7 +237,7 @@ type CommsRecordProps = {
   models: Map<any, any>
 };
 
-export const CommsRecord = Record({
+export const makeCommsRecord = Record({
   targets: new Map(),
   info: new Map(),
   models: new Map()

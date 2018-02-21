@@ -4,9 +4,10 @@ import {
   makeLocalKernelRecord,
   makeRemoteKernelRecord,
   makeDesktopHostRecord,
-  makeJupyterHostRecord,
-  AppRecord
-} from "@nteract/types/core/records";
+  makeJupyterHostRecord
+} from "../records";
+
+import type { AppRecord } from "../records";
 
 import * as actionTypes from "../actionTypes";
 
@@ -14,7 +15,9 @@ import type {
   NewKernelAction,
   SetExecutionStateAction,
   SetNotificationSystemAction,
-  SetGithubTokenAction
+  SetGithubTokenAction,
+  DoneSavingAction,
+  StartSavingAction
 } from "../actionTypes";
 
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
@@ -60,7 +63,7 @@ export function setExecutionState(
   state: AppRecord,
   action: SetExecutionStateAction
 ) {
-  return state.setIn(["kernel", "status"], action.kernelStatus);
+  return state.mergeIn(["kernel"], { status: action.kernelStatus });
 }
 
 function setNotificationsSystem(
@@ -72,7 +75,13 @@ function setNotificationsSystem(
 
 export default function handleApp(
   state: AppRecord = makeAppRecord(),
-  action: *
+  action:
+    | SetNotificationSystemAction
+    | SetExecutionStateAction
+    | NewKernelAction
+    | SetGithubTokenAction
+    | StartSavingAction
+    | DoneSavingAction
 ) {
   switch (action.type) {
     case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:

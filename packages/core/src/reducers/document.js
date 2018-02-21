@@ -53,9 +53,9 @@ import type {
   LanguageInfoMetadata,
   KernelInfo,
   DocumentRecord
-} from "@nteract/types/core/records";
+} from "../records";
 
-import { makeDocumentRecord } from "@nteract/types/core/records";
+import { makeDocumentRecord } from "../records";
 
 import {
   emptyCodeCell,
@@ -70,6 +70,7 @@ import {
 
 import type {
   ImmutableCell,
+  ImmutableCellMap,
   ImmutableNotebook,
   CellID,
   CellType,
@@ -81,20 +82,8 @@ import type {
 
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 
-// TODO: Delete this, it's not used anywhere
-type Pager = {
-  source: "page",
-  data: MimeBundle,
-  start: number
-};
-
-// TODO: Import these from @nteract/types
-// NOTE: number is only allowed when indexing into a List
 type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
-
-// TODO: Import these from @nteract/types
-type ImmutableCellMap = Immutable.Map<string, ImmutableCell>;
 
 /**
  * An output can be a stream of data that does not arrive at a single time. This
@@ -298,6 +287,7 @@ function appendOutput(state: DocumentRecord, action: AppendOutputAction) {
   return keyPaths
     .reduce(
       (currState: DocumentRecord, kp: KeyPath) =>
+        // $FlowFixMe: gnarly one we need to FIXME
         currState.setIn(kp, immutableOutput),
       state
     )
@@ -322,6 +312,7 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
 
   return keyPaths.reduce(
     (currState: DocumentRecord, kp: KeyPath) =>
+      // $FlowFixMe: gnarly one we need to FIXME
       currState.updateIn(kp, output => {
         return output.merge(updatedContent);
       }),
@@ -421,7 +412,8 @@ function toggleStickyCell(
   action: ToggleStickyCellAction
 ) {
   const { id } = action;
-  const stickyCells: Immutable.Set<CellID> = state.get("stickyCells");
+  const stickyCells = state.get("stickyCells", Immutable.Set());
+
   if (stickyCells.has(id)) {
     return state.set("stickyCells", stickyCells.delete(id));
   }

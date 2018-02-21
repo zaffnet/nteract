@@ -4,7 +4,7 @@ import { remote } from "electron";
 import { from } from "rxjs/observable/from";
 
 import * as nativeWindow from "../../src/notebook/native-window";
-import { makeAppRecord, makeDocumentRecord } from "@nteract/types/core/records";
+import { makeAppRecord, makeDocumentRecord } from "@nteract/core/records";
 
 const path = require("path");
 

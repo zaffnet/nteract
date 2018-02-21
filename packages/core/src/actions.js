@@ -11,7 +11,7 @@ import type {
   KernelInfo,
   LocalKernelProps,
   RemoteKernelProps
-} from "@nteract/types/core/records";
+} from "../records";
 
 import type {
   ImmutableCell,

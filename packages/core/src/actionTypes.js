@@ -16,10 +16,10 @@ import type {
 import type {
   LanguageInfoMetadata,
   KernelInfo,
-  DocumentRecord,
-  LocalKernelProps,
-  RemoteKernelProps
-} from "@nteract/types/core/records";
+  DocumentRecord
+} from "./records";
+
+import type { LocalKernelProps, RemoteKernelProps } from "./records/hosts";
 
 import type { ExecuteRequest } from "@nteract/messaging";
 

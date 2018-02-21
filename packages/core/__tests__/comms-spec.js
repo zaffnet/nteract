@@ -1,9 +1,9 @@
 import commsReducer from "../src/reducers/comms";
-import { CommsRecord } from "@nteract/types/core/records";
+import { makeCommsRecord } from "@nteract/core/records";
 
 describe("registerCommTarget", () => {
   test("sets comm targets", () => {
-    const state = new CommsRecord();
+    const state = new makeCommsRecord();
 
     const action = {
       type: "REGISTER_COMM_TARGET",
@@ -18,7 +18,7 @@ describe("registerCommTarget", () => {
 
 describe("comm reducers", () => {
   test("process comm_open and comm_message actions", () => {
-    const state = new CommsRecord();
+    const state = new makeCommsRecord();
     const action = {
       type: "COMM_OPEN",
       target_module: "reducers",
@@ -48,7 +48,7 @@ describe("comm reducers", () => {
     });
   });
   test("does a straight replacement for unknown comm messages", () => {
-    const state = new CommsRecord();
+    const state = new makeCommsRecord();
 
     // Note that we're not starting with a COMM_OPEN in order to process
     // a COMM_MESSAGE that hasn't been "opened"

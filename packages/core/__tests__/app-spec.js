@@ -1,10 +1,6 @@
 import * as actionTypes from "@nteract/core/actionTypes";
 import { app } from "@nteract/core/reducers";
-import {
-  AppRecord,
-  makeAppRecord,
-  makeLocalKernelRecord
-} from "@nteract/types/core/records";
+import { makeAppRecord, makeLocalKernelRecord } from "@nteract/core/records";
 
 describe("startSaving", () => {
   test("should set isSaving to false", () => {
