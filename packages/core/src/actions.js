@@ -150,7 +150,8 @@ export const fetchContentFailed = (payload: {
 });
 
 export const fetchKernelspecs = (payload: {
-  kernelspecsRef: KernelspecsRef
+  kernelspecsRef: KernelspecsRef,
+  hostRef: HostRef
 }): FetchKernelspecs => ({
   type: actionTypes.FETCH_KERNELSPECS,
   payload
@@ -158,6 +159,7 @@ export const fetchKernelspecs = (payload: {
 
 export const fetchKernelspecsFulfilled = (payload: {
   kernelspecsRef: KernelspecsRef,
+  hostRef: HostRef,
   defaultKernelName: string,
   kernelspecs: { [string]: KernelspecProps }
 }): FetchKernelspecsFulfilled => ({

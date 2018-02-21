@@ -54,7 +54,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
 
       // TODO: we should likely be passing in a hostRef to fetchContent too.
       store.dispatch(fetchContent({ path: jupyterConfigData.contentsPath }));
-      store.dispatch(fetchKernelspecs({ kernelspecsRef }));
+      store.dispatch(fetchKernelspecs({ hostRef, kernelspecsRef }));
     }
 
     render(): React$Element<any> {

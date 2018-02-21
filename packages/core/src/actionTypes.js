@@ -84,7 +84,8 @@ export const FETCH_KERNELSPECS = "CORE/FETCH_KERNELSPECS";
 export type FetchKernelspecs = {
   type: "CORE/FETCH_KERNELSPECS",
   payload: {
-    kernelspecsRef: KernelspecsRef
+    kernelspecsRef: KernelspecsRef,
+    hostRef: HostRef
   }
 };
 
@@ -93,6 +94,7 @@ export type FetchKernelspecsFulfilled = {
   type: "CORE/FETCH_KERNELSPECS_FULFILLED",
   payload: {
     kernelspecsRef: KernelspecsRef,
+    hostRef: HostRef,
     defaultKernelName: string,
     kernelspecs: { [string]: KernelspecProps }
   }
