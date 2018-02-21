@@ -3,9 +3,40 @@
 import type { Notebook as v4Notebook } from "./v4";
 import type { Notebook as v3Notebook } from "./v3";
 
-import type { ImmutableNotebook, JSONType } from "@nteract/types/commutable";
-
 import * as Immutable from "immutable";
+
+export type ExecutionCount = number | null;
+
+export type MimeBundle = JSONObject;
+
+export type CellType = "markdown" | "code";
+export type CellID = string;
+
+import type {
+  ImmutableNotebook,
+  ImmutableCodeCell,
+  ImmutableMarkdownCell,
+  ImmutableRawCell,
+  ImmutableCell,
+  ImmutableOutput,
+  ImmutableOutputs,
+  ImmutableMimeBundle,
+  ImmutableJSONType,
+  ImmutableCellOrder,
+  ImmutableCellMap
+} from "./types";
+
+export type {
+  ImmutableNotebook,
+  ImmutableCodeCell,
+  ImmutableMarkdownCell,
+  ImmutableRawCell,
+  ImmutableCell,
+  ImmutableOutput,
+  ImmutableOutputs,
+  ImmutableMimeBundle,
+  ImmutableJSONType
+};
 
 const v4 = require("./v4");
 const v3 = require("./v3");
@@ -39,6 +70,7 @@ function parseNotebook(notebookString: string): Notebook {
 
 function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
   if (Immutable.Map.isMap(notebook)) {
+    // $FlowFixMe: isMap doesn't hint to flow that this is an Immutable
     const immNotebook: ImmutableNotebook = notebook;
     if (immNotebook.has("cellOrder") && immNotebook.has("cellMap")) {
       return immNotebook;
@@ -48,6 +80,7 @@ function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
     );
   }
 
+  // $FlowFixMe: isMap doesn't hint to flow that this is a plain Object
   const notebookJSON: Notebook = notebook;
 
   if (notebookJSON.nbformat === 4 && notebookJSON.nbformat_minor >= 0) {
@@ -73,7 +106,13 @@ function fromJS(notebook: Notebook | ImmutableNotebook): ImmutableNotebook {
 }
 
 function toJS(immnb: ImmutableNotebook): v4Notebook {
-  if (immnb.get("nbformat") === 4 && immnb.get("nbformat_minor") >= 0) {
+  const minorVersion: null | number = immnb.get("nbformat_minor", null);
+
+  if (
+    immnb.get("nbformat") === 4 &&
+    typeof minorVersion === "number" &&
+    minorVersion >= 0
+  ) {
     return v4.toJS(immnb);
   }
   throw new TypeError("Only notebook formats 3 and 4 are supported!");
@@ -104,5 +143,3 @@ module.exports = {
   createImmutableOutput: v4.createImmutableOutput,
   createImmutableMimeBundle: v4.createImmutableMimeBundle
 };
-
-export type { ImmutableNotebook };

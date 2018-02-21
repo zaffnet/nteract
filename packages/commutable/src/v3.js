@@ -1,7 +1,6 @@
 /* @flow */
 /* eslint-disable array-callback-return, prefer-spread */
 import type {
-  JSONObject,
   ImmutableNotebook,
   ImmutableCodeCell,
   ImmutableMarkdownCell,

@@ -3,7 +3,6 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook } from "@nteract/commutable";
 
-import type { JSONObject } from "@nteract/types/commutable";
 import type {
   KernelspecsRef,
   KernelspecProps
