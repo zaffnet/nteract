@@ -5,18 +5,5 @@ import config from "./config";
 import app from "./app";
 import modals from "./modals";
 import core from "./core";
-import {
-  communicationKernelspecsByRef,
-  entitiesKernelspecsByRef
-} from "./kernelspecs";
 
-export {
-  document,
-  comms,
-  config,
-  app,
-  modals,
-  communicationKernelspecsByRef,
-  entitiesKernelspecsByRef,
-  core
-};
+export { document, comms, config, app, modals, core };

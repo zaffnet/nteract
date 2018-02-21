@@ -11,8 +11,6 @@ import {
   comms,
   config,
   app,
-  communicationKernelspecsByRef,
-  entitiesKernelspecsByRef,
   modals,
   core
 } from "@nteract/core/reducers";
@@ -51,13 +49,7 @@ const rootReducer = combineReducers({
   comms,
   config,
   modals,
-  core,
-  communication: combineReducers({
-    kernelspecsByRef: communicationKernelspecsByRef
-  }),
-  entities: combineReducers({
-    kernelspecsByRef: entitiesKernelspecsByRef
-  })
+  core
 });
 
 export default function configureStore({
