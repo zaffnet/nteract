@@ -234,16 +234,16 @@ export class Prompt extends React.Component<PromptProps> {
   }
 }
 
-type EditorChildren = string | React.Element<any> | Array<EditorChildren>;
+type SourceChildren = string | React.Element<any> | Array<SourceChildren>;
 
-export type EditorProps = {
+export type SourceProps = {
   language: string,
-  children: EditorChildren,
+  children: SourceChildren,
   className?: string,
   theme: "light" | "dark"
 };
 
-export class Editor extends React.Component<EditorProps> {
+export class Source extends React.Component<SourceProps> {
   static defaultProps = {
     children: "",
     language: "python",

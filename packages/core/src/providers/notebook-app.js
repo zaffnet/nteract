@@ -26,7 +26,7 @@ import CodeMirror from "./editor";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import { Input, Prompt, Editor, Pagers, Outputs, Cell } from "../components";
+import { Input, Prompt, Source, Pagers, Outputs, Cell } from "../components";
 
 import DraggableCell from "../components/draggable-cell";
 import CellCreator from "./cell-creator";
@@ -155,7 +155,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                 running={running}
                 queued={queued}
               />
-              <Editor>
+              <Source>
                 <CodeMirror
                   tip
                   completion
@@ -172,7 +172,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                       : this.props.codeMirrorMode
                   }}
                 />
-              </Editor>
+              </Source>
             </Input>
             <Pagers>
               {this.props.pager.map((pager, key) => (
@@ -217,7 +217,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
             unfocusEditor={unfocusEditor}
             source={this.props.source}
           >
-            <Editor>
+            <Source>
               <CodeMirror
                 id={id}
                 value={this.props.source}
@@ -238,7 +238,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                   }
                 }}
               />
-            </Editor>
+            </Source>
           </MarkdownPreviewer>
         );
         break;

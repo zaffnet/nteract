@@ -12,17 +12,16 @@ import {
   createCodeCell
 } from "@nteract/commutable";
 
-import { themes, components } from "@nteract/core";
-
-const {
+import {
+  themes,
   Cell,
   Input,
   Prompt,
   PromptBuffer,
-  Editor,
+  Source,
   Outputs,
   Cells
-} = components;
+} from "@nteract/core";
 
 import { PapermillView } from "./papermill";
 
@@ -113,9 +112,9 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                       />
                       <Input hidden={sourceHidden}>
                         <Prompt />
-                        <Editor language={language} theme={this.props.theme}>
+                        <Source language={language} theme={this.props.theme}>
                           {source}
-                        </Editor>
+                        </Source>
                       </Input>
                       <Outputs
                         hidden={outputHidden}

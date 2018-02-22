@@ -12,8 +12,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { actions, providers } from "@nteract/core";
-const { NotebookApp, Styles } = providers;
+import { actions, NotebookApp, Styles } from "@nteract/core";
 
 import { displayOrder, transforms } from "@nteract/transforms-full";
 

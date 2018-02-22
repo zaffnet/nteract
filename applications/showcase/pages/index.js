@@ -4,7 +4,7 @@ import {
   Input,
   Prompt,
   PromptBuffer,
-  Editor,
+  Source,
   Outputs,
   Cells
 } from "@nteract/core/components";
@@ -196,7 +196,7 @@ export const Example = () => (
                   counter={cell.executionCount}
                 />
               )}
-              <Editor>
+              <Source>
                 <SyntaxHighlighter
                   style={idea}
                   language={cell.type === "markdown" ? "markdown" : "python"}
@@ -209,7 +209,7 @@ export const Example = () => (
                 >
                   {cell.code}
                 </SyntaxHighlighter>
-              </Editor>
+              </Source>
             </Input>
           ) : null}
           <Outputs>
@@ -228,7 +228,7 @@ export const Example = () => (
 const cellText = `<Cell>
   <Input>
     <Prompt counter={11} />
-    <Editor>{"import wizardry\nwizardry.birthday()"}</Editor>
+    <Source>{"import wizardry\nwizardry.birthday()"}</Source>
   </Input>
   <Outputs>
     <img
@@ -243,7 +243,7 @@ const ExampleCell = () => (
   <Cell>
     <Input>
       <Prompt counter={11} />
-      <Editor>{"import wizardry\nwizardry.birthday()"}</Editor>
+      <Source>{"import wizardry\nwizardry.birthday()"}</Source>
     </Input>
     <Outputs>
       <img
