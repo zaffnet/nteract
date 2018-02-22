@@ -22,7 +22,7 @@ import Toolbar from "../components/toolbar";
 
 import { Display, RichestMime } from "@nteract/display-area";
 
-import CodeMirror from "./editor";
+import Editor from "../components/editor";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
@@ -156,7 +156,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                 queued={queued}
               />
               <Source>
-                <CodeMirror
+                <Editor
                   tip
                   completion
                   id={id}
@@ -218,7 +218,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
             source={this.props.source}
           >
             <Source>
-              <CodeMirror
+              <Editor
                 id={id}
                 value={this.props.source}
                 theme={this.props.theme}
