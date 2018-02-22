@@ -41,7 +41,7 @@ export function saveEpic(
         map(() => {
           if (process.platform !== "darwin") {
             const state = store.getState();
-            const notificationSystem = state.app.get("notificationSystem");
+            const notificationSystem = selectors.notificationSystem(state);
             notificationSystem.addNotification({
               title: "Save successful!",
               autoDismiss: 2,
