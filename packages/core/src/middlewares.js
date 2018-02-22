@@ -2,6 +2,8 @@
 // NOTE: These are just default middlewares here for now until I figure out how
 // to divide up the desktop app and this core package
 
+import * as selectors from "../selectors";
+
 type Action = {
   type: string
 };
@@ -24,7 +26,7 @@ export const errorMiddleware = (
     errorText = JSON.stringify(action, null, 2);
   }
   const state = store.getState();
-  const notificationSystem = state.app.get("notificationSystem");
+  const notificationSystem = selectors.notificationSystem(state);
   if (notificationSystem) {
     notificationSystem.addNotification({
       title: action.type,

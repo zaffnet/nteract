@@ -127,7 +127,7 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
     concatMap(action => {
       const state = store.getState();
       const kernel = selectors.currentKernel(state);
-      const notificationSystem = state.app.notificationSystem;
+      const notificationSystem = selectors.notificationSystem(state);
 
       if (!kernel) {
         notificationSystem.addNotification({

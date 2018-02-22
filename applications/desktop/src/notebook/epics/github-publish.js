@@ -163,7 +163,7 @@ export function handleGistAction(store: any, action: any) {
   const githubUsername = selectors.currentNotebookGithubUsername(state);
   const gistId = selectors.currentNotebookGistId(state);
   const filename = selectors.currentFilename(state);
-  const notificationSystem = state.app.get("notificationSystem");
+  const notificationSystem = selectors.notificationSystem(state);
   let publishAsUser = false;
   if (action.type === PUBLISH_USER_GIST) {
     const githubToken = state.app.get("githubToken");
