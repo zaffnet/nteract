@@ -55,7 +55,7 @@
     "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
     "publish": "lerna run publish",
-    "prettify": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,flow-typed,mathjax-electron}/**'",
+    "prettify": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
     "pack": "lerna run pack --scope nteract --stream",
     "dist": "lerna run dist --scope nteract --stream",
     "dist:all": "lerna run dist:all --scope nteract --stream"
@@ -160,7 +160,7 @@
     "node-fetch": "^2.0.0",
     "nprogress": "^0.2.0",
     "object-path": "^0.11.4",
-    "prettier": "^1.9.2",
+    "prettier": "^1.10.2",
     "prop-types": "^15.6.0",
     "raf": "^3.4.0",
     "rc-menu": "6.2.6",
