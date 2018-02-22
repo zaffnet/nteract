@@ -67,7 +67,7 @@
       "./scripts/test-setup"
     ],
     "moduleNameMapper": {
-      "^@nteract/core$": "<rootDir>/packages/core/src/",
+      "^@nteract/core$": "<rootDir>/packages/core/src",
       "^@nteract/core/(.*)$": "<rootDir>/packages/core/src/$1",
       "\\.css$": "<rootDir>/scripts/noop-module.js"
     },
