@@ -1,8 +1,18 @@
 // @flow
 
 // import type { AppState } from "../records";
-// TODO: Super wrong
-type AppState = Object;
+// FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
+type AppState = {
+  // The new way
+  core: Object,
+  modals: Object,
+
+  // The old way
+  app: Object,
+  comms: *,
+  document: Object,
+  config: Object
+};
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
@@ -184,7 +194,7 @@ export const transientCellMap = createSelector(
 
 export const currentCellMap = createSelector([currentNotebook], notebook => {
   if (notebook) {
-    return notebook.get("cellMap");
+    return notebook.get("cellMap", Immutable.Map());
   }
   return null;
 });
@@ -233,6 +243,19 @@ export const currentHiddenCellIds = createSelector(
   }
 );
 
+export const currentIdsOfHiddenOutputs = createSelector(
+  [currentCellMap, currentCellOrder],
+  (cellMap, cellOrder): Immutable.List<any> => {
+    if (!cellOrder || !cellMap) {
+      return Immutable.List();
+    }
+
+    return cellOrder.filter(cellId =>
+      cellMap.getIn([cellId, "metadata", "outputHidden"])
+    );
+  }
+);
+
 export const currentFilename: (state: *) => string = createSelector(
   (state: AppState) => state.document.get("filename"),
   identity
@@ -266,5 +289,10 @@ export const communicationKernelspecsByRefCore = createSelector(
 export const kernelspecsByRefCore = createSelector(
   (state: AppState, { kernelspecsRef }) =>
     state.core.getIn(["entities", "kernelspecs", "byRef", kernelspecsRef]),
+  identity
+);
+
+export const notificationSystem = createSelector(
+  (state: AppState) => state.app.get("notificationSystem"),
   identity
 );

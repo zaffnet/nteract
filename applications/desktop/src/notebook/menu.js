@@ -179,7 +179,8 @@ export function dispatchKillKernel(store: *) {
 
 export function dispatchInterruptKernel(store: *) {
   const state = store.getState();
-  const notificationSystem = state.app.get("notificationSystem");
+
+  const notificationSystem = selectors.notificationSystem(state);
   if (process.platform === "win32") {
     notificationSystem.addNotification({
       title: "Not supported in Windows",
@@ -217,13 +218,13 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
-  const focused = state.document.get("cellFocused");
+  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(actions.copyCell(focused));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
-  const focused = state.document.get("cellFocused");
+  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(actions.cutCell(focused));
 }
 
@@ -233,13 +234,13 @@ export function dispatchPasteCell(store: *) {
 
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
-  const focused = state.document.get("cellFocused");
+  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(actions.createCellAfter("code", focused));
 }
 
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
-  const focused = state.document.get("cellFocused");
+  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(actions.createCellAfter("markdown", focused));
 }
 
@@ -269,14 +270,11 @@ export function exportPDF(
   notificationSystem: *
 ): void {
   const state = store.getState();
-  // $FlowFixMe: This should be using a selector first and foremost
-  const notebook = state.document.get("notebook");
-  const cellMap = notebook.get("cellMap");
-  const cellOrder = notebook.get("cellOrder");
-  const unexpandedCells = cellOrder.filter(
-    cellID => cellMap.getIn([cellID, "metadata", "outputHidden"]) === false
-  );
 
+  const unexpandedCells = selectors.currentIdsOfHiddenOutputs(state);
+  // TODO: we should not be modifying the document to print PDFs
+  //       and we especially shouldn't be relying on all these actions to
+  //       run through before we print...
   // Expand unexpanded cells
   unexpandedCells.map(cellID =>
     store.dispatch(actions.toggleOutputExpansion(cellID))
@@ -329,8 +327,8 @@ export function triggerSaveAsPDF(store: *) {
 
 export function storeToPDF(store: *) {
   const state = store.getState();
-  // $FlowFixMe: This should be using a selector first and foremost
-  let filename = path.basename(state.document.get("filename"), ".ipynb");
+  const notebookName = selectors.currentFilename(state);
+  let filename = path.basename(notebookName, ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
   if (filename === "") {
     notificationSystem.addNotification({
