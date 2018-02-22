@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import CellCreator from "../../src/components/cell-creator";
+import { PureCellCreator } from "../../src/components/cell-creator";
 
 describe("CellCreatorView", () => {
   const createCell = jest.fn();
@@ -9,7 +9,7 @@ describe("CellCreatorView", () => {
 
   const setup = id =>
     shallow(
-      <CellCreator
+      <PureCellCreator
         createCell={createCell}
         mergeCell={mergeCell}
         above={false}

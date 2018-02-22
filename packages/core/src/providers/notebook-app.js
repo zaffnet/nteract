@@ -29,7 +29,7 @@ import { displayOrder, transforms } from "@nteract/transforms";
 import { Input, Prompt, Source, Pagers, Outputs, Cell } from "../components";
 
 import DraggableCell from "../components/draggable-cell";
-import CellCreator from "./cell-creator";
+import CellCreator from "../components/cell-creator";
 import StatusBar from "../components/status-bar";
 
 import {
