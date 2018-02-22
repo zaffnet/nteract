@@ -24,6 +24,7 @@ jobs:
 
       - save_cache:
           paths:
+            - ~/.npm
             - ./node_modules
             - ~/.jestcache
           key: v1-dependencies-{{ checksum "package.json" }}
