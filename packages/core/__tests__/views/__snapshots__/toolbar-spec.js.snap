@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Toolbar View should be able to render a toolbar 1`] = `
-<Toolbar
+<PureToolbar
   type="code"
 >
   <div
@@ -192,11 +192,11 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
       styleId="2145412815"
     />
   </div>
-</Toolbar>
+</PureToolbar>
 `;
 
 exports[`Toolbar View should be able to render a toolbar 2`] = `
-<Toolbar
+<PureToolbar
   type="code"
 >
   <div
@@ -474,5 +474,5 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
       styleId="2145412815"
     />
   </div>
-</Toolbar>
+</PureToolbar>
 `;

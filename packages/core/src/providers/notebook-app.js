@@ -18,7 +18,7 @@ import { HijackScroll } from "../components/hijack-scroll";
 import MathJax from "@nteract/mathjax";
 
 import MarkdownPreviewer from "../components/markdown-preview";
-import Toolbar from "./toolbar";
+import Toolbar from "../components/toolbar";
 
 import { Display, RichestMime } from "@nteract/display-area";
 
