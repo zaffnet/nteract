@@ -1,15 +1,7 @@
 // @flow
 import { remote } from "electron";
 
-import {
-  SET_CONFIG_AT_KEY,
-  LOAD_CONFIG,
-  SAVE_CONFIG
-} from "@nteract/core/actionTypes";
-
-import { doneSavingConfig, configLoaded } from "@nteract/core/actions";
-
-import * as selectors from "@nteract/core/selectors";
+import { selectors, actions, actionTypes } from "@nteract/core";
 import { readFileObservable, writeFileObservable } from "fs-observable";
 import { mapTo, mergeMap, map, switchMap } from "rxjs/operators";
 import { ofType } from "redux-observable";
@@ -30,11 +22,11 @@ export const CONFIG_FILE_PATH = path.join(HOME, ".jupyter", "nteract.json");
  */
 export const loadConfigEpic = (actions: ActionsObservable<*>) =>
   actions.pipe(
-    ofType(LOAD_CONFIG),
+    ofType(actionTypes.LOAD_CONFIG),
     switchMap(() =>
       readFileObservable(CONFIG_FILE_PATH).pipe(
         map(JSON.parse),
-        map(configLoaded)
+        map(actions.configLoaded)
       )
     )
   );
@@ -46,7 +38,10 @@ export const loadConfigEpic = (actions: ActionsObservable<*>) =>
  * @return {ActionObservable}  ActionObservable with SAVE_CONFIG type
  */
 export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
-  actions.pipe(ofType(SET_CONFIG_AT_KEY), mapTo({ type: SAVE_CONFIG }));
+  actions.pipe(
+    ofType(actionTypes.SET_CONFIG_AT_KEY),
+    mapTo({ type: actionTypes.SAVE_CONFIG })
+  );
 
 /**
  * An epic that saves the configuration.
@@ -56,11 +51,11 @@ export const saveConfigOnChangeEpic = (actions: ActionsObservable<*>) =>
  */
 export const saveConfigEpic = (actions: ActionsObservable<*>, store: any) =>
   actions.pipe(
-    ofType(SAVE_CONFIG),
+    ofType(actionTypes.SAVE_CONFIG),
     mergeMap(() =>
       writeFileObservable(
         CONFIG_FILE_PATH,
         JSON.stringify(selectors.userPreferences(store.getState()))
-      ).pipe(map(doneSavingConfig))
+      ).pipe(map(actions.doneSavingConfig))
     )
   );

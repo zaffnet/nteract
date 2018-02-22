@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { JSONTransform, HTMLTransform } from "@nteract/transforms";
 
-import { Editor } from "@nteract/core/components";
+import { Source } from "@nteract/core/components";
 
 const d3 = Object.assign({}, require("d3-dsv"));
 
@@ -258,7 +258,7 @@ const Paragraph = props => {
 
   return (
     <React.Fragment>
-      <Editor language={lang}>{props.text}</Editor>
+      <Source language={lang}>{props.text}</Source>
       <div
         style={{
           paddingBottom: "10px",

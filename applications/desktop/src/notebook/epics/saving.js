@@ -5,10 +5,8 @@ import {
   ofType
 } from "redux-observable"; /* eslint-disable no-unused-vars */
 import { writeFileObservable } from "fs-observable";
-import { SAVE, SAVE_AS } from "@nteract/core/actionTypes";
-import * as selectors from "@nteract/core/selectors";
 
-import { changeFilename, save, doneSaving } from "@nteract/core/actions";
+import { actionTypes, selectors, actions } from "@nteract/core";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 
@@ -25,7 +23,7 @@ export function saveEpic(
   store: Store<any, any>
 ) {
   return action$.pipe(
-    ofType(SAVE),
+    ofType(actionTypes.SAVE),
     mergeMap(action => {
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
@@ -48,7 +46,7 @@ export function saveEpic(
               level: "success"
             });
           }
-          return doneSaving();
+          return actions.doneSaving();
         }),
         catchError((error: Error) =>
           of({
@@ -69,13 +67,13 @@ export function saveEpic(
  */
 export function saveAsEpic(action$: ActionsObservable<*>) {
   return action$.pipe(
-    ofType(SAVE_AS),
+    ofType(actionTypes.SAVE_AS),
     mergeMap(action => {
       return [
         // order matters here, since we need the filename set in the state
         // before we save the document
-        changeFilename(action.filename),
-        save()
+        actions.changeFilename(action.filename),
+        actions.save()
       ];
     })
   );

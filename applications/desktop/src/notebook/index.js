@@ -12,9 +12,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { NotebookApp, Styles } from "@nteract/core/providers";
-
-import { setNotificationSystem } from "@nteract/core/actions";
+import { actions, NotebookApp, Styles } from "@nteract/core";
 
 import { displayOrder, transforms } from "@nteract/transforms-full";
 
@@ -54,7 +52,7 @@ export default class App extends React.PureComponent<Object, Object> {
   notificationSystem: NotificationSystem;
 
   componentDidMount(): void {
-    store.dispatch(setNotificationSystem(this.notificationSystem));
+    store.dispatch(actions.setNotificationSystem(this.notificationSystem));
     ipc.send("react-ready");
   }
 

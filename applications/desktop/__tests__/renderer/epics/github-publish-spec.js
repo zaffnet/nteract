@@ -4,7 +4,8 @@ import { dummy, dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 import { toArray } from "rxjs/operators";
 
-import { PUBLISH_USER_GIST } from "@nteract/core/actionTypes";
+import { actionTypes } from "@nteract/core";
+
 import {
   publishNotebookObservable,
   createGistCallback,
@@ -35,7 +36,7 @@ const createNotificationSystem = () => ({
 
 describe("handleGistAction", () => {
   test("returns an observable from User Action", () => {
-    const publishUserAction = { type: "PUBLISH_USER_GIST" };
+    const publishUserAction = { type: actionTypes.PUBLISH_USER_GIST };
     const store = dummyStore();
     const handleGist = handleGistAction(store, publishUserAction);
     expect(handleGist.subscribe).not.toBeNull();

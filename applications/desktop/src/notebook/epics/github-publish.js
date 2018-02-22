@@ -1,14 +1,7 @@
 // @flow
 import { shell } from "electron";
 
-import {
-  PUBLISH_USER_GIST,
-  PUBLISH_ANONYMOUS_GIST
-} from "@nteract/core/actionTypes";
-
-import { overwriteMetadata, deleteMetadata } from "@nteract/core/actions";
-
-import * as selectors from "@nteract/core/selectors";
+import { selectors, actions, actionTypes } from "@nteract/core";
 
 const path = require("path");
 
@@ -72,7 +65,7 @@ export function createGistCallback(
       return;
     }
     const gistID = response.data.id;
-    observer.next(overwriteMetadata("gist_id", gistID));
+    observer.next(actions.overwriteMetadata("gist_id", gistID));
     notifyUser(filename, gistID, notificationSystem);
     observer.complete();
   };
@@ -111,8 +104,10 @@ export function publishNotebookObservable(
           level: "info"
         });
         if (githubUsername !== (res.data.login || undefined)) {
-          observer.next(overwriteMetadata("github_username", res.data.login));
-          observer.next(deleteMetadata("gist_id"));
+          observer.next(
+            actions.overwriteMetadata("github_username", res.data.login)
+          );
+          observer.next(actions.deleteMetadata("gist_id"));
         }
       });
     }
@@ -165,7 +160,7 @@ export function handleGistAction(store: any, action: any) {
   const filename = selectors.currentFilename(state);
   const notificationSystem = selectors.notificationSystem(state);
   let publishAsUser = false;
-  if (action.type === PUBLISH_USER_GIST) {
+  if (action.type === actionTypes.PUBLISH_USER_GIST) {
     const githubToken = state.app.get("githubToken");
     github.authenticate({ type: "oauth", token: githubToken });
     publishAsUser = true;
@@ -188,7 +183,7 @@ export function handleGistAction(store: any, action: any) {
 export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
   const boundHandleGistAction = handleGistAction.bind(null, store);
   return action$.pipe(
-    ofType(PUBLISH_USER_GIST, PUBLISH_ANONYMOUS_GIST),
+    ofType(actionTypes.PUBLISH_USER_GIST, actionTypes.PUBLISH_ANONYMOUS_GIST),
     mergeMap(action => boundHandleGistAction(action)),
     catchError(handleGistError)
   );

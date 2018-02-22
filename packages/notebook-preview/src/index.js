@@ -8,32 +8,31 @@ import { displayOrder, transforms } from "@nteract/transforms";
 import {
   emptyNotebook,
   appendCellToNotebook,
-  fromJS
+  fromJS,
+  createCodeCell
 } from "@nteract/commutable";
-import { createCodeCell } from "@nteract/commutable";
 
 import {
+  themes,
   Cell,
   Input,
   Prompt,
   PromptBuffer,
-  Editor,
+  Source,
   Outputs,
   Cells
-} from "@nteract/core/components";
+} from "@nteract/core";
 
 import { PapermillView } from "./papermill";
 
 import Markdown from "@nteract/markdown";
 import MathJax from "@nteract/mathjax";
 
-const themes = require("@nteract/core/themes");
-
 type Props = {
   displayOrder: Array<string>,
   notebook: any,
   transforms: Object,
-  theme: string
+  theme: "light" | "dark"
 };
 
 type State = {
@@ -113,9 +112,9 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                       />
                       <Input hidden={sourceHidden}>
                         <Prompt />
-                        <Editor language={language} theme={this.props.theme}>
+                        <Source language={language} theme={this.props.theme}>
                           {source}
-                        </Editor>
+                        </Source>
                       </Input>
                       <Outputs
                         hidden={outputHidden}

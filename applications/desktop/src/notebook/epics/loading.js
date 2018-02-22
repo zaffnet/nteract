@@ -22,8 +22,7 @@ import * as Immutable from "immutable";
 import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
-import * as actionTypes from "@nteract/core/actionTypes";
-import * as actions from "@nteract/core/actions";
+import { actionTypes, actions } from "@nteract/core";
 
 import type { SetNotebookAction } from "@nteract/core/src/actionTypes";
 

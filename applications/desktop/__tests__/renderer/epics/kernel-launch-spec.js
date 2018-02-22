@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import * as actionTypes from "@nteract/core/actionTypes";
+import { actionTypes } from "@nteract/core";
 
 import {
   acquireKernelInfo,

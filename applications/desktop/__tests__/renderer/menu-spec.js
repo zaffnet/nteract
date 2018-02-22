@@ -2,7 +2,7 @@ import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
 import { dummyStore } from "@nteract/core/dummy";
 import * as menu from "../../src/notebook/menu";
-import * as actionTypes from "@nteract/core/actionTypes";
+import { actionTypes } from "@nteract/core";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
