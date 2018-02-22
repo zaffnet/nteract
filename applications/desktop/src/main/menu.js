@@ -214,6 +214,8 @@ export const named = {
 };
 
 export function loadFullMenu(store: * = global.store) {
+  // NOTE for those looking for selectors -- this state is not the same as the
+  //      "core" state -- it's a main process side model in the electron app
   const state = store.getState();
   const kernelSpecs = state.get("kernelSpecs") ? state.get("kernelSpecs") : {};
 
