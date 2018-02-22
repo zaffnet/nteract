@@ -2,7 +2,7 @@ jest.mock("fs");
 import { ActionsObservable } from "redux-observable";
 import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
-import { save, saveAs } from "@nteract/core/actions";
+import { actions } from "@nteract/core";
 
 import {
   SAVE,
@@ -20,7 +20,10 @@ describe("saveEpic", () => {
   test("saves the file using the notebook in the state tree", async function() {
     const store = dummyStore();
 
-    const responses = await saveEpic(ActionsObservable.of(save()), store)
+    const responses = await saveEpic(
+      ActionsObservable.of(actions.save()),
+      store
+    )
       .pipe(toArray())
       .toPromise();
 
@@ -36,7 +39,7 @@ describe("saveAsEpic", () => {
     const store = dummyStore();
 
     const responses = await saveAsEpic(
-      ActionsObservable.of(saveAs("great-filename")),
+      ActionsObservable.of(actions.saveAs("great-filename")),
       store
     )
       .pipe(toArray())

@@ -14,7 +14,7 @@ import {
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";
 
-import { LOAD, NEW_NOTEBOOK, SET_NOTEBOOK } from "@nteract/core/actionTypes";
+import { actionTypes } from "@nteract/core";
 
 import { toArray } from "rxjs/operators";
 
@@ -72,7 +72,7 @@ describe("loadingEpic", () => {
 describe("newNotebookEpic", () => {
   test("calls new Kernel after creating a new notebook", async function() {
     const action$ = ActionsObservable.of({
-      type: NEW_NOTEBOOK,
+      type: actionTypes.NEW_NOTEBOOK,
       kernelSpec: {
         name: "hylang"
       }
@@ -84,7 +84,7 @@ describe("newNotebookEpic", () => {
     expect(responseActions).toEqual([
       {
         filename: null,
-        type: "SET_NOTEBOOK",
+        type: actionTypes.SET_NOTEBOOK,
         notebook: monocellNotebook.setIn(
           ["metadata", "kernel_info", "name"],
           "hylang"

@@ -8,11 +8,13 @@ import { displayOrder, transforms } from "@nteract/transforms";
 import {
   emptyNotebook,
   appendCellToNotebook,
-  fromJS
+  fromJS,
+  createCodeCell
 } from "@nteract/commutable";
-import { createCodeCell } from "@nteract/commutable";
 
-import {
+import { themes, components } from "@nteract/core";
+
+const {
   Cell,
   Input,
   Prompt,
@@ -20,20 +22,18 @@ import {
   Editor,
   Outputs,
   Cells
-} from "@nteract/core/components";
+} = components;
 
 import { PapermillView } from "./papermill";
 
 import Markdown from "@nteract/markdown";
 import MathJax from "@nteract/mathjax";
 
-const themes = require("@nteract/core/themes");
-
 type Props = {
   displayOrder: Array<string>,
   notebook: any,
   transforms: Object,
-  theme: string
+  theme: "light" | "dark"
 };
 
 type State = {

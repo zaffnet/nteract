@@ -651,7 +651,7 @@ export function newNotebook(kernelSpec: Object, cwd: string) {
 
 // Expects notebook to be JS Object or Immutable.js
 export const setNotebook = (
-  filename: string,
+  filename: ?string,
   notebook: Notebook
 ): SetNotebookAction => ({
   type: actionTypes.SET_NOTEBOOK,

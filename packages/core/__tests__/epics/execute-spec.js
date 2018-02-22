@@ -1,19 +1,10 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
-import {
-  SEND_EXECUTE_REQUEST,
-  ABORT_EXECUTION,
-  ERROR_EXECUTING,
-  EXECUTE_CELL,
-  CLEAR_OUTPUTS,
-  UPDATE_CELL_STATUS,
-  UPDATE_DISPLAY,
-  LAUNCH_KERNEL_SUCCESSFUL
-} from "@nteract/core/actionTypes";
+
+import { actionTypes, actions } from "@nteract/core";
 
 import { createExecuteRequest } from "@nteract/messaging";
 
-import { executeCell } from "@nteract/core/actions";
 import {
   executeCellStream,
   executeCellEpic,
@@ -29,8 +20,8 @@ import { toArray, share, catchError, bufferCount } from "rxjs/operators";
 
 describe("executeCell", () => {
   test("returns an executeCell action", () => {
-    expect(executeCell("0-0-0-0")).toEqual({
-      type: EXECUTE_CELL,
+    expect(actions.executeCell("0-0-0-0")).toEqual({
+      type: actionTypes.EXECUTE_CELL,
       id: "0-0-0-0"
     });
   });
@@ -82,7 +73,9 @@ describe("createExecuteCellStream", () => {
         })
       }
     };
-    const action$ = ActionsObservable.of({ type: SEND_EXECUTE_REQUEST });
+    const action$ = ActionsObservable.of({
+      type: actionTypes.SEND_EXECUTE_REQUEST
+    });
     const observable = createExecuteCellStream(action$, store, "source", "id");
     observable.pipe(toArray()).subscribe(
       actions => {
@@ -137,7 +130,7 @@ describe("createExecuteCellStream", () => {
     observable.subscribe(x => actionBuffer.push(x), err => done.fail(err));
     expect(actionBuffer).toEqual([
       {
-        type: "SEND_EXECUTE_REQUEST",
+        type: actionTypes.SEND_EXECUTE_REQUEST,
         id: "id",
         message
       }
@@ -165,7 +158,7 @@ describe("executeCellEpic", () => {
   test("Errors on a bad action", done => {
     // Make one hot action
     const badAction$ = ActionsObservable.of({
-      type: EXECUTE_CELL
+      type: actionTypes.EXECUTE_CELL
     }).pipe(share());
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
@@ -175,14 +168,16 @@ describe("executeCellEpic", () => {
     responseActions.subscribe(
       // Every action that goes through should get stuck on an array
       x => {
-        expect(x.type).toEqual(ERROR_EXECUTING);
+        expect(x.type).toEqual(actionTypes.ERROR_EXECUTING);
         done();
       },
       err => done.fail(err)
     );
   });
   test("Errors on an action where source not a string", done => {
-    const badAction$ = ActionsObservable.of(executeCell("id", 2)).pipe(share());
+    const badAction$ = ActionsObservable.of(actions.executeCell("id", 2)).pipe(
+      share()
+    );
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs source string");
@@ -191,7 +186,7 @@ describe("executeCellEpic", () => {
     responseActions.subscribe(
       // Every action that goes through should get stuck on an array
       x => {
-        expect(x.type).toEqual(ERROR_EXECUTING);
+        expect(x.type).toEqual(actionTypes.ERROR_EXECUTING);
         done();
       },
       err => done.fail(err)
@@ -228,7 +223,9 @@ describe("executeCellEpic", () => {
       }
     };
 
-    const action$ = ActionsObservable.of(executeCell("first")).pipe(share());
+    const action$ = ActionsObservable.of(actions.executeCell("first")).pipe(
+      share()
+    );
     const responseActions = executeCellEpic(action$, store);
     responseActions.subscribe(
       x => {
@@ -274,7 +271,7 @@ describe("updateDisplayEpic", () => {
 
     const channels = from(messages);
     const action$ = ActionsObservable.of({
-      type: LAUNCH_KERNEL_SUCCESSFUL,
+      type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
       kernel: {
         channels
       }
@@ -291,14 +288,14 @@ describe("updateDisplayEpic", () => {
       () => {
         expect(responseActions).toEqual([
           {
-            type: UPDATE_DISPLAY,
+            type: actionTypes.UPDATE_DISPLAY,
             content: {
               data: { "text/html": "<marquee>wee</marquee>" },
               transient: { display_id: "1234" }
             }
           },
           {
-            type: UPDATE_DISPLAY,
+            type: actionTypes.UPDATE_DISPLAY,
             content: {
               data: { "text/plain": "i am text" },
               transient: { display_id: "here" }
