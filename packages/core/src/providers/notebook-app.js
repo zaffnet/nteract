@@ -274,7 +274,21 @@ export const ConnectedCell = connect(
   mapDispatchToCellProps
 )(AnyCell);
 
-type NotebookProps = {
+type NotebookProps = NotebookStateProps & NotebookDispatchProps;
+
+type PureNotebookProps = {
+  displayOrder?: Array<string>,
+  cellOrder?: ImmutableList<any>,
+  transforms?: Object,
+  stickyCells?: ImmutableSet<string>,
+  theme?: string,
+  lastSaved?: Date,
+  languageDisplayName?: string,
+  kernelStatus?: string,
+  codeMirrorMode?: string | ImmutableMap<string, *>
+};
+
+type NotebookStateProps = {
   displayOrder: Array<string>,
   cellOrder: ImmutableList<any>,
   transforms: Object,
@@ -283,7 +297,10 @@ type NotebookProps = {
   lastSaved: Date,
   languageDisplayName: string,
   kernelStatus: string,
-  codeMirrorMode: string | ImmutableMap<string, *>,
+  codeMirrorMode: string | ImmutableMap<string, *>
+};
+
+type NotebookDispatchProps = {
   moveCell: (sourceId: string, destinationId: string, above: boolean) => void,
   selectCell: (id: string) => void,
   executeFocusedCell: () => void,
@@ -291,7 +308,10 @@ type NotebookProps = {
   focusNextCellEditor: () => void
 };
 
-const mapStateToProps = (state: Object, ownProps: NotebookProps) => {
+const mapStateToProps = (
+  state: Object,
+  ownProps: PureNotebookProps
+): NotebookStateProps => {
   return {
     theme: selectors.userPreferences(state).theme,
     lastSaved: selectors.currentLastSaved(state),
@@ -305,7 +325,7 @@ const mapStateToProps = (state: Object, ownProps: NotebookProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
   moveCell: (sourceId: string, destinationId: string, above: boolean) =>
     dispatch(actions.moveCell(sourceId, destinationId, above)),
   selectCell: (id: string) => dispatch(actions.focusCell(id)),
@@ -316,6 +336,7 @@ const mapDispatchToProps = dispatch => ({
 
 export class NotebookApp extends React.PureComponent<NotebookProps> {
   static defaultProps = {
+    theme: "light",
     displayOrder,
     transforms
   };
