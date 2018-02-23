@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { JSONTransform, HTMLTransform } from "@nteract/transforms";
 
-import { Source } from "@nteract/core/components";
+import { Source } from "@nteract/core";
 
 const d3 = Object.assign({}, require("d3-dsv"));
 

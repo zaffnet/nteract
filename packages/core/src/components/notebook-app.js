@@ -13,29 +13,26 @@ import {
   isImmutable
 } from "immutable";
 
-import { HijackScroll } from "../components/hijack-scroll";
+import { HijackScroll } from "./hijack-scroll";
 
 import MathJax from "@nteract/mathjax";
 
-import MarkdownPreviewer from "../components/markdown-preview";
-import Toolbar from "../components/toolbar";
+import MarkdownPreviewer from "./markdown-preview";
+import Toolbar from "./toolbar";
 
 import { Display, RichestMime } from "@nteract/display-area";
 
-import Editor from "../components/editor";
+import Editor from "./editor";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import { Input, Prompt, Source, Pagers, Outputs, Cell } from "../components";
+import { Input, Prompt, Source, Pagers, Outputs, Cell } from "./presentational";
 
-import DraggableCell from "../components/draggable-cell";
-import CellCreator from "../components/cell-creator";
-import StatusBar from "../components/status-bar";
+import DraggableCell from "./draggable-cell";
+import CellCreator from "./cell-creator";
+import StatusBar from "./status-bar";
 
-import {
-  PinnedPlaceHolderCell,
-  StickyCellContainer
-} from "../components/pinned-cell";
+import { PinnedPlaceHolderCell, StickyCellContainer } from "./pinned-cell";
 
 import * as actions from "../actions";
 

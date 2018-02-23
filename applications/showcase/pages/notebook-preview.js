@@ -7,7 +7,7 @@ import { emptyNotebook, fromJS } from "@nteract/commutable";
 
 import { light, dark } from "@nteract/core/themes";
 
-import { Styles } from "@nteract/core/providers";
+import { Styles } from "@nteract/core";
 
 import { ajax } from "rxjs/observable/dom/ajax";
 

@@ -6,10 +6,9 @@ import {
   PromptBuffer,
   Source,
   Outputs,
-  Cells
-} from "@nteract/core/components";
-
-import { Styles } from "@nteract/core/providers";
+  Cells,
+  Styles
+} from "@nteract/core";
 
 import { light } from "@nteract/core/themes";
 
