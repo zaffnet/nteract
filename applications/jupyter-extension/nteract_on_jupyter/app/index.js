@@ -11,19 +11,14 @@ import configureStore from "./store";
 import type { JupyterConfigData } from "./store";
 
 import {
-  NotebookApp,
-  Styles,
   ModalController,
+  NotebookApp,
   NotebookMenu,
-  TitleBar
+  Styles,
+  TitleBar,
+  actions,
+  state
 } from "@nteract/core";
-
-import { addHost, fetchKernelspecs, fetchContent } from "@nteract/core/actions";
-
-import {
-  createHostRef,
-  createKernelspecsRef
-} from "@nteract/core/src/state/refs";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });
@@ -33,28 +28,32 @@ function createApp(jupyterConfigData: JupyterConfigData) {
     notificationSystem: NotificationSystem;
 
     componentDidMount(): void {
-      const hostRef = createHostRef();
-      const kernelspecsRef = createKernelspecsRef();
+      const hostRef = state.createHostRef();
+      const kernelspecsRef = state.createKernelspecsRef();
       store.dispatch(
-        addHost({
+        actions.addHost({
           hostRef,
 
           // TODO: are we missing some host info here?
           host: {
-            // id: string,
+            id: null,
             type: "jupyter",
-            // kernelIds: Array<Id>,
+            defaultKernelName: "python",
+            kernelIds: null,
             token: jupyterConfigData.token,
             serverUrl: location.origin + jupyterConfigData.baseUrl
-            // crossDomain: boolean,
-            // rootContentRef: Ref,
           }
         })
       );
 
       // TODO: we should likely be passing in a hostRef to fetchContent too.
-      store.dispatch(fetchContent({ path: jupyterConfigData.contentsPath }));
-      store.dispatch(fetchKernelspecs({ hostRef, kernelspecsRef }));
+      store.dispatch(
+        actions.fetchContent({
+          path: jupyterConfigData.contentsPath,
+          params: {}
+        })
+      );
+      store.dispatch(actions.fetchKernelspecs({ hostRef, kernelspecsRef }));
     }
 
     render(): React$Element<any> {

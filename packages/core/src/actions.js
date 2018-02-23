@@ -101,6 +101,8 @@ import type {
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed
+  // TODO FIXME FIXME VERY WRONG FIXME FIXME TODO: none of these types exist!
+  // Try changing the import to `./actionTypes`!
 } from "../actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
@@ -117,7 +119,15 @@ export const closeModal = () => ({
 
 export const addHost = (payload: {
   hostRef: HostRef,
-  host: HostRecordProps
+  host: {
+    id: ?string,
+    type: "jupyter" | "local",
+    defaultKernelName: string,
+    kernelIds: ?Array<string>,
+    token?: string,
+    serverUrl?: string,
+    crossDomain?: boolean
+  }
 }) => ({
   type: actionTypes.ADD_HOST,
   payload
