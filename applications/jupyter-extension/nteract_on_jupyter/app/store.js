@@ -6,14 +6,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import {
-  document,
-  comms,
-  config,
-  app,
-  modals,
-  core
-} from "@nteract/core/reducers";
+import { reducers } from "@nteract/core";
 
 import {
   makeAppRecord,
@@ -35,12 +28,12 @@ export type JupyterConfigData = {
 };
 
 const rootReducer = combineReducers({
-  app,
-  document,
-  comms,
-  config,
-  modals,
-  core
+  app: reducers.app,
+  document: reducers.document,
+  comms: reducers.comms,
+  config: reducers.config,
+  modals: reducers.modals,
+  core: reducers.core
 });
 
 export default function configureStore({

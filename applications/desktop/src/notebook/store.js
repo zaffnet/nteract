@@ -5,16 +5,17 @@ import type { AppState } from "@nteract/core/src/records";
 
 import middlewares from "./middlewares";
 
-import { document, comms, config, app } from "@nteract/core/reducers";
+import { reducers } from "@nteract/core";
 
 const rootReducer = combineReducers({
-  app,
-  document,
-  comms,
-  config
+  app: reducers.app,
+  document: reducers.document,
+  comms: reducers.comms,
+  config: reducers.config
 });
 
 export default function configureStore(initialState: AppState) {
+  // $FlowFixMe: Not sure why this is failing now?
   return createStore(
     rootReducer,
     initialState,

@@ -8,7 +8,7 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import * as actions from "@nteract/core/actions";
+import { actions } from "@nteract/core";
 
 import * as selectors from "@nteract/core/selectors";
 
@@ -245,7 +245,7 @@ export function dispatchCreateTextCellAfter(store: *) {
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
-  store.dispatch(actions.fetchContent({ path: filename }));
+  store.dispatch(actions.fetchContent({ path: filename, params: {} }));
 }
 
 export function dispatchNewNotebook(

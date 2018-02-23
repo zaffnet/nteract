@@ -7,6 +7,7 @@ import * as themes from "./themes";
 import * as epics from "./epics";
 import * as selectors from "./selectors";
 import * as records from "./records";
+import * as state from "./state";
 
 export * from "./components";
 export * from "./providers";
@@ -23,5 +24,6 @@ export {
   reducers,
   themes,
   selectors,
-  epics
+  epics,
+  state
 };

@@ -6,6 +6,9 @@ import { Record } from "immutable";
 import { makeHostsRecord } from "./hosts";
 import { makeKernelspecsRecord } from "./kernelspecs";
 
+export * from "./hosts";
+export * from "./kernelspecs";
+
 export type EntitiesRecordProps = {
   hosts: RecordOf<HostsRecordProps>,
   kernelspecs: RecordOf<KernelspecsRecordProps>

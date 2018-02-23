@@ -10,7 +10,7 @@ import {
   Styles
 } from "@nteract/core";
 
-import { light } from "@nteract/core/themes";
+import { themes } from "@nteract/core";
 
 import * as React from "react";
 
@@ -276,7 +276,7 @@ export default () => (
     <style jsx>{`
       .root {
         display: flex;
-        ${light};
+        ${themes.light};
       }
       .root > :global(.cells) {
         width: 50%;

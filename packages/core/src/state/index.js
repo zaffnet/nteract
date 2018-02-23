@@ -6,6 +6,11 @@ import { Record } from "immutable";
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord } from "./entities";
 
+export * from "./communication";
+export * from "./entities";
+export * from "./ids";
+export * from "./refs";
+
 export type StateRecordProps = {
   communication: RecordOf<CommunicationRecordProps>,
   entities: RecordOf<EntitiesRecordProps>

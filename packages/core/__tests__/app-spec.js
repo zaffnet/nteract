@@ -1,5 +1,4 @@
-import * as actionTypes from "@nteract/core/actionTypes";
-import { app } from "@nteract/core/reducers";
+import { actionTypes, reducers } from "@nteract/core";
 import { makeAppRecord, makeLocalKernelRecord } from "@nteract/core/records";
 
 describe("startSaving", () => {
@@ -14,7 +13,7 @@ describe("startSaving", () => {
 
     const action = { type: actionTypes.START_SAVING };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.isSaving).toBe(true);
   });
 });
@@ -31,7 +30,7 @@ describe("doneSaving", () => {
 
     const action = { type: actionTypes.DONE_SAVING };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.isSaving).toBe(false);
   });
 });
@@ -51,7 +50,7 @@ describe("setExecutionState", () => {
       kernelStatus: "idle"
     };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.kernel.status).toBe("idle");
   });
 });
@@ -68,7 +67,7 @@ describe("setNotificationSystem", () => {
 
     const action = { type: actionTypes.SET_NOTIFICATION_SYSTEM };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.notificationSystem).toEqual(originalState.notificationSystem);
   });
   test("sets the notificationSystem if given", () => {
@@ -85,7 +84,7 @@ describe("setNotificationSystem", () => {
       notificationSystem: ""
     };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.notificationSystem).toBe("");
   });
 });
@@ -98,7 +97,7 @@ describe("setGithubToken", () => {
 
     const action = { type: actionTypes.SET_GITHUB_TOKEN, githubToken: "TOKEN" };
 
-    const state = app(originalState, action);
+    const state = reducers.app(originalState, action);
     expect(state.githubToken).toEqual("TOKEN");
   });
 });

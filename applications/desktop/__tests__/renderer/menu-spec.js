@@ -345,7 +345,8 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "CORE/FETCH_CONTENT",
         payload: {
-          path: "test-ipynb.ipynb"
+          path: "test-ipynb.ipynb",
+          params: {}
         }
       });
     });

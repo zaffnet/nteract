@@ -37,7 +37,7 @@ import { ipcRenderer as ipc } from "electron";
 import { createMainChannel } from "enchannel-zmq-backend";
 import * as jmp from "jmp";
 
-import type { NewKernelAction } from "@nteract/core/actionTypes";
+import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/records";
 
@@ -296,19 +296,22 @@ export function watchSpawn(action$: *, store: *) {
   return action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) => {
+      // $FlowFixMe
       const spawn = action.kernel.spawn;
       return Observable.create(observer => {
+        // $FlowFixMe
         spawn.on("error", error => {
           // We both set the state and make it easy for us to log the error
           observer.next(actions.setExecutionState("errored"));
           observer.error({ type: "ERROR", payload: error, err: true });
           observer.complete();
         });
-
+        // $FlowFixMe
         spawn.on("exit", () => {
           observer.next(actions.setExecutionState("exited"));
           observer.complete();
         });
+        // $FlowFixMe
         spawn.on("disconnect", () => {
           observer.next(actions.setExecutionState("disconnected"));
           observer.complete();

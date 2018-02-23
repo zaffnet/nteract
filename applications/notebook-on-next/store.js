@@ -4,7 +4,7 @@ import { createEpicMiddleware, combineEpics } from "redux-observable";
 
 import { Map as ImmutableMap } from "immutable";
 
-import { app, document, comms, config } from "@nteract/core/reducers";
+import { reducers } from "@nteract/core";
 
 import type { AppState } from "@nteract/core/src/records";
 
@@ -34,10 +34,10 @@ const epics = [
 ];
 
 const rootReducer = combineReducers({
-  app,
-  document,
-  comms,
-  config
+  app: reducers.app,
+  document: reducers.document,
+  comms: reducers.comms,
+  config: reducers.config
 });
 
 const defaultState = {
