@@ -1,10 +1,21 @@
 // @flow
-import React from "react";
+import * as React from "react";
+import { connect } from "react-redux";
+import * as actions from "../actions";
 
 type Props = {
   above: boolean,
   createCell: (type: string) => void,
   mergeCell: () => void
+};
+
+type ConnectedProps = {
+  above: boolean,
+  createCellAppend: (type: string) => void,
+  createCellBefore: (type: string, id: string) => void,
+  createCellAfter: (type: string, id: string) => void,
+  mergeCellAfter: (id: string) => void,
+  id?: string
 };
 
 import {
@@ -13,7 +24,7 @@ import {
   DownArrowOcticon
 } from "@nteract/octicons";
 
-export default (props: Props) => (
+export const PureCellCreator = (props: Props) => (
   <div className="creator-hover-mask">
     <div className="creator-hover-region">
       <div className="cell-creator">
@@ -108,3 +119,59 @@ export default (props: Props) => (
     `}</style>
   </div>
 );
+
+class CellCreator extends React.Component<ConnectedProps> {
+  createCell: (type: string) => void;
+  mergeCell: () => void;
+
+  constructor(): void {
+    super();
+    this.createCell = this.createCell.bind(this);
+    this.mergeCell = this.mergeCell.bind(this);
+  }
+
+  createCell(type: "code" | "markdown"): void {
+    const {
+      above,
+      createCellAfter,
+      createCellAppend,
+      createCellBefore,
+      id
+    } = this.props;
+
+    if (!id) {
+      createCellAppend(type);
+      return;
+    }
+
+    above ? createCellBefore(type, id) : createCellAfter(type, id);
+  }
+
+  mergeCell(): void {
+    const { mergeCellAfter, id } = this.props;
+
+    // We can't merge cells if we don't have a cell ID
+    if (id) {
+      mergeCellAfter(id);
+    }
+  }
+
+  render(): React$Element<any> {
+    return (
+      <PureCellCreator
+        above={this.props.above}
+        createCell={this.createCell}
+        mergeCell={this.mergeCell}
+      />
+    );
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  createCellAppend: type => dispatch(actions.createCellAppend(type)),
+  createCellBefore: (type, id) => dispatch(actions.createCellBefore(type, id)),
+  createCellAfter: (type, id) => dispatch(actions.createCellAfter(type, id)),
+  mergeCellAfter: id => dispatch(actions.mergeCellAfter(id))
+});
+
+export default connect(null, mapDispatchToProps)(CellCreator);

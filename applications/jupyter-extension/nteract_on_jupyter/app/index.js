@@ -10,7 +10,13 @@ import configureStore from "./store";
 
 import type { JupyterConfigData } from "./store";
 
-import { NotebookApp, Styles } from "@nteract/core/providers";
+import {
+  NotebookApp,
+  Styles,
+  ModalController,
+  NotebookMenu,
+  TitleBar
+} from "@nteract/core";
 
 import { addHost, fetchKernelspecs, fetchContent } from "@nteract/core/actions";
 
@@ -18,12 +24,6 @@ import {
   createHostRef,
   createKernelspecsRef
 } from "@nteract/core/src/state/refs";
-
-import {
-  ModalController,
-  NotebookMenu,
-  TitleBar
-} from "@nteract/core/components";
 
 function createApp(jupyterConfigData: JupyterConfigData) {
   const store = configureStore({ config: jupyterConfigData });

@@ -6,7 +6,10 @@
 // TODO: Fix up a11y eslint here
 // TODO: All the `<li>` below that have role button should just be `<button>` with proper styling
 
-import React, { Component } from "react";
+import * as React from "react";
+
+import { connect } from "react-redux";
+import * as actions from "../actions";
 
 import {
   DropdownMenu,
@@ -21,7 +24,7 @@ import {
   TriangleRightOcticon
 } from "@nteract/octicons";
 
-export type ToolbarProps = {|
+export type PureToolbarProps = {|
   type: "markdown" | "code" | "raw",
   executeCell: () => void,
   removeCell: () => void,
@@ -33,7 +36,7 @@ export type ToolbarProps = {|
   changeCellType: () => void
 |};
 
-export default class Toolbar extends Component<ToolbarProps> {
+export class PureToolbar extends React.Component<PureToolbarProps> {
   clearOutputs: () => void;
   toggleCellInputVisibility: () => void;
   toggleCellOutputVisibility: () => void;
@@ -45,7 +48,7 @@ export default class Toolbar extends Component<ToolbarProps> {
     type: "code"
   };
 
-  constructor(props: ToolbarProps) {
+  constructor(props: PureToolbarProps) {
     super(props);
     this.clearOutputs = this.clearOutputs.bind(this);
     this.toggleCellInputVisibility = this.toggleCellInputVisibility.bind(this);
@@ -243,3 +246,34 @@ export default class Toolbar extends Component<ToolbarProps> {
     );
   }
 }
+
+type ConnectedProps = {
+  id: string,
+  type: "markdown" | "code" | "raw",
+  executeCell: () => void,
+  removeCell: () => void,
+  toggleStickyCell: () => void,
+  clearOutputs: () => void,
+  toggleCellOutputVisibility: () => void,
+  toggleCellInputVisibility: () => void,
+  changeCellType: () => void,
+  toggleOutputExpansion: () => void
+};
+
+const mapDispatchToProps = (dispatch, { id, type }) => ({
+  toggleStickyCell: () => dispatch(actions.toggleStickyCell(id)),
+  removeCell: () => dispatch(actions.removeCell(id)),
+  executeCell: () => dispatch(actions.executeCell(id)),
+  clearOutputs: () => dispatch(actions.clearOutputs(id)),
+  toggleCellInputVisibility: () =>
+    dispatch(actions.toggleCellInputVisibility(id)),
+  toggleCellOutputVisibility: () =>
+    dispatch(actions.toggleCellOutputVisibility(id)),
+  changeCellType: () =>
+    dispatch(
+      actions.changeCellType(id, type === "markdown" ? "code" : "markdown")
+    ),
+  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion(id))
+});
+
+export default connect(null, mapDispatchToProps)(PureToolbar);

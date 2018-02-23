@@ -3,7 +3,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import Toolbar from "../../src/providers/toolbar";
+import Toolbar from "../../src/components/toolbar";
 import { dummyStore } from "../../src/dummy";
 
 import {

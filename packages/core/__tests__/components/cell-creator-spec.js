@@ -3,31 +3,40 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import CellCreator from "../../src/providers/cell-creator";
+import CellCreator from "../../src/components/cell-creator";
 import { dummyStore } from "../../src/dummy";
 import {
   NEW_CELL_AFTER,
   NEW_CELL_BEFORE,
   NEW_CELL_APPEND,
   MERGE_CELL_AFTER
-} from "../../actionTypes";
+} from "../../src/actionTypes";
 
 describe("CellCreatorProvider", () => {
-  const store = dummyStore();
-
-  const setup = (above, id) =>
-    mount(
-      <Provider store={store}>
-        <CellCreator above={above} id={id} />
-      </Provider>
-    );
-
   test("can be constructed", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
     const component = setup(false, "test");
     expect(component).not.toBeNull();
   });
-  test("createCell can create text cell", () =>
-    new Promise(resolve => {
+  test("createCell can create text cell", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
+    return new Promise(resolve => {
       const dispatch = action => {
         expect(action.id).toBe("test");
         expect(action.cellType).toBe("markdown");
@@ -40,9 +49,19 @@ describe("CellCreatorProvider", () => {
         .findWhere(n => n.prop("createCell") !== undefined)
         .prop("createCell");
       createCell("markdown");
-    }));
-  test("createCell can create code cell", () =>
-    new Promise(resolve => {
+    });
+  });
+  test("createCell can create code cell", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
+    return new Promise(resolve => {
       const dispatch = action => {
         expect(action.id).toBe("test");
         expect(action.cellType).toBe("code");
@@ -55,9 +74,19 @@ describe("CellCreatorProvider", () => {
         .findWhere(n => n.prop("createCell") !== undefined)
         .prop("createCell");
       createCell("code");
-    }));
-  test("createCell can add a cell above the current one", () =>
-    new Promise(resolve => {
+    });
+  });
+  test("createCell can add a cell above the current one", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
+    return new Promise(resolve => {
       const dispatch = action => {
         expect(action.id).toBe("test");
         expect(action.cellType).toBe("code");
@@ -70,9 +99,19 @@ describe("CellCreatorProvider", () => {
         .findWhere(n => n.prop("createCell") !== undefined)
         .prop("createCell");
       createCell("code");
-    }));
-  test("createCell creates a new cell if cell has no id", () =>
-    new Promise(resolve => {
+    });
+  });
+  test("createCell creates a new cell if cell has no id", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
+    return new Promise(resolve => {
       const dispatch = action => {
         expect(action.cellType).toBe("code");
         expect(action.type).toBe(NEW_CELL_APPEND);
@@ -84,9 +123,19 @@ describe("CellCreatorProvider", () => {
         .findWhere(n => n.prop("createCell") !== undefined)
         .prop("createCell");
       createCell("code");
-    }));
-  test("mergeCell merges two cells into one", () =>
-    new Promise(resolve => {
+    });
+  });
+  test("mergeCell merges two cells into one", () => {
+    const store = dummyStore();
+
+    const setup = (above, id) =>
+      mount(
+        <Provider store={store}>
+          <CellCreator above={above} id={id} />
+        </Provider>
+      );
+
+    return new Promise(resolve => {
       const dispatch = action => {
         expect(action.id).toBe("test");
         expect(action.type).toBe(MERGE_CELL_AFTER);
@@ -98,5 +147,6 @@ describe("CellCreatorProvider", () => {
         .findWhere(n => n.prop("mergeCell") !== undefined)
         .prop("mergeCell");
       createCell("code");
-    }));
+    });
+  });
 });

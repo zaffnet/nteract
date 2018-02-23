@@ -2,7 +2,7 @@
 import * as React from "react";
 import fetch from "isomorphic-fetch";
 import { monocellNotebook, fromJS, toJS } from "@nteract/commutable";
-import { NotebookApp, Styles } from "@nteract/core/providers";
+import { NotebookApp, Styles } from "@nteract/core";
 import { Provider } from "react-redux";
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 

@@ -3,7 +3,7 @@ import * as React from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
 import Markdown from "@nteract/markdown";
-import { Styles } from "@nteract/core/providers";
+import { Styles } from "@nteract/core";
 
 import DirectoryListing from "./directory-listing";
 
