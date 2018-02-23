@@ -87,23 +87,13 @@ import type {
   KillKernelAction,
   KillKernelFailed,
   KillKernelSuccessful,
-  // TODO: Needs an action creator
-  StartSavingAction,
-  // TODO: Needs an action creator
-  DoneSavingAction,
-  // TODO: Needs an action creator
-  DoneSavingConfigAction,
-  // TODO: Needs an action creator
-  SetNotebookCheckpointAction,
   OpenModal,
   CloseModal,
   AddHost,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed
-  // TODO FIXME FIXME VERY WRONG FIXME FIXME TODO: none of these types exist!
-  // Try changing the import to `./actionTypes`!
-} from "../actionTypes";
+} from "./actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 import type { HostRecordProps } from "./state/entities/hosts";
@@ -394,6 +384,8 @@ export function updateCellStatus(
   };
 }
 
+/* Unlike focus next & previous, to set focus, we require an ID,
+   because the others are based on there already being a focused cell */
 export function focusCell(id: string): FocusCellAction {
   return {
     type: actionTypes.FOCUS_CELL,
@@ -402,7 +394,7 @@ export function focusCell(id: string): FocusCellAction {
 }
 
 export function focusNextCell(
-  id?: string,
+  id: ?string,
   createCellIfUndefined: boolean = true
 ): FocusNextCellAction {
   return {
@@ -412,21 +404,21 @@ export function focusNextCell(
   };
 }
 
-export function focusNextCellEditor(id?: string): FocusNextCellEditorAction {
+export function focusNextCellEditor(id: ?string): FocusNextCellEditorAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
     id
   };
 }
 
-export function focusPreviousCell(id: string): FocusPreviousCellAction {
+export function focusPreviousCell(id: ?string): FocusPreviousCellAction {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL,
     id
   };
 }
 
-export function focusCellEditor(id: string | null): FocusCellEditorAction {
+export function focusCellEditor(id: ?string): FocusCellEditorAction {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
     id
@@ -434,7 +426,7 @@ export function focusCellEditor(id: string | null): FocusCellEditorAction {
 }
 
 export function focusPreviousCellEditor(
-  id: string
+  id: ?string
 ): FocusPreviousCellEditorAction {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
@@ -769,7 +761,7 @@ export function deleteConnectionFileFailed(
   };
 }
 
-export function deleteConnectionFileSuccessful(): deleteConnectionFileSuccessful {
+export function deleteConnectionFileSuccessful(): DeleteConnectionFileSuccessfulAction {
   return {
     type: actionTypes.DELETE_CONNECTION_FILE_SUCCESSFUL
   };
@@ -801,7 +793,7 @@ export function restartKernel(
   };
 }
 
-export function restartKernelFailed(error: Error): RestartKernel {
+export function restartKernelFailed(error: Error): RestartKernelFailed {
   return {
     type: actionTypes.RESTART_KERNEL_FAILED,
     payload: error,

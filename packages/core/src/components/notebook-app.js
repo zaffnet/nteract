@@ -298,11 +298,11 @@ type NotebookStateProps = {
 };
 
 type NotebookDispatchProps = {
-  moveCell: (sourceId: string, destinationId: string, above: boolean) => void,
-  selectCell: (id: string) => void,
-  executeFocusedCell: () => void,
-  focusNextCell: () => void,
-  focusNextCellEditor: () => void
+  moveCell: (sourceId: string, destinationId: string, above: boolean) => *,
+  selectCell: (id: string) => *,
+  executeFocusedCell: () => *,
+  focusNextCell: () => *,
+  focusNextCellEditor: () => *
 };
 
 const mapStateToProps = (

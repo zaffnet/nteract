@@ -4,11 +4,11 @@ import { Map } from "immutable";
 
 import type { SetConfigAction, MergeConfigAction } from "../actionTypes";
 
-type ConfigAction = SetConfigAction | MergeConfigAction;
+type ConfigAction = SetConfigAction<*> | MergeConfigAction;
 
 type ConfigState = Map<any, any>;
 
-export function setConfigAtKey(state: ConfigState, action: SetConfigAction) {
+export function setConfigAtKey(state: ConfigState, action: SetConfigAction<*>) {
   const { key, value } = action;
   return state.set(key, value);
 }

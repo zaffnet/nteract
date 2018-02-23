@@ -240,37 +240,37 @@ export type ExecuteFocusedCellAction = {
 };
 
 export const FOCUS_CELL = "FOCUS_CELL";
-export type FocusCellAction = { type: "FOCUS_CELL", id: CellID };
+export type FocusCellAction = { type: "FOCUS_CELL", id: ?CellID };
 
 export const FOCUS_NEXT_CELL = "FOCUS_NEXT_CELL";
 export type FocusNextCellAction = {
   type: "FOCUS_NEXT_CELL",
-  id: CellID,
+  id: ?CellID,
   createCellIfUndefined: boolean
 };
 
 export const FOCUS_PREVIOUS_CELL = "FOCUS_PREVIOUS_CELL";
 export type FocusPreviousCellAction = {
   type: "FOCUS_PREVIOUS_CELL",
-  id: CellID
+  id: ?CellID
 };
 
 export const FOCUS_CELL_EDITOR = "FOCUS_CELL_EDITOR";
 export type FocusCellEditorAction = {
   type: "FOCUS_CELL_EDITOR",
-  id: CellID | null
+  id: ?CellID
 };
 
 export const FOCUS_NEXT_CELL_EDITOR = "FOCUS_NEXT_CELL_EDITOR";
 export type FocusNextCellEditorAction = {
   type: "FOCUS_NEXT_CELL_EDITOR",
-  id: CellID
+  id: ?CellID
 };
 
 export const FOCUS_PREVIOUS_CELL_EDITOR = "FOCUS_PREVIOUS_CELL_EDITOR";
 export type FocusPreviousCellEditorAction = {
   type: "FOCUS_PREVIOUS_CELL_EDITOR",
-  id: CellID
+  id: ?CellID
 };
 
 export const TOGGLE_STICKY_CELL = "TOGGLE_STICKY_CELL";
@@ -326,10 +326,10 @@ export type CommMessageAction = {
 };
 
 export const SET_CONFIG_AT_KEY = "SET_CONFIG_AT_KEY";
-export type SetConfigAction = {
+export type SetConfigAction<T> = {
   type: "SET_CONFIG_AT_KEY",
   key: string,
-  value: string
+  value: T
 };
 
 export const MERGE_CONFIG = "MERGE_CONFIG";
@@ -393,7 +393,7 @@ export const SET_NOTEBOOK = "SET_NOTEBOOK";
 export type SetNotebookAction = {
   type: "SET_NOTEBOOK",
   notebook: ImmutableNotebook,
-  filename?: string
+  filename: ?string
 };
 
 export const START_SAVING = "START_SAVING";

@@ -89,7 +89,7 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   );
 
 export const extractNewKernel = (
-  filename?: string,
+  filename: ?string,
   notebook: ImmutableNotebook
 ) => {
   // TODO: There's some incongruence between desktop and web app here, regarding path vs. filename
