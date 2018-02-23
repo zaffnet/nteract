@@ -30,7 +30,7 @@ import type { SetNotebookAction } from "@nteract/core/src/actionTypes";
  * Determines the right kernel to launch based on a notebook
  */
 export const extractNewKernel = (
-  filename?: string,
+  filename: ?string,
   notebook: ImmutableNotebook
 ) => {
   // TODO: There's some incongruence between desktop and web app here, regarding path vs. filename
