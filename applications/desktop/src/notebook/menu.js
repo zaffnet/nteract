@@ -348,11 +348,7 @@ export function storeToPDF(store: *) {
       }
     });
   } else {
-    filename = path.join(
-      // $FlowFixMe: This should be using a selector first and foremost
-      path.dirname(state.document.get("filename")),
-      filename
-    );
+    filename = path.join(path.dirname(notebookName), filename);
     exportPDF(store, filename, notificationSystem);
   }
 }
