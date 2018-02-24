@@ -41,7 +41,7 @@ import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/records";
 
-import { createKernelRef } from "@nteract/core/records";
+import { state } from "@nteract/core";
 
 import { selectors, actions, actionTypes } from "@nteract/core";
 
@@ -87,7 +87,7 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
 
           const kernel: LocalKernelProps = {
             // TODO: Include the ref when we need it here
-            ref: createKernelRef(),
+            ref: state.createKernelRef(),
             type: "zeromq",
             channels,
             connectionFile,

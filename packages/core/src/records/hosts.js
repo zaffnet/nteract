@@ -1,22 +1,22 @@
 // @flow
 import type { ChildProcess } from "child_process";
-import type { Id } from "./ids";
+import type { HostId, KernelId } from "../state/ids";
 import type { RecordFactory, RecordOf } from "immutable";
-import type { HostRef, KernelRef, KernelspecsRef } from "./refs";
+import type { HostRef, KernelRef, KernelspecsRef } from "../state/refs";
 
 import { Subject } from "rxjs/Subject";
 
 import { Record, List } from "immutable";
 
 export type BaseHostProps = {
-  id: ?Id,
+  id: ?HostId,
   ref: ?HostRef,
   selectedKernelRef: ?KernelRef,
   kernelspecsRef: ?KernelspecsRef, // reference to a collection of kernelspecs
   defaultKernelName: ?string,
   // In the desktop case, this _should_ be only one, pending
   // kernel cleanup
-  activeKernelRefs: List<Id>
+  activeKernelRefs: List<KernelRef>
 };
 
 export type JupyterHostRecordProps = BaseHostProps & {
@@ -68,7 +68,7 @@ export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
 
 export type RemoteKernelProps = {
   type: "websocket",
-  id: ?Id,
+  id: ?KernelId,
   ref: ?KernelRef,
   kernelSpecName: ?string,
   lastActivity: ?Date,

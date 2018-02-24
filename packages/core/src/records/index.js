@@ -20,10 +20,6 @@ const version: string = require("../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 
-export type { HostRef, KernelRef, KernelspecsRef } from "./refs";
-
-export { createHostRef, createKernelRef, createKernelspecsRef } from "./refs";
-
 export type HostRecord = RecordOf<
   DesktopHostRecordProps | JupyterHostRecordProps
 >;
