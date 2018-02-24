@@ -38,6 +38,9 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
                   width={6}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Run Cell
+                  </title>
                   <path
                     d="M0 14l6-6-6-6z"
                     fillRule="evenodd"
@@ -76,6 +79,9 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
                   width={16}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Pin Cell to Top
+                  </title>
                   <path
                     d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
                     fillRule="evenodd"
@@ -114,6 +120,9 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
                   width={12}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Delete Cell
+                  </title>
                   <path
                     d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
                     fillRule="evenodd"
@@ -164,6 +173,9 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
                           width={10}
                           xmlns="http://www.w3.org/2000/svg"
                         >
+                          <title>
+                            Show Additional Actions
+                          </title>
                           <path
                             d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6z"
                             fillRule="evenodd"
@@ -233,6 +245,9 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                   width={6}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Run Cell
+                  </title>
                   <path
                     d="M0 14l6-6-6-6z"
                     fillRule="evenodd"
@@ -271,6 +286,9 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                   width={16}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Pin Cell to Top
+                  </title>
                   <path
                     d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
                     fillRule="evenodd"
@@ -309,6 +327,9 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                   width={12}
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>
+                    Delete Cell
+                  </title>
                   <path
                     d="M11 2H9c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1H2c-.55 0-1 .45-1 1v1c0 .55.45 1 1 1v9c0 .55.45 1 1 1h7c.55 0 1-.45 1-1V5c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 12H3V5h1v8h1V5h1v8h1V5h1v8h1V5h1v9zm1-10H2V3h9v1z"
                     fillRule="evenodd"
@@ -359,6 +380,9 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                           width={10}
                           xmlns="http://www.w3.org/2000/svg"
                         >
+                          <title>
+                            Show Additional Actions
+                          </title>
                           <path
                             d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6z"
                             fillRule="evenodd"
