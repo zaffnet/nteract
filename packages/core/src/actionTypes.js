@@ -19,7 +19,7 @@ import type {
   DocumentRecord
 } from "./records";
 
-import type { LocalKernelProps, RemoteKernelProps } from "./records/hosts";
+import type { LocalKernelProps, RemoteKernelProps } from "./records/kernels";
 
 import type { ExecuteRequest } from "@nteract/messaging";
 

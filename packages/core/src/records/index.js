@@ -1,12 +1,8 @@
 /* @flow */
 import type { RecordFactory, RecordOf } from "immutable";
 import type { Subject } from "rxjs";
-import type {
-  DesktopHostRecordProps,
-  JupyterHostRecordProps,
-  LocalKernelProps,
-  RemoteKernelProps
-} from "./hosts";
+import type { DesktopHostRecordProps, JupyterHostRecordProps } from "./hosts";
+import type { LocalKernelProps, RemoteKernelProps } from "./kernels";
 
 export type {
   DesktopHostRecordProps,
@@ -24,12 +20,8 @@ export type HostRecord = RecordOf<
   DesktopHostRecordProps | JupyterHostRecordProps
 >;
 
-export {
-  makeLocalKernelRecord,
-  makeDesktopHostRecord,
-  makeJupyterHostRecord,
-  makeRemoteKernelRecord
-} from "./hosts";
+export { makeDesktopHostRecord, makeJupyterHostRecord } from "./hosts";
+export { makeLocalKernelRecord, makeRemoteKernelRecord } from "./kernels";
 
 export type {
   CommunicationKernelspecsProps,
