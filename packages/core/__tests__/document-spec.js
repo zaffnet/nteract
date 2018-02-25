@@ -13,7 +13,7 @@ import {
   emptyNotebook
 } from "@nteract/commutable";
 
-import { makeDocumentRecord } from "../src/records";
+import { makeDocumentRecord } from "../src/state";
 
 import { reduceOutputs, cleanCellTransient } from "../src/reducers/document";
 

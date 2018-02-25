@@ -6,7 +6,6 @@ import * as reducers from "./reducers";
 import * as themes from "./themes";
 import * as epics from "./epics";
 import * as selectors from "./selectors";
-import * as records from "./records";
 import * as state from "./state";
 
 export * from "./components";
@@ -16,7 +15,6 @@ export * from "./providers";
 const constants = actionTypes;
 
 export {
-  records,
   actions,
   actionTypes,
   constants,

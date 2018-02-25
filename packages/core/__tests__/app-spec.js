@@ -1,10 +1,9 @@
-import { actionTypes, reducers } from "@nteract/core";
-import { makeAppRecord, makeLocalKernelRecord } from "@nteract/core/records";
+import { actionTypes, reducers, state as stateModule } from "@nteract/core";
 
 describe("startSaving", () => {
   test("should set isSaving to false", () => {
-    const originalState = makeAppRecord({
-      kernel: makeLocalKernelRecord({
+    const originalState = stateModule.makeAppRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -20,8 +19,8 @@ describe("startSaving", () => {
 
 describe("doneSaving", () => {
   test("should set isSaving to false", () => {
-    const originalState = makeAppRecord({
-      kernel: makeLocalKernelRecord({
+    const originalState = stateModule.makeAppRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -37,8 +36,8 @@ describe("doneSaving", () => {
 
 describe("setExecutionState", () => {
   test("should set the exeuction state to the given value", () => {
-    const originalState = makeAppRecord({
-      kernel: makeLocalKernelRecord({
+    const originalState = stateModule.makeAppRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -57,8 +56,8 @@ describe("setExecutionState", () => {
 
 describe("setNotificationSystem", () => {
   test("returns the same originalState if notificationSystem is undefined", () => {
-    const originalState = makeAppRecord({
-      kernel: makeLocalKernelRecord({
+    const originalState = stateModule.makeAppRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -71,8 +70,8 @@ describe("setNotificationSystem", () => {
     expect(state.notificationSystem).toEqual(originalState.notificationSystem);
   });
   test("sets the notificationSystem if given", () => {
-    const originalState = makeAppRecord({
-      kernel: makeLocalKernelRecord({
+    const originalState = stateModule.makeAppRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -91,7 +90,7 @@ describe("setNotificationSystem", () => {
 
 describe("setGithubToken", () => {
   test("calls setGithubToken", () => {
-    const originalState = makeAppRecord({
+    const originalState = stateModule.makeAppRecord({
       githubToken: null
     });
 

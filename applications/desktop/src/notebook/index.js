@@ -20,22 +20,18 @@ import { initMenuHandlers } from "./menu";
 import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
 
-import {
-  makeAppRecord,
-  makeDesktopHostRecord,
-  makeDocumentRecord,
-  makeCommsRecord
-} from "@nteract/core/records";
+import { state } from "@nteract/core";
 
 import "./main.css";
 
 const store = configureStore({
-  app: makeAppRecord({
-    host: makeDesktopHostRecord(),
+  // $FlowFixMe
+  app: state.makeAppRecord({
+    host: state.makeDesktopHostRecord(),
     version: remote.app.getVersion()
   }),
-  document: makeDocumentRecord(),
-  comms: makeCommsRecord(),
+  document: state.makeDocumentRecord(),
+  comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
   })

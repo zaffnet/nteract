@@ -2,12 +2,10 @@
 import {
   makeAppRecord,
   makeLocalKernelRecord,
-  makeRemoteKernelRecord,
-  makeDesktopHostRecord,
-  makeJupyterHostRecord
-} from "../records";
+  makeRemoteKernelRecord
+} from "../state";
 
-import type { AppRecord } from "../records";
+import type { AppRecord } from "../state";
 
 import * as actionTypes from "../actionTypes";
 

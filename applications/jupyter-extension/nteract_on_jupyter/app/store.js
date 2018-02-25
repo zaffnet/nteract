@@ -6,16 +6,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import { reducers } from "@nteract/core";
-
-import {
-  makeAppRecord,
-  makeDocumentRecord,
-  makeCommsRecord,
-  makeJupyterHostRecord
-} from "@nteract/core/records";
-
-import type { AppState } from "@nteract/core/src/records";
+import { reducers, state } from "@nteract/core";
 
 import { allEpics as epics } from "@nteract/core/epics";
 
@@ -42,16 +33,17 @@ export default function configureStore({
   config: JupyterConfigData
 }) {
   const initialState = {
-    app: makeAppRecord({
-      host: makeJupyterHostRecord({
+    // $FlowFixMe
+    app: state.makeAppRecord({
+      host: state.makeOldJupyterHostRecord({
         token: config.token,
         // TODO: Use URL join, even though we know these are right
         serverUrl: location.origin + config.baseUrl
       }),
       version: `nteract-on-jupyter@${config.appVersion}`
     }),
-    document: makeDocumentRecord(),
-    comms: makeCommsRecord(),
+    document: state.makeDocumentRecord(),
+    comms: state.makeCommsRecord(),
     config: ImmutableMap({
       theme: "light"
     })
@@ -61,6 +53,7 @@ export default function configureStore({
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
+    // $FlowFixMe
     rootReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))

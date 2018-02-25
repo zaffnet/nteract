@@ -8,23 +8,17 @@ import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,
-  KernelInfo,
   LocalKernelProps,
   RemoteKernelProps
-} from "../records";
+} from "./state";
 
 import type {
-  ImmutableCell,
-  ImmutableNotebook,
   CellID,
   CellType,
-  ImmutableCellOrder,
-  ImmutableOutput,
-  ImmutableOutputs,
   MimeBundle
 } from "@nteract/commutable/src/types";
 
-import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+import type { Output } from "@nteract/commutable/src/v4";
 
 import type {
   UnhideAll,

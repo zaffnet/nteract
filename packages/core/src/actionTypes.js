@@ -1,6 +1,4 @@
 /* @flow */
-
-import type { ChildProcess } from "child_process"; // eslint-disable-line no-unused-vars
 import type { HostRef, KernelspecsRef } from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
@@ -14,16 +12,15 @@ import type {
 } from "@nteract/commutable/src";
 
 import type {
-  LanguageInfoMetadata,
   KernelInfo,
-  DocumentRecord
-} from "./records";
-
-import type { LocalKernelProps, RemoteKernelProps } from "./records/hosts";
+  LanguageInfoMetadata,
+  LocalKernelProps,
+  RemoteKernelProps
+} from "./state";
 
 import type { ExecuteRequest } from "@nteract/messaging";
 
-import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+import type { Output } from "@nteract/commutable/src/v4";
 
 export type ErrorAction<T: string> = {
   type: T,

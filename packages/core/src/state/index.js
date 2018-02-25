@@ -10,6 +10,7 @@ export * from "./communication";
 export * from "./entities";
 export * from "./ids";
 export * from "./refs";
+export * from "./old";
 
 export type StateRecordProps = {
   communication: RecordOf<CommunicationRecordProps>,

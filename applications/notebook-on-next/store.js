@@ -4,15 +4,7 @@ import { createEpicMiddleware, combineEpics } from "redux-observable";
 
 import { Map as ImmutableMap } from "immutable";
 
-import { reducers } from "@nteract/core";
-
-import type { AppState } from "@nteract/core/src/records";
-
-import {
-  makeAppRecord,
-  makeDocumentRecord,
-  makeCommsRecord
-} from "@nteract/core/records";
+import { reducers, state } from "@nteract/core";
 
 import {
   executeCellEpic,
@@ -41,9 +33,9 @@ const rootReducer = combineReducers({
 });
 
 const defaultState = {
-  app: makeAppRecord(),
-  document: makeDocumentRecord(),
-  comms: makeCommsRecord(),
+  app: state.makeAppRecord(),
+  document: state.makeDocumentRecord(),
+  comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
   })
@@ -59,6 +51,7 @@ export default function configureStore() {
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
+    // $FlowFixMe
     rootReducer,
     defaultState,
     composeEnhancers(applyMiddleware(...middlewares))
