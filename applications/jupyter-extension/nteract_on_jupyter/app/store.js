@@ -15,8 +15,6 @@ import {
   makeJupyterHostRecord
 } from "@nteract/core/records";
 
-import type { AppState } from "@nteract/core/src/records";
-
 import { allEpics as epics } from "@nteract/core/epics";
 
 export type JupyterConfigData = {

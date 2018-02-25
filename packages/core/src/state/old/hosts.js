@@ -1,6 +1,6 @@
 // @flow
-import type { HostId } from "../state/ids";
-import type { HostRef, KernelRef, KernelspecsRef } from "../state/refs";
+import type { HostId } from "../ids";
+import type { HostRef, KernelRef, KernelspecsRef } from "../refs";
 import type { RecordFactory, RecordOf } from "immutable";
 import { Record, List } from "immutable";
 import { Subject } from "rxjs/Subject";

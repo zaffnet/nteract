@@ -7,7 +7,7 @@ import type { LocalKernelProps, RemoteKernelProps } from "./kernels";
 export type { LocalKernelProps, RemoteKernelProps };
 
 // Pull version from core's package.json
-const version: string = require("../../package.json").version;
+const version: string = require("../../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 

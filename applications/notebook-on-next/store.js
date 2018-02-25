@@ -6,8 +6,6 @@ import { Map as ImmutableMap } from "immutable";
 
 import { reducers } from "@nteract/core";
 
-import type { AppState } from "@nteract/core/src/records";
-
 import {
   makeAppRecord,
   makeDocumentRecord,

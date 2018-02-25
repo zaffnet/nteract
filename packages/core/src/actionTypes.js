@@ -11,9 +11,12 @@ import type {
   MimeBundle
 } from "@nteract/commutable/src";
 
-import type { LanguageInfoMetadata, KernelInfo } from "./records";
-
-import type { LocalKernelProps, RemoteKernelProps } from "./records/kernels";
+import type {
+  KernelInfo,
+  LanguageInfoMetadata,
+  LocalKernelProps,
+  RemoteKernelProps
+} from "./state";
 
 import type { ExecuteRequest } from "@nteract/messaging";
 

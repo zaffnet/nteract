@@ -1,7 +1,7 @@
 // @flow
 import type { ChildProcess } from "child_process";
-import type { KernelId } from "../state/ids";
-import type { KernelRef } from "../state/refs";
+import type { KernelId } from "../ids";
+import type { KernelRef } from "../refs";
 import type { RecordFactory, RecordOf } from "immutable";
 import { Record } from "immutable";
 import { Subject } from "rxjs/Subject";

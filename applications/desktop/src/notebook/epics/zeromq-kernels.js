@@ -39,7 +39,7 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/records";
+import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
 
 import { state } from "@nteract/core";
 

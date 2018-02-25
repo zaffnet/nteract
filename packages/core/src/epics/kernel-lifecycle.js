@@ -30,8 +30,6 @@ import * as uuid from "uuid";
 
 import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
 
-import type { KernelInfo } from "../records";
-
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";

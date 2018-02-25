@@ -23,14 +23,7 @@ const rootReducer = combineReducers({
   config
 });
 
-import type { AppState } from "../records";
-import { makeAppRecord, makeDocumentRecord, makeCommsRecord } from "../records";
-
-/**
-function configureStore(initialState: AppState) {
-  return createStore(rootReducer, initialState, applyMiddleware(...middlewares));
-}
-**/
+import { makeAppRecord, makeDocumentRecord, makeCommsRecord } from "../state";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
