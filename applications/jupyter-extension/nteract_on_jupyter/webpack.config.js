@@ -70,12 +70,6 @@ module.exports = {
 
     new webpack.IgnorePlugin(/\.(css|less)$/),
 
-    // build vendor bundle (including common code chunks used in other bundles)
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      minChunks: Infinity,
-      filename: "vendor.js"
-    }),
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
       compress: {
