@@ -8,6 +8,7 @@ import {
   BrowserWindow
 } from "electron";
 import * as path from "path";
+import { sortBy } from "lodash";
 import { launch, launchNewNotebook } from "./launch";
 import { installShellCommand } from "./cli";
 
@@ -219,14 +220,16 @@ export function loadFullMenu(store: * = global.store) {
   const state = store.getState();
   const kernelSpecs = state.get("kernelSpecs") ? state.get("kernelSpecs") : {};
 
-  function generateSubMenu(kernelSpecName) {
+  function generateSubMenu(kernel) {
     return {
-      label: kernelSpecs[kernelSpecName].spec.display_name,
-      click: createSender("menu:new-kernel", kernelSpecs[kernelSpecName])
+      label: kernel.spec.display_name,
+      click: createSender("menu:new-kernel", kernel)
     };
   }
 
-  const kernelMenuItems = Object.keys(kernelSpecs).map(generateSubMenu);
+  const kernelMenuItems = sortBy(kernelSpecs, "spec.display_name").map(
+    generateSubMenu
+  );
 
   const newNotebookItems = Object.keys(kernelSpecs).map(kernelSpecName => ({
     label: kernelSpecs[kernelSpecName].spec.display_name,
