@@ -4,10 +4,10 @@ import { launchKernelByName, interruptKernel } from "../../src/actions";
 
 import {
   makeAppRecord,
-  makeJupyterHostRecord,
+  makeOldJupyterHostRecord,
   makeRemoteKernelRecord,
   makeDocumentRecord
-} from "../../records";
+} from "../../src/state";
 
 import { emptyNotebook } from "@nteract/commutable";
 import {
@@ -28,8 +28,9 @@ describe("launchWebSocketKernelEpic", () => {
         return this.state;
       },
       state: {
+        // $FlowFixMe
         app: makeAppRecord({
-          host: makeJupyterHostRecord({
+          host: makeOldJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
@@ -71,8 +72,9 @@ describe("interruptKernelEpic", () => {
         return this.state;
       },
       state: {
+        // $FlowFixMe
         app: makeAppRecord({
-          host: makeJupyterHostRecord({
+          host: makeOldJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
@@ -81,6 +83,7 @@ describe("interruptKernelEpic", () => {
             type: "websocket",
             channels: jest.fn(),
             kernelSpecName: "fancy",
+            // $FlowFixMe: This is looking for real KernelId.
             id: "0"
           }),
           notificationSystem: { addNotification: jest.fn() }

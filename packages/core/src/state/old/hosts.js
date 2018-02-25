@@ -23,7 +23,7 @@ export type JupyterHostRecordProps = BaseHostProps & {
   crossDomain: ?boolean
 };
 
-export const makeJupyterHostRecord: RecordFactory<
+export const makeOldJupyterHostRecord: RecordFactory<
   JupyterHostRecordProps
 > = Record({
   type: "jupyter",

@@ -13,7 +13,7 @@ import { List, Map, Record, Set } from "immutable";
 
 type HostRecord = RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>;
 
-export { makeDesktopHostRecord, makeJupyterHostRecord } from "./hosts";
+export { makeDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
 export { makeLocalKernelRecord, makeRemoteKernelRecord } from "./kernels";
 
 /*

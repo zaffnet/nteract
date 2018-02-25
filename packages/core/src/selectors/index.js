@@ -1,6 +1,5 @@
 // @flow
 
-// import type { AppState } from "../records";
 // FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
 type AppState = {
   // The new way

@@ -8,10 +8,9 @@ import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,
-  KernelInfo,
   LocalKernelProps,
   RemoteKernelProps
-} from "../records";
+} from "./state";
 
 import type {
   CellID,
