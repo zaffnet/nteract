@@ -49,11 +49,7 @@ import type {
   SendExecuteMessageAction
 } from "../actionTypes";
 
-import type {
-  LanguageInfoMetadata,
-  KernelInfo,
-  DocumentRecord
-} from "../records";
+import type { DocumentRecord } from "../records";
 
 import { makeDocumentRecord } from "../records";
 
