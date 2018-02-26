@@ -27,7 +27,7 @@ import "./main.css";
 const store = configureStore({
   // $FlowFixMe
   app: state.makeAppRecord({
-    host: state.makeDesktopHostRecord(),
+    host: state.makeOldDesktopHostRecord(),
     version: remote.app.getVersion()
   }),
   document: state.makeDocumentRecord(),

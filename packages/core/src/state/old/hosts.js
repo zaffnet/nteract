@@ -5,7 +5,7 @@ import type { RecordFactory, RecordOf } from "immutable";
 import { Record, List } from "immutable";
 import { Subject } from "rxjs/Subject";
 
-export type BaseHostProps = {
+export type OldBaseHostProps = {
   id: ?HostId,
   ref: ?HostRef,
   selectedKernelRef: ?KernelRef,
@@ -16,7 +16,7 @@ export type BaseHostProps = {
   activeKernelRefs: List<KernelRef>
 };
 
-export type JupyterHostRecordProps = BaseHostProps & {
+export type OldJupyterHostRecordProps = OldBaseHostProps & {
   type: "jupyter",
   token: ?string,
   serverUrl: ?string,
@@ -24,7 +24,7 @@ export type JupyterHostRecordProps = BaseHostProps & {
 };
 
 export const makeOldJupyterHostRecord: RecordFactory<
-  JupyterHostRecordProps
+  OldJupyterHostRecordProps
 > = Record({
   type: "jupyter",
   ref: null,
@@ -38,19 +38,19 @@ export const makeOldJupyterHostRecord: RecordFactory<
   crossDomain: false
 });
 
-export type JupyterHostRecord = RecordOf<JupyterHostRecordProps>;
+export type OldJupyterHostRecord = RecordOf<OldJupyterHostRecordProps>;
 
-export type BinderHostRecordProps = JupyterHostRecordProps & {
+export type OldBinderHostRecordProps = OldJupyterHostRecordProps & {
   // TODO: figure out if this belong here, it was brought over by play
   messages: List<string>
 };
 
-export type DesktopHostRecordProps = BaseHostProps & {
+export type OldDesktopHostRecordProps = OldBaseHostProps & {
   type: "local"
 };
 
-export const makeDesktopHostRecord: RecordFactory<
-  DesktopHostRecordProps
+export const makeOldDesktopHostRecord: RecordFactory<
+  OldDesktopHostRecordProps
 > = Record({
   type: "local",
   ref: null,
@@ -61,4 +61,4 @@ export const makeDesktopHostRecord: RecordFactory<
   activeKernelRefs: List()
 });
 
-export type DesktopHostRecord = RecordOf<DesktopHostRecordProps>;
+export type OldDesktopHostRecord = RecordOf<OldDesktopHostRecordProps>;

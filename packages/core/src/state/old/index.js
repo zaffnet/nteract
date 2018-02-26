@@ -1,7 +1,10 @@
 /* @flow */
 import type { RecordFactory, RecordOf } from "immutable";
 import type { Subject } from "rxjs";
-import type { DesktopHostRecordProps, JupyterHostRecordProps } from "./hosts";
+import type {
+  OldDesktopHostRecordProps,
+  OldJupyterHostRecordProps
+} from "./hosts";
 import type { OldLocalKernelProps, OldRemoteKernelProps } from "./kernels";
 
 export type { OldLocalKernelProps, OldRemoteKernelProps };
@@ -11,9 +14,11 @@ const version: string = require("../../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 
-type HostRecord = RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>;
+type HostRecord = RecordOf<
+  OldDesktopHostRecordProps | OldJupyterHostRecordProps
+>;
 
-export { makeDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
+export { makeOldDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
 export { makeOldLocalKernelRecord, makeOldRemoteKernelRecord } from "./kernels";
 
 /*
