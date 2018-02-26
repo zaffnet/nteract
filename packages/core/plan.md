@@ -85,6 +85,14 @@ type core = {
         }
       }
     },
+    sessions: {
+      byRef: {
+        [ref: Ref]: {
+          loading: boolean,
+          error: ?Object
+        }
+      }
+    },
     kernels: {
       byRef: {
         [ref: Ref]: {
@@ -226,6 +234,19 @@ type core = {
         }
       }
     },
+
+    sessions: {
+      byRef: {
+        [ref: Ref]: {
+          id: Id,
+          name: string, // This is just a display name.
+          type: string, // TODO: this should be an enum.
+          kernelRef: Ref
+        }
+      },
+      refs: Array<Ref>
+    },
+    
     contents: {
       byRef: {
         [ref: Ref]: {
@@ -246,10 +267,10 @@ type core = {
           // here.
           model: ?Object, // null | DirectoryModel | NotebookModel | FileModel
 
-          // The kernelRef is nullable here because we don't necessarily need
-          // the kernel to be running to display the document. This allows us 
-          // to render a document and start up a kernel in parallel.
-          kernelRef: ?KernelRef 
+          // The sessionRef is nullable here because we don't necessarily need
+          // the session to be running to display the document. This allows us 
+          // to render a document and start up a session in parallel.
+          sessionRef: ?SessionRef 
         }
       }
     },
