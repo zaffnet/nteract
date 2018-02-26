@@ -28,9 +28,9 @@ export type ErrorAction<T: string> = {
   error: true
 };
 
-export const OPEN_MODAL = "CORE/OPEN_MPODAL";
+export const OPEN_MODAL = "CORE/OPEN_MODAL";
 export type OpenModal = {
-  type: "CORE/OPEN_MPODAL",
+  type: "CORE/OPEN_MODAL",
   payload: {
     modalType: string
   }
