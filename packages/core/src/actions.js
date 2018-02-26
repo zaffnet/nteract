@@ -8,8 +8,8 @@ import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
   LanguageInfoMetadata,
-  LocalKernelProps,
-  RemoteKernelProps
+  OldLocalKernelProps,
+  OldRemoteKernelProps
 } from "./state";
 
 import type {
@@ -175,7 +175,7 @@ export function launchKernelFailed(error: Error) {
 }
 
 export function launchKernelSuccessful(
-  kernel: LocalKernelProps | RemoteKernelProps
+  kernel: OldLocalKernelProps | OldRemoteKernelProps
 ): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,

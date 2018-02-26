@@ -39,7 +39,7 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
+import type { KernelInfo, OldLocalKernelProps } from "@nteract/core/src/state";
 
 import { state } from "@nteract/core";
 
@@ -85,7 +85,7 @@ export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
         .then((channels: Channels) => {
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
-          const kernel: LocalKernelProps = {
+          const kernel: OldLocalKernelProps = {
             // TODO: Include the ref when we need it here
             ref: state.createKernelRef(),
             type: "zeromq",

@@ -14,8 +14,8 @@ import type {
 import type {
   KernelInfo,
   LanguageInfoMetadata,
-  LocalKernelProps,
-  RemoteKernelProps
+  OldLocalKernelProps,
+  OldRemoteKernelProps
 } from "./state";
 
 import type { ExecuteRequest } from "@nteract/messaging";
@@ -456,7 +456,7 @@ export type LaunchKernelFailed = ErrorAction<"LAUNCH_KERNEL_FAILED">;
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
-  kernel: LocalKernelProps | RemoteKernelProps
+  kernel: OldLocalKernelProps | OldRemoteKernelProps
 };
 
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";

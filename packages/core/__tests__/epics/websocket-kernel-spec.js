@@ -5,7 +5,7 @@ import { launchKernelByName, interruptKernel } from "../../src/actions";
 import {
   makeAppRecord,
   makeOldJupyterHostRecord,
-  makeRemoteKernelRecord,
+  makeOldRemoteKernelRecord,
   makeDocumentRecord
 } from "../../src/state";
 
@@ -79,7 +79,7 @@ describe("interruptKernelEpic", () => {
             token: "eh",
             serverUrl: "http://localhost:8888/"
           }),
-          kernel: makeRemoteKernelRecord({
+          kernel: makeOldRemoteKernelRecord({
             type: "websocket",
             channels: jest.fn(),
             kernelSpecName: "fancy",

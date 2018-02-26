@@ -2,9 +2,9 @@
 import type { RecordFactory, RecordOf } from "immutable";
 import type { Subject } from "rxjs";
 import type { DesktopHostRecordProps, JupyterHostRecordProps } from "./hosts";
-import type { LocalKernelProps, RemoteKernelProps } from "./kernels";
+import type { OldLocalKernelProps, OldRemoteKernelProps } from "./kernels";
 
-export type { LocalKernelProps, RemoteKernelProps };
+export type { OldLocalKernelProps, OldRemoteKernelProps };
 
 // Pull version from core's package.json
 const version: string = require("../../../package.json").version;
@@ -14,7 +14,7 @@ import { List, Map, Record, Set } from "immutable";
 type HostRecord = RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>;
 
 export { makeDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
-export { makeLocalKernelRecord, makeRemoteKernelRecord } from "./kernels";
+export { makeOldLocalKernelRecord, makeOldRemoteKernelRecord } from "./kernels";
 
 /*
 
@@ -124,7 +124,7 @@ type NotebookMetadata = {
 };
 
 type AppRecordProps = {
-  kernel: ?RecordOf<RemoteKernelProps> | ?RecordOf<LocalKernelProps>,
+  kernel: ?RecordOf<OldRemoteKernelProps> | ?RecordOf<OldLocalKernelProps>,
   host: ?HostRecord,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },

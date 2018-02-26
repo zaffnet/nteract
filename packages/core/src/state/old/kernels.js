@@ -6,7 +6,7 @@ import type { RecordFactory, RecordOf } from "immutable";
 import { Record } from "immutable";
 import { Subject } from "rxjs/Subject";
 
-export type RemoteKernelProps = {
+export type OldRemoteKernelProps = {
   type: "websocket",
   id: ?KernelId,
   ref: ?KernelRef,
@@ -22,7 +22,7 @@ export type RemoteKernelProps = {
   status: ?string
 };
 
-export type LocalKernelProps = {
+export type OldLocalKernelProps = {
   type: "zeromq",
   spawn: ?ChildProcess,
   connectionFile: ?string,
@@ -39,7 +39,9 @@ export type LocalKernelProps = {
   status: ?string
 };
 
-export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
+export const makeOldLocalKernelRecord: RecordFactory<
+  OldLocalKernelProps
+> = Record({
   type: "zeromq",
   spawn: null,
   connectionFile: null,
@@ -51,7 +53,9 @@ export const makeLocalKernelRecord: RecordFactory<LocalKernelProps> = Record({
   status: null
 });
 
-export const makeRemoteKernelRecord: RecordFactory<RemoteKernelProps> = Record({
+export const makeOldRemoteKernelRecord: RecordFactory<
+  OldRemoteKernelProps
+> = Record({
   type: "websocket",
   cwd: ".",
   id: null,
@@ -62,5 +66,5 @@ export const makeRemoteKernelRecord: RecordFactory<RemoteKernelProps> = Record({
   status: null
 });
 
-export type LocalKernelRecord = RecordOf<LocalKernelProps>;
-export type RemoteKernelRecord = RecordOf<RemoteKernelProps>;
+export type OldLocalKernelRecord = RecordOf<OldLocalKernelProps>;
+export type OldRemoteKernelRecord = RecordOf<OldRemoteKernelProps>;
