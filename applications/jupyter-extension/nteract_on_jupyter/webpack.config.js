@@ -25,6 +25,7 @@ const aliases = {
 };
 
 module.exports = {
+  mode: isProd ? "production" : "development",
   devtool: isProd ? "hidden-source-map" : "cheap-eval-source-map",
   entry: {
     app: "./app/index.js",
@@ -42,7 +43,8 @@ module.exports = {
   target: "web",
   output: {
     path: path.join(__dirname, "lib"),
-    filename: "main.js"
+    filename: "[name].js",
+    chunkFilename: "[name].bundle.js"
   },
   module: {
     rules: [
@@ -50,8 +52,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules\/(?!(@nteract|rx-jupyter|rx-binder))/,
         loader: "babel-loader"
-      },
-      { test: /\.json$/, loader: "json-loader" }
+      }
     ]
   },
   resolve: {
@@ -60,28 +61,9 @@ module.exports = {
     alias: aliases
   },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(nodeEnv)
-      }
-    }),
     new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin(),
 
     new webpack.IgnorePlugin(/\.(css|less)$/),
-
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
-      compress: {
-        warnings: false,
-        pure_getters: true,
-        passes: 3,
-        screw_ie8: true,
-        sequences: false
-      },
-      output: { comments: false, beautify: true },
-      sourceMap: false
-    }),
 
     new webpack.SourceMapDevToolPlugin({
       filename: "[name].js.map",

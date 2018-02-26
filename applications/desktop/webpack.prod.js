@@ -6,23 +6,11 @@ const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 const { commonMainConfig, commonRendererConfig } = require("./webpack.common");
 
-const plugins = [
-  new webpack.optimize.ModuleConcatenationPlugin(),
-  new webpack.DefinePlugin({
-    "process.env.NODE_ENV": JSON.stringify("production")
-  }),
-  new UglifyJSPlugin({
-    parallel: true,
-    uglifyOptions: {
-      ecma: 7
-    }
-  })
-];
-
-const mainConfig = merge(commonMainConfig, { plugins: plugins });
+const mainConfig = merge(commonMainConfig, { mode: "production" });
 
 const rendererConfig = merge(commonRendererConfig, {
-  plugins: [new LodashModuleReplacementPlugin(), ...plugins]
+  plugins: [new LodashModuleReplacementPlugin()],
+  mode: "production"
 });
 
 module.exports = [mainConfig, rendererConfig];

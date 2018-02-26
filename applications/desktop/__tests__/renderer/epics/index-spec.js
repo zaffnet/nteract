@@ -14,17 +14,18 @@ describe("epics", () => {
 
 describe("retryAndEmitError", () => {
   test("returns the source observable, emitting an error action first", () => {
-    const source = { startWith: jest.fn(() => source) };
+    console.error = jest.fn(err => {});
+
+    const source = {
+      pipe: jest.fn()
+    };
+
     const err = new Error("Oh no!");
     const newSource = retryAndEmitError(err, source);
 
-    expect(source.startWith).toHaveBeenCalledTimes(1);
-    expect(source.startWith).toHaveBeenCalledWith({
-      payload: err,
-      error: true,
-      type: "ERROR"
-    });
+    expect(console.error).toHaveBeenCalledWith(err);
 
-    expect(newSource).toBe(source);
+    expect(source.pipe).toHaveBeenCalledTimes(1);
+    expect(source.pipe).toHaveBeenCalledWith(expect.any(Function));
   });
 });
