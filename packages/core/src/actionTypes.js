@@ -12,8 +12,8 @@ import type {
 } from "@nteract/commutable/src";
 
 import type {
-  KernelInfo,
-  LanguageInfoMetadata,
+  OldKernelInfo,
+  OldLanguageInfoMetadata,
   OldLocalKernelProps,
   OldRemoteKernelProps
 } from "./state";
@@ -205,7 +205,7 @@ export type AcceptPayloadMessageAction = {
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
 export type SetLanguageInfoAction = {
   type: "SET_LANGUAGE_INFO",
-  langInfo: LanguageInfoMetadata
+  langInfo: OldLanguageInfoMetadata
 };
 
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
@@ -276,7 +276,7 @@ export type ToggleStickyCellAction = { type: "TOGGLE_STICKY_CELL", id: CellID };
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
 export type SetKernelInfoAction = {
   type: "SET_KERNEL_INFO",
-  kernelInfo: KernelInfo
+  kernelInfo: OldKernelInfo
 };
 
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";

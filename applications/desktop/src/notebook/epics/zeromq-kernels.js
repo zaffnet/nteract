@@ -39,7 +39,10 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type { KernelInfo, OldLocalKernelProps } from "@nteract/core/src/state";
+import type {
+  OldKernelInfo,
+  OldLocalKernelProps
+} from "@nteract/core/src/state";
 
 import { state } from "@nteract/core";
 
@@ -55,10 +58,10 @@ import {
 /**
  * Instantiate a connection to a new kernel.
  *
- * @param  {KernelInfo}  kernelSpec The kernel specs - name,language, etc
+ * @param  {OldKernelInfo}  kernelSpec The kernel specs - name,language, etc
  * @param  {String}  cwd The working directory to launch the kernel in
  */
-export function launchKernelObservable(kernelSpec: KernelInfo, cwd: string) {
+export function launchKernelObservable(kernelSpec: OldKernelInfo, cwd: string) {
   const spec = kernelSpec.spec;
 
   return Observable.create(observer => {

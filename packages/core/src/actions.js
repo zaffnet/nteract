@@ -7,7 +7,7 @@ import type { HostRef, KernelspecsRef } from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
-  LanguageInfoMetadata,
+  OldLanguageInfoMetadata,
   OldLocalKernelProps,
   OldRemoteKernelProps
 } from "./state";
@@ -737,7 +737,7 @@ export function updateDisplay(content: {
 }
 
 export function setLanguageInfo(
-  langInfo: LanguageInfoMetadata
+  langInfo: OldLanguageInfoMetadata
 ): SetLanguageInfoAction {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,

@@ -99,12 +99,12 @@ type KernelspecMetadata = {
 };
 
 // Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
-export type KernelInfo = {
+export type OldKernelInfo = {
   name: string,
   spec: KernelspecMetadata
 };
 
-export type LanguageInfoMetadata = {
+export type OldLanguageInfoMetadata = {
   name: string,
   codemirror_mode?: string | ImmutableJSONMap,
   file_extension?: string,
@@ -114,7 +114,7 @@ export type LanguageInfoMetadata = {
 
 type NotebookMetadata = {
   kernelspec: KernelspecMetadata,
-  language_info: LanguageInfoMetadata
+  language_info: OldLanguageInfoMetadata
   // NOTE: We're not currently using orig_nbformat in nteract. Based on the comment
   // in the schema, we won't:
   //
