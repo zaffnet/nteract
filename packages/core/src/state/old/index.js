@@ -1,20 +1,25 @@
 /* @flow */
 import type { RecordFactory, RecordOf } from "immutable";
 import type { Subject } from "rxjs";
-import type { DesktopHostRecordProps, JupyterHostRecordProps } from "./hosts";
-import type { LocalKernelProps, RemoteKernelProps } from "./kernels";
+import type {
+  OldDesktopHostRecordProps,
+  OldJupyterHostRecordProps
+} from "./hosts";
+import type { OldLocalKernelProps, OldRemoteKernelProps } from "./kernels";
 
-export type { LocalKernelProps, RemoteKernelProps };
+export type { OldLocalKernelProps, OldRemoteKernelProps };
 
 // Pull version from core's package.json
 const version: string = require("../../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 
-type HostRecord = RecordOf<DesktopHostRecordProps | JupyterHostRecordProps>;
+type HostRecord = RecordOf<
+  OldDesktopHostRecordProps | OldJupyterHostRecordProps
+>;
 
-export { makeDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
-export { makeLocalKernelRecord, makeRemoteKernelRecord } from "./kernels";
+export { makeOldDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
+export { makeOldLocalKernelRecord, makeOldRemoteKernelRecord } from "./kernels";
 
 /*
 
@@ -94,12 +99,12 @@ type KernelspecMetadata = {
 };
 
 // Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
-export type KernelInfo = {
+export type OldKernelInfo = {
   name: string,
   spec: KernelspecMetadata
 };
 
-export type LanguageInfoMetadata = {
+export type OldLanguageInfoMetadata = {
   name: string,
   codemirror_mode?: string | ImmutableJSONMap,
   file_extension?: string,
@@ -109,7 +114,7 @@ export type LanguageInfoMetadata = {
 
 type NotebookMetadata = {
   kernelspec: KernelspecMetadata,
-  language_info: LanguageInfoMetadata
+  language_info: OldLanguageInfoMetadata
   // NOTE: We're not currently using orig_nbformat in nteract. Based on the comment
   // in the schema, we won't:
   //
@@ -124,7 +129,7 @@ type NotebookMetadata = {
 };
 
 type AppRecordProps = {
-  kernel: ?RecordOf<RemoteKernelProps> | ?RecordOf<LocalKernelProps>,
+  kernel: ?RecordOf<OldRemoteKernelProps> | ?RecordOf<OldLocalKernelProps>,
   host: ?HostRecord,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },

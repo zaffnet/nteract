@@ -12,10 +12,10 @@ import type {
 } from "@nteract/commutable/src";
 
 import type {
-  KernelInfo,
-  LanguageInfoMetadata,
-  LocalKernelProps,
-  RemoteKernelProps
+  OldKernelInfo,
+  OldLanguageInfoMetadata,
+  OldLocalKernelProps,
+  OldRemoteKernelProps
 } from "./state";
 
 import type { ExecuteRequest } from "@nteract/messaging";
@@ -28,9 +28,9 @@ export type ErrorAction<T: string> = {
   error: true
 };
 
-export const OPEN_MODAL = "CORE/OPEN_MPODAL";
+export const OPEN_MODAL = "CORE/OPEN_MODAL";
 export type OpenModal = {
-  type: "CORE/OPEN_MPODAL",
+  type: "CORE/OPEN_MODAL",
   payload: {
     modalType: string
   }
@@ -205,7 +205,7 @@ export type AcceptPayloadMessageAction = {
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
 export type SetLanguageInfoAction = {
   type: "SET_LANGUAGE_INFO",
-  langInfo: LanguageInfoMetadata
+  langInfo: OldLanguageInfoMetadata
 };
 
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
@@ -276,7 +276,7 @@ export type ToggleStickyCellAction = { type: "TOGGLE_STICKY_CELL", id: CellID };
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
 export type SetKernelInfoAction = {
   type: "SET_KERNEL_INFO",
-  kernelInfo: KernelInfo
+  kernelInfo: OldKernelInfo
 };
 
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";
@@ -456,7 +456,7 @@ export type LaunchKernelFailed = ErrorAction<"LAUNCH_KERNEL_FAILED">;
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
-  kernel: LocalKernelProps | RemoteKernelProps
+  kernel: OldLocalKernelProps | OldRemoteKernelProps
 };
 
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";

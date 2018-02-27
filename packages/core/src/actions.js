@@ -7,9 +7,9 @@ import type { HostRef, KernelspecsRef } from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
-  LanguageInfoMetadata,
-  LocalKernelProps,
-  RemoteKernelProps
+  OldLanguageInfoMetadata,
+  OldLocalKernelProps,
+  OldRemoteKernelProps
 } from "./state";
 
 import type {
@@ -175,7 +175,7 @@ export function launchKernelFailed(error: Error) {
 }
 
 export function launchKernelSuccessful(
-  kernel: LocalKernelProps | RemoteKernelProps
+  kernel: OldLocalKernelProps | OldRemoteKernelProps
 ): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -737,7 +737,7 @@ export function updateDisplay(content: {
 }
 
 export function setLanguageInfo(
-  langInfo: LanguageInfoMetadata
+  langInfo: OldLanguageInfoMetadata
 ): SetLanguageInfoAction {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
