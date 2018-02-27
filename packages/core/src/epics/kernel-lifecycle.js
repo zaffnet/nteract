@@ -135,7 +135,7 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
           level: "error"
         });
 
-        // TODO: Wow do we need to send notifcations through our store for
+        // TODO: Wow do we need to send notifications through our store for
         // consistency
         return empty();
       }

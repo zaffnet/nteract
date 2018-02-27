@@ -4,26 +4,10 @@ import { createEpicMiddleware, combineEpics } from "redux-observable";
 
 import { Map as ImmutableMap } from "immutable";
 
-import { reducers, state } from "@nteract/core";
-
-import {
-  executeCellEpic,
-  updateDisplayEpic,
-  commListenEpic,
-  launchWebSocketKernelEpic,
-  acquireKernelInfoEpic,
-  watchExecutionStateEpic
-} from "@nteract/core/epics";
+import { reducers, state, epics as coreEpics } from "@nteract/core";
 
 // TODO: Bring desktop's wrapEpic over to @nteract/core so we can use it here
-const epics = [
-  executeCellEpic,
-  updateDisplayEpic,
-  commListenEpic,
-  launchWebSocketKernelEpic,
-  acquireKernelInfoEpic,
-  watchExecutionStateEpic
-];
+const epics = coreEpics.allEpics;
 
 const rootReducer = combineReducers({
   app: reducers.app,
@@ -38,7 +22,10 @@ const defaultState = {
   comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
-  })
+  }),
+  // TODO FIXME FIXME FIXME
+  core: ImmutableMap(),
+  modals: ImmutableMap()
 };
 
 const composeEnhancers =

@@ -8,9 +8,7 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { actions } from "@nteract/core";
-
-import * as selectors from "@nteract/core/selectors";
+import { actions, selectors } from "@nteract/core";
 
 export function cwdKernelFallback() {
   // HACK: If we see they're at /, we assume that was the OS launching the Application

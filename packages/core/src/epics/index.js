@@ -25,8 +25,8 @@ import { fetchKernelspecsEpic } from "./kernelspecs";
 
 import { fetchContentEpic, setNotebookEpic, saveContentEpic } from "./contents";
 
-// Because `@nteract/core/epics` ends up being a commonjs import, we can't currently
-// rely on a default export or a `import * as epics from ""@nteract/core/epics"`
+// Because `@nteract/core` ends up being a commonjs import, we can't currently
+// rely on `import { epics } from ""@nteract/core"`
 // as it would collide the array with the named exports
 const allEpics = [
   executeCellEpic,

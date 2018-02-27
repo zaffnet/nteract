@@ -32,7 +32,10 @@ const store = configureStore({
   comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
-  })
+  }),
+  // TODO: FIXME FIXME
+  core: ImmutableMap(),
+  modals: ImmutableMap()
 });
 
 // Register for debugging
