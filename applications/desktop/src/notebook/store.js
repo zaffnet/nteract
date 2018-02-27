@@ -11,7 +11,9 @@ const rootReducer = combineReducers({
   app: reducers.app,
   document: reducers.document,
   comms: reducers.comms,
-  config: reducers.config
+  config: reducers.config,
+  modals: reducers.modals,
+  core: reducers.core
 });
 
 export default function configureStore(initialState: AppState) {
