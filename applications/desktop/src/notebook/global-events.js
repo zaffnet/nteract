@@ -5,7 +5,7 @@ import type { AppState } from "@nteract/core/src/state";
 
 import { dialog } from "electron";
 import { is } from "immutable";
-import * as selectors from "@nteract/core/selectors";
+import { selectors } from "@nteract/core";
 
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
