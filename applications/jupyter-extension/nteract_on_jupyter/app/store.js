@@ -31,7 +31,6 @@ export default function configureStore({
   config: JupyterConfigData
 }) {
   const initialState = {
-    // $FlowFixMe
     app: state.makeAppRecord({
       host: state.makeOldJupyterHostRecord({
         token: config.token,
@@ -45,16 +44,14 @@ export default function configureStore({
     config: ImmutableMap({
       theme: "light"
     }),
-    // FIXME FIXME FIXME FIXME
-    core: ImmutableMap(),
-    modals: ImmutableMap()
+    core: state.makeStateRecord(),
+    modals: state.makeModalsRecord()
   };
 
   const rootEpic = combineEpics(...coreEpics.allEpics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
-    // $FlowFixMe
     rootReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))

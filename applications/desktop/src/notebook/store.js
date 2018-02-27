@@ -17,7 +17,6 @@ const rootReducer = combineReducers({
 });
 
 export default function configureStore(initialState: AppState) {
-  // $FlowFixMe: Not sure why this is failing now?
   return createStore(
     rootReducer,
     initialState,

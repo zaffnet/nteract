@@ -79,7 +79,6 @@ function buildDummyNotebook(config) {
 export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
-  // $FlowFixMe: dummystore should use a real record
   return createStore(rootReducer, {
     document: makeDocumentRecord({
       notebook: dummyNotebook,

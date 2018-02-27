@@ -1,12 +1,12 @@
 /* @flow */
 
-import { Map } from "immutable";
+import { Map as ImmutableMap } from "immutable";
+
+import type { ConfigState } from "../state";
 
 import type { SetConfigAction, MergeConfigAction } from "../actionTypes";
 
 type ConfigAction = SetConfigAction<*> | MergeConfigAction;
-
-type ConfigState = Map<any, any>;
 
 export function setConfigAtKey(state: ConfigState, action: SetConfigAction<*>) {
   const { key, value } = action;
@@ -19,7 +19,7 @@ export function mergeConfig(state: ConfigState, action: MergeConfigAction) {
 }
 
 export default function handleConfig(
-  state: ConfigState = Map(),
+  state: ConfigState = new ImmutableMap(),
   action: ConfigAction
 ) {
   switch (action.type) {
