@@ -1,5 +1,5 @@
 // @flow
-import { errorMiddleware } from "@nteract/core/middlewares";
+import { middlewares as coreMiddlewares } from "@nteract/core";
 
 import { createEpicMiddleware, combineEpics } from "redux-observable";
 
@@ -11,7 +11,10 @@ type Action = {
   type: string
 };
 
-const middlewares = [createEpicMiddleware(rootEpic), errorMiddleware];
+const middlewares = [
+  createEpicMiddleware(rootEpic),
+  coreMiddlewares.errorMiddleware
+];
 
 if (process.env.DEBUG === "true") {
   const logger = require("./logger"); // eslint-disable-line global-require
