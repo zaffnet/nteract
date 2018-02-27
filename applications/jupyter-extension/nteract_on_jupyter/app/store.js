@@ -44,7 +44,10 @@ export default function configureStore({
     comms: state.makeCommsRecord(),
     config: ImmutableMap({
       theme: "light"
-    })
+    }),
+    // FIXME FIXME FIXME FIXME
+    core: ImmutableMap(),
+    modals: ImmutableMap()
   };
 
   const rootEpic = combineEpics(...coreEpics.allEpics);

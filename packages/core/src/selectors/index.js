@@ -3,8 +3,8 @@
 // FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
 type AppState = {
   // The new way
-  core: Object,
-  modals: Object,
+  core: any,
+  modals: any,
 
   // The old way
   app: Object,

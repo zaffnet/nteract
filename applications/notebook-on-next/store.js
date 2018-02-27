@@ -22,7 +22,10 @@ const defaultState = {
   comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
-  })
+  }),
+  // TODO FIXME FIXME FIXME
+  core: ImmutableMap(),
+  modals: ImmutableMap()
 };
 
 const composeEnhancers =

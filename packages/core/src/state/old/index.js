@@ -213,6 +213,7 @@ export type AppState = {
   document: RecordOf<DocumentRecordProps>,
   comms: RecordOf<CommsRecordProps>,
   config: Map<string, any>,
-  core: *,
-  modals: *
+  // TODO FIXME FIXME
+  core: Map<any, any>,
+  modals: Map<any, any>
 };
