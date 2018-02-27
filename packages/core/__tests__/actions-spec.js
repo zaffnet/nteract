@@ -14,9 +14,9 @@ describe("setLanguageInfo", () => {
       version: "3.5.1"
     };
 
-    expect(actions.setLanguageInfo(langInfo)).toEqual({
+    expect(actions.setLanguageInfo({ langInfo })).toEqual({
       type: actionTypes.SET_LANGUAGE_INFO,
-      langInfo
+      payload: { langInfo }
     });
   });
 });
@@ -94,49 +94,71 @@ describe("commMessageAction", () => {
 
 describe("newNotebook", () => {
   test("creates a new notebook", () => {
-    expect(actions.newNotebook({ spec: "hokey" }, "/tmp")).toEqual({
+    expect(
+      actions.newNotebook({
+        kernelSpec: { spec: "hokey" },
+        cwd: "/tmp"
+      })
+    ).toEqual({
       type: actionTypes.NEW_NOTEBOOK,
-      kernelSpec: { spec: "hokey" },
-      cwd: "/tmp"
+      payload: {
+        kernelSpec: { spec: "hokey" },
+        cwd: "/tmp"
+      }
     });
   });
 });
 
 describe("setNotebook", () => {
   test("sets a notebook", () => {
-    expect(actions.setNotebook("test", { nbformat: 4, cells: [] })).toEqual({
+    expect(
+      actions.setNotebook({
+        filename: "test",
+        notebook: { nbformat: 4, cells: [] }
+      })
+    ).toEqual({
       type: actionTypes.SET_NOTEBOOK,
-      filename: "test",
-      notebook: { nbformat: 4, cells: [] }
+      payload: {
+        filename: "test",
+        notebook: { nbformat: 4, cells: [] }
+      }
     });
   });
 });
 
 describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
-    expect(actions.setExecutionState("idle")).toEqual({
+    expect(actions.setExecutionState({ kernelStatus: "idle" })).toEqual({
       type: actionTypes.SET_EXECUTION_STATE,
-      kernelStatus: "idle"
+      payload: { kernelStatus: "idle" }
     });
   });
 });
 
 describe("launchKernel", () => {
   test("creates a LAUNCH_KERNEL action", () => {
-    expect(actions.launchKernel({ spec: "hokey" }, ".")).toEqual({
+    expect(
+      actions.launchKernel({ kernelSpec: { spec: "hokey" }, cwd: "." })
+    ).toEqual({
       type: actionTypes.LAUNCH_KERNEL,
-      kernelSpec: { spec: "hokey" },
-      cwd: "."
+      payload: {
+        kernelSpec: { spec: "hokey" },
+        cwd: "."
+      }
     });
   });
 });
 
 describe("launchKernelByName", () => {
   test("creates a LAUNCH_KERNEL_BY_NAME action", () => {
-    expect(actions.launchKernelByName("python2", ".")).toEqual({
+    expect(
+      actions.launchKernelByName({ kernelSpecName: "python2", cwd: "." })
+    ).toEqual({
       type: actionTypes.LAUNCH_KERNEL_BY_NAME,
-      kernelSpecName: "python2",
-      cwd: "."
+      payload: {
+        kernelSpecName: "python2",
+        cwd: "."
+      }
     });
   });
 });

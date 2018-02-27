@@ -12,6 +12,7 @@ import { killKernelImmediately } from "./epics/zeromq-kernels";
 export function unload(store: Store<AppState, Action>) {
   const kernel = selectors.currentKernel(store.getState());
   if (kernel) {
+    // TODO: Do we need to provide a KernelRef here?
     killKernelImmediately(kernel);
   }
   return;

@@ -249,7 +249,7 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
-      action.kernel.channels.pipe(
+      action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
         map(msg => actions.updateDisplay(msg.content)),
         catchError(err =>

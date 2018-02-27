@@ -3,6 +3,7 @@
 import { List, Map, Set, is } from "immutable";
 
 import * as actionTypes from "../src/actionTypes";
+import * as actions from "../src/actions";
 import { document as reducers } from "../src/reducers";
 
 import {
@@ -163,10 +164,7 @@ describe("reduceOutputs", () => {
 describe("setNotebook", () => {
   test("converts a JSON notebook to our commutable notebook and puts in state", () => {
     const notebook = fromJS(dummyJSON);
-    const state = reducers(initialDocument, {
-      type: actionTypes.SET_NOTEBOOK,
-      notebook
-    });
+    const state = reducers(initialDocument, actions.setNotebook({ notebook }));
     expect(state.getIn(["notebook", "nbformat"])).toBe(4);
   });
 });
@@ -710,7 +708,7 @@ describe("setLanguageInfo", () => {
   test("sets the language object", () => {
     const originalState = monocellDocument;
 
-    const action = { type: actionTypes.SET_LANGUAGE_INFO, langInfo: "test" };
+    const action = actions.setLanguageInfo({ langInfo: "test" });
 
     const state = reducers(originalState, action);
     expect(state.getIn(["notebook", "metadata", "language_info"])).toBe("test");

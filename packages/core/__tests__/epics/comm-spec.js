@@ -6,7 +6,7 @@ import {
   commActionObservable
 } from "../../src/epics/comm";
 
-import { commOpenAction, commMessageAction } from "../../src/actions";
+import * as actions from "../../src/actions";
 
 import { COMM_OPEN, COMM_MESSAGE, COMM_ERROR } from "../../src/actionTypes";
 
@@ -87,13 +87,13 @@ describe("commActionObservable", () => {
       buffers: new Uint8Array()
     };
 
-    const launchKernelAction = {
+    const action = actions.launchKernelSuccessful({
       kernel: {
         channels: of(commOpenMessage, commMessage)
       }
-    };
+    });
 
-    commActionObservable(launchKernelAction)
+    commActionObservable(action)
       .pipe(toArray())
       .subscribe(
         actions => {

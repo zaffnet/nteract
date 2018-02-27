@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import { actionTypes } from "@nteract/core";
+import { actions, actionTypes } from "@nteract/core";
 
 import {
   acquireKernelInfo,
@@ -36,13 +36,15 @@ describe("launchKernelEpic", () => {
       err => done.fail(err)
     );
   });
+
   test("calls launchKernelObservable if given the correct action", async function() {
     const actionBuffer = [];
-    const action$ = ActionsObservable.of({
-      type: actionTypes.LAUNCH_KERNEL,
-      kernelSpec: { spec: "hokey", name: "woohoo" },
-      cwd: "~"
-    });
+    const action$ = ActionsObservable.of(
+      actions.launchKernel({
+        kernelSpec: { spec: "hokey", name: "woohoo" },
+        cwd: "~"
+      })
+    );
 
     const state = {
       app: {
@@ -61,12 +63,8 @@ describe("launchKernelEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      {
-        type: actionTypes.SET_KERNEL_INFO,
-        kernelInfo: { spec: "hokey", name: "woohoo" }
-      },
-      {
-        type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
+      actions.setNotebookKernelInfo({ spec: "hokey", name: "woohoo" }),
+      actions.launchKernelSuccessful({
         kernel: {
           ref: expect.any(String),
           lastActivity: null,
@@ -78,22 +76,22 @@ describe("launchKernelEpic", () => {
           kernelSpecName: "woohoo",
           status: "launched"
         }
-      },
-      {
-        type: "SET_EXECUTION_STATE",
+      }),
+      actions.setExecutionState({
         kernelStatus: "launched"
-      }
+      })
     ]);
   });
 });
 
 describe("launchKernelByNameEpic", () => {
   test("creates a LAUNCH_KERNEL action in response to a LAUNCH_KERNEL_BY_NAME action", done => {
-    const action$ = ActionsObservable.of({
-      type: actionTypes.LAUNCH_KERNEL_BY_NAME,
-      kernelSpecName: "python3",
-      cwd: "~"
-    });
+    const action$ = ActionsObservable.of(
+      actions.launchKernelByName({
+        kernelSpecName: "python3",
+        cwd: "~"
+      })
+    );
     const obs = launchKernelByNameEpic(action$);
     obs.pipe(toArray()).subscribe(
       actions => {

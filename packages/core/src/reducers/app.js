@@ -35,7 +35,7 @@ export function launchKernelSuccessful(
   state: AppRecord,
   action: NewKernelAction
 ) {
-  if (!action.kernel || !action.kernel.type) {
+  if (!action.payload.kernel || !action.payload.kernel.type) {
     // unset on lack of kernel
     return state.set("kernel", null);
   }
@@ -43,12 +43,12 @@ export function launchKernelSuccessful(
   let kernel = null;
 
   // We create a record based on the kernel type
-  switch (action.kernel.type) {
+  switch (action.payload.kernel.type) {
     case "websocket":
-      kernel = makeOldRemoteKernelRecord(action.kernel);
+      kernel = makeOldRemoteKernelRecord(action.payload.kernel);
       break;
     case "zeromq":
-      kernel = makeOldLocalKernelRecord(action.kernel);
+      kernel = makeOldLocalKernelRecord(action.payload.kernel);
       break;
     default:
       kernel = null;
@@ -61,7 +61,7 @@ export function setExecutionState(
   state: AppRecord,
   action: SetExecutionStateAction
 ) {
-  return state.mergeIn(["kernel"], { status: action.kernelStatus });
+  return state.mergeIn(["kernel"], { status: action.payload.kernelStatus });
 }
 
 function setNotificationsSystem(

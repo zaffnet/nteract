@@ -74,7 +74,8 @@ export function createCommCloseMessage(
  * @param  {Object} launchKernelAction a LAUNCH_KERNEL_SUCCESSFUL action
  * @return {ActionsObservable}          all actions resulting from comm messages on this kernel
  */
-export function commActionObservable({ kernel }: NewKernelAction) {
+export function commActionObservable(action: NewKernelAction) {
+  const { payload: { kernel } } = action;
   const commOpenAction$ = kernel.channels.pipe(
     ofMessageType("comm_open"),
     map(commOpenAction)

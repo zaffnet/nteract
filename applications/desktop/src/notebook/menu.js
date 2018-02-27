@@ -10,6 +10,8 @@ import { throttle } from "lodash";
 
 import { actions, selectors } from "@nteract/core";
 
+import type { KernelRef } from "@nteract/core/src/state/refs";
+
 export function cwdKernelFallback() {
   // HACK: If we see they're at /, we assume that was the OS launching the Application
   //       from a launcher (launchctl on macOS)
@@ -73,6 +75,7 @@ export function triggerWindowRefresh(store: *, filename: string) {
 }
 
 export function dispatchRestartKernel(store: *) {
+  // TODO: provide a KernelRef
   store.dispatch(actions.restartKernel());
 }
 
@@ -92,12 +95,17 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
       },
       index => {
         if (index === 0) {
+          // TODO: get a KernelRef here and use it in selector.
           const kernel = selectors.currentKernel(store.getState());
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
           store.dispatch(
-            actions.launchKernelByName(kernel.kernelSpecName, cwd)
+            // TODO: get a KernelRef here and use it in action.
+            actions.launchKernelByName({
+              kernelSpecName: kernel.kernelSpecName,
+              cwd
+            })
           );
         }
         resolve();
@@ -129,7 +137,8 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const cwd = filename
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
-  store.dispatch(actions.launchKernel(spec, cwd));
+  // TODO: get a KernelRef here and use it in action.
+  store.dispatch(actions.launchKernel({ kernelSpec: spec, cwd }));
 }
 
 export function dispatchPublishAnonGist(store: *) {
@@ -172,7 +181,8 @@ export function dispatchUnhideAll(store: *) {
 }
 
 export function dispatchKillKernel(store: *) {
-  store.dispatch(actions.killKernel());
+  // TODO: get a KernelRef here and use it in action.
+  store.dispatch(actions.killKernel({ restarting: false }));
 }
 
 export function dispatchInterruptKernel(store: *) {
@@ -186,11 +196,13 @@ export function dispatchInterruptKernel(store: *) {
       level: "error"
     });
   } else {
-    store.dispatch(actions.interruptKernel());
+    // TODO: get a KernelRef here and use it in action.
+    store.dispatch(actions.interruptKernel({}));
   }
 }
 
 export function dispatchRestartClearAll(store: *) {
+  // TODO: provide a KernelRef
   store.dispatch(actions.restartKernel({ clearOutputs: true }));
 }
 
@@ -243,6 +255,7 @@ export function dispatchCreateTextCellAfter(store: *) {
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
+  // TODO: provide KernelRef here.
   store.dispatch(actions.fetchContent({ path: filename, params: {} }));
 }
 
@@ -251,7 +264,13 @@ export function dispatchNewNotebook(
   event: Event,
   kernelSpec: Object
 ) {
-  store.dispatch(actions.newNotebook(kernelSpec, cwdKernelFallback()));
+  // TODO: provide KernelRef here.
+  store.dispatch(
+    actions.newNotebook({
+      kernelSpec,
+      cwd: cwdKernelFallback()
+    })
+  );
 }
 
 /**

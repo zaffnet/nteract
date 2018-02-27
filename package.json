@@ -205,5 +205,6 @@
     "webpack-merge": "^4.1.2",
     "winston": "^2.3.0",
     "yargs": "^11.0.0"
-  }
+  },
+  "dependencies": {}
 }

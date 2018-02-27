@@ -20,7 +20,7 @@ import {
   fetchContentFulfilled
 } from "../actions";
 
-import { FETCH_CONTENT_FULFILLED } from "../actionTypes";
+import { FETCH_CONTENT, SAVE, FETCH_CONTENT_FULFILLED } from "../actionTypes";
 
 import * as selectors from "../selectors";
 
@@ -30,8 +30,7 @@ import { contents } from "rx-jupyter";
 
 import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
 
-import { FETCH_CONTENT, SAVE } from "../actionTypes";
-import type { FetchContent } from "../actionTypes";
+import type { FetchContent, FetchContentFulfilled } from "../actionTypes";
 
 export function fetchContentEpic(
   action$: ActionsObservable<*>,
@@ -58,12 +57,17 @@ export function fetchContentEpic(
           map(xhr => {
             return fetchContentFulfilled({
               path: action.payload.path,
-              model: xhr.response
+              model: xhr.response,
+              kernelRef: action.payload.kernelRef
             });
           }),
           catchError((xhrError: any) =>
             of(
-              fetchContentFailed({ path: action.payload.path, error: xhrError })
+              fetchContentFailed({
+                path: action.payload.path,
+                error: xhrError,
+                kernelRef: action.payload.kernelRef
+              })
             )
           )
         );
@@ -120,7 +124,7 @@ export function setNotebookEpic(
 ) {
   return action$.pipe(
     ofType(FETCH_CONTENT_FULFILLED),
-    tap(action => {
+    tap((action: FetchContentFulfilled) => {
       if (
         !action.payload ||
         !action.payload.model ||
@@ -129,11 +133,20 @@ export function setNotebookEpic(
         throw new Error("content needs a type");
       }
     }),
-    filter(action => action.payload.model.type === "notebook"),
-    map(action =>
-      setNotebook(action.payload.path, fromJS(action.payload.model.content))
+    filter(
+      (action: FetchContentFulfilled) =>
+        action.payload.model.type === "notebook"
+    ),
+    map((action: FetchContentFulfilled) =>
+      setNotebook({
+        filename: action.payload.path,
+        notebook: fromJS(action.payload.model.content),
+        kernelRef: action.payload.kernelRef
+      })
     ),
     catchError((xhrError: any) =>
+      // TODO: We should create an actionType/action for this to make it easier
+      // for reducers to target.
       of({ type: "ERROR", payload: xhrError, error: true })
     )
   );

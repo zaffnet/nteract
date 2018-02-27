@@ -38,10 +38,10 @@ type Props = {
   setCellTypeMarkdown: ?(cellId: ?string) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
-  restartKernel: ?() => void,
-  restartKernelAndClearOutputs: ?() => void,
-  killKernel: ?() => void,
-  interruptKernel: ?() => void
+  restartKernel: ?(payload: *) => void,
+  restartKernelAndClearOutputs: ?(payload: *) => void,
+  killKernel: ?(payload: *) => void,
+  interruptKernel: ?(payload: *) => void
 };
 
 class PureNotebookMenu extends React.Component<Props> {
@@ -185,21 +185,25 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.INTERRUPT_KERNEL:
         if (interruptKernel) {
-          interruptKernel();
+          // TODO: provide KernelRef
+          interruptKernel({});
         }
         break;
       case MENU_ITEM_ACTIONS.RESTART_KERNEL:
         if (restartKernel) {
-          restartKernel();
+          // TODO: provide KernelRef
+          restartKernel({});
         }
         break;
       case MENU_ITEM_ACTIONS.KILL_KERNEL:
         if (killKernel) {
-          killKernel();
+          // TODO: provide KernelRef
+          killKernel({});
         }
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
-          restartKernelAndClearOutputs();
+          // TODO: provide KernelRef
+          restartKernelAndClearOutputs({});
         }
         break;
 
@@ -376,11 +380,11 @@ const mapDispatchToProps = dispatch => ({
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),
-  restartKernel: () => dispatch(actions.restartKernel()),
-  restartKernelAndClearOutputs: () =>
-    dispatch(actions.restartKernel({ clearOutputs: true })),
-  killKernel: () => dispatch(actions.killKernel()),
-  interruptKernel: () => dispatch(actions.interruptKernel())
+  restartKernel: payload => dispatch(actions.restartKernel(payload)),
+  restartKernelAndClearOutputs: payload =>
+    dispatch(actions.restartKernel({ ...payload, clearOutputs: true })),
+  killKernel: payload => dispatch(actions.killKernel(payload)),
+  interruptKernel: payload => dispatch(actions.interruptKernel(payload))
 });
 
 const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(
