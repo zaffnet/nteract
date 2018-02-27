@@ -20,6 +20,10 @@ type HostRecord = RecordOf<
 
 export { makeOldDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
 export { makeOldLocalKernelRecord, makeOldRemoteKernelRecord } from "./kernels";
+export { makeModalsRecord } from "./modals";
+
+import type { ModalsRecordProps } from "./modals";
+export { ModalsRecordProps } from "./modals";
 
 /*
 
@@ -112,7 +116,7 @@ export type OldLanguageInfoMetadata = {
   pygments_lexer?: string
 };
 
-type NotebookMetadata = {
+export type NotebookMetadata = {
   kernelspec: KernelspecMetadata,
   language_info: OldLanguageInfoMetadata
   // NOTE: We're not currently using orig_nbformat in nteract. Based on the comment
@@ -128,7 +132,7 @@ type NotebookMetadata = {
   // orig_nbformat?: number,
 };
 
-type AppRecordProps = {
+export type AppRecordProps = {
   kernel: ?RecordOf<OldRemoteKernelProps> | ?RecordOf<OldLocalKernelProps>,
   host: ?HostRecord,
   githubToken: ?string,
@@ -169,7 +173,7 @@ export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
 
 export type AppRecord = RecordOf<AppRecordProps>;
 
-type DocumentRecordProps = {
+export type DocumentRecordProps = {
   // TODO: This _needs_ to become a Record
   notebook: ?Map<string, any>,
   savedNotebook: ?Map<string, any>,
@@ -201,24 +205,16 @@ export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
 });
 export type DocumentRecord = RecordOf<DocumentRecordProps>;
 
-type CommsRecordProps = {
+export type CommsRecordProps = {
   targets: Map<any, any>,
   info: Map<any, any>,
   models: Map<any, any>
 };
+
+export type CommsRecord = RecordOf<CommsRecordProps>;
 
 export const makeCommsRecord = Record({
   targets: new Map(),
   info: new Map(),
   models: new Map()
 });
-
-export type AppState = {
-  app: RecordOf<AppRecordProps>,
-  document: RecordOf<DocumentRecordProps>,
-  comms: RecordOf<CommsRecordProps>,
-  config: Map<string, any>,
-  // TODO FIXME FIXME
-  core: Map<any, any>,
-  modals: Map<any, any>
-};

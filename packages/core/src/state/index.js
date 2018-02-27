@@ -12,6 +12,13 @@ export * from "./ids";
 export * from "./refs";
 export * from "./old";
 
+import type {
+  AppRecordProps,
+  DocumentRecordProps,
+  CommsRecordProps,
+  ModalsRecordProps
+} from "./old";
+
 export type StateRecordProps = {
   communication: RecordOf<CommunicationRecordProps>,
   entities: RecordOf<EntitiesRecordProps>
@@ -21,3 +28,12 @@ export const makeStateRecord: RecordFactory<StateRecordProps> = Record({
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });
+
+export type AppState = {
+  app: RecordOf<AppRecordProps>,
+  document: RecordOf<DocumentRecordProps>,
+  comms: RecordOf<CommsRecordProps>,
+  config: Map<string, any>,
+  core: RecordOf<StateRecordProps>,
+  modals: RecordOf<ModalsRecordProps>
+};

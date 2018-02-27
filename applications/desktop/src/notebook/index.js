@@ -23,7 +23,6 @@ import { initGlobalHandlers } from "./global-events";
 import { state } from "@nteract/core";
 
 const store = configureStore({
-  // $FlowFixMe
   app: state.makeAppRecord({
     host: state.makeOldDesktopHostRecord(),
     version: remote.app.getVersion()
@@ -33,9 +32,8 @@ const store = configureStore({
   config: ImmutableMap({
     theme: "light"
   }),
-  // TODO: FIXME FIXME
-  core: ImmutableMap(),
-  modals: ImmutableMap()
+  core: state.makeStateRecord(),
+  modals: state.makeModalsRecord()
 });
 
 // Register for debugging

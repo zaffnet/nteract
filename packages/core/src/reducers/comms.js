@@ -7,22 +7,20 @@ import type {
   CommMessageAction
 } from "../actionTypes";
 
-type CommState = Immutable.Map<string, any>;
-
-const defaultCommState: CommState = Immutable.Map({
-  targets: Immutable.Map(),
-  models: Immutable.Map(),
-  info: Immutable.Map()
-});
+import { makeCommsRecord } from "../state";
+import type { CommsRecord } from "../state";
 
 function registerCommTarget(
-  state: CommState,
+  state: CommsRecord,
   action: RegisterCommTargetAction
-): CommState {
+): CommsRecord {
   return state.setIn(["targets", action.name], action.handler);
 }
 
-function processCommOpen(state: CommState, action: CommOpenAction): CommState {
+function processCommOpen(
+  state: CommsRecord,
+  action: CommOpenAction
+): CommsRecord {
   const { target_name, target_module, data, comm_id } = action;
 
   const commInfo = {
@@ -36,9 +34,9 @@ function processCommOpen(state: CommState, action: CommOpenAction): CommState {
 }
 
 function processCommMessage(
-  state: CommState,
+  state: CommsRecord,
   action: CommMessageAction
-): CommState {
+): CommsRecord {
   const { data, comm_id } = action;
 
   const commInfo = state.getIn(["info", comm_id]);
@@ -62,7 +60,7 @@ function processCommMessage(
 type CommAction = RegisterCommTargetAction | CommMessageAction | CommOpenAction;
 
 export default function(
-  state: CommState = defaultCommState,
+  state: CommsRecord = makeCommsRecord(),
   action: CommAction
 ) {
   switch (action.type) {

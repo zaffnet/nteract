@@ -54,7 +54,6 @@ export default function configureStore({
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
-    // $FlowFixMe
     rootReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middlewares))
