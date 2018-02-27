@@ -22,8 +22,6 @@ import { initGlobalHandlers } from "./global-events";
 
 import { state } from "@nteract/core";
 
-import "./main.css";
-
 const store = configureStore({
   // $FlowFixMe
   app: state.makeAppRecord({

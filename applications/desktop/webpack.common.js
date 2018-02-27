@@ -1,4 +1,3 @@
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require("webpack");
 const path = require("path");
 
@@ -9,6 +8,7 @@ const nodeModules = {
 };
 
 const mainConfig = {
+  mode: "development",
   entry: {
     main: "./src/main/index.js"
   },
@@ -22,10 +22,7 @@ const mainConfig = {
     __filename: false
   },
   module: {
-    rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      { test: /\.json$/, loader: "json-loader" }
-    ]
+    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }]
   },
   resolve: {
     mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
@@ -35,6 +32,7 @@ const mainConfig = {
 };
 
 const rendererConfig = {
+  mode: "development",
   entry: {
     app: "./src/notebook/index.js",
     vendor: [
@@ -54,20 +52,13 @@ const rendererConfig = {
   target: "electron-renderer",
   output: {
     path: path.join(__dirname, "lib"),
-    filename: "webpacked-notebook.js"
+    chunkFilename: "[name].bundle.js",
+    filename: "[name].js"
   },
   externals: nodeModules,
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      { test: /\.json$/, loader: "json-loader" },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader"
-        })
-      },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         use: [
@@ -85,15 +76,7 @@ const rendererConfig = {
     mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
     extensions: [".js", ".jsx"]
   },
-  plugins: [
-    new webpack.IgnorePlugin(/\.less$/),
-    // build vendor bundle (including common code chunks used in other bundles)
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      filename: "vendor.js"
-    }),
-    new ExtractTextPlugin("styles.css")
-  ]
+  plugins: [new webpack.IgnorePlugin(/\.less$/)]
 };
 
 module.exports = {
