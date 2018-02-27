@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import * as React from "react";
 import Document, { Head, Main, NextScript } from "next/document";
 
 export default class MyDocument extends Document {

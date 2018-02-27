@@ -1,7 +1,8 @@
 // @flow
+import * as React from "react";
+
 const d3 = Object.assign({}, require("d3-dsv"));
 
-import * as React from "react";
 import DataTransform from "@nteract/transform-dataresource";
 
 export default class CSVView extends React.Component<*> {
