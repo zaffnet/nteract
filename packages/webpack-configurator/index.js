@@ -79,20 +79,11 @@ function configure(
     config.module.rules = [];
   }
 
-  // The JSON loader can't be loaded twice, so we check if they've already
-  // configured it. If not, we'll set up the JSON loader after.
-  // See https://github.com/webpack-contrib/json-loader/issues/13#issuecomment-188480384
-  let hasJSONLoader = false;
-
   let hasBabelLoader = false;
 
   // If, for example, the webpack config was set up for hot reload, we override
   // it to accept nteract packages
   config.module.rules = config.module.rules.map(rule => {
-    if (rule.loader === "json-loader") {
-      hasJSONLoader = true;
-    }
-
     if (
       rule.loader === "babel-loader" ||
       (rule.use && rule.use.loader === "babel-loader")
@@ -116,10 +107,6 @@ function configure(
     exclude,
     loader: "babel-loader?cacheDirectory=true"
   });
-
-  if (!hasJSONLoader) {
-    config.module.rules.push({ test: /\.json$/, loader: "json-loader" });
-  }
 
   if (!config.resolve) {
     config.resolve = {};
