@@ -6,6 +6,8 @@ import { Record } from "immutable";
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord } from "./entities";
 
+import * as Immutable from "immutable";
+
 export * from "./communication";
 export * from "./entities";
 export * from "./ids";
@@ -18,6 +20,8 @@ import type {
   CommsRecordProps,
   ModalsRecordProps
 } from "./old";
+
+export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
   communication: RecordOf<CommunicationRecordProps>,
@@ -33,7 +37,7 @@ export type AppState = {
   app: RecordOf<AppRecordProps>,
   document: RecordOf<DocumentRecordProps>,
   comms: RecordOf<CommsRecordProps>,
-  config: Map<string, any>,
+  config: ConfigState,
   core: RecordOf<StateRecordProps>,
   modals: RecordOf<ModalsRecordProps>
 };

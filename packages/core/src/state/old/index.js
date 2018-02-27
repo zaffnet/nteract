@@ -134,7 +134,9 @@ export type NotebookMetadata = {
 
 export type AppRecordProps = {
   kernel: ?RecordOf<OldRemoteKernelProps> | ?RecordOf<OldLocalKernelProps>,
-  host: ?HostRecord,
+  host:
+    | ?RecordOf<OldDesktopHostRecordProps>
+    | ?RecordOf<OldJupyterHostRecordProps>,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },
   isSaving: boolean,
