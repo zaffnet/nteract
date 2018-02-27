@@ -2,7 +2,7 @@
 // NOTE: These are just default middlewares here for now until I figure out how
 // to divide up the desktop app and this core package
 
-import * as selectors from "../selectors";
+import * as selectors from "./selectors";
 
 type Action = {
   type: string

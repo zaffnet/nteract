@@ -22,6 +22,7 @@ import { initGlobalHandlers } from "./global-events";
 
 import { state } from "@nteract/core";
 
+// $FlowFixMe: this state tree is missing core and modals
 const store = configureStore({
   // $FlowFixMe
   app: state.makeAppRecord({
