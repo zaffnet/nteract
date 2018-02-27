@@ -150,7 +150,7 @@ export function cleanCellTransient(state: DocumentRecord, id: string) {
 }
 
 function setNotebook(state: DocumentRecord, action: SetNotebookAction) {
-  const { notebook, filename } = action;
+  const { payload: { notebook, filename } } = action;
 
   return state
     .set("notebook", notebook)
@@ -600,7 +600,7 @@ function updateCellStatus(
   return state.setIn(["transient", "cellMap", id, "status"], status);
 }
 function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfoAction) {
-  const langInfo = Immutable.fromJS(action.langInfo);
+  const langInfo = Immutable.fromJS(action.payload.langInfo);
   return state.setIn(["notebook", "metadata", "language_info"], langInfo);
 }
 

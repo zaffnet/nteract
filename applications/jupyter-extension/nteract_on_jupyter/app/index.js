@@ -47,6 +47,7 @@ function createApp(jupyterConfigData: JupyterConfigData) {
       );
 
       // TODO: we should likely be passing in a hostRef to fetchContent too.
+      // TODO: provide a KernelRef
       store.dispatch(
         actions.fetchContent({
           path: jupyterConfigData.contentsPath,

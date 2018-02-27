@@ -44,7 +44,9 @@ describe("launchWebSocketKernelEpic", () => {
       }
     };
 
-    const action$ = ActionsObservable.of(launchKernelByName("fancy", "/"));
+    const action$ = ActionsObservable.of(
+      launchKernelByName({ kernelSpecName: "fancy", cwd: "/" })
+    );
 
     const responseActions = await launchWebSocketKernelEpic(action$, store)
       .pipe(toArray())
@@ -53,12 +55,14 @@ describe("launchWebSocketKernelEpic", () => {
     expect(responseActions).toEqual([
       {
         type: "LAUNCH_KERNEL_SUCCESSFUL",
-        kernel: {
-          type: "websocket",
-          channels: expect.any(Subject),
-          kernelSpecName: "fancy",
-          cwd: "/",
-          id: "0"
+        payload: {
+          kernel: {
+            type: "websocket",
+            channels: expect.any(Subject),
+            kernelSpecName: "fancy",
+            cwd: "/",
+            id: "0"
+          }
         }
       }
     ]);
@@ -94,7 +98,7 @@ describe("interruptKernelEpic", () => {
       }
     };
 
-    const action$ = ActionsObservable.of(interruptKernel());
+    const action$ = ActionsObservable.of(interruptKernel({}));
 
     const responseActions = await interruptKernelEpic(action$, store)
       .pipe(toArray())
@@ -102,7 +106,8 @@ describe("interruptKernelEpic", () => {
 
     expect(responseActions).toEqual([
       {
-        type: "INTERRUPT_KERNEL_SUCCESSFUL"
+        type: "INTERRUPT_KERNEL_SUCCESSFUL",
+        payload: {}
       }
     ]);
   });

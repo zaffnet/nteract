@@ -1,4 +1,9 @@
 // @flow
+import type {
+  InterruptKernel,
+  KillKernelAction,
+  LaunchKernelByNameAction
+} from "../actionTypes";
 
 import { ofType } from "redux-observable";
 
@@ -31,7 +36,8 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // TODO: When a switchMap happens, we need to close down the originating
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
-    switchMap(({ kernelSpecName, cwd }) => {
+    switchMap((action: LaunchKernelByNameAction) => {
+      const { payload: { kernelSpecName, cwd, ref } } = action;
       const config = selectors.serverConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
@@ -47,7 +53,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 
           kernel.channels.next(kernelInfoRequest());
 
-          return of(actions.launchKernelSuccessful(kernel));
+          return of(actions.launchKernelSuccessful({ kernel, ref }));
         })
       );
     })
@@ -60,18 +66,25 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
-    concatMap(() => {
+    concatMap((action: InterruptKernel) => {
       const state = store.getState();
       const serverConfig = selectors.serverConfig(state);
       const kernel = selectors.currentKernel(state);
       const id = kernel.id;
 
-      return kernels
-        .interrupt(serverConfig, id)
-        .pipe(
-          map(() => actions.interruptKernelSuccessful()),
-          catchError(err => of(actions.interruptKernelFailed(err)))
-        );
+      return kernels.interrupt(serverConfig, id).pipe(
+        map(() =>
+          actions.interruptKernelSuccessful({ ref: action.payload.ref })
+        ),
+        catchError(err =>
+          of(
+            actions.interruptKernelFailed({
+              error: err,
+              ref: action.payload.ref
+            })
+          )
+        )
+      );
     })
   );
 
@@ -82,7 +95,7 @@ export const killKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ kills, we shouldn't interrupt the in-flight
     // kill, instead doing it after the last one happens
-    concatMap(() => {
+    concatMap((action: KillKernelAction) => {
       const state = store.getState();
       const serverConfig = selectors.serverConfig(state);
       const kernel = selectors.currentKernel(state);
@@ -91,8 +104,12 @@ export const killKernelEpic = (action$: *, store: *) =>
       return kernels
         .kill(serverConfig, id)
         .pipe(
-          map(() => actions.killKernelSuccessful()),
-          catchError(err => of(actions.killKernelFailed(err)))
+          map(() => actions.killKernelSuccessful({ ref: action.payload.ref })),
+          catchError(err =>
+            of(
+              actions.killKernelFailed({ error: err, ref: action.payload.ref })
+            )
+          )
         );
     })
   );

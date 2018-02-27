@@ -36,7 +36,7 @@ describe("acquireKernelInfo", () => {
 
     obs.subscribe(langAction => {
       expect(langAction).toEqual({
-        langInfo: { language: "python" },
+        payload: { langInfo: { language: "python" } },
         type: "SET_LANGUAGE_INFO"
       });
       done();
@@ -48,11 +48,13 @@ describe("watchExecutionStateEpic", () => {
   test("returns an Observable with an initial state of idle", done => {
     const action$ = ActionsObservable.of({
       type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
-      kernel: {
-        channels: of({
-          header: { msg_type: "status" },
-          content: { execution_state: "idle" }
-        })
+      payload: {
+        kernel: {
+          channels: of({
+            header: { msg_type: "status" },
+            content: { execution_state: "idle" }
+          })
+        }
       }
     });
     const obs = watchExecutionStateEpic(action$);

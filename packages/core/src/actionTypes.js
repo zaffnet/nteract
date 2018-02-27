@@ -1,5 +1,5 @@
 /* @flow */
-import type { HostRef, KernelspecsRef } from "./state/refs";
+import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
@@ -52,7 +52,8 @@ export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
   payload: {
     path: string,
-    params: Object
+    params: Object,
+    kernelRef?: KernelRef
   }
 };
 
@@ -61,7 +62,8 @@ export type FetchContentFulfilled = {
   type: "CORE/FETCH_CONTENT_FULFILLED",
   payload: {
     path: string,
-    model: any // literal response from API
+    model: any, // literal response from API
+    kernelRef?: KernelRef
   }
 };
 
@@ -70,8 +72,10 @@ export type FetchContentFailed = {
   type: "CORE/FETCH_CONTENT_FAILED",
   payload: {
     path: string,
-    error: Object
-  }
+    error: Error,
+    kernelRef?: KernelRef
+  },
+  error: true
 };
 
 export const FETCH_KERNELSPECS = "CORE/FETCH_KERNELSPECS";
@@ -205,7 +209,10 @@ export type AcceptPayloadMessageAction = {
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
 export type SetLanguageInfoAction = {
   type: "SET_LANGUAGE_INFO",
-  langInfo: OldLanguageInfoMetadata
+  payload: {
+    langInfo: OldLanguageInfoMetadata,
+    ref?: KernelRef
+  }
 };
 
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
@@ -369,7 +376,10 @@ export type ChangeCellTypeAction = {
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
 export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
-  kernelStatus: string
+  payload: {
+    kernelStatus: string,
+    ref?: KernelRef
+  }
 };
 
 export const SET_NOTIFICATION_SYSTEM = "SET_NOTIFICATION_SYSTEM";
@@ -384,41 +394,81 @@ export type SetNotificationSystemAction = {
 export const DONE_SAVING = "DONE_SAVING";
 export type DoneSavingAction = { type: "DONE_SAVING" };
 
+export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
+export type NewNotebook = {
+  type: "NEW_NOTEBOOK",
+  payload: {
+    kernelSpec: Object,
+    kernelRef?: KernelRef
+  }
+};
+
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)
 export const SET_NOTEBOOK = "SET_NOTEBOOK";
 export type SetNotebookAction = {
   type: "SET_NOTEBOOK",
-  notebook: ImmutableNotebook,
-  filename: ?string
+  payload: {
+    notebook: ImmutableNotebook,
+    filename: ?string,
+    kernelRef?: KernelRef
+  }
 };
 
 export const START_SAVING = "START_SAVING";
 export type StartSavingAction = { type: "START_SAVING" };
 
 export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
-export type InterruptKernel = { type: "INTERRUPT_KERNEL" };
+export type InterruptKernel = {
+  type: "INTERRUPT_KERNEL",
+  payload: {
+    ref?: KernelRef
+  }
+};
 
 export const INTERRUPT_KERNEL_SUCCESSFUL = "INTERRUPT_KERNEL_SUCCESSFUL";
-export type InterruptKernelSuccessful = { type: "INTERRUPT_KERNEL_SUCCESSFUL" };
+export type InterruptKernelSuccessful = {
+  type: "INTERRUPT_KERNEL_SUCCESSFUL",
+  payload: {
+    ref?: KernelRef
+  }
+};
 
 export const INTERRUPT_KERNEL_FAILED = "INTERRUPT_KERNEL_FAILED";
-export type InterruptKernelFailed = ErrorAction<"INTERRUPT_KERNEL_FAILED">;
+export type InterruptKernelFailed = {
+  type: "INTERRUPT_KERNEL_FAILED",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 export const KILL_KERNEL = "KILL_KERNEL";
 export type KillKernelAction = {
   type: "KILL_KERNEL",
   payload: {
-    restarting: boolean
+    restarting: boolean,
+    ref?: KernelRef
   }
 };
 
 export const KILL_KERNEL_FAILED = "KILL_KERNEL_FAILED";
-export type KillKernelFailed = ErrorAction<"KILL_KERNEL_FAILED">;
+export type KillKernelFailed = {
+  type: "KILL_KERNEL_FAILED",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 export const KILL_KERNEL_SUCCESSFUL = "KILL_KERNEL_SUCCESSFUL";
 export type KillKernelSuccessful = {
-  type: "KILL_KERNEL_SUCCESSFUL"
+  type: "KILL_KERNEL_SUCCESSFUL",
+  payload: {
+    ref?: KernelRef
+  }
 };
 
 export const SET_GITHUB_TOKEN = "SET_GITHUB_TOKEN";
@@ -431,60 +481,123 @@ export const RESTART_KERNEL = "RESTART_KERNEL";
 export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
-    clearOutputs: boolean
+    clearOutputs: boolean,
+    ref?: KernelRef
   }
 };
 
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
-export type RestartKernelFailed = ErrorAction<"RESTART_KERNEL_FAILED">;
+export type RestartKernelFailed = {
+  type: "RESTART_KERNEL_FAILED",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
-  type: "RESTART_KERNEL_SUCCESSFUL"
+  type: "RESTART_KERNEL_SUCCESSFUL",
+  payload: {
+    ref?: KernelRef
+  }
 };
 
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
-  kernelSpec: Object,
-  cwd: string
+  payload: {
+    ref?: KernelRef,
+    kernelSpec: Object,
+    cwd: string
+  }
 };
 
 export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
-export type LaunchKernelFailed = ErrorAction<"LAUNCH_KERNEL_FAILED">;
+export type LaunchKernelFailed = {
+  type: "LAUNCH_KERNEL_FAILED",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
-  kernel: OldLocalKernelProps | OldRemoteKernelProps
+  payload: {
+    kernel: OldLocalKernelProps | OldRemoteKernelProps,
+    ref?: KernelRef
+  }
 };
 
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",
-  kernelSpecName: string,
-  cwd: string
+  payload: {
+    kernelSpecName: string,
+    cwd: string,
+    ref?: KernelRef
+  }
+};
+
+export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
+export type KernelRawStdout = {
+  type: "KERNEL_RAW_STDOUT",
+  payload: {
+    ref?: KernelRef,
+    text: string
+  }
+};
+
+export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
+export type KernelRawStderr = {
+  type: "KERNEL_RAW_STDERR",
+  payload: {
+    ref?: KernelRef,
+    text: string
+  }
 };
 
 export const DELETE_CONNECTION_FILE_FAILED = "DELETE_CONNECTION_FILE_FAILED";
-export type DeleteConnectionFileFailedAction = ErrorAction<
-  "DELETE_CONNECTION_FILE_FAILED"
->;
+export type DeleteConnectionFileFailedAction = {
+  type: "DELETE_CONNECTION_FILE_FAILED",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 export const DELETE_CONNECTION_FILE_SUCCESSFUL =
   "DELETE_CONNECTION_FILE_SUCCESSFUL";
 export type DeleteConnectionFileSuccessfulAction = {
-  type: "DELETE_CONNECTION_FILE_SUCCESSFUL"
+  type: "DELETE_CONNECTION_FILE_SUCCESSFUL",
+  payload: {
+    ref?: KernelRef
+  }
 };
 
 export const SHUTDOWN_REPLY_SUCCEEDED = "SHUTDOWN_REPLY_SUCCEEDED";
 export type ShutdownReplySucceeded = {
   type: "SHUTDOWN_REPLY_SUCCEEDED",
-  payload: Object
+  payload: {
+    text: string,
+    ref?: KernelRef
+  }
 };
 
 export const SHUTDOWN_REPLY_TIMED_OUT = "SHUTDOWN_REPLY_TIMED_OUT";
-export type ShutdownReplyTimedOut = ErrorAction<"SHUTDOWN_REPLY_TIMED_OUT">;
+export type ShutdownReplyTimedOut = {
+  type: "SHUTDOWN_REPLY_TIMED_OUT",
+  payload: {
+    error: Error,
+    ref?: KernelRef
+  },
+  error: true
+};
 
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
@@ -497,18 +610,9 @@ export const SAVE_FAILED = "SAVE_FAILED";
 // TODO: Relocate this action type from desktop's app.js
 export const SAVE_AS = "SAVE_AS";
 
-// TODO: Properly type this action, which is only produced, never consumed
-export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
-// TODO: Properly type this action, which is only produced, never consumed
-export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
-
-// TODO: Properly type this action type, which is consumed only by epics
-export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
-
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
 
 // TODO: Properly type these ERROR action types
 export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
 export const ERROR_EXECUTING = "ERROR_EXECUTING";
-export const ERROR_KERNEL_LAUNCH_FAILED = "ERROR_KERNEL_LAUNCH_FAILED";

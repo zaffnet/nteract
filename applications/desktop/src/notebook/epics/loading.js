@@ -24,7 +24,11 @@ import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import { actionTypes, actions } from "@nteract/core";
 
-import type { SetNotebookAction } from "@nteract/core/src/actionTypes";
+import type {
+  FetchContent,
+  NewNotebook,
+  SetNotebookAction
+} from "@nteract/core/src/actionTypes";
 
 /**
  * Determines the right kernel to launch based on a notebook
@@ -111,7 +115,7 @@ function createContentsResponse(
 export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
-    tap(action => {
+    tap((action: FetchContent) => {
       // If there isn't a filename, save-as it instead
       if (!action.payload.path) {
         throw new Error("fetch content needs a path");
@@ -132,11 +136,18 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
         map(model =>
           actions.fetchContentFulfilled({
             path: model.path,
-            model
+            model,
+            kernelRef: action.payload.kernelRef
           })
         ),
         catchError((err: Error) =>
-          of(actions.fetchContentFailed({ path: filepath, error: err }))
+          of(
+            actions.fetchContentFailed({
+              path: filepath,
+              error: err,
+              kernelRef: action.payload.kernelRef
+            })
+          )
         )
       );
     })
@@ -149,11 +160,15 @@ export const launchKernelWhenNotebookSetEpic = (
     ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebookAction) => {
       const { cwd, kernelSpecName } = extractNewKernel(
-        action.filename,
-        action.notebook
+        action.payload.filename,
+        action.payload.notebook
       );
 
-      return actions.launchKernelByName(kernelSpecName, cwd);
+      return actions.launchKernelByName({
+        kernelSpecName,
+        cwd,
+        ref: action.payload.kernelRef
+      });
     })
   );
 
@@ -165,8 +180,8 @@ export const launchKernelWhenNotebookSetEpic = (
 export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
-    map(action => {
-      const { name, spec } = action.kernelSpec;
+    map((action: NewNotebook) => {
+      const { payload: { kernelSpec: { name, spec }, kernelRef } } = action;
 
       let notebook = monocellNotebook;
 
@@ -178,6 +193,6 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
         notebook = notebook.setIn(["metadata", "kernelspec"], spec);
       }
 
-      return actions.setNotebook(null, notebook);
+      return actions.setNotebook({ filename: null, notebook, kernelRef });
     })
   );

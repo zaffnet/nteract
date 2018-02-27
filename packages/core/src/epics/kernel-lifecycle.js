@@ -9,6 +9,7 @@ import { from } from "rxjs/observable/from";
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
+import type { KernelRef } from "../state/refs";
 
 const path = require("path");
 
@@ -28,7 +29,11 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
-import type { NewKernelAction, SetNotebookAction } from "../actionTypes";
+import type {
+  NewKernelAction,
+  RestartKernel,
+  SetNotebookAction
+} from "../actionTypes";
 
 import * as selectors from "../selectors";
 import * as actions from "../actions";
@@ -43,9 +48,14 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) =>
-      action.kernel.channels.pipe(
+      action.payload.kernel.channels.pipe(
         filter(msg => msg.header.msg_type === "status"),
-        map(msg => actions.setExecutionState(msg.content.execution_state))
+        map(msg =>
+          actions.setExecutionState({
+            kernelStatus: msg.content.execution_state,
+            ref: action.payload.ref
+          })
+        )
       )
     )
   );
@@ -56,7 +66,7 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
  * @param  {Object}  channels  A object containing the kernel channels
  * @returns  {Observable}  The reply from the server
  */
-export function acquireKernelInfo(channels: Channels) {
+export function acquireKernelInfo(channels: Channels, ref?: KernelRef) {
   const message = createMessage("kernel_info_request");
 
   const obs = channels.pipe(
@@ -64,7 +74,7 @@ export function acquireKernelInfo(channels: Channels) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
-    map(actions.setLanguageInfo)
+    map(langInfo => actions.setLanguageInfo({ langInfo, ref }))
   );
 
   return Observable.create(observer => {
@@ -82,7 +92,10 @@ export function acquireKernelInfo(channels: Channels) {
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap(action => acquireKernelInfo(action.kernel.channels))
+    switchMap((action: NewKernelAction) => {
+      const { payload: { kernel: { channels }, ref } } = action;
+      return acquireKernelInfo(channels, ref);
+    })
   );
 
 export const extractNewKernel = (
@@ -110,18 +123,22 @@ export const launchKernelWhenNotebookSetEpic = (
     ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebookAction) => {
       const { cwd, kernelSpecName } = extractNewKernel(
-        action.filename,
-        action.notebook
+        action.payload.filename,
+        action.payload.notebook
       );
 
-      return actions.launchKernelByName(kernelSpecName, cwd);
+      return actions.launchKernelByName({
+        kernelSpecName,
+        cwd,
+        ref: action.payload.kernelRef
+      });
     })
   );
 
 export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
-    concatMap(action => {
+    concatMap((action: RestartKernel) => {
       const state = store.getState();
       const kernel = selectors.currentKernel(state);
       const notificationSystem = selectors.notificationSystem(state);
@@ -152,8 +169,12 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
       });
 
       return of(
-        actions.killKernel({ restarting: true }),
-        actions.launchKernelByName(kernel.kernelSpecName, kernel.cwd)
+        actions.killKernel({ restarting: true, ref: action.payload.ref }),
+        actions.launchKernelByName({
+          kernelSpecName: kernel.kernelSpecName,
+          cwd: kernel.cwd,
+          ref: action.payload.ref
+        })
       );
     })
   );

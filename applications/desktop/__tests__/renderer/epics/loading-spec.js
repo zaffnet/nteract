@@ -63,6 +63,7 @@ describe("loadingEpic", () => {
           error: expect.anything(),
           path: "file"
         },
+        error: true,
         type: "CORE/FETCH_CONTENT_FAILED"
       }
     ]);
@@ -73,8 +74,10 @@ describe("newNotebookEpic", () => {
   test("calls new Kernel after creating a new notebook", async function() {
     const action$ = ActionsObservable.of({
       type: actionTypes.NEW_NOTEBOOK,
-      kernelSpec: {
-        name: "hylang"
+      payload: {
+        kernelSpec: {
+          name: "hylang"
+        }
       }
     });
     const responseActions = await newNotebookEpic(action$)
@@ -83,12 +86,14 @@ describe("newNotebookEpic", () => {
 
     expect(responseActions).toEqual([
       {
-        filename: null,
         type: actionTypes.SET_NOTEBOOK,
-        notebook: monocellNotebook.setIn(
-          ["metadata", "kernel_info", "name"],
-          "hylang"
-        )
+        payload: {
+          filename: null,
+          notebook: monocellNotebook.setIn(
+            ["metadata", "kernel_info", "name"],
+            "hylang"
+          )
+        }
       }
     ]);
   });

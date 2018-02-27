@@ -185,7 +185,8 @@ describe("menu", () => {
 
       if (process.platform !== "win32") {
         expect(store.dispatch).toHaveBeenCalledWith({
-          type: actionTypes.INTERRUPT_KERNEL
+          type: actionTypes.INTERRUPT_KERNEL,
+          payload: {}
         });
       }
     });
@@ -304,8 +305,10 @@ describe("menu", () => {
 
       expect(store.dispatch).toHaveBeenCalledWith({
         type: actionTypes.LAUNCH_KERNEL,
-        kernelSpec: { spec: "hokey" },
-        cwd: process.cwd()
+        payload: {
+          kernelSpec: { spec: "hokey" },
+          cwd: process.cwd()
+        }
       });
     });
   });
@@ -360,8 +363,10 @@ describe("menu", () => {
       menu.dispatchNewNotebook(store, {}, { spec: "hokey" });
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "NEW_NOTEBOOK",
-        kernelSpec: { spec: "hokey" },
-        cwd: process.cwd()
+        payload: {
+          kernelSpec: { spec: "hokey" },
+          cwd: process.cwd()
+        }
       });
     });
   });
