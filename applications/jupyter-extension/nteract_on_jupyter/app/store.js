@@ -6,9 +6,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import { reducers, state } from "@nteract/core";
-
-import { allEpics as epics } from "@nteract/core/epics";
+import { reducers, state, epics as coreEpics } from "@nteract/core";
 
 export type JupyterConfigData = {
   token: string,
@@ -49,7 +47,7 @@ export default function configureStore({
     })
   };
 
-  const rootEpic = combineEpics(...epics);
+  const rootEpic = combineEpics(...coreEpics.allEpics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(

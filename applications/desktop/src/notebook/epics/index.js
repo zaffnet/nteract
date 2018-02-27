@@ -18,16 +18,7 @@ import {
   watchSpawn
 } from "./zeromq-kernels";
 
-import {
-  restartKernelEpic,
-  acquireKernelInfoEpic,
-  watchExecutionStateEpic,
-  executeCellEpic,
-  updateDisplayEpic,
-  commListenEpic,
-  executeAllCellsEpic,
-  setNotebookEpic
-} from "@nteract/core/epics";
+import { epics as coreEpics } from "@nteract/core";
 
 import { publishEpic } from "./github-publish";
 
@@ -46,25 +37,26 @@ export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics = [
+  coreEpics.restartKernelEpic,
+  coreEpics.acquireKernelInfoEpic,
+  coreEpics.watchExecutionStateEpic,
+  coreEpics.executeCellEpic,
+  coreEpics.updateDisplayEpic,
+  coreEpics.commListenEpic,
+  coreEpics.executeAllCellsEpic,
+  coreEpics.setNotebookEpic,
+
   launchKernelWhenNotebookSetEpic,
-  setNotebookEpic,
-  executeAllCellsEpic,
-  restartKernelEpic,
   watchSpawn,
-  commListenEpic,
   publishEpic,
   saveEpic,
   saveAsEpic,
   fetchContentEpic,
   newNotebookEpic,
-  executeCellEpic,
-  updateDisplayEpic,
   launchKernelEpic,
   launchKernelByNameEpic,
   interruptKernelEpic,
   killKernelEpic,
-  acquireKernelInfoEpic,
-  watchExecutionStateEpic,
   loadConfigEpic,
   saveConfigEpic,
   saveConfigOnChangeEpic
