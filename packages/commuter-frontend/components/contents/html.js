@@ -1,5 +1,4 @@
 // @flow
-
 import * as React from "react";
 
 export default class HTMLView extends React.Component<*> {

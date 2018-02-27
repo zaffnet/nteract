@@ -1,4 +1,6 @@
 // @flow
+import * as React from "react";
+
 import {
   Cell,
   Input,
@@ -11,8 +13,6 @@ import {
 } from "@nteract/core";
 
 import { themes } from "@nteract/core";
-
-import * as React from "react";
 
 import ReactMarkdown from "react-markdown";
 

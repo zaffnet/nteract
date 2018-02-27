@@ -1,3 +1,4 @@
+// @flow
 import * as React from "react";
 
 import ZeppelinView from "./zeppelin";
@@ -6,7 +7,7 @@ import JSONTransform from "@nteract/transforms/lib/json";
 
 import Immutable from "immutable";
 
-export default props => {
+export default (props: *) => {
   const content = JSON.parse(props.entry.content);
   try {
     // Zeppelin notebooks are called note.json, we'll go ahead and render them
@@ -27,7 +28,7 @@ export default props => {
       <React.Fragment>
         <h1>Failed to parse Zeppelin Notebook</h1>
         <pre>{e.toString()}</pre>
-        <code>{this.props.entry.content}</code>
+        <code>{props.entry.content}</code>
       </React.Fragment>
     );
   }
