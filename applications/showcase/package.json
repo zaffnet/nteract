@@ -18,6 +18,7 @@
     "@nteract/transform-dataresource": "^3.0.1",
     "@nteract/transforms": "^4.0.0",
     "@nteract/transforms-full": "^5.0.0",
+    "@nteract/webpack-configurator": "^0.0.0",
     "next": "^5.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
