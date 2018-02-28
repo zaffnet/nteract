@@ -13,7 +13,9 @@ const rootReducer = combineReducers({
   app: reducers.app,
   document: reducers.document,
   comms: reducers.comms,
-  config: reducers.config
+  config: reducers.config,
+  core: reducers.core,
+  modals: reducers.modals
 });
 
 const defaultState = {
@@ -23,9 +25,8 @@ const defaultState = {
   config: ImmutableMap({
     theme: "light"
   }),
-  // TODO FIXME FIXME FIXME
-  core: ImmutableMap(),
-  modals: ImmutableMap()
+  core: state.makeStateRecord(),
+  modals: state.makeModalsRecord()
 };
 
 const composeEnhancers =
@@ -38,7 +39,6 @@ export default function configureStore() {
   const middlewares = [createEpicMiddleware(rootEpic)];
 
   return createStore(
-    // $FlowFixMe
     rootReducer,
     defaultState,
     composeEnhancers(applyMiddleware(...middlewares))
