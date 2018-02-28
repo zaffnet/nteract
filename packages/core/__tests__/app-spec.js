@@ -3,7 +3,7 @@ import { actionTypes, reducers, state as stateModule } from "@nteract/core";
 describe("startSaving", () => {
   test("should set isSaving to false", () => {
     const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeOldLocalKernelRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -20,7 +20,7 @@ describe("startSaving", () => {
 describe("doneSaving", () => {
   test("should set isSaving to false", () => {
     const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeOldLocalKernelRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -37,7 +37,7 @@ describe("doneSaving", () => {
 describe("setExecutionState", () => {
   test("should set the exeuction state to the given value", () => {
     const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeOldLocalKernelRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -57,7 +57,7 @@ describe("setExecutionState", () => {
 describe("setNotificationSystem", () => {
   test("returns the same originalState if notificationSystem is undefined", () => {
     const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeOldLocalKernelRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
@@ -71,7 +71,7 @@ describe("setNotificationSystem", () => {
   });
   test("sets the notificationSystem if given", () => {
     const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeOldLocalKernelRecord({
+      kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false

@@ -41,10 +41,7 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type {
-  OldKernelInfo,
-  OldLocalKernelProps
-} from "@nteract/core/src/state";
+import type { OldKernelInfo, LocalKernelProps } from "@nteract/core/src/state";
 
 import { selectors, actions, actionTypes, state } from "@nteract/core";
 
@@ -90,10 +87,11 @@ export function launchKernelObservable(
         .then((channels: Channels) => {
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
-          const kernel: OldLocalKernelProps = {
+          const kernel: LocalKernelProps = {
             // TODO: Include the ref when we need it here
             ref: state.createKernelRef(),
             type: "zeromq",
+            hostRef: null,
             channels,
             connectionFile,
             spawn,
@@ -326,10 +324,10 @@ export function watchSpawn(action$: *, store: *) {
       if (!action.payload.kernel.type === "zeromq") {
         throw new Error("kernel.type is not zeromq.");
       }
+      // $FlowFixMe: spawn's type seems not to be defined.
       if (!action.payload.kernel.spawn) {
         throw new Error("kernel.spawn is not provided.");
       }
-      // $FlowFixMe: spawn's type seems not to be defined.
       const spawn: ChildProcess = action.payload.kernel.spawn;
       return Observable.create(observer => {
         spawn.on("error", error => {

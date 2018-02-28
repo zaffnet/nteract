@@ -1,8 +1,8 @@
 // @flow
 import {
   makeAppRecord,
-  makeOldLocalKernelRecord,
-  makeOldRemoteKernelRecord
+  makeLocalKernelRecord,
+  makeRemoteKernelRecord
 } from "../state";
 
 import type { AppRecord } from "../state";
@@ -45,10 +45,10 @@ export function launchKernelSuccessful(
   // We create a record based on the kernel type
   switch (action.payload.kernel.type) {
     case "websocket":
-      kernel = makeOldRemoteKernelRecord(action.payload.kernel);
+      kernel = makeRemoteKernelRecord(action.payload.kernel);
       break;
     case "zeromq":
-      kernel = makeOldLocalKernelRecord(action.payload.kernel);
+      kernel = makeLocalKernelRecord(action.payload.kernel);
       break;
     default:
       kernel = null;

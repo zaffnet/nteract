@@ -72,6 +72,7 @@ describe("launchKernelEpic", () => {
           lastActivity: null,
           type: "zeromq",
           cwd: "~",
+          hostRef: null,
           channels: expect.anything(),
           spawn: expect.anything(),
           connectionFile: "connectionFile.json",
