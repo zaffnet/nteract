@@ -49,8 +49,9 @@ function processCommMessage(
     const value = Immutable.fromJS(data.value);
 
     // set `value` into `path` of the model data
-    // $FlowFixMe: Intersection type error.
-    return state.setIn(["models", comm_id].concat(path), value);
+    return state.updateIn(["models", comm_id], model =>
+      model.setIn(path, value)
+    );
   }
 
   // Default to overwrite / replace for now
