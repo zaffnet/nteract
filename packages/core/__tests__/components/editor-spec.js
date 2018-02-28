@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 
 import Editor from "../../src/components/editor";
 import { dummyStore } from "../../src/dummy";
-import { UPDATE_CELL_SOURCE, FOCUS_CELL_EDITOR } from "../../src/actionTypes";
+import { actionTypes } from "../../src";
 
 describe("EditorProvider", () => {
   const store = dummyStore();
@@ -25,7 +25,7 @@ describe("EditorProvider", () => {
       const dispatch = action => {
         expect(action.id).toBe("test");
         expect(action.value).toBe("i love nteract");
-        expect(action.type).toBe("SET_IN_CELL");
+        expect(action.type).toBe(actionTypes.SET_IN_CELL);
         resolve();
       };
       store.dispatch = dispatch;
@@ -40,7 +40,7 @@ describe("EditorProvider", () => {
     new Promise(resolve => {
       const dispatch = action => {
         expect(action.id).toBe("test");
-        expect(action.type).toBe(FOCUS_CELL_EDITOR);
+        expect(action.type).toBe(actionTypes.FOCUS_CELL_EDITOR);
         resolve();
       };
       store.dispatch = dispatch;
