@@ -1,17 +1,16 @@
 // @flow
+import * as Immutable from "immutable";
 import type { KernelspecsCommunicationRecordProps } from "./kernelspecs";
-import type { RecordFactory, RecordOf } from "immutable";
-import { Record } from "immutable";
 import { makeKernelspecsCommunicationRecord } from "./kernelspecs";
 
 export * from "./kernelspecs";
 
 export type CommunicationRecordProps = {
-  kernelspecs: RecordOf<KernelspecsCommunicationRecordProps>
+  kernelspecs: Immutable.RecordOf<KernelspecsCommunicationRecordProps>
 };
 
-export const makeCommunicationRecord: RecordFactory<
+export const makeCommunicationRecord: Immutable.RecordFactory<
   CommunicationRecordProps
-> = Record({
+> = Immutable.Record({
   kernelspecs: makeKernelspecsCommunicationRecord()
 });
