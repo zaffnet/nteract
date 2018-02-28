@@ -1,8 +1,7 @@
 // @flow
+import * as Immutable from "immutable";
 import type { HostId, KernelId } from "../ids";
 import type { HostRef } from "../refs";
-import type { RecordFactory, RecordOf } from "immutable";
-import { List, Map, Record } from "immutable";
 
 export type BaseHostProps = {
   id: ?HostId,
@@ -14,22 +13,22 @@ export type JupyterHostRecordProps = BaseHostProps & {
   token: ?string,
   serverUrl: ?string,
   crossDomain: ?boolean,
-  kernelIds: List<KernelId>
+  kernelIds: Immutable.List<KernelId>
 };
 
-export const makeJupyterHostRecord: RecordFactory<
+export const makeJupyterHostRecord: Immutable.RecordFactory<
   JupyterHostRecordProps
-> = Record({
+> = Immutable.Record({
   type: "jupyter",
   id: null,
   defaultKernelName: "python",
-  kernelIds: List(),
+  kernelIds: Immutable.List(),
   token: null,
   serverUrl: null,
   crossDomain: false
 });
 
-export type JupyterHostRecord = RecordOf<JupyterHostRecordProps>;
+export type JupyterHostRecord = Immutable.RecordOf<JupyterHostRecordProps>;
 
 export type BinderHostRecordProps = BaseHostProps & {
   // TODO: figure out if this belong here, it was brought over by play
@@ -37,37 +36,39 @@ export type BinderHostRecordProps = BaseHostProps & {
   token: ?string,
   serverUrl: ?string,
   crossDomain: ?boolean,
-  kernelIds: List<KernelId>,
-  messages: List<string>
+  kernelIds: Immutable.List<KernelId>,
+  messages: Immutable.List<string>
 };
 
-export const makeBinderHostRecord: RecordFactory<
+export const makeBinderHostRecord: Immutable.RecordFactory<
   BinderHostRecordProps
-> = Record({
+> = Immutable.Record({
   type: "binder",
   id: null,
   defaultKernelName: "python",
-  kernelIds: List(),
+  kernelIds: Immutable.List(),
   token: null,
   serverUrl: null,
   crossDomain: false,
-  messages: List()
+  messages: Immutable.List()
 });
 
-export type BinderHostRecord = RecordOf<BinderHostRecordProps>;
+export type BinderHostRecord = Immutable.RecordOf<BinderHostRecordProps>;
 
 export type LocalHostRecordProps = BaseHostProps & {
   type: "local"
 };
 
-export const makeLocalHostRecord: RecordFactory<LocalHostRecordProps> = Record({
+export const makeLocalHostRecord: Immutable.RecordFactory<
+  LocalHostRecordProps
+> = Immutable.Record({
   type: "local",
   id: null,
   defaultKernelName: "python",
-  kernelIds: List()
+  kernelIds: Immutable.List()
 });
 
-export type LocalHostRecord = RecordOf<LocalHostRecordProps>;
+export type LocalHostRecord = Immutable.RecordOf<LocalHostRecordProps>;
 
 export type HostRecordProps =
   | LocalHostRecordProps
@@ -76,11 +77,13 @@ export type HostRecordProps =
 export type HostRecord = LocalHostRecord | JupyterHostRecord | BinderHostRecord;
 
 export type HostsRecordProps = {
-  byRef: Map<HostRef, HostRecord>,
-  refs: List<HostRef>
+  byRef: Immutable.Map<HostRef, HostRecord>,
+  refs: Immutable.List<HostRef>
 };
 
-export const makeHostsRecord: RecordFactory<HostsRecordProps> = Record({
-  byRef: Map(),
-  refs: List()
+export const makeHostsRecord: Immutable.RecordFactory<
+  HostsRecordProps
+> = Immutable.Record({
+  byRef: Immutable.Map(),
+  refs: Immutable.List()
 });

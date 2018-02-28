@@ -1,12 +1,9 @@
 // @flow
+import * as Immutable from "immutable";
 import type { CommunicationRecordProps } from "./communication";
 import type { EntitiesRecordProps } from "./entities";
-import type { RecordFactory, RecordOf } from "immutable";
-import { Record } from "immutable";
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord } from "./entities";
-
-import * as Immutable from "immutable";
 
 export * from "./communication";
 export * from "./entities";
@@ -24,20 +21,22 @@ import type {
 export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
-  communication: RecordOf<CommunicationRecordProps>,
-  entities: RecordOf<EntitiesRecordProps>
+  communication: Immutable.RecordOf<CommunicationRecordProps>,
+  entities: Immutable.RecordOf<EntitiesRecordProps>
 };
 
-export const makeStateRecord: RecordFactory<StateRecordProps> = Record({
+export const makeStateRecord: Immutable.RecordFactory<
+  StateRecordProps
+> = Immutable.Record({
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });
 
 export type AppState = {
-  app: RecordOf<AppRecordProps>,
-  document: RecordOf<DocumentRecordProps>,
-  comms: RecordOf<CommsRecordProps>,
+  app: Immutable.RecordOf<AppRecordProps>,
+  document: Immutable.RecordOf<DocumentRecordProps>,
+  comms: Immutable.RecordOf<CommsRecordProps>,
   config: ConfigState,
-  core: RecordOf<StateRecordProps>,
-  modals: RecordOf<ModalsRecordProps>
+  core: Immutable.RecordOf<StateRecordProps>,
+  modals: Immutable.RecordOf<ModalsRecordProps>
 };

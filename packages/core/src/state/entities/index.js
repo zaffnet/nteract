@@ -1,8 +1,7 @@
 // @flow
+import * as Immutable from "immutable";
 import type { HostsRecordProps } from "./hosts";
 import type { KernelspecsRecordProps } from "./kernelspecs";
-import type { RecordFactory, RecordOf } from "immutable";
-import { Record } from "immutable";
 import { makeHostsRecord } from "./hosts";
 import { makeKernelspecsRecord } from "./kernelspecs";
 
@@ -10,11 +9,13 @@ export * from "./hosts";
 export * from "./kernelspecs";
 
 export type EntitiesRecordProps = {
-  hosts: RecordOf<HostsRecordProps>,
-  kernelspecs: RecordOf<KernelspecsRecordProps>
+  hosts: Immutable.RecordOf<HostsRecordProps>,
+  kernelspecs: Immutable.RecordOf<KernelspecsRecordProps>
 };
 
-export const makeEntitiesRecord: RecordFactory<EntitiesRecordProps> = Record({
+export const makeEntitiesRecord: Immutable.RecordFactory<
+  EntitiesRecordProps
+> = Immutable.Record({
   hosts: makeHostsRecord(),
   kernelspecs: makeKernelspecsRecord()
 });
