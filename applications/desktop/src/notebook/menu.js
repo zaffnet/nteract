@@ -76,7 +76,7 @@ export function triggerWindowRefresh(store: *, filename: string) {
 
 export function dispatchRestartKernel(store: *) {
   // TODO: provide a KernelRef
-  store.dispatch(actions.restartKernel());
+  store.dispatch(actions.restartKernel({ clearOutputs: false }));
 }
 
 export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
