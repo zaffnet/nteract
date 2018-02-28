@@ -144,5 +144,8 @@ function main(rootEl: Element, dataEl: Node | null) {
 const rootEl = document.querySelector("#root");
 const dataEl = document.querySelector("#jupyter-config-data");
 
-// $FlowFixMe: querySelector can return null so this freaks out.
-main(rootEl, dataEl);
+if (!rootEl || !dataEl) {
+  alert("Something drastic happened, and we don't have config data");
+} else {
+  main(rootEl, dataEl);
+}
