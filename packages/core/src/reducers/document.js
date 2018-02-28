@@ -94,10 +94,12 @@ export function reduceOutputs(
   outputs: ImmutableOutputs = Immutable.List(),
   output: Output
 ) {
-  // eslint-disable-line max-len
+  const last = outputs.last();
+
   if (
     output.output_type !== "stream" ||
-    (outputs.size > 0 && outputs.last().get("output_type") !== "stream")
+    !last ||
+    (outputs.size > 0 && last.get("output_type") !== "stream")
   ) {
     // If it's not a stream type, we just fold in the output
     return outputs.push(createImmutableOutput(output));
@@ -113,15 +115,16 @@ export function reduceOutputs(
   }
 
   if (
+    last &&
     outputs.size > 0 &&
     typeof streamOutput.name !== "undefined" &&
-    outputs.last().get("output_type") === "stream"
+    last.get("output_type") === "stream"
   ) {
     // Invariant: size > 0, outputs.last() exists
-    if (outputs.last().get("name") === streamOutput.name) {
+    if (last.get("name") === streamOutput.name) {
       return outputs.updateIn([outputs.size - 1, "text"], appendText);
     }
-    const nextToLast: ImmutableOutput = outputs.butLast().last();
+    const nextToLast: ?ImmutableOutput = outputs.butLast().last();
     if (
       nextToLast &&
       nextToLast.get("output_type") === "stream" &&
@@ -301,8 +304,10 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
     ["transient", "keyPathsForDisplays", displayID],
     new Immutable.List()
   );
+
   const updatedContent = {
-    data: createImmutableMimeBundle(content.data || {}),
+    // $FlowFixMe: Not sure why this isn't accepted as mimebundle
+    data: createImmutableMimeBundle(content.data),
     metadata: Immutable.fromJS(content.metadata || {})
   };
 
@@ -449,7 +454,7 @@ function newCellAfter(state: DocumentRecord, action: NewCellAfterAction) {
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
-    const index = notebook.get("cellOrder").indexOf(id) + 1;
+    const index = notebook.get("cellOrder", Immutable.List()).indexOf(id) + 1;
     return insertCellAt(notebook, cell.set("source", source), cellID, index);
   });
 }
@@ -459,7 +464,10 @@ function newCellBefore(state: DocumentRecord, action: NewCellBeforeAction) {
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
-    const cellOrder: ImmutableCellOrder = notebook.get("cellOrder");
+    const cellOrder: ImmutableCellOrder = notebook.get(
+      "cellOrder",
+      Immutable.List()
+    );
     const index = cellOrder.indexOf(id);
     return insertCellAt(notebook, cell, cellID, index);
   });
@@ -482,6 +490,11 @@ function mergeCellAfter(state: DocumentRecord, action: MergeCellAfterAction) {
   );
 
   const nextId = cellOrder.get(index + 1);
+
+  if (!nextId) {
+    return state;
+  }
+
   const firstSource: string = cellMap.getIn([id, "source"], "");
   const secondSource: string = cellMap.getIn([nextId, "source"], "");
 
@@ -495,7 +508,10 @@ function mergeCellAfter(state: DocumentRecord, action: MergeCellAfterAction) {
 function newCellAppend(state: DocumentRecord, action: NewCellAppendAction) {
   const { cellType } = action;
   const notebook: ImmutableNotebook = state.get("notebook");
-  const cellOrder: ImmutableCellOrder = notebook.get("cellOrder");
+  const cellOrder: ImmutableCellOrder = notebook.get(
+    "cellOrder",
+    Immutable.List()
+  );
   const cell: ImmutableCell =
     cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const index = cellOrder.count();
@@ -643,7 +659,12 @@ function copyCell(state: DocumentRecord, action: CopyCellAction) {
 function cutCell(state: DocumentRecord, action: CutCellAction) {
   const { id } = action;
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
-  const cell: ImmutableCell = cellMap.get(id);
+  const cell: ?ImmutableCell = cellMap.get(id);
+
+  if (!cell) {
+    return state;
+  }
+
   return state
     .set("copied", Immutable.Map({ id, cell }))
     .update("notebook", (notebook: ImmutableNotebook) =>

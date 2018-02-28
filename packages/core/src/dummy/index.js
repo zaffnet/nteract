@@ -6,7 +6,8 @@ import * as Immutable from "immutable";
 import {
   monocellNotebook,
   emptyCodeCell,
-  appendCellToNotebook
+  appendCellToNotebook,
+  emptyNotebook
 } from "@nteract/commutable";
 
 /* Our createStore */
@@ -33,7 +34,7 @@ import {
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
     notebook
-      .get("cellOrder")
+      .get("cellOrder", Immutable.List())
       .reduce(
         (acc, id) => acc.setIn([id, "metadata", "inputHidden"], true),
         cells
@@ -87,12 +88,13 @@ export function dummyStore(config: *) {
   return createStore(rootReducer, {
     document: makeDocumentRecord({
       notebook: dummyNotebook,
-      savedNotebook: config && config.saved === true ? dummyNotebook : null,
+      savedNotebook:
+        config && config.saved === true ? dummyNotebook : emptyNotebook,
       cellPagers: new Immutable.Map(),
       stickyCells: new Immutable.Set(),
       cellFocused:
         config && config.codeCellCount > 1
-          ? dummyNotebook.get("cellOrder").get(1)
+          ? dummyNotebook.get("cellOrder", Immutable.List()).get(1)
           : null,
       filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),

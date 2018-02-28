@@ -4,12 +4,13 @@ import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
+  Notebook,
   ImmutableNotebook,
   CellID,
   CellType,
   ImmutableJSONType,
   MimeBundle
-} from "@nteract/commutable/src";
+} from "@nteract/commutable";
 
 import type {
   OldKernelInfo,
