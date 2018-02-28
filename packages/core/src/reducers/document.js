@@ -637,22 +637,18 @@ function copyCell(state: DocumentRecord, action: CopyCellAction) {
   const { id } = action;
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
   const cell = cellMap.get(id);
-  // $FlowFixMe: Immutable
-  return state.set("copied", new Immutable.Map({ id, cell }));
+  return state.set("copied", Immutable.Map({ id, cell }));
 }
 
 function cutCell(state: DocumentRecord, action: CutCellAction) {
   const { id } = action;
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
   const cell: ImmutableCell = cellMap.get(id);
-  return (
-    state
-      // $FlowFixMe: Immutable
-      .set("copied", new Immutable.Map({ id, cell }))
-      .update("notebook", (notebook: ImmutableNotebook) =>
-        removeCell(notebook, id)
-      )
-  );
+  return state
+    .set("copied", Immutable.Map({ id, cell }))
+    .update("notebook", (notebook: ImmutableNotebook) =>
+      removeCell(notebook, id)
+    );
 }
 
 function pasteCell(state: DocumentRecord) {
