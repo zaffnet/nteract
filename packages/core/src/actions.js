@@ -76,6 +76,7 @@ import type {
   SetConfigAction,
   LaunchKernelAction,
   LaunchKernelByNameAction,
+  LaunchKernelFailed,
   KernelRawStdout,
   KernelRawStderr,
   InterruptKernel,
@@ -175,10 +176,13 @@ export const fetchKernelspecsFailed = (payload: {
   payload
 });
 
-export function launchKernelFailed(error: Error) {
+export function launchKernelFailed(payload: {
+  error: Error,
+  ref?: KernelRef
+}): LaunchKernelFailed {
   return {
     type: actionTypes.LAUNCH_KERNEL_FAILED,
-    payload: error,
+    payload,
     error: true
   };
 }

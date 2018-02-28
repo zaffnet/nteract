@@ -194,15 +194,14 @@ export type DocumentRecordProps = {
 export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
   notebook: null,
   savedNotebook: null,
-  // $FlowFixMe: Immutable
-  transient: new Map({
-    keyPathsForDisplays: new Map()
+  transient: Map({
+    keyPathsForDisplays: Map()
   }),
-  cellPagers: new Map(),
-  stickyCells: new Set(),
+  cellPagers: Map(),
+  stickyCells: Set(),
   editorFocused: null,
   cellFocused: null,
-  copied: new Map(),
+  copied: Map(),
   filename: ""
 });
 export type DocumentRecord = RecordOf<DocumentRecordProps>;

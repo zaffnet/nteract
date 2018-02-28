@@ -188,9 +188,8 @@ export const launchKernelEpic = (
         kernel ? killKernel({ kernel, ref: action.payload.ref }) : empty()
       );
     }),
-    catchError((error, source) => {
+    catchError((error: Error, source: rxjs$Observable<*>) => {
       // TODO: we need to get the KernelRef into this failure action.
-      // $FlowFixMe: error isn't type Error here?
       return merge(of(actions.launchKernelFailed({ error })), source);
     })
   );

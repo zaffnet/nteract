@@ -23,7 +23,12 @@ const rootReducer = combineReducers({
   config
 });
 
-import { makeAppRecord, makeDocumentRecord, makeCommsRecord } from "../state";
+import {
+  makeAppRecord,
+  makeDocumentRecord,
+  makeCommsRecord,
+  makeOldLocalKernelRecord
+} from "../state";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
@@ -96,11 +101,7 @@ export function dummyStore(config: *) {
         addNotification: () => {} // most of the time you'll want to mock this
       },
       githubToken: "TOKEN",
-      // $FlowFixMe -- use a real kernel record here
-      kernel: {
-        channels: "channelInfo",
-        status: "not connected"
-      }
+      kernel: makeOldLocalKernelRecord()
     }),
     config: Immutable.Map({
       theme: "light"
