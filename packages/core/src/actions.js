@@ -492,10 +492,10 @@ export function deleteMetadata(field: string): DeleteMetadataFieldAction {
   };
 }
 
-// TODO: we should probably remove the default here.
-export function killKernel(
-  payload: { restarting: boolean, ref?: KernelRef } = { restarting: false }
-): KillKernelAction {
+export function killKernel(payload: {
+  restarting: boolean,
+  ref?: KernelRef
+}): KillKernelAction {
   return {
     type: actionTypes.KILL_KERNEL,
     payload
@@ -847,10 +847,10 @@ export function shutdownReplyTimedOut(payload: {
   };
 }
 
-// TODO: probably should remove default here.
-export function restartKernel(
-  payload: { clearOutputs: boolean, ref?: KernelRef } = { clearOutputs: false }
-): RestartKernel {
+export function restartKernel(payload: {
+  clearOutputs: boolean,
+  ref?: KernelRef
+}): RestartKernel {
   return {
     type: actionTypes.RESTART_KERNEL,
     payload
