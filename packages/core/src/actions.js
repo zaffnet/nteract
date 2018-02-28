@@ -90,11 +90,15 @@ import type {
   AddHost,
   FetchContent,
   FetchContentFulfilled,
-  FetchContentFailed
+  FetchContentFailed,
+  UseCore
 } from "./actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 import type { HostRecordProps } from "./state/entities/hosts";
+
+// TODO: See reducers/core/index `useCore` reducer.
+export const useCore = (): UseCore => ({ type: actionTypes.USE_CORE });
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,
