@@ -1,7 +1,7 @@
 // @flow
 import * as actionTypes from "./actionTypes";
 
-import type { Notebook } from "@nteract/commutable";
+import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
@@ -708,7 +708,7 @@ export function newNotebook(payload: {
 // Expects notebook to be JS Object or Immutable.js
 export const setNotebook = (payload: {
   filename: ?string,
-  notebook: Notebook,
+  notebook: ImmutableNotebook,
   kernelRef?: KernelRef
 }): SetNotebookAction => ({
   type: actionTypes.SET_NOTEBOOK,

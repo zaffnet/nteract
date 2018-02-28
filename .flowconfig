@@ -4,10 +4,7 @@ types
 
 [options]
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
-module.name_mapper='^@nteract/core$' -> '<PROJECT_ROOT>/packages/core/src'
-module.name_mapper='^@nteract/core/(?!src)(.+)$' -> '<PROJECT_ROOT>/packages/core/src/$1'
-module.name_mapper='^@nteract/core/src/(.+)$' -> '<PROJECT_ROOT>/packages/core/src/$1'
-module.name_mapper='^@nteract/(?!core)(.+)$' -> '<PROJECT_ROOT>/packages/$1/src'
+module.name_mapper='^@nteract/\(.+\)$' -> '<PROJECT_ROOT>/packages/\1/src'
 module.name_mapper='^ansi-to-react$' -> '<PROJECT_ROOT>/packages/ansi-to-react/src'
 module.name_mapper='^enchannel-zmq-backend$' -> '<PROJECT_ROOT>/packages/enchannel-zmq-backend/src'
 module.name_mapper='^fs-observable$' -> '<PROJECT_ROOT>/packages/fs-observable/src'

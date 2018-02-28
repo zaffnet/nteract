@@ -72,4 +72,5 @@ class Editor extends React.Component<Props> {
   }
 }
 
+// $FlowFixMe: The editor ownProps and mapped props need addressing
 export default connect(mapStateToProps)(Editor);

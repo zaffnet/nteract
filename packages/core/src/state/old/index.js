@@ -7,6 +7,8 @@ import type {
 } from "./hosts";
 import type { OldLocalKernelProps, OldRemoteKernelProps } from "./kernels";
 
+import { emptyNotebook } from "@nteract/commutable";
+
 export type { OldLocalKernelProps, OldRemoteKernelProps };
 
 // Pull version from core's package.json
@@ -177,8 +179,8 @@ export type AppRecord = RecordOf<AppRecordProps>;
 
 export type DocumentRecordProps = {
   // TODO: This _needs_ to become a Record
-  notebook: ?Map<string, any>,
-  savedNotebook: ?Map<string, any>,
+  notebook: Map<string, any>,
+  savedNotebook: Map<string, any>,
   filename: ?string,
   transient: Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)
@@ -192,8 +194,8 @@ export type DocumentRecordProps = {
 };
 
 export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
-  notebook: null,
-  savedNotebook: null,
+  notebook: emptyNotebook,
+  savedNotebook: emptyNotebook,
   transient: Map({
     keyPathsForDisplays: Map()
   }),
@@ -204,6 +206,7 @@ export const makeDocumentRecord: RecordFactory<DocumentRecordProps> = Record({
   copied: Map(),
   filename: ""
 });
+
 export type DocumentRecord = RecordOf<DocumentRecordProps>;
 
 export type CommsRecordProps = {

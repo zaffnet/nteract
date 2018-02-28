@@ -27,6 +27,8 @@ import type {
 } from "./types";
 
 export type {
+  ImmutableCellOrder,
+  ImmutableCellMap,
   ImmutableNotebook,
   ImmutableCodeCell,
   ImmutableMarkdownCell,
