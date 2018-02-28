@@ -2,6 +2,7 @@
 import * as Immutable from "immutable";
 import type { CommunicationRecordProps } from "./communication";
 import type { EntitiesRecordProps } from "./entities";
+import type { KernelRef } from "./refs";
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord } from "./entities";
 
@@ -21,6 +22,8 @@ import type {
 export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
+  kernelRef: ?KernelRef,
+  useCore: boolean,
   communication: Immutable.RecordOf<CommunicationRecordProps>,
   entities: Immutable.RecordOf<EntitiesRecordProps>
 };
@@ -28,6 +31,8 @@ export type StateRecordProps = {
 export const makeStateRecord: Immutable.RecordFactory<
   StateRecordProps
 > = Immutable.Record({
+  kernelRef: null,
+  useCore: false,
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });

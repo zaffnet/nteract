@@ -52,8 +52,14 @@ export const currentHost = createSelector(
 );
 
 export const currentKernel = createSelector(
+  (state: AppState) => state.core.useCore,
   (state: AppState) => state.app.kernel,
-  identity
+  (state: AppState) => state.core.kernelRef,
+  (state: AppState) => state.core.getIn(["entities", "kernels", "byRef"]),
+  (state: AppState) => state,
+  (useCore, oldKernel, kernelRef, kernelsByRef, state) => {
+    return useCore ? kernelsByRef.get(kernelRef) : oldKernel;
+  }
 );
 
 export const currentKernelType = createSelector([currentKernel], kernel => {
@@ -293,5 +299,16 @@ export const kernelspecsByRefCore = createSelector(
 
 export const notificationSystem = createSelector(
   (state: AppState) => state.app.get("notificationSystem"),
+  identity
+);
+
+export const kernelByRefCore = createSelector(
+  (state: AppState, { kernelRef }) =>
+    state.core.getIn(["entities", "kernels", "byRef", kernelRef]),
+  identity
+);
+
+export const currentKernelRefCore = createSelector(
+  (state: AppState) => state.core.get("kernelRef"),
   identity
 );

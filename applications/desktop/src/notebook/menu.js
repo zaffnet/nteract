@@ -104,7 +104,8 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
             // TODO: get a KernelRef here and use it in action.
             actions.launchKernelByName({
               kernelSpecName: kernel.kernelSpecName,
-              cwd
+              cwd,
+              selectNextKernel: true
             })
           );
         }
@@ -138,7 +139,9 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
   // TODO: get a KernelRef here and use it in action.
-  store.dispatch(actions.launchKernel({ kernelSpec: spec, cwd }));
+  store.dispatch(
+    actions.launchKernel({ kernelSpec: spec, cwd, selectNextKernel: true })
+  );
 }
 
 export function dispatchPublishAnonGist(store: *) {

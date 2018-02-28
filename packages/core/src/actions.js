@@ -90,11 +90,15 @@ import type {
   AddHost,
   FetchContent,
   FetchContentFulfilled,
-  FetchContentFailed
+  FetchContentFailed,
+  UseCore
 } from "./actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 import type { HostRecordProps } from "./state/entities/hosts";
+
+// TODO: See reducers/core/index `useCore` reducer.
+export const useCore = (): UseCore => ({ type: actionTypes.USE_CORE });
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,
@@ -200,7 +204,8 @@ export function launchKernelSuccessful(payload: {
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
-  ref?: KernelRef
+  ref?: KernelRef,
+  selectNextKernel: boolean
 }): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -211,7 +216,8 @@ export function launchKernel(payload: {
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
-  ref?: KernelRef
+  ref?: KernelRef,
+  selectNextKernel: boolean
 }): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,

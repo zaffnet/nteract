@@ -29,6 +29,10 @@ export type ErrorAction<T: string> = {
   error: true
 };
 
+// TODO: See reducers/core/index `useCore` reducer.
+export const USE_CORE = "CORE/USE_CORE";
+export type UseCore = { type: "CORE/USE_CORE" };
+
 export const OPEN_MODAL = "CORE/OPEN_MODAL";
 export type OpenModal = {
   type: "CORE/OPEN_MODAL",
@@ -511,7 +515,19 @@ export type LaunchKernelAction = {
   payload: {
     ref?: KernelRef,
     kernelSpec: Object,
-    cwd: string
+    cwd: string,
+    selectNextKernel: boolean
+  }
+};
+
+export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
+export type LaunchKernelByNameAction = {
+  type: "LAUNCH_KERNEL_BY_NAME",
+  payload: {
+    kernelSpecName: string,
+    cwd: string,
+    ref?: KernelRef,
+    selectNextKernel: boolean
   }
 };
 
@@ -530,16 +546,6 @@ export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: OldLocalKernelProps | OldRemoteKernelProps,
-    ref?: KernelRef
-  }
-};
-
-export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
-export type LaunchKernelByNameAction = {
-  type: "LAUNCH_KERNEL_BY_NAME",
-  payload: {
-    kernelSpecName: string,
-    cwd: string,
     ref?: KernelRef
   }
 };

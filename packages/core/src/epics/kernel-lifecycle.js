@@ -5,6 +5,7 @@ import { of } from "rxjs/observable/of";
 import { empty } from "rxjs/observable/empty";
 import { merge } from "rxjs/observable/merge";
 import { from } from "rxjs/observable/from";
+import { createKernelRef } from "../state/refs";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -130,7 +131,8 @@ export const launchKernelWhenNotebookSetEpic = (
       return actions.launchKernelByName({
         kernelSpecName,
         cwd,
-        ref: action.payload.kernelRef
+        ref: action.payload.kernelRef,
+        selectNextKernel: true
       });
     })
   );
@@ -173,7 +175,8 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
         actions.launchKernelByName({
           kernelSpecName: kernel.kernelSpecName,
           cwd: kernel.cwd,
-          ref: action.payload.ref
+          ref: createKernelRef(),
+          selectNextKernel: true
         })
       );
     })

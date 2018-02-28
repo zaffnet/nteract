@@ -1,7 +1,7 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
 
-import { actionTypes, actions } from "@nteract/core";
+import { actionTypes, actions, state as stateModule } from "@nteract/core";
 
 import { createExecuteRequest } from "@nteract/messaging";
 
@@ -49,11 +49,21 @@ describe("createExecuteCellStream", () => {
         return this.state;
       },
       state: {
+        core: stateModule.makeStateRecord({
+          useCore: true,
+          kernelRef: "fake",
+          entities: stateModule.makeEntitiesRecord({
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                fake: stateModule.makeRemoteKernelRecord({
+                  channels,
+                  status: "not connected"
+                })
+              })
+            })
+          })
+        }),
         app: {
-          kernel: {
-            channels,
-            status: "not connected"
-          },
           notificationSystem: { addNotification: jest.fn() }
         },
         document: Immutable.fromJS({
@@ -98,11 +108,21 @@ describe("createExecuteCellStream", () => {
         return this.state;
       },
       state: {
+        core: stateModule.makeStateRecord({
+          useCore: true,
+          kernelRef: "fake",
+          entities: stateModule.makeEntitiesRecord({
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                fake: stateModule.makeRemoteKernelRecord({
+                  channels,
+                  status: "connected"
+                })
+              })
+            })
+          })
+        }),
         app: {
-          kernel: {
-            channels,
-            status: "connected"
-          },
           notificationSystem: { addNotification: jest.fn() },
           document: Immutable.fromJS({
             notebook: {
@@ -198,11 +218,21 @@ describe("executeCellEpic", () => {
         return this.state;
       },
       state: {
+        core: stateModule.makeStateRecord({
+          useCore: true,
+          kernelRef: "fake",
+          entities: stateModule.makeEntitiesRecord({
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                fake: stateModule.makeRemoteKernelRecord({
+                  channels: null,
+                  status: "not connected"
+                })
+              })
+            })
+          })
+        }),
         app: {
-          kernel: {
-            status: "not connected"
-          },
-          channels: false,
           notificationSystem: { addNotification: jest.fn() }
         },
         document: Immutable.fromJS({

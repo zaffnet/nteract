@@ -27,8 +27,14 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
+    componentWillMount(): void {
+      // TODO: See reducers/core/index `useCore` reducer.
+      store.dispatch(actions.useCore());
+    }
+
     componentDidMount(): void {
       const hostRef = state.createHostRef();
+      const kernelRef = state.createKernelRef();
       const kernelspecsRef = state.createKernelspecsRef();
       store.dispatch(
         actions.addHost({
@@ -47,11 +53,11 @@ function createApp(jupyterConfigData: JupyterConfigData) {
       );
 
       // TODO: we should likely be passing in a hostRef to fetchContent too.
-      // TODO: provide a KernelRef
       store.dispatch(
         actions.fetchContent({
           path: jupyterConfigData.contentsPath,
-          params: {}
+          params: {},
+          kernelRef
         })
       );
       store.dispatch(actions.fetchKernelspecs({ hostRef, kernelspecsRef }));
