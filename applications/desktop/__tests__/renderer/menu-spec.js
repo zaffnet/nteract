@@ -307,7 +307,8 @@ describe("menu", () => {
         type: actionTypes.LAUNCH_KERNEL,
         payload: {
           kernelSpec: { spec: "hokey" },
-          cwd: process.cwd()
+          cwd: process.cwd(),
+          selectNextKernel: true
         }
       });
     });

@@ -42,7 +42,8 @@ describe("launchKernelEpic", () => {
     const action$ = ActionsObservable.of(
       actions.launchKernel({
         kernelSpec: { spec: "hokey", name: "woohoo" },
-        cwd: "~"
+        cwd: "~",
+        selectNextKernel: true
       })
     );
 

@@ -45,7 +45,11 @@ describe("launchWebSocketKernelEpic", () => {
     };
 
     const action$ = ActionsObservable.of(
-      launchKernelByName({ kernelSpecName: "fancy", cwd: "/" })
+      actions.launchKernelByName({
+        kernelSpecName: "fancy",
+        cwd: "/",
+        selectNextKernel: true
+      })
     );
 
     const responseActions = await launchWebSocketKernelEpic(action$, store)

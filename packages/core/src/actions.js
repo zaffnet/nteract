@@ -204,7 +204,8 @@ export function launchKernelSuccessful(payload: {
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
-  ref?: KernelRef
+  ref?: KernelRef,
+  selectNextKernel: boolean
 }): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -215,7 +216,8 @@ export function launchKernel(payload: {
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
-  ref?: KernelRef
+  ref?: KernelRef,
+  selectNextKernel: boolean
 }): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,

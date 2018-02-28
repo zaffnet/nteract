@@ -148,7 +148,8 @@ export const launchKernelByNameEpic = (
             actions.launchKernel({
               kernelSpec: specs[action.payload.kernelSpecName],
               cwd: action.payload.cwd,
-              ref: action.payload.ref
+              ref: action.payload.ref,
+              selectNextKernel: action.payload.selectNextKernel
             })
           )
         )
