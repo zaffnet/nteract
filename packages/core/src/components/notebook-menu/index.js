@@ -1,14 +1,15 @@
 // @flow
-import * as React from "react";
-import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
-import { localCss } from "./styles";
-import { connect } from "react-redux";
 import * as Immutable from "immutable";
+import * as React from "react";
 import * as actions from "../../actions";
-import * as selectors from "../../selectors";
-import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import * as extraHandlers from "./extra-handlers";
+import * as selectors from "../../selectors";
+import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
+import type { KernelRef } from "../../state/refs";
+import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import { MODAL_TYPES } from "../modal-controller";
+import { connect } from "react-redux";
+import { localCss } from "./styles";
 
 // To allow actions that can take dynamic arguments (like selecting a kernel
 // based on the host's kernelspecs), we have some simple utility functions to
@@ -20,6 +21,7 @@ type Props = {
   defaultOpenKeys?: Array<string>,
   openKeys?: Array<string>,
   cellFocused: ?string,
+  currentKernelRef: ?KernelRef,
   saveNotebook: ?() => void,
   executeCell: ?(cellId: ?string) => void,
   executeAllCells: ?() => void,
@@ -48,6 +50,7 @@ class PureNotebookMenu extends React.Component<Props> {
   static defaultProps = {
     cellFocused: null,
     saveNotebook: null,
+    currentKernelRef: null,
     executeCell: null,
     executeAllCells: null,
     executeAllCellsBelow: null,
@@ -72,6 +75,7 @@ class PureNotebookMenu extends React.Component<Props> {
     const {
       saveNotebook,
       cellFocused,
+      currentKernelRef,
       copyCell,
       createCodeCell,
       createMarkdownCell,
@@ -185,25 +189,22 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.INTERRUPT_KERNEL:
         if (interruptKernel) {
-          // TODO: provide KernelRef
-          interruptKernel({});
+          interruptKernel({ ref: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.RESTART_KERNEL:
         if (restartKernel) {
-          // TODO: provide KernelRef
-          restartKernel({});
+          restartKernel({ ref: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.KILL_KERNEL:
         if (killKernel) {
-          // TODO: provide KernelRef
-          killKernel({});
+          killKernel({ ref: currentKernelRef });
         }
+        break;
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
-          // TODO: provide KernelRef
-          restartKernelAndClearOutputs({});
+          restartKernelAndClearOutputs({ ref: currentKernelRef });
         }
         break;
 
@@ -357,7 +358,8 @@ class PureNotebookMenu extends React.Component<Props> {
 const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
   filename: selectors.currentFilename(state),
-  notebook: selectors.currentNotebook(state)
+  notebook: selectors.currentNotebook(state),
+  currentKernelRef: selectors.currentKernelRefCore(state)
 });
 
 const mapDispatchToProps = dispatch => ({
