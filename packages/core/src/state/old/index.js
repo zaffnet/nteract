@@ -5,14 +5,7 @@ import type {
   OldDesktopHostRecordProps,
   OldJupyterHostRecordProps
 } from "./hosts";
-import type { OldLocalKernelProps, OldRemoteKernelProps } from "./kernels";
-
 import { emptyNotebook } from "@nteract/commutable";
-
-export type { OldLocalKernelProps, OldRemoteKernelProps };
-
-// Pull version from core's package.json
-const version: string = require("../../../package.json").version;
 
 import { List, Map, Record, Set } from "immutable";
 
@@ -21,7 +14,6 @@ type HostRecord = RecordOf<
 >;
 
 export { makeOldDesktopHostRecord, makeOldJupyterHostRecord } from "./hosts";
-export { makeOldLocalKernelRecord, makeOldRemoteKernelRecord } from "./kernels";
 export { makeModalsRecord } from "./modals";
 
 import type { ModalsRecordProps } from "./modals";
@@ -133,49 +125,6 @@ export type NotebookMetadata = {
   //
   // orig_nbformat?: number,
 };
-
-export type AppRecordProps = {
-  kernel: ?RecordOf<OldRemoteKernelProps> | ?RecordOf<OldLocalKernelProps>,
-  host:
-    | ?RecordOf<OldDesktopHostRecordProps>
-    | ?RecordOf<OldJupyterHostRecordProps>,
-  githubToken: ?string,
-  notificationSystem: { addNotification: Function },
-  isSaving: boolean,
-  lastSaved: ?Date,
-  configLastSaved: ?Date,
-  error: any,
-  // The version number should be provided by an app on boot
-  version: string
-};
-
-export const makeAppRecord: RecordFactory<AppRecordProps> = Record({
-  kernel: null,
-  host: null,
-  githubToken: null,
-  notificationSystem: {
-    addNotification: (msg: { level?: "error" | "warning" }) => {
-      let logger = console.log.bind(console);
-      switch (msg.level) {
-        case "error":
-          logger = console.error.bind(console);
-          break;
-        case "warning":
-          logger = console.warn.bind(console);
-          break;
-      }
-      logger(msg);
-    }
-  },
-  isSaving: false,
-  lastSaved: null,
-  configLastSaved: null,
-  error: null,
-  // set the default version to @nteract/core's version
-  version: `@nteract/core@${version}`
-});
-
-export type AppRecord = RecordOf<AppRecordProps>;
 
 export type DocumentRecordProps = {
   // TODO: This _needs_ to become a Record

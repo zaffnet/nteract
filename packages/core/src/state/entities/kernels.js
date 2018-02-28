@@ -3,23 +3,20 @@ import * as Immutable from "immutable";
 import type { ChildProcess } from "child_process";
 import type { HostRef, KernelRef } from "../refs";
 import type { KernelId } from "../ids";
+import { Subject } from "rxjs/subject";
 
-export type BaseKernelProps = {
-  name: ?string,
+export type LocalKernelProps = {
   kernelSpecName: ?string,
   hostRef: ?HostRef,
   lastActivity: ?Date,
-  channels: ?rxjs$Subject<*, *>,
+  channels: rxjs$Subject<*>,
   cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
   //
   // We also use this for other bits of lifecycle, including: launching,
   //   shutting down, not connected.
-  status: ?string
-};
-
-export type LocalKernelProps = BaseKernelProps & {
+  status: ?string,
   type: "zeromq",
   spawn: ?ChildProcess,
   connectionFile: ?string
@@ -32,9 +29,8 @@ export const makeLocalKernelRecord: Immutable.RecordFactory<
   cwd: ".",
   kernelSpecName: null,
   hostRef: null,
-  name: null,
   lastActivity: null,
-  channels: null,
+  channels: new Subject(),
   status: null,
   spawn: null,
   connectionFile: null
@@ -42,7 +38,18 @@ export const makeLocalKernelRecord: Immutable.RecordFactory<
 
 export type LocalKernelRecord = Immutable.RecordOf<LocalKernelProps>;
 
-export type RemoteKernelProps = BaseKernelProps & {
+export type RemoteKernelProps = {
+  kernelSpecName: ?string,
+  hostRef: ?HostRef,
+  lastActivity: ?Date,
+  channels: rxjs$Subject<*>,
+  cwd: string,
+  // Canonically: idle, busy, starting
+  // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
+  //
+  // We also use this for other bits of lifecycle, including: launching,
+  //   shutting down, not connected.
+  status: ?string,
   type: "websocket",
   id: ?KernelId
 };
@@ -55,9 +62,8 @@ export const makeRemoteKernelRecord: Immutable.RecordFactory<
   id: null,
   kernelSpecName: null,
   hostRef: null,
-  name: null,
   lastActivity: null,
-  channels: null,
+  channels: new Subject(),
   status: null
 });
 

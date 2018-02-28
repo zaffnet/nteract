@@ -30,7 +30,7 @@ import {
   makeAppRecord,
   makeDocumentRecord,
   makeCommsRecord,
-  makeOldLocalKernelRecord,
+  makeLocalKernelRecord,
   makeStateRecord,
   makeModalsRecord
 } from "../state";
@@ -109,7 +109,7 @@ export function dummyStore(config: *) {
         addNotification: () => {} // most of the time you'll want to mock this
       },
       githubToken: "TOKEN",
-      kernel: makeOldLocalKernelRecord()
+      kernel: makeLocalKernelRecord()
     }),
     config: Immutable.Map({
       theme: "light"
