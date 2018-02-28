@@ -67,8 +67,8 @@
       "./scripts/test-setup"
     ],
     "moduleNameMapper": {
-      "^@nteract/core$": "<rootDir>/packages/core/src",
-      "^@nteract/core/(.*)$": "<rootDir>/packages/core/src/$1",
+      "^@nteract/(?!styles|core/dummy)(.*)$": "<rootDir>/packages/$1/src",
+      "^@nteract/core/dummy$": "<rootDir>/packages/core/src/dummy",
       "\\.css$": "<rootDir>/scripts/noop-module.js"
     },
     "coveragePathIgnorePatterns": [
