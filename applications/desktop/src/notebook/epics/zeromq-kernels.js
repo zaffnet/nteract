@@ -166,16 +166,37 @@ export const launchKernelEpic = (
 ): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL),
-    tap((action: LaunchKernelAction) => {
-      if (!action.payload.kernelSpec) {
-        throw new Error("launchKernel needs a kernelSpec");
-      }
-      ipc.send("nteract:ping:kernel", action.payload.kernelSpec);
-    }),
     // We must kill the previous kernel now
     // Then launch the next one
     switchMap((action: LaunchKernelAction) => {
-      const kernel = selectors.currentKernel(store.getState());
+      if (
+        !action ||
+        !action.payload ||
+        !action.payload.kernelSpec ||
+        !action.payload.ref
+      ) {
+        return of(
+          actions.launchKernelFailed({
+            error: new Error(
+              "launchKernel needs a kernelSpec and a kernel ref"
+            ),
+            ref: action && action.payload && action.payload.ref
+          })
+        );
+      }
+
+      // TODO: Do the async version of `ipc.send`, potentially coordinate with main process
+      ipc.send("nteract:ping:kernel", action.payload.kernelSpec);
+
+      let cleanupOldKernel$ = empty();
+
+      // Kill the old kernel by emitting the action to kill it
+      const oldKernelRef = selectors.currentKernelRef(store.getState());
+      if (oldKernelRef && oldKernelRef !== action.payloadRef) {
+        cleanupOldKernel$ = of(
+          actions.killKernel({ restarting: false, ref: oldKernelRef })
+        );
+      }
 
       return merge(
         launchKernelObservable(
@@ -184,18 +205,15 @@ export const launchKernelEpic = (
           action.payload.ref
         ),
         // Was there a kernel before (?) -- kill it if so, otherwise nothing else
-        kernel ? killKernel({ kernel, ref: action.payload.ref }) : empty()
+        cleanupOldKernel$
       ).pipe(
-        catchError((error: Error, source: rxjs$Observable<*>) => {
-          return merge(
-            of(actions.launchKernelFailed({ error, ref: action.payload.ref })),
-            source
-          );
-        })
+        catchError((error: Error) =>
+          of(actions.launchKernelFailed({ error, ref: action.payload.ref }))
+        )
       );
     }),
-    catchError((error: Error, source: rxjs$Observable<*>) => {
-      return merge(of({ type: "ERROR", payload: error, error: true }), source);
+    catchError((error: Error) => {
+      return of({ type: "ERROR", payload: error, error: true });
     })
   );
 
@@ -242,84 +260,77 @@ export function killKernelImmediately(kernel: *): void {
   fs.unlinkSync(kernel.connectionFile);
 }
 
-function killKernel(input: {
-  kernel: Object,
-  ref: KernelRef
-}): Observable<Action> {
-  const request = shutdownRequest({ restart: false });
-  const { kernel, ref } = input;
-
-  // Try to make a shutdown request
-  // If we don't get a response within X time, force a shutdown
-  // Either way do the same cleanup
-  const shutDownHandling = kernel.channels.pipe(
-    childOf(request),
-    ofMessageType("shutdown_reply"),
-    first(),
-    // If we got a reply, great! :)
-    map(msg => actions.shutdownReplySucceeded({ text: msg.content, ref })),
-    // If we don't get a response within 2s, assume failure :(
-    timeout(1000 * 2),
-    catchError(err => of(actions.shutdownReplyTimedOut({ error: err, ref }))),
-    mergeMap(action => {
-      // End all communication on the channels
-      kernel.channels.complete();
-
-      // Clean up all the terminal streams
-      // "pause" stdin, which puts it back in its normal state
-      if (kernel.spawn.stdin) {
-        kernel.spawn.stdin.pause();
-      }
-      kernel.spawn.stdout.destroy();
-      kernel.spawn.stderr.destroy();
-
-      // Kill the process fully
-      kernel.spawn.kill("SIGKILL");
-
-      // Delete the connection file
-      const del$ = unlinkObservable(kernel.connectionFile).pipe(
-        map(() => actions.deleteConnectionFileSuccessful({ ref })),
-        catchError(err =>
-          of(actions.deleteConnectionFileFailed({ error: err, ref }))
-        )
-      );
-
-      return merge(
-        // Pass on our intermediate action
-        of(action),
-        // Inform about the state
-        of(actions.setExecutionState({ kernelStatus: "shutting down", ref })),
-        // and our connection file deletion
-        del$
-      );
-    }),
-    catchError(err =>
-      // Catch all, in case there were other errors here
-      of(actions.killKernelFailed({ error: err, ref }))
-    )
-  );
-
-  // On subscription, send the message
-  return Observable.create(observer => {
-    const subscription = shutDownHandling.subscribe(observer);
-    kernel.channels.next(request);
-    return subscription;
-  });
-}
-
-// TODO: Switch this to a ref based setup
-//
-// Yet another "would be nice to have a ref" setup, since we may be switching
-// from one kernel to another
-//
 export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),
-    // This epic can only interrupt direct zeromq connected kernels
+    // This epic can only kill direct zeromq connected kernels
     filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
     concatMap((action: KillKernelAction) => {
-      const kernel = selectors.currentKernel(store.getState());
-      return killKernel({ kernel, ref: action.payload.ref });
+      const state = store.getState();
+      const ref = action.payload.ref;
+      const kernel = selectors.kernel(state, { ref });
+      const request = shutdownRequest({ restart: false });
+
+      // Try to make a shutdown request
+      // If we don't get a response within X time, force a shutdown
+      // Either way do the same cleanup
+      const shutDownHandling = kernel.channels.pipe(
+        childOf(request),
+        ofMessageType("shutdown_reply"),
+        first(),
+        // If we got a reply, great! :)
+        map(msg => actions.shutdownReplySucceeded({ text: msg.content, ref })),
+        // If we don't get a response within 2s, assume failure :(
+        timeout(1000 * 2),
+        catchError(err =>
+          of(actions.shutdownReplyTimedOut({ error: err, ref }))
+        ),
+        mergeMap(action => {
+          // End all communication on the channels
+          kernel.channels.complete();
+
+          // Clean up all the terminal streams
+          // "pause" stdin, which puts it back in its normal state
+          if (kernel.spawn.stdin) {
+            kernel.spawn.stdin.pause();
+          }
+          kernel.spawn.stdout.destroy();
+          kernel.spawn.stderr.destroy();
+
+          // Kill the process fully
+          kernel.spawn.kill("SIGKILL");
+
+          // Delete the connection file
+          const del$ = unlinkObservable(kernel.connectionFile).pipe(
+            map(() => actions.deleteConnectionFileSuccessful({ ref })),
+            catchError(err =>
+              of(actions.deleteConnectionFileFailed({ error: err, ref }))
+            )
+          );
+
+          return merge(
+            // Pass on our intermediate action
+            of(action),
+            // Inform about the state
+            of(
+              actions.setExecutionState({ kernelStatus: "shutting down", ref })
+            ),
+            // and our connection file deletion
+            del$
+          );
+        }),
+        catchError(err =>
+          // Catch all, in case there were other errors here
+          of(actions.killKernelFailed({ error: err, ref }))
+        )
+      );
+
+      // On subscription, send the message
+      return Observable.create(observer => {
+        const subscription = shutDownHandling.subscribe(observer);
+        kernel.channels.next(request);
+        return subscription;
+      });
     })
   );
 

@@ -21,11 +21,8 @@ const useCore = (state = false, action) => {
 // around.
 const kernelRef = (state = null, action) => {
   switch (action.type) {
+    case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       return action.payload.selectNextKernel ? action.payload.ref : state;
     default:
       return state;

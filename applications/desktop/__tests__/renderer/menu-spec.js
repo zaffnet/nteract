@@ -308,7 +308,8 @@ describe("menu", () => {
         payload: {
           kernelSpec: { spec: "hokey" },
           cwd: process.cwd(),
-          selectNextKernel: true
+          selectNextKernel: true,
+          ref: expect.any(String)
         }
       });
     });
@@ -344,7 +345,8 @@ describe("menu", () => {
         type: "CORE/FETCH_CONTENT",
         payload: {
           path: "test-ipynb.ipynb",
-          params: {}
+          params: {},
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -360,7 +362,8 @@ describe("menu", () => {
         type: "NEW_NOTEBOOK",
         payload: {
           kernelSpec: { spec: "hokey" },
-          cwd: process.cwd()
+          cwd: process.cwd(),
+          kernelRef: expect.any(String)
         }
       });
     });

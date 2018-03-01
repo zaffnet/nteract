@@ -8,7 +8,7 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { actions, selectors } from "@nteract/core";
+import { actions, selectors, state as stateModule } from "@nteract/core";
 
 import type { KernelRef } from "@nteract/core/src/state/refs";
 
@@ -75,8 +75,10 @@ export function triggerWindowRefresh(store: *, filename: string) {
 }
 
 export function dispatchRestartKernel(store: *) {
-  // TODO: provide a KernelRef
-  store.dispatch(actions.restartKernel({ clearOutputs: false }));
+  const state = store.getState();
+  const ref = selectors.currentKernel(state);
+
+  store.dispatch(actions.restartKernel({ clearOutputs: false, ref }));
 }
 
 export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
@@ -95,17 +97,21 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
       },
       index => {
         if (index === 0) {
-          // TODO: get a KernelRef here and use it in selector.
           const kernel = selectors.currentKernel(store.getState());
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
+
+          // Create a brand new kernel
+          const ref = stateModule.createKernelRef();
+
           store.dispatch(
             // TODO: get a KernelRef here and use it in action.
             actions.launchKernelByName({
               kernelSpecName: kernel.kernelSpecName,
               cwd,
-              selectNextKernel: true
+              selectNextKernel: true,
+              ref
             })
           );
         }
@@ -138,9 +144,17 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const cwd = filename
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
-  // TODO: get a KernelRef here and use it in action.
+
+  // Create a brand new kernel
+  const ref = stateModule.createKernelRef();
+
   store.dispatch(
-    actions.launchKernel({ kernelSpec: spec, cwd, selectNextKernel: true })
+    actions.launchKernel({
+      kernelSpec: spec,
+      cwd,
+      selectNextKernel: true,
+      ref
+    })
   );
 }
 
@@ -189,8 +203,9 @@ export function dispatchUnhideAll(store: *) {
 }
 
 export function dispatchKillKernel(store: *) {
-  // TODO: get a KernelRef here and use it in action.
-  store.dispatch(actions.killKernel({ restarting: false }));
+  const state = store.getState();
+  const ref = selectors.currentKernel(state);
+  store.dispatch(actions.killKernel({ restarting: false, ref }));
 }
 
 export function dispatchInterruptKernel(store: *) {
@@ -204,14 +219,17 @@ export function dispatchInterruptKernel(store: *) {
       level: "error"
     });
   } else {
-    // TODO: get a KernelRef here and use it in action.
-    store.dispatch(actions.interruptKernel({}));
+    const ref = selectors.currentKernel(state);
+
+    store.dispatch(actions.interruptKernel({ ref }));
   }
 }
 
 export function dispatchRestartClearAll(store: *) {
-  // TODO: provide a KernelRef
-  store.dispatch(actions.restartKernel({ clearOutputs: true }));
+  const state = store.getState();
+  const ref = selectors.currentKernel(state);
+
+  store.dispatch(actions.restartKernel({ clearOutputs: true, ref }));
 }
 
 export function dispatchZoomIn() {
@@ -263,8 +281,12 @@ export function dispatchCreateTextCellAfter(store: *) {
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
-  // TODO: provide KernelRef here.
-  store.dispatch(actions.fetchContent({ path: filename, params: {} }));
+  const state = store.getState();
+  const kernelRef = stateModule.createKernelRef();
+
+  store.dispatch(
+    actions.fetchContent({ path: filename, params: {}, kernelRef })
+  );
 }
 
 export function dispatchNewNotebook(
@@ -272,11 +294,13 @@ export function dispatchNewNotebook(
   event: Event,
   kernelSpec: Object
 ) {
-  // TODO: provide KernelRef here.
+  const kernelRef = stateModule.createKernelRef();
+
   store.dispatch(
     actions.newNotebook({
       kernelSpec,
-      cwd: cwdKernelFallback()
+      cwd: cwdKernelFallback(),
+      kernelRef
     })
   );
 }
