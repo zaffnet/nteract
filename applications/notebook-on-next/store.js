@@ -14,8 +14,7 @@ const rootReducer = combineReducers({
   document: reducers.document,
   comms: reducers.comms,
   config: reducers.config,
-  core: reducers.core,
-  modals: reducers.modals
+  core: reducers.core
 });
 
 const defaultState = {
@@ -25,8 +24,7 @@ const defaultState = {
   config: ImmutableMap({
     theme: "light"
   }),
-  core: state.makeStateRecord(),
-  modals: state.makeModalsRecord()
+  core: state.makeStateRecord()
 };
 
 const composeEnhancers =

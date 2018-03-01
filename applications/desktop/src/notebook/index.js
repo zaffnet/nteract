@@ -32,8 +32,7 @@ const store = configureStore({
   config: ImmutableMap({
     theme: "light"
   }),
-  core: state.makeStateRecord(),
-  modals: state.makeModalsRecord()
+  core: state.makeStateRecord()
 });
 
 // Register for debugging

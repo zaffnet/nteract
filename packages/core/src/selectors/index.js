@@ -4,7 +4,6 @@
 type AppState = {
   // The new way
   core: any,
-  modals: any,
 
   // The old way
   app: Object,
@@ -267,7 +266,7 @@ export const currentFilename: (state: *) => string = createSelector(
 );
 
 export const modalType = createSelector(
-  (state: AppState) => state.modals.modalType,
+  (state: AppState) => state.core.modals.modalType,
   identity
 );
 

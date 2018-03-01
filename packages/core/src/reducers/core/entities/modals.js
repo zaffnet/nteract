@@ -1,7 +1,7 @@
 // @flow
-import * as actionTypes from "../actionTypes";
+import * as actionTypes from "../../../actionTypes";
 import { combineReducers } from "redux-immutable";
-import * as Immutable from "immutable";
+import { makeModalsRecord } from "../../../state/entities/modals";
 
 const modalType = (state = "", action) => {
   switch (action.type) {
@@ -14,7 +14,4 @@ const modalType = (state = "", action) => {
   }
 };
 
-const makeModals = Immutable.Record({ modalType: "" });
-const modals = combineReducers({ modalType }, makeModals);
-
-export default modals;
+export const modals = combineReducers({ modalType }, makeModalsRecord);

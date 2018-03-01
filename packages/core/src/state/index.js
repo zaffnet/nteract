@@ -7,7 +7,6 @@ import type {
   RemoteKernelProps
 } from "./entities";
 import type { KernelRef } from "./refs";
-import type { ModalsRecordProps } from "./old/modals";
 import type {
   OldDesktopHostRecordProps,
   OldJupyterHostRecordProps
@@ -22,8 +21,6 @@ export * from "./entities";
 export * from "./ids";
 export * from "./refs";
 
-export type { ModalsRecordProps } from "./old/modals";
-export { makeModalsRecord } from "./old/modals";
 export {
   makeOldDesktopHostRecord,
   makeOldJupyterHostRecord
@@ -261,6 +258,5 @@ export type AppState = {
   document: Immutable.RecordOf<DocumentRecordProps>,
   comms: Immutable.RecordOf<CommsRecordProps>,
   config: ConfigState,
-  core: Immutable.RecordOf<StateRecordProps>,
-  modals: Immutable.RecordOf<ModalsRecordProps>
+  core: Immutable.RecordOf<StateRecordProps>
 };

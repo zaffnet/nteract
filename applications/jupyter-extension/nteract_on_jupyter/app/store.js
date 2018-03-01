@@ -21,7 +21,6 @@ const rootReducer = combineReducers({
   document: reducers.document,
   comms: reducers.comms,
   config: reducers.config,
-  modals: reducers.modals,
   core: reducers.core
 });
 
@@ -44,8 +43,7 @@ export default function configureStore({
     config: ImmutableMap({
       theme: "light"
     }),
-    core: state.makeStateRecord(),
-    modals: state.makeModalsRecord()
+    core: state.makeStateRecord()
   };
 
   const rootEpic = combineEpics(...coreEpics.allEpics);
