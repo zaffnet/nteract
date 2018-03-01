@@ -12,7 +12,6 @@ const rootReducer = combineReducers({
   document: reducers.document,
   comms: reducers.comms,
   config: reducers.config,
-  modals: reducers.modals,
   core: reducers.core
 });
 

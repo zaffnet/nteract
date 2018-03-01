@@ -7,7 +7,7 @@ import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
-  OldLanguageInfoMetadata,
+  LanguageInfoMetadata,
   LocalKernelProps,
   RemoteKernelProps
 } from "./state";
@@ -115,7 +115,6 @@ export const addHost = (payload: {
     id: ?string,
     type: "jupyter" | "local",
     defaultKernelName: string,
-    kernelIds: ?Array<string>,
     token?: string,
     serverUrl?: string,
     crossDomain?: boolean
@@ -803,7 +802,7 @@ export function updateDisplay(content: {
 }
 
 export function setLanguageInfo(payload: {
-  langInfo: OldLanguageInfoMetadata,
+  langInfo: LanguageInfoMetadata,
   ref?: KernelRef
 }): SetLanguageInfoAction {
   return {

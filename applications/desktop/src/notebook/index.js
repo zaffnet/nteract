@@ -24,7 +24,7 @@ import { state } from "@nteract/core";
 
 const store = configureStore({
   app: state.makeAppRecord({
-    host: state.makeOldDesktopHostRecord(),
+    host: state.makeLocalHostRecord(),
     version: remote.app.getVersion()
   }),
   document: state.makeDocumentRecord(),
@@ -32,8 +32,7 @@ const store = configureStore({
   config: ImmutableMap({
     theme: "light"
   }),
-  core: state.makeStateRecord(),
-  modals: state.makeModalsRecord()
+  core: state.makeStateRecord()
 });
 
 // Register for debugging

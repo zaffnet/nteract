@@ -15,7 +15,7 @@ describe("launchWebSocketKernelEpic", () => {
       state: {
         // $FlowFixMe
         app: stateModule.makeAppRecord({
-          host: stateModule.makeOldJupyterHostRecord({
+          host: stateModule.makeJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"
@@ -85,7 +85,7 @@ describe("interruptKernelEpic", () => {
           })
         }),
         app: stateModule.makeAppRecord({
-          host: stateModule.makeOldJupyterHostRecord({
+          host: stateModule.makeJupyterHostRecord({
             type: "jupyter",
             token: "eh",
             serverUrl: "http://localhost:8888/"

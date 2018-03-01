@@ -12,7 +12,7 @@ import {
 
 /* Our createStore */
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import { document, comms, config, core, modals } from "../reducers";
+import { document, comms, config, core } from "../reducers";
 
 export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
 
@@ -22,8 +22,7 @@ const rootReducer = combineReducers({
   document,
   comms,
   config,
-  core,
-  modals
+  core
 });
 
 import {
@@ -31,8 +30,7 @@ import {
   makeDocumentRecord,
   makeCommsRecord,
   makeLocalKernelRecord,
-  makeStateRecord,
-  makeModalsRecord
+  makeStateRecord
 } from "../state";
 
 function hideCells(notebook) {
@@ -91,7 +89,6 @@ export function dummyStore(config: *) {
 
   return createStore(rootReducer, {
     core: makeStateRecord(),
-    modals: makeModalsRecord(),
     document: makeDocumentRecord({
       notebook: dummyNotebook,
       savedNotebook:
