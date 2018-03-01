@@ -212,6 +212,8 @@ export const launchKernelEpic = (
         )
       );
     }),
+    // TODO: ask @jayphelps about `merge(of(errorAction), source)` replaying the
+    // original action
     catchError((error: Error) => {
       return of({ type: "ERROR", payload: error, error: true });
     })
