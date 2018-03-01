@@ -58,7 +58,7 @@ export type FetchContent = {
   payload: {
     path: string,
     params: Object,
-    kernelRef?: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -68,7 +68,7 @@ export type FetchContentFulfilled = {
   payload: {
     path: string,
     model: any, // literal response from API
-    kernelRef?: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -78,7 +78,7 @@ export type FetchContentFailed = {
   payload: {
     path: string,
     error: Error,
-    kernelRef?: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -223,7 +223,7 @@ export type SetLanguageInfoAction = {
   type: "SET_LANGUAGE_INFO",
   payload: {
     langInfo: LanguageInfoMetadata,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -402,7 +402,7 @@ export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
   payload: {
     kernelStatus: string,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -429,7 +429,7 @@ export type NewNotebook = {
   type: "NEW_NOTEBOOK",
   payload: {
     kernelSpec: Object,
-    kernelRef?: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -441,7 +441,7 @@ export type SetNotebookAction = {
   payload: {
     notebook: ImmutableNotebook,
     filename: ?string,
-    kernelRef?: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -449,7 +449,7 @@ export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 export type InterruptKernel = {
   type: "INTERRUPT_KERNEL",
   payload: {
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -457,7 +457,7 @@ export const INTERRUPT_KERNEL_SUCCESSFUL = "INTERRUPT_KERNEL_SUCCESSFUL";
 export type InterruptKernelSuccessful = {
   type: "INTERRUPT_KERNEL_SUCCESSFUL",
   payload: {
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -466,7 +466,7 @@ export type InterruptKernelFailed = {
   type: "INTERRUPT_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };
@@ -476,7 +476,7 @@ export type KillKernelAction = {
   type: "KILL_KERNEL",
   payload: {
     restarting: boolean,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -485,7 +485,7 @@ export type KillKernelFailed = {
   type: "KILL_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };
@@ -494,7 +494,7 @@ export const KILL_KERNEL_SUCCESSFUL = "KILL_KERNEL_SUCCESSFUL";
 export type KillKernelSuccessful = {
   type: "KILL_KERNEL_SUCCESSFUL",
   payload: {
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -509,7 +509,7 @@ export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
     clearOutputs: boolean,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -518,7 +518,7 @@ export type RestartKernelFailed = {
   type: "RESTART_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };
@@ -527,7 +527,7 @@ export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
   type: "RESTART_KERNEL_SUCCESSFUL",
   payload: {
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -535,7 +535,7 @@ export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
   payload: {
-    ref?: KernelRef,
+    ref: KernelRef,
     kernelSpec: Object,
     cwd: string,
     selectNextKernel: boolean
@@ -548,7 +548,7 @@ export type LaunchKernelByNameAction = {
   payload: {
     kernelSpecName: string,
     cwd: string,
-    ref?: KernelRef,
+    ref: KernelRef,
     selectNextKernel: boolean
   }
 };
@@ -558,7 +558,7 @@ export type LaunchKernelFailed = {
   type: "LAUNCH_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };
@@ -568,7 +568,7 @@ export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -576,7 +576,7 @@ export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
 export type KernelRawStdout = {
   type: "KERNEL_RAW_STDOUT",
   payload: {
-    ref?: KernelRef,
+    ref: KernelRef,
     text: string
   }
 };
@@ -585,7 +585,7 @@ export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
 export type KernelRawStderr = {
   type: "KERNEL_RAW_STDERR",
   payload: {
-    ref?: KernelRef,
+    ref: KernelRef,
     text: string
   }
 };
@@ -595,7 +595,7 @@ export type DeleteConnectionFileFailedAction = {
   type: "DELETE_CONNECTION_FILE_FAILED",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };
@@ -605,7 +605,7 @@ export const DELETE_CONNECTION_FILE_SUCCESSFUL =
 export type DeleteConnectionFileSuccessfulAction = {
   type: "DELETE_CONNECTION_FILE_SUCCESSFUL",
   payload: {
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -614,7 +614,7 @@ export type ShutdownReplySucceeded = {
   type: "SHUTDOWN_REPLY_SUCCEEDED",
   payload: {
     text: string,
-    ref?: KernelRef
+    ref: KernelRef
   }
 };
 
@@ -623,7 +623,7 @@ export type ShutdownReplyTimedOut = {
   type: "SHUTDOWN_REPLY_TIMED_OUT",
   payload: {
     error: Error,
-    ref?: KernelRef
+    ref: KernelRef
   },
   error: true
 };

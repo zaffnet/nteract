@@ -67,7 +67,7 @@ import type {
 export function launchKernelObservable(
   kernelSpec: KernelInfo,
   cwd: string,
-  ref?: KernelRef
+  ref: KernelRef
 ) {
   const spec = kernelSpec.spec;
 
@@ -238,7 +238,7 @@ export function killKernelImmediately(kernel: *): void {
 
 function killKernel(input: {
   kernel: Object,
-  ref?: KernelRef
+  ref: KernelRef
 }): Observable<Action> {
   const request = shutdownRequest({ restart: false });
   const { kernel, ref } = input;
