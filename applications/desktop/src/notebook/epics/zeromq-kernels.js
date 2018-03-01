@@ -185,11 +185,17 @@ export const launchKernelEpic = (
         ),
         // Was there a kernel before (?) -- kill it if so, otherwise nothing else
         kernel ? killKernel({ kernel, ref: action.payload.ref }) : empty()
+      ).pipe(
+        catchError((error: Error, source: rxjs$Observable<*>) => {
+          return merge(
+            of(actions.launchKernelFailed({ error, ref: action.payload.ref })),
+            source
+          );
+        })
       );
     }),
     catchError((error: Error, source: rxjs$Observable<*>) => {
-      // TODO: we need to get the KernelRef into this failure action.
-      return merge(of(actions.launchKernelFailed({ error })), source);
+      return merge(of({ type: "ERROR", payload: error, error: true }), source);
     })
   );
 
