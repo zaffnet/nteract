@@ -29,10 +29,6 @@ export type ErrorAction<T: string> = {
   error: true
 };
 
-// TODO: See reducers/core/index `useCore` reducer.
-export const USE_CORE = "CORE/USE_CORE";
-export type UseCore = { type: "CORE/USE_CORE" };
-
 export const OPEN_MODAL = "CORE/OPEN_MODAL";
 export type OpenModal = {
   type: "CORE/OPEN_MODAL",

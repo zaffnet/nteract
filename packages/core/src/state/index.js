@@ -135,7 +135,6 @@ export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
   kernelRef: ?KernelRef,
-  useCore: boolean,
   communication: Immutable.RecordOf<CommunicationRecordProps>,
   entities: Immutable.RecordOf<EntitiesRecordProps>
 };
@@ -144,7 +143,6 @@ export const makeStateRecord: Immutable.RecordFactory<
   StateRecordProps
 > = Immutable.Record({
   kernelRef: null,
-  useCore: false,
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });

@@ -50,7 +50,6 @@ describe("createExecuteCellStream", () => {
       },
       state: {
         core: stateModule.makeStateRecord({
-          useCore: true,
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
             kernels: stateModule.makeKernelsRecord({
@@ -109,7 +108,6 @@ describe("createExecuteCellStream", () => {
       },
       state: {
         core: stateModule.makeStateRecord({
-          useCore: true,
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
             kernels: stateModule.makeKernelsRecord({
@@ -219,7 +217,6 @@ describe("executeCellEpic", () => {
       },
       state: {
         core: stateModule.makeStateRecord({
-          useCore: true,
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
             kernels: stateModule.makeKernelsRecord({

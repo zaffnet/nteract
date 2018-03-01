@@ -71,7 +71,7 @@ describe("launchKernelEpic", () => {
     );
 
     const state = {
-      core: stateModule.makeStateRecord({ useCore: false }),
+      core: stateModule.makeStateRecord(),
       app: {
         kernel: null
       }
