@@ -41,7 +41,7 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type { OldKernelInfo, LocalKernelProps } from "@nteract/core/src/state";
+import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
 
 import { selectors, actions, actionTypes, state } from "@nteract/core";
 
@@ -61,11 +61,11 @@ import type {
 /**
  * Instantiate a connection to a new kernel.
  *
- * @param  {OldKernelInfo}  kernelSpec The kernel specs - name,language, etc
+ * @param  {KernelInfo}  kernelSpec The kernel specs - name,language, etc
  * @param  {String}  cwd The working directory to launch the kernel in
  */
 export function launchKernelObservable(
-  kernelSpec: OldKernelInfo,
+  kernelSpec: KernelInfo,
   cwd: string,
   ref?: KernelRef
 ) {
