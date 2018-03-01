@@ -24,7 +24,7 @@ import { state } from "@nteract/core";
 
 const store = configureStore({
   app: state.makeAppRecord({
-    host: state.makeOldDesktopHostRecord(),
+    host: state.makeLocalHostRecord(),
     version: remote.app.getVersion()
   }),
   document: state.makeDocumentRecord(),

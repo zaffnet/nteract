@@ -8,9 +8,9 @@ import type {
 } from "./entities";
 import type { KernelRef } from "./refs";
 import type {
-  OldDesktopHostRecordProps,
-  OldJupyterHostRecordProps
-} from "./old/hosts";
+  LocalHostRecordProps,
+  JupyterHostRecordProps
+} from "./entities/hosts";
 import type { Subject } from "rxjs/Subject";
 import { emptyNotebook } from "@nteract/commutable";
 import { makeCommunicationRecord } from "./communication";
@@ -20,15 +20,6 @@ export * from "./communication";
 export * from "./entities";
 export * from "./ids";
 export * from "./refs";
-
-export {
-  makeOldDesktopHostRecord,
-  makeOldJupyterHostRecord
-} from "./old/hosts";
-
-type HostRecord = Immutable.RecordOf<
-  OldDesktopHostRecordProps | OldJupyterHostRecordProps
->;
 
 /*
 
@@ -211,8 +202,8 @@ export type AppRecordProps = {
     | ?Immutable.RecordOf<RemoteKernelProps>
     | ?Immutable.RecordOf<LocalKernelProps>,
   host:
-    | ?Immutable.RecordOf<OldDesktopHostRecordProps>
-    | ?Immutable.RecordOf<OldJupyterHostRecordProps>,
+    | ?Immutable.RecordOf<LocalHostRecordProps>
+    | ?Immutable.RecordOf<JupyterHostRecordProps>,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },
   isSaving: boolean,

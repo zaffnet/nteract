@@ -115,7 +115,6 @@ export const addHost = (payload: {
     id: ?string,
     type: "jupyter" | "local",
     defaultKernelName: string,
-    kernelIds: ?Array<string>,
     token?: string,
     serverUrl?: string,
     crossDomain?: boolean

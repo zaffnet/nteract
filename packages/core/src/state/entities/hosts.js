@@ -12,8 +12,7 @@ export type JupyterHostRecordProps = BaseHostProps & {
   type: "jupyter",
   token: ?string,
   serverUrl: ?string,
-  crossDomain: ?boolean,
-  kernelIds: Immutable.List<KernelId>
+  crossDomain: ?boolean
 };
 
 export const makeJupyterHostRecord: Immutable.RecordFactory<
@@ -22,7 +21,6 @@ export const makeJupyterHostRecord: Immutable.RecordFactory<
   type: "jupyter",
   id: null,
   defaultKernelName: "python",
-  kernelIds: Immutable.List(),
   token: null,
   serverUrl: null,
   crossDomain: false
@@ -36,7 +34,6 @@ export type BinderHostRecordProps = BaseHostProps & {
   token: ?string,
   serverUrl: ?string,
   crossDomain: ?boolean,
-  kernelIds: Immutable.List<KernelId>,
   messages: Immutable.List<string>
 };
 
@@ -46,7 +43,6 @@ export const makeBinderHostRecord: Immutable.RecordFactory<
   type: "binder",
   id: null,
   defaultKernelName: "python",
-  kernelIds: Immutable.List(),
   token: null,
   serverUrl: null,
   crossDomain: false,
@@ -64,8 +60,7 @@ export const makeLocalHostRecord: Immutable.RecordFactory<
 > = Immutable.Record({
   type: "local",
   id: null,
-  defaultKernelName: "python",
-  kernelIds: Immutable.List()
+  defaultKernelName: "python"
 });
 
 export type LocalHostRecord = Immutable.RecordOf<LocalHostRecordProps>;

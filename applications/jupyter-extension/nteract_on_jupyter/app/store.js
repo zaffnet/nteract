@@ -31,7 +31,7 @@ export default function configureStore({
 }) {
   const initialState = {
     app: state.makeAppRecord({
-      host: state.makeOldJupyterHostRecord({
+      host: state.makeJupyterHostRecord({
         token: config.token,
         // TODO: Use URL join, even though we know these are right
         serverUrl: location.origin + config.baseUrl

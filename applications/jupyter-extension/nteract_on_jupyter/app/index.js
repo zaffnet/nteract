@@ -45,7 +45,6 @@ function createApp(jupyterConfigData: JupyterConfigData) {
             id: null,
             type: "jupyter",
             defaultKernelName: "python",
-            kernelIds: null,
             token: jupyterConfigData.token,
             serverUrl: location.origin + jupyterConfigData.baseUrl
           }
