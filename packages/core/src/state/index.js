@@ -44,54 +44,6 @@ type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
 
 type ImmutableJSONList = Immutable.List<ImmutableJSON>;
 
-type ExecutionCount = number | null;
-
-type MimeBundle = Immutable.Map<string, ImmutableJSON>;
-
-type ExecuteResult = {
-  output_type: "execute_result",
-  execution_count: ExecutionCount,
-  data: MimeBundle,
-  metadata: ImmutableJSONMap
-};
-
-type DisplayData = {
-  output_type: "display_data",
-  data: MimeBundle,
-  metadata: ImmutableJSONMap
-};
-
-type StreamOutput = {
-  output_type: "stream",
-  name: "stdout" | "stderr",
-  text: string
-};
-
-type ErrorOutput = {
-  output_type: "error",
-  ename: string,
-  evalue: string,
-  traceback: Immutable.List<string>
-};
-
-type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
-
-type CodeCell = {
-  cell_type: "code",
-  metadata: ImmutableJSONMap,
-  execution_count: ExecutionCount,
-  source: string,
-  outputs: Immutable.List<Output>
-};
-
-type MarkdownCell = {
-  cell_type: "markdown",
-  source: string,
-  metadata: ImmutableJSONMap
-};
-
-type Cell = MarkdownCell | CodeCell;
-
 type KernelspecMetadata = {
   name: string,
   display_name: string,
