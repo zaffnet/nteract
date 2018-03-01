@@ -7,6 +7,13 @@ import type {
   RemoteKernelProps
 } from "./entities";
 import type { KernelRef } from "./refs";
+import type { ModalsRecordProps } from "./old/modals";
+import type {
+  OldDesktopHostRecordProps,
+  OldJupyterHostRecordProps
+} from "./old/hosts";
+import type { Subject } from "rxjs/Subject";
+import { emptyNotebook } from "@nteract/commutable";
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord } from "./entities";
 
@@ -14,20 +21,175 @@ export * from "./communication";
 export * from "./entities";
 export * from "./ids";
 export * from "./refs";
-export * from "./old";
+
+export type { ModalsRecordProps } from "./old/modals";
+export { makeModalsRecord } from "./old/modals";
+export {
+  makeOldDesktopHostRecord,
+  makeOldJupyterHostRecord
+} from "./old/hosts";
+
+type HostRecord = Immutable.RecordOf<
+  OldDesktopHostRecordProps | OldJupyterHostRecordProps
+>;
+
+/*
+
+This is the definition of JSON that Flow provides
+
+type JSON = | string | number | boolean | null | JSONObject | JSONArray;
+type JSONObject = { [key:string]: JSON };
+type JSONArray = Array<JSON>;
+
+Which we'll adapt for our use of Immutable.js
+
+*/
+type ImmutableJSON =
+  | string
+  | number
+  | boolean
+  | null
+  | ImmutableJSONMap
+  | ImmutableJSONList; // eslint-disable-line no-use-before-define
+
+type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
+
+type ImmutableJSONList = Immutable.List<ImmutableJSON>;
+
+type ExecutionCount = number | null;
+
+type MimeBundle = Immutable.Map<string, ImmutableJSON>;
+
+type ExecuteResult = {
+  output_type: "execute_result",
+  execution_count: ExecutionCount,
+  data: MimeBundle,
+  metadata: ImmutableJSONMap
+};
+
+type DisplayData = {
+  output_type: "display_data",
+  data: MimeBundle,
+  metadata: ImmutableJSONMap
+};
+
+type StreamOutput = {
+  output_type: "stream",
+  name: "stdout" | "stderr",
+  text: string
+};
+
+type ErrorOutput = {
+  output_type: "error",
+  ename: string,
+  evalue: string,
+  traceback: Immutable.List<string>
+};
+
+type Output = ExecuteResult | DisplayData | StreamOutput | ErrorOutput;
+
+type CodeCell = {
+  cell_type: "code",
+  metadata: ImmutableJSONMap,
+  execution_count: ExecutionCount,
+  source: string,
+  outputs: Immutable.List<Output>
+};
+
+type MarkdownCell = {
+  cell_type: "markdown",
+  source: string,
+  metadata: ImmutableJSONMap
+};
+
+type Cell = MarkdownCell | CodeCell;
+
+type KernelspecMetadata = {
+  name: string,
+  display_name: string,
+  language: string
+};
+
+// Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
+export type OldKernelInfo = {
+  name: string,
+  spec: KernelspecMetadata
+};
+
+export type OldLanguageInfoMetadata = {
+  name: string,
+  codemirror_mode?: string | ImmutableJSONMap,
+  file_extension?: string,
+  mimetype?: string,
+  pygments_lexer?: string
+};
+
+export type NotebookMetadata = {
+  kernelspec: KernelspecMetadata,
+  language_info: OldLanguageInfoMetadata
+  // NOTE: We're not currently using orig_nbformat in nteract. Based on the comment
+  // in the schema, we won't:
+  //
+  //   > Original notebook format (major number) before converting the notebook between versions. This should never be written to a file
+  //
+  //   from https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L58-L61
+  //
+  // It seems like an intermediate/in-memory representation that bled its way into the spec, when it should have been
+  // handled as separate state.
+  //
+  // orig_nbformat?: number,
+};
+
+export type DocumentRecordProps = {
+  // TODO: This _needs_ to become a Record
+  notebook: Immutable.Map<string, any>,
+  savedNotebook: Immutable.Map<string, any>,
+  filename: ?string,
+  transient: Immutable.Map<string, any>, // has the keypaths for updating displays
+  // transient should be more fully typed (be a record itself)
+  // right now it's keypaths and then it looks like it's able to handle any per
+  // cell transient data that will be deleted when the kernel is restarted
+  cellPagers: any,
+  stickyCells: Immutable.Set<any>,
+  editorFocused: any,
+  cellFocused: any,
+  copied: Immutable.Map<any, any>
+};
+
+export const makeDocumentRecord: Immutable.RecordFactory<
+  DocumentRecordProps
+> = Immutable.Record({
+  notebook: emptyNotebook,
+  savedNotebook: emptyNotebook,
+  transient: Immutable.Map({
+    keyPathsForDisplays: Immutable.Map()
+  }),
+  cellPagers: Immutable.Map(),
+  stickyCells: Immutable.Set(),
+  editorFocused: null,
+  cellFocused: null,
+  copied: Immutable.Map(),
+  filename: ""
+});
+
+export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
+
+export type CommsRecordProps = {
+  targets: Immutable.Map<any, any>,
+  info: Immutable.Map<any, any>,
+  models: Immutable.Map<any, any>
+};
+
+export type CommsRecord = Immutable.RecordOf<CommsRecordProps>;
+
+export const makeCommsRecord = Immutable.Record({
+  targets: new Immutable.Map(),
+  info: new Immutable.Map(),
+  models: new Immutable.Map()
+});
 
 // Pull version from core's package.json
 const version: string = require("../../package.json").version;
-
-import type {
-  DocumentRecordProps,
-  CommsRecordProps,
-  ModalsRecordProps
-} from "./old";
-import type {
-  OldDesktopHostRecordProps,
-  OldJupyterHostRecordProps
-} from "./old/hosts";
 
 export type ConfigState = Immutable.Map<string, any>;
 
