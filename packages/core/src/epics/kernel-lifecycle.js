@@ -142,10 +142,13 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
     ofType(actionTypes.RESTART_KERNEL),
     concatMap((action: RestartKernel) => {
       const state = store.getState();
-      const kernel = selectors.currentKernel(state);
+
+      const oldKernelRef = action.payload.kernelRef;
+      const oldKernel = selectors.kernel(state, { kernelRef: oldKernelRef });
+
       const notificationSystem = selectors.notificationSystem(state);
 
-      if (!kernel) {
+      if (!oldKernelRef || !oldKernel) {
         notificationSystem.addNotification({
           title: "Failure to Restart",
           message: `Unable to restart kernel, please select a new kernel.`,
@@ -164,7 +167,7 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
       //       This only mirrors the old behavior of restart kernel (for now)
       notificationSystem.addNotification({
         title: "Kernel Restarted",
-        message: `Kernel ${kernel.kernelSpecName} has been restarted.`,
+        message: `Kernel ${oldKernel.kernelSpecName} has been restarted.`,
         dismissible: true,
         position: "tr",
         level: "success"
@@ -173,11 +176,11 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
       return of(
         actions.killKernel({
           restarting: true,
-          kernelRef: action.payload.kernelRef
+          kernelRef: oldKernelRef
         }),
         actions.launchKernelByName({
-          kernelSpecName: kernel.kernelSpecName,
-          cwd: kernel.cwd,
+          kernelSpecName: oldKernel.kernelSpecName,
+          cwd: oldKernel.cwd,
           kernelRef: createKernelRef(),
           selectNextKernel: true
         })
