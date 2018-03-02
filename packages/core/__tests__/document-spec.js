@@ -16,7 +16,10 @@ import {
 
 import { makeDocumentRecord } from "../src/state";
 
-import { reduceOutputs, cleanCellTransient } from "../src/reducers/document";
+import {
+  reduceOutputs,
+  cleanCellTransient
+} from "../src/reducers/core/entities/contents";
 
 import { dummyJSON, dummyCommutable } from "../src/dummy";
 

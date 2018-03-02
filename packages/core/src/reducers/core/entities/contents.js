@@ -5,7 +5,7 @@ import * as uuid from "uuid";
 
 import { escapeCarriageReturnSafe } from "escape-carriage";
 
-import * as actionTypes from "../actionTypes";
+import * as actionTypes from "../../../actionTypes";
 
 // TODO: With the new document plan, I think it starts to make sense to decouple
 //       the document view actions and the underlying document format
@@ -47,11 +47,11 @@ import type {
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
   SendExecuteMessageAction
-} from "../actionTypes";
+} from "../../../actionTypes";
 
-import type { DocumentRecord } from "../state";
+import type { DocumentRecord } from "../../../state";
 
-import { makeDocumentRecord } from "../state";
+import { makeDocumentRecord } from "../../../state";
 
 import {
   emptyCodeCell,
@@ -772,7 +772,7 @@ const defaultDocument: DocumentRecord = makeDocumentRecord({
   notebook: emptyNotebook
 });
 
-function handleDocument(
+function document(
   state: DocumentRecord = defaultDocument,
   action: DocumentAction
 ) {
@@ -856,4 +856,6 @@ function handleDocument(
   }
 }
 
-export default handleDocument;
+// TODO: we should not export this after we ensure that apps are looking into
+// core state for contents.
+export { document };
