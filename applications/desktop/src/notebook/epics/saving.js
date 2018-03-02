@@ -1,4 +1,5 @@
 /* @flow */
+import type { Save, SaveAs } from "@nteract/core/src/actionTypes";
 
 import {
   ActionsObservable,
@@ -24,7 +25,7 @@ export function saveEpic(
 ) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
-    mergeMap(action => {
+    mergeMap((action: Save) => {
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
       const filename = selectors.currentFilename(state);
@@ -46,15 +47,9 @@ export function saveEpic(
               level: "success"
             });
           }
-          return actions.doneSaving();
+          return actions.saveFulfilled();
         }),
-        catchError((error: Error) =>
-          of({
-            type: "ERROR",
-            payload: error,
-            error: true
-          })
-        )
+        catchError((error: Error) => of(actions.saveFailed(error)))
       );
     })
   );
@@ -68,7 +63,7 @@ export function saveEpic(
 export function saveAsEpic(action$: ActionsObservable<*>) {
   return action$.pipe(
     ofType(actionTypes.SAVE_AS),
-    mergeMap(action => {
+    mergeMap((action: SaveAs) => {
       return [
         // order matters here, since we need the filename set in the state
         // before we save the document

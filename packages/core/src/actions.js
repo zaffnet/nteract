@@ -31,6 +31,10 @@ import type {
   DeleteConnectionFileSuccessfulAction,
   ExecuteCellAction,
   ExecuteFocusedCellAction,
+  ExecuteAllCells,
+  ExecuteAllCellsBelow,
+  ExecuteCanceled,
+  ExecuteFailed,
   FetchKernelspecs,
   FetchKernelspecsFulfilled,
   FetchKernelspecsFailed,
@@ -51,6 +55,7 @@ import type {
   ClearOutputsAction,
   AppendOutputAction,
   UpdateDisplayAction,
+  UpdateDisplayFailed,
   FocusNextCellAction,
   FocusCellEditorAction,
   FocusNextCellEditorAction,
@@ -88,6 +93,10 @@ import type {
   OpenModal,
   CloseModal,
   AddHost,
+  Save,
+  SaveAs,
+  SaveFailed,
+  SaveFulfilled,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed,
@@ -124,12 +133,11 @@ export const addHost = (payload: {
   payload
 });
 
-export const fetchContent = (
-  payload: { path: string, params: Object, kernelRef?: KernelRef } = {
-    path: "/",
-    params: {}
-  }
-): FetchContent => ({
+export const fetchContent = (payload: {
+  path: string,
+  params: Object,
+  kernelRef?: KernelRef
+}): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
 });
@@ -381,15 +389,13 @@ export function updateCellExecutionCount(
   return setInCell(id, ["execution_count"], count);
 }
 
-export function unhideAll(
-  payload?: { outputHidden: boolean, inputHidden: boolean } = {
-    outputHidden: false,
-    inputHidden: false
-  }
-): UnhideAll {
+export function unhideAll(payload: {
+  outputHidden: boolean,
+  inputHidden: boolean
+}): UnhideAll {
   return {
     type: "UNHIDE_ALL",
-    payload: { outputHidden: false, inputHidden: false, ...payload }
+    payload
   };
 }
 
@@ -433,7 +439,7 @@ export function focusCell(id: string): FocusCellAction {
 
 export function focusNextCell(
   id: ?string,
-  createCellIfUndefined: boolean = true
+  createCellIfUndefined: boolean
 ): FocusNextCellAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
@@ -628,13 +634,13 @@ export function executeCell(id: string): ExecuteCellAction {
   };
 }
 
-export function executeAllCells() {
+export function executeAllCells(): ExecuteAllCells {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS
   };
 }
 
-export function executeAllCellsBelow() {
+export function executeAllCellsBelow(): ExecuteAllCellsBelow {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS_BELOW
   };
@@ -657,6 +663,20 @@ export function sendExecuteMessage(
   };
 }
 
+export function executeCanceled(): ExecuteCanceled {
+  return {
+    type: actionTypes.EXECUTE_CANCELED
+  };
+}
+
+export function executeFailed(error: Error): ExecuteFailed {
+  return {
+    type: actionTypes.EXECUTE_FAILED,
+    error: true,
+    payload: error
+  };
+}
+
 export function changeFilename(filename: string): ChangeFilenameAction {
   return {
     type: actionTypes.CHANGE_FILENAME,
@@ -664,13 +684,20 @@ export function changeFilename(filename: string): ChangeFilenameAction {
   };
 }
 
-export function save() {
+export function save(): Save {
   return {
     type: actionTypes.SAVE
   };
 }
 
-export function saveFailed(error: Error) {
+export function saveAs(filename: string): SaveAs {
+  return {
+    type: actionTypes.SAVE_AS,
+    filename
+  };
+}
+
+export function saveFailed(error: Error): SaveFailed {
   return {
     type: actionTypes.SAVE_FAILED,
     payload: error,
@@ -678,16 +705,9 @@ export function saveFailed(error: Error) {
   };
 }
 
-export function saveAs(filename: string) {
+export function saveFulfilled(): SaveFulfilled {
   return {
-    type: actionTypes.SAVE_AS,
-    filename
-  };
-}
-
-export function doneSaving() {
-  return {
-    type: actionTypes.DONE_SAVING
+    type: actionTypes.SAVE_FULFILLED
   };
 }
 
@@ -798,6 +818,14 @@ export function updateDisplay(content: {
   return {
     type: actionTypes.UPDATE_DISPLAY,
     content
+  };
+}
+
+export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
+  return {
+    type: actionTypes.UPDATE_DISPLAY_FAILED,
+    payload: error,
+    error: true
   };
 }
 

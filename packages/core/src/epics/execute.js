@@ -127,11 +127,7 @@ export function createExecuteCellStream(
     !(kernel.status === "starting" || kernel.status === "not connected");
 
   if (!kernelConnected || !channels) {
-    return of({
-      type: actionTypes.ERROR_EXECUTING,
-      payload: "Kernel not connected!",
-      error: true
-    });
+    return of(actions.executeFailed(new Error("Kernel not connected!")));
   }
 
   const cellStream = executeCellStream(channels, id, message).pipe(
@@ -139,7 +135,7 @@ export function createExecuteCellStream(
       merge(
         action$.pipe(
           filter(laterAction => laterAction.id === id),
-          ofType(actionTypes.ABORT_EXECUTION, actionTypes.REMOVE_CELL)
+          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL)
         ),
         action$.pipe(
           ofType(
@@ -235,12 +231,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     ),
     // Bring back all the inner Observables into one stream
     mergeAll(),
-    catchError((err, source) =>
-      merge(
-        of({ type: actionTypes.ERROR_EXECUTING, payload: err, error: true }),
-        source
-      )
-    )
+    catchError((err, source) => merge(of(actions.executeFailed(err)), source))
   );
 }
 
@@ -252,13 +243,7 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
       action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
         map(msg => actions.updateDisplay(msg.content)),
-        catchError(err =>
-          of({
-            type: actionTypes.ERROR_UPDATE_DISPLAY,
-            payload: err,
-            error: true
-          })
-        )
+        catchError(err => of(actions.updateDisplayFailed(err)))
       )
     )
   );

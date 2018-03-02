@@ -14,8 +14,9 @@ import type {
   SetExecutionStateAction,
   SetNotificationSystemAction,
   SetGithubTokenAction,
-  DoneSavingAction,
-  StartSavingAction
+  Save,
+  SaveFailed,
+  SaveFulfilled
 } from "../actionTypes";
 
 function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
@@ -23,11 +24,15 @@ function setGithubToken(state: AppRecord, action: SetGithubTokenAction) {
   return state.set("githubToken", githubToken);
 }
 
-function startSaving(state: AppRecord) {
+function save(state: AppRecord) {
   return state.set("isSaving", true);
 }
 
-function doneSaving(state: AppRecord) {
+function saveFailed(state: AppRecord) {
+  return state.set("isSaving", false);
+}
+
+function saveFulfilled(state: AppRecord) {
   return state.set("isSaving", false).set("lastSaved", new Date());
 }
 
@@ -78,18 +83,21 @@ export default function handleApp(
     | SetExecutionStateAction
     | NewKernelAction
     | SetGithubTokenAction
-    | StartSavingAction
-    | DoneSavingAction
+    | Save
+    | SaveFulfilled
+    | SaveFailed
 ) {
   switch (action.type) {
     case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
       return launchKernelSuccessful(state, action);
     case actionTypes.SET_EXECUTION_STATE:
       return setExecutionState(state, action);
-    case actionTypes.START_SAVING:
-      return startSaving(state);
-    case actionTypes.DONE_SAVING:
-      return doneSaving(state);
+    case actionTypes.SAVE:
+      return save(state);
+    case actionTypes.SAVE_FAILED:
+      return saveFailed(state);
+    case actionTypes.SAVE_FULFILLED:
+      return saveFulfilled(state);
     case actionTypes.SET_NOTIFICATION_SYSTEM:
       return setNotificationsSystem(state, action);
     case actionTypes.SET_GITHUB_TOKEN:

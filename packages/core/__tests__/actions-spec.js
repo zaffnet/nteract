@@ -23,7 +23,9 @@ describe("setLanguageInfo", () => {
 
 describe("unhideAll", () => {
   test("allows being called with sets defaults for outputHidden and inputHidden", () => {
-    expect(actions.unhideAll({ outputHidden: true })).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: true, inputHidden: false })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: true,
@@ -31,7 +33,9 @@ describe("unhideAll", () => {
       }
     });
 
-    expect(actions.unhideAll({ inputHidden: true })).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: false, inputHidden: true })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: false,
@@ -39,7 +43,9 @@ describe("unhideAll", () => {
       }
     });
 
-    expect(actions.unhideAll()).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: false, inputHidden: false })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: false,
@@ -461,10 +467,18 @@ describe("save", () => {
     });
   });
 
-  test("creates a DONE_SAVING action", () => {
-    const fakeNotebook = { nbformat: "eh" };
-    expect(actions.doneSaving()).toEqual({
-      type: actionTypes.DONE_SAVING
+  test("creates a SAVE_FAILED action", () => {
+    const error = new Error("fake");
+    expect(actions.saveFailed(error)).toEqual({
+      type: actionTypes.SAVE_FAILED,
+      error: true,
+      payload: error
+    });
+  });
+
+  test("creates a SAVE_FULFILLED action", () => {
+    expect(actions.saveFulfilled()).toEqual({
+      type: actionTypes.SAVE_FULFILLED
     });
   });
 });

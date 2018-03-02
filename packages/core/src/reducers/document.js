@@ -27,7 +27,7 @@ import type {
   NewCellBeforeAction,
   ClearOutputsAction,
   AppendOutputAction,
-  DoneSavingAction,
+  SaveFulfilled,
   UpdateDisplayAction,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -162,10 +162,7 @@ function setNotebook(state: DocumentRecord, action: SetNotebookAction) {
     .setIn(["transient", "cellMap"], new Immutable.Map());
 }
 
-function setNotebookCheckpoint(
-  state: DocumentRecord,
-  action: DoneSavingAction
-) {
+function setNotebookCheckpoint(state: DocumentRecord, action: SaveFulfilled) {
   // Use the current version of the notebook document
   return state.set("savedNotebook", state.get("notebook"));
 }
@@ -766,7 +763,7 @@ type DocumentAction =
   | ToggleCellExpansionAction
   | AcceptPayloadMessageAction
   | SendExecuteMessageAction
-  | DoneSavingAction
+  | SaveFulfilled
   | RestartKernel
   | ClearAllOutputs
   | SetInCellAction<*>;
@@ -784,7 +781,7 @@ function handleDocument(
       return sendExecuteRequest(state, action);
     case actionTypes.SET_NOTEBOOK:
       return setNotebook(state, action);
-    case actionTypes.DONE_SAVING:
+    case actionTypes.SAVE_FULFILLED:
       return setNotebookCheckpoint(state, action);
     case actionTypes.FOCUS_CELL:
       return focusCell(state, action);

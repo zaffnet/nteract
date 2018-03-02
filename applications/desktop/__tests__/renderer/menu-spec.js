@@ -2,7 +2,7 @@ import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
 import { dummyStore } from "@nteract/core/dummy";
 import * as menu from "../../src/notebook/menu";
-import { actionTypes } from "@nteract/core";
+import { actions, actionTypes } from "@nteract/core";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
@@ -318,12 +318,8 @@ describe("menu", () => {
     test("sends as SAVE request if given a filename", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchSave(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "SAVE"
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.save());
     });
   });
 
@@ -331,12 +327,10 @@ describe("menu", () => {
     test("dispatches SAVE_AS action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "SAVE_AS",
-        filename: "test-ipynb.ipynb"
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.saveAs("test-ipynb.ipynb")
+      );
     });
   });
 
@@ -421,10 +415,7 @@ describe("menu", () => {
 
       menu.triggerWindowRefresh(store, filename);
 
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "SAVE_AS",
-        filename
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs(filename));
     });
   });
 

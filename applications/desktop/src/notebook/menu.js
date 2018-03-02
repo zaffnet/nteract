@@ -180,7 +180,12 @@ export function dispatchClearAll(store: *) {
 }
 
 export function dispatchUnhideAll(store: *) {
-  store.dispatch(actions.unhideAll());
+  store.dispatch(
+    actions.unhideAll({
+      outputHidden: false,
+      inputHidden: false
+    })
+  );
 }
 
 export function dispatchKillKernel(store: *) {

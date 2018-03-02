@@ -1,25 +1,29 @@
-import { actionTypes, reducers, state as stateModule } from "@nteract/core";
+import {
+  actions,
+  actionTypes,
+  reducers,
+  state as stateModule
+} from "@nteract/core";
 
-describe("startSaving", () => {
-  test("should set isSaving to false", () => {
+describe("save", () => {
+  test("should set isSaving to true", () => {
     const originalState = stateModule.makeAppRecord({
+      isSaving: false,
       kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
         connectionFile: false
       })
     });
-
-    const action = { type: actionTypes.START_SAVING };
-
-    const state = reducers.app(originalState, action);
+    const state = reducers.app(originalState, actions.save());
     expect(state.isSaving).toBe(true);
   });
 });
 
-describe("doneSaving", () => {
+describe("saveFailed", () => {
   test("should set isSaving to false", () => {
     const originalState = stateModule.makeAppRecord({
+      isSaving: true,
       kernel: stateModule.makeLocalKernelRecord({
         channels: false,
         spawn: false,
@@ -27,9 +31,23 @@ describe("doneSaving", () => {
       })
     });
 
-    const action = { type: actionTypes.DONE_SAVING };
+    const state = reducers.app(originalState, actions.saveFailed());
+    expect(state.isSaving).toBe(false);
+  });
+});
 
-    const state = reducers.app(originalState, action);
+describe("saveFulfilled", () => {
+  test("should set isSaving to false", () => {
+    const originalState = stateModule.makeAppRecord({
+      isSaving: true,
+      kernel: stateModule.makeLocalKernelRecord({
+        channels: false,
+        spawn: false,
+        connectionFile: false
+      })
+    });
+
+    const state = reducers.app(originalState, actions.saveFulfilled());
     expect(state.isSaving).toBe(false);
   });
 });
