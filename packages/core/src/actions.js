@@ -31,6 +31,10 @@ import type {
   DeleteConnectionFileSuccessfulAction,
   ExecuteCellAction,
   ExecuteFocusedCellAction,
+  ExecuteAllCells,
+  ExecuteAllCellsBelow,
+  ExecuteCanceled,
+  ExecuteFailed,
   FetchKernelspecs,
   FetchKernelspecsFulfilled,
   FetchKernelspecsFailed,
@@ -633,13 +637,13 @@ export function executeCell(id: string): ExecuteCellAction {
   };
 }
 
-export function executeAllCells() {
+export function executeAllCells(): ExecuteAllCells {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS
   };
 }
 
-export function executeAllCellsBelow() {
+export function executeAllCellsBelow(): ExecuteAllCellsBelow {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS_BELOW
   };
@@ -659,6 +663,20 @@ export function sendExecuteMessage(
     type: actionTypes.SEND_EXECUTE_REQUEST,
     id,
     message
+  };
+}
+
+export function executeCanceled(): ExecuteCanceled {
+  return {
+    type: actionTypes.EXECUTE_CANCELED
+  };
+}
+
+export function executeFailed(error: Error): ExecuteFailed {
+  return {
+    type: actionTypes.EXECUTE_FAILED,
+    error: true,
+    payload: error
   };
 }
 

@@ -255,6 +255,18 @@ export type ExecuteFocusedCellAction = {
   type: "EXECUTE_FOCUSED_CELL"
 };
 
+export const EXECUTE_CANCELED = "EXECUTE_CANCELED";
+export type ExecuteCanceled = {
+  type: "EXECUTE_CANCELED"
+};
+
+export const EXECUTE_FAILED = "EXECUTE_FAILED";
+export type ExecuteFailed = {
+  type: "EXECUTE_FAILED",
+  error: true,
+  payload: Error
+};
+
 export const FOCUS_CELL = "FOCUS_CELL";
 export type FocusCellAction = { type: "FOCUS_CELL", id: ?CellID };
 
@@ -620,7 +632,3 @@ export type ShutdownReplyTimedOut = {
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
-
-// TODO: This needs a proper flow type, is only consumed by the epics
-export const ABORT_EXECUTION = "ABORT_EXECUTION";
-export const ERROR_EXECUTING = "ERROR_EXECUTING";

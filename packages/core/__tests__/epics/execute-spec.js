@@ -89,8 +89,8 @@ describe("createExecuteCellStream", () => {
     const observable = createExecuteCellStream(action$, store, "source", "id");
     observable.pipe(toArray()).subscribe(
       actions => {
-        const payloads = actions.map(({ payload }) => payload);
-        expect(payloads).toEqual(["Kernel not connected!"]);
+        const payloads = actions.map(({ payload }) => payload.toString());
+        expect(payloads).toEqual(["Error: Kernel not connected!"]);
         done();
       },
       err => done.fail(err)
@@ -188,7 +188,7 @@ describe("executeCellEpic", () => {
     responseActions.subscribe(
       // Every action that goes through should get stuck on an array
       x => {
-        expect(x.type).toEqual(actionTypes.ERROR_EXECUTING);
+        expect(x.type).toEqual(actionTypes.EXECUTE_FAILED);
         done();
       },
       err => done.fail(err)
@@ -206,7 +206,7 @@ describe("executeCellEpic", () => {
     responseActions.subscribe(
       // Every action that goes through should get stuck on an array
       x => {
-        expect(x.type).toEqual(actionTypes.ERROR_EXECUTING);
+        expect(x.type).toEqual(actionTypes.EXECUTE_FAILED);
         done();
       },
       err => done.fail(err)
@@ -259,7 +259,7 @@ describe("executeCellEpic", () => {
     const responseActions = executeCellEpic(action$, store);
     responseActions.subscribe(
       x => {
-        expect(x.payload.toString()).toEqual("Kernel not connected!");
+        expect(x.payload.toString()).toEqual("Error: Kernel not connected!");
         done();
       },
       err => done.fail(err)
