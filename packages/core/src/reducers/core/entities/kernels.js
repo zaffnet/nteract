@@ -14,26 +14,14 @@ import * as Immutable from "immutable";
 const byRef = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case actionTypes.SET_LANGUAGE_INFO:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       // TODO: Should the kernel hold language info?
       return state;
     case actionTypes.SET_EXECUTION_STATE:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       return state.setIn(
         [action.payload.ref, "status"],
         action.payload.kernelStatus
       );
     case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       switch (action.payload.kernel.type) {
         case "zeromq":
           return state.set(

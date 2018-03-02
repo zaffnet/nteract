@@ -13,10 +13,6 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.RESTART_KERNEL:
     case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       return state.set(
         action.payload.ref,
         makeKernelCommunicationRecord({
@@ -26,10 +22,6 @@ const byRef = (state = Immutable.Map(), action) => {
       );
     case actionTypes.RESTART_KERNEL_SUCCESSFUL:
     case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       return state.set(
         action.payload.ref,
         makeKernelCommunicationRecord({
@@ -39,10 +31,6 @@ const byRef = (state = Immutable.Map(), action) => {
       );
     case actionTypes.RESTART_KERNEL_FAILED:
     case actionTypes.LAUNCH_KERNEL_FAILED:
-      // TODO: #2608
-      if (!action.payload.ref) {
-        return state;
-      }
       return state.set(
         action.payload.ref,
         makeKernelCommunicationRecord({
