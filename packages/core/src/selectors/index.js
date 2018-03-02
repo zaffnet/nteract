@@ -282,7 +282,7 @@ export const currentFilename: (state: *) => string = createSelector(
 );
 
 export const modalType = createSelector(
-  (state: AppState) => state.core.modals.modalType,
+  (state: AppState) => state.core.entities.modals.modalType,
   identity
 );
 
