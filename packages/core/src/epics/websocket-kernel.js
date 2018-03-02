@@ -37,7 +37,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap((action: LaunchKernelByNameAction) => {
-      const { payload: { kernelSpecName, cwd, ref } } = action;
+      const { payload: { kernelSpecName, cwd, kernelRef } } = action;
       const config = selectors.serverConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
@@ -53,7 +53,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 
           kernel.channels.next(kernelInfoRequest());
 
-          return of(actions.launchKernelSuccessful({ kernel, ref }));
+          return of(actions.launchKernelSuccessful({ kernel, kernelRef }));
         })
       );
     })
@@ -74,13 +74,15 @@ export const interruptKernelEpic = (action$: *, store: *) =>
 
       return kernels.interrupt(serverConfig, id).pipe(
         map(() =>
-          actions.interruptKernelSuccessful({ ref: action.payload.ref })
+          actions.interruptKernelSuccessful({
+            kernelRef: action.payload.kernelRef
+          })
         ),
         catchError(err =>
           of(
             actions.interruptKernelFailed({
               error: err,
-              ref: action.payload.ref
+              kernelRef: action.payload.kernelRef
             })
           )
         )
@@ -104,10 +106,17 @@ export const killKernelEpic = (action$: *, store: *) =>
       return kernels
         .kill(serverConfig, id)
         .pipe(
-          map(() => actions.killKernelSuccessful({ ref: action.payload.ref })),
+          map(() =>
+            actions.killKernelSuccessful({
+              kernelRef: action.payload.kernelRef
+            })
+          ),
           catchError(err =>
             of(
-              actions.killKernelFailed({ error: err, ref: action.payload.ref })
+              actions.killKernelFailed({
+                error: err,
+                kernelRef: action.payload.kernelRef
+              })
             )
           )
         );

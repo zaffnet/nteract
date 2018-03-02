@@ -57,9 +57,7 @@ describe("createTitleFeed", () => {
         notebook,
         filename: "titled.ipynb"
       }),
-      app: stateModule.makeAppRecord({
-        kernelStatus: "not connected"
-      })
+      app: stateModule.makeAppRecord()
     };
 
     const state$ = from([state]);
@@ -94,9 +92,7 @@ describe("createTitleFeed", () => {
         savedNotebook: notebook,
         filename: "titled.ipynb"
       }),
-      app: stateModule.makeAppRecord({
-        kernelStatus: "not connected"
-      })
+      app: stateModule.makeAppRecord()
     };
 
     const state$ = from([state]);

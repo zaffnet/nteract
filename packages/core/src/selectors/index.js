@@ -12,6 +12,8 @@ type AppState = {
   config: Object
 };
 
+import type { KernelRef } from "../state/refs";
+
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
 import { createSelector } from "reselect";
@@ -50,14 +52,28 @@ export const currentHost = createSelector(
   identity
 );
 
-export const currentKernel = createSelector(
-  (state: AppState) => state.core.useCore,
-  (state: AppState) => state.app.kernel,
-  (state: AppState) => state.core.kernelRef,
+export const kernelsByRef = createSelector(
   (state: AppState) => state.core.getIn(["entities", "kernels", "byRef"]),
-  (state: AppState) => state,
-  (useCore, oldKernel, kernelRef, kernelsByRef, state) => {
-    return useCore ? kernelsByRef.get(kernelRef) : oldKernel;
+  identity
+);
+
+// Get a kernel by kernelRef, using the `props` argument
+export const kernel = createSelector(
+  (state: AppState, { kernelRef }: { kernelRef: KernelRef }) =>
+    kernelsByRef(state).get(kernelRef),
+  identity
+);
+
+export const currentKernelRef = createSelector(
+  (state: AppState) => state.core.kernelRef,
+  identity
+);
+
+export const currentKernel = createSelector(
+  currentKernelRef,
+  (state: AppState) => state.core.getIn(["entities", "kernels", "byRef"]),
+  (kernelRef, kernelsByRef) => {
+    return kernelsByRef.get(kernelRef);
   }
 );
 
@@ -266,7 +282,7 @@ export const currentFilename: (state: *) => string = createSelector(
 );
 
 export const modalType = createSelector(
-  (state: AppState) => state.core.modals.modalType,
+  (state: AppState) => state.core.entities.modals.modalType,
   identity
 );
 
@@ -298,16 +314,5 @@ export const kernelspecsByRefCore = createSelector(
 
 export const notificationSystem = createSelector(
   (state: AppState) => state.app.get("notificationSystem"),
-  identity
-);
-
-export const kernelByRefCore = createSelector(
-  (state: AppState, { kernelRef }) =>
-    state.core.getIn(["entities", "kernels", "byRef", kernelRef]),
-  identity
-);
-
-export const currentKernelRefCore = createSelector(
-  (state: AppState) => state.core.get("kernelRef"),
   identity
 );

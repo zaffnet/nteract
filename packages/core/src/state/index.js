@@ -135,7 +135,6 @@ export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
   kernelRef: ?KernelRef,
-  useCore: boolean,
   communication: Immutable.RecordOf<CommunicationRecordProps>,
   entities: Immutable.RecordOf<EntitiesRecordProps>
 };
@@ -144,15 +143,11 @@ export const makeStateRecord: Immutable.RecordFactory<
   StateRecordProps
 > = Immutable.Record({
   kernelRef: null,
-  useCore: false,
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });
 
 export type AppRecordProps = {
-  kernel:
-    | ?Immutable.RecordOf<RemoteKernelProps>
-    | ?Immutable.RecordOf<LocalKernelProps>,
   host:
     | ?Immutable.RecordOf<LocalHostRecordProps>
     | ?Immutable.RecordOf<JupyterHostRecordProps>,
@@ -169,7 +164,6 @@ export type AppRecordProps = {
 export const makeAppRecord: Immutable.RecordFactory<
   AppRecordProps
 > = Immutable.Record({
-  kernel: null,
   host: null,
   githubToken: null,
   notificationSystem: {

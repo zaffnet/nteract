@@ -68,7 +68,6 @@ describe("interruptKernelEpic", () => {
       state: {
         // $FlowFixMe
         core: stateModule.makeStateRecord({
-          useCore: true,
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
             kernels: stateModule.makeKernelsRecord({

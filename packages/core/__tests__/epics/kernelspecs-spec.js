@@ -15,7 +15,7 @@ describe("fetchKernelspecsEpic", () => {
         app: {
           host: {
             type: "jupyter",
-            ref: null,
+            kernelRef: null,
             id: null,
             selectedKernelRef: null,
             kernelspecsRef: null,

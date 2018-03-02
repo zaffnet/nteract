@@ -99,15 +99,11 @@ import type {
   SaveFulfilled,
   FetchContent,
   FetchContentFulfilled,
-  FetchContentFailed,
-  UseCore
+  FetchContentFailed
 } from "./actionTypes";
 
 import { createExecuteRequest } from "@nteract/messaging";
 import type { HostRecordProps } from "./state/entities/hosts";
-
-// TODO: See reducers/core/index `useCore` reducer.
-export const useCore = (): UseCore => ({ type: actionTypes.USE_CORE });
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,
@@ -136,7 +132,7 @@ export const addHost = (payload: {
 export const fetchContent = (payload: {
   path: string,
   params: Object,
-  kernelRef?: KernelRef
+  kernelRef: KernelRef
 }): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
@@ -145,7 +141,7 @@ export const fetchContent = (payload: {
 export const fetchContentFulfilled = (payload: {
   path: string,
   model: any,
-  kernelRef?: KernelRef
+  kernelRef: KernelRef
 }): FetchContentFulfilled => ({
   type: actionTypes.FETCH_CONTENT_FULFILLED,
   payload
@@ -154,7 +150,7 @@ export const fetchContentFulfilled = (payload: {
 export const fetchContentFailed = (payload: {
   path: string,
   error: Error,
-  kernelRef?: KernelRef
+  kernelRef: KernelRef
 }): FetchContentFailed => ({
   type: actionTypes.FETCH_CONTENT_FAILED,
   payload,
@@ -189,7 +185,7 @@ export const fetchKernelspecsFailed = (payload: {
 
 export function launchKernelFailed(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): LaunchKernelFailed {
   return {
     type: actionTypes.LAUNCH_KERNEL_FAILED,
@@ -200,7 +196,7 @@ export function launchKernelFailed(payload: {
 
 export function launchKernelSuccessful(payload: {
   kernel: LocalKernelProps | RemoteKernelProps,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -211,7 +207,7 @@ export function launchKernelSuccessful(payload: {
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
-  ref?: KernelRef,
+  kernelRef: KernelRef,
   selectNextKernel: boolean
 }): LaunchKernelAction {
   return {
@@ -223,7 +219,7 @@ export function launchKernel(payload: {
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
-  ref?: KernelRef,
+  kernelRef: KernelRef,
   selectNextKernel: boolean
 }): LaunchKernelByNameAction {
   return {
@@ -234,7 +230,7 @@ export function launchKernelByName(payload: {
 
 export function kernelRawStdout(payload: {
   text: string,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): KernelRawStdout {
   return {
     type: actionTypes.KERNEL_RAW_STDOUT,
@@ -244,7 +240,7 @@ export function kernelRawStdout(payload: {
 
 export function kernelRawStderr(payload: {
   text: string,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): KernelRawStderr {
   return {
     type: actionTypes.KERNEL_RAW_STDERR,
@@ -262,7 +258,7 @@ export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
 
 export function setExecutionState(payload: {
   kernelStatus: string,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): SetExecutionStateAction {
   return {
     type: actionTypes.SET_EXECUTION_STATE,
@@ -505,7 +501,7 @@ export function deleteMetadata(field: string): DeleteMetadataFieldAction {
 
 export function killKernel(payload: {
   restarting: boolean,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): KillKernelAction {
   return {
     type: actionTypes.KILL_KERNEL,
@@ -515,7 +511,7 @@ export function killKernel(payload: {
 
 export function killKernelFailed(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): KillKernelFailed {
   return {
     type: actionTypes.KILL_KERNEL_FAILED,
@@ -525,7 +521,7 @@ export function killKernelFailed(payload: {
 }
 
 export function killKernelSuccessful(payload: {
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): KillKernelSuccessful {
   return {
     type: actionTypes.KILL_KERNEL_SUCCESSFUL,
@@ -533,7 +529,9 @@ export function killKernelSuccessful(payload: {
   };
 }
 
-export function interruptKernel(payload: { ref?: KernelRef }): InterruptKernel {
+export function interruptKernel(payload: {
+  kernelRef: KernelRef
+}): InterruptKernel {
   return {
     type: actionTypes.INTERRUPT_KERNEL,
     payload
@@ -541,7 +539,7 @@ export function interruptKernel(payload: { ref?: KernelRef }): InterruptKernel {
 }
 
 export function interruptKernelSuccessful(payload: {
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): InterruptKernelSuccessful {
   return {
     type: actionTypes.INTERRUPT_KERNEL_SUCCESSFUL,
@@ -551,7 +549,7 @@ export function interruptKernelSuccessful(payload: {
 
 export function interruptKernelFailed(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): interruptKernelFailed {
   return {
     type: actionTypes.INTERRUPT_KERNEL_FAILED,
@@ -715,7 +713,7 @@ export function saveFulfilled(): SaveFulfilled {
 export function newNotebook(payload: {
   kernelSpec: Object,
   cwd: string,
-  kernelRef?: KernelRef
+  kernelRef: KernelRef
 }): NewNotebook {
   return {
     type: actionTypes.NEW_NOTEBOOK,
@@ -734,7 +732,7 @@ export function newNotebook(payload: {
 export const setNotebook = (payload: {
   filename: ?string,
   notebook: ImmutableNotebook,
-  kernelRef?: KernelRef
+  kernelRef: KernelRef
 }): SetNotebookAction => ({
   type: actionTypes.SET_NOTEBOOK,
   payload
@@ -831,7 +829,7 @@ export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
 
 export function setLanguageInfo(payload: {
   langInfo: LanguageInfoMetadata,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): SetLanguageInfoAction {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
@@ -841,7 +839,7 @@ export function setLanguageInfo(payload: {
 
 export function deleteConnectionFileFailed(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): DeleteConnectionFileFailedAction {
   return {
     type: actionTypes.DELETE_CONNECTION_FILE_FAILED,
@@ -851,7 +849,7 @@ export function deleteConnectionFileFailed(payload: {
 }
 
 export function deleteConnectionFileSuccessful(payload: {
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): DeleteConnectionFileSuccessfulAction {
   return {
     type: actionTypes.DELETE_CONNECTION_FILE_SUCCESSFUL,
@@ -861,7 +859,7 @@ export function deleteConnectionFileSuccessful(payload: {
 
 export function shutdownReplySucceeded(payload: {
   text: string,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): ShutdownReplySucceeded {
   return {
     type: actionTypes.SHUTDOWN_REPLY_SUCCEEDED,
@@ -871,7 +869,7 @@ export function shutdownReplySucceeded(payload: {
 
 export function shutdownReplyTimedOut(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): ShutdownReplyTimedOut {
   return {
     type: actionTypes.SHUTDOWN_REPLY_TIMED_OUT,
@@ -882,7 +880,7 @@ export function shutdownReplyTimedOut(payload: {
 
 export function restartKernel(payload: {
   clearOutputs: boolean,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): RestartKernel {
   return {
     type: actionTypes.RESTART_KERNEL,
@@ -892,7 +890,7 @@ export function restartKernel(payload: {
 
 export function restartKernelFailed(payload: {
   error: Error,
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): RestartKernelFailed {
   return {
     type: actionTypes.RESTART_KERNEL_FAILED,
@@ -902,7 +900,7 @@ export function restartKernelFailed(payload: {
 }
 
 export function restartKernelSuccessful(payload: {
-  ref?: KernelRef
+  kernelRef: KernelRef
 }): RestartKernelSuccessful {
   return {
     type: actionTypes.RESTART_KERNEL_SUCCESSFUL,

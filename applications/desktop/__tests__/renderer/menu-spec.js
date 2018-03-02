@@ -154,7 +154,8 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: actionTypes.RESTART_KERNEL,
         payload: {
-          clearOutputs: true
+          clearOutputs: true,
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -170,7 +171,8 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: actionTypes.RESTART_KERNEL,
         payload: {
-          clearOutputs: false
+          clearOutputs: false,
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -186,7 +188,9 @@ describe("menu", () => {
       if (process.platform !== "win32") {
         expect(store.dispatch).toHaveBeenCalledWith({
           type: actionTypes.INTERRUPT_KERNEL,
-          payload: {}
+          payload: {
+            kernelRef: expect.any(String)
+          }
         });
       }
     });
@@ -202,7 +206,8 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: actionTypes.KILL_KERNEL,
         payload: {
-          restarting: false
+          restarting: false,
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -308,7 +313,8 @@ describe("menu", () => {
         payload: {
           kernelSpec: { spec: "hokey" },
           cwd: process.cwd(),
-          selectNextKernel: true
+          selectNextKernel: true,
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -344,7 +350,8 @@ describe("menu", () => {
         type: "CORE/FETCH_CONTENT",
         payload: {
           path: "test-ipynb.ipynb",
-          params: {}
+          params: {},
+          kernelRef: expect.any(String)
         }
       });
     });
@@ -360,7 +367,8 @@ describe("menu", () => {
         type: "NEW_NOTEBOOK",
         payload: {
           kernelSpec: { spec: "hokey" },
-          cwd: process.cwd()
+          cwd: process.cwd(),
+          kernelRef: expect.any(String)
         }
       });
     });

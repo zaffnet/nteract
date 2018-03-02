@@ -11,7 +11,7 @@ import {
 } from "../../../src/notebook/epics/zeromq-kernels";
 
 import { of } from "rxjs/observable/of";
-import { toArray, share } from "rxjs/operators";
+import { toArray, catchError } from "rxjs/operators";
 
 describe("launchKernelObservable", () => {
   test("returns an observable", () => {
@@ -21,20 +21,42 @@ describe("launchKernelObservable", () => {
 });
 
 describe("launchKernelEpic", () => {
-  test("throws an error if given a bad action", done => {
+  test("throws an error if given a bad action", async function() {
     const actionBuffer = [];
-    const action$ = ActionsObservable.of({
-      type: actionTypes.LAUNCH_KERNEL
-    }).pipe(share());
-    const obs = launchKernelEpic(action$);
-    obs.subscribe(
-      x => {
-        expect(x.type).toEqual(actionTypes.LAUNCH_KERNEL_FAILED);
-        actionBuffer.push(x.type);
-        done();
+    const action$ = ActionsObservable.of(
+      {
+        type: actionTypes.LAUNCH_KERNEL,
+        payload: {
+          kernelRef: "1234"
+        }
       },
-      err => done.fail(err)
+      {
+        type: actionTypes.LAUNCH_KERNEL,
+        payload: { kernelSpec: {} }
+      }
     );
+
+    const resultAction$ = await launchKernelEpic(action$)
+      .pipe(toArray())
+      .toPromise();
+    expect(resultAction$).toEqual([
+      {
+        error: true,
+        payload: {
+          error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
+          kernelRef: "1234"
+        },
+        type: "LAUNCH_KERNEL_FAILED"
+      },
+      {
+        error: true,
+        payload: {
+          error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
+          kernelRef: undefined
+        },
+        type: "LAUNCH_KERNEL_FAILED"
+      }
+    ]);
   });
 
   test("calls launchKernelObservable if given the correct action", async function() {
@@ -43,12 +65,13 @@ describe("launchKernelEpic", () => {
       actions.launchKernel({
         kernelSpec: { spec: "hokey", name: "woohoo" },
         cwd: "~",
-        selectNextKernel: true
+        selectNextKernel: true,
+        kernelRef: "123"
       })
     );
 
     const state = {
-      core: stateModule.makeStateRecord({ useCore: false }),
+      core: stateModule.makeStateRecord(),
       app: {
         kernel: null
       }
@@ -68,7 +91,7 @@ describe("launchKernelEpic", () => {
       actions.setNotebookKernelInfo({ spec: "hokey", name: "woohoo" }),
       actions.launchKernelSuccessful({
         kernel: {
-          ref: expect.any(String),
+          kernelRef: expect.any(String),
           lastActivity: null,
           type: "zeromq",
           cwd: "~",
@@ -78,10 +101,12 @@ describe("launchKernelEpic", () => {
           connectionFile: "connectionFile.json",
           kernelSpecName: "woohoo",
           status: "launched"
-        }
+        },
+        kernelRef: "123"
       }),
       actions.setExecutionState({
-        kernelStatus: "launched"
+        kernelStatus: "launched",
+        kernelRef: "123"
       })
     ]);
   });

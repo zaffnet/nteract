@@ -189,22 +189,22 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.INTERRUPT_KERNEL:
         if (interruptKernel) {
-          interruptKernel({ ref: currentKernelRef });
+          interruptKernel({ kernelRef: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.RESTART_KERNEL:
         if (restartKernel) {
-          restartKernel({ ref: currentKernelRef });
+          restartKernel({ kernelRef: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.KILL_KERNEL:
         if (killKernel) {
-          killKernel({ ref: currentKernelRef });
+          killKernel({ kernelRef: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
-          restartKernelAndClearOutputs({ ref: currentKernelRef });
+          restartKernelAndClearOutputs({ kernelRef: currentKernelRef });
         }
         break;
 
@@ -359,7 +359,7 @@ const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
   filename: selectors.currentFilename(state),
   notebook: selectors.currentNotebook(state),
-  currentKernelRef: selectors.currentKernelRefCore(state)
+  currentKernelRef: selectors.currentKernelRef(state)
 });
 
 const mapDispatchToProps = dispatch => ({

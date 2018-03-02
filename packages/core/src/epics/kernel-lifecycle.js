@@ -54,7 +54,7 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
         map(msg =>
           actions.setExecutionState({
             kernelStatus: msg.content.execution_state,
-            ref: action.payload.ref
+            kernelRef: action.payload.kernelRef
           })
         )
       )
@@ -67,7 +67,7 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
  * @param  {Object}  channels  A object containing the kernel channels
  * @returns  {Observable}  The reply from the server
  */
-export function acquireKernelInfo(channels: Channels, ref?: KernelRef) {
+export function acquireKernelInfo(channels: Channels, kernelRef: KernelRef) {
   const message = createMessage("kernel_info_request");
 
   const obs = channels.pipe(
@@ -75,7 +75,7 @@ export function acquireKernelInfo(channels: Channels, ref?: KernelRef) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
-    map(langInfo => actions.setLanguageInfo({ langInfo, ref }))
+    map(langInfo => actions.setLanguageInfo({ langInfo, kernelRef }))
   );
 
   return Observable.create(observer => {
@@ -94,8 +94,8 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) => {
-      const { payload: { kernel: { channels }, ref } } = action;
-      return acquireKernelInfo(channels, ref);
+      const { payload: { kernel: { channels }, kernelRef } } = action;
+      return acquireKernelInfo(channels, kernelRef);
     })
   );
 
@@ -131,7 +131,7 @@ export const launchKernelWhenNotebookSetEpic = (
       return actions.launchKernelByName({
         kernelSpecName,
         cwd,
-        ref: action.payload.kernelRef,
+        kernelRef: action.payload.kernelRef,
         selectNextKernel: true
       });
     })
@@ -142,10 +142,13 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
     ofType(actionTypes.RESTART_KERNEL),
     concatMap((action: RestartKernel) => {
       const state = store.getState();
-      const kernel = selectors.currentKernel(state);
+
+      const oldKernelRef = action.payload.kernelRef;
+      const oldKernel = selectors.kernel(state, { kernelRef: oldKernelRef });
+
       const notificationSystem = selectors.notificationSystem(state);
 
-      if (!kernel) {
+      if (!oldKernelRef || !oldKernel) {
         notificationSystem.addNotification({
           title: "Failure to Restart",
           message: `Unable to restart kernel, please select a new kernel.`,
@@ -164,18 +167,21 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
       //       This only mirrors the old behavior of restart kernel (for now)
       notificationSystem.addNotification({
         title: "Kernel Restarted",
-        message: `Kernel ${kernel.kernelSpecName} has been restarted.`,
+        message: `Kernel ${oldKernel.kernelSpecName} has been restarted.`,
         dismissible: true,
         position: "tr",
         level: "success"
       });
 
       return of(
-        actions.killKernel({ restarting: true, ref: action.payload.ref }),
+        actions.killKernel({
+          restarting: true,
+          kernelRef: oldKernelRef
+        }),
         actions.launchKernelByName({
-          kernelSpecName: kernel.kernelSpecName,
-          cwd: kernel.cwd,
-          ref: createKernelRef(),
+          kernelSpecName: oldKernel.kernelSpecName,
+          cwd: oldKernel.cwd,
+          kernelRef: createKernelRef(),
           selectNextKernel: true
         })
       );
