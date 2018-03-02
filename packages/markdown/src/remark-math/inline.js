@@ -54,15 +54,32 @@ module.exports = function inlinePlugin(opts: Object) {
 
       const trimmedContent = match[1].trim();
 
+      if (isDouble) {
+        return eat(match[0])({
+          type: "math",
+          value: trimmedContent,
+          data: {
+            hName: "div",
+            hProperties: {
+              className: "math"
+            },
+            hChildren: [
+              {
+                type: "text",
+                value: trimmedContent
+              }
+            ]
+          }
+        });
+      }
+
       return eat(match[0])({
         type: "inlineMath",
         value: trimmedContent,
         data: {
           hName: "span",
           hProperties: {
-            className:
-              "inlineMath" +
-              (isDouble && opts.inlineMathDouble ? " inlineMathDouble" : "")
+            className: "inlineMath"
           },
           hChildren: [
             {
