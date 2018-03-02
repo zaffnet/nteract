@@ -83,7 +83,9 @@ function buildDummyNotebook(config) {
 export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
+  // $FlowFixMe: Faking out channels
   const frontendToShell = new Subject();
+  // $FlowFixMe: Faking out channels
   const shellToFrontend = new Subject();
   const mockShell = Subject.create(frontendToShell, shellToFrontend);
   const mockIOPub = new Subject();
@@ -97,6 +99,7 @@ export function dummyStore(config: *) {
       entities: stateModule.makeEntitiesRecord({
         kernels: stateModule.makeKernelsRecord({
           byRef: Immutable.Map({
+            // $FlowFixMe: This really is a kernel ref, Flow can't handle typing it though
             [kernelRef]: stateModule.makeRemoteKernelRecord({
               channels,
               status: "not connected"
