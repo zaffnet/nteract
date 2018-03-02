@@ -3,6 +3,8 @@
 
 import * as Immutable from "immutable";
 
+import { Subject } from "rxjs/Subject";
+
 import {
   monocellNotebook,
   emptyCodeCell,
@@ -16,22 +18,16 @@ import { document, comms, config, core } from "../reducers";
 
 export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
 
+import * as stateModule from "../state";
+
 const rootReducer = combineReducers({
   // Fake out app, since it comes from
-  app: (state = makeAppRecord(), action) => state,
+  app: (state = stateModule.makeAppRecord(), action) => state,
   document,
   comms,
   config,
   core
 });
-
-import {
-  makeAppRecord,
-  makeDocumentRecord,
-  makeCommsRecord,
-  makeLocalKernelRecord,
-  makeStateRecord
-} from "../state";
 
 function hideCells(notebook) {
   return notebook.update("cellMap", cells =>
@@ -87,9 +83,29 @@ function buildDummyNotebook(config) {
 export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
+  const frontendToShell = new Subject();
+  const shellToFrontend = new Subject();
+  const mockShell = Subject.create(frontendToShell, shellToFrontend);
+  const mockIOPub = new Subject();
+  const channels = mockShell;
+
+  const kernelRef = stateModule.createKernelRef();
+
   return createStore(rootReducer, {
-    core: makeStateRecord(),
-    document: makeDocumentRecord({
+    core: stateModule.makeStateRecord({
+      kernelRef,
+      entities: stateModule.makeEntitiesRecord({
+        kernels: stateModule.makeKernelsRecord({
+          byRef: Immutable.Map({
+            [kernelRef]: stateModule.makeRemoteKernelRecord({
+              channels,
+              status: "not connected"
+            })
+          })
+        })
+      })
+    }),
+    document: stateModule.makeDocumentRecord({
       notebook: dummyNotebook,
       savedNotebook:
         config && config.saved === true ? dummyNotebook : emptyNotebook,
@@ -101,7 +117,7 @@ export function dummyStore(config: *) {
           : null,
       filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
-    app: makeAppRecord({
+    app: stateModule.makeAppRecord({
       notificationSystem: {
         addNotification: () => {} // most of the time you'll want to mock this
       },
@@ -110,6 +126,6 @@ export function dummyStore(config: *) {
     config: Immutable.Map({
       theme: "light"
     }),
-    comms: makeCommsRecord()
+    comms: stateModule.makeCommsRecord()
   });
 }
