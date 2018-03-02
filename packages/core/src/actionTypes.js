@@ -177,6 +177,13 @@ export type UpdateDisplayAction = {
   }
 };
 
+export const UPDATE_DISPLAY_FAILED = "UPDATE_DISPLAY_FAILED";
+export type UpdateDisplayFailed = {
+  type: "UPDATE_DISPLAY_FAILED",
+  payload: Error,
+  error: true
+};
+
 export const UNHIDE_ALL = "UNHIDE_ALL";
 export type UnhideAll = {
   type: "UNHIDE_ALL",
@@ -616,7 +623,4 @@ export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
 
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";
-
-// TODO: Properly type these ERROR action types
-export const ERROR_UPDATE_DISPLAY = "ERROR_UPDATE_DISPLAY";
 export const ERROR_EXECUTING = "ERROR_EXECUTING";

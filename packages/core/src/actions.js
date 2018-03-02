@@ -51,6 +51,7 @@ import type {
   ClearOutputsAction,
   AppendOutputAction,
   UpdateDisplayAction,
+  UpdateDisplayFailed,
   FocusNextCellAction,
   FocusCellEditorAction,
   FocusNextCellEditorAction,
@@ -802,6 +803,14 @@ export function updateDisplay(content: {
   return {
     type: actionTypes.UPDATE_DISPLAY,
     content
+  };
+}
+
+export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
+  return {
+    type: actionTypes.UPDATE_DISPLAY_FAILED,
+    payload: error,
+    error: true
   };
 }
 

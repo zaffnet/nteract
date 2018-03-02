@@ -252,13 +252,7 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
       action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
         map(msg => actions.updateDisplay(msg.content)),
-        catchError(err =>
-          of({
-            type: actionTypes.ERROR_UPDATE_DISPLAY,
-            payload: err,
-            error: true
-          })
-        )
+        catchError(err => of(actions.updateDisplayFailed(err)))
       )
     )
   );
