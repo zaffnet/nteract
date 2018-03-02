@@ -9,6 +9,7 @@ import { makeKernelsRecord } from "./kernels";
 import { makeKernelspecsRecord } from "./kernelspecs";
 import { makeModalsRecord } from "./modals";
 
+export * from "./contents";
 export * from "./hosts";
 export * from "./kernels";
 export * from "./kernelspecs";
