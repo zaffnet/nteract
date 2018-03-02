@@ -81,7 +81,10 @@ export function dispatchRestartKernel(store: *) {
   store.dispatch(actions.restartKernel({ clearOutputs: false, kernelRef }));
 }
 
-export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
+export function promptUserAboutNewKernel(
+  store: *,
+  filename: string
+): Promise<*> {
   return new Promise(resolve => {
     dialog.showMessageBox(
       {
@@ -125,7 +128,7 @@ export function triggerSaveAs(store: *) {
   showSaveAsDialog().then(filename => {
     if (filename) {
       triggerWindowRefresh(store, filename);
-      triggerKernelRefresh(store, filename);
+      promptUserAboutNewKernel(store, filename);
     }
   });
 }
