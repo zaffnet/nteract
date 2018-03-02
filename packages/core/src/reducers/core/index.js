@@ -13,7 +13,7 @@ const kernelRef = (state = null, action) => {
   switch (action.type) {
     case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
-      return action.payload.selectNextKernel ? action.payload.ref : state;
+      return action.payload.selectNextKernel ? action.payload.kernelRef : state;
     default:
       return state;
   }

@@ -309,7 +309,7 @@ describe("menu", () => {
           kernelSpec: { spec: "hokey" },
           cwd: process.cwd(),
           selectNextKernel: true,
-          ref: expect.any(String)
+          kernelRef: expect.any(String)
         }
       });
     });

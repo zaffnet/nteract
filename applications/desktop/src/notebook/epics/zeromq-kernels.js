@@ -67,7 +67,7 @@ import type {
 export function launchKernelObservable(
   kernelSpec: KernelInfo,
   cwd: string,
-  ref: KernelRef
+  kernelRef: KernelRef
 ) {
   const spec = kernelSpec.spec;
 
@@ -76,10 +76,14 @@ export function launchKernelObservable(
       const { config, spawn, connectionFile } = c;
 
       spawn.stdout.on("data", data => {
-        observer.next(actions.kernelRawStdout({ text: data.toString(), ref }));
+        observer.next(
+          actions.kernelRawStdout({ text: data.toString(), kernelRef })
+        );
       });
       spawn.stderr.on("data", data => {
-        observer.next(actions.kernelRawStderr({ text: data.toString(), ref }));
+        observer.next(
+          actions.kernelRawStderr({ text: data.toString(), kernelRef })
+        );
       });
 
       // do dependency injection of jmp to make it match our ABI version of node
@@ -88,8 +92,8 @@ export function launchKernelObservable(
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {
-            // TODO: Include the ref when we need it here
-            ref: state.createKernelRef(),
+            // TODO: Include the kernelRef when we need it here
+            kernelRef: state.createKernelRef(),
             type: "zeromq",
             hostRef: null,
             channels,
@@ -101,10 +105,10 @@ export function launchKernelObservable(
             status: "launched" // TODO: Determine our taxonomy
           };
 
-          observer.next(actions.launchKernelSuccessful({ kernel, ref }));
+          observer.next(actions.launchKernelSuccessful({ kernel, kernelRef }));
           // TODO: Request status right after
           observer.next(
-            actions.setExecutionState({ kernelStatus: "launched", ref })
+            actions.setExecutionState({ kernelStatus: "launched", kernelRef })
           );
           observer.complete();
         })
@@ -146,7 +150,7 @@ export const launchKernelByNameEpic = (
             actions.launchKernel({
               kernelSpec: specs[action.payload.kernelSpecName],
               cwd: action.payload.cwd,
-              ref: action.payload.ref,
+              kernelRef: action.payload.kernelRef,
               selectNextKernel: action.payload.selectNextKernel
             })
           )
@@ -173,14 +177,14 @@ export const launchKernelEpic = (
         !action ||
         !action.payload ||
         !action.payload.kernelSpec ||
-        !action.payload.ref
+        !action.payload.kernelRef
       ) {
         return of(
           actions.launchKernelFailed({
             error: new Error(
-              "launchKernel needs a kernelSpec and a kernel ref"
+              "launchKernel needs a kernelSpec and a kernel kernelRef"
             ),
-            ref: action && action.payload && action.payload.ref
+            kernelRef: action && action.payload && action.payload.kernelRef
           })
         );
       }
@@ -194,7 +198,7 @@ export const launchKernelEpic = (
       const oldKernelRef = selectors.currentKernelRef(store.getState());
       if (oldKernelRef && oldKernelRef !== action.payloadRef) {
         cleanupOldKernel$ = of(
-          actions.killKernel({ restarting: false, ref: oldKernelRef })
+          actions.killKernel({ restarting: false, kernelRef: oldKernelRef })
         );
       }
 
@@ -202,13 +206,18 @@ export const launchKernelEpic = (
         launchKernelObservable(
           action.payload.kernelSpec,
           action.payload.cwd,
-          action.payload.ref
+          action.payload.kernelRef
         ),
         // Was there a kernel before (?) -- kill it if so, otherwise nothing else
         cleanupOldKernel$
       ).pipe(
         catchError((error: Error) =>
-          of(actions.launchKernelFailed({ error, ref: action.payload.ref }))
+          of(
+            actions.launchKernelFailed({
+              error,
+              kernelRef: action.payload.kernelRef
+            })
+          )
         )
       );
     }),
@@ -240,7 +249,11 @@ export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
       spawn.kill("SIGINT");
 
       return merge(
-        of(actions.interruptKernelSuccessful({ ref: action.payload.ref }))
+        of(
+          actions.interruptKernelSuccessful({
+            kernelRef: action.payload.kernelRef
+          })
+        )
       );
     })
   );
@@ -269,8 +282,8 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
     filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
     concatMap((action: KillKernelAction) => {
       const state = store.getState();
-      const ref = action.payload.ref;
-      const kernel = selectors.kernel(state, { ref });
+      const kernelRef = action.payload.kernelRef;
+      const kernel = selectors.kernel(state, { kernelRef });
       const request = shutdownRequest({ restart: false });
 
       // Try to make a shutdown request
@@ -281,11 +294,13 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
         ofMessageType("shutdown_reply"),
         first(),
         // If we got a reply, great! :)
-        map(msg => actions.shutdownReplySucceeded({ text: msg.content, ref })),
+        map(msg =>
+          actions.shutdownReplySucceeded({ text: msg.content, kernelRef })
+        ),
         // If we don't get a response within 2s, assume failure :(
         timeout(1000 * 2),
         catchError(err =>
-          of(actions.shutdownReplyTimedOut({ error: err, ref }))
+          of(actions.shutdownReplyTimedOut({ error: err, kernelRef }))
         ),
         mergeMap(action => {
           // End all communication on the channels
@@ -304,9 +319,9 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
 
           // Delete the connection file
           const del$ = unlinkObservable(kernel.connectionFile).pipe(
-            map(() => actions.deleteConnectionFileSuccessful({ ref })),
+            map(() => actions.deleteConnectionFileSuccessful({ kernelRef })),
             catchError(err =>
-              of(actions.deleteConnectionFileFailed({ error: err, ref }))
+              of(actions.deleteConnectionFileFailed({ error: err, kernelRef }))
             )
           );
 
@@ -315,7 +330,10 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
             of(action),
             // Inform about the state
             of(
-              actions.setExecutionState({ kernelStatus: "shutting down", ref })
+              actions.setExecutionState({
+                kernelStatus: "shutting down",
+                kernelRef
+              })
             ),
             // and our connection file deletion
             del$
@@ -323,7 +341,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
         }),
         catchError(err =>
           // Catch all, in case there were other errors here
-          of(actions.killKernelFailed({ error: err, ref }))
+          of(actions.killKernelFailed({ error: err, kernelRef }))
         )
       );
 
@@ -354,7 +372,7 @@ export function watchSpawn(action$: *, store: *) {
           observer.next(
             actions.setExecutionState({
               kernelStatus: "errored",
-              ref: action.payload.ref
+              kernelRef: action.payload.kernelRef
             })
           );
           observer.error({ type: "ERROR", payload: error, err: true });
@@ -364,7 +382,7 @@ export function watchSpawn(action$: *, store: *) {
           observer.next(
             actions.setExecutionState({
               kernelStatus: "exited",
-              ref: action.payload.ref
+              kernelRef: action.payload.kernelRef
             })
           );
           observer.complete();
@@ -373,7 +391,7 @@ export function watchSpawn(action$: *, store: *) {
           observer.next(
             actions.setExecutionState({
               kernelStatus: "disconnected",
-              ref: action.payload.ref
+              kernelRef: action.payload.kernelRef
             })
           );
           observer.complete();

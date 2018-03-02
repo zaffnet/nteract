@@ -18,19 +18,19 @@ const byRef = (state = Immutable.Map(), action) => {
       return state;
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
-        [action.payload.ref, "status"],
+        [action.payload.kernelRef, "status"],
         action.payload.kernelStatus
       );
     case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
       switch (action.payload.kernel.type) {
         case "zeromq":
           return state.set(
-            action.payload.ref,
+            action.payload.kernelRef,
             makeLocalKernelRecord(action.payload.kernel)
           );
         case "websocket":
           return state.set(
-            action.payload.ref,
+            action.payload.kernelRef,
             makeRemoteKernelRecord(action.payload.kernel)
           );
         default:

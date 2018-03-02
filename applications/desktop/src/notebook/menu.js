@@ -76,9 +76,9 @@ export function triggerWindowRefresh(store: *, filename: string) {
 
 export function dispatchRestartKernel(store: *) {
   const state = store.getState();
-  const ref = selectors.currentKernel(state);
+  const kernelRef = selectors.currentKernel(state);
 
-  store.dispatch(actions.restartKernel({ clearOutputs: false, ref }));
+  store.dispatch(actions.restartKernel({ clearOutputs: false, kernelRef }));
 }
 
 export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
@@ -103,7 +103,7 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
             : cwdKernelFallback();
 
           // Create a brand new kernel
-          const ref = stateModule.createKernelRef();
+          const kernelRef = stateModule.createKernelRef();
 
           store.dispatch(
             // TODO: get a KernelRef here and use it in action.
@@ -111,7 +111,7 @@ export function triggerKernelRefresh(store: *, filename: string): Promise<*> {
               kernelSpecName: kernel.kernelSpecName,
               cwd,
               selectNextKernel: true,
-              ref
+              kernelRef
             })
           );
         }
@@ -146,14 +146,14 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
     : cwdKernelFallback();
 
   // Create a brand new kernel
-  const ref = stateModule.createKernelRef();
+  const kernelRef = stateModule.createKernelRef();
 
   store.dispatch(
     actions.launchKernel({
       kernelSpec: spec,
       cwd,
       selectNextKernel: true,
-      ref
+      kernelRef
     })
   );
 }
@@ -204,8 +204,8 @@ export function dispatchUnhideAll(store: *) {
 
 export function dispatchKillKernel(store: *) {
   const state = store.getState();
-  const ref = selectors.currentKernel(state);
-  store.dispatch(actions.killKernel({ restarting: false, ref }));
+  const kernelRef = selectors.currentKernel(state);
+  store.dispatch(actions.killKernel({ restarting: false, kernelRef }));
 }
 
 export function dispatchInterruptKernel(store: *) {
@@ -219,17 +219,17 @@ export function dispatchInterruptKernel(store: *) {
       level: "error"
     });
   } else {
-    const ref = selectors.currentKernel(state);
+    const kernelRef = selectors.currentKernel(state);
 
-    store.dispatch(actions.interruptKernel({ ref }));
+    store.dispatch(actions.interruptKernel({ kernelRef }));
   }
 }
 
 export function dispatchRestartClearAll(store: *) {
   const state = store.getState();
-  const ref = selectors.currentKernel(state);
+  const kernelRef = selectors.currentKernel(state);
 
-  store.dispatch(actions.restartKernel({ clearOutputs: true, ref }));
+  store.dispatch(actions.restartKernel({ clearOutputs: true, kernelRef }));
 }
 
 export function dispatchZoomIn() {

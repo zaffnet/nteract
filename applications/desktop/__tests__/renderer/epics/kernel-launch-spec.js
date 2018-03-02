@@ -27,7 +27,7 @@ describe("launchKernelEpic", () => {
       {
         type: actionTypes.LAUNCH_KERNEL,
         payload: {
-          ref: "1234"
+          kernelRef: "1234"
         }
       },
       {
@@ -43,16 +43,20 @@ describe("launchKernelEpic", () => {
       {
         error: true,
         payload: {
-          error: new Error("launchKernel needs a kernelSpec and a kernel ref"),
-          ref: "1234"
+          error: new Error(
+            "launchKernel needs a kernelSpec and a kernel kernelRef"
+          ),
+          kernelRef: "1234"
         },
         type: "LAUNCH_KERNEL_FAILED"
       },
       {
         error: true,
         payload: {
-          error: new Error("launchKernel needs a kernelSpec and a kernel ref"),
-          ref: undefined
+          error: new Error(
+            "launchKernel needs a kernelSpec and a kernel kernelRef"
+          ),
+          kernelRef: undefined
         },
         type: "LAUNCH_KERNEL_FAILED"
       }
@@ -66,7 +70,7 @@ describe("launchKernelEpic", () => {
         kernelSpec: { spec: "hokey", name: "woohoo" },
         cwd: "~",
         selectNextKernel: true,
-        ref: "123"
+        kernelRef: "123"
       })
     );
 
@@ -91,7 +95,7 @@ describe("launchKernelEpic", () => {
       actions.setNotebookKernelInfo({ spec: "hokey", name: "woohoo" }),
       actions.launchKernelSuccessful({
         kernel: {
-          ref: expect.any(String),
+          kernelRef: expect.any(String),
           lastActivity: null,
           type: "zeromq",
           cwd: "~",
@@ -102,11 +106,11 @@ describe("launchKernelEpic", () => {
           kernelSpecName: "woohoo",
           status: "launched"
         },
-        ref: "123"
+        kernelRef: "123"
       }),
       actions.setExecutionState({
         kernelStatus: "launched",
-        ref: "123"
+        kernelRef: "123"
       })
     ]);
   });

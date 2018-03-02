@@ -62,10 +62,10 @@ export const kernelsByRef = createSelector(
   identity
 );
 
-// Get a kernel by ref, using the `props` argument
+// Get a kernel by kernelRef, using the `props` argument
 export const kernel = createSelector(
-  (state: AppState, { ref }: { ref: KernelRef }) =>
-    kernelsByRef(state).get(ref),
+  (state: AppState, { kernelRef }: { kernelRef: KernelRef }) =>
+    kernelsByRef(state).get(kernelRef),
   identity
 );
 

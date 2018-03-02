@@ -167,7 +167,7 @@ export const launchKernelWhenNotebookSetEpic = (
       return actions.launchKernelByName({
         kernelSpecName,
         cwd,
-        ref: action.payload.kernelRef,
+        kernelRef: action.payload.kernelRef,
         selectNextKernel: true
       });
     })

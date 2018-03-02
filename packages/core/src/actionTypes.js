@@ -219,7 +219,7 @@ export type SetLanguageInfoAction = {
   type: "SET_LANGUAGE_INFO",
   payload: {
     langInfo: LanguageInfoMetadata,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -398,7 +398,7 @@ export type SetExecutionStateAction = {
   type: "SET_EXECUTION_STATE",
   payload: {
     kernelStatus: string,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -445,7 +445,7 @@ export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 export type InterruptKernel = {
   type: "INTERRUPT_KERNEL",
   payload: {
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -453,7 +453,7 @@ export const INTERRUPT_KERNEL_SUCCESSFUL = "INTERRUPT_KERNEL_SUCCESSFUL";
 export type InterruptKernelSuccessful = {
   type: "INTERRUPT_KERNEL_SUCCESSFUL",
   payload: {
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -462,7 +462,7 @@ export type InterruptKernelFailed = {
   type: "INTERRUPT_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -472,7 +472,7 @@ export type KillKernelAction = {
   type: "KILL_KERNEL",
   payload: {
     restarting: boolean,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -481,7 +481,7 @@ export type KillKernelFailed = {
   type: "KILL_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -490,7 +490,7 @@ export const KILL_KERNEL_SUCCESSFUL = "KILL_KERNEL_SUCCESSFUL";
 export type KillKernelSuccessful = {
   type: "KILL_KERNEL_SUCCESSFUL",
   payload: {
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -505,7 +505,7 @@ export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
     clearOutputs: boolean,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -514,7 +514,7 @@ export type RestartKernelFailed = {
   type: "RESTART_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -523,7 +523,7 @@ export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
   type: "RESTART_KERNEL_SUCCESSFUL",
   payload: {
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -531,7 +531,7 @@ export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
   payload: {
-    ref: KernelRef,
+    kernelRef: KernelRef,
     kernelSpec: Object,
     cwd: string,
     selectNextKernel: boolean
@@ -544,7 +544,7 @@ export type LaunchKernelByNameAction = {
   payload: {
     kernelSpecName: string,
     cwd: string,
-    ref: KernelRef,
+    kernelRef: KernelRef,
     selectNextKernel: boolean
   }
 };
@@ -554,7 +554,7 @@ export type LaunchKernelFailed = {
   type: "LAUNCH_KERNEL_FAILED",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -564,7 +564,7 @@ export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -572,7 +572,7 @@ export const KERNEL_RAW_STDOUT = "KERNEL_RAW_STDOUT";
 export type KernelRawStdout = {
   type: "KERNEL_RAW_STDOUT",
   payload: {
-    ref: KernelRef,
+    kernelRef: KernelRef,
     text: string
   }
 };
@@ -581,7 +581,7 @@ export const KERNEL_RAW_STDERR = "KERNEL_RAW_STDERR";
 export type KernelRawStderr = {
   type: "KERNEL_RAW_STDERR",
   payload: {
-    ref: KernelRef,
+    kernelRef: KernelRef,
     text: string
   }
 };
@@ -591,7 +591,7 @@ export type DeleteConnectionFileFailedAction = {
   type: "DELETE_CONNECTION_FILE_FAILED",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
@@ -601,7 +601,7 @@ export const DELETE_CONNECTION_FILE_SUCCESSFUL =
 export type DeleteConnectionFileSuccessfulAction = {
   type: "DELETE_CONNECTION_FILE_SUCCESSFUL",
   payload: {
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -610,7 +610,7 @@ export type ShutdownReplySucceeded = {
   type: "SHUTDOWN_REPLY_SUCCEEDED",
   payload: {
     text: string,
-    ref: KernelRef
+    kernelRef: KernelRef
   }
 };
 
@@ -619,7 +619,7 @@ export type ShutdownReplyTimedOut = {
   type: "SHUTDOWN_REPLY_TIMED_OUT",
   payload: {
     error: Error,
-    ref: KernelRef
+    kernelRef: KernelRef
   },
   error: true
 };
