@@ -180,7 +180,7 @@ export const launchKernelEpic = (
         return of(
           actions.launchKernelFailed({
             error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
-            kernelRef: action && action.payload && action.payload.kernelRef
+            kernelRef: action.payload && action.payload.kernelRef
           })
         );
       }
