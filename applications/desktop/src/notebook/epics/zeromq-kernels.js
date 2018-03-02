@@ -92,7 +92,6 @@ export function launchKernelObservable(
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {
-            // TODO: Include the kernelRef when we need it here
             kernelRef: state.createKernelRef(),
             type: "zeromq",
             hostRef: null,
