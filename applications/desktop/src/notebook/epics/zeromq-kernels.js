@@ -92,7 +92,6 @@ export function launchKernelObservable(
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {
-            // TODO: Include the kernelRef when we need it here
             kernelRef: state.createKernelRef(),
             type: "zeromq",
             hostRef: null,
@@ -181,7 +180,7 @@ export const launchKernelEpic = (
         return of(
           actions.launchKernelFailed({
             error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
-            kernelRef: action && action.payload && action.payload.kernelRef
+            kernelRef: action.payload && action.payload.kernelRef
           })
         );
       }

@@ -208,7 +208,6 @@ export function dispatchUnhideAll(store: *) {
 export function dispatchKillKernel(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
-  console.log(kernelRef);
   store.dispatch(actions.killKernel({ restarting: false, kernelRef }));
 }
 
