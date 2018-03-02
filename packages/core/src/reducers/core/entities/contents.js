@@ -49,9 +49,9 @@ import type {
   SendExecuteMessageAction
 } from "../../../actionTypes";
 
-import type { DocumentRecord } from "../../../state";
+import type { DocumentRecord } from "../../../state/entities/contents";
 
-import { makeDocumentRecord } from "../../../state";
+import { makeDocumentRecord } from "../../../state/entities/contents";
 
 import {
   emptyCodeCell,
