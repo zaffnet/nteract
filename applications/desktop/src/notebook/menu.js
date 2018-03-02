@@ -76,7 +76,7 @@ export function triggerWindowRefresh(store: *, filename: string) {
 
 export function dispatchRestartKernel(store: *) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernel(state);
+  const kernelRef = selectors.currentKernelRef(state);
 
   store.dispatch(actions.restartKernel({ clearOutputs: false, kernelRef }));
 }
@@ -100,7 +100,7 @@ export function promptUserAboutNewKernel(
       },
       index => {
         if (index === 0) {
-          const kernel = selectors.currentKernel(store.getState());
+          const kernel = selectors.currentKernelRef(store.getState());
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
@@ -207,7 +207,8 @@ export function dispatchUnhideAll(store: *) {
 
 export function dispatchKillKernel(store: *) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernel(state);
+  const kernelRef = selectors.currentKernelRef(state);
+  console.log(kernelRef);
   store.dispatch(actions.killKernel({ restarting: false, kernelRef }));
 }
 
@@ -222,7 +223,7 @@ export function dispatchInterruptKernel(store: *) {
       level: "error"
     });
   } else {
-    const kernelRef = selectors.currentKernel(state);
+    const kernelRef = selectors.currentKernelRef(state);
 
     store.dispatch(actions.interruptKernel({ kernelRef }));
   }
@@ -230,7 +231,7 @@ export function dispatchInterruptKernel(store: *) {
 
 export function dispatchRestartClearAll(store: *) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernel(state);
+  const kernelRef = selectors.currentKernelRef(state);
 
   store.dispatch(actions.restartKernel({ clearOutputs: true, kernelRef }));
 }
