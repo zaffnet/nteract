@@ -3,7 +3,6 @@ import { ActionsObservable } from "redux-observable";
 import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 import { actions } from "@nteract/core";
-import { actionTypes } from "@nteract/core";
 
 import { saveEpic, saveAsEpic } from "../../../src/notebook/epics/saving";
 
@@ -24,7 +23,7 @@ describe("saveEpic", () => {
     // TODO: This should be testing that the mocks for fs were called with the
     // filename and notebook from the state tree
 
-    expect(responses).toEqual([{ type: actionTypes.DONE_SAVING }]);
+    expect(responses).toEqual([actions.saveFulfilled()]);
   });
 });
 
@@ -40,8 +39,8 @@ describe("saveAsEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      { type: actionTypes.CHANGE_FILENAME, filename: "great-filename" },
-      { type: actionTypes.SAVE }
+      actions.changeFilename("great-filename"),
+      actions.save()
     ]);
   });
 });

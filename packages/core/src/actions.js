@@ -88,6 +88,10 @@ import type {
   OpenModal,
   CloseModal,
   AddHost,
+  Save,
+  SaveAs,
+  SaveFailed,
+  SaveFulfilled,
   FetchContent,
   FetchContentFulfilled,
   FetchContentFailed,
@@ -664,13 +668,20 @@ export function changeFilename(filename: string): ChangeFilenameAction {
   };
 }
 
-export function save() {
+export function save(): Save {
   return {
     type: actionTypes.SAVE
   };
 }
 
-export function saveFailed(error: Error) {
+export function saveAs(filename: string): SaveAs {
+  return {
+    type: actionTypes.SAVE_AS,
+    filename
+  };
+}
+
+export function saveFailed(error: Error): SaveFailed {
   return {
     type: actionTypes.SAVE_FAILED,
     payload: error,
@@ -678,16 +689,9 @@ export function saveFailed(error: Error) {
   };
 }
 
-export function saveAs(filename: string) {
+export function saveFulfilled(): SaveFulfilled {
   return {
-    type: actionTypes.SAVE_AS,
-    filename
-  };
-}
-
-export function doneSaving() {
-  return {
-    type: actionTypes.DONE_SAVING
+    type: actionTypes.SAVE_FULFILLED
   };
 }
 

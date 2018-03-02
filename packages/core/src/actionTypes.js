@@ -393,11 +393,17 @@ export type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 
-// TODO: Make this action JSON serializable (don't use the Immutable.js version
-//       of the notebook in this action)
-// TODO: Determine the "right" name for this action creator (?)
-export const DONE_SAVING = "DONE_SAVING";
-export type DoneSavingAction = { type: "DONE_SAVING" };
+export const SAVE = "SAVE";
+export type Save = { type: "SAVE" };
+
+export const SAVE_AS = "SAVE_AS";
+export type SaveAs = { type: "SAVE_AS", filename: string };
+
+export const SAVE_FAILED = "SAVE_FAILED";
+export type SaveFailed = { type: "SAVE_FAILED" };
+
+export const SAVE_FULFILLED = "SAVE_FULFILLED";
+export type SaveFulfilled = { type: "SAVE_FULFILLED" };
 
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {
@@ -419,9 +425,6 @@ export type SetNotebookAction = {
     kernelRef?: KernelRef
   }
 };
-
-export const START_SAVING = "START_SAVING";
-export type StartSavingAction = { type: "START_SAVING" };
 
 export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 export type InterruptKernel = {
@@ -610,12 +613,6 @@ export type ShutdownReplyTimedOut = {
 export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
 // TODO: This action needs a proper flow type, its from desktop's github store
 export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
-
-// TODO: Relocate this action type from desktop's app.js
-export const SAVE = "SAVE";
-export const SAVE_FAILED = "SAVE_FAILED";
-// TODO: Relocate this action type from desktop's app.js
-export const SAVE_AS = "SAVE_AS";
 
 // TODO: This needs a proper flow type, is only consumed by the epics
 export const ABORT_EXECUTION = "ABORT_EXECUTION";

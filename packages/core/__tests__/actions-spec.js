@@ -461,10 +461,18 @@ describe("save", () => {
     });
   });
 
-  test("creates a DONE_SAVING action", () => {
-    const fakeNotebook = { nbformat: "eh" };
-    expect(actions.doneSaving()).toEqual({
-      type: actionTypes.DONE_SAVING
+  test("creates a SAVE_FAILED action", () => {
+    const error = new Error("fake");
+    expect(actions.saveFailed(error)).toEqual({
+      type: actionTypes.SAVE_FAILED,
+      error: true,
+      payload: error
+    });
+  });
+
+  test("creates a SAVE_FULFILLED action", () => {
+    expect(actions.saveFulfilled()).toEqual({
+      type: actionTypes.SAVE_FULFILLED
     });
   });
 });

@@ -12,16 +12,8 @@ import {
 } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
-import {
-  setNotebook,
-  saveFailed,
-  doneSaving,
-  fetchContentFailed,
-  fetchContentFulfilled
-} from "../actions";
-
-import { FETCH_CONTENT, SAVE, FETCH_CONTENT_FULFILLED } from "../actionTypes";
-
+import * as actions from "../actions";
+import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
 
 import type { ActionsObservable } from "redux-observable";
@@ -30,14 +22,14 @@ import { contents } from "rx-jupyter";
 
 import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
 
-import type { FetchContent, FetchContentFulfilled } from "../actionTypes";
+import type { FetchContent, FetchContentFulfilled, Save } from "../actionTypes";
 
 export function fetchContentEpic(
   action$: ActionsObservable<*>,
   store: Store<*, *>
 ) {
   return action$.pipe(
-    ofType(FETCH_CONTENT),
+    ofType(actionTypes.FETCH_CONTENT),
     tap((action: FetchContent) => {
       if (!action.payload || !action.payload.path) {
         throw new Error("fetching content needs a path");
@@ -55,7 +47,7 @@ export function fetchContentEpic(
             }
           }),
           map(xhr => {
-            return fetchContentFulfilled({
+            return actions.fetchContentFulfilled({
               path: action.payload.path,
               model: xhr.response,
               kernelRef: action.payload.kernelRef
@@ -63,7 +55,7 @@ export function fetchContentEpic(
           }),
           catchError((xhrError: any) =>
             of(
-              fetchContentFailed({
+              actions.fetchContentFailed({
                 path: action.payload.path,
                 error: xhrError,
                 kernelRef: action.payload.kernelRef
@@ -80,15 +72,15 @@ export function saveContentEpic(
   store: Store<*, *>
 ) {
   return action$.pipe(
-    ofType(SAVE),
-    mergeMap(action => {
+    ofType(actionTypes.SAVE),
+    mergeMap((action: Save) => {
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
 
       // TODO: this will likely make more sense when this becomes less
       // notebook-centric.
       if (!currentNotebook) {
-        return of(saveFailed(new Error("Notebook was not set.")));
+        return of(actions.saveFailed(new Error("Notebook was not set.")));
       }
 
       const filename = selectors.currentFilename(state);
@@ -110,8 +102,8 @@ export function saveContentEpic(
       return contents
         .save(serverConfig, filename, model)
         .pipe(
-          mapTo(doneSaving()),
-          catchError((error: Error) => of(saveFailed(error)))
+          mapTo(actions.saveFulfilled()),
+          catchError((error: Error) => of(actions.saveFailed(error)))
         );
     })
   );
@@ -123,7 +115,7 @@ export function setNotebookEpic(
   store: Store<*, *>
 ) {
   return action$.pipe(
-    ofType(FETCH_CONTENT_FULFILLED),
+    ofType(actionTypes.FETCH_CONTENT_FULFILLED),
     tap((action: FetchContentFulfilled) => {
       if (
         !action.payload ||
@@ -138,7 +130,7 @@ export function setNotebookEpic(
         action.payload.model.type === "notebook"
     ),
     map((action: FetchContentFulfilled) =>
-      setNotebook({
+      actions.setNotebook({
         filename: action.payload.path,
         notebook: fromJS(action.payload.model.content),
         kernelRef: action.payload.kernelRef
