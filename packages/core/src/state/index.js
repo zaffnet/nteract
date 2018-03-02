@@ -148,9 +148,6 @@ export const makeStateRecord: Immutable.RecordFactory<
 });
 
 export type AppRecordProps = {
-  kernel:
-    | ?Immutable.RecordOf<RemoteKernelProps>
-    | ?Immutable.RecordOf<LocalKernelProps>,
   host:
     | ?Immutable.RecordOf<LocalHostRecordProps>
     | ?Immutable.RecordOf<JupyterHostRecordProps>,
@@ -167,7 +164,6 @@ export type AppRecordProps = {
 export const makeAppRecord: Immutable.RecordFactory<
   AppRecordProps
 > = Immutable.Record({
-  kernel: null,
   host: null,
   githubToken: null,
   notificationSystem: {

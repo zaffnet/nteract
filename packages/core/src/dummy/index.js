@@ -105,8 +105,7 @@ export function dummyStore(config: *) {
       notificationSystem: {
         addNotification: () => {} // most of the time you'll want to mock this
       },
-      githubToken: "TOKEN",
-      kernel: makeLocalKernelRecord()
+      githubToken: "TOKEN"
     }),
     config: Immutable.Map({
       theme: "light"

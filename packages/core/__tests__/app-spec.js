@@ -23,12 +23,7 @@ describe("save", () => {
 describe("saveFailed", () => {
   test("should set isSaving to false", () => {
     const originalState = stateModule.makeAppRecord({
-      isSaving: true,
-      kernel: stateModule.makeLocalKernelRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
-      })
+      isSaving: true
     });
 
     const state = reducers.app(originalState, actions.saveFailed());
@@ -39,12 +34,7 @@ describe("saveFailed", () => {
 describe("saveFulfilled", () => {
   test("should set isSaving to false", () => {
     const originalState = stateModule.makeAppRecord({
-      isSaving: true,
-      kernel: stateModule.makeLocalKernelRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
-      })
+      isSaving: true
     });
 
     const state = reducers.app(originalState, actions.saveFulfilled());
@@ -52,35 +42,9 @@ describe("saveFulfilled", () => {
   });
 });
 
-describe("setExecutionState", () => {
-  test("should set the exeuction state to the given value", () => {
-    const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeLocalKernelRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
-      })
-    });
-
-    const action = {
-      type: actionTypes.SET_EXECUTION_STATE,
-      payload: { kernelStatus: "idle" }
-    };
-
-    const state = reducers.app(originalState, action);
-    expect(state.kernel.status).toBe("idle");
-  });
-});
-
 describe("setNotificationSystem", () => {
   test("returns the same originalState if notificationSystem is undefined", () => {
-    const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeLocalKernelRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
-      })
-    });
+    const originalState = stateModule.makeAppRecord();
 
     const action = { type: actionTypes.SET_NOTIFICATION_SYSTEM };
 
@@ -88,13 +52,7 @@ describe("setNotificationSystem", () => {
     expect(state.notificationSystem).toEqual(originalState.notificationSystem);
   });
   test("sets the notificationSystem if given", () => {
-    const originalState = stateModule.makeAppRecord({
-      kernel: stateModule.makeLocalKernelRecord({
-        channels: false,
-        spawn: false,
-        connectionFile: false
-      })
-    });
+    const originalState = stateModule.makeAppRecord();
 
     const action = {
       type: actionTypes.SET_NOTIFICATION_SYSTEM,
