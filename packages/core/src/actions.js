@@ -133,12 +133,11 @@ export const addHost = (payload: {
   payload
 });
 
-export const fetchContent = (
-  payload: { path: string, params: Object, kernelRef?: KernelRef } = {
-    path: "/",
-    params: {}
-  }
-): FetchContent => ({
+export const fetchContent = (payload: {
+  path: string,
+  params: Object,
+  kernelRef?: KernelRef
+}): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
 });
@@ -390,15 +389,13 @@ export function updateCellExecutionCount(
   return setInCell(id, ["execution_count"], count);
 }
 
-export function unhideAll(
-  payload?: { outputHidden: boolean, inputHidden: boolean } = {
-    outputHidden: false,
-    inputHidden: false
-  }
-): UnhideAll {
+export function unhideAll(payload: {
+  outputHidden: boolean,
+  inputHidden: boolean
+}): UnhideAll {
   return {
     type: "UNHIDE_ALL",
-    payload: { outputHidden: false, inputHidden: false, ...payload }
+    payload
   };
 }
 
@@ -442,7 +439,7 @@ export function focusCell(id: string): FocusCellAction {
 
 export function focusNextCell(
   id: ?string,
-  createCellIfUndefined: boolean = true
+  createCellIfUndefined: boolean
 ): FocusNextCellAction {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,

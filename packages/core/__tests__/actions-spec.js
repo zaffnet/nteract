@@ -23,7 +23,9 @@ describe("setLanguageInfo", () => {
 
 describe("unhideAll", () => {
   test("allows being called with sets defaults for outputHidden and inputHidden", () => {
-    expect(actions.unhideAll({ outputHidden: true })).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: true, inputHidden: false })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: true,
@@ -31,7 +33,9 @@ describe("unhideAll", () => {
       }
     });
 
-    expect(actions.unhideAll({ inputHidden: true })).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: false, inputHidden: true })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: false,
@@ -39,7 +43,9 @@ describe("unhideAll", () => {
       }
     });
 
-    expect(actions.unhideAll()).toEqual({
+    expect(
+      actions.unhideAll({ outputHidden: false, inputHidden: false })
+    ).toEqual({
       type: actionTypes.UNHIDE_ALL,
       payload: {
         outputHidden: false,
