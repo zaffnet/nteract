@@ -359,7 +359,7 @@ const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
   filename: selectors.currentFilename(state),
   notebook: selectors.currentNotebook(state),
-  currentKernelRef: selectors.currentKernelRefCore(state)
+  currentKernelRef: selectors.currentKernelRef(state)
 });
 
 const mapDispatchToProps = dispatch => ({
