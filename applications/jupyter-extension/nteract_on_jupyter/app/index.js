@@ -27,8 +27,6 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
-    componentWillMount(): void {}
-
     componentDidMount(): void {
       const hostRef = state.createHostRef();
       const kernelRef = state.createKernelRef();
