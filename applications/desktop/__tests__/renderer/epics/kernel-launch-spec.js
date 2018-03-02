@@ -43,9 +43,7 @@ describe("launchKernelEpic", () => {
       {
         error: true,
         payload: {
-          error: new Error(
-            "launchKernel needs a kernelSpec and a kernel kernelRef"
-          ),
+          error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
           kernelRef: "1234"
         },
         type: "LAUNCH_KERNEL_FAILED"
@@ -53,9 +51,7 @@ describe("launchKernelEpic", () => {
       {
         error: true,
         payload: {
-          error: new Error(
-            "launchKernel needs a kernelSpec and a kernel kernelRef"
-          ),
+          error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
           kernelRef: undefined
         },
         type: "LAUNCH_KERNEL_FAILED"
