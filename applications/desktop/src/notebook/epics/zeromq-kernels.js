@@ -174,7 +174,6 @@ export const launchKernelEpic = (
     // Then launch the next one
     switchMap((action: LaunchKernelAction) => {
       if (
-        !action ||
         !action.payload ||
         !action.payload.kernelSpec ||
         !action.payload.kernelRef
