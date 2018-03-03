@@ -61,7 +61,7 @@ import type {
   AppendOutput,
   UpdateDisplay,
   UpdateDisplayFailed,
-  FocusNextCellAction,
+  FocusNextCell,
   FocusCellEditorAction,
   FocusNextCellEditorAction,
   FocusPreviousCellEditorAction,
@@ -450,14 +450,15 @@ export function focusCell(payload: {
   };
 }
 
-export function focusNextCell(
+// TODO: #2618
+export function focusNextCell(payload: {
   id: ?string,
-  createCellIfUndefined: boolean
-): FocusNextCellAction {
+  createCellIfUndefined: boolean,
+  contentRef?: ContentRef
+}): FocusNextCell {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
-    id,
-    createCellIfUndefined
+    payload
   };
 }
 

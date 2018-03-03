@@ -209,20 +209,20 @@ describe("focusNextCell", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.FOCUS_NEXT_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.focusNextCell({ id, createCellIfUndefined: false })
+    );
     expect(state.get("cellFocused")).not.toBeNull();
   });
   test("should return same state if last cell and createCellIfUndefined is false", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.FOCUS_NEXT_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.focusNextCell({ id, createCellIfUndefined: false })
+    );
     expect(state.get("cellFocused")).not.toBeNull();
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
   });
@@ -233,14 +233,10 @@ describe("focusNextCell", () => {
     );
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = {
-      type: actionTypes.FOCUS_NEXT_CELL,
-      id,
-      createCellIfUndefined: true
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.focusNextCell({ id, createCellIfUndefined: true })
+    );
     const newCellId = state.getIn(["notebook", "cellOrder"]).last();
     const newCellType = state.getIn([
       "notebook",
@@ -260,14 +256,10 @@ describe("focusNextCell", () => {
     );
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = {
-      type: actionTypes.FOCUS_NEXT_CELL,
-      id,
-      createCellIfUndefined: true
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.focusNextCell({ id, createCellIfUndefined: true })
+    );
     const newCellId = state.getIn(["notebook", "cellOrder"]).last();
     const newCellType = state.getIn([
       "notebook",

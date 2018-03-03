@@ -253,17 +253,25 @@ describe("focusCell", () => {
 
 describe("focusNextCell", () => {
   test("creates a FOCUS_NEXT_CELL action", () => {
-    expect(actions.focusNextCell("1234", false)).toEqual({
+    expect(
+      actions.focusNextCell({ id: "1234", createCellIfUndefined: false })
+    ).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL,
-      id: "1234",
-      createCellIfUndefined: false
+      payload: {
+        id: "1234",
+        createCellIfUndefined: false
+      }
     });
   });
   test("creates a FOCUS_NEXT_CELL action with cell creation flag", () => {
-    expect(actions.focusNextCell("1234", true)).toEqual({
+    expect(
+      actions.focusNextCell({ id: "1234", createCellIfUndefined: true })
+    ).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL,
-      id: "1234",
-      createCellIfUndefined: true
+      payload: {
+        id: "1234",
+        createCellIfUndefined: true
+      }
     });
   });
 });

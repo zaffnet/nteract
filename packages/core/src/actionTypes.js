@@ -301,11 +301,15 @@ export type FocusCell = {
   }
 };
 
+// TODO: #2618
 export const FOCUS_NEXT_CELL = "FOCUS_NEXT_CELL";
-export type FocusNextCellAction = {
+export type FocusNextCell = {
   type: "FOCUS_NEXT_CELL",
-  id: ?CellID,
-  createCellIfUndefined: boolean
+  payload: {
+    id: ?CellID,
+    createCellIfUndefined: boolean,
+    contentRef?: ContentRef
+  }
 };
 
 export const FOCUS_PREVIOUS_CELL = "FOCUS_PREVIOUS_CELL";

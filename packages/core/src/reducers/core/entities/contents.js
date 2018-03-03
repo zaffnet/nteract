@@ -29,7 +29,7 @@ import type {
   AppendOutput,
   SaveFulfilled,
   UpdateDisplay,
-  FocusNextCellAction,
+  FocusNextCell,
   FocusCellEditorAction,
   FocusNextCellEditorAction,
   FocusPreviousCellEditorAction,
@@ -318,10 +318,10 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplay) {
   );
 }
 
-function focusNextCell(state: DocumentRecord, action: FocusNextCellAction) {
+function focusNextCell(state: DocumentRecord, action: FocusNextCell) {
   const cellOrder = state.getIn(["notebook", "cellOrder"], Immutable.List());
 
-  const id = action.id ? action.id : state.get("cellFocused");
+  const id = action.payload.id ? action.payload.id : state.get("cellFocused");
   // If for some reason we neither have an ID here or a focused cell, we just
   // keep the state consistent
   if (!id) {
@@ -335,7 +335,7 @@ function focusNextCell(state: DocumentRecord, action: FocusNextCellAction) {
 
   // When at the end, create a new cell
   if (nextIndex >= cellOrder.size) {
-    if (!action.createCellIfUndefined) {
+    if (!action.payload.createCellIfUndefined) {
       return state;
     }
 
@@ -734,7 +734,7 @@ type DocumentAction =
   | FocusPreviousCellEditorAction
   | FocusPreviousCellAction
   | FocusNextCellEditorAction
-  | FocusNextCellAction
+  | FocusNextCell
   | FocusCellEditorAction
   | FocusCell
   | SetNotebook

@@ -115,7 +115,8 @@ const mapDispatchToCellProps = (dispatch, { id }) => ({
     dispatch(actions.focusPreviousCellEditor(id));
   },
   focusBelowCell: () => {
-    dispatch(actions.focusNextCell(id, true));
+    // TODO: #2618
+    dispatch(actions.focusNextCell({ id, createCellIfUndefined: true }));
     dispatch(actions.focusNextCellEditor(id));
   }
 });
@@ -302,7 +303,7 @@ type NotebookDispatchProps = {
   moveCell: (sourceId: string, destinationId: string, above: boolean) => *,
   focusCell: (payload: *) => *,
   executeFocusedCell: () => *,
-  focusNextCell: (*, *) => *,
+  focusNextCell: (*) => *,
   focusNextCellEditor: () => *
 };
 
@@ -328,7 +329,7 @@ const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
     dispatch(actions.moveCell(sourceId, destinationId, above)),
   focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
-  focusNextCell: (...args) => dispatch(actions.focusNextCell(...args)),
+  focusNextCell: (payload: *) => dispatch(actions.focusNextCell(payload)),
   focusNextCellEditor: () => dispatch(actions.focusNextCellEditor())
 });
 
@@ -390,7 +391,8 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
     if (e.shiftKey) {
       // Couldn't focusNextCell just do focusing of both?
-      focusNextCell(null, true);
+      // TODO: #2618
+      focusNextCell({ id: null, createCellIfUndefined: true });
       focusNextCellEditor();
     }
   }
