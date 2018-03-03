@@ -195,7 +195,7 @@
     "unified": "^6.1.5",
     "unist-builder": "^1.0.2",
     "url-join": "^4.0.0",
-    "url-loader": "^0.6.2",
+    "url-loader": "^1.0.0",
     "url-search-params": "^0.10.0",
     "uuid": "^3.1.0",
     "vega": "^2.6.5",
