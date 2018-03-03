@@ -113,7 +113,8 @@ const mapDispatchToCellProps = (dispatch, { id }) => ({
   focusAboveCell: () => {
     // TODO: #2618
     dispatch(actions.focusPreviousCell({ id }));
-    dispatch(actions.focusPreviousCellEditor(id));
+    // TODO: #2618
+    dispatch(actions.focusPreviousCellEditor({ id }));
   },
   focusBelowCell: () => {
     // TODO: #2618

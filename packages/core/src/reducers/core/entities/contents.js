@@ -32,7 +32,7 @@ import type {
   FocusNextCell,
   FocusCellEditorAction,
   FocusNextCellEditor,
-  FocusPreviousCellEditorAction,
+  FocusPreviousCellEditor,
   RemoveCellAction,
   FocusCell,
   NewCellAppendAction,
@@ -395,13 +395,15 @@ function focusNextCellEditor(
 
 function focusPreviousCellEditor(
   state: DocumentRecord,
-  action: FocusPreviousCellEditorAction
+  action: FocusPreviousCellEditor
 ) {
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
   );
-  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+  const curIndex = cellOrder.findIndex(
+    (id: CellID) => id === action.payload.id
+  );
   const nextIndex = Math.max(0, curIndex - 1);
 
   return state.set("editorFocused", cellOrder.get(nextIndex));
@@ -733,7 +735,7 @@ function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
 
 type DocumentAction =
   | ToggleStickyCellAction
-  | FocusPreviousCellEditorAction
+  | FocusPreviousCellEditor
   | FocusPreviousCell
   | FocusNextCellEditor
   | FocusNextCell

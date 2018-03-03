@@ -314,10 +314,10 @@ describe("focusPreviousCellEditor", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.focusPreviousCellEditor({ id })
+    );
     expect(state.get("editorFocused")).toBe(previousId);
   });
 });

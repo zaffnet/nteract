@@ -296,9 +296,9 @@ describe("focusCellEditor", () => {
 
 describe("focusPreviousCellEditor", () => {
   test("creates a FOCUS_PREVIOUS_CELL_EDITOR action", () => {
-    expect(actions.focusPreviousCellEditor("1234")).toEqual({
+    expect(actions.focusPreviousCellEditor({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });

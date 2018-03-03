@@ -338,10 +338,14 @@ export type FocusNextCellEditor = {
   }
 };
 
+// TODO: #2618
 export const FOCUS_PREVIOUS_CELL_EDITOR = "FOCUS_PREVIOUS_CELL_EDITOR";
-export type FocusPreviousCellEditorAction = {
+export type FocusPreviousCellEditor = {
   type: "FOCUS_PREVIOUS_CELL_EDITOR",
-  id: ?CellID
+  payload: {
+    id: ?CellID,
+    contentRef?: ContentRef
+  }
 };
 
 export const TOGGLE_STICKY_CELL = "TOGGLE_STICKY_CELL";
