@@ -31,7 +31,7 @@ import type {
   UpdateDisplay,
   FocusNextCell,
   FocusCellEditorAction,
-  FocusNextCellEditorAction,
+  FocusNextCellEditor,
   FocusPreviousCellEditorAction,
   RemoveCellAction,
   FocusCell,
@@ -372,14 +372,14 @@ function focusCellEditor(state: DocumentRecord, action: FocusCellEditorAction) {
 
 function focusNextCellEditor(
   state: DocumentRecord,
-  action: FocusNextCellEditorAction
+  action: FocusNextCellEditor
 ) {
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
   );
 
-  const id = action.id ? action.id : state.get("editorFocused");
+  const id = action.payload.id ? action.payload.id : state.get("editorFocused");
 
   // If for some reason we neither have an ID here or a focused editor, we just
   // keep the state consistent
@@ -735,7 +735,7 @@ type DocumentAction =
   | ToggleStickyCellAction
   | FocusPreviousCellEditorAction
   | FocusPreviousCell
-  | FocusNextCellEditorAction
+  | FocusNextCellEditor
   | FocusNextCell
   | FocusCellEditorAction
   | FocusCell

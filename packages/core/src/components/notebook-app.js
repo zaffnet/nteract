@@ -118,7 +118,8 @@ const mapDispatchToCellProps = (dispatch, { id }) => ({
   focusBelowCell: () => {
     // TODO: #2618
     dispatch(actions.focusNextCell({ id, createCellIfUndefined: true }));
-    dispatch(actions.focusNextCellEditor(id));
+    // TODO: #2618
+    dispatch(actions.focusNextCellEditor({ id }));
   }
 });
 
@@ -305,7 +306,7 @@ type NotebookDispatchProps = {
   focusCell: (payload: *) => *,
   executeFocusedCell: () => *,
   focusNextCell: (*) => *,
-  focusNextCellEditor: () => *
+  focusNextCellEditor: (*) => *
 };
 
 const mapStateToProps = (
@@ -331,7 +332,8 @@ const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
   focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
   focusNextCell: (payload: *) => dispatch(actions.focusNextCell(payload)),
-  focusNextCellEditor: () => dispatch(actions.focusNextCellEditor())
+  focusNextCellEditor: (payload: *) =>
+    dispatch(actions.focusNextCellEditor(payload))
 });
 
 export class NotebookApp extends React.PureComponent<NotebookProps> {
@@ -394,7 +396,8 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
       // Couldn't focusNextCell just do focusing of both?
       // TODO: #2618
       focusNextCell({ id: null, createCellIfUndefined: true });
-      focusNextCellEditor();
+      // TODO: #2618
+      focusNextCellEditor({ id: null });
     }
   }
 

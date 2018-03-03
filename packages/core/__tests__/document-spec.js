@@ -303,10 +303,7 @@ describe("focusNextCellEditor", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.FOCUS_NEXT_CELL_EDITOR, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.focusNextCellEditor({ id }));
     expect(state.get("editorFocused")).not.toBeNull();
   });
 });
