@@ -82,9 +82,7 @@ describe("createExecuteCellStream", () => {
         })
       }
     };
-    const action$ = ActionsObservable.of({
-      type: actionTypes.SEND_EXECUTE_REQUEST
-    });
+    const action$ = ActionsObservable.of(actions.sendExecuteRequest({}));
     const observable = createExecuteCellStream(action$, store, "source", "id");
     observable.pipe(toArray()).subscribe(
       actions => {
@@ -147,11 +145,7 @@ describe("createExecuteCellStream", () => {
     const actionBuffer = [];
     observable.subscribe(x => actionBuffer.push(x), err => done.fail(err));
     expect(actionBuffer).toEqual([
-      {
-        type: actionTypes.SEND_EXECUTE_REQUEST,
-        id: "id",
-        message
-      }
+      actions.sendExecuteRequest({ id: "id", message })
     ]);
     done();
   });

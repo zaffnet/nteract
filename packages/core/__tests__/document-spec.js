@@ -1034,11 +1034,10 @@ describe("sendExecuteRequest", () => {
       })
     });
 
-    const state = reducers(initialState, {
-      type: actionTypes.SEND_EXECUTE_REQUEST,
-      id,
-      message: {}
-    });
+    const state = reducers(
+      initialState,
+      actions.sendExecuteRequest({ id, message: {} })
+    );
 
     expect(state.getIn(["transient", "cellMap", id, "status"])).toEqual(
       "queued"

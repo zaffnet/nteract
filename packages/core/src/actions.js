@@ -3,7 +3,12 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
-import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
+import type {
+  ContentRef,
+  HostRef,
+  KernelRef,
+  KernelspecsRef
+} from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
@@ -73,7 +78,7 @@ import type {
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
-  SendExecuteMessageAction,
+  SendExecuteRequest,
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
@@ -650,14 +655,15 @@ export function executeFocusedCell(): ExecuteFocusedCellAction {
   };
 }
 
-export function sendExecuteMessage(
+// TODO: #2618
+export function sendExecuteRequest(payload: {
   id: string,
-  message: *
-): SendExecuteMessageAction {
+  message: *,
+  contentRef?: ContentRef
+}): SendExecuteRequest {
   return {
     type: actionTypes.SEND_EXECUTE_REQUEST,
-    id,
-    message
+    payload
   };
 }
 

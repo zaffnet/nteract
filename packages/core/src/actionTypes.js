@@ -1,5 +1,10 @@
 /* @flow */
-import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
+import type {
+  ContentRef,
+  HostRef,
+  KernelRef,
+  KernelspecsRef
+} from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
@@ -223,11 +228,15 @@ export type SetLanguageInfoAction = {
   }
 };
 
+// TODO: #2618
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
-export type SendExecuteMessageAction = {
+export type SendExecuteRequest = {
   type: "SEND_EXECUTE_REQUEST",
-  id: CellID,
-  message: ExecuteRequest
+  payload: {
+    id: CellID,
+    message: ExecuteRequest,
+    contentRef?: ContentRef
+  }
 };
 
 export const EXECUTE_CELL = "EXECUTE_CELL";

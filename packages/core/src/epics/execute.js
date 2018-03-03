@@ -150,8 +150,9 @@ export function createExecuteCellStream(
 
   return merge(
     // We make sure to propagate back to "ourselves" the actual message
-    // that we sent to the kernel with the sendExecuteMessage action
-    of(actions.sendExecuteMessage(id, message)),
+    // that we sent to the kernel with the sendExecuteRequest action
+    // TODO: #2618
+    of(actions.sendExecuteRequest({ id, message })),
     // Merging it in with the actual stream
     cellStream
   );

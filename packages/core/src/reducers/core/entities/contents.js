@@ -46,7 +46,7 @@ import type {
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
   SetInCellAction,
-  SendExecuteMessageAction
+  SendExecuteRequest
 } from "../../../actionTypes";
 
 import type { DocumentRecord } from "../../../state/entities/contents";
@@ -546,11 +546,8 @@ function acceptPayloadMessage(
   return state;
 }
 
-function sendExecuteRequest(
-  state: DocumentRecord,
-  action: SendExecuteMessageAction
-) {
-  const { id } = action;
+function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
+  const { id } = action.payload;
   // TODO: Record the last execute request for this cell
 
   // * Clear outputs
@@ -762,7 +759,7 @@ type DocumentAction =
   | ChangeCellTypeAction
   | ToggleCellExpansionAction
   | AcceptPayloadMessageAction
-  | SendExecuteMessageAction
+  | SendExecuteRequest
   | SaveFulfilled
   | RestartKernel
   | ClearAllOutputs
