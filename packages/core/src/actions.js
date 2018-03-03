@@ -66,7 +66,7 @@ import type {
   FocusNextCellEditorAction,
   FocusPreviousCellEditorAction,
   RemoveCellAction,
-  FocusCellAction,
+  FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
   MoveCellAction,
@@ -431,10 +431,14 @@ export function updateCellStatus(
 
 /* Unlike focus next & previous, to set focus, we require an ID,
    because the others are based on there already being a focused cell */
-export function focusCell(id: string): FocusCellAction {
+// TODO: #2618
+export function focusCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): FocusCell {
   return {
     type: actionTypes.FOCUS_CELL,
-    id
+    payload
   };
 }
 

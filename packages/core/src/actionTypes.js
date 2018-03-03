@@ -272,8 +272,15 @@ export type ExecuteFailed = {
   payload: Error
 };
 
+// TODO: #2618
 export const FOCUS_CELL = "FOCUS_CELL";
-export type FocusCellAction = { type: "FOCUS_CELL", id: ?CellID };
+export type FocusCell = {
+  type: "FOCUS_CELL",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
 export const FOCUS_NEXT_CELL = "FOCUS_NEXT_CELL";
 export type FocusNextCellAction = {

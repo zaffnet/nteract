@@ -34,7 +34,7 @@ import type {
   FocusNextCellEditorAction,
   FocusPreviousCellEditorAction,
   RemoveCellAction,
-  FocusCellAction,
+  FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
   MoveCellAction,
@@ -167,8 +167,8 @@ function setNotebookCheckpoint(state: DocumentRecord, action: SaveFulfilled) {
   return state.set("savedNotebook", state.get("notebook"));
 }
 
-function focusCell(state: DocumentRecord, action: FocusCellAction) {
-  return state.set("cellFocused", action.id);
+function focusCell(state: DocumentRecord, action: FocusCell) {
+  return state.set("cellFocused", action.payload.id);
 }
 
 function clearOutputs(state: DocumentRecord, action: ClearOutputsAction) {
@@ -725,17 +725,14 @@ function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
   return state;
 }
 
-type FocusCellActionType =
+type DocumentAction =
+  | ToggleStickyCellAction
   | FocusPreviousCellEditorAction
   | FocusPreviousCellAction
   | FocusNextCellEditorAction
   | FocusNextCellAction
   | FocusCellEditorAction
-  | FocusCellAction;
-
-type DocumentAction =
-  | ToggleStickyCellAction
-  | FocusCellActionType
+  | FocusCell
   | SetNotebook
   | ClearOutputsAction
   | AppendOutputAction

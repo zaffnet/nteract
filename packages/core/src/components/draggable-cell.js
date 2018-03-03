@@ -39,7 +39,7 @@ type Props = {|
   connectDragPreview: (img: Image) => void,
   connectDragSource: (el: ?React$Element<any>) => void,
   connectDropTarget: (el: ?React$Element<any>) => void,
-  selectCell: () => void,
+  focusCell: (payload: *) => *,
   id: string,
   isDragging: boolean,
   isOver: boolean,
@@ -119,6 +119,11 @@ class DraggableCellView extends React.Component<Props, State> {
     };
   }
 
+  selectCell = () => {
+    // TODO: #2618
+    this.props.focusCell({ id: this.props.id });
+  };
+
   render(): ?React$Element<any> {
     return this.props.connectDropTarget(
       <div
@@ -141,7 +146,7 @@ class DraggableCellView extends React.Component<Props, State> {
         {this.props.connectDragSource(
           <div
             className="cell-drag-handle"
-            onClick={this.props.selectCell}
+            onClick={this.selectCell}
             role="presentation"
           />
         )}

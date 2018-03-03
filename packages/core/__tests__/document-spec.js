@@ -199,10 +199,7 @@ describe("setLanguageInfo", () => {
 describe("focusCell", () => {
   test("should set cellFocused to the appropriate cell ID", () => {
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.FOCUS_CELL, id };
-
-    const state = reducers(monocellDocument, action);
+    const state = reducers(monocellDocument, actions.focusCell({ id }));
     expect(state.get("cellFocused")).toBe(id);
   });
 });

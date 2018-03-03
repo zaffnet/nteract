@@ -244,9 +244,9 @@ describe("removeCell", () => {
 
 describe("focusCell", () => {
   test("creates a FOCUS_CELL action", () => {
-    expect(actions.focusCell("1234")).toEqual({
+    expect(actions.focusCell({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });

@@ -106,7 +106,8 @@ const mapStateToCellProps = (state, { id }) => {
 };
 
 const mapDispatchToCellProps = (dispatch, { id }) => ({
-  selectCell: () => dispatch(actions.focusCell(id)),
+  // TODO: #2618
+  selectCell: () => dispatch(actions.focusCell({ id })),
   focusEditor: () => dispatch(actions.focusCellEditor(id)),
   unfocusEditor: () => dispatch(actions.focusCellEditor(null)),
   focusAboveCell: () => {
@@ -299,7 +300,7 @@ type NotebookStateProps = {
 
 type NotebookDispatchProps = {
   moveCell: (sourceId: string, destinationId: string, above: boolean) => *,
-  selectCell: (id: string) => *,
+  focusCell: (payload: *) => *,
   executeFocusedCell: () => *,
   focusNextCell: (*, *) => *,
   focusNextCellEditor: () => *
@@ -325,7 +326,7 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
   moveCell: (sourceId: string, destinationId: string, above: boolean) =>
     dispatch(actions.moveCell(sourceId, destinationId, above)),
-  selectCell: (id: string) => dispatch(actions.focusCell(id)),
+  focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
   focusNextCell: (...args) => dispatch(actions.focusNextCell(...args)),
   focusNextCellEditor: () => dispatch(actions.focusNextCellEditor())
@@ -418,13 +419,11 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
   }
 
   renderCell(id: string): ?React$Element<any> {
-    const { selectCell } = this.props;
     return (
       <ConnectedCell
         id={id}
         transforms={this.props.transforms}
         displayOrder={this.props.displayOrder}
-        selectCell={selectCell}
         codeMirrorMode={this.props.codeMirrorMode}
       />
     );
@@ -432,13 +431,13 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
   createCellElement(id: string): React$Element<*> {
     const isStickied = this.props.stickyCells.get(id);
-    const { moveCell, selectCell } = this.props;
+    const { moveCell, focusCell } = this.props;
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
         {isStickied ? (
           <PinnedPlaceHolderCell />
         ) : (
-          <DraggableCell moveCell={moveCell} id={id} selectCell={selectCell}>
+          <DraggableCell moveCell={moveCell} id={id} focusCell={focusCell}>
             {this.renderCell(id)}
           </DraggableCell>
         )}
