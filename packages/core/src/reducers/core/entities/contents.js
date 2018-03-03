@@ -39,7 +39,7 @@ import type {
   MergeCellAfterAction,
   MoveCellAction,
   ToggleStickyCellAction,
-  FocusPreviousCellAction,
+  FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
   UpdateCellStatusAction,
@@ -355,10 +355,12 @@ function focusNextCell(state: DocumentRecord, action: FocusNextCell) {
 
 function focusPreviousCell(
   state: DocumentRecord,
-  action: FocusPreviousCellAction
+  action: FocusPreviousCell
 ): DocumentRecord {
   const cellOrder = state.getIn(["notebook", "cellOrder"], Immutable.List());
-  const curIndex = cellOrder.findIndex((id: CellID) => id === action.id);
+  const curIndex = cellOrder.findIndex(
+    (id: CellID) => id === action.payload.id
+  );
   const nextIndex = Math.max(0, curIndex - 1);
 
   return state.set("cellFocused", cellOrder.get(nextIndex));
@@ -732,7 +734,7 @@ function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
 type DocumentAction =
   | ToggleStickyCellAction
   | FocusPreviousCellEditorAction
-  | FocusPreviousCellAction
+  | FocusPreviousCell
   | FocusNextCellEditorAction
   | FocusNextCell
   | FocusCellEditorAction

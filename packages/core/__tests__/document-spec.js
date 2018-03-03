@@ -280,10 +280,7 @@ describe("focusPreviousCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const previousId = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.FOCUS_PREVIOUS_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.focusPreviousCell({ id }));
     expect(state.get("cellFocused")).toBe(previousId);
   });
 });

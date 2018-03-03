@@ -71,7 +71,7 @@ import type {
   MergeCellAfterAction,
   MoveCellAction,
   ToggleStickyCellAction,
-  FocusPreviousCellAction,
+  FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
   UpdateCellStatusAction,
@@ -469,10 +469,14 @@ export function focusNextCellEditor(id: ?string): FocusNextCellEditorAction {
   };
 }
 
-export function focusPreviousCell(id: ?string): FocusPreviousCellAction {
+// TODO: #2618
+export function focusPreviousCell(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusPreviousCell {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL,
-    id
+    payload
   };
 }
 

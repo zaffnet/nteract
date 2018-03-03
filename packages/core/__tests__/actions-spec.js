@@ -278,9 +278,9 @@ describe("focusNextCell", () => {
 
 describe("focusPreviousCell", () => {
   test("creates a FOCUS_PREVIOUS_CELL action", () => {
-    expect(actions.focusPreviousCell("1234")).toEqual({
+    expect(actions.focusPreviousCell({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_PREVIOUS_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
