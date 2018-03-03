@@ -245,7 +245,8 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
     switchMap((action: NewKernelAction) =>
       action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
-        map(msg => actions.updateDisplay(msg.content)),
+        // TODO: #2618
+        map(msg => actions.updateDisplay({ content: msg.content })),
         catchError(err => of(actions.updateDisplayFailed(err)))
       )
     )

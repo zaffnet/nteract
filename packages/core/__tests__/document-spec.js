@@ -898,14 +898,13 @@ describe("updateDisplay", () => {
           transient: { display_id: "1234" }
         }
       }),
-      {
-        type: actionTypes.UPDATE_DISPLAY,
+      actions.updateDisplay({
         content: {
           output_type: "update_display_data",
           data: { "text/html": "<marquee>WOO</marquee>" },
           transient: { display_id: "1234" }
         }
-      }
+      })
     ];
 
     const state = actionArray.reduce(

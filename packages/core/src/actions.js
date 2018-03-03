@@ -59,7 +59,7 @@ import type {
   ClearAllOutputs,
   ClearOutputs,
   AppendOutput,
-  UpdateDisplayAction,
+  UpdateDisplay,
   UpdateDisplayFailed,
   FocusNextCellAction,
   FocusCellEditorAction,
@@ -836,14 +836,18 @@ export function acceptPayloadMessage(
   };
 }
 
-export function updateDisplay(content: {
-  data: MimeBundle,
-  metadata: JSONObject,
-  transient: { display_id: string }
-}): UpdateDisplayAction {
+// TODO: #2618
+export function updateDisplay(payload: {
+  content: {
+    data: MimeBundle,
+    metadata: JSONObject,
+    transient: { display_id: string }
+  },
+  contentRef?: ContentRef
+}): UpdateDisplay {
   return {
     type: actionTypes.UPDATE_DISPLAY,
-    content
+    payload
   };
 }
 

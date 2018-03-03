@@ -310,20 +310,18 @@ describe("updateDisplayEpic", () => {
       },
       () => {
         expect(responseActions).toEqual([
-          {
-            type: actionTypes.UPDATE_DISPLAY,
+          actions.updateDisplay({
             content: {
               data: { "text/html": "<marquee>wee</marquee>" },
               transient: { display_id: "1234" }
             }
-          },
-          {
-            type: actionTypes.UPDATE_DISPLAY,
+          }),
+          actions.updateDisplay({
             content: {
               data: { "text/plain": "i am text" },
               transient: { display_id: "here" }
             }
-          }
+          })
         ]);
         done();
       }

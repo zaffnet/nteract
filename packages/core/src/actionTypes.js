@@ -172,13 +172,17 @@ export type AppendOutput = {
   }
 };
 
+// TODO: #2618
 export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
-export type UpdateDisplayAction = {
+export type UpdateDisplay = {
   type: "UPDATE_DISPLAY",
-  content: {
-    data: MimeBundle,
-    metadata: JSONObject,
-    transient: { display_id: string }
+  payload: {
+    content: {
+      data: MimeBundle,
+      metadata: JSONObject,
+      transient: { display_id: string }
+    },
+    contentRef?: ContentRef
   }
 };
 

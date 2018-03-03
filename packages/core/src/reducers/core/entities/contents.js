@@ -28,7 +28,7 @@ import type {
   ClearOutputs,
   AppendOutput,
   SaveFulfilled,
-  UpdateDisplayAction,
+  UpdateDisplay,
   FocusNextCellAction,
   FocusCellEditorAction,
   FocusNextCellEditorAction,
@@ -290,8 +290,8 @@ function appendOutput(state: DocumentRecord, action: AppendOutput) {
     .setIn(["transient", "keyPathsForDisplays", displayID], keyPaths);
 }
 
-function updateDisplay(state: DocumentRecord, action: UpdateDisplayAction) {
-  const { content } = action;
+function updateDisplay(state: DocumentRecord, action: UpdateDisplay) {
+  const { content } = action.payload;
   if (!(content && content.transient && content.transient.display_id)) {
     return state;
   }
@@ -740,7 +740,7 @@ type DocumentAction =
   | SetNotebook
   | ClearOutputs
   | AppendOutput
-  | UpdateDisplayAction
+  | UpdateDisplay
   | MoveCellAction
   | RemoveCellAction
   | NewCellAfterAction
