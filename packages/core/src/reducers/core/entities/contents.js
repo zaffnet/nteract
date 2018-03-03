@@ -26,7 +26,7 @@ import type {
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearOutputs,
-  AppendOutputAction,
+  AppendOutput,
   SaveFulfilled,
   UpdateDisplayAction,
   FocusNextCellAction,
@@ -224,9 +224,9 @@ function clearAllOutputs(
     .set("transient", transient);
 }
 
-function appendOutput(state: DocumentRecord, action: AppendOutputAction) {
-  const output = action.output;
-  const cellID = action.id;
+function appendOutput(state: DocumentRecord, action: AppendOutput) {
+  const output = action.payload.output;
+  const cellID = action.payload.id;
 
   // If it's display data and it doesn't have a display id, fold it in like non
   // display data
@@ -739,7 +739,7 @@ type DocumentAction =
   | FocusCell
   | SetNotebook
   | ClearOutputs
-  | AppendOutputAction
+  | AppendOutput
   | UpdateDisplayAction
   | MoveCellAction
   | RemoveCellAction

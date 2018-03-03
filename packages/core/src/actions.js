@@ -58,7 +58,7 @@ import type {
   NewCellBeforeAction,
   ClearAllOutputs,
   ClearOutputs,
-  AppendOutputAction,
+  AppendOutput,
   UpdateDisplayAction,
   UpdateDisplayFailed,
   FocusNextCellAction,
@@ -813,11 +813,15 @@ export function commMessageAction(message: any) {
   };
 }
 
-export function appendOutput(id: CellID, output: Output): AppendOutputAction {
+// TODO: #2618
+export function appendOutput(payload: {
+  id: CellID,
+  output: Output,
+  contentRef?: ContentRef
+}): AppendOutput {
   return {
     type: actionTypes.APPEND_OUTPUT,
-    id,
-    output
+    payload
   };
 }
 

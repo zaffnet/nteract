@@ -93,7 +93,8 @@ export function executeCellStream(
     // All actions for new outputs
     cellMessages.pipe(
       outputs(),
-      map(output => actions.appendOutput(id, output))
+      // TODO: #2618
+      map(output => actions.appendOutput({ id, output }))
     ),
 
     // clear_output display message

@@ -823,14 +823,13 @@ describe("appendOutput", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder", 2]);
 
-    const action = {
-      type: actionTypes.APPEND_OUTPUT,
+    const action = actions.appendOutput({
       id,
       output: {
         output_type: "display_data",
         data: { "text/html": "<marquee>wee</marquee>" }
       }
-    };
+    });
 
     const state = reducers(originalState, action);
     expect(
@@ -854,15 +853,14 @@ describe("appendOutput", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder", 2]);
 
-    const action = {
-      type: actionTypes.APPEND_OUTPUT,
+    const action = actions.appendOutput({
       id,
       output: {
         output_type: "display_data",
         data: { "text/html": "<marquee>wee</marquee>" },
         transient: { display_id: "1234" }
       }
-    };
+    });
 
     const state = reducers(originalState, action);
     expect(
@@ -891,16 +889,15 @@ describe("updateDisplay", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder", 2]);
 
-    const actions = [
-      {
-        type: actionTypes.APPEND_OUTPUT,
+    const actionArray = [
+      actions.appendOutput({
         id,
         output: {
           output_type: "display_data",
           data: { "text/html": "<marquee>wee</marquee>" },
           transient: { display_id: "1234" }
         }
-      },
+      }),
       {
         type: actionTypes.UPDATE_DISPLAY,
         content: {
@@ -911,7 +908,7 @@ describe("updateDisplay", () => {
       }
     ];
 
-    const state = actions.reduce(
+    const state = actionArray.reduce(
       (s, action) => reducers(s, action),
       originalState
     );

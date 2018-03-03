@@ -161,11 +161,15 @@ export type NewCellAppendAction = {
 export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
 export type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
 
+// TODO: #2618
 export const APPEND_OUTPUT = "APPEND_OUTPUT";
-export type AppendOutputAction = {
+export type AppendOutput = {
   type: "APPEND_OUTPUT",
-  id: CellID,
-  output: Output
+  payload: {
+    id: CellID,
+    output: Output,
+    contentRef?: ContentRef
+  }
 };
 
 export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
