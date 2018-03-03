@@ -440,13 +440,15 @@ export type NewNotebook = {
 
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)
+// TODO: #2618
 export const SET_NOTEBOOK = "SET_NOTEBOOK";
-export type SetNotebookAction = {
+export type SetNotebook = {
   type: "SET_NOTEBOOK",
   payload: {
     notebook: ImmutableNotebook,
     filename: ?string,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 

@@ -22,7 +22,7 @@ import type {
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
   AcceptPayloadMessageAction,
-  SetNotebookAction,
+  SetNotebook,
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearOutputsAction,
@@ -152,7 +152,7 @@ export function cleanCellTransient(state: DocumentRecord, id: string) {
     .setIn(["transient", "cellMap", id], new Immutable.Map());
 }
 
-function setNotebook(state: DocumentRecord, action: SetNotebookAction) {
+function setNotebook(state: DocumentRecord, action: SetNotebook) {
   const { payload: { notebook, filename } } = action;
 
   return state
@@ -736,7 +736,7 @@ type FocusCellActionType =
 type DocumentAction =
   | ToggleStickyCellAction
   | FocusCellActionType
-  | SetNotebookAction
+  | SetNotebook
   | ClearOutputsAction
   | AppendOutputAction
   | UpdateDisplayAction

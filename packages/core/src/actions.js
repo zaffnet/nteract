@@ -53,7 +53,7 @@ import type {
   OverwriteMetadataFieldAction,
   AcceptPayloadMessageAction,
   NewNotebook,
-  SetNotebookAction,
+  SetNotebook,
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearAllOutputs,
@@ -735,11 +735,13 @@ export function newNotebook(payload: {
 }
 
 // Expects notebook to be JS Object or Immutable.js
+// TODO: #2618
 export const setNotebook = (payload: {
   filename: ?string,
   notebook: ImmutableNotebook,
-  kernelRef: KernelRef
-}): SetNotebookAction => ({
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
+}): SetNotebook => ({
   type: actionTypes.SET_NOTEBOOK,
   payload
 });

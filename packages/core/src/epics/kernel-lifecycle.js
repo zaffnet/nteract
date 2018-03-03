@@ -33,7 +33,7 @@ import * as uuid from "uuid";
 import type {
   NewKernelAction,
   RestartKernel,
-  SetNotebookAction
+  SetNotebook
 } from "../actionTypes";
 
 import * as selectors from "../selectors";
@@ -122,7 +122,7 @@ export const launchKernelWhenNotebookSetEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.SET_NOTEBOOK),
-    map((action: SetNotebookAction) => {
+    map((action: SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.payload.filename,
         action.payload.notebook

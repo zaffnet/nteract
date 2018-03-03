@@ -130,6 +130,7 @@ export function setNotebookEpic(
         action.payload.model.type === "notebook"
     ),
     map((action: FetchContentFulfilled) =>
+      // TODO: #2618
       actions.setNotebook({
         filename: action.payload.path,
         notebook: fromJS(action.payload.model.content),
