@@ -192,7 +192,8 @@ export function dispatchRunAll(store: *) {
 }
 
 export function dispatchClearAll(store: *) {
-  store.dispatch(actions.clearAllOutputs());
+  // TODO: #2618
+  store.dispatch(actions.clearAllOutputs({}));
 }
 
 export function dispatchUnhideAll(store: *) {

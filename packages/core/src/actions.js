@@ -282,9 +282,13 @@ export function clearOutputs(payload: {
   };
 }
 
-export function clearAllOutputs(): ClearAllOutputs {
+// TODO: #2618
+export function clearAllOutputs(payload: {
+  contentRef?: ContentRef
+}): ClearAllOutputs {
   return {
-    type: actionTypes.CLEAR_ALL_OUTPUTS
+    type: actionTypes.CLEAR_ALL_OUTPUTS,
+    payload
   };
 }
 

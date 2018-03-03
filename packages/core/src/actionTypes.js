@@ -216,8 +216,12 @@ export type ClearOutputs = {
   }
 };
 
+// TODO: #2618
 export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
-export type ClearAllOutputs = { type: "CLEAR_ALL_OUTPUTS" };
+export type ClearAllOutputs = {
+  type: "CLEAR_ALL_OUTPUTS",
+  payload: { contentRef?: ContentRef }
+};
 
 export const ACCEPT_PAYLOAD_MESSAGE_ACTION = "ACCEPT_PAYLOAD_MESSAGE_ACTION";
 export type AcceptPayloadMessageAction = {

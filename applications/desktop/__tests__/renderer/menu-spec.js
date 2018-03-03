@@ -220,9 +220,7 @@ describe("menu", () => {
 
       menu.dispatchClearAll(store);
 
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.CLEAR_ALL_OUTPUTS
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.clearAllOutputs({}));
     });
   });
 
