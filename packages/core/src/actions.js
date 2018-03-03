@@ -57,7 +57,7 @@ import type {
   NewCellAfterAction,
   NewCellBeforeAction,
   ClearAllOutputs,
-  ClearOutputsAction,
+  ClearOutputs,
   AppendOutputAction,
   UpdateDisplayAction,
   UpdateDisplayFailed,
@@ -271,10 +271,14 @@ export function setExecutionState(payload: {
   };
 }
 
-export function clearOutputs(id: string): ClearOutputsAction {
+// TODO: #2618
+export function clearOutputs(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ClearOutputs {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
-    id
+    payload
   };
 }
 

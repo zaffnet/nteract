@@ -25,7 +25,7 @@ import type {
   SetNotebook,
   NewCellAfterAction,
   NewCellBeforeAction,
-  ClearOutputsAction,
+  ClearOutputs,
   AppendOutputAction,
   SaveFulfilled,
   UpdateDisplayAction,
@@ -171,8 +171,8 @@ function focusCell(state: DocumentRecord, action: FocusCell) {
   return state.set("cellFocused", action.payload.id);
 }
 
-function clearOutputs(state: DocumentRecord, action: ClearOutputsAction) {
-  const { id } = action;
+function clearOutputs(state: DocumentRecord, action: ClearOutputs) {
+  const { id } = action.payload;
 
   const type = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
@@ -552,9 +552,13 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
 
   // * Clear outputs
   // * Set status to queued, as all we've done is submit the execution request
+  // FIXME: This is a weird pattern. We're bascially faking a dispatch here
+  // inside a reducer and then appending to the result. I think that both of
+  // these reducers should just handle the original action.
+  // TODO: #2618
   return clearOutputs(state, {
     type: "CLEAR_OUTPUTS",
-    id
+    payload: { id }
   }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
@@ -734,7 +738,7 @@ type DocumentAction =
   | FocusCellEditorAction
   | FocusCell
   | SetNotebook
-  | ClearOutputsAction
+  | ClearOutputs
   | AppendOutputAction
   | UpdateDisplayAction
   | MoveCellAction

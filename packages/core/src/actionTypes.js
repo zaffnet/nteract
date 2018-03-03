@@ -206,8 +206,15 @@ export type ToggleCellInputVisibilityAction = {
   id: CellID
 };
 
+// TODO: #2618
 export const CLEAR_OUTPUTS = "CLEAR_OUTPUTS";
-export type ClearOutputsAction = { type: "CLEAR_OUTPUTS", id: CellID };
+export type ClearOutputs = {
+  type: "CLEAR_OUTPUTS",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
 export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
 export type ClearAllOutputs = { type: "CLEAR_ALL_OUTPUTS" };

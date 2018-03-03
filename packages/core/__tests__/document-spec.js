@@ -490,9 +490,7 @@ describe("clearOutputs", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
 
-    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.clearOutputs({ id }));
     const outputs = state.getIn(["notebook", "cellMap", id, "outputs"]);
     expect(outputs).toBe(List.of());
   });
@@ -505,10 +503,7 @@ describe("clearOutputs", () => {
     });
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.clearOutputs({ id }));
     const outputs = state.getIn(["notebook", "cellMap", id, "outputs"]);
     expect(outputs).toBeUndefined();
   });
@@ -674,10 +669,7 @@ describe("clearOutputs", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.CLEAR_OUTPUTS, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.clearOutputs({ id }));
     expect(state.getIn(["notebook", "cellMap", id, "outputs"]).count()).toBe(0);
   });
 });

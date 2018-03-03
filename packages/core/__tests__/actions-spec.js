@@ -194,9 +194,9 @@ describe("updateCellSource", () => {
 
 describe("clearOutputs", () => {
   test("creates a CLEAR_OUTPUTS action", () => {
-    expect(actions.clearOutputs("woo")).toEqual({
+    expect(actions.clearOutputs({ id: "woo" })).toEqual({
       type: "CLEAR_OUTPUTS",
-      id: "woo"
+      payload: { id: "woo" }
     });
   });
 });

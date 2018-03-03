@@ -264,7 +264,8 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
   toggleStickyCell: () => dispatch(actions.toggleStickyCell(id)),
   removeCell: () => dispatch(actions.removeCell(id)),
   executeCell: () => dispatch(actions.executeCell(id)),
-  clearOutputs: () => dispatch(actions.clearOutputs(id)),
+  // TODO: #2618
+  clearOutputs: () => dispatch(actions.clearOutputs({ id })),
   toggleCellInputVisibility: () =>
     dispatch(actions.toggleCellInputVisibility(id)),
   toggleCellOutputVisibility: () =>

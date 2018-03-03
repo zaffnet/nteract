@@ -99,7 +99,8 @@ export function executeCellStream(
     // clear_output display message
     cellMessages.pipe(
       ofMessageType("clear_output"),
-      mapTo(actions.clearOutputs(id))
+      // TODO: #2618
+      mapTo(actions.clearOutputs({ id }))
     )
   );
 
