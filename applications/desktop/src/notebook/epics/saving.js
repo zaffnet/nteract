@@ -47,7 +47,8 @@ export function saveEpic(
               level: "success"
             });
           }
-          return actions.saveFulfilled();
+          // TODO: #2618
+          return actions.saveFulfilled({});
         }),
         catchError((error: Error) => of(actions.saveFailed(error)))
       );

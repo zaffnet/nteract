@@ -99,12 +99,11 @@ export function saveContentEpic(
         type: "notebook"
       };
 
-      return contents
-        .save(serverConfig, filename, model)
-        .pipe(
-          mapTo(actions.saveFulfilled()),
-          catchError((error: Error) => of(actions.saveFailed(error)))
-        );
+      return contents.save(serverConfig, filename, model).pipe(
+        // TODO: #2618
+        mapTo(actions.saveFulfilled({})),
+        catchError((error: Error) => of(actions.saveFailed(error)))
+      );
     })
   );
 }

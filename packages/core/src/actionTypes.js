@@ -426,8 +426,12 @@ export type SaveAs = { type: "SAVE_AS", filename: string };
 export const SAVE_FAILED = "SAVE_FAILED";
 export type SaveFailed = { type: "SAVE_FAILED" };
 
+// TODO: #2618
 export const SAVE_FULFILLED = "SAVE_FULFILLED";
-export type SaveFulfilled = { type: "SAVE_FULFILLED" };
+export type SaveFulfilled = {
+  type: "SAVE_FULFILLED",
+  payload: { contentRef?: ContentRef }
+};
 
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {

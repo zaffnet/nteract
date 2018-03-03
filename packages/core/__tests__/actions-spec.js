@@ -477,8 +477,9 @@ describe("save", () => {
   });
 
   test("creates a SAVE_FULFILLED action", () => {
-    expect(actions.saveFulfilled()).toEqual({
-      type: actionTypes.SAVE_FULFILLED
+    expect(actions.saveFulfilled({})).toEqual({
+      type: actionTypes.SAVE_FULFILLED,
+      payload: {}
     });
   });
 });

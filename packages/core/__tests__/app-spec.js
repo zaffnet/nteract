@@ -37,7 +37,7 @@ describe("saveFulfilled", () => {
       isSaving: true
     });
 
-    const state = reducers.app(originalState, actions.saveFulfilled());
+    const state = reducers.app(originalState, actions.saveFulfilled({}));
     expect(state.isSaving).toBe(false);
   });
 });

@@ -174,10 +174,7 @@ describe("setNotebook", () => {
 
 describe("setNotebookCheckpoint", () => {
   test("stores saved notebook", () => {
-    const state = reducers(
-      initialDocument,
-      actions.saveFulfilled(dummyCommutable)
-    );
+    const state = reducers(initialDocument, actions.saveFulfilled({}));
     expect(state.get("notebook")).toEqual(state.get("savedNotebook"));
   });
 });

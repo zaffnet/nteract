@@ -709,9 +709,13 @@ export function saveFailed(error: Error): SaveFailed {
   };
 }
 
-export function saveFulfilled(): SaveFulfilled {
+// TODO: #2618
+export function saveFulfilled(payload: {
+  contentRef?: ContentRef
+}): SaveFulfilled {
   return {
-    type: actionTypes.SAVE_FULFILLED
+    type: actionTypes.SAVE_FULFILLED,
+    payload
   };
 }
 
