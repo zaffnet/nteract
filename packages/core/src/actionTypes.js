@@ -407,10 +407,14 @@ export type ToggleStickyCell = {
   }
 };
 
+// TODO: #2618
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
-export type SetKernelInfoAction = {
+export type SetKernelInfo = {
   type: "SET_KERNEL_INFO",
-  kernelInfo: KernelInfo
+  payload: {
+    kernelInfo: KernelInfo,
+    contentRef?: ContentRef
+  }
 };
 
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";

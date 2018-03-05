@@ -40,7 +40,7 @@ import type {
   MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
-  SetKernelInfoAction,
+  SetKernelInfo,
   SetLanguageInfo,
   UpdateCellStatus,
   ToggleCellInputVisibility,
@@ -623,8 +623,8 @@ function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfo) {
   return state.setIn(["notebook", "metadata", "language_info"], langInfo);
 }
 
-function setKernelSpec(state: DocumentRecord, action: SetKernelInfoAction) {
-  const { kernelInfo } = action;
+function setKernelInfo(state: DocumentRecord, action: SetKernelInfo) {
+  const { kernelInfo } = action.payload;
   return state
     .setIn(
       ["notebook", "metadata", "kernelspec"],
@@ -756,7 +756,7 @@ type DocumentAction =
   | ToggleCellInputVisibility
   | UpdateCellStatus
   | SetLanguageInfo
-  | SetKernelInfoAction
+  | SetKernelInfo
   | OverwriteMetadataFieldAction
   | DeleteMetadataFieldAction
   | CopyCellAction
@@ -834,7 +834,7 @@ function document(
     case actionTypes.SET_LANGUAGE_INFO:
       return setLanguageInfo(state, action);
     case actionTypes.SET_KERNEL_INFO:
-      return setKernelSpec(state, action);
+      return setKernelInfo(state, action);
     case actionTypes.OVERWRITE_METADATA_FIELD:
       return overwriteMetadata(state, action);
     case actionTypes.DELETE_METADATA_FIELD:

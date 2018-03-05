@@ -169,13 +169,15 @@ describe("launchKernelByName", () => {
   });
 });
 
-describe("setNotebookKernelInfo", () => {
+describe("setKernelInfo", () => {
   test("creates a SET_KERNEL_INFO action", () => {
     const kernelInfo = { name: "japanese" };
-    expect(actions.setNotebookKernelInfo(kernelInfo)).toEqual({
+    expect(actions.setKernelInfo({ kernelInfo })).toEqual({
       type: actionTypes.SET_KERNEL_INFO,
-      kernelInfo: {
-        name: "japanese"
+      payload: {
+        kernelInfo: {
+          name: "japanese"
+        }
       }
     });
   });

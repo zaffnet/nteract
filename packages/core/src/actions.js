@@ -72,7 +72,7 @@ import type {
   MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
-  SetKernelInfoAction,
+  SetKernelInfo,
   SetLanguageInfo,
   UpdateCellStatus,
   ToggleCellInputVisibility,
@@ -254,10 +254,14 @@ export function kernelRawStderr(payload: {
 }
 
 // TODO: Does this need to pass KernelRef information?
-export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
+// TODO: #2618
+export function setKernelInfo(payload: {
+  kernelInfo: any,
+  contentRef?: ContentRef
+}): SetKernelInfo {
   return {
     type: actionTypes.SET_KERNEL_INFO,
-    kernelInfo
+    payload
   };
 }
 
