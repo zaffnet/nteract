@@ -153,12 +153,16 @@ export type RemoveCell = {
   }
 };
 
-export const NEW_CELL_AFTER = "NEW_CELL_AFTER";
-export type NewCellAfterAction = {
-  type: "NEW_CELL_AFTER",
-  id: CellID,
-  cellType: CellType,
-  source: string
+// TODO: #2618
+export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
+export type CreateCellAfter = {
+  type: "CREATE_CELL_AFTER",
+  payload: {
+    id: CellID,
+    cellType: CellType,
+    source: string,
+    contentRef?: ContentRef
+  }
 };
 
 export const NEW_CELL_BEFORE = "NEW_CELL_BEFORE";

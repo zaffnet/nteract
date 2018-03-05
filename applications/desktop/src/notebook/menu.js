@@ -274,13 +274,19 @@ export function dispatchPasteCell(store: *) {
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.createCellAfter("code", focused));
+  // TODO: #2618
+  store.dispatch(
+    actions.createCellAfter({ cellType: "code", id: focused, source: "" })
+  );
 }
 
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.createCellAfter("markdown", focused));
+  // TODO: #2618
+  store.dispatch(
+    actions.createCellAfter({ cellType: "markdown", id: focused, source: "" })
+  );
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {

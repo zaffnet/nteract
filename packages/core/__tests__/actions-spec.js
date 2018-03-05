@@ -321,20 +321,13 @@ describe("focusNextCellEditor", () => {
 });
 
 describe("createCellAfter", () => {
-  test("creates a NEW_CELL_AFTER action with default empty source string", () => {
-    expect(actions.createCellAfter("markdown", "1234")).toEqual({
-      type: actionTypes.NEW_CELL_AFTER,
-      source: "",
-      cellType: "markdown",
-      id: "1234"
-    });
-  });
-  test("creates a NEW_CELL_AFTER action with provided source string", () => {
-    expect(actions.createCellAfter("code", "1234", 'print("woo")')).toEqual({
-      type: actionTypes.NEW_CELL_AFTER,
-      source: 'print("woo")',
-      cellType: "code",
-      id: "1234"
+  test("creates a CREATE_CELL_AFTER action with provided source string", () => {
+    const cellType = "code";
+    const id = "1234";
+    const source = 'print("woo")';
+    expect(actions.createCellAfter({ cellType, id, source })).toEqual({
+      type: actionTypes.CREATE_CELL_AFTER,
+      payload: { source, cellType, id }
     });
   });
 });

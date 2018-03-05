@@ -54,7 +54,7 @@ import type {
   AcceptPayloadMessageAction,
   NewNotebook,
   SetNotebook,
-  NewCellAfterAction,
+  CreateCellAfter,
   NewCellBeforeAction,
   ClearAllOutputs,
   ClearOutputs,
@@ -316,16 +316,16 @@ export function removeCell(payload: {
   };
 }
 
-export function createCellAfter(
+// TODO: #2618
+export function createCellAfter(payload: {
+  id: CellID,
   cellType: CellType,
-  id: string,
-  source: string = ""
-): NewCellAfterAction {
+  source: string,
+  contentRef?: ContentRef
+}): CreateCellAfter {
   return {
-    type: actionTypes.NEW_CELL_AFTER,
-    source,
-    cellType,
-    id
+    type: actionTypes.CREATE_CELL_AFTER,
+    payload
   };
 }
 

@@ -23,7 +23,7 @@ import type {
   OverwriteMetadataFieldAction,
   AcceptPayloadMessageAction,
   SetNotebook,
-  NewCellAfterAction,
+  CreateCellAfter,
   NewCellBeforeAction,
   ClearOutputs,
   AppendOutput,
@@ -447,8 +447,8 @@ function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
   );
 }
 
-function newCellAfter(state: DocumentRecord, action: NewCellAfterAction) {
-  const { cellType, id, source } = action;
+function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
+  const { cellType, id, source } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -535,11 +535,18 @@ function acceptPayloadMessage(
       return state.setIn(["notebook", "cellMap", id, "source"], payload.text);
     } else {
       // create the next cell
-      return newCellAfter(state, {
-        type: actionTypes.NEW_CELL_AFTER,
-        cellType: "code",
-        source: payload.text,
-        id
+      // FIXME: This is a weird pattern. We're basically faking a dispatch here
+      // inside a reducer and then appending to the result. I think that both of
+      // these reducers should just handle the original action.
+      // TODO: #2618
+      return createCellAfter(state, {
+        type: actionTypes.CREATE_CELL_AFTER,
+        payload: {
+          cellType: "code",
+          // TODO: is payload.text guaranteed to be defined?
+          source: payload.text || "",
+          id
+        }
       });
     }
   }
@@ -553,7 +560,7 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
 
   // * Clear outputs
   // * Set status to queued, as all we've done is submit the execution request
-  // FIXME: This is a weird pattern. We're bascially faking a dispatch here
+  // FIXME: This is a weird pattern. We're basically faking a dispatch here
   // inside a reducer and then appending to the result. I think that both of
   // these reducers should just handle the original action.
   // TODO: #2618
@@ -744,7 +751,7 @@ type DocumentAction =
   | UpdateDisplay
   | MoveCell
   | RemoveCell
-  | NewCellAfterAction
+  | CreateCellAfter
   | NewCellBeforeAction
   | NewCellAppendAction
   | MergeCellAfterAction
@@ -811,8 +818,8 @@ function document(
       return moveCell(state, action);
     case actionTypes.REMOVE_CELL:
       return removeCellFromState(state, action);
-    case actionTypes.NEW_CELL_AFTER:
-      return newCellAfter(state, action);
+    case actionTypes.CREATE_CELL_AFTER:
+      return createCellAfter(state, action);
     case actionTypes.NEW_CELL_BEFORE:
       return newCellBefore(state, action);
     case actionTypes.MERGE_CELL_AFTER:

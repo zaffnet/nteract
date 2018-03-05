@@ -374,9 +374,15 @@ const mapDispatchToProps = dispatch => ({
   copyCell: cellId => dispatch(actions.copyCell(cellId)),
   pasteCell: () => dispatch(actions.pasteCell()),
   mergeCellAfter: cellId => dispatch(actions.mergeCellAfter(cellId)),
-  createCodeCell: cellId => dispatch(actions.createCellAfter("code", cellId)),
+  // TODO: #2618
+  createCodeCell: cellId =>
+    dispatch(
+      actions.createCellAfter({ cellType: "code", id: cellId, source: "" })
+    ),
   createMarkdownCell: cellId =>
-    dispatch(actions.createCellAfter("markdown", cellId)),
+    dispatch(
+      actions.createCellAfter({ cellType: "markdown", id: cellId, source: "" })
+    ),
   setCellTypeCode: cellId => dispatch(actions.changeCellType(cellId, "code")),
   setCellTypeMarkdown: cellId =>
     dispatch(actions.changeCellType(cellId, "markdown")),

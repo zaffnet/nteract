@@ -13,7 +13,7 @@ type ConnectedProps = {
   above: boolean,
   createCellAppend: (type: string) => void,
   createCellBefore: (type: string, id: string) => void,
-  createCellAfter: (type: string, id: string) => void,
+  createCellAfter: (payload: *) => void,
   mergeCellAfter: (id: string) => void,
   id?: string
 };
@@ -144,7 +144,10 @@ class CellCreator extends React.Component<ConnectedProps> {
       return;
     }
 
-    above ? createCellBefore(type, id) : createCellAfter(type, id);
+    // TODO: #2618
+    above
+      ? createCellBefore(type, id)
+      : createCellAfter({ cellType: type, id, source: "" });
   }
 
   mergeCell(): void {
@@ -170,7 +173,7 @@ class CellCreator extends React.Component<ConnectedProps> {
 const mapDispatchToProps = dispatch => ({
   createCellAppend: type => dispatch(actions.createCellAppend(type)),
   createCellBefore: (type, id) => dispatch(actions.createCellBefore(type, id)),
-  createCellAfter: (type, id) => dispatch(actions.createCellAfter(type, id)),
+  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
   mergeCellAfter: id => dispatch(actions.mergeCellAfter(id))
 });
 

@@ -6,34 +6,24 @@ import { actions, actionTypes } from "@nteract/core";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
-    test("dispatches a CREATE_CELL_AFTER action", () => {
+    test("dispatches a CREATE_CELL_AFTER with code action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCreateCellAfter(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.NEW_CELL_AFTER,
-        cellType: "code",
-        source: "",
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.createCellAfter({ cellType: "code", id: null, source: "" })
+      );
     });
   });
 
   describe("dispatchCreateTextCellAfter", () => {
-    test("dispatches a CREATE_TEXT_CELL_AFTER action", () => {
+    test("dispatches a CREATE_CELL_AFTER with markdown action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCreateTextCellAfter(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.NEW_CELL_AFTER,
-        cellType: "markdown",
-        source: "",
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.createCellAfter({ cellType: "markdown", id: null, source: "" })
+      );
     });
   });
 
