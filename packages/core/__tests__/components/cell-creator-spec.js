@@ -137,7 +137,7 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
+        expect(action.payload.id).toBe("test");
         expect(action.type).toBe(MERGE_CELL_AFTER);
         resolve();
       };

@@ -14,7 +14,7 @@ type ConnectedProps = {
   createCellAppend: (type: string) => void,
   createCellBefore: (payload: *) => void,
   createCellAfter: (payload: *) => void,
-  mergeCellAfter: (id: string) => void,
+  mergeCellAfter: (payload: *) => void,
   id?: string
 };
 
@@ -155,7 +155,8 @@ class CellCreator extends React.Component<ConnectedProps> {
 
     // We can't merge cells if we don't have a cell ID
     if (id) {
-      mergeCellAfter(id);
+      // TODO: #2618
+      mergeCellAfter({ id });
     }
   }
 
@@ -174,7 +175,7 @@ const mapDispatchToProps = dispatch => ({
   createCellAppend: type => dispatch(actions.createCellAppend(type)),
   createCellBefore: (payload: *) => dispatch(actions.createCellBefore(payload)),
   createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
-  mergeCellAfter: id => dispatch(actions.mergeCellAfter(id))
+  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload))
 });
 
 export default connect(null, mapDispatchToProps)(CellCreator);

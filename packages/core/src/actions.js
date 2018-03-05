@@ -68,7 +68,7 @@ import type {
   RemoveCell,
   FocusCell,
   NewCellAppendAction,
-  MergeCellAfterAction,
+  MergeCellAfter,
   MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
@@ -348,10 +348,14 @@ export function createCellAppend(cellType: CellType): NewCellAppendAction {
   };
 }
 
-export function mergeCellAfter(id: string): MergeCellAfterAction {
+// TODO: #2618
+export function mergeCellAfter(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): MergeCellAfter {
   return {
     type: actionTypes.MERGE_CELL_AFTER,
-    id
+    payload
   };
 }
 

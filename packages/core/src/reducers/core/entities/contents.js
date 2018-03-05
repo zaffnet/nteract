@@ -36,7 +36,7 @@ import type {
   RemoveCell,
   FocusCell,
   NewCellAppendAction,
-  MergeCellAfterAction,
+  MergeCellAfter,
   MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
@@ -471,8 +471,8 @@ function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
   });
 }
 
-function mergeCellAfter(state: DocumentRecord, action: MergeCellAfterAction) {
-  const { id } = action;
+function mergeCellAfter(state: DocumentRecord, action: MergeCellAfter) {
+  const { id } = action.payload;
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
@@ -754,7 +754,7 @@ type DocumentAction =
   | CreateCellAfter
   | CreateCellBefore
   | NewCellAppendAction
-  | MergeCellAfterAction
+  | MergeCellAfter
   | ToggleCellOutputVisibilityAction
   | ToggleCellInputVisibilityAction
   | UpdateCellStatusAction

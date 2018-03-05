@@ -368,9 +368,9 @@ describe("createCellAppend", () => {
 
 describe("mergeCellAfter", () => {
   test("creates a MERGE_CELL_AFTER action", () => {
-    expect(actions.mergeCellAfter("0121")).toEqual({
+    expect(actions.mergeCellAfter({ id: "0121" })).toEqual({
       type: actionTypes.MERGE_CELL_AFTER,
-      id: "0121"
+      payload: { id: "0121" }
     });
   });
 });

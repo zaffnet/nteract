@@ -182,8 +182,15 @@ export type NewCellAppendAction = {
   cellType: CellType
 };
 
+// TODO: #2618
 export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
-export type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
+export type MergeCellAfter = {
+  type: "MERGE_CELL_AFTER",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
 // TODO: #2618
 export const APPEND_OUTPUT = "APPEND_OUTPUT";

@@ -120,7 +120,9 @@ describe("PureNotebookMenu ", () => {
       expect(props.mergeCellAfter).not.toHaveBeenCalled();
       mergeCellAfterItem.simulate("click");
       expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
-      expect(props.mergeCellAfter).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.mergeCellAfter).toHaveBeenCalledWith({
+        id: props.cellFocused
+      });
 
       const createMarkdownCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })

@@ -505,21 +505,15 @@ describe("createCellBefore", () => {
 describe("mergeCellAfter", () => {
   test("merges cells appropriately", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
-
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-    const action = { type: actionTypes.MERGE_CELL_AFTER, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.mergeCellAfter({ id }));
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(1);
     expect(state.getIn(["notebook", "cellOrder"]).first()).toBe(id);
   });
   test("should do nothing if merging the last cell", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
-
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-    const action = { type: actionTypes.MERGE_CELL_AFTER, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.mergeCellAfter({ id }));
     expect(state).toEqual(originalState);
   });
 });

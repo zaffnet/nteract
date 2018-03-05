@@ -30,7 +30,7 @@ type Props = {
   unhideAllCells: ?(*) => void,
   cutCell: ?(cellId: ?string) => void,
   copyCell: ?(cellId: ?string) => void,
-  mergeCellAfter: ?(cellId: ?string) => void,
+  mergeCellAfter: ?(payload: *) => void,
   filename: ?string,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?() => void,
@@ -129,7 +129,8 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
         if (mergeCellAfter) {
-          mergeCellAfter(cellFocused);
+          // TODO: #2618
+          mergeCellAfter({ id: cellFocused });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
@@ -373,7 +374,7 @@ const mapDispatchToProps = dispatch => ({
   cutCell: cellId => dispatch(actions.cutCell(cellId)),
   copyCell: cellId => dispatch(actions.copyCell(cellId)),
   pasteCell: () => dispatch(actions.pasteCell()),
-  mergeCellAfter: cellId => dispatch(actions.mergeCellAfter(cellId)),
+  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload)),
   // TODO: #2618
   createCodeCell: cellId =>
     dispatch(
