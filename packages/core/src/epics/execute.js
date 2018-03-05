@@ -75,7 +75,8 @@ export function executeCellStream(
 
   const cellAction$ = merge(
     payloadStream.pipe(
-      map(payload => actions.acceptPayloadMessage(id, payload))
+      // TODO: #2618
+      map(payload => actions.acceptPayloadMessage({ id, payload }))
     ),
 
     // All actions for updating cell status

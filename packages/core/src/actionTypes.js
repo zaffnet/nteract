@@ -274,11 +274,15 @@ export type ClearAllOutputs = {
   payload: { contentRef?: ContentRef }
 };
 
-export const ACCEPT_PAYLOAD_MESSAGE_ACTION = "ACCEPT_PAYLOAD_MESSAGE_ACTION";
-export type AcceptPayloadMessageAction = {
-  type: "ACCEPT_PAYLOAD_MESSAGE_ACTION",
-  id: CellID,
-  payload: *
+// TODO: #2618
+export const ACCEPT_PAYLOAD_MESSAGE = "ACCEPT_PAYLOAD_MESSAGE";
+export type AcceptPayloadMessage = {
+  type: "ACCEPT_PAYLOAD_MESSAGE",
+  payload: {
+    id: CellID,
+    payload: *,
+    contentRef?: ContentRef
+  }
 };
 
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";

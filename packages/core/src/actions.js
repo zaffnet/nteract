@@ -51,7 +51,7 @@ import type {
   CopyCellAction,
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
-  AcceptPayloadMessageAction,
+  AcceptPayloadMessage,
   NewNotebook,
   SetNotebook,
   CreateCellAfter,
@@ -857,13 +857,14 @@ export function appendOutput(payload: {
   };
 }
 
-export function acceptPayloadMessage(
+// TODO: #2618
+export function acceptPayloadMessage(payload: {
   id: CellID,
-  payload: *
-): AcceptPayloadMessageAction {
+  payload: *,
+  contentRef?: ContentRef
+}): AcceptPayloadMessage {
   return {
-    type: actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION,
-    id,
+    type: actionTypes.ACCEPT_PAYLOAD_MESSAGE,
     payload
   };
 }

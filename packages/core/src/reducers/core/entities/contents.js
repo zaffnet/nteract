@@ -21,7 +21,7 @@ import type {
   CopyCellAction,
   DeleteMetadataFieldAction,
   OverwriteMetadataFieldAction,
-  AcceptPayloadMessageAction,
+  AcceptPayloadMessage,
   SetNotebook,
   CreateCellAfter,
   CreateCellBefore,
@@ -519,9 +519,9 @@ function createCellAppend(state: DocumentRecord, action: CreateCellAppend) {
 
 function acceptPayloadMessage(
   state: DocumentRecord,
-  action: AcceptPayloadMessageAction
+  action: AcceptPayloadMessage
 ): DocumentRecord {
-  const { id, payload } = action;
+  const { id, payload } = action.payload;
 
   if (payload.source === "page") {
     // append pager
@@ -767,7 +767,7 @@ type DocumentAction =
   | PasteCellAction
   | ChangeCellTypeAction
   | ToggleCellExpansionAction
-  | AcceptPayloadMessageAction
+  | AcceptPayloadMessage
   | SendExecuteRequest
   | SaveFulfilled
   | RestartKernel
@@ -830,7 +830,7 @@ function document(
       return toggleCellOutputVisibility(state, action);
     case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:
       return toggleCellInputVisibility(state, action);
-    case actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION:
+    case actionTypes.ACCEPT_PAYLOAD_MESSAGE:
       return acceptPayloadMessage(state, action);
     case actionTypes.UPDATE_CELL_STATUS:
       return updateCellStatus(state, action);
