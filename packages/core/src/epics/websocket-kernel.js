@@ -103,22 +103,20 @@ export const killKernelEpic = (action$: *, store: *) =>
       const kernel = selectors.currentKernel(state);
       const id = kernel.id;
 
-      return kernels
-        .kill(serverConfig, id)
-        .pipe(
-          map(() =>
-            actions.killKernelSuccessful({
+      return kernels.kill(serverConfig, id).pipe(
+        map(() =>
+          actions.killKernelSuccessful({
+            kernelRef: action.payload.kernelRef
+          })
+        ),
+        catchError(err =>
+          of(
+            actions.killKernelFailed({
+              error: err,
               kernelRef: action.payload.kernelRef
             })
-          ),
-          catchError(err =>
-            of(
-              actions.killKernelFailed({
-                error: err,
-                kernelRef: action.payload.kernelRef
-              })
-            )
           )
-        );
+        )
+      );
     })
   );

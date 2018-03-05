@@ -38,7 +38,7 @@ import type {
   NewCellAppendAction,
   MergeCellAfterAction,
   MoveCellAction,
-  ToggleStickyCellAction,
+  ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
@@ -409,11 +409,8 @@ function focusPreviousCellEditor(
   return state.set("editorFocused", cellOrder.get(nextIndex));
 }
 
-function toggleStickyCell(
-  state: DocumentRecord,
-  action: ToggleStickyCellAction
-) {
-  const { id } = action;
+function toggleStickyCell(state: DocumentRecord, action: ToggleStickyCell) {
+  const { id } = action.payload;
   const stickyCells = state.get("stickyCells", Immutable.Set());
 
   if (stickyCells.has(id)) {
@@ -734,7 +731,7 @@ function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
 }
 
 type DocumentAction =
-  | ToggleStickyCellAction
+  | ToggleStickyCell
   | FocusPreviousCellEditor
   | FocusPreviousCell
   | FocusNextCellEditor

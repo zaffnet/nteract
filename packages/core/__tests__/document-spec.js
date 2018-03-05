@@ -330,10 +330,7 @@ describe("toggleStickyCell", () => {
     const originalState = doc;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.TOGGLE_STICKY_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.toggleStickyCell({ id }));
     expect(state.hasIn(["stickyCells", id])).toBe(true);
   });
   test("should unstick a stuck cell given its ID", () => {
@@ -343,10 +340,7 @@ describe("toggleStickyCell", () => {
       .set("stickyCells", new Set([id]));
 
     const originalState = doc;
-
-    const action = { type: actionTypes.TOGGLE_STICKY_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.toggleStickyCell({ id }));
     expect(state.hasIn(["stickyCells", id])).toBe(false);
   });
 });

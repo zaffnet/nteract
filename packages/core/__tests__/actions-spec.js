@@ -343,9 +343,11 @@ describe("createCellBefore", () => {
 
 describe("toggleStickyCell", () => {
   test("creates a TOGGLE_STICKY_CELL action", () => {
-    expect(actions.toggleStickyCell("1234")).toEqual({
+    expect(actions.toggleStickyCell({ id: "1234" })).toEqual({
       type: actionTypes.TOGGLE_STICKY_CELL,
-      id: "1234"
+      payload: {
+        id: "1234"
+      }
     });
   });
 });

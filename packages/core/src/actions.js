@@ -70,7 +70,7 @@ import type {
   NewCellAppendAction,
   MergeCellAfterAction,
   MoveCellAction,
-  ToggleStickyCellAction,
+  ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
@@ -502,10 +502,14 @@ export function focusPreviousCellEditor(payload: {
   };
 }
 
-export function toggleStickyCell(id: string): ToggleStickyCellAction {
+// TODO: #2618
+export function toggleStickyCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleStickyCell {
   return {
     type: actionTypes.TOGGLE_STICKY_CELL,
-    id
+    payload
   };
 }
 
