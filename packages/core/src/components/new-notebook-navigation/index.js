@@ -26,26 +26,45 @@ export type AvailableNotebooks = Array<AvailableNotebook>;
 
 export const NewNotebook = (
   props: AvailableNotebook & {
-    onClick: (ks: KernelspecProps) => void
+    href?: string,
+    onClick?: (ks: KernelspecProps) => void
   }
 ) => {
   const Logo = logos.builtins[props.kernelspec.language];
 
+  const inner = (
+    <React.Fragment>
+      <div className="display-name">{props.kernelspec.displayName}</div>
+      <div className="logo">
+        <Logo />
+      </div>
+    </React.Fragment>
+  );
+
   const onClick = () => {
-    props.onClick(props.kernelspec);
+    if (props.onClick) {
+      props.onClick(props.kernelspec);
+    }
   };
 
   return (
     <React.Fragment>
-      <button className="newNotebook" onClick={onClick}>
-        <div className="display-name">{props.kernelspec.displayName}</div>
-        <div className="logo">
-          <Logo />
-        </div>
-      </button>
+      {props.href ? (
+        <a className="newNotebook" href={props.href}>
+          {inner}
+        </a>
+      ) : (
+        <button className="newNotebook" onClick={onClick}>
+          {inner}
+        </button>
+      )}
       <style jsx>{`
         .newNotebook :global(*) {
           color: var(--nt-color-midnight-light);
+        }
+
+        a {
+          padding-top: 20px;
         }
 
         .newNotebook {
