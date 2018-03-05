@@ -188,10 +188,10 @@ export const launchKernelEpic = (
       // TODO: Do the async version of `ipc.send`, potentially coordinate with main process
       ipc.send("nteract:ping:kernel", action.payload.kernelSpec);
 
-      let cleanupOldKernel$ = empty();
-
-      // Kill the old kernel by emitting the action to kill it
       const oldKernelRef = selectors.currentKernelRef(store.getState());
+
+      // Kill the old kernel by emitting the action to kill it if it exists
+      let cleanupOldKernel$ = empty();
       if (oldKernelRef && oldKernelRef !== action.payloadRef) {
         cleanupOldKernel$ = of(
           actions.killKernel({ restarting: false, kernelRef: oldKernelRef })
