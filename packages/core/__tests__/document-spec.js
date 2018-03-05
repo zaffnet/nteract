@@ -521,10 +521,10 @@ describe("mergeCellAfter", () => {
 describe("newCellAppend", () => {
   test("appends a new code cell at the end", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
-
-    const action = { type: actionTypes.NEW_CELL_APPEND, cellType: "code" };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.createCellAppend({ cellType: "code" })
+    );
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
   });
 });

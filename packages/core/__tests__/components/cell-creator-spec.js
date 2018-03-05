@@ -8,7 +8,7 @@ import { dummyStore } from "../../src/dummy";
 import {
   CREATE_CELL_AFTER,
   CREATE_CELL_BEFORE,
-  NEW_CELL_APPEND,
+  CREATE_CELL_APPEND,
   MERGE_CELL_AFTER
 } from "../../src/actionTypes";
 
@@ -113,8 +113,8 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.cellType).toBe("code");
-        expect(action.type).toBe(NEW_CELL_APPEND);
+        expect(action.payload.cellType).toBe("code");
+        expect(action.type).toBe(CREATE_CELL_APPEND);
         resolve();
       };
       store.dispatch = dispatch;

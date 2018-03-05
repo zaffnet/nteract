@@ -358,10 +358,10 @@ describe("toggleStickyCell", () => {
 });
 
 describe("createCellAppend", () => {
-  test("creates a NEW_CELL_APPEND action", () => {
-    expect(actions.createCellAppend("markdown")).toEqual({
-      type: actionTypes.NEW_CELL_APPEND,
-      cellType: "markdown"
+  test("creates a CREATE_CELL_APPEND action", () => {
+    expect(actions.createCellAppend({ cellType: "markdown" })).toEqual({
+      type: actionTypes.CREATE_CELL_APPEND,
+      payload: { cellType: "markdown" }
     });
   });
 });

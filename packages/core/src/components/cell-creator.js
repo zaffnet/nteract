@@ -11,7 +11,7 @@ type Props = {
 
 type ConnectedProps = {
   above: boolean,
-  createCellAppend: (type: string) => void,
+  createCellAppend: (payload: *) => void,
   createCellBefore: (payload: *) => void,
   createCellAfter: (payload: *) => void,
   mergeCellAfter: (payload: *) => void,
@@ -140,7 +140,8 @@ class CellCreator extends React.Component<ConnectedProps> {
     } = this.props;
 
     if (!id) {
-      createCellAppend(type);
+      // TODO: #2618
+      createCellAppend({ cellType: type });
       return;
     }
 
@@ -172,7 +173,7 @@ class CellCreator extends React.Component<ConnectedProps> {
 }
 
 const mapDispatchToProps = dispatch => ({
-  createCellAppend: type => dispatch(actions.createCellAppend(type)),
+  createCellAppend: (payload: *) => dispatch(actions.createCellAppend(payload)),
   createCellBefore: (payload: *) => dispatch(actions.createCellBefore(payload)),
   createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
   mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload))

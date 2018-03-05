@@ -35,7 +35,7 @@ import type {
   FocusPreviousCellEditor,
   RemoveCell,
   FocusCell,
-  NewCellAppendAction,
+  CreateCellAppend,
   MergeCellAfter,
   MoveCell,
   ToggleStickyCell,
@@ -503,8 +503,8 @@ function mergeCellAfter(state: DocumentRecord, action: MergeCellAfter) {
   );
 }
 
-function newCellAppend(state: DocumentRecord, action: NewCellAppendAction) {
-  const { cellType } = action;
+function createCellAppend(state: DocumentRecord, action: CreateCellAppend) {
+  const { cellType } = action.payload;
   const notebook: ImmutableNotebook = state.get("notebook");
   const cellOrder: ImmutableCellOrder = notebook.get(
     "cellOrder",
@@ -753,7 +753,7 @@ type DocumentAction =
   | RemoveCell
   | CreateCellAfter
   | CreateCellBefore
-  | NewCellAppendAction
+  | CreateCellAppend
   | MergeCellAfter
   | ToggleCellOutputVisibilityAction
   | ToggleCellInputVisibilityAction
@@ -824,8 +824,8 @@ function document(
       return createCellBefore(state, action);
     case actionTypes.MERGE_CELL_AFTER:
       return mergeCellAfter(state, action);
-    case actionTypes.NEW_CELL_APPEND:
-      return newCellAppend(state, action);
+    case actionTypes.CREATE_CELL_APPEND:
+      return createCellAppend(state, action);
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:
       return toggleCellOutputVisibility(state, action);
     case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:

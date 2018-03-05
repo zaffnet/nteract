@@ -176,10 +176,14 @@ export type CreateCellBefore = {
   }
 };
 
-export const NEW_CELL_APPEND = "NEW_CELL_APPEND";
-export type NewCellAppendAction = {
-  type: "NEW_CELL_APPEND",
-  cellType: CellType
+// TODO: #2618
+export const CREATE_CELL_APPEND = "CREATE_CELL_APPEND";
+export type CreateCellAppend = {
+  type: "CREATE_CELL_APPEND",
+  payload: {
+    cellType: CellType,
+    contentRef?: ContentRef
+  }
 };
 
 // TODO: #2618
