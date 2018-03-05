@@ -109,7 +109,6 @@ export function promptUserAboutNewKernel(
           const kernelRef = stateModule.createKernelRef();
 
           store.dispatch(
-            // TODO: get a KernelRef here and use it in action.
             actions.launchKernelByName({
               kernelSpecName: kernel.kernelSpecName,
               cwd,

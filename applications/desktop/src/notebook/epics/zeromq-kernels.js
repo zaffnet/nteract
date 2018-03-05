@@ -43,7 +43,7 @@ import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
 
-import { selectors, actions, actionTypes, state } from "@nteract/core";
+import { selectors, actions, actionTypes } from "@nteract/core";
 
 import {
   createMessage,
@@ -92,7 +92,7 @@ export function launchKernelObservable(
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {
-            kernelRef: state.createKernelRef(),
+            kernelRef,
             type: "zeromq",
             hostRef: null,
             channels,
@@ -188,10 +188,10 @@ export const launchKernelEpic = (
       // TODO: Do the async version of `ipc.send`, potentially coordinate with main process
       ipc.send("nteract:ping:kernel", action.payload.kernelSpec);
 
-      let cleanupOldKernel$ = empty();
-
-      // Kill the old kernel by emitting the action to kill it
       const oldKernelRef = selectors.currentKernelRef(store.getState());
+
+      // Kill the old kernel by emitting the action to kill it if it exists
+      let cleanupOldKernel$ = empty();
       if (oldKernelRef && oldKernelRef !== action.payloadRef) {
         cleanupOldKernel$ = of(
           actions.killKernel({ restarting: false, kernelRef: oldKernelRef })
@@ -367,7 +367,7 @@ export function watchSpawn(action$: *, store: *) {
           // We both set the state and make it easy for us to log the error
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "errored",
+              kernelStatus: "process errored",
               kernelRef: action.payload.kernelRef
             })
           );
@@ -377,7 +377,7 @@ export function watchSpawn(action$: *, store: *) {
         spawn.on("exit", () => {
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "exited",
+              kernelStatus: "process exited",
               kernelRef: action.payload.kernelRef
             })
           );
@@ -386,7 +386,7 @@ export function watchSpawn(action$: *, store: *) {
         spawn.on("disconnect", () => {
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "disconnected",
+              kernelStatus: "process disconnected",
               kernelRef: action.payload.kernelRef
             })
           );

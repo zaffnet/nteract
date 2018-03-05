@@ -16,6 +16,18 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.SET_LANGUAGE_INFO:
       // TODO: Should the kernel hold language info?
       return state;
+    case actionTypes.KILL_KERNEL_SUCCESSFUL:
+      return state.setIn([action.payload.kernelRef, "status"], "killed");
+    case actionTypes.KILL_KERNEL_FAILED:
+      return state.setIn(
+        [action.payload.kernelRef, "status"],
+        "failed to kill"
+      );
+    case actionTypes.RESTART_KERNEL:
+      return state.setIn([action.payload.kernelRef, "status"], "restarting");
+    case actionTypes.LAUNCH_KERNEL:
+    case actionTypes.LAUNCH_KERNEL_BY_NAME:
+      return state.setIn([action.payload.kernelRef, "status"], "launching");
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
         [action.payload.kernelRef, "status"],
