@@ -625,14 +625,10 @@ describe("updateCellStatus", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = {
-      type: actionTypes.UPDATE_CELL_STATUS,
-      id,
-      status: "test status"
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.updateCellStatus({ id, status: "test status" })
+    );
     expect(state.getIn(["transient", "cellMap", id, "status"])).toBe(
       "test status"
     );

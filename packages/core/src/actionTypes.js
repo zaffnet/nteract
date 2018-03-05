@@ -424,11 +424,15 @@ export type DeleteMetadataFieldAction = {
   field: string
 };
 
+// TODO: #2618
 export const UPDATE_CELL_STATUS = "UPDATE_CELL_STATUS";
-export type UpdateCellStatusAction = {
+export type UpdateCellStatus = {
   type: "UPDATE_CELL_STATUS",
-  id: CellID,
-  status: string
+  payload: {
+    id: CellID,
+    status: string,
+    contentRef?: ContentRef
+  }
 };
 
 export const REGISTER_COMM_TARGET = "REGISTER_COMM_TARGET";

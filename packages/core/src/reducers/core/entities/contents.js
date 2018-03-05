@@ -42,7 +42,7 @@ import type {
   FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
-  UpdateCellStatusAction,
+  UpdateCellStatus,
   ToggleCellInputVisibility,
   ToggleCellOutputVisibility,
   SetInCell,
@@ -614,11 +614,8 @@ function toggleCellInputVisibility(
   );
 }
 
-function updateCellStatus(
-  state: DocumentRecord,
-  action: UpdateCellStatusAction
-) {
-  const { id, status } = action;
+function updateCellStatus(state: DocumentRecord, action: UpdateCellStatus) {
+  const { id, status } = action.payload;
   return state.setIn(["transient", "cellMap", id, "status"], status);
 }
 function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfoAction) {
@@ -757,7 +754,7 @@ type DocumentAction =
   | MergeCellAfter
   | ToggleCellOutputVisibility
   | ToggleCellInputVisibility
-  | UpdateCellStatusAction
+  | UpdateCellStatus
   | SetLanguageInfoAction
   | SetKernelInfoAction
   | OverwriteMetadataFieldAction

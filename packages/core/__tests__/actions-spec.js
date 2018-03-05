@@ -218,10 +218,12 @@ describe("updateCellExecutionCount", () => {
 
 describe("updateCellStatus", () => {
   test("creates an UPDATE_CELL_STATUS action", () => {
-    expect(actions.updateCellStatus("1234", "test")).toEqual({
+    expect(actions.updateCellStatus({ id: "1234", status: "test" })).toEqual({
       type: actionTypes.UPDATE_CELL_STATUS,
-      id: "1234",
-      status: "test"
+      payload: {
+        id: "1234",
+        status: "test"
+      }
     });
   });
 });

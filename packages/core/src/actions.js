@@ -74,7 +74,7 @@ import type {
   FocusPreviousCell,
   SetKernelInfoAction,
   SetLanguageInfoAction,
-  UpdateCellStatusAction,
+  UpdateCellStatus,
   ToggleCellInputVisibility,
   ToggleCellOutputVisibility,
   SetInCell,
@@ -443,14 +443,15 @@ export function toggleCellInputVisibility(payload: {
   };
 }
 
-export function updateCellStatus(
+// TODO: #2618
+export function updateCellStatus(payload: {
   id: string,
-  status: string
-): UpdateCellStatusAction {
+  status: string,
+  contentRef?: ContentRef
+}): UpdateCellStatus {
   return {
     type: actionTypes.UPDATE_CELL_STATUS,
-    id,
-    status
+    payload
   };
 }
 

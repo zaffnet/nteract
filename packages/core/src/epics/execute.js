@@ -82,7 +82,8 @@ export function executeCellStream(
     // All actions for updating cell status
     cellMessages.pipe(
       kernelStatuses(),
-      map(status => actions.updateCellStatus(id, status))
+      // TODO: #2618
+      map(status => actions.updateCellStatus({ id, status }))
     ),
 
     // Update the input numbering: `[ ]`
