@@ -4,18 +4,24 @@ import type { RecordFactory, RecordOf } from "immutable";
 import { List, Map, Record } from "immutable";
 
 export type KernelspecProps = {
+  name: string,
   argv: List<string>,
   env: Map<string, *>,
   interruptMode: ?string,
-  language: ?string,
-  resources: Map<string, *>
+  language: string,
+  displayName: string,
+  resources: Map<string, *>,
+  metadata: Map<string, *>
 };
 
 export const makeKernelspec: RecordFactory<KernelspecProps> = Record({
+  name: "",
   argv: List(),
   env: Map(),
   interruptMode: null,
-  language: null,
+  language: "",
+  displayName: "",
+  metadata: Map(),
   resources: Map()
 });
 
