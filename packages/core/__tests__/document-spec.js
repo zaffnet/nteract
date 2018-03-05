@@ -489,19 +489,14 @@ describe("createCellAfter", () => {
   });
 });
 
-describe("newCellBefore", () => {
-  test("creates a new cell after the given id", () => {
+describe("createCellBefore", () => {
+  test("creates a new cell before the given id", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
-
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = {
-      type: actionTypes.NEW_CELL_BEFORE,
-      id,
-      cellType: "markdown"
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.createCellBefore({ cellType: "markdown", id })
+    );
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
     expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(id);
   });

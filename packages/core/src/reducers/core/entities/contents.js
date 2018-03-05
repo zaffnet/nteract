@@ -24,7 +24,7 @@ import type {
   AcceptPayloadMessageAction,
   SetNotebook,
   CreateCellAfter,
-  NewCellBeforeAction,
+  CreateCellBefore,
   ClearOutputs,
   AppendOutput,
   SaveFulfilled,
@@ -457,8 +457,8 @@ function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
   });
 }
 
-function newCellBefore(state: DocumentRecord, action: NewCellBeforeAction) {
-  const { cellType, id } = action;
+function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
+  const { cellType, id } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -752,7 +752,7 @@ type DocumentAction =
   | MoveCell
   | RemoveCell
   | CreateCellAfter
-  | NewCellBeforeAction
+  | CreateCellBefore
   | NewCellAppendAction
   | MergeCellAfterAction
   | ToggleCellOutputVisibilityAction
@@ -820,8 +820,8 @@ function document(
       return removeCellFromState(state, action);
     case actionTypes.CREATE_CELL_AFTER:
       return createCellAfter(state, action);
-    case actionTypes.NEW_CELL_BEFORE:
-      return newCellBefore(state, action);
+    case actionTypes.CREATE_CELL_BEFORE:
+      return createCellBefore(state, action);
     case actionTypes.MERGE_CELL_AFTER:
       return mergeCellAfter(state, action);
     case actionTypes.NEW_CELL_APPEND:

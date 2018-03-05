@@ -7,7 +7,7 @@ import CellCreator from "../../src/components/cell-creator";
 import { dummyStore } from "../../src/dummy";
 import {
   CREATE_CELL_AFTER,
-  NEW_CELL_BEFORE,
+  CREATE_CELL_BEFORE,
   NEW_CELL_APPEND,
   MERGE_CELL_AFTER
 } from "../../src/actionTypes";
@@ -88,9 +88,9 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
-        expect(action.cellType).toBe("code");
-        expect(action.type).toBe(NEW_CELL_BEFORE);
+        expect(action.payload.id).toBe("test");
+        expect(action.payload.cellType).toBe("code");
+        expect(action.type).toBe(CREATE_CELL_BEFORE);
         resolve();
       };
       store.dispatch = dispatch;

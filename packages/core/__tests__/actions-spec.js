@@ -333,11 +333,15 @@ describe("createCellAfter", () => {
 });
 
 describe("createCellBefore", () => {
-  test("creates a NEW_CELL_BEFORE action", () => {
-    expect(actions.createCellBefore("markdown", "1234")).toEqual({
-      type: actionTypes.NEW_CELL_BEFORE,
-      cellType: "markdown",
-      id: "1234"
+  test("creates a CREATE_CELL_BEFORE action", () => {
+    expect(
+      actions.createCellBefore({ cellType: "markdown", id: "1234" })
+    ).toEqual({
+      type: actionTypes.CREATE_CELL_BEFORE,
+      payload: {
+        cellType: "markdown",
+        id: "1234"
+      }
     });
   });
 });

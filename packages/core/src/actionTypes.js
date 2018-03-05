@@ -165,11 +165,15 @@ export type CreateCellAfter = {
   }
 };
 
-export const NEW_CELL_BEFORE = "NEW_CELL_BEFORE";
-export type NewCellBeforeAction = {
-  type: "NEW_CELL_BEFORE",
-  cellType: CellType,
-  id: CellID
+// TODO: #2618
+export const CREATE_CELL_BEFORE = "CREATE_CELL_BEFORE";
+export type CreateCellBefore = {
+  type: "CREATE_CELL_BEFORE",
+  payload: {
+    cellType: CellType,
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
 export const NEW_CELL_APPEND = "NEW_CELL_APPEND";

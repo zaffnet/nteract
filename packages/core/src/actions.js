@@ -55,7 +55,7 @@ import type {
   NewNotebook,
   SetNotebook,
   CreateCellAfter,
-  NewCellBeforeAction,
+  CreateCellBefore,
   ClearAllOutputs,
   ClearOutputs,
   AppendOutput,
@@ -329,14 +329,15 @@ export function createCellAfter(payload: {
   };
 }
 
-export function createCellBefore(
+// TODO: #2618
+export function createCellBefore(payload: {
   cellType: CellType,
-  id: string
-): NewCellBeforeAction {
+  id: string,
+  contentRef?: ContentRef
+}): CreateCellBefore {
   return {
-    type: actionTypes.NEW_CELL_BEFORE,
-    cellType,
-    id
+    type: actionTypes.CREATE_CELL_BEFORE,
+    payload
   };
 }
 
