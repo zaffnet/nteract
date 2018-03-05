@@ -43,7 +43,7 @@ import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
 import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
 
-import { selectors, actions, actionTypes, state } from "@nteract/core";
+import { selectors, actions, actionTypes } from "@nteract/core";
 
 import {
   createMessage,
@@ -92,7 +92,7 @@ export function launchKernelObservable(
           observer.next(actions.setNotebookKernelInfo(kernelSpec));
 
           const kernel: LocalKernelProps = {
-            kernelRef: state.createKernelRef(),
+            kernelRef,
             type: "zeromq",
             hostRef: null,
             channels,
