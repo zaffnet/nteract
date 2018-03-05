@@ -1,8 +1,6 @@
 // @flow
 const { Observable } = require("rxjs/Observable");
 
-const EventSourcePolyfill = require("eventsource");
-
 const mybinderURL = "https://mybinder.org";
 
 function cleanRepo(repo) {
@@ -36,11 +34,26 @@ function formBinderURL({
   return url;
 }
 
+const eventSourceFallback =
+  window && window.EventSource
+    ? window.EventSource
+    : function(url) {
+        throw new Error(
+          "Event Source not supported on this platform -- please polyfill"
+        );
+      };
+
 function binder(
   options /*: BinderOptions */,
   /** Allow overriding EventSource for testing and ponyfilling **/
-  EventSourceDI /* :* */ = EventSourcePolyfill
+  EventSourceDI /* :* */ = eventSourceFallback
 ) /*: Observable<*> */ {
+  if (!EventSourceDI) {
+    throw new Error(
+      "Event Source not supported on this platform -- please polyfill"
+    );
+  }
+
   const url = formBinderURL(options);
 
   return Observable.create(observer => {

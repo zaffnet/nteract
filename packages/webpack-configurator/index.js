@@ -52,84 +52,24 @@ type WebpackConfig = {
     }>
   }
 };
- */
+*/
 
-function configure(
+function nextWebpack(
   config /*: WebpackConfig */,
   options /*: ?NextWebPackOptions */
 ) /*: WebpackConfig */ {
-  // non-next.js app assumptions, that we're in dev mode and not server side
-  // we're not using these yet, I'd like defaults set to keep a convention
-  if (!options) {
-    options = {
-      dev: true,
-      isServer: false
-    };
-  }
-
-  const { dev, isServer } = options;
-
-  if (!config.module) {
-    config.module = {
-      rules: []
-    };
-  }
-
-  if (!config.module.rules) {
-    config.module.rules = [];
-  }
-
-  let hasBabelLoader = false;
-
-  // If, for example, the webpack config was set up for hot reload, we override
-  // it to accept nteract packages
-  config.module.rules = config.module.rules.map(rule => {
-    if (
-      rule.loader === "babel-loader" ||
-      (rule.use && rule.use.loader === "babel-loader")
-    ) {
-      hasBabelLoader = true;
-    }
-
-    if (String(rule.exclude) === String(/node_modules/)) {
-      rule.exclude = exclude;
-    }
-
-    return rule;
-  });
-
-  // ** Enforce transpilation **
-  // At least for next.js apps, it seems like we still have to add this on.
-  // We do know, based on hasBabelLoader if it already was configured in the
-  // suite of rules. I hope this isn't adding a second step.
   config.module.rules.push({
     test: /\.js$/,
-    exclude,
-    loader: "babel-loader?cacheDirectory=true"
+    exclude: exclude,
+    loader: "babel-loader"
   });
 
-  if (!config.resolve) {
-    config.resolve = {};
-  }
-
-  config.resolve.alias = {
-    // Whatever came in before
-    ...config.resolve.alias,
-    // Alias nteract packages
-    ...aliases,
-    // Alias RxJS modules
-    ...rxAliases
-  };
-
-  config.resolve.mainFields = [
-    "nteractDesktop",
-    "es2015",
-    "jsnext:main",
-    "module",
-    "main"
-  ];
-  config.resolve.extensions = [".js", ".jsx", ".json"];
-
+  config.resolve = Object.assign({}, config.resolve, {
+    mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
+    alias: mergeDefaultAliases(
+      config.resolve ? config.resolve.alias : undefined
+    )
+  });
   return config;
 }
 
@@ -137,5 +77,5 @@ module.exports = {
   exclude,
   aliases,
   mergeDefaultAliases,
-  configure
+  nextWebpack
 };
