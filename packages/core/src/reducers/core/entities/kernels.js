@@ -23,6 +23,11 @@ const byRef = (state = Immutable.Map(), action) => {
         [action.payload.kernelRef, "status"],
         "failed to kill"
       );
+    case actionTypes.RESTART_KERNEL:
+      return state.setIn([action.payload.kernelRef, "status"], "restarting");
+    case actionTypes.LAUNCH_KERNEL:
+    case actionTypes.LAUNCH_KERNEL_BY_NAME:
+      return state.setIn([action.payload.kernelRef, "status"], "launching");
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
         [action.payload.kernelRef, "status"],
