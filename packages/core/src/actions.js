@@ -50,7 +50,7 @@ import type {
   CutCellAction,
   CopyCellAction,
   DeleteMetadataFieldAction,
-  OverwriteMetadataFieldAction,
+  OverwriteMetadataField,
   AcceptPayloadMessage,
   NewNotebook,
   SetNotebook,
@@ -535,14 +535,15 @@ export function toggleStickyCell(payload: {
   };
 }
 
-export function overwriteMetadata(
+// TODO: #2618
+export function overwriteMetadataField(payload: {
   field: string,
-  value: any
-): OverwriteMetadataFieldAction {
+  value: any,
+  contentRef?: ContentRef
+}): OverwriteMetadataField {
   return {
     type: actionTypes.OVERWRITE_METADATA_FIELD,
-    field,
-    value
+    payload
   };
 }
 

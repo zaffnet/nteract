@@ -544,17 +544,16 @@ describe("updateSource", () => {
   });
 });
 
-describe("overwriteMetadata", () => {
+describe("overwriteMetadataField", () => {
   test("overwrites notebook metadata appropriately", () => {
     const originalState = monocellDocument;
-
-    const action = {
-      type: actionTypes.OVERWRITE_METADATA_FIELD,
-      field: "name",
-      value: "javascript"
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.overwriteMetadataField({
+        field: "name",
+        value: "javascript"
+      })
+    );
     expect(state.getIn(["notebook", "metadata", "name"])).toBe("javascript");
   });
 });

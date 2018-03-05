@@ -417,11 +417,15 @@ export type SetKernelInfo = {
   }
 };
 
+// TODO: #2618
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";
-export type OverwriteMetadataFieldAction = {
+export type OverwriteMetadataField = {
   type: "OVERWRITE_METADATA_FIELD",
-  field: string,
-  value: any
+  payload: {
+    field: string,
+    value: any,
+    contentRef?: ContentRef
+  }
 };
 
 export const DELETE_METADATA_FIELD = "DELETE_METADATA_FIELD";

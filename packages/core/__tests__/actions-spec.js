@@ -388,16 +388,21 @@ describe("setNotificationSystem", () => {
   });
 });
 
-describe("overwriteMetadata", () => {
+describe("overwriteMetadataField", () => {
   test("creates an OVERWRITE_METADATA_FIELD", () => {
     expect(
-      actions.overwriteMetadata("foo", {
-        bar: 3
+      actions.overwriteMetadataField({
+        field: "foo",
+        value: {
+          bar: 3
+        }
       })
     ).toEqual({
       type: actionTypes.OVERWRITE_METADATA_FIELD,
-      field: "foo",
-      value: { bar: 3 }
+      payload: {
+        field: "foo",
+        value: { bar: 3 }
+      }
     });
   });
 });

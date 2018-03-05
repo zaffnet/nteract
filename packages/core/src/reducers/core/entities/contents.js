@@ -20,7 +20,7 @@ import type {
   CutCellAction,
   CopyCellAction,
   DeleteMetadataFieldAction,
-  OverwriteMetadataFieldAction,
+  OverwriteMetadataField,
   AcceptPayloadMessage,
   SetNotebook,
   CreateCellAfter,
@@ -571,6 +571,7 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
 }
 
 function setInCell(state: DocumentRecord, action: SetInCell<*>) {
+  // $FlowFixMe: Flow is complaining because the first arg has unknown length?
   return state.setIn(
     ["notebook", "cellMap", action.payload.id].concat(action.payload.path),
     action.payload.value
@@ -637,11 +638,11 @@ function setKernelInfo(state: DocumentRecord, action: SetKernelInfo) {
     .setIn(["notebook", "metadata", "kernel_info", "name"], kernelInfo.name);
 }
 
-function overwriteMetadata(
+function overwriteMetadataField(
   state: DocumentRecord,
-  action: OverwriteMetadataFieldAction
+  action: OverwriteMetadataField
 ) {
-  const { field, value } = action;
+  const { field, value } = action.payload;
   return state.setIn(["notebook", "metadata", field], Immutable.fromJS(value));
 }
 function deleteMetadata(
@@ -757,7 +758,7 @@ type DocumentAction =
   | UpdateCellStatus
   | SetLanguageInfo
   | SetKernelInfo
-  | OverwriteMetadataFieldAction
+  | OverwriteMetadataField
   | DeleteMetadataFieldAction
   | CopyCellAction
   | CutCellAction
@@ -836,7 +837,7 @@ function document(
     case actionTypes.SET_KERNEL_INFO:
       return setKernelInfo(state, action);
     case actionTypes.OVERWRITE_METADATA_FIELD:
-      return overwriteMetadata(state, action);
+      return overwriteMetadataField(state, action);
     case actionTypes.DELETE_METADATA_FIELD:
       return deleteMetadata(state, action);
     case actionTypes.COPY_CELL:
