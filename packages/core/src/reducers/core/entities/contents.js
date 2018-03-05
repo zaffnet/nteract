@@ -37,7 +37,7 @@ import type {
   FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
-  MoveCellAction,
+  MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
@@ -419,20 +419,20 @@ function toggleStickyCell(state: DocumentRecord, action: ToggleStickyCell) {
   return state.set("stickyCells", stickyCells.add(id));
 }
 
-function moveCell(state: DocumentRecord, action: MoveCellAction) {
+function moveCell(state: DocumentRecord, action: MoveCell) {
   return state.updateIn(
     ["notebook", "cellOrder"],
     (cellOrder: ImmutableCellOrder) => {
-      const oldIndex = cellOrder.findIndex(id => id === action.id);
+      const oldIndex = cellOrder.findIndex(id => id === action.payload.id);
       const newIndex =
-        cellOrder.findIndex(id => id === action.destinationId) +
-        (action.above ? 0 : 1);
+        cellOrder.findIndex(id => id === action.payload.destinationId) +
+        (action.payload.above ? 0 : 1);
       if (oldIndex === newIndex) {
         return cellOrder;
       }
       return cellOrder
         .splice(oldIndex, 1)
-        .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.id);
+        .splice(newIndex - (oldIndex < newIndex ? 1 : 0), 0, action.payload.id);
     }
   );
 }
@@ -742,7 +742,7 @@ type DocumentAction =
   | ClearOutputs
   | AppendOutput
   | UpdateDisplay
-  | MoveCellAction
+  | MoveCell
   | RemoveCellAction
   | NewCellAfterAction
   | NewCellBeforeAction

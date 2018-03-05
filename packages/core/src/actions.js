@@ -69,7 +69,7 @@ import type {
   FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
-  MoveCellAction,
+  MoveCell,
   ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
@@ -292,16 +292,16 @@ export function clearAllOutputs(payload: {
   };
 }
 
-export function moveCell(
+// TODO: #2618
+export function moveCell(payload: {
   id: string,
   destinationId: string,
-  above: boolean
-): MoveCellAction {
+  above: boolean,
+  contentRef?: ContentRef
+}): MoveCell {
   return {
     type: actionTypes.MOVE_CELL,
-    id,
-    destinationId,
-    above
+    payload
   };
 }
 

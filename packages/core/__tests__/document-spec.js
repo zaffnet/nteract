@@ -367,10 +367,10 @@ describe("moveCell", () => {
     const cellOrder = originalState.getIn(["notebook", "cellOrder"]);
     const id = cellOrder.last();
     const destinationId = cellOrder.first();
-
-    const action = { type: actionTypes.MOVE_CELL, id, destinationId };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.moveCell({ id, destinationId, above: false })
+    );
     expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(id);
     expect(state.getIn(["notebook", "cellOrder"]).first()).toBe(destinationId);
   });
@@ -380,15 +380,10 @@ describe("moveCell", () => {
     const cellOrder = originalState.getIn(["notebook", "cellOrder"]);
     const id = cellOrder.last();
     const destinationId = cellOrder.first();
-
-    const action = {
-      type: actionTypes.MOVE_CELL,
-      id,
-      destinationId,
-      above: true
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.moveCell({ id, destinationId, above: true })
+    );
     expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(destinationId);
     expect(state.getIn(["notebook", "cellOrder"]).first()).toBe(id);
   });
@@ -405,28 +400,28 @@ describe("moveCell", () => {
 
     const cellOrder = originalState.getIn(["notebook", "cellOrder"]);
 
-    const action = {
-      type: actionTypes.MOVE_CELL,
-      id: cellOrder.get(0),
-      destinationId: cellOrder.get(1)
-    };
-    // implicitly above: false
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.moveCell({
+        id: cellOrder.get(0),
+        destinationId: cellOrder.get(1),
+        above: false
+      })
+    );
     expect(state.getIn(["notebook", "cellOrder"]).toJS()).toEqual([
       cellOrder.get(1),
       cellOrder.get(0),
       cellOrder.get(2)
     ]);
 
-    const action2 = {
-      type: actionTypes.MOVE_CELL,
-      id: cellOrder.get(0),
-      destinationId: cellOrder.get(1),
-      above: true
-    };
-
-    const state2 = reducers(originalState, action2);
+    const state2 = reducers(
+      originalState,
+      actions.moveCell({
+        id: cellOrder.get(0),
+        destinationId: cellOrder.get(1),
+        above: true
+      })
+    );
     expect(state2.getIn(["notebook", "cellOrder"]).toJS()).toEqual([
       cellOrder.get(0),
       cellOrder.get(1),

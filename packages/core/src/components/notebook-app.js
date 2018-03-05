@@ -303,7 +303,7 @@ type NotebookStateProps = {
 };
 
 type NotebookDispatchProps = {
-  moveCell: (sourceId: string, destinationId: string, above: boolean) => *,
+  moveCell: (payload: *) => *,
   focusCell: (payload: *) => *,
   executeFocusedCell: () => *,
   focusNextCell: (*) => *,
@@ -328,8 +328,7 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
-  moveCell: (sourceId: string, destinationId: string, above: boolean) =>
-    dispatch(actions.moveCell(sourceId, destinationId, above)),
+  moveCell: (payload: *) => dispatch(actions.moveCell(payload)),
   focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
   focusNextCell: (payload: *) => dispatch(actions.focusNextCell(payload)),

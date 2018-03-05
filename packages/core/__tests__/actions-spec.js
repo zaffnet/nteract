@@ -228,11 +228,15 @@ describe("updateCellStatus", () => {
 
 describe("moveCell", () => {
   test("creates a MOVE_CELL action", () => {
-    expect(actions.moveCell("1234", "5678", true)).toEqual({
+    expect(
+      actions.moveCell({ id: "1234", destinationId: "5678", above: true })
+    ).toEqual({
       type: actionTypes.MOVE_CELL,
-      id: "1234",
-      destinationId: "5678",
-      above: true
+      payload: {
+        id: "1234",
+        destinationId: "5678",
+        above: true
+      }
     });
   });
 });

@@ -131,11 +131,16 @@ export type SetInCell<T> = {
   }
 };
 
+// TODO: #2618
 export const MOVE_CELL = "MOVE_CELL";
-export type MoveCellAction = {
+export type MoveCell = {
   type: "MOVE_CELL",
-  id: CellID,
-  destinationId: CellID
+  payload: {
+    id: CellID,
+    destinationId: CellID,
+    above: boolean,
+    contentRef?: ContentRef
+  }
 };
 
 export const REMOVE_CELL = "REMOVE_CELL";

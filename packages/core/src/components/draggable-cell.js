@@ -43,7 +43,7 @@ type Props = {|
   id: string,
   isDragging: boolean,
   isOver: boolean,
-  moveCell: (source: string, dest: string, above: boolean) => Object,
+  moveCell: (payload: *) => Object,
   children: React.Element<any>
 |};
 
@@ -74,7 +74,12 @@ const cellTarget = {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
-      props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
+      // TODO: #2618
+      props.moveCell({
+        id: monitor.getItem().id,
+        destinationId: props.id,
+        above: hoverUpperHalf
+      });
     }
   },
 
