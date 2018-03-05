@@ -418,9 +418,9 @@ describe("cutCell", () => {
 
 describe("toggleCellOutputVisibility", () => {
   test("creates a TOGGLE_CELL_OUTPUT_VISIBILITY action", () => {
-    expect(actions.toggleCellOutputVisibility("235")).toEqual({
+    expect(actions.toggleCellOutputVisibility({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });

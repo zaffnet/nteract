@@ -76,7 +76,7 @@ import type {
   SetLanguageInfoAction,
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
-  ToggleCellOutputVisibilityAction,
+  ToggleCellOutputVisibility,
   SetInCell,
   SendExecuteRequest,
   NewKernelAction,
@@ -421,12 +421,14 @@ export function unhideAll(payload: {
   };
 }
 
-export function toggleCellOutputVisibility(
-  id: string
-): ToggleCellOutputVisibilityAction {
+// TODO: #2618
+export function toggleCellOutputVisibility(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleCellOutputVisibility {
   return {
     type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
-    id
+    payload
   };
 }
 

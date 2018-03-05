@@ -270,8 +270,9 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
   clearOutputs: () => dispatch(actions.clearOutputs({ id })),
   toggleCellInputVisibility: () =>
     dispatch(actions.toggleCellInputVisibility(id)),
+  // TODO: #2618
   toggleCellOutputVisibility: () =>
-    dispatch(actions.toggleCellOutputVisibility(id)),
+    dispatch(actions.toggleCellOutputVisibility({ id })),
   changeCellType: () =>
     dispatch(
       actions.changeCellType(id, type === "markdown" ? "code" : "markdown")

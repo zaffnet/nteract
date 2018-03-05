@@ -580,10 +580,10 @@ describe("toggleCellOutputVisibility", () => {
     );
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.toggleCellOutputVisibility({ id })
+    );
     expect(
       state.getIn(["notebook", "cellMap", id, "metadata", "outputHidden"])
     ).toBe(true);

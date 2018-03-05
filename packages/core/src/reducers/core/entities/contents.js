@@ -44,7 +44,7 @@ import type {
   SetLanguageInfoAction,
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
-  ToggleCellOutputVisibilityAction,
+  ToggleCellOutputVisibility,
   SetInCell,
   SendExecuteRequest
 } from "../../../actionTypes";
@@ -579,9 +579,9 @@ function setInCell(state: DocumentRecord, action: SetInCell<*>) {
 
 function toggleCellOutputVisibility(
   state: DocumentRecord,
-  action: ToggleCellOutputVisibilityAction
+  action: ToggleCellOutputVisibility
 ) {
-  const { id } = action;
+  const { id } = action.payload;
   return state.setIn(
     ["notebook", "cellMap", id, "metadata", "outputHidden"],
     !state.getIn(["notebook", "cellMap", id, "metadata", "outputHidden"])
@@ -755,7 +755,7 @@ type DocumentAction =
   | CreateCellBefore
   | CreateCellAppend
   | MergeCellAfter
-  | ToggleCellOutputVisibilityAction
+  | ToggleCellOutputVisibility
   | ToggleCellInputVisibilityAction
   | UpdateCellStatusAction
   | SetLanguageInfoAction

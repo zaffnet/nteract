@@ -237,10 +237,14 @@ export type UnhideAll = {
   }
 };
 
+// TODO: #2618
 export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
-export type ToggleCellOutputVisibilityAction = {
+export type ToggleCellOutputVisibility = {
   type: "TOGGLE_CELL_OUTPUT_VISIBILITY",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
 export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
