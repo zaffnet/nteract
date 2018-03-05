@@ -247,10 +247,14 @@ export type ToggleCellOutputVisibility = {
   }
 };
 
+// TODO: #2618
 export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
-export type ToggleCellInputVisibilityAction = {
+export type ToggleCellInputVisibility = {
   type: "TOGGLE_CELL_INPUT_VISIBILITY",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
 // TODO: #2618

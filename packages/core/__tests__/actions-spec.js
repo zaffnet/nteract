@@ -427,9 +427,9 @@ describe("toggleCellOutputVisibility", () => {
 
 describe("toggleCellInputVisibility", () => {
   test("creates a TOGGLE_CELL_INPUT_VISIBILITY action", () => {
-    expect(actions.toggleCellInputVisibility("235")).toEqual({
+    expect(actions.toggleCellInputVisibility({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });

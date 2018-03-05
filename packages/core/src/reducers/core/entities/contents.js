@@ -43,7 +43,7 @@ import type {
   SetKernelInfoAction,
   SetLanguageInfoAction,
   UpdateCellStatusAction,
-  ToggleCellInputVisibilityAction,
+  ToggleCellInputVisibility,
   ToggleCellOutputVisibility,
   SetInCell,
   SendExecuteRequest
@@ -605,9 +605,9 @@ function unhideAll(state: DocumentRecord, action: UnhideAll) {
 
 function toggleCellInputVisibility(
   state: DocumentRecord,
-  action: ToggleCellInputVisibilityAction
+  action: ToggleCellInputVisibility
 ) {
-  const { id } = action;
+  const { id } = action.payload;
   return state.setIn(
     ["notebook", "cellMap", id, "metadata", "inputHidden"],
     !state.getIn(["notebook", "cellMap", id, "metadata", "inputHidden"])
@@ -756,7 +756,7 @@ type DocumentAction =
   | CreateCellAppend
   | MergeCellAfter
   | ToggleCellOutputVisibility
-  | ToggleCellInputVisibilityAction
+  | ToggleCellInputVisibility
   | UpdateCellStatusAction
   | SetLanguageInfoAction
   | SetKernelInfoAction

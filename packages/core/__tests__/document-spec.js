@@ -597,12 +597,13 @@ describe("toggleCellInputVisibility", () => {
       cells =>
         cells.map(value => value.setIn(["metadata", "inputHidden"], false))
     );
-
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.toggleCellInputVisibility({
+        id
+      })
+    );
     expect(
       state.getIn(["notebook", "cellMap", id, "metadata", "inputHidden"])
     ).toBe(true);
