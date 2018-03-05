@@ -433,12 +433,8 @@ describe("moveCell", () => {
 describe("removeCell", () => {
   test("should remove a cell given an ID", () => {
     const originalState = monocellDocument;
-
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.REMOVE_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.removeCell({ id }));
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(2);
   });
 });

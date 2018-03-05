@@ -243,9 +243,9 @@ describe("moveCell", () => {
 
 describe("removeCell", () => {
   test("creates a REMOVE_CELL action", () => {
-    expect(actions.removeCell("1234")).toEqual({
+    expect(actions.removeCell({ id: "1234" })).toEqual({
       type: actionTypes.REMOVE_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });

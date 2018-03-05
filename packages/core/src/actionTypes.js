@@ -143,8 +143,15 @@ export type MoveCell = {
   }
 };
 
+// TODO: #2618
 export const REMOVE_CELL = "REMOVE_CELL";
-export type RemoveCellAction = { type: "REMOVE_CELL", id: CellID };
+export type RemoveCell = {
+  type: "REMOVE_CELL",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
 export const NEW_CELL_AFTER = "NEW_CELL_AFTER";
 export type NewCellAfterAction = {

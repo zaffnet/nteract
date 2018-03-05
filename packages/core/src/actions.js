@@ -65,7 +65,7 @@ import type {
   FocusCellEditorAction,
   FocusNextCellEditor,
   FocusPreviousCellEditor,
-  RemoveCellAction,
+  RemoveCell,
   FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
@@ -305,10 +305,14 @@ export function moveCell(payload: {
   };
 }
 
-export function removeCell(id: string): RemoveCellAction {
+// TODO: #2618
+export function removeCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): RemoveCell {
   return {
     type: actionTypes.REMOVE_CELL,
-    id
+    payload
   };
 }
 

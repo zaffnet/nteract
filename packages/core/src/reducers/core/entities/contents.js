@@ -33,7 +33,7 @@ import type {
   FocusCellEditorAction,
   FocusNextCellEditor,
   FocusPreviousCellEditor,
-  RemoveCellAction,
+  RemoveCell,
   FocusCell,
   NewCellAppendAction,
   MergeCellAfterAction,
@@ -437,8 +437,8 @@ function moveCell(state: DocumentRecord, action: MoveCell) {
   );
 }
 
-function removeCellFromState(state: DocumentRecord, action: RemoveCellAction) {
-  const { id } = action;
+function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
+  const { id } = action.payload;
   return cleanCellTransient(
     state.update("notebook", (notebook: ImmutableNotebook) =>
       removeCell(notebook, id)
@@ -743,7 +743,7 @@ type DocumentAction =
   | AppendOutput
   | UpdateDisplay
   | MoveCell
-  | RemoveCellAction
+  | RemoveCell
   | NewCellAfterAction
   | NewCellBeforeAction
   | NewCellAppendAction

@@ -263,7 +263,8 @@ type ConnectedProps = {
 const mapDispatchToProps = (dispatch, { id, type }) => ({
   // TODO: #2618
   toggleStickyCell: () => dispatch(actions.toggleStickyCell({ id })),
-  removeCell: () => dispatch(actions.removeCell(id)),
+  // TODO: #2618
+  removeCell: () => dispatch(actions.removeCell({ id })),
   executeCell: () => dispatch(actions.executeCell(id)),
   // TODO: #2618
   clearOutputs: () => dispatch(actions.clearOutputs({ id })),

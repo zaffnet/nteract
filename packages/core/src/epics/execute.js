@@ -137,8 +137,13 @@ export function createExecuteCellStream(
     takeUntil(
       merge(
         action$.pipe(
-          filter(laterAction => laterAction.id === id),
-          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL)
+          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL),
+          // TODO: Type this when payloads are equivalent and simplify...
+          filter(
+            laterAction =>
+              (laterAction.payload && laterAction.payload.id === id) ||
+              laterAction.id === id
+          )
         ),
         action$.pipe(
           ofType(
