@@ -60,6 +60,13 @@ export const NewNotebook = (
           margin-right: 20px;
 
           flex: 0 0 auto;
+
+          --logo-off: currentColor;
+        }
+
+        .newNotebook:focus,
+        .newNotebook:hover {
+          --logo-off: unset;
         }
 
         .newNotebook:focus {
