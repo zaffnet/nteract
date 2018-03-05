@@ -183,11 +183,13 @@ describe("setNotebookKernelInfo", () => {
 
 describe("updateCellSource", () => {
   test("creates a UPDATE_CELL_SOURCE action", () => {
-    expect(actions.updateCellSource("1234", "# test")).toEqual({
+    expect(actions.updateCellSource({ id: "1234", value: "# test" })).toEqual({
       type: "SET_IN_CELL",
-      id: "1234",
-      path: ["source"],
-      value: "# test"
+      payload: {
+        id: "1234",
+        path: ["source"],
+        value: "# test"
+      }
     });
   });
 });
@@ -203,11 +205,13 @@ describe("clearOutputs", () => {
 
 describe("updateCellExecutionCount", () => {
   test("creates a SET_IN_CELL action with the right path", () => {
-    expect(actions.updateCellExecutionCount("1234", 3)).toEqual({
+    expect(actions.updateCellExecutionCount({ id: "1234", value: 3 })).toEqual({
       type: "SET_IN_CELL",
-      id: "1234",
-      path: ["execution_count"],
-      value: 3
+      payload: {
+        id: "1234",
+        path: ["execution_count"],
+        value: 3
+      }
     });
   });
 });

@@ -350,15 +350,10 @@ describe("updateExecutionCount", () => {
     const originalState = monocellDocument;
 
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = {
-      type: "SET_IN_CELL",
-      id,
-      path: ["execution_count"],
-      value: 42
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.setInCell({ id, path: ["execution_count"], value: 42 })
+    );
     expect(state.getIn(["notebook", "cellMap", id, "execution_count"])).toBe(
       42
     );
@@ -564,15 +559,10 @@ describe("updateSource", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = {
-      type: "SET_IN_CELL",
-      id,
-      path: ["source"],
-      value: "This is a test"
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.setInCell({ id, path: ["source"], value: "This is a test" })
+    );
     expect(state.getIn(["notebook", "cellMap", id, "source"])).toBe(
       "This is a test"
     );

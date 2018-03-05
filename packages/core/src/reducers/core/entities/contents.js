@@ -45,7 +45,7 @@ import type {
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
-  SetInCellAction,
+  SetInCell,
   SendExecuteRequest
 } from "../../../actionTypes";
 
@@ -563,10 +563,10 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
   }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
-function setInCell(state: DocumentRecord, action: SetInCellAction<*>) {
+function setInCell(state: DocumentRecord, action: SetInCell<*>) {
   return state.setIn(
-    ["notebook", "cellMap", action.id].concat(action.path),
-    action.value
+    ["notebook", "cellMap", action.payload.id].concat(action.payload.path),
+    action.payload.value
   );
 }
 
@@ -765,7 +765,7 @@ type DocumentAction =
   | SaveFulfilled
   | RestartKernel
   | ClearAllOutputs
-  | SetInCellAction<*>;
+  | SetInCell<*>;
 
 const defaultDocument: DocumentRecord = makeDocumentRecord({
   notebook: emptyNotebook

@@ -87,7 +87,8 @@ export function executeCellStream(
     // Update the input numbering: `[ ]`
     cellMessages.pipe(
       executionCounts(),
-      map(ct => actions.updateCellExecutionCount(id, ct))
+      // TODO: #2618
+      map(ct => actions.updateCellExecutionCount({ id, value: ct }))
     ),
 
     // All actions for new outputs

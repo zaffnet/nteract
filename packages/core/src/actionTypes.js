@@ -119,12 +119,16 @@ export type ChangeFilenameAction = {
   filename: string
 };
 
+// TODO: #2618
 export const SET_IN_CELL = "SET_IN_CELL";
-export type SetInCellAction<T> = {
+export type SetInCell<T> = {
   type: "SET_IN_CELL",
-  id: CellID,
-  path: Array<string>,
-  value: T
+  payload: {
+    id: CellID,
+    path: Array<string>,
+    value: T,
+    contentRef?: ContentRef
+  }
 };
 
 export const MOVE_CELL = "MOVE_CELL";

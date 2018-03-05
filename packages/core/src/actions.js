@@ -77,7 +77,7 @@ import type {
   UpdateCellStatusAction,
   ToggleCellInputVisibilityAction,
   ToggleCellOutputVisibilityAction,
-  SetInCellAction,
+  SetInCell,
   SendExecuteRequest,
   NewKernelAction,
   SetGithubTokenAction,
@@ -350,12 +350,13 @@ export function mergeCellAfter(id: string): MergeCellAfterAction {
   };
 }
 
+// TODO: #2618
 /**
  * setInCell can generically be used to set any attribute on a cell, including
  * and especially for changing metadata per cell.
- * @param {CellID} id    cell ID
- * @param {Array<string>} path  path within a cell to set
- * @param {any} value what to set it to
+ * @param {CellID} payload.id    cell ID
+ * @param {Array<string>} payload.path  path within a cell to set
+ * @param {any} payload.value what to set it to
  *
  * Example:
  *
@@ -371,31 +372,30 @@ export function mergeCellAfter(id: string): MergeCellAfterAction {
  * }
  *
  */
-export function setInCell<T>(
+export function setInCell<T>(payload: {
   id: CellID,
   path: Array<string>,
-  value: T
-): SetInCellAction<T> {
+  value: T,
+  contentRef?: ContentRef
+}): SetInCell<T> {
   return {
     type: actionTypes.SET_IN_CELL,
-    id,
-    path,
-    value
+    payload
   };
 }
 
-export function updateCellSource(
+export function updateCellSource(payload: {
   id: string,
-  source: string
-): SetInCellAction<string> {
-  return setInCell(id, ["source"], source);
+  value: string
+}): SetInCell<string> {
+  return setInCell({ ...payload, path: ["source"] });
 }
 
-export function updateCellExecutionCount(
+export function updateCellExecutionCount(payload: {
   id: string,
-  count: number
-): SetInCellAction<number> {
-  return setInCell(id, ["execution_count"], count);
+  value: number
+}): SetInCell<number> {
+  return setInCell({ ...payload, path: ["execution_count"] });
 }
 
 export function unhideAll(payload: {
