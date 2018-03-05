@@ -5,7 +5,7 @@ import renderer from "react-test-renderer";
 import { shallow, mount } from "enzyme";
 import { NewNotebookNavigation } from "../../src/components/new-notebook-navigation";
 
-import { List, Map, Record } from "immutable";
+import * as Immutable from "immutable";
 
 describe("NewNotebookNavigation", () => {
   test("snapshots", () => {
@@ -15,10 +15,10 @@ describe("NewNotebookNavigation", () => {
           name: "python3",
           language: "python",
           displayName: "Python 3",
-          metadata: Map(),
-          env: Map(),
-          argv: List(),
-          resources: Map(),
+          metadata: Immutable.Map(),
+          env: Immutable.Map(),
+          argv: Immutable.List(),
+          resources: Immutable.Map(),
           interruptMode: "yes"
         }
       },
@@ -27,10 +27,10 @@ describe("NewNotebookNavigation", () => {
           name: "scala211",
           language: "scala",
           displayName: "Scala 2.11",
-          metadata: Map(),
-          env: Map(),
-          argv: List(),
-          resources: Map(),
+          metadata: Immutable.Map(),
+          env: Immutable.Map(),
+          argv: Immutable.List(),
+          resources: Immutable.Map(),
           interruptMode: "yes"
         }
       },
@@ -39,10 +39,10 @@ describe("NewNotebookNavigation", () => {
           name: "python2",
           language: "python",
           displayName: "Python 2",
-          metadata: Map(),
-          env: Map(),
-          argv: List(),
-          resources: Map(),
+          metadata: Immutable.Map(),
+          env: Immutable.Map(),
+          argv: Immutable.List(),
+          resources: Immutable.Map(),
           interruptMode: "yes"
         }
       }

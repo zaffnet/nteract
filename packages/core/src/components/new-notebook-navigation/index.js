@@ -14,8 +14,6 @@ import * as React from "react";
 
 import type { KernelspecProps } from "../../state/entities/kernelspecs";
 
-import { List, Map, Record } from "immutable";
-
 import * as logos from "./logos";
 
 export type AvailableNotebook = {
