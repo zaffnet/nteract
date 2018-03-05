@@ -73,7 +73,7 @@ import type {
   ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
-  SetLanguageInfoAction,
+  SetLanguageInfo,
   UpdateCellStatus,
   ToggleCellInputVisibility,
   ToggleCellOutputVisibility,
@@ -893,10 +893,12 @@ export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
   };
 }
 
+// TODO: #2618
 export function setLanguageInfo(payload: {
   langInfo: LanguageInfoMetadata,
-  kernelRef: KernelRef
-}): SetLanguageInfoAction {
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
+}): SetLanguageInfo {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
     payload

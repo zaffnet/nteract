@@ -285,12 +285,14 @@ export type AcceptPayloadMessage = {
   }
 };
 
+// TODO: #2618
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
-export type SetLanguageInfoAction = {
+export type SetLanguageInfo = {
   type: "SET_LANGUAGE_INFO",
   payload: {
     langInfo: LanguageInfoMetadata,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 

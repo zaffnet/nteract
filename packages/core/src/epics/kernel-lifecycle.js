@@ -75,6 +75,7 @@ export function acquireKernelInfo(channels: Channels, kernelRef: KernelRef) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
+    // TODO: #2618
     map(langInfo => actions.setLanguageInfo({ langInfo, kernelRef }))
   );
 

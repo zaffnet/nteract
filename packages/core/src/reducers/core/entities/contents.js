@@ -41,7 +41,7 @@ import type {
   ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfoAction,
-  SetLanguageInfoAction,
+  SetLanguageInfo,
   UpdateCellStatus,
   ToggleCellInputVisibility,
   ToggleCellOutputVisibility,
@@ -618,7 +618,7 @@ function updateCellStatus(state: DocumentRecord, action: UpdateCellStatus) {
   const { id, status } = action.payload;
   return state.setIn(["transient", "cellMap", id, "status"], status);
 }
-function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfoAction) {
+function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfo) {
   const langInfo = Immutable.fromJS(action.payload.langInfo);
   return state.setIn(["notebook", "metadata", "language_info"], langInfo);
 }
@@ -755,7 +755,7 @@ type DocumentAction =
   | ToggleCellOutputVisibility
   | ToggleCellInputVisibility
   | UpdateCellStatus
-  | SetLanguageInfoAction
+  | SetLanguageInfo
   | SetKernelInfoAction
   | OverwriteMetadataFieldAction
   | DeleteMetadataFieldAction
