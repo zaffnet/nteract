@@ -367,7 +367,7 @@ export function watchSpawn(action$: *, store: *) {
           // We both set the state and make it easy for us to log the error
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "errored",
+              kernelStatus: "process errored",
               kernelRef: action.payload.kernelRef
             })
           );
@@ -377,7 +377,7 @@ export function watchSpawn(action$: *, store: *) {
         spawn.on("exit", () => {
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "exited",
+              kernelStatus: "process exited",
               kernelRef: action.payload.kernelRef
             })
           );
@@ -386,7 +386,7 @@ export function watchSpawn(action$: *, store: *) {
         spawn.on("disconnect", () => {
           observer.next(
             actions.setExecutionState({
-              kernelStatus: "disconnected",
+              kernelStatus: "process disconnected",
               kernelRef: action.payload.kernelRef
             })
           );
