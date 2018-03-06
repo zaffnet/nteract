@@ -755,10 +755,14 @@ export function executeFailed(error: Error): ExecuteFailed {
   };
 }
 
-export function changeFilename(filename: string): ChangeFilenameAction {
+// TODO: #2618
+export function changeFilename(payload: {
+  filename: ?string,
+  contentRef?: ContentRef
+}): ChangeFilenameAction {
   return {
     type: actionTypes.CHANGE_FILENAME,
-    filename
+    payload
   };
 }
 

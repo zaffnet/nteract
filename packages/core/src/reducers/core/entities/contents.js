@@ -729,8 +729,9 @@ function toggleOutputExpansion(
 }
 
 function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
-  if (action.filename) {
-    return state.set("filename", action.filename);
+  const { filename } = action.payload;
+  if (filename) {
+    return state.set("filename", filename);
   }
   return state;
 }

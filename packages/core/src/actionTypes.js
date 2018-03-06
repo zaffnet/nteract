@@ -113,10 +113,14 @@ export type FetchKernelspecsFailed = {
   }
 };
 
+// TODO: #2618
 export const CHANGE_FILENAME = "CHANGE_FILENAME";
 export type ChangeFilenameAction = {
   type: "CHANGE_FILENAME",
-  filename: string
+  payload: {
+    filename: ?string,
+    contentRef?: ContentRef
+  }
 };
 
 // TODO: #2618

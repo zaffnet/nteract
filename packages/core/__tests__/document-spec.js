@@ -898,27 +898,24 @@ describe("cleanCellTransient", () => {
 });
 
 describe("changeFilename", () => {
-  test("returns the same originalState if filename is undefined", () => {
+  test("returns the same originalState if filename is null", () => {
     const originalState = makeDocumentRecord({
       filename: "original.ipynb"
     });
-
-    const action = { type: actionTypes.CHANGE_FILENAME };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.changeFilename({ filename: null })
+    );
     expect(state.filename).toBe("original.ipynb");
   });
   test("sets the filename if given a valid one", () => {
     const originalState = makeDocumentRecord({
       filename: "original.ipynb"
     });
-
-    const action = {
-      type: actionTypes.CHANGE_FILENAME,
-      filename: "test.ipynb"
-    };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.changeFilename({ filename: "test.ipynb" })
+    );
     expect(state.filename).toBe("test.ipynb");
   });
 });

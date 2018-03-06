@@ -39,7 +39,7 @@ describe("saveAsEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.changeFilename("great-filename"),
+      actions.changeFilename({ filename: "great-filename" }),
       actions.save()
     ]);
   });
