@@ -197,6 +197,7 @@ export function dispatchClearAll(store: *) {
 }
 
 export function dispatchUnhideAll(store: *) {
+  // TODO: #2618
   store.dispatch(
     actions.unhideAll({
       outputHidden: false,

@@ -238,16 +238,10 @@ describe("menu", () => {
     test("", () => {
       const store = dummyStore({ hideAll: true });
       store.dispatch = jest.fn();
-
       menu.dispatchUnhideAll(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "UNHIDE_ALL",
-        payload: {
-          outputHidden: false,
-          inputHidden: false
-        }
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.unhideAll({ outputHidden: false, inputHidden: false })
+      );
     });
   });
 

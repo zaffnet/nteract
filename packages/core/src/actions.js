@@ -415,9 +415,11 @@ export function updateCellExecutionCount(payload: {
   return setInCell({ ...payload, path: ["execution_count"] });
 }
 
+// TODO: #2618
 export function unhideAll(payload: {
   outputHidden: boolean,
-  inputHidden: boolean
+  inputHidden: boolean,
+  contentRef?: ContentRef
 }): UnhideAll {
   return {
     type: "UNHIDE_ALL",

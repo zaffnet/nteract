@@ -27,7 +27,7 @@ type Props = {
   executeAllCells: ?() => void,
   executeAllCellsBelow: ?() => void,
   clearAllOutputs: ?(payload: *) => void,
-  unhideAllCells: ?(*) => void,
+  unhideAll: ?(*) => void,
   cutCell: ?(payload: *) => void,
   copyCell: ?(payload: *) => void,
   mergeCellAfter: ?(payload: *) => void,
@@ -55,7 +55,7 @@ class PureNotebookMenu extends React.Component<Props> {
     executeAllCells: null,
     executeAllCellsBelow: null,
     clearAllOutputs: null,
-    unhideAllCells: null,
+    unhideAll: null,
     cutCell: null,
     copyCell: null,
     mergeCellAfter: null,
@@ -84,7 +84,7 @@ class PureNotebookMenu extends React.Component<Props> {
       executeAllCells,
       executeAllCellsBelow,
       clearAllOutputs,
-      unhideAllCells,
+      unhideAll,
       filename,
       mergeCellAfter,
       notebook,
@@ -166,9 +166,10 @@ class PureNotebookMenu extends React.Component<Props> {
           executeAllCellsBelow();
         }
         break;
-      case MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS:
-        if (unhideAllCells) {
-          unhideAllCells({ outputHidden: false, inputHidden: false });
+      case MENU_ITEM_ACTIONS.UNHIDE_ALL:
+        if (unhideAll) {
+          // TODO: #2618
+          unhideAll({ outputHidden: false, inputHidden: false });
         }
         break;
       case MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS:
@@ -308,7 +309,7 @@ class PureNotebookMenu extends React.Component<Props> {
               Clear All Outputs
             </MenuItem>
 
-            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS)}>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.UNHIDE_ALL)}>
               Unhide All Input and Output
             </MenuItem>
           </SubMenu>
@@ -373,7 +374,7 @@ const mapDispatchToProps = dispatch => ({
   executeAllCells: () => dispatch(actions.executeAllCells()),
   executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
   clearAllOutputs: (payload: *) => dispatch(actions.clearAllOutputs(payload)),
-  unhideAllCells: payload => dispatch(actions.unhideAll(payload)),
+  unhideAll: payload => dispatch(actions.unhideAll(payload)),
   cutCell: (payload: *) => dispatch(actions.cutCell(payload)),
   copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
   pasteCell: (payload: *) => dispatch(actions.pasteCell(payload)),

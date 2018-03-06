@@ -228,12 +228,14 @@ export type UpdateDisplayFailed = {
   error: true
 };
 
+// TODO: #2618
 export const UNHIDE_ALL = "UNHIDE_ALL";
 export type UnhideAll = {
   type: "UNHIDE_ALL",
   payload: {
     inputHidden: boolean,
-    outputHidden: boolean
+    outputHidden: boolean,
+    contentRef?: ContentRef
   }
 };
 
