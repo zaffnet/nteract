@@ -48,7 +48,7 @@ import type {
   ToggleCellExpansionAction,
   ChangeCellTypeAction,
   CutCellAction,
-  CopyCellAction,
+  CopyCell,
   DeleteMetadataField,
   OverwriteMetadataField,
   AcceptPayloadMessage,
@@ -626,10 +626,14 @@ export function setNotificationSystem(
   };
 }
 
-export function copyCell(id: CellID): CopyCellAction {
+// TODO: #2618
+export function copyCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): CopyCell {
   return {
     type: actionTypes.COPY_CELL,
-    id
+    payload
   };
 }
 

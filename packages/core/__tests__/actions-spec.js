@@ -409,9 +409,9 @@ describe("overwriteMetadataField", () => {
 
 describe("copyCell", () => {
   test("creates a COPY_CELL action", () => {
-    expect(actions.copyCell("235")).toEqual({
+    expect(actions.copyCell({ id: "235" })).toEqual({
       type: actionTypes.COPY_CELL,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });

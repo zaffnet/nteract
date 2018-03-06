@@ -18,7 +18,7 @@ import type {
   ToggleCellExpansionAction,
   ChangeCellTypeAction,
   CutCellAction,
-  CopyCellAction,
+  CopyCell,
   DeleteMetadataField,
   OverwriteMetadataField,
   AcceptPayloadMessage,
@@ -653,8 +653,8 @@ function deleteMetadataField(
   return state.deleteIn(["notebook", "metadata", field]);
 }
 
-function copyCell(state: DocumentRecord, action: CopyCellAction) {
-  const { id } = action;
+function copyCell(state: DocumentRecord, action: CopyCell) {
+  const { id } = action.payload;
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
   const cell = cellMap.get(id);
   return state.set("copied", Immutable.Map({ id, cell }));
@@ -760,7 +760,7 @@ type DocumentAction =
   | SetKernelInfo
   | OverwriteMetadataField
   | DeleteMetadataField
-  | CopyCellAction
+  | CopyCell
   | CutCellAction
   | PasteCellAction
   | ChangeCellTypeAction

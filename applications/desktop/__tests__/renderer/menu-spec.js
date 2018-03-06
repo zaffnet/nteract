@@ -55,16 +55,13 @@ describe("menu", () => {
   });
 
   describe("dispatchCopyCell", () => {
-    test("dispatches a COPY_CELL action", () => {
+    test("dispatches a copyCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCopyCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.COPY_CELL,
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.copyCell({ id: null })
+      );
     });
   });
 

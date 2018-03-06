@@ -258,7 +258,8 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.copyCell(focused));
+  // TODO: #2618
+  store.dispatch(actions.copyCell({ id: focused }));
 }
 
 export function dispatchCutCell(store: *) {

@@ -104,7 +104,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.copyCell).not.toHaveBeenCalled();
       copyCellItem.simulate("click");
       expect(props.copyCell).toHaveBeenCalledTimes(1);
-      expect(props.copyCell).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.copyCell).toHaveBeenCalledWith({ id: props.cellFocused });
 
       const pasteCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.PASTE_CELL })
