@@ -112,7 +112,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.pasteCell).not.toHaveBeenCalled();
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalledTimes(1);
-      expect(props.pasteCell).toHaveBeenCalledWith();
+      expect(props.pasteCell).toHaveBeenCalledWith({});
 
       const mergeCellAfterItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.MERGE_CELL_AFTER })

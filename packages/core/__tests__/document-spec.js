@@ -684,10 +684,7 @@ describe("pasteCell", () => {
         id
       })
     );
-
-    const action = { type: actionTypes.PASTE_CELL };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.pasteCell({}));
     const copiedId = state.getIn(["notebook", "cellOrder", 1]);
 
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(4);

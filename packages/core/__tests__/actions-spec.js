@@ -445,7 +445,10 @@ describe("toggleCellInputVisibility", () => {
 
 describe("pasteCell", () => {
   test("creates a PASTE_CELL action", () => {
-    expect(actions.pasteCell()).toEqual({ type: actionTypes.PASTE_CELL });
+    expect(actions.pasteCell({})).toEqual({
+      type: actionTypes.PASTE_CELL,
+      payload: {}
+    });
   });
 });
 

@@ -270,7 +270,8 @@ export function dispatchCutCell(store: *) {
 }
 
 export function dispatchPasteCell(store: *) {
-  store.dispatch(actions.pasteCell());
+  // TODO: #2618
+  store.dispatch(actions.pasteCell({}));
 }
 
 export function dispatchCreateCellAfter(store: *) {

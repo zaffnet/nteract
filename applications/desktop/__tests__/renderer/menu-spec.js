@@ -28,15 +28,11 @@ describe("menu", () => {
   });
 
   describe("dispatchPasteCell", () => {
-    test("dispatches a PASTE_CELL action", () => {
+    test("dispatches a pasteCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchPasteCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.PASTE_CELL
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.pasteCell({}));
     });
   });
 

@@ -43,7 +43,7 @@ import type {
   FetchKernelspecs,
   FetchKernelspecsFulfilled,
   FetchKernelspecsFailed,
-  PasteCellAction,
+  PasteCell,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
   ChangeCellTypeAction,
@@ -648,9 +648,11 @@ export function cutCell(payload: {
   };
 }
 
-export function pasteCell(): PasteCellAction {
+// TODO: #2618
+export function pasteCell(payload: { contentRef?: ContentRef }): PasteCell {
   return {
-    type: actionTypes.PASTE_CELL
+    type: actionTypes.PASTE_CELL,
+    payload
   };
 }
 

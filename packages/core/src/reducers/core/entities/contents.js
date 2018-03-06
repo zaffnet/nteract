@@ -13,7 +13,7 @@ import type {
   UnhideAll,
   RestartKernel,
   ClearAllOutputs,
-  PasteCellAction,
+  PasteCell,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
   ChangeCellTypeAction,
@@ -762,7 +762,7 @@ type DocumentAction =
   | DeleteMetadataField
   | CopyCell
   | CutCell
-  | PasteCellAction
+  | PasteCell
   | ChangeCellTypeAction
   | ToggleCellExpansionAction
   | AcceptPayloadMessage

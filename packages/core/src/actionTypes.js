@@ -514,8 +514,12 @@ export type CopyCell = {
   payload: { id: CellID, contentRef?: ContentRef }
 };
 
+// TODO: #2618
 export const PASTE_CELL = "PASTE_CELL";
-export type PasteCellAction = { type: "PASTE_CELL" };
+export type PasteCell = {
+  type: "PASTE_CELL",
+  payload: { contentRef?: ContentRef }
+};
 
 export const CHANGE_CELL_TYPE = "CHANGE_CELL_TYPE";
 export type ChangeCellTypeAction = {
