@@ -387,9 +387,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch(
       actions.createCellAfter({ cellType: "markdown", id: cellId, source: "" })
     ),
-  setCellTypeCode: cellId => dispatch(actions.changeCellType(cellId, "code")),
+  // TODO: #2618
+  setCellTypeCode: cellId =>
+    dispatch(actions.changeCellType({ id: cellId, to: "code" })),
   setCellTypeMarkdown: cellId =>
-    dispatch(actions.changeCellType(cellId, "markdown")),
+    dispatch(actions.changeCellType({ id: cellId, to: "markdown" })),
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),

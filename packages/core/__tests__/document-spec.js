@@ -698,37 +698,32 @@ describe("pasteCell", () => {
 describe("changeCellType", () => {
   test("converts code cell to markdown cell", () => {
     const originalState = monocellDocument;
-
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "markdown" };
-
-    const state = reducers(originalState, action);
-
+    const state = reducers(
+      originalState,
+      actions.changeCellType({ id, to: "markdown" })
+    );
     expect(state.getIn(["notebook", "cellMap", id, "cell_type"])).toBe(
       "markdown"
     );
   });
   test("converts markdown cell to code cell", () => {
     const originalState = monocellDocument;
-
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "code" };
-
-    const state = reducers(originalState, action);
-
+    const state = reducers(
+      originalState,
+      actions.changeCellType({ id, to: "code" })
+    );
     expect(state.getIn(["notebook", "cellMap", id, "cell_type"])).toBe("code");
     expect(state.getIn(["notebook", "cellMap", id, "outputs"])).toBeDefined();
   });
   test("does nothing if cell type is same", () => {
     const originalState = monocellDocument;
-
     const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.CHANGE_CELL_TYPE, id, to: "markdown" };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.changeCellType({ id, to: "markdown" })
+    );
     expect(state).toBe(originalState);
   });
 });

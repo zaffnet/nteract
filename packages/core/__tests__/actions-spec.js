@@ -454,10 +454,12 @@ describe("pasteCell", () => {
 
 describe("changeCellType", () => {
   test("creates a CHANGE_CELL_TYPE action", () => {
-    expect(actions.changeCellType("235", "markdown")).toEqual({
+    expect(actions.changeCellType({ id: "235", to: "markdown" })).toEqual({
       type: actionTypes.CHANGE_CELL_TYPE,
-      id: "235",
-      to: "markdown"
+      payload: {
+        id: "235",
+        to: "markdown"
+      }
     });
   });
 });

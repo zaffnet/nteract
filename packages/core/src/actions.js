@@ -46,7 +46,7 @@ import type {
   PasteCell,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
-  ChangeCellTypeAction,
+  ChangeCellType,
   CutCell,
   CopyCell,
   DeleteMetadataField,
@@ -656,11 +656,15 @@ export function pasteCell(payload: { contentRef?: ContentRef }): PasteCell {
   };
 }
 
-export function changeCellType(id: CellID, to: CellType): ChangeCellTypeAction {
+// TODO: #2618
+export function changeCellType(payload: {
+  id: CellID,
+  to: CellType,
+  contentRef?: ContentRef
+}): ChangeCellType {
   return {
     type: actionTypes.CHANGE_CELL_TYPE,
-    id,
-    to
+    payload
   };
 }
 

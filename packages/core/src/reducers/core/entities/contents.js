@@ -16,7 +16,7 @@ import type {
   PasteCell,
   ChangeFilenameAction,
   ToggleCellExpansionAction,
-  ChangeCellTypeAction,
+  ChangeCellType,
   CutCell,
   CopyCell,
   DeleteMetadataField,
@@ -693,8 +693,8 @@ function pasteCell(state: DocumentRecord) {
     insertCellAfter(notebook, copiedCell, id, copiedId)
   );
 }
-function changeCellType(state: DocumentRecord, action: ChangeCellTypeAction) {
-  const { id, to } = action;
+function changeCellType(state: DocumentRecord, action: ChangeCellType) {
+  const { id, to } = action.payload;
   const from = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
   if (from === to) {
@@ -763,7 +763,7 @@ type DocumentAction =
   | CopyCell
   | CutCell
   | PasteCell
-  | ChangeCellTypeAction
+  | ChangeCellType
   | ToggleCellExpansionAction
   | AcceptPayloadMessage
   | SendExecuteRequest

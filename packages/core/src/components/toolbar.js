@@ -273,9 +273,13 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
   // TODO: #2618
   toggleCellInputVisibility: () =>
     dispatch(actions.toggleCellInputVisibility({ id })),
+  // TODO: #2618
   changeCellType: () =>
     dispatch(
-      actions.changeCellType(id, type === "markdown" ? "code" : "markdown")
+      actions.changeCellType({
+        id,
+        to: type === "markdown" ? "code" : "markdown"
+      })
     ),
   toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion(id))
 });
