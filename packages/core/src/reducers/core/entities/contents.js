@@ -15,7 +15,7 @@ import type {
   ClearAllOutputs,
   PasteCell,
   ChangeFilenameAction,
-  ToggleCellExpansionAction,
+  ToggleCellExpansion,
   ChangeCellType,
   CutCell,
   CopyCell,
@@ -717,9 +717,9 @@ function changeCellType(state: DocumentRecord, action: ChangeCellType) {
 
 function toggleOutputExpansion(
   state: DocumentRecord,
-  action: ToggleCellExpansionAction
+  action: ToggleCellExpansion
 ) {
-  const { id } = action;
+  const { id } = action.payload;
   return state.updateIn(["notebook", "cellMap"], (cells: ImmutableCellMap) =>
     cells.setIn(
       [id, "metadata", "outputExpanded"],
@@ -764,7 +764,7 @@ type DocumentAction =
   | CutCell
   | PasteCell
   | ChangeCellType
-  | ToggleCellExpansionAction
+  | ToggleCellExpansion
   | AcceptPayloadMessage
   | SendExecuteRequest
   | SaveFulfilled

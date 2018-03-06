@@ -494,10 +494,14 @@ export type SaveConfigAction = { type: "SAVE_CONFIG" };
 export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
 export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
 
+// TODO: #2618
 export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
-export type ToggleCellExpansionAction = {
+export type ToggleCellExpansion = {
   type: "TOGGLE_OUTPUT_EXPANSION",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
 // TODO: #2618

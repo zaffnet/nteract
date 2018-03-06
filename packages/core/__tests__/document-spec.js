@@ -735,12 +735,11 @@ describe("toggleOutputExpansion", () => {
       cells =>
         cells.map(value => value.setIn(["metadata", "outputExpanded"], false))
     );
-
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
-
-    const action = { type: actionTypes.TOGGLE_OUTPUT_EXPANSION, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.toggleOutputExpansion({ id })
+    );
     expect(
       state.getIn(["notebook", "cellMap", id, "metadata", "outputExpanded"])
     ).toBe(true);

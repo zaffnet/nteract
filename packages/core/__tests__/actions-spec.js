@@ -475,9 +475,9 @@ describe("setGithubToken", () => {
 
 describe("toggleOutputExpansion", () => {
   test("creates a TOGGLE_OUTPUT_EXPANSION action", () => {
-    expect(actions.toggleOutputExpansion("235")).toEqual({
+    expect(actions.toggleOutputExpansion({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });

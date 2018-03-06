@@ -338,7 +338,8 @@ export function exportPDF(
   //       run through before we print...
   // Expand unexpanded cells
   unexpandedCells.map(cellID =>
-    store.dispatch(actions.toggleOutputExpansion(cellID))
+    // TODO: #2618
+    store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
   );
 
   remote.getCurrentWindow().webContents.printToPDF(
@@ -350,7 +351,7 @@ export function exportPDF(
 
       // Restore the modified cells to their unexpanded state.
       unexpandedCells.map(cellID =>
-        store.dispatch(actions.toggleOutputExpansion(cellID))
+        store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
       );
 
       fs.writeFile(`${filename}.pdf`, data, error_fs => {

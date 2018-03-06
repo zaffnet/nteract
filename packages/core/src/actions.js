@@ -45,7 +45,7 @@ import type {
   FetchKernelspecsFailed,
   PasteCell,
   ChangeFilenameAction,
-  ToggleCellExpansionAction,
+  ToggleCellExpansion,
   ChangeCellType,
   CutCell,
   CopyCell,
@@ -691,10 +691,14 @@ export function setCursorBlink(value: string): SetConfigAction<string> {
   return setConfigAtKey("cursorBlinkRate", value);
 }
 
-export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
+// TODO: #2618
+export function toggleOutputExpansion(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleCellExpansion {
   return {
     type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
-    id
+    payload
   };
 }
 

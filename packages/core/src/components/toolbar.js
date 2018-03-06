@@ -281,7 +281,8 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
         to: type === "markdown" ? "code" : "markdown"
       })
     ),
-  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion(id))
+  // TODO: #2618
+  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion({ id }))
 });
 
 export default connect(null, mapDispatchToProps)(PureToolbar);
