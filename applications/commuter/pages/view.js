@@ -1,7 +1,8 @@
 // @flow
 import * as React from "react";
 import Link from "next/link";
-require("isomorphic-fetch");
+
+import { getJSON } from "../shims/ajax";
 
 import { join as pathJoin } from "path";
 
@@ -54,14 +55,11 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
 
     const url = `${BASE_PATH}api/contents/${viewPath}`;
 
-    const res = await fetch(url);
-
-    const statusCode = res.status > 200 ? res.status : false;
-    const json = await res.json();
+    const xhr = await getJSON(url).toPromise();
 
     return {
-      contents: json,
-      statusCode,
+      contents: xhr.response,
+      statusCode: xhr.status,
       viewPath,
       serverConfig: config
     };
@@ -82,7 +80,7 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
   }
 
   render() {
-    if (this.props.statusCode) {
+    if (this.props.statusCode !== 200) {
       return `Nothing found for ${this.props.viewPath}`;
     }
 

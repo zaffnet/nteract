@@ -2,4 +2,4 @@
 
 process.env.NODE_ENV = "production";
 
-require("./");
+require("./lib/index.js");

@@ -114,7 +114,6 @@ export const Entry = (props: EntryProps) => {
         </Styles>
       );
     default:
-      console.log("Unknown contents ");
       return <pre>{JSON.stringify(props.entry.content)}</pre>;
   }
 };
