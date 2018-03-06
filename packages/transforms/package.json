@@ -33,7 +33,7 @@
     "@nteract/mathjax": "^0.0.2",
     "@nteract/transform-vdom": "^2.1.0",
     "ansi-to-react": "^2.0.6",
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.6.1",
     "react-json-tree": "^0.11.0"
   },
   "peerDependencies": {
