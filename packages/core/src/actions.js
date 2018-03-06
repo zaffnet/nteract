@@ -49,7 +49,7 @@ import type {
   ChangeCellTypeAction,
   CutCellAction,
   CopyCellAction,
-  DeleteMetadataFieldAction,
+  DeleteMetadataField,
   OverwriteMetadataField,
   AcceptPayloadMessage,
   NewNotebook,
@@ -547,10 +547,14 @@ export function overwriteMetadataField(payload: {
   };
 }
 
-export function deleteMetadata(field: string): DeleteMetadataFieldAction {
+// TODO: #2618
+export function deleteMetadataField(payload: {
+  field: string,
+  contentRef?: ContentRef
+}): DeleteMetadataField {
   return {
     type: actionTypes.DELETE_METADATA_FIELD,
-    field
+    payload
   };
 }
 

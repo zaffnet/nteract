@@ -558,14 +558,16 @@ describe("overwriteMetadataField", () => {
   });
 });
 
-describe("deleteMetadata", () => {
+describe("deleteMetadataField", () => {
   test("deletes notebook metadata appropriately", () => {
     const originalState = monocellDocument.setIn(
       ["notebook", "metadata", "name"],
       "johnwashere"
     );
-    const action = { type: actionTypes.DELETE_METADATA_FIELD, field: "name" };
-    const state = reducers(originalState, action);
+    const state = reducers(
+      originalState,
+      actions.deleteMetadataField({ field: "name" })
+    );
     expect(state.getIn(["notebook", "metadata", "name"])).toBe(undefined);
   });
 });

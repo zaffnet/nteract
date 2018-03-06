@@ -428,10 +428,14 @@ export type OverwriteMetadataField = {
   }
 };
 
+// TODO: #2618
 export const DELETE_METADATA_FIELD = "DELETE_METADATA_FIELD";
-export type DeleteMetadataFieldAction = {
+export type DeleteMetadataField = {
   type: "DELETE_METADATA_FIELD",
-  field: string
+  payload: {
+    field: string,
+    contentRef?: ContentRef
+  }
 };
 
 // TODO: #2618

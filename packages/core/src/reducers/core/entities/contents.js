@@ -19,7 +19,7 @@ import type {
   ChangeCellTypeAction,
   CutCellAction,
   CopyCellAction,
-  DeleteMetadataFieldAction,
+  DeleteMetadataField,
   OverwriteMetadataField,
   AcceptPayloadMessage,
   SetNotebook,
@@ -645,11 +645,11 @@ function overwriteMetadataField(
   const { field, value } = action.payload;
   return state.setIn(["notebook", "metadata", field], Immutable.fromJS(value));
 }
-function deleteMetadata(
+function deleteMetadataField(
   state: DocumentRecord,
-  action: DeleteMetadataFieldAction
+  action: DeleteMetadataField
 ) {
-  const { field } = action;
+  const { field } = action.payload;
   return state.deleteIn(["notebook", "metadata", field]);
 }
 
@@ -759,7 +759,7 @@ type DocumentAction =
   | SetLanguageInfo
   | SetKernelInfo
   | OverwriteMetadataField
-  | DeleteMetadataFieldAction
+  | DeleteMetadataField
   | CopyCellAction
   | CutCellAction
   | PasteCellAction
@@ -839,7 +839,7 @@ function document(
     case actionTypes.OVERWRITE_METADATA_FIELD:
       return overwriteMetadataField(state, action);
     case actionTypes.DELETE_METADATA_FIELD:
-      return deleteMetadata(state, action);
+      return deleteMetadataField(state, action);
     case actionTypes.COPY_CELL:
       return copyCell(state, action);
     case actionTypes.CUT_CELL:

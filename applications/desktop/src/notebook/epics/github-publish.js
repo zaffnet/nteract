@@ -113,7 +113,8 @@ export function publishNotebookObservable(
               value: res.data.login
             })
           );
-          observer.next(actions.deleteMetadata("gist_id"));
+          // TODO: #2618
+          observer.next(actions.deleteMetadataField({ field: "gist_id" }));
         }
       });
     }
