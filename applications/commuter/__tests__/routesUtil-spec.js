@@ -1,5 +1,5 @@
 // @flow
-const isDir = require("./../src/content-providers/s3/contents").isDir;
+const isDir = require("./../backend/content-providers/s3/contents").isDir;
 
 describe("Routes util tests", () => {
   test("returns isDir true", () => {

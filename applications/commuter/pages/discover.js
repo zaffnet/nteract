@@ -1,12 +1,13 @@
 // @flow
 import * as React from "react";
-require("isomorphic-fetch");
 import TimeAgo from "@nteract/timeago";
 
 import NextLink from "next/link";
 
 import Header from "../components/header";
 import Body from "../components/body";
+
+import { getJSON } from "../shims/ajax";
 
 import { theme } from "../theme";
 
@@ -137,15 +138,12 @@ class DiscoveryGrid extends React.Component<*> {
     }
 
     const url = `${BASE_PATH}api/v1/discovery`;
-    const res = await fetch(url);
 
-    const statusCode = res.status > 200 ? res.status : false;
-
-    const json = await res.json();
+    const xhr = await getJSON(url).toPromise();
 
     return {
-      discovered: json.results,
-      statusCode
+      discovered: xhr.response.results,
+      statusCode: xhr.status
     };
   }
 

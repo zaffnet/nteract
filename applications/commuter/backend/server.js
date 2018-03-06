@@ -2,7 +2,7 @@
 
 import type { $Request, $Response } from "express";
 
-const front = require("@nteract/commuter-frontend");
+const front = require("../frontend");
 
 const { parse } = require("url");
 
