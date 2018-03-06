@@ -41,16 +41,13 @@ describe("menu", () => {
   });
 
   describe("dispatchCutCell", () => {
-    test("dispatches a CUT_CELL action", () => {
+    test("dispatches a cutCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCutCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.CUT_CELL,
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.cutCell({ id: null })
+      );
     });
   });
 

@@ -47,7 +47,7 @@ import type {
   ChangeFilenameAction,
   ToggleCellExpansionAction,
   ChangeCellTypeAction,
-  CutCellAction,
+  CutCell,
   CopyCell,
   DeleteMetadataField,
   OverwriteMetadataField,
@@ -637,10 +637,14 @@ export function copyCell(payload: {
   };
 }
 
-export function cutCell(id: CellID): CutCellAction {
+// TODO: #2618
+export function cutCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): CutCell {
   return {
     type: actionTypes.CUT_CELL,
-    id
+    payload
   };
 }
 

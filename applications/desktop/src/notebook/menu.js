@@ -265,7 +265,8 @@ export function dispatchCopyCell(store: *) {
 export function dispatchCutCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.cutCell(focused));
+  // TODO: #2618
+  store.dispatch(actions.cutCell({ id: focused }));
 }
 
 export function dispatchPasteCell(store: *) {

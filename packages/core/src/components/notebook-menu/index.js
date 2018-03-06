@@ -28,7 +28,7 @@ type Props = {
   executeAllCellsBelow: ?() => void,
   clearAllOutputs: ?(payload: *) => void,
   unhideAllCells: ?(*) => void,
-  cutCell: ?(cellId: ?string) => void,
+  cutCell: ?(payload: *) => void,
   copyCell: ?(payload: *) => void,
   mergeCellAfter: ?(payload: *) => void,
   filename: ?string,
@@ -120,7 +120,8 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.CUT_CELL:
         if (cutCell) {
-          cutCell(cellFocused);
+          // TODO: #2618
+          cutCell({ id: cellFocused });
         }
         break;
       case MENU_ITEM_ACTIONS.PASTE_CELL:
@@ -372,7 +373,7 @@ const mapDispatchToProps = dispatch => ({
   executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
   clearAllOutputs: (payload: *) => dispatch(actions.clearAllOutputs(payload)),
   unhideAllCells: payload => dispatch(actions.unhideAll(payload)),
-  cutCell: cellId => dispatch(actions.cutCell(cellId)),
+  cutCell: (payload: *) => dispatch(actions.cutCell(payload)),
   copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
   pasteCell: () => dispatch(actions.pasteCell()),
   mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload)),

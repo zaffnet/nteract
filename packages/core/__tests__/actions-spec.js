@@ -418,9 +418,9 @@ describe("copyCell", () => {
 
 describe("cutCell", () => {
   test("creates a CUT_CELL action", () => {
-    expect(actions.cutCell("235")).toEqual({
+    expect(actions.cutCell({ id: "235" })).toEqual({
       type: actionTypes.CUT_CELL,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });

@@ -500,8 +500,12 @@ export type ToggleCellExpansionAction = {
   id: CellID
 };
 
+// TODO: #2618
 export const CUT_CELL = "CUT_CELL";
-export type CutCellAction = { type: "CUT_CELL", id: CellID };
+export type CutCell = {
+  type: "CUT_CELL",
+  payload: { id: CellID, contentRef?: ContentRef }
+};
 
 // TODO: #2618
 export const COPY_CELL = "COPY_CELL";

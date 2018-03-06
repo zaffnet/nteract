@@ -665,10 +665,7 @@ describe("cutCell", () => {
 
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
     const cell = originalState.getIn(["notebook", "cellMap", id]);
-
-    const action = { type: actionTypes.CUT_CELL, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.cutCell({ id }));
     expect(state.getIn(["copied", "cell"])).toBe(cell);
     expect(state.getIn(["copied", "id"])).toBe(id);
     expect(state.getIn(["notebook", "cellMap", id])).toBeUndefined();
