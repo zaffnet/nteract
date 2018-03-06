@@ -922,10 +922,14 @@ export function updateDisplay(payload: {
   };
 }
 
-export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
+// TODO: #2618
+export function updateDisplayFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): UpdateDisplayFailed {
   return {
     type: actionTypes.UPDATE_DISPLAY_FAILED,
-    payload: error,
+    payload,
     error: true
   };
 }

@@ -225,10 +225,14 @@ export type UpdateDisplay = {
   }
 };
 
+// TODO: #2618
 export const UPDATE_DISPLAY_FAILED = "UPDATE_DISPLAY_FAILED";
 export type UpdateDisplayFailed = {
   type: "UPDATE_DISPLAY_FAILED",
-  payload: Error,
+  payload: {
+    error: Error,
+    contentRef?: ContentRef
+  },
   error: true
 };
 

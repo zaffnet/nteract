@@ -255,7 +255,8 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
         ofMessageType("update_display_data"),
         // TODO: #2618
         map(msg => actions.updateDisplay({ content: msg.content })),
-        catchError(err => of(actions.updateDisplayFailed(err)))
+        // TODO: #2618
+        catchError(error => of(actions.updateDisplayFailed({ error })))
       )
     )
   );
