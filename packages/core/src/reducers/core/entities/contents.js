@@ -30,7 +30,7 @@ import type {
   SaveFulfilled,
   UpdateDisplay,
   FocusNextCell,
-  FocusCellEditorAction,
+  FocusCellEditor,
   FocusNextCellEditor,
   FocusPreviousCellEditor,
   RemoveCell,
@@ -366,8 +366,8 @@ function focusPreviousCell(
   return state.set("cellFocused", cellOrder.get(nextIndex));
 }
 
-function focusCellEditor(state: DocumentRecord, action: FocusCellEditorAction) {
-  return state.set("editorFocused", action.id);
+function focusCellEditor(state: DocumentRecord, action: FocusCellEditor) {
+  return state.set("editorFocused", action.payload.id);
 }
 
 function focusNextCellEditor(
@@ -742,7 +742,7 @@ type DocumentAction =
   | FocusPreviousCell
   | FocusNextCellEditor
   | FocusNextCell
-  | FocusCellEditorAction
+  | FocusCellEditor
   | FocusCell
   | SetNotebook
   | ClearOutputs

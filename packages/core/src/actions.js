@@ -62,7 +62,7 @@ import type {
   UpdateDisplay,
   UpdateDisplayFailed,
   FocusNextCell,
-  FocusCellEditorAction,
+  FocusCellEditor,
   FocusNextCellEditor,
   FocusPreviousCellEditor,
   RemoveCell,
@@ -508,10 +508,14 @@ export function focusPreviousCell(payload: {
   };
 }
 
-export function focusCellEditor(id: ?string): FocusCellEditorAction {
+// TODO: #2618
+export function focusCellEditor(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusCellEditor {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
-    id
+    payload
   };
 }
 

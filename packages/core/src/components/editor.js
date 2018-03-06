@@ -54,7 +54,8 @@ class Editor extends React.Component<Props> {
     const { cellFocused, dispatch, id } = this.props;
 
     if (focused) {
-      dispatch(focusCellEditor(id));
+      // TODO: #2618
+      dispatch(focusCellEditor({ id }));
       if (!cellFocused) {
         // TODO: #2618
         dispatch(focusCell({ id }));

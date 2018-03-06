@@ -288,12 +288,8 @@ describe("focusPreviousCell", () => {
 describe("focusCellEditor", () => {
   test("should set editorFocused to the appropriate cell ID", () => {
     const originalState = monocellDocument;
-
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
-
-    const action = { type: actionTypes.FOCUS_CELL_EDITOR, id };
-
-    const state = reducers(originalState, action);
+    const state = reducers(originalState, actions.focusCellEditor({ id }));
     expect(state.get("editorFocused")).toBe(id);
   });
 });

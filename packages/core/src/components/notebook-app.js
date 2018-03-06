@@ -108,8 +108,10 @@ const mapStateToCellProps = (state, { id }) => {
 const mapDispatchToCellProps = (dispatch, { id }) => ({
   // TODO: #2618
   selectCell: () => dispatch(actions.focusCell({ id })),
-  focusEditor: () => dispatch(actions.focusCellEditor(id)),
-  unfocusEditor: () => dispatch(actions.focusCellEditor(null)),
+  // TODO: #2618
+  focusEditor: () => dispatch(actions.focusCellEditor({ id })),
+  // TODO: #2618
+  unfocusEditor: () => dispatch(actions.focusCellEditor({ id: null })),
   focusAboveCell: () => {
     // TODO: #2618
     dispatch(actions.focusPreviousCell({ id }));

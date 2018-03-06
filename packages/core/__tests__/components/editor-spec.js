@@ -39,7 +39,7 @@ describe("EditorProvider", () => {
   test("onFocusChange can update editor focus", () =>
     new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
+        expect(action.payload.id).toBe("test");
         expect(action.type).toBe(actionTypes.FOCUS_CELL_EDITOR);
         resolve();
       };
