@@ -26,14 +26,14 @@ type Props = {
   executeCell: ?(cellId: ?string) => void,
   executeAllCells: ?() => void,
   executeAllCellsBelow: ?() => void,
-  clearAllOutputs: ?() => void,
-  unhideAllCells: ?(*) => void,
-  cutCell: ?(cellId: ?string) => void,
-  copyCell: ?(cellId: ?string) => void,
-  mergeCellAfter: ?(cellId: ?string) => void,
+  clearAllOutputs: ?(payload: *) => void,
+  unhideAll: ?(*) => void,
+  cutCell: ?(payload: *) => void,
+  copyCell: ?(payload: *) => void,
+  mergeCellAfter: ?(payload: *) => void,
   filename: ?string,
   notebook: Immutable.Map<string, *>,
-  pasteCell: ?() => void,
+  pasteCell: ?(payload: *) => void,
   createCodeCell: ?(cellId: ?string) => void,
   createMarkdownCell: ?(cellId: ?string) => void,
   setCellTypeCode: ?(cellId: ?string) => void,
@@ -55,7 +55,7 @@ class PureNotebookMenu extends React.Component<Props> {
     executeAllCells: null,
     executeAllCellsBelow: null,
     clearAllOutputs: null,
-    unhideAllCells: null,
+    unhideAll: null,
     cutCell: null,
     copyCell: null,
     mergeCellAfter: null,
@@ -84,7 +84,7 @@ class PureNotebookMenu extends React.Component<Props> {
       executeAllCells,
       executeAllCellsBelow,
       clearAllOutputs,
-      unhideAllCells,
+      unhideAll,
       filename,
       mergeCellAfter,
       notebook,
@@ -114,22 +114,26 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.COPY_CELL:
         if (copyCell) {
-          copyCell(cellFocused);
+          // TODO: #2618
+          copyCell({ id: cellFocused });
         }
         break;
       case MENU_ITEM_ACTIONS.CUT_CELL:
         if (cutCell) {
-          cutCell(cellFocused);
+          // TODO: #2618
+          cutCell({ id: cellFocused });
         }
         break;
       case MENU_ITEM_ACTIONS.PASTE_CELL:
         if (pasteCell) {
-          pasteCell();
+          // TODO: #2618
+          pasteCell({});
         }
         break;
       case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
         if (mergeCellAfter) {
-          mergeCellAfter(cellFocused);
+          // TODO: #2618
+          mergeCellAfter({ id: cellFocused });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
@@ -162,14 +166,16 @@ class PureNotebookMenu extends React.Component<Props> {
           executeAllCellsBelow();
         }
         break;
-      case MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS:
-        if (unhideAllCells) {
-          unhideAllCells({ outputHidden: false, inputHidden: false });
+      case MENU_ITEM_ACTIONS.UNHIDE_ALL:
+        if (unhideAll) {
+          // TODO: #2618
+          unhideAll({ outputHidden: false, inputHidden: false });
         }
         break;
       case MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS:
         if (clearAllOutputs) {
-          clearAllOutputs();
+          // TODO: #2618
+          clearAllOutputs({});
         }
         break;
       case MENU_ITEM_ACTIONS.SET_THEME_DARK:
@@ -303,7 +309,7 @@ class PureNotebookMenu extends React.Component<Props> {
               Clear All Outputs
             </MenuItem>
 
-            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.UNHIDE_ALL_CELLS)}>
+            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.UNHIDE_ALL)}>
               Unhide All Input and Output
             </MenuItem>
           </SubMenu>
@@ -367,18 +373,26 @@ const mapDispatchToProps = dispatch => ({
   executeCell: cellId => dispatch(actions.executeCell(cellId)),
   executeAllCells: () => dispatch(actions.executeAllCells()),
   executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
-  clearAllOutputs: () => dispatch(actions.clearAllOutputs()),
-  unhideAllCells: payload => dispatch(actions.unhideAll(payload)),
-  cutCell: cellId => dispatch(actions.cutCell(cellId)),
-  copyCell: cellId => dispatch(actions.copyCell(cellId)),
-  pasteCell: () => dispatch(actions.pasteCell()),
-  mergeCellAfter: cellId => dispatch(actions.mergeCellAfter(cellId)),
-  createCodeCell: cellId => dispatch(actions.createCellAfter("code", cellId)),
+  clearAllOutputs: (payload: *) => dispatch(actions.clearAllOutputs(payload)),
+  unhideAll: payload => dispatch(actions.unhideAll(payload)),
+  cutCell: (payload: *) => dispatch(actions.cutCell(payload)),
+  copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
+  pasteCell: (payload: *) => dispatch(actions.pasteCell(payload)),
+  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload)),
+  // TODO: #2618
+  createCodeCell: cellId =>
+    dispatch(
+      actions.createCellAfter({ cellType: "code", id: cellId, source: "" })
+    ),
   createMarkdownCell: cellId =>
-    dispatch(actions.createCellAfter("markdown", cellId)),
-  setCellTypeCode: cellId => dispatch(actions.changeCellType(cellId, "code")),
+    dispatch(
+      actions.createCellAfter({ cellType: "markdown", id: cellId, source: "" })
+    ),
+  // TODO: #2618
+  setCellTypeCode: cellId =>
+    dispatch(actions.changeCellType({ id: cellId, to: "code" })),
   setCellTypeMarkdown: cellId =>
-    dispatch(actions.changeCellType(cellId, "markdown")),
+    dispatch(actions.changeCellType({ id: cellId, to: "markdown" })),
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),

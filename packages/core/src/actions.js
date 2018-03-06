@@ -3,7 +3,12 @@ import * as actionTypes from "./actionTypes";
 
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
-import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
+import type {
+  ContentRef,
+  HostRef,
+  KernelRef,
+  KernelspecsRef
+} from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
 import type {
@@ -38,42 +43,42 @@ import type {
   FetchKernelspecs,
   FetchKernelspecsFulfilled,
   FetchKernelspecsFailed,
-  PasteCellAction,
+  PasteCell,
   ChangeFilenameAction,
-  ToggleCellExpansionAction,
-  ChangeCellTypeAction,
-  CutCellAction,
-  CopyCellAction,
-  DeleteMetadataFieldAction,
-  OverwriteMetadataFieldAction,
-  AcceptPayloadMessageAction,
+  ToggleCellExpansion,
+  ChangeCellType,
+  CutCell,
+  CopyCell,
+  DeleteMetadataField,
+  OverwriteMetadataField,
+  AcceptPayloadMessage,
   NewNotebook,
-  SetNotebookAction,
-  NewCellAfterAction,
-  NewCellBeforeAction,
+  SetNotebook,
+  CreateCellAfter,
+  CreateCellBefore,
   ClearAllOutputs,
-  ClearOutputsAction,
-  AppendOutputAction,
-  UpdateDisplayAction,
+  ClearOutputs,
+  AppendOutput,
+  UpdateDisplay,
   UpdateDisplayFailed,
-  FocusNextCellAction,
-  FocusCellEditorAction,
-  FocusNextCellEditorAction,
-  FocusPreviousCellEditorAction,
-  RemoveCellAction,
-  FocusCellAction,
-  NewCellAppendAction,
-  MergeCellAfterAction,
-  MoveCellAction,
-  ToggleStickyCellAction,
-  FocusPreviousCellAction,
-  SetKernelInfoAction,
-  SetLanguageInfoAction,
-  UpdateCellStatusAction,
-  ToggleCellInputVisibilityAction,
-  ToggleCellOutputVisibilityAction,
-  SetInCellAction,
-  SendExecuteMessageAction,
+  FocusNextCell,
+  FocusCellEditor,
+  FocusNextCellEditor,
+  FocusPreviousCellEditor,
+  RemoveCell,
+  FocusCell,
+  CreateCellAppend,
+  MergeCellAfter,
+  MoveCell,
+  ToggleStickyCell,
+  FocusPreviousCell,
+  SetKernelInfo,
+  SetLanguageInfo,
+  UpdateCellStatus,
+  ToggleCellInputVisibility,
+  ToggleCellOutputVisibility,
+  SetInCell,
+  SendExecuteRequest,
   NewKernelAction,
   SetGithubTokenAction,
   SetNotificationSystemAction,
@@ -249,10 +254,14 @@ export function kernelRawStderr(payload: {
 }
 
 // TODO: Does this need to pass KernelRef information?
-export function setNotebookKernelInfo(kernelInfo: any): SetKernelInfoAction {
+// TODO: #2618
+export function setKernelInfo(payload: {
+  kernelInfo: any,
+  contentRef?: ContentRef
+}): SetKernelInfo {
   return {
     type: actionTypes.SET_KERNEL_INFO,
-    kernelInfo
+    payload
   };
 }
 
@@ -266,83 +275,105 @@ export function setExecutionState(payload: {
   };
 }
 
-export function clearOutputs(id: string): ClearOutputsAction {
+// TODO: #2618
+export function clearOutputs(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ClearOutputs {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
-    id
+    payload
   };
 }
 
-export function clearAllOutputs(): ClearAllOutputs {
+// TODO: #2618
+export function clearAllOutputs(payload: {
+  contentRef?: ContentRef
+}): ClearAllOutputs {
   return {
-    type: actionTypes.CLEAR_ALL_OUTPUTS
+    type: actionTypes.CLEAR_ALL_OUTPUTS,
+    payload
   };
 }
 
-export function moveCell(
+// TODO: #2618
+export function moveCell(payload: {
   id: string,
   destinationId: string,
-  above: boolean
-): MoveCellAction {
+  above: boolean,
+  contentRef?: ContentRef
+}): MoveCell {
   return {
     type: actionTypes.MOVE_CELL,
-    id,
-    destinationId,
-    above
+    payload
   };
 }
 
-export function removeCell(id: string): RemoveCellAction {
+// TODO: #2618
+export function removeCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): RemoveCell {
   return {
     type: actionTypes.REMOVE_CELL,
-    id
+    payload
   };
 }
 
-export function createCellAfter(
+// TODO: #2618
+export function createCellAfter(payload: {
+  id: CellID,
+  cellType: CellType,
+  source: string,
+  contentRef?: ContentRef
+}): CreateCellAfter {
+  return {
+    type: actionTypes.CREATE_CELL_AFTER,
+    payload
+  };
+}
+
+// TODO: #2618
+export function createCellBefore(payload: {
   cellType: CellType,
   id: string,
-  source: string = ""
-): NewCellAfterAction {
+  contentRef?: ContentRef
+}): CreateCellBefore {
   return {
-    type: actionTypes.NEW_CELL_AFTER,
-    source,
-    cellType,
-    id
+    type: actionTypes.CREATE_CELL_BEFORE,
+    payload
   };
 }
 
-export function createCellBefore(
+// TODO: #2618
+export function createCellAppend(payload: {
   cellType: CellType,
-  id: string
-): NewCellBeforeAction {
+  contentRef?: ContentRef
+}): CreateCellAppend {
   return {
-    type: actionTypes.NEW_CELL_BEFORE,
-    cellType,
-    id
+    type: actionTypes.CREATE_CELL_APPEND,
+    payload
   };
 }
 
-export function createCellAppend(cellType: CellType): NewCellAppendAction {
-  return {
-    type: actionTypes.NEW_CELL_APPEND,
-    cellType
-  };
-}
-
-export function mergeCellAfter(id: string): MergeCellAfterAction {
+// TODO: #2618
+export function mergeCellAfter(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): MergeCellAfter {
   return {
     type: actionTypes.MERGE_CELL_AFTER,
-    id
+    payload
   };
 }
 
+// TODO: #2618
 /**
  * setInCell can generically be used to set any attribute on a cell, including
  * and especially for changing metadata per cell.
- * @param {CellID} id    cell ID
- * @param {Array<string>} path  path within a cell to set
- * @param {any} value what to set it to
+ * @param {CellID} payload.id    cell ID
+ * @param {Array<string>} payload.path  path within a cell to set
+ * @param {any} payload.value what to set it to
  *
  * Example:
  *
@@ -358,36 +389,37 @@ export function mergeCellAfter(id: string): MergeCellAfterAction {
  * }
  *
  */
-export function setInCell<T>(
+export function setInCell<T>(payload: {
   id: CellID,
   path: Array<string>,
-  value: T
-): SetInCellAction<T> {
+  value: T,
+  contentRef?: ContentRef
+}): SetInCell<T> {
   return {
     type: actionTypes.SET_IN_CELL,
-    id,
-    path,
-    value
+    payload
   };
 }
 
-export function updateCellSource(
+export function updateCellSource(payload: {
   id: string,
-  source: string
-): SetInCellAction<string> {
-  return setInCell(id, ["source"], source);
+  value: string
+}): SetInCell<string> {
+  return setInCell({ ...payload, path: ["source"] });
 }
 
-export function updateCellExecutionCount(
+export function updateCellExecutionCount(payload: {
   id: string,
-  count: number
-): SetInCellAction<number> {
-  return setInCell(id, ["execution_count"], count);
+  value: number
+}): SetInCell<number> {
+  return setInCell({ ...payload, path: ["execution_count"] });
 }
 
+// TODO: #2618
 export function unhideAll(payload: {
   outputHidden: boolean,
-  inputHidden: boolean
+  inputHidden: boolean,
+  contentRef?: ContentRef
 }): UnhideAll {
   return {
     type: "UNHIDE_ALL",
@@ -395,107 +427,140 @@ export function unhideAll(payload: {
   };
 }
 
-export function toggleCellOutputVisibility(
-  id: string
-): ToggleCellOutputVisibilityAction {
+// TODO: #2618
+export function toggleCellOutputVisibility(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleCellOutputVisibility {
   return {
     type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
-    id
+    payload
   };
 }
 
-export function toggleCellInputVisibility(
-  id: string
-): ToggleCellInputVisibilityAction {
+// TODO: #2618
+export function toggleCellInputVisibility(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleCellInputVisibility {
   return {
     type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
-    id
+    payload
   };
 }
 
-export function updateCellStatus(
+// TODO: #2618
+export function updateCellStatus(payload: {
   id: string,
-  status: string
-): UpdateCellStatusAction {
+  status: string,
+  contentRef?: ContentRef
+}): UpdateCellStatus {
   return {
     type: actionTypes.UPDATE_CELL_STATUS,
-    id,
-    status
+    payload
   };
 }
 
 /* Unlike focus next & previous, to set focus, we require an ID,
    because the others are based on there already being a focused cell */
-export function focusCell(id: string): FocusCellAction {
+// TODO: #2618
+export function focusCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): FocusCell {
   return {
     type: actionTypes.FOCUS_CELL,
-    id
+    payload
   };
 }
 
-export function focusNextCell(
+// TODO: #2618
+export function focusNextCell(payload: {
   id: ?string,
-  createCellIfUndefined: boolean
-): FocusNextCellAction {
+  createCellIfUndefined: boolean,
+  contentRef?: ContentRef
+}): FocusNextCell {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
-    id,
-    createCellIfUndefined
+    payload
   };
 }
 
-export function focusNextCellEditor(id: ?string): FocusNextCellEditorAction {
+// TODO: #2618
+export function focusNextCellEditor(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusNextCellEditor {
   return {
     type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
-    id
+    payload
   };
 }
 
-export function focusPreviousCell(id: ?string): FocusPreviousCellAction {
+// TODO: #2618
+export function focusPreviousCell(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusPreviousCell {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL,
-    id
+    payload
   };
 }
 
-export function focusCellEditor(id: ?string): FocusCellEditorAction {
+// TODO: #2618
+export function focusCellEditor(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusCellEditor {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
-    id
+    payload
   };
 }
 
-export function focusPreviousCellEditor(
-  id: ?string
-): FocusPreviousCellEditorAction {
+// TODO: #2618
+export function focusPreviousCellEditor(payload: {
+  id: ?string,
+  contentRef?: ContentRef
+}): FocusPreviousCellEditor {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
-    id
+    payload
   };
 }
 
-export function toggleStickyCell(id: string): ToggleStickyCellAction {
+// TODO: #2618
+export function toggleStickyCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleStickyCell {
   return {
     type: actionTypes.TOGGLE_STICKY_CELL,
-    id
+    payload
   };
 }
 
-export function overwriteMetadata(
+// TODO: #2618
+export function overwriteMetadataField(payload: {
   field: string,
-  value: any
-): OverwriteMetadataFieldAction {
+  value: any,
+  contentRef?: ContentRef
+}): OverwriteMetadataField {
   return {
     type: actionTypes.OVERWRITE_METADATA_FIELD,
-    field,
-    value
+    payload
   };
 }
 
-export function deleteMetadata(field: string): DeleteMetadataFieldAction {
+// TODO: #2618
+export function deleteMetadataField(payload: {
+  field: string,
+  contentRef?: ContentRef
+}): DeleteMetadataField {
   return {
     type: actionTypes.DELETE_METADATA_FIELD,
-    field
+    payload
   };
 }
 
@@ -567,31 +632,45 @@ export function setNotificationSystem(
   };
 }
 
-export function copyCell(id: CellID): CopyCellAction {
+// TODO: #2618
+export function copyCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): CopyCell {
   return {
     type: actionTypes.COPY_CELL,
-    id
+    payload
   };
 }
 
-export function cutCell(id: CellID): CutCellAction {
+// TODO: #2618
+export function cutCell(payload: {
+  id: CellID,
+  contentRef?: ContentRef
+}): CutCell {
   return {
     type: actionTypes.CUT_CELL,
-    id
+    payload
   };
 }
 
-export function pasteCell(): PasteCellAction {
+// TODO: #2618
+export function pasteCell(payload: { contentRef?: ContentRef }): PasteCell {
   return {
-    type: actionTypes.PASTE_CELL
+    type: actionTypes.PASTE_CELL,
+    payload
   };
 }
 
-export function changeCellType(id: CellID, to: CellType): ChangeCellTypeAction {
+// TODO: #2618
+export function changeCellType(payload: {
+  id: CellID,
+  to: CellType,
+  contentRef?: ContentRef
+}): ChangeCellType {
   return {
     type: actionTypes.CHANGE_CELL_TYPE,
-    id,
-    to
+    payload
   };
 }
 
@@ -618,10 +697,14 @@ export function setCursorBlink(value: string): SetConfigAction<string> {
   return setConfigAtKey("cursorBlinkRate", value);
 }
 
-export function toggleOutputExpansion(id: string): ToggleCellExpansionAction {
+// TODO: #2618
+export function toggleOutputExpansion(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ToggleCellExpansion {
   return {
     type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
-    id
+    payload
   };
 }
 
@@ -650,14 +733,15 @@ export function executeFocusedCell(): ExecuteFocusedCellAction {
   };
 }
 
-export function sendExecuteMessage(
+// TODO: #2618
+export function sendExecuteRequest(payload: {
   id: string,
-  message: *
-): SendExecuteMessageAction {
+  message: *,
+  contentRef?: ContentRef
+}): SendExecuteRequest {
   return {
     type: actionTypes.SEND_EXECUTE_REQUEST,
-    id,
-    message
+    payload
   };
 }
 
@@ -675,10 +759,14 @@ export function executeFailed(error: Error): ExecuteFailed {
   };
 }
 
-export function changeFilename(filename: string): ChangeFilenameAction {
+// TODO: #2618
+export function changeFilename(payload: {
+  filename: ?string,
+  contentRef?: ContentRef
+}): ChangeFilenameAction {
   return {
     type: actionTypes.CHANGE_FILENAME,
-    filename
+    payload
   };
 }
 
@@ -703,9 +791,13 @@ export function saveFailed(error: Error): SaveFailed {
   };
 }
 
-export function saveFulfilled(): SaveFulfilled {
+// TODO: #2618
+export function saveFulfilled(payload: {
+  contentRef?: ContentRef
+}): SaveFulfilled {
   return {
-    type: actionTypes.SAVE_FULFILLED
+    type: actionTypes.SAVE_FULFILLED,
+    payload
   };
 }
 
@@ -729,11 +821,13 @@ export function newNotebook(payload: {
 }
 
 // Expects notebook to be JS Object or Immutable.js
+// TODO: #2618
 export const setNotebook = (payload: {
   filename: ?string,
   notebook: ImmutableNotebook,
-  kernelRef: KernelRef
-}): SetNotebookAction => ({
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
+}): SetNotebook => ({
   type: actionTypes.SET_NOTEBOOK,
   payload
 });
@@ -789,48 +883,63 @@ export function commMessageAction(message: any) {
   };
 }
 
-export function appendOutput(id: CellID, output: Output): AppendOutputAction {
+// TODO: #2618
+export function appendOutput(payload: {
+  id: CellID,
+  output: Output,
+  contentRef?: ContentRef
+}): AppendOutput {
   return {
     type: actionTypes.APPEND_OUTPUT,
-    id,
-    output
-  };
-}
-
-export function acceptPayloadMessage(
-  id: CellID,
-  payload: *
-): AcceptPayloadMessageAction {
-  return {
-    type: actionTypes.ACCEPT_PAYLOAD_MESSAGE_ACTION,
-    id,
     payload
   };
 }
 
-export function updateDisplay(content: {
-  data: MimeBundle,
-  metadata: JSONObject,
-  transient: { display_id: string }
-}): UpdateDisplayAction {
+// TODO: #2618
+export function acceptPayloadMessage(payload: {
+  id: CellID,
+  payload: *,
+  contentRef?: ContentRef
+}): AcceptPayloadMessage {
   return {
-    type: actionTypes.UPDATE_DISPLAY,
-    content
+    type: actionTypes.ACCEPT_PAYLOAD_MESSAGE,
+    payload
   };
 }
 
-export function updateDisplayFailed(error: Error): UpdateDisplayFailed {
+// TODO: #2618
+export function updateDisplay(payload: {
+  content: {
+    data: MimeBundle,
+    metadata: JSONObject,
+    transient: { display_id: string }
+  },
+  contentRef?: ContentRef
+}): UpdateDisplay {
+  return {
+    type: actionTypes.UPDATE_DISPLAY,
+    payload
+  };
+}
+
+// TODO: #2618
+export function updateDisplayFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): UpdateDisplayFailed {
   return {
     type: actionTypes.UPDATE_DISPLAY_FAILED,
-    payload: error,
+    payload,
     error: true
   };
 }
 
+// TODO: #2618
 export function setLanguageInfo(payload: {
   langInfo: LanguageInfoMetadata,
-  kernelRef: KernelRef
-}): SetLanguageInfoAction {
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
+}): SetLanguageInfo {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
     payload

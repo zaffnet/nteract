@@ -11,7 +11,7 @@ export const MENU_ITEM_ACTIONS = {
   RESTART_KERNEL: "restart-kernel",
   RESTART_AND_CLEAR_OUTPUTS: "restart-kernel-and-clear-outputs",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",
-  UNHIDE_ALL_CELLS: "unhide-all-cells",
+  UNHIDE_ALL: "unhide-all",
   CREATE_CODE_CELL: "create-code-cell",
   CREATE_MARKDOWN_CELL: "create-markdown-cell",
   SET_CELL_TYPE_CODE: "set-cell-type-code",

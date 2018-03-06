@@ -27,7 +27,7 @@ import { actionTypes, actions } from "@nteract/core";
 import type {
   FetchContent,
   NewNotebook,
-  SetNotebookAction
+  SetNotebook
 } from "@nteract/core/src/actionTypes";
 
 /**
@@ -158,7 +158,7 @@ export const launchKernelWhenNotebookSetEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.SET_NOTEBOOK),
-    map((action: SetNotebookAction) => {
+    map((action: SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.payload.filename,
         action.payload.notebook
@@ -194,6 +194,7 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
         notebook = notebook.setIn(["metadata", "kernelspec"], spec);
       }
 
+      // TODO: #2618
       return actions.setNotebook({ filename: null, notebook, kernelRef });
     })
   );

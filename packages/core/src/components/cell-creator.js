@@ -11,10 +11,10 @@ type Props = {
 
 type ConnectedProps = {
   above: boolean,
-  createCellAppend: (type: string) => void,
-  createCellBefore: (type: string, id: string) => void,
-  createCellAfter: (type: string, id: string) => void,
-  mergeCellAfter: (id: string) => void,
+  createCellAppend: (payload: *) => void,
+  createCellBefore: (payload: *) => void,
+  createCellAfter: (payload: *) => void,
+  mergeCellAfter: (payload: *) => void,
   id?: string
 };
 
@@ -140,11 +140,15 @@ class CellCreator extends React.Component<ConnectedProps> {
     } = this.props;
 
     if (!id) {
-      createCellAppend(type);
+      // TODO: #2618
+      createCellAppend({ cellType: type });
       return;
     }
 
-    above ? createCellBefore(type, id) : createCellAfter(type, id);
+    // TODO: #2618
+    above
+      ? createCellBefore({ cellType: type, id })
+      : createCellAfter({ cellType: type, id, source: "" });
   }
 
   mergeCell(): void {
@@ -152,7 +156,8 @@ class CellCreator extends React.Component<ConnectedProps> {
 
     // We can't merge cells if we don't have a cell ID
     if (id) {
-      mergeCellAfter(id);
+      // TODO: #2618
+      mergeCellAfter({ id });
     }
   }
 
@@ -168,10 +173,10 @@ class CellCreator extends React.Component<ConnectedProps> {
 }
 
 const mapDispatchToProps = dispatch => ({
-  createCellAppend: type => dispatch(actions.createCellAppend(type)),
-  createCellBefore: (type, id) => dispatch(actions.createCellBefore(type, id)),
-  createCellAfter: (type, id) => dispatch(actions.createCellAfter(type, id)),
-  mergeCellAfter: id => dispatch(actions.mergeCellAfter(id))
+  createCellAppend: (payload: *) => dispatch(actions.createCellAppend(payload)),
+  createCellBefore: (payload: *) => dispatch(actions.createCellBefore(payload)),
+  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
+  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload))
 });
 
 export default connect(null, mapDispatchToProps)(CellCreator);

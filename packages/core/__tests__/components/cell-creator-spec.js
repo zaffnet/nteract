@@ -6,9 +6,9 @@ import { Provider } from "react-redux";
 import CellCreator from "../../src/components/cell-creator";
 import { dummyStore } from "../../src/dummy";
 import {
-  NEW_CELL_AFTER,
-  NEW_CELL_BEFORE,
-  NEW_CELL_APPEND,
+  CREATE_CELL_AFTER,
+  CREATE_CELL_BEFORE,
+  CREATE_CELL_APPEND,
   MERGE_CELL_AFTER
 } from "../../src/actionTypes";
 
@@ -38,9 +38,9 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
-        expect(action.cellType).toBe("markdown");
-        expect(action.type).toBe(NEW_CELL_AFTER);
+        expect(action.payload.id).toBe("test");
+        expect(action.payload.cellType).toBe("markdown");
+        expect(action.type).toBe(CREATE_CELL_AFTER);
         resolve();
       };
       store.dispatch = dispatch;
@@ -63,9 +63,9 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
-        expect(action.cellType).toBe("code");
-        expect(action.type).toBe(NEW_CELL_AFTER);
+        expect(action.payload.id).toBe("test");
+        expect(action.payload.cellType).toBe("code");
+        expect(action.type).toBe(CREATE_CELL_AFTER);
         resolve();
       };
       store.dispatch = dispatch;
@@ -88,9 +88,9 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
-        expect(action.cellType).toBe("code");
-        expect(action.type).toBe(NEW_CELL_BEFORE);
+        expect(action.payload.id).toBe("test");
+        expect(action.payload.cellType).toBe("code");
+        expect(action.type).toBe(CREATE_CELL_BEFORE);
         resolve();
       };
       store.dispatch = dispatch;
@@ -113,8 +113,8 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.cellType).toBe("code");
-        expect(action.type).toBe(NEW_CELL_APPEND);
+        expect(action.payload.cellType).toBe("code");
+        expect(action.type).toBe(CREATE_CELL_APPEND);
         resolve();
       };
       store.dispatch = dispatch;
@@ -137,7 +137,7 @@ describe("CellCreatorProvider", () => {
 
     return new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
+        expect(action.payload.id).toBe("test");
         expect(action.type).toBe(MERGE_CELL_AFTER);
         resolve();
       };

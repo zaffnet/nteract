@@ -65,7 +65,10 @@ export function createGistCallback(
       return;
     }
     const gistID = response.data.id;
-    observer.next(actions.overwriteMetadata("gist_id", gistID));
+    // TODO: #2618
+    observer.next(
+      actions.overwriteMetadataField({ field: "gist_id", value: gistID })
+    );
     notifyUser(filename, gistID, notificationSystem);
     observer.complete();
   };
@@ -105,9 +108,13 @@ export function publishNotebookObservable(
         });
         if (githubUsername !== (res.data.login || undefined)) {
           observer.next(
-            actions.overwriteMetadata("github_username", res.data.login)
+            actions.overwriteMetadataField({
+              field: "github_username",
+              value: res.data.login
+            })
           );
-          observer.next(actions.deleteMetadata("gist_id"));
+          // TODO: #2618
+          observer.next(actions.deleteMetadataField({ field: "gist_id" }));
         }
       });
     }

@@ -1,5 +1,10 @@
 /* @flow */
-import type { HostRef, KernelRef, KernelspecsRef } from "./state/refs";
+import type {
+  ContentRef,
+  HostRef,
+  KernelRef,
+  KernelspecsRef
+} from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 
@@ -108,126 +113,208 @@ export type FetchKernelspecsFailed = {
   }
 };
 
+// TODO: #2618
 export const CHANGE_FILENAME = "CHANGE_FILENAME";
 export type ChangeFilenameAction = {
   type: "CHANGE_FILENAME",
-  filename: string
-};
-
-export const SET_IN_CELL = "SET_IN_CELL";
-export type SetInCellAction<T> = {
-  type: "SET_IN_CELL",
-  id: CellID,
-  path: Array<string>,
-  value: T
-};
-
-export const MOVE_CELL = "MOVE_CELL";
-export type MoveCellAction = {
-  type: "MOVE_CELL",
-  id: CellID,
-  destinationId: CellID
-};
-
-export const REMOVE_CELL = "REMOVE_CELL";
-export type RemoveCellAction = { type: "REMOVE_CELL", id: CellID };
-
-export const NEW_CELL_AFTER = "NEW_CELL_AFTER";
-export type NewCellAfterAction = {
-  type: "NEW_CELL_AFTER",
-  id: CellID,
-  cellType: CellType,
-  source: string
-};
-
-export const NEW_CELL_BEFORE = "NEW_CELL_BEFORE";
-export type NewCellBeforeAction = {
-  type: "NEW_CELL_BEFORE",
-  cellType: CellType,
-  id: CellID
-};
-
-export const NEW_CELL_APPEND = "NEW_CELL_APPEND";
-export type NewCellAppendAction = {
-  type: "NEW_CELL_APPEND",
-  cellType: CellType
-};
-
-export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
-export type MergeCellAfterAction = { type: "MERGE_CELL_AFTER", id: CellID };
-
-export const APPEND_OUTPUT = "APPEND_OUTPUT";
-export type AppendOutputAction = {
-  type: "APPEND_OUTPUT",
-  id: CellID,
-  output: Output
-};
-
-export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
-export type UpdateDisplayAction = {
-  type: "UPDATE_DISPLAY",
-  content: {
-    data: MimeBundle,
-    metadata: JSONObject,
-    transient: { display_id: string }
+  payload: {
+    filename: ?string,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
+export const SET_IN_CELL = "SET_IN_CELL";
+export type SetInCell<T> = {
+  type: "SET_IN_CELL",
+  payload: {
+    id: CellID,
+    path: Array<string>,
+    value: T,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const MOVE_CELL = "MOVE_CELL";
+export type MoveCell = {
+  type: "MOVE_CELL",
+  payload: {
+    id: CellID,
+    destinationId: CellID,
+    above: boolean,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const REMOVE_CELL = "REMOVE_CELL";
+export type RemoveCell = {
+  type: "REMOVE_CELL",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
+export type CreateCellAfter = {
+  type: "CREATE_CELL_AFTER",
+  payload: {
+    id: CellID,
+    cellType: CellType,
+    source: string,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const CREATE_CELL_BEFORE = "CREATE_CELL_BEFORE";
+export type CreateCellBefore = {
+  type: "CREATE_CELL_BEFORE",
+  payload: {
+    cellType: CellType,
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const CREATE_CELL_APPEND = "CREATE_CELL_APPEND";
+export type CreateCellAppend = {
+  type: "CREATE_CELL_APPEND",
+  payload: {
+    cellType: CellType,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
+export type MergeCellAfter = {
+  type: "MERGE_CELL_AFTER",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const APPEND_OUTPUT = "APPEND_OUTPUT";
+export type AppendOutput = {
+  type: "APPEND_OUTPUT",
+  payload: {
+    id: CellID,
+    output: Output,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
+export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
+export type UpdateDisplay = {
+  type: "UPDATE_DISPLAY",
+  payload: {
+    content: {
+      data: MimeBundle,
+      metadata: JSONObject,
+      transient: { display_id: string }
+    },
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
 export const UPDATE_DISPLAY_FAILED = "UPDATE_DISPLAY_FAILED";
 export type UpdateDisplayFailed = {
   type: "UPDATE_DISPLAY_FAILED",
-  payload: Error,
+  payload: {
+    error: Error,
+    contentRef?: ContentRef
+  },
   error: true
 };
 
+// TODO: #2618
 export const UNHIDE_ALL = "UNHIDE_ALL";
 export type UnhideAll = {
   type: "UNHIDE_ALL",
   payload: {
     inputHidden: boolean,
-    outputHidden: boolean
+    outputHidden: boolean,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
-export type ToggleCellOutputVisibilityAction = {
+export type ToggleCellOutputVisibility = {
   type: "TOGGLE_CELL_OUTPUT_VISIBILITY",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
-export type ToggleCellInputVisibilityAction = {
+export type ToggleCellInputVisibility = {
   type: "TOGGLE_CELL_INPUT_VISIBILITY",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const CLEAR_OUTPUTS = "CLEAR_OUTPUTS";
-export type ClearOutputsAction = { type: "CLEAR_OUTPUTS", id: CellID };
-
-export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
-export type ClearAllOutputs = { type: "CLEAR_ALL_OUTPUTS" };
-
-export const ACCEPT_PAYLOAD_MESSAGE_ACTION = "ACCEPT_PAYLOAD_MESSAGE_ACTION";
-export type AcceptPayloadMessageAction = {
-  type: "ACCEPT_PAYLOAD_MESSAGE_ACTION",
-  id: CellID,
-  payload: *
+export type ClearOutputs = {
+  type: "CLEAR_OUTPUTS",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
+export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
+export type ClearAllOutputs = {
+  type: "CLEAR_ALL_OUTPUTS",
+  payload: { contentRef?: ContentRef }
+};
+
+// TODO: #2618
+export const ACCEPT_PAYLOAD_MESSAGE = "ACCEPT_PAYLOAD_MESSAGE";
+export type AcceptPayloadMessage = {
+  type: "ACCEPT_PAYLOAD_MESSAGE",
+  payload: {
+    id: CellID,
+    payload: *,
+    contentRef?: ContentRef
+  }
+};
+
+// TODO: #2618
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
-export type SetLanguageInfoAction = {
+export type SetLanguageInfo = {
   type: "SET_LANGUAGE_INFO",
   payload: {
     langInfo: LanguageInfoMetadata,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
-export type SendExecuteMessageAction = {
+export type SendExecuteRequest = {
   type: "SEND_EXECUTE_REQUEST",
-  id: CellID,
-  message: ExecuteRequest
+  payload: {
+    id: CellID,
+    message: ExecuteRequest,
+    contentRef?: ContentRef
+  }
 };
 
 export const EXECUTE_CELL = "EXECUTE_CELL";
@@ -263,67 +350,117 @@ export type ExecuteFailed = {
   payload: Error
 };
 
+// TODO: #2618
 export const FOCUS_CELL = "FOCUS_CELL";
-export type FocusCellAction = { type: "FOCUS_CELL", id: ?CellID };
+export type FocusCell = {
+  type: "FOCUS_CELL",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const FOCUS_NEXT_CELL = "FOCUS_NEXT_CELL";
-export type FocusNextCellAction = {
+export type FocusNextCell = {
   type: "FOCUS_NEXT_CELL",
-  id: ?CellID,
-  createCellIfUndefined: boolean
+  payload: {
+    id: ?CellID,
+    createCellIfUndefined: boolean,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const FOCUS_PREVIOUS_CELL = "FOCUS_PREVIOUS_CELL";
-export type FocusPreviousCellAction = {
+export type FocusPreviousCell = {
   type: "FOCUS_PREVIOUS_CELL",
-  id: ?CellID
+  payload: {
+    id: ?CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const FOCUS_CELL_EDITOR = "FOCUS_CELL_EDITOR";
-export type FocusCellEditorAction = {
+export type FocusCellEditor = {
   type: "FOCUS_CELL_EDITOR",
-  id: ?CellID
+  payload: {
+    id: ?CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const FOCUS_NEXT_CELL_EDITOR = "FOCUS_NEXT_CELL_EDITOR";
-export type FocusNextCellEditorAction = {
+export type FocusNextCellEditor = {
   type: "FOCUS_NEXT_CELL_EDITOR",
-  id: ?CellID
+  payload: {
+    id: ?CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const FOCUS_PREVIOUS_CELL_EDITOR = "FOCUS_PREVIOUS_CELL_EDITOR";
-export type FocusPreviousCellEditorAction = {
+export type FocusPreviousCellEditor = {
   type: "FOCUS_PREVIOUS_CELL_EDITOR",
-  id: ?CellID
+  payload: {
+    id: ?CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const TOGGLE_STICKY_CELL = "TOGGLE_STICKY_CELL";
-export type ToggleStickyCellAction = { type: "TOGGLE_STICKY_CELL", id: CellID };
+export type ToggleStickyCell = {
+  type: "TOGGLE_STICKY_CELL",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
-export type SetKernelInfoAction = {
+export type SetKernelInfo = {
   type: "SET_KERNEL_INFO",
-  kernelInfo: KernelInfo
+  payload: {
+    kernelInfo: KernelInfo,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";
-export type OverwriteMetadataFieldAction = {
+export type OverwriteMetadataField = {
   type: "OVERWRITE_METADATA_FIELD",
-  field: string,
-  value: any
+  payload: {
+    field: string,
+    value: any,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const DELETE_METADATA_FIELD = "DELETE_METADATA_FIELD";
-export type DeleteMetadataFieldAction = {
+export type DeleteMetadataField = {
   type: "DELETE_METADATA_FIELD",
-  field: string
+  payload: {
+    field: string,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const UPDATE_CELL_STATUS = "UPDATE_CELL_STATUS";
-export type UpdateCellStatusAction = {
+export type UpdateCellStatus = {
   type: "UPDATE_CELL_STATUS",
-  id: CellID,
-  status: string
+  payload: {
+    id: CellID,
+    status: string,
+    contentRef?: ContentRef
+  }
 };
 
 export const REGISTER_COMM_TARGET = "REGISTER_COMM_TARGET";
@@ -371,26 +508,46 @@ export type SaveConfigAction = { type: "SAVE_CONFIG" };
 export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
 export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
 
+// TODO: #2618
 export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
-export type ToggleCellExpansionAction = {
+export type ToggleCellExpansion = {
   type: "TOGGLE_OUTPUT_EXPANSION",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const CUT_CELL = "CUT_CELL";
-export type CutCellAction = { type: "CUT_CELL", id: CellID };
+export type CutCell = {
+  type: "CUT_CELL",
+  payload: { id: CellID, contentRef?: ContentRef }
+};
 
+// TODO: #2618
 export const COPY_CELL = "COPY_CELL";
-export type CopyCellAction = { type: "COPY_CELL", id: CellID };
+export type CopyCell = {
+  type: "COPY_CELL",
+  payload: { id: CellID, contentRef?: ContentRef }
+};
 
+// TODO: #2618
 export const PASTE_CELL = "PASTE_CELL";
-export type PasteCellAction = { type: "PASTE_CELL" };
+export type PasteCell = {
+  type: "PASTE_CELL",
+  payload: { contentRef?: ContentRef }
+};
 
+// TODO: #2618
 export const CHANGE_CELL_TYPE = "CHANGE_CELL_TYPE";
-export type ChangeCellTypeAction = {
+export type ChangeCellType = {
   type: "CHANGE_CELL_TYPE",
-  id: CellID,
-  to: string
+  payload: {
+    id: CellID,
+    to: CellType,
+    contentRef?: ContentRef
+  }
 };
 
 export const SET_EXECUTION_STATE = "SET_EXECUTION_STATE";
@@ -417,8 +574,12 @@ export type SaveAs = { type: "SAVE_AS", filename: string };
 export const SAVE_FAILED = "SAVE_FAILED";
 export type SaveFailed = { type: "SAVE_FAILED" };
 
+// TODO: #2618
 export const SAVE_FULFILLED = "SAVE_FULFILLED";
-export type SaveFulfilled = { type: "SAVE_FULFILLED" };
+export type SaveFulfilled = {
+  type: "SAVE_FULFILLED",
+  payload: { contentRef?: ContentRef }
+};
 
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {
@@ -431,13 +592,15 @@ export type NewNotebook = {
 
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)
+// TODO: #2618
 export const SET_NOTEBOOK = "SET_NOTEBOOK";
-export type SetNotebookAction = {
+export type SetNotebook = {
   type: "SET_NOTEBOOK",
   payload: {
     notebook: ImmutableNotebook,
     filename: ?string,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 

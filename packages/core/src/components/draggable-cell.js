@@ -39,11 +39,11 @@ type Props = {|
   connectDragPreview: (img: Image) => void,
   connectDragSource: (el: ?React$Element<any>) => void,
   connectDropTarget: (el: ?React$Element<any>) => void,
-  selectCell: () => void,
+  focusCell: (payload: *) => *,
   id: string,
   isDragging: boolean,
   isOver: boolean,
-  moveCell: (source: string, dest: string, above: boolean) => Object,
+  moveCell: (payload: *) => Object,
   children: React.Element<any>
 |};
 
@@ -74,7 +74,12 @@ const cellTarget = {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
-      props.moveCell(monitor.getItem().id, props.id, hoverUpperHalf);
+      // TODO: #2618
+      props.moveCell({
+        id: monitor.getItem().id,
+        destinationId: props.id,
+        above: hoverUpperHalf
+      });
     }
   },
 
@@ -119,6 +124,11 @@ class DraggableCellView extends React.Component<Props, State> {
     };
   }
 
+  selectCell = () => {
+    // TODO: #2618
+    this.props.focusCell({ id: this.props.id });
+  };
+
   render(): ?React$Element<any> {
     return this.props.connectDropTarget(
       <div
@@ -141,7 +151,7 @@ class DraggableCellView extends React.Component<Props, State> {
         {this.props.connectDragSource(
           <div
             className="cell-drag-handle"
-            onClick={this.props.selectCell}
+            onClick={this.selectCell}
             role="presentation"
           />
         )}

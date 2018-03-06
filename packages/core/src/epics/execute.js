@@ -75,31 +75,36 @@ export function executeCellStream(
 
   const cellAction$ = merge(
     payloadStream.pipe(
-      map(payload => actions.acceptPayloadMessage(id, payload))
+      // TODO: #2618
+      map(payload => actions.acceptPayloadMessage({ id, payload }))
     ),
 
     // All actions for updating cell status
     cellMessages.pipe(
       kernelStatuses(),
-      map(status => actions.updateCellStatus(id, status))
+      // TODO: #2618
+      map(status => actions.updateCellStatus({ id, status }))
     ),
 
     // Update the input numbering: `[ ]`
     cellMessages.pipe(
       executionCounts(),
-      map(ct => actions.updateCellExecutionCount(id, ct))
+      // TODO: #2618
+      map(ct => actions.updateCellExecutionCount({ id, value: ct }))
     ),
 
     // All actions for new outputs
     cellMessages.pipe(
       outputs(),
-      map(output => actions.appendOutput(id, output))
+      // TODO: #2618
+      map(output => actions.appendOutput({ id, output }))
     ),
 
     // clear_output display message
     cellMessages.pipe(
       ofMessageType("clear_output"),
-      mapTo(actions.clearOutputs(id))
+      // TODO: #2618
+      mapTo(actions.clearOutputs({ id }))
     )
   );
 
@@ -134,8 +139,13 @@ export function createExecuteCellStream(
     takeUntil(
       merge(
         action$.pipe(
-          filter(laterAction => laterAction.id === id),
-          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL)
+          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL),
+          // TODO: Type this when payloads are equivalent and simplify...
+          filter(
+            laterAction =>
+              (laterAction.payload && laterAction.payload.id === id) ||
+              laterAction.id === id
+          )
         ),
         action$.pipe(
           ofType(
@@ -150,8 +160,9 @@ export function createExecuteCellStream(
 
   return merge(
     // We make sure to propagate back to "ourselves" the actual message
-    // that we sent to the kernel with the sendExecuteMessage action
-    of(actions.sendExecuteMessage(id, message)),
+    // that we sent to the kernel with the sendExecuteRequest action
+    // TODO: #2618
+    of(actions.sendExecuteRequest({ id, message })),
     // Merging it in with the actual stream
     cellStream
   );
@@ -242,8 +253,10 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
     switchMap((action: NewKernelAction) =>
       action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
-        map(msg => actions.updateDisplay(msg.content)),
-        catchError(err => of(actions.updateDisplayFailed(err)))
+        // TODO: #2618
+        map(msg => actions.updateDisplay({ content: msg.content })),
+        // TODO: #2618
+        catchError(error => of(actions.updateDisplayFailed({ error })))
       )
     )
   );

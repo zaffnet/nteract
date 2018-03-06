@@ -88,7 +88,7 @@ describe("launchKernelEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.setNotebookKernelInfo({ spec: "hokey", name: "woohoo" }),
+      actions.setKernelInfo({ kernelInfo: { spec: "hokey", name: "woohoo" } }),
       actions.launchKernelSuccessful({
         kernel: {
           kernelRef: expect.any(String),

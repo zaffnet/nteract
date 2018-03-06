@@ -99,12 +99,11 @@ export function saveContentEpic(
         type: "notebook"
       };
 
-      return contents
-        .save(serverConfig, filename, model)
-        .pipe(
-          mapTo(actions.saveFulfilled()),
-          catchError((error: Error) => of(actions.saveFailed(error)))
-        );
+      return contents.save(serverConfig, filename, model).pipe(
+        // TODO: #2618
+        mapTo(actions.saveFulfilled({})),
+        catchError((error: Error) => of(actions.saveFailed(error)))
+      );
     })
   );
 }
@@ -130,6 +129,7 @@ export function setNotebookEpic(
         action.payload.model.type === "notebook"
     ),
     map((action: FetchContentFulfilled) =>
+      // TODO: #2618
       actions.setNotebook({
         filename: action.payload.path,
         notebook: fromJS(action.payload.model.content),

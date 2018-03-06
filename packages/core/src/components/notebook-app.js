@@ -106,16 +106,23 @@ const mapStateToCellProps = (state, { id }) => {
 };
 
 const mapDispatchToCellProps = (dispatch, { id }) => ({
-  selectCell: () => dispatch(actions.focusCell(id)),
-  focusEditor: () => dispatch(actions.focusCellEditor(id)),
-  unfocusEditor: () => dispatch(actions.focusCellEditor(null)),
+  // TODO: #2618
+  selectCell: () => dispatch(actions.focusCell({ id })),
+  // TODO: #2618
+  focusEditor: () => dispatch(actions.focusCellEditor({ id })),
+  // TODO: #2618
+  unfocusEditor: () => dispatch(actions.focusCellEditor({ id: null })),
   focusAboveCell: () => {
-    dispatch(actions.focusPreviousCell(id));
-    dispatch(actions.focusPreviousCellEditor(id));
+    // TODO: #2618
+    dispatch(actions.focusPreviousCell({ id }));
+    // TODO: #2618
+    dispatch(actions.focusPreviousCellEditor({ id }));
   },
   focusBelowCell: () => {
-    dispatch(actions.focusNextCell(id, true));
-    dispatch(actions.focusNextCellEditor(id));
+    // TODO: #2618
+    dispatch(actions.focusNextCell({ id, createCellIfUndefined: true }));
+    // TODO: #2618
+    dispatch(actions.focusNextCellEditor({ id }));
   }
 });
 
@@ -298,11 +305,11 @@ type NotebookStateProps = {
 };
 
 type NotebookDispatchProps = {
-  moveCell: (sourceId: string, destinationId: string, above: boolean) => *,
-  selectCell: (id: string) => *,
+  moveCell: (payload: *) => *,
+  focusCell: (payload: *) => *,
   executeFocusedCell: () => *,
-  focusNextCell: (*, *) => *,
-  focusNextCellEditor: () => *
+  focusNextCell: (*) => *,
+  focusNextCellEditor: (*) => *
 };
 
 const mapStateToProps = (
@@ -323,12 +330,12 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
-  moveCell: (sourceId: string, destinationId: string, above: boolean) =>
-    dispatch(actions.moveCell(sourceId, destinationId, above)),
-  selectCell: (id: string) => dispatch(actions.focusCell(id)),
+  moveCell: (payload: *) => dispatch(actions.moveCell(payload)),
+  focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
-  focusNextCell: (...args) => dispatch(actions.focusNextCell(...args)),
-  focusNextCellEditor: () => dispatch(actions.focusNextCellEditor())
+  focusNextCell: (payload: *) => dispatch(actions.focusNextCell(payload)),
+  focusNextCellEditor: (payload: *) =>
+    dispatch(actions.focusNextCellEditor(payload))
 });
 
 export class NotebookApp extends React.PureComponent<NotebookProps> {
@@ -389,8 +396,10 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
     if (e.shiftKey) {
       // Couldn't focusNextCell just do focusing of both?
-      focusNextCell(null, true);
-      focusNextCellEditor();
+      // TODO: #2618
+      focusNextCell({ id: null, createCellIfUndefined: true });
+      // TODO: #2618
+      focusNextCellEditor({ id: null });
     }
   }
 
@@ -418,13 +427,11 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
   }
 
   renderCell(id: string): ?React$Element<any> {
-    const { selectCell } = this.props;
     return (
       <ConnectedCell
         id={id}
         transforms={this.props.transforms}
         displayOrder={this.props.displayOrder}
-        selectCell={selectCell}
         codeMirrorMode={this.props.codeMirrorMode}
       />
     );
@@ -432,13 +439,13 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
   createCellElement(id: string): React$Element<*> {
     const isStickied = this.props.stickyCells.get(id);
-    const { moveCell, selectCell } = this.props;
+    const { moveCell, focusCell } = this.props;
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
         {isStickied ? (
           <PinnedPlaceHolderCell />
         ) : (
-          <DraggableCell moveCell={moveCell} id={id} selectCell={selectCell}>
+          <DraggableCell moveCell={moveCell} id={id} focusCell={focusCell}>
             {this.renderCell(id)}
           </DraggableCell>
         )}

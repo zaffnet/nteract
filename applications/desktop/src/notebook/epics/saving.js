@@ -47,7 +47,8 @@ export function saveEpic(
               level: "success"
             });
           }
-          return actions.saveFulfilled();
+          // TODO: #2618
+          return actions.saveFulfilled({});
         }),
         catchError((error: Error) => of(actions.saveFailed(error)))
       );
@@ -67,7 +68,8 @@ export function saveAsEpic(action$: ActionsObservable<*>) {
       return [
         // order matters here, since we need the filename set in the state
         // before we save the document
-        actions.changeFilename(action.filename),
+        // TODO: #2618
+        actions.changeFilename({ filename: action.filename }),
         actions.save()
       ];
     })

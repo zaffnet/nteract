@@ -23,7 +23,7 @@ describe("saveEpic", () => {
     // TODO: This should be testing that the mocks for fs were called with the
     // filename and notebook from the state tree
 
-    expect(responses).toEqual([actions.saveFulfilled()]);
+    expect(responses).toEqual([actions.saveFulfilled({})]);
   });
 });
 
@@ -39,7 +39,7 @@ describe("saveAsEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.changeFilename("great-filename"),
+      actions.changeFilename({ filename: "great-filename" }),
       actions.save()
     ]);
   });

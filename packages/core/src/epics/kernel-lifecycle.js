@@ -33,7 +33,7 @@ import * as uuid from "uuid";
 import type {
   NewKernelAction,
   RestartKernel,
-  SetNotebookAction
+  SetNotebook
 } from "../actionTypes";
 
 import * as selectors from "../selectors";
@@ -75,6 +75,7 @@ export function acquireKernelInfo(channels: Channels, kernelRef: KernelRef) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
+    // TODO: #2618
     map(langInfo => actions.setLanguageInfo({ langInfo, kernelRef }))
   );
 
@@ -122,7 +123,7 @@ export const launchKernelWhenNotebookSetEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.SET_NOTEBOOK),
-    map((action: SetNotebookAction) => {
+    map((action: SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.payload.filename,
         action.payload.notebook

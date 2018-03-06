@@ -46,17 +46,19 @@ class Editor extends React.Component<Props> {
 
   onChange(text: string): void {
     const { dispatch, id } = this.props;
-
-    dispatch(updateCellSource(id, text));
+    // TODO: #2618
+    dispatch(updateCellSource({ id, value: text }));
   }
 
   onFocusChange(focused: boolean): void {
     const { cellFocused, dispatch, id } = this.props;
 
     if (focused) {
-      dispatch(focusCellEditor(id));
+      // TODO: #2618
+      dispatch(focusCellEditor({ id }));
       if (!cellFocused) {
-        dispatch(focusCell(id));
+        // TODO: #2618
+        dispatch(focusCell({ id }));
       }
     }
   }

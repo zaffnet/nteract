@@ -261,19 +261,28 @@ type ConnectedProps = {
 };
 
 const mapDispatchToProps = (dispatch, { id, type }) => ({
-  toggleStickyCell: () => dispatch(actions.toggleStickyCell(id)),
-  removeCell: () => dispatch(actions.removeCell(id)),
+  // TODO: #2618
+  toggleStickyCell: () => dispatch(actions.toggleStickyCell({ id })),
+  // TODO: #2618
+  removeCell: () => dispatch(actions.removeCell({ id })),
   executeCell: () => dispatch(actions.executeCell(id)),
-  clearOutputs: () => dispatch(actions.clearOutputs(id)),
+  // TODO: #2618
+  clearOutputs: () => dispatch(actions.clearOutputs({ id })),
   toggleCellInputVisibility: () =>
     dispatch(actions.toggleCellInputVisibility(id)),
-  toggleCellOutputVisibility: () =>
-    dispatch(actions.toggleCellOutputVisibility(id)),
+  // TODO: #2618
+  toggleCellInputVisibility: () =>
+    dispatch(actions.toggleCellInputVisibility({ id })),
+  // TODO: #2618
   changeCellType: () =>
     dispatch(
-      actions.changeCellType(id, type === "markdown" ? "code" : "markdown")
+      actions.changeCellType({
+        id,
+        to: type === "markdown" ? "code" : "markdown"
+      })
     ),
-  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion(id))
+  // TODO: #2618
+  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion({ id }))
 });
 
 export default connect(null, mapDispatchToProps)(PureToolbar);

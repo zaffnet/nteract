@@ -23,8 +23,8 @@ describe("EditorProvider", () => {
   test("onChange updates cell source", () =>
     new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
-        expect(action.value).toBe("i love nteract");
+        expect(action.payload.id).toBe("test");
+        expect(action.payload.value).toBe("i love nteract");
         expect(action.type).toBe(actionTypes.SET_IN_CELL);
         resolve();
       };
@@ -39,7 +39,7 @@ describe("EditorProvider", () => {
   test("onFocusChange can update editor focus", () =>
     new Promise(resolve => {
       const dispatch = action => {
-        expect(action.id).toBe("test");
+        expect(action.payload.id).toBe("test");
         expect(action.type).toBe(actionTypes.FOCUS_CELL_EDITOR);
         resolve();
       };

@@ -169,13 +169,15 @@ describe("launchKernelByName", () => {
   });
 });
 
-describe("setNotebookKernelInfo", () => {
+describe("setKernelInfo", () => {
   test("creates a SET_KERNEL_INFO action", () => {
     const kernelInfo = { name: "japanese" };
-    expect(actions.setNotebookKernelInfo(kernelInfo)).toEqual({
+    expect(actions.setKernelInfo({ kernelInfo })).toEqual({
       type: actionTypes.SET_KERNEL_INFO,
-      kernelInfo: {
-        name: "japanese"
+      payload: {
+        kernelInfo: {
+          name: "japanese"
+        }
       }
     });
   });
@@ -183,179 +185,196 @@ describe("setNotebookKernelInfo", () => {
 
 describe("updateCellSource", () => {
   test("creates a UPDATE_CELL_SOURCE action", () => {
-    expect(actions.updateCellSource("1234", "# test")).toEqual({
+    expect(actions.updateCellSource({ id: "1234", value: "# test" })).toEqual({
       type: "SET_IN_CELL",
-      id: "1234",
-      path: ["source"],
-      value: "# test"
+      payload: {
+        id: "1234",
+        path: ["source"],
+        value: "# test"
+      }
     });
   });
 });
 
 describe("clearOutputs", () => {
   test("creates a CLEAR_OUTPUTS action", () => {
-    expect(actions.clearOutputs("woo")).toEqual({
+    expect(actions.clearOutputs({ id: "woo" })).toEqual({
       type: "CLEAR_OUTPUTS",
-      id: "woo"
+      payload: { id: "woo" }
     });
   });
 });
 
 describe("updateCellExecutionCount", () => {
   test("creates a SET_IN_CELL action with the right path", () => {
-    expect(actions.updateCellExecutionCount("1234", 3)).toEqual({
+    expect(actions.updateCellExecutionCount({ id: "1234", value: 3 })).toEqual({
       type: "SET_IN_CELL",
-      id: "1234",
-      path: ["execution_count"],
-      value: 3
+      payload: {
+        id: "1234",
+        path: ["execution_count"],
+        value: 3
+      }
     });
   });
 });
 
 describe("updateCellStatus", () => {
   test("creates an UPDATE_CELL_STATUS action", () => {
-    expect(actions.updateCellStatus("1234", "test")).toEqual({
+    expect(actions.updateCellStatus({ id: "1234", status: "test" })).toEqual({
       type: actionTypes.UPDATE_CELL_STATUS,
-      id: "1234",
-      status: "test"
+      payload: {
+        id: "1234",
+        status: "test"
+      }
     });
   });
 });
 
 describe("moveCell", () => {
   test("creates a MOVE_CELL action", () => {
-    expect(actions.moveCell("1234", "5678", true)).toEqual({
+    expect(
+      actions.moveCell({ id: "1234", destinationId: "5678", above: true })
+    ).toEqual({
       type: actionTypes.MOVE_CELL,
-      id: "1234",
-      destinationId: "5678",
-      above: true
+      payload: {
+        id: "1234",
+        destinationId: "5678",
+        above: true
+      }
     });
   });
 });
 
 describe("removeCell", () => {
   test("creates a REMOVE_CELL action", () => {
-    expect(actions.removeCell("1234")).toEqual({
+    expect(actions.removeCell({ id: "1234" })).toEqual({
       type: actionTypes.REMOVE_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("focusCell", () => {
   test("creates a FOCUS_CELL action", () => {
-    expect(actions.focusCell("1234")).toEqual({
+    expect(actions.focusCell({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("focusNextCell", () => {
   test("creates a FOCUS_NEXT_CELL action", () => {
-    expect(actions.focusNextCell("1234", false)).toEqual({
+    expect(
+      actions.focusNextCell({ id: "1234", createCellIfUndefined: false })
+    ).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL,
-      id: "1234",
-      createCellIfUndefined: false
+      payload: {
+        id: "1234",
+        createCellIfUndefined: false
+      }
     });
   });
   test("creates a FOCUS_NEXT_CELL action with cell creation flag", () => {
-    expect(actions.focusNextCell("1234", true)).toEqual({
+    expect(
+      actions.focusNextCell({ id: "1234", createCellIfUndefined: true })
+    ).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL,
-      id: "1234",
-      createCellIfUndefined: true
+      payload: {
+        id: "1234",
+        createCellIfUndefined: true
+      }
     });
   });
 });
 
 describe("focusPreviousCell", () => {
   test("creates a FOCUS_PREVIOUS_CELL action", () => {
-    expect(actions.focusPreviousCell("1234")).toEqual({
+    expect(actions.focusPreviousCell({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_PREVIOUS_CELL,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("focusCellEditor", () => {
   test("creates a FOCUS_CELL_EDITOR action", () => {
-    expect(actions.focusCellEditor("1234")).toEqual({
+    expect(actions.focusCellEditor({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_CELL_EDITOR,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("focusPreviousCellEditor", () => {
   test("creates a FOCUS_PREVIOUS_CELL_EDITOR action", () => {
-    expect(actions.focusPreviousCellEditor("1234")).toEqual({
+    expect(actions.focusPreviousCellEditor({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("focusNextCellEditor", () => {
   test("creates a FOCUS_NEXT_CELL_EDITOR action", () => {
-    expect(actions.focusNextCellEditor("1234")).toEqual({
+    expect(actions.focusNextCellEditor({ id: "1234" })).toEqual({
       type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
-      id: "1234"
+      payload: { id: "1234" }
     });
   });
 });
 
 describe("createCellAfter", () => {
-  test("creates a NEW_CELL_AFTER action with default empty source string", () => {
-    expect(actions.createCellAfter("markdown", "1234")).toEqual({
-      type: actionTypes.NEW_CELL_AFTER,
-      source: "",
-      cellType: "markdown",
-      id: "1234"
-    });
-  });
-  test("creates a NEW_CELL_AFTER action with provided source string", () => {
-    expect(actions.createCellAfter("code", "1234", 'print("woo")')).toEqual({
-      type: actionTypes.NEW_CELL_AFTER,
-      source: 'print("woo")',
-      cellType: "code",
-      id: "1234"
+  test("creates a CREATE_CELL_AFTER action with provided source string", () => {
+    const cellType = "code";
+    const id = "1234";
+    const source = 'print("woo")';
+    expect(actions.createCellAfter({ cellType, id, source })).toEqual({
+      type: actionTypes.CREATE_CELL_AFTER,
+      payload: { source, cellType, id }
     });
   });
 });
 
 describe("createCellBefore", () => {
-  test("creates a NEW_CELL_BEFORE action", () => {
-    expect(actions.createCellBefore("markdown", "1234")).toEqual({
-      type: actionTypes.NEW_CELL_BEFORE,
-      cellType: "markdown",
-      id: "1234"
+  test("creates a CREATE_CELL_BEFORE action", () => {
+    expect(
+      actions.createCellBefore({ cellType: "markdown", id: "1234" })
+    ).toEqual({
+      type: actionTypes.CREATE_CELL_BEFORE,
+      payload: {
+        cellType: "markdown",
+        id: "1234"
+      }
     });
   });
 });
 
 describe("toggleStickyCell", () => {
   test("creates a TOGGLE_STICKY_CELL action", () => {
-    expect(actions.toggleStickyCell("1234")).toEqual({
+    expect(actions.toggleStickyCell({ id: "1234" })).toEqual({
       type: actionTypes.TOGGLE_STICKY_CELL,
-      id: "1234"
+      payload: {
+        id: "1234"
+      }
     });
   });
 });
 
 describe("createCellAppend", () => {
-  test("creates a NEW_CELL_APPEND action", () => {
-    expect(actions.createCellAppend("markdown")).toEqual({
-      type: actionTypes.NEW_CELL_APPEND,
-      cellType: "markdown"
+  test("creates a CREATE_CELL_APPEND action", () => {
+    expect(actions.createCellAppend({ cellType: "markdown" })).toEqual({
+      type: actionTypes.CREATE_CELL_APPEND,
+      payload: { cellType: "markdown" }
     });
   });
 });
 
 describe("mergeCellAfter", () => {
   test("creates a MERGE_CELL_AFTER action", () => {
-    expect(actions.mergeCellAfter("0121")).toEqual({
+    expect(actions.mergeCellAfter({ id: "0121" })).toEqual({
       type: actionTypes.MERGE_CELL_AFTER,
-      id: "0121"
+      payload: { id: "0121" }
     });
   });
 });
@@ -369,68 +388,78 @@ describe("setNotificationSystem", () => {
   });
 });
 
-describe("overwriteMetadata", () => {
+describe("overwriteMetadataField", () => {
   test("creates an OVERWRITE_METADATA_FIELD", () => {
     expect(
-      actions.overwriteMetadata("foo", {
-        bar: 3
+      actions.overwriteMetadataField({
+        field: "foo",
+        value: {
+          bar: 3
+        }
       })
     ).toEqual({
       type: actionTypes.OVERWRITE_METADATA_FIELD,
-      field: "foo",
-      value: { bar: 3 }
+      payload: {
+        field: "foo",
+        value: { bar: 3 }
+      }
     });
   });
 });
 
 describe("copyCell", () => {
   test("creates a COPY_CELL action", () => {
-    expect(actions.copyCell("235")).toEqual({
+    expect(actions.copyCell({ id: "235" })).toEqual({
       type: actionTypes.COPY_CELL,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });
 
 describe("cutCell", () => {
   test("creates a CUT_CELL action", () => {
-    expect(actions.cutCell("235")).toEqual({
+    expect(actions.cutCell({ id: "235" })).toEqual({
       type: actionTypes.CUT_CELL,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });
 
 describe("toggleCellOutputVisibility", () => {
   test("creates a TOGGLE_CELL_OUTPUT_VISIBILITY action", () => {
-    expect(actions.toggleCellOutputVisibility("235")).toEqual({
+    expect(actions.toggleCellOutputVisibility({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });
 
 describe("toggleCellInputVisibility", () => {
   test("creates a TOGGLE_CELL_INPUT_VISIBILITY action", () => {
-    expect(actions.toggleCellInputVisibility("235")).toEqual({
+    expect(actions.toggleCellInputVisibility({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });
 
 describe("pasteCell", () => {
   test("creates a PASTE_CELL action", () => {
-    expect(actions.pasteCell()).toEqual({ type: actionTypes.PASTE_CELL });
+    expect(actions.pasteCell({})).toEqual({
+      type: actionTypes.PASTE_CELL,
+      payload: {}
+    });
   });
 });
 
 describe("changeCellType", () => {
   test("creates a CHANGE_CELL_TYPE action", () => {
-    expect(actions.changeCellType("235", "markdown")).toEqual({
+    expect(actions.changeCellType({ id: "235", to: "markdown" })).toEqual({
       type: actionTypes.CHANGE_CELL_TYPE,
-      id: "235",
-      to: "markdown"
+      payload: {
+        id: "235",
+        to: "markdown"
+      }
     });
   });
 });
@@ -446,9 +475,9 @@ describe("setGithubToken", () => {
 
 describe("toggleOutputExpansion", () => {
   test("creates a TOGGLE_OUTPUT_EXPANSION action", () => {
-    expect(actions.toggleOutputExpansion("235")).toEqual({
+    expect(actions.toggleOutputExpansion({ id: "235" })).toEqual({
       type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
-      id: "235"
+      payload: { id: "235" }
     });
   });
 });
@@ -477,8 +506,9 @@ describe("save", () => {
   });
 
   test("creates a SAVE_FULFILLED action", () => {
-    expect(actions.saveFulfilled()).toEqual({
-      type: actionTypes.SAVE_FULFILLED
+    expect(actions.saveFulfilled({})).toEqual({
+      type: actionTypes.SAVE_FULFILLED,
+      payload: {}
     });
   });
 });

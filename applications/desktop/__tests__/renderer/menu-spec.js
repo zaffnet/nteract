@@ -6,75 +6,55 @@ import { actions, actionTypes } from "@nteract/core";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
-    test("dispatches a CREATE_CELL_AFTER action", () => {
+    test("dispatches a CREATE_CELL_AFTER with code action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCreateCellAfter(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.NEW_CELL_AFTER,
-        cellType: "code",
-        source: "",
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.createCellAfter({ cellType: "code", id: null, source: "" })
+      );
     });
   });
 
   describe("dispatchCreateTextCellAfter", () => {
-    test("dispatches a CREATE_TEXT_CELL_AFTER action", () => {
+    test("dispatches a CREATE_CELL_AFTER with markdown action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCreateTextCellAfter(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.NEW_CELL_AFTER,
-        cellType: "markdown",
-        source: "",
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.createCellAfter({ cellType: "markdown", id: null, source: "" })
+      );
     });
   });
 
   describe("dispatchPasteCell", () => {
-    test("dispatches a PASTE_CELL action", () => {
+    test("dispatches a pasteCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchPasteCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.PASTE_CELL
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.pasteCell({}));
     });
   });
 
   describe("dispatchCutCell", () => {
-    test("dispatches a CUT_CELL action", () => {
+    test("dispatches a cutCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCutCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.CUT_CELL,
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.cutCell({ id: null })
+      );
     });
   });
 
   describe("dispatchCopyCell", () => {
-    test("dispatches a COPY_CELL action", () => {
+    test("dispatches a copyCell action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchCopyCell(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.COPY_CELL,
-        id: null
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.copyCell({ id: null })
+      );
     });
   });
 
@@ -220,9 +200,7 @@ describe("menu", () => {
 
       menu.dispatchClearAll(store);
 
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: actionTypes.CLEAR_ALL_OUTPUTS
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.clearAllOutputs({}));
     });
   });
 
@@ -260,16 +238,10 @@ describe("menu", () => {
     test("", () => {
       const store = dummyStore({ hideAll: true });
       store.dispatch = jest.fn();
-
       menu.dispatchUnhideAll(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "UNHIDE_ALL",
-        payload: {
-          outputHidden: false,
-          inputHidden: false
-        }
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.unhideAll({ outputHidden: false, inputHidden: false })
+      );
     });
   });
 

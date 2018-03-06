@@ -96,7 +96,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.cutCell).not.toHaveBeenCalled();
       cutCellItem.simulate("click");
       expect(props.cutCell).toHaveBeenCalledTimes(1);
-      expect(props.cutCell).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.cutCell).toHaveBeenCalledWith({ id: props.cellFocused });
 
       const copyCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.COPY_CELL })
@@ -104,7 +104,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.copyCell).not.toHaveBeenCalled();
       copyCellItem.simulate("click");
       expect(props.copyCell).toHaveBeenCalledTimes(1);
-      expect(props.copyCell).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.copyCell).toHaveBeenCalledWith({ id: props.cellFocused });
 
       const pasteCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.PASTE_CELL })
@@ -112,7 +112,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.pasteCell).not.toHaveBeenCalled();
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalledTimes(1);
-      expect(props.pasteCell).toHaveBeenCalledWith();
+      expect(props.pasteCell).toHaveBeenCalledWith({});
 
       const mergeCellAfterItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.MERGE_CELL_AFTER })
@@ -120,7 +120,9 @@ describe("PureNotebookMenu ", () => {
       expect(props.mergeCellAfter).not.toHaveBeenCalled();
       mergeCellAfterItem.simulate("click");
       expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
-      expect(props.mergeCellAfter).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.mergeCellAfter).toHaveBeenCalledWith({
+        id: props.cellFocused
+      });
 
       const createMarkdownCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })

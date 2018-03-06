@@ -192,10 +192,12 @@ export function dispatchRunAll(store: *) {
 }
 
 export function dispatchClearAll(store: *) {
-  store.dispatch(actions.clearAllOutputs());
+  // TODO: #2618
+  store.dispatch(actions.clearAllOutputs({}));
 }
 
 export function dispatchUnhideAll(store: *) {
+  // TODO: #2618
   store.dispatch(
     actions.unhideAll({
       outputHidden: false,
@@ -257,29 +259,38 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.copyCell(focused));
+  // TODO: #2618
+  store.dispatch(actions.copyCell({ id: focused }));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.cutCell(focused));
+  // TODO: #2618
+  store.dispatch(actions.cutCell({ id: focused }));
 }
 
 export function dispatchPasteCell(store: *) {
-  store.dispatch(actions.pasteCell());
+  // TODO: #2618
+  store.dispatch(actions.pasteCell({}));
 }
 
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.createCellAfter("code", focused));
+  // TODO: #2618
+  store.dispatch(
+    actions.createCellAfter({ cellType: "code", id: focused, source: "" })
+  );
 }
 
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  store.dispatch(actions.createCellAfter("markdown", focused));
+  // TODO: #2618
+  store.dispatch(
+    actions.createCellAfter({ cellType: "markdown", id: focused, source: "" })
+  );
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
@@ -328,7 +339,8 @@ export function exportPDF(
   //       run through before we print...
   // Expand unexpanded cells
   unexpandedCells.map(cellID =>
-    store.dispatch(actions.toggleOutputExpansion(cellID))
+    // TODO: #2618
+    store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
   );
 
   remote.getCurrentWindow().webContents.printToPDF(
@@ -340,7 +352,7 @@ export function exportPDF(
 
       // Restore the modified cells to their unexpanded state.
       unexpandedCells.map(cellID =>
-        store.dispatch(actions.toggleOutputExpansion(cellID))
+        store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
       );
 
       fs.writeFile(`${filename}.pdf`, data, error_fs => {
