@@ -709,6 +709,18 @@ export function toggleOutputExpansion(payload: {
 }
 
 // TODO: #2618
+export function sendExecuteRequest(payload: {
+  id: string,
+  message: *,
+  contentRef?: ContentRef
+}): SendExecuteRequest {
+  return {
+    type: actionTypes.SEND_EXECUTE_REQUEST,
+    payload
+  };
+}
+
+// TODO: #2618
 export function executeCell(payload: {
   id: string,
   contentRef?: ContentRef
@@ -735,18 +747,6 @@ export function executeAllCellsBelow(payload: {
 }): ExecuteAllCellsBelow {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS_BELOW,
-    payload
-  };
-}
-
-// TODO: #2618
-export function sendExecuteRequest(payload: {
-  id: string,
-  message: *,
-  contentRef?: ContentRef
-}): SendExecuteRequest {
-  return {
-    type: actionTypes.SEND_EXECUTE_REQUEST,
     payload
   };
 }
