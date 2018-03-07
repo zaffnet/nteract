@@ -11,6 +11,8 @@ import { empty } from "rxjs/observable/empty";
 import { fromEvent } from "rxjs/observable/fromEvent";
 import { merge } from "rxjs/observable/merge";
 
+import { sample } from "lodash";
+
 import * as fs from "fs";
 
 import {
@@ -76,15 +78,44 @@ export function launchKernelObservable(
     launchSpec(spec, { cwd, stdio: ["ignore", "pipe", "pipe"] }).then(c => {
       const { config, spawn, connectionFile } = c;
 
-      spawn.stdout.on("data", data => {
-        observer.next(
-          actions.kernelRawStdout({ text: data.toString(), kernelRef })
+      // Pick a random color for the kernel to assist in debugging kernels
+      const logColor = sample([
+        "#404040",
+        "#704040",
+        "#407040",
+        "#404070",
+        "#704070",
+        "#707040",
+        "#407070",
+        "#707070"
+      ]);
+
+      const logStd = text => {
+        console.log(
+          `%c${text}`,
+          `color: ${logColor}; font-family: Source Code Pro, courier;`
         );
+      };
+
+      console.log(
+        `\n>>>> %cLogging kernel ${
+          kernelSpec.name
+        } (ref ${kernelRef}) stdout and stderr to javascript console in %cthis color %c  %c <<<<\n`,
+        `font-weight: bold;`,
+        `color: ${logColor}; font-weight: bold;`,
+        `background-color: ${logColor}; padding: 2px;`,
+        `color: black`
+      );
+
+      spawn.stdout.on("data", data => {
+        const text = data.toString();
+        logStd(text);
+        observer.next(actions.kernelRawStdout({ text, kernelRef }));
       });
       spawn.stderr.on("data", data => {
-        observer.next(
-          actions.kernelRawStderr({ text: data.toString(), kernelRef })
-        );
+        const text = data.toString();
+        logStd(text);
+        observer.next(actions.kernelRawStderr({ text, kernelRef }));
       });
 
       // do dependency injection of jmp to make it match our ABI version of node

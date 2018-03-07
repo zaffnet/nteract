@@ -8,10 +8,10 @@ import uuid from "uuid";
 // However, _outside_ this file, they are no longer `string`, but actually the
 // opaque types that we've set.
 // See https://flow.org/en/docs/types/opaque-types/#toc-within-the-defining-file
-export opaque type HostRef = string;
-export opaque type KernelRef = string;
-export opaque type KernelspecsRef = string;
-export opaque type ContentRef = string;
+export opaque type HostRef: string = string;
+export opaque type KernelRef: string = string;
+export opaque type KernelspecsRef: string = string;
+export opaque type ContentRef: string = string;
 
 export const createHostRef = (): HostRef => uuid.v4();
 export const createKernelRef = (): KernelRef => uuid.v4();
