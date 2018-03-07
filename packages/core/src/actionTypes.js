@@ -625,12 +625,14 @@ export type SaveFulfilled = {
   payload: { contentRef?: ContentRef }
 };
 
+// TODO: #2618
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {
   type: "NEW_NOTEBOOK",
   payload: {
     kernelSpec: Object,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 

@@ -840,7 +840,8 @@ export function saveFulfilled(payload: {
 export function newNotebook(payload: {
   kernelSpec: Object,
   cwd: string,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): NewNotebook {
   return {
     type: actionTypes.NEW_NOTEBOOK,
@@ -850,7 +851,8 @@ export function newNotebook(payload: {
         payload.cwd ||
         // TODO: Does it matter that this is our fallback when targeting the web app
         process.cwd(),
-      kernelRef: payload.kernelRef
+      kernelRef: payload.kernelRef,
+      contentRef: payload.contentRef
     }
   };
 }
