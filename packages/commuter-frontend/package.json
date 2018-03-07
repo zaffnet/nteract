@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commuter-frontend",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "Frontend for commuter, deprecated as a standalone",
   "main": "index.js",
   "publishConfig": {

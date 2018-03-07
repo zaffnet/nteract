@@ -1,6 +1,6 @@
 {
   "name": "@nteract/styles",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Root style package to supply custom CSS Properties.",
   "main": "index.js",
   "files": [

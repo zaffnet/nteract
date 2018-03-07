@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms-full",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Transforms from nteract",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -33,11 +33,11 @@
     "react": "^16.2.0"
   },
   "dependencies": {
-    "@nteract/transform-dataresource": "^3.0.1",
+    "@nteract/transform-dataresource": "^3.0.2",
     "@nteract/transform-geojson": "^3.1.0",
     "@nteract/transform-model-debug": "^3.1.0",
-    "@nteract/transform-plotly": "^3.1.5",
+    "@nteract/transform-plotly": "^3.1.6",
     "@nteract/transform-vega": "^3.1.0",
-    "@nteract/transforms": "^4.0.0"
+    "@nteract/transforms": "^4.0.1"
   }
 }
