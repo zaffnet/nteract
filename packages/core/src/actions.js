@@ -134,28 +134,34 @@ export const addHost = (payload: {
   payload
 });
 
+// TODO: #2618
 export const fetchContent = (payload: {
   path: string,
   params: Object,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
 });
 
+// TODO: #2618
 export const fetchContentFulfilled = (payload: {
   path: string,
   model: any,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContentFulfilled => ({
   type: actionTypes.FETCH_CONTENT_FULFILLED,
   payload
 });
 
+// TODO: #2618
 export const fetchContentFailed = (payload: {
   path: string,
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContentFailed => ({
   type: actionTypes.FETCH_CONTENT_FAILED,
   payload,

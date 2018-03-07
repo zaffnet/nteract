@@ -53,33 +53,39 @@ export type AddHost = {
   payload: { hostRef: HostRef, host: HostRecord }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
   payload: {
     path: string,
     params: Object,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT_FULFILLED = "CORE/FETCH_CONTENT_FULFILLED";
 export type FetchContentFulfilled = {
   type: "CORE/FETCH_CONTENT_FULFILLED",
   payload: {
     path: string,
     model: any, // literal response from API
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT_FAILED = "CORE/FETCH_CONTENT_FAILED";
 export type FetchContentFailed = {
   type: "CORE/FETCH_CONTENT_FAILED",
   payload: {
     path: string,
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
