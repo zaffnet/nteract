@@ -291,7 +291,7 @@ describe("menu", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
       menu.dispatchSave(store);
-      expect(store.dispatch).toHaveBeenCalledWith(actions.save());
+      expect(store.dispatch).toHaveBeenCalledWith(actions.save({}));
     });
   });
 
@@ -301,7 +301,7 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.saveAs("test-ipynb.ipynb")
+        actions.saveAs({ filename: "test-ipynb.ipynb" })
       );
     });
   });
@@ -389,7 +389,7 @@ describe("menu", () => {
 
       menu.triggerWindowRefresh(store, filename);
 
-      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs(filename));
+      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs({ filename }));
     });
   });
 

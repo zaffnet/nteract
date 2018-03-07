@@ -50,7 +50,8 @@ export function saveEpic(
           // TODO: #2618
           return actions.saveFulfilled({});
         }),
-        catchError((error: Error) => of(actions.saveFailed(error)))
+        // TODO: #2618
+        catchError((error: Error) => of(actions.saveFailed({ error })))
       );
     })
   );
@@ -69,8 +70,9 @@ export function saveAsEpic(action$: ActionsObservable<*>) {
         // order matters here, since we need the filename set in the state
         // before we save the document
         // TODO: #2618
-        actions.changeFilename({ filename: action.filename }),
-        actions.save()
+        actions.changeFilename({ filename: action.payload.filename }),
+        // TODO: #2618
+        actions.save({})
       ];
     })
   );

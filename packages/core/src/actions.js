@@ -795,23 +795,33 @@ export function changeFilename(payload: {
   };
 }
 
-export function save(): Save {
+// TODO: #2618
+export function save(payload: { contentRef?: ContentRef }): Save {
   return {
-    type: actionTypes.SAVE
+    type: actionTypes.SAVE,
+    payload
   };
 }
 
-export function saveAs(filename: string): SaveAs {
+// TODO: #2618
+export function saveAs(payload: {
+  filename: string,
+  contentRef?: ContentRef
+}): SaveAs {
   return {
     type: actionTypes.SAVE_AS,
-    filename
+    payload
   };
 }
 
-export function saveFailed(error: Error): SaveFailed {
+// TODO: #2618
+export function saveFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): SaveFailed {
   return {
     type: actionTypes.SAVE_FAILED,
-    payload: error,
+    payload,
     error: true
   };
 }

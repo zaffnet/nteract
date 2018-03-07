@@ -22,7 +22,7 @@ type Props = {
   openKeys?: Array<string>,
   cellFocused: ?string,
   currentKernelRef: ?KernelRef,
-  saveNotebook: ?() => void,
+  saveNotebook: ?(payload: *) => void,
   executeCell: ?(payload: *) => void,
   executeAllCells: ?(payload: *) => void,
   executeAllCellsBelow: ?(payload: *) => void,
@@ -102,7 +102,8 @@ class PureNotebookMenu extends React.Component<Props> {
     switch (action) {
       case MENU_ITEM_ACTIONS.SAVE_NOTEBOOK:
         if (saveNotebook) {
-          saveNotebook();
+          // TODO: #2618
+          saveNotebook({});
         }
         break;
       case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
@@ -371,7 +372,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveNotebook: () => dispatch(actions.save()),
+  saveNotebook: (payload: *) => dispatch(actions.save(payload)),
   executeCell: (payload: *) => dispatch(actions.executeCell(payload)),
   executeAllCells: (payload: *) => dispatch(actions.executeAllCells(payload)),
   executeAllCellsBelow: (payload: *) =>

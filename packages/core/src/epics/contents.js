@@ -80,7 +80,9 @@ export function saveContentEpic(
       // TODO: this will likely make more sense when this becomes less
       // notebook-centric.
       if (!currentNotebook) {
-        return of(actions.saveFailed(new Error("Notebook was not set.")));
+        return of(
+          actions.saveFailed({ error: new Error("Notebook was not set.") })
+        );
       }
 
       const filename = selectors.currentFilename(state);
@@ -102,7 +104,7 @@ export function saveContentEpic(
       return contents.save(serverConfig, filename, model).pipe(
         // TODO: #2618
         mapTo(actions.saveFulfilled({})),
-        catchError((error: Error) => of(actions.saveFailed(error)))
+        catchError((error: Error) => of(actions.saveFailed({ error })))
       );
     })
   );

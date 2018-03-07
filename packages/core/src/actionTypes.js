@@ -590,14 +590,33 @@ export type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 
+// TODO: #2618
 export const SAVE = "SAVE";
-export type Save = { type: "SAVE" };
+export type Save = {
+  type: "SAVE",
+  payload: {
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const SAVE_AS = "SAVE_AS";
-export type SaveAs = { type: "SAVE_AS", filename: string };
+export type SaveAs = {
+  type: "SAVE_AS",
+  payload: {
+    filename: string,
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const SAVE_FAILED = "SAVE_FAILED";
-export type SaveFailed = { type: "SAVE_FAILED" };
+export type SaveFailed = {
+  type: "SAVE_FAILED",
+  payload: {
+    contentRef?: ContentRef
+  }
+};
 
 // TODO: #2618
 export const SAVE_FULFILLED = "SAVE_FULFILLED";

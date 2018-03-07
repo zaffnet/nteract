@@ -484,24 +484,25 @@ describe("toggleOutputExpansion", () => {
 
 describe("save", () => {
   test("creates a SAVE action", () => {
-    expect(actions.save()).toEqual({
-      type: actionTypes.SAVE
+    expect(actions.save({})).toEqual({
+      type: actionTypes.SAVE,
+      payload: {}
     });
   });
 
   test("creates a SAVE_AS action", () => {
-    expect(actions.saveAs("foo.ipynb")).toEqual({
+    expect(actions.saveAs({ filename: "foo.ipynb" })).toEqual({
       type: actionTypes.SAVE_AS,
-      filename: "foo.ipynb"
+      payload: { filename: "foo.ipynb" }
     });
   });
 
   test("creates a SAVE_FAILED action", () => {
     const error = new Error("fake");
-    expect(actions.saveFailed(error)).toEqual({
+    expect(actions.saveFailed({ error })).toEqual({
       type: actionTypes.SAVE_FAILED,
       error: true,
-      payload: error
+      payload: { error }
     });
   });
 
