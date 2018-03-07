@@ -53,33 +53,39 @@ export type AddHost = {
   payload: { hostRef: HostRef, host: HostRecord }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
   payload: {
     path: string,
     params: Object,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT_FULFILLED = "CORE/FETCH_CONTENT_FULFILLED";
 export type FetchContentFulfilled = {
   type: "CORE/FETCH_CONTENT_FULFILLED",
   payload: {
     path: string,
     model: any, // literal response from API
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const FETCH_CONTENT_FAILED = "CORE/FETCH_CONTENT_FAILED";
 export type FetchContentFailed = {
   type: "CORE/FETCH_CONTENT_FAILED",
   payload: {
     path: string,
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
@@ -317,37 +323,62 @@ export type SendExecuteRequest = {
   }
 };
 
+// TODO: #2618
 export const EXECUTE_CELL = "EXECUTE_CELL";
-export type ExecuteCellAction = {
+export type ExecuteCell = {
   type: "EXECUTE_CELL",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_ALL_CELLS = "EXECUTE_ALL_CELLS";
 export type ExecuteAllCells = {
-  type: "EXECUTE_ALL_CELLS"
+  type: "EXECUTE_ALL_CELLS",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_ALL_CELLS_BELOW = "EXECUTE_ALL_CELLS_BELOW";
 export type ExecuteAllCellsBelow = {
-  type: "EXECUTE_ALL_CELLS_BELOW"
+  type: "EXECUTE_ALL_CELLS_BELOW",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_FOCUSED_CELL = "EXECUTE_FOCUSED_CELL";
-export type ExecuteFocusedCellAction = {
-  type: "EXECUTE_FOCUSED_CELL"
+export type ExecuteFocusedCell = {
+  type: "EXECUTE_FOCUSED_CELL",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_CANCELED = "EXECUTE_CANCELED";
 export type ExecuteCanceled = {
-  type: "EXECUTE_CANCELED"
+  type: "EXECUTE_CANCELED",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_FAILED = "EXECUTE_FAILED";
 export type ExecuteFailed = {
   type: "EXECUTE_FAILED",
-  error: true,
-  payload: Error
+  payload: {
+    error: Error,
+    contentRef?: ContentRef
+  },
+  error: true
 };
 
 // TODO: #2618
@@ -565,14 +596,33 @@ export type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 
+// TODO: #2618
 export const SAVE = "SAVE";
-export type Save = { type: "SAVE" };
+export type Save = {
+  type: "SAVE",
+  payload: {
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const SAVE_AS = "SAVE_AS";
-export type SaveAs = { type: "SAVE_AS", filename: string };
+export type SaveAs = {
+  type: "SAVE_AS",
+  payload: {
+    filename: string,
+    contentRef?: ContentRef
+  }
+};
 
+// TODO: #2618
 export const SAVE_FAILED = "SAVE_FAILED";
-export type SaveFailed = { type: "SAVE_FAILED" };
+export type SaveFailed = {
+  type: "SAVE_FAILED",
+  payload: {
+    contentRef?: ContentRef
+  }
+};
 
 // TODO: #2618
 export const SAVE_FULFILLED = "SAVE_FULFILLED";
@@ -581,12 +631,14 @@ export type SaveFulfilled = {
   payload: { contentRef?: ContentRef }
 };
 
+// TODO: #2618
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {
   type: "NEW_NOTEBOOK",
   payload: {
     kernelSpec: Object,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
@@ -663,33 +715,40 @@ export type SetGithubTokenAction = {
   githubToken: string
 };
 
+// TODO: #2618
 export const RESTART_KERNEL = "RESTART_KERNEL";
 export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
     clearOutputs: boolean,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
 export type RestartKernelFailed = {
   type: "RESTART_KERNEL_FAILED",
   payload: {
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
 
+// TODO: #2618
 export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
   type: "RESTART_KERNEL_SUCCESSFUL",
   payload: {
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
@@ -697,10 +756,12 @@ export type LaunchKernelAction = {
     kernelRef: KernelRef,
     kernelSpec: Object,
     cwd: string,
-    selectNextKernel: boolean
+    selectNextKernel: boolean,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",
@@ -708,26 +769,31 @@ export type LaunchKernelByNameAction = {
     kernelSpecName: string,
     cwd: string,
     kernelRef: KernelRef,
-    selectNextKernel: boolean
+    selectNextKernel: boolean,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
 export type LaunchKernelFailed = {
   type: "LAUNCH_KERNEL_FAILED",
   payload: {
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 

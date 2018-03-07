@@ -34,8 +34,8 @@ import type {
   ShutdownReplySucceeded,
   DeleteConnectionFileFailedAction,
   DeleteConnectionFileSuccessfulAction,
-  ExecuteCellAction,
-  ExecuteFocusedCellAction,
+  ExecuteCell,
+  ExecuteFocusedCell,
   ExecuteAllCells,
   ExecuteAllCellsBelow,
   ExecuteCanceled,
@@ -134,28 +134,34 @@ export const addHost = (payload: {
   payload
 });
 
+// TODO: #2618
 export const fetchContent = (payload: {
   path: string,
   params: Object,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
 });
 
+// TODO: #2618
 export const fetchContentFulfilled = (payload: {
   path: string,
   model: any,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContentFulfilled => ({
   type: actionTypes.FETCH_CONTENT_FULFILLED,
   payload
 });
 
+// TODO: #2618
 export const fetchContentFailed = (payload: {
   path: string,
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): FetchContentFailed => ({
   type: actionTypes.FETCH_CONTENT_FAILED,
   payload,
@@ -188,9 +194,11 @@ export const fetchKernelspecsFailed = (payload: {
   payload
 });
 
+// TODO: #2618
 export function launchKernelFailed(payload: {
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): LaunchKernelFailed {
   return {
     type: actionTypes.LAUNCH_KERNEL_FAILED,
@@ -199,9 +207,11 @@ export function launchKernelFailed(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernelSuccessful(payload: {
   kernel: LocalKernelProps | RemoteKernelProps,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -209,11 +219,13 @@ export function launchKernelSuccessful(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
   kernelRef: KernelRef,
-  selectNextKernel: boolean
+  selectNextKernel: boolean,
+  contentRef?: ContentRef
 }): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -221,11 +233,13 @@ export function launchKernel(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
   kernelRef: KernelRef,
-  selectNextKernel: boolean
+  selectNextKernel: boolean,
+  contentRef?: ContentRef
 }): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,
@@ -708,31 +722,6 @@ export function toggleOutputExpansion(payload: {
   };
 }
 
-export function executeCell(id: string): ExecuteCellAction {
-  return {
-    type: actionTypes.EXECUTE_CELL,
-    id
-  };
-}
-
-export function executeAllCells(): ExecuteAllCells {
-  return {
-    type: actionTypes.EXECUTE_ALL_CELLS
-  };
-}
-
-export function executeAllCellsBelow(): ExecuteAllCellsBelow {
-  return {
-    type: actionTypes.EXECUTE_ALL_CELLS_BELOW
-  };
-}
-
-export function executeFocusedCell(): ExecuteFocusedCellAction {
-  return {
-    type: actionTypes.EXECUTE_FOCUSED_CELL
-  };
-}
-
 // TODO: #2618
 export function sendExecuteRequest(payload: {
   id: string,
@@ -745,17 +734,67 @@ export function sendExecuteRequest(payload: {
   };
 }
 
-export function executeCanceled(): ExecuteCanceled {
+// TODO: #2618
+export function executeCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ExecuteCell {
   return {
-    type: actionTypes.EXECUTE_CANCELED
+    type: actionTypes.EXECUTE_CELL,
+    payload
   };
 }
 
-export function executeFailed(error: Error): ExecuteFailed {
+// TODO: #2618
+export function executeAllCells(payload: {
+  contentRef?: ContentRef
+}): ExecuteAllCells {
+  return {
+    type: actionTypes.EXECUTE_ALL_CELLS,
+    payload
+  };
+}
+
+// TODO: #2618
+export function executeAllCellsBelow(payload: {
+  contentRef?: ContentRef
+}): ExecuteAllCellsBelow {
+  return {
+    type: actionTypes.EXECUTE_ALL_CELLS_BELOW,
+    payload
+  };
+}
+
+// TODO: #2618
+export function executeFocusedCell(payload: {
+  contentRef?: ContentRef
+}): ExecuteFocusedCell {
+  return {
+    type: actionTypes.EXECUTE_FOCUSED_CELL,
+    payload
+  };
+}
+
+// TODO: #2618
+export function executeCanceled(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ExecuteCanceled {
+  return {
+    type: actionTypes.EXECUTE_CANCELED,
+    payload
+  };
+}
+
+// TODO: #2618
+export function executeFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): ExecuteFailed {
   return {
     type: actionTypes.EXECUTE_FAILED,
     error: true,
-    payload: error
+    payload
   };
 }
 
@@ -770,23 +809,33 @@ export function changeFilename(payload: {
   };
 }
 
-export function save(): Save {
+// TODO: #2618
+export function save(payload: { contentRef?: ContentRef }): Save {
   return {
-    type: actionTypes.SAVE
+    type: actionTypes.SAVE,
+    payload
   };
 }
 
-export function saveAs(filename: string): SaveAs {
+// TODO: #2618
+export function saveAs(payload: {
+  filename: string,
+  contentRef?: ContentRef
+}): SaveAs {
   return {
     type: actionTypes.SAVE_AS,
-    filename
+    payload
   };
 }
 
-export function saveFailed(error: Error): SaveFailed {
+// TODO: #2618
+export function saveFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): SaveFailed {
   return {
     type: actionTypes.SAVE_FAILED,
-    payload: error,
+    payload,
     error: true
   };
 }
@@ -805,7 +854,8 @@ export function saveFulfilled(payload: {
 export function newNotebook(payload: {
   kernelSpec: Object,
   cwd: string,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): NewNotebook {
   return {
     type: actionTypes.NEW_NOTEBOOK,
@@ -815,7 +865,8 @@ export function newNotebook(payload: {
         payload.cwd ||
         // TODO: Does it matter that this is our fallback when targeting the web app
         process.cwd(),
-      kernelRef: payload.kernelRef
+      kernelRef: payload.kernelRef,
+      contentRef: payload.contentRef
     }
   };
 }
@@ -987,9 +1038,11 @@ export function shutdownReplyTimedOut(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernel(payload: {
   clearOutputs: boolean,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernel {
   return {
     type: actionTypes.RESTART_KERNEL,
@@ -997,9 +1050,11 @@ export function restartKernel(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernelFailed(payload: {
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernelFailed {
   return {
     type: actionTypes.RESTART_KERNEL_FAILED,
@@ -1008,8 +1063,10 @@ export function restartKernelFailed(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernelSuccessful(payload: {
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernelSuccessful {
   return {
     type: actionTypes.RESTART_KERNEL_SUCCESSFUL,

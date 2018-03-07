@@ -20,9 +20,9 @@ import { toArray, share, catchError, bufferCount } from "rxjs/operators";
 
 describe("executeCell", () => {
   test("returns an executeCell action", () => {
-    expect(actions.executeCell("0-0-0-0")).toEqual({
+    expect(actions.executeCell({ id: "0-0-0-0" })).toEqual({
       type: actionTypes.EXECUTE_CELL,
-      id: "0-0-0-0"
+      payload: { id: "0-0-0-0" }
     });
   });
 });
@@ -86,8 +86,10 @@ describe("createExecuteCellStream", () => {
     const observable = createExecuteCellStream(action$, store, "source", "id");
     observable.pipe(toArray()).subscribe(
       actions => {
-        const payloads = actions.map(({ payload }) => payload.toString());
-        expect(payloads).toEqual(["Error: Kernel not connected!"]);
+        const errors = actions.map(({ payload: { error } }) =>
+          error.toString()
+        );
+        expect(errors).toEqual(["Error: Kernel not connected!"]);
         done();
       },
       err => done.fail(err)
@@ -169,9 +171,9 @@ describe("executeCellEpic", () => {
   };
   test("Errors on a bad action", done => {
     // Make one hot action
-    const badAction$ = ActionsObservable.of({
-      type: actionTypes.EXECUTE_CELL
-    }).pipe(share());
+    const badAction$ = ActionsObservable.of(actions.executeCell({})).pipe(
+      share()
+    );
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs an id");
@@ -187,9 +189,9 @@ describe("executeCellEpic", () => {
     );
   });
   test("Errors on an action where source not a string", done => {
-    const badAction$ = ActionsObservable.of(actions.executeCell("id", 2)).pipe(
-      share()
-    );
+    const badAction$ = ActionsObservable.of(
+      actions.executeCell({ id: "id" })
+    ).pipe(share());
     const responseActions = executeCellEpic(badAction$, store).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs source string");
@@ -244,13 +246,15 @@ describe("executeCellEpic", () => {
       }
     };
 
-    const action$ = ActionsObservable.of(actions.executeCell("first")).pipe(
-      share()
-    );
+    const action$ = ActionsObservable.of(
+      actions.executeCell({ id: "first" })
+    ).pipe(share());
     const responseActions = executeCellEpic(action$, store);
     responseActions.subscribe(
       x => {
-        expect(x.payload.toString()).toEqual("Error: Kernel not connected!");
+        expect(x.payload.error.toString()).toEqual(
+          "Error: Kernel not connected!"
+        );
         done();
       },
       err => done.fail(err)

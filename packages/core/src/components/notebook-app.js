@@ -307,7 +307,7 @@ type NotebookStateProps = {
 type NotebookDispatchProps = {
   moveCell: (payload: *) => *,
   focusCell: (payload: *) => *,
-  executeFocusedCell: () => *,
+  executeFocusedCell: (payload: *) => *,
   focusNextCell: (*) => *,
   focusNextCellEditor: (*) => *
 };
@@ -332,7 +332,8 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
   moveCell: (payload: *) => dispatch(actions.moveCell(payload)),
   focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
-  executeFocusedCell: () => dispatch(actions.executeFocusedCell()),
+  executeFocusedCell: (payload: *) =>
+    dispatch(actions.executeFocusedCell(payload)),
   focusNextCell: (payload: *) => dispatch(actions.focusNextCell(payload)),
   focusNextCellEditor: (payload: *) =>
     dispatch(actions.focusNextCellEditor(payload))
@@ -392,7 +393,8 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 
     // NOTE: Order matters here because we need it to execute _before_ we
     // focus the next cell
-    executeFocusedCell();
+    // TODO: #2618
+    executeFocusedCell({});
 
     if (e.shiftKey) {
       // Couldn't focusNextCell just do focusing of both?

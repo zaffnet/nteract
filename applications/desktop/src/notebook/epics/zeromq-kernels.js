@@ -1,5 +1,5 @@
 /* @flow */
-import type { KernelRef } from "@nteract/core/src/state";
+import type { ContentRef, KernelRef } from "@nteract/core/src/state";
 import { unlinkObservable } from "fs-observable";
 
 import type { ChildProcess } from "child_process";
@@ -67,7 +67,8 @@ import type {
 export function launchKernelObservable(
   kernelSpec: KernelInfo,
   cwd: string,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 ) {
   const spec = kernelSpec.spec;
 
@@ -89,8 +90,12 @@ export function launchKernelObservable(
       // do dependency injection of jmp to make it match our ABI version of node
       createMainChannel(config, undefined, undefined, jmp)
         .then((channels: Channels) => {
-          // TODO: #2618
-          observer.next(actions.setKernelInfo({ kernelInfo: kernelSpec }));
+          observer.next(
+            actions.setKernelInfo({
+              kernelInfo: kernelSpec,
+              contentRef: contentRef
+            })
+          );
 
           const kernel: LocalKernelProps = {
             kernelRef,
@@ -105,7 +110,9 @@ export function launchKernelObservable(
             status: "launched" // TODO: Determine our taxonomy
           };
 
-          observer.next(actions.launchKernelSuccessful({ kernel, kernelRef }));
+          observer.next(
+            actions.launchKernelSuccessful({ kernel, kernelRef, contentRef })
+          );
           // TODO: Request status right after
           observer.next(
             actions.setExecutionState({ kernelStatus: "launched", kernelRef })
@@ -151,7 +158,8 @@ export const launchKernelByNameEpic = (
               kernelSpec: specs[action.payload.kernelSpecName],
               cwd: action.payload.cwd,
               kernelRef: action.payload.kernelRef,
-              selectNextKernel: action.payload.selectNextKernel
+              selectNextKernel: action.payload.selectNextKernel,
+              contentRef: action.payload.contentRef
             })
           )
         )
@@ -181,7 +189,8 @@ export const launchKernelEpic = (
         return of(
           actions.launchKernelFailed({
             error: new Error("launchKernel needs a kernelSpec and a kernelRef"),
-            kernelRef: action.payload && action.payload.kernelRef
+            kernelRef: action.payload && action.payload.kernelRef,
+            contentRef: action.payload.contentRef
           })
         );
       }
@@ -203,7 +212,8 @@ export const launchKernelEpic = (
         launchKernelObservable(
           action.payload.kernelSpec,
           action.payload.cwd,
-          action.payload.kernelRef
+          action.payload.kernelRef,
+          action.payload.contentRef
         ),
         // Was there a kernel before (?) -- kill it if so, otherwise nothing else
         cleanupOldKernel$
@@ -212,7 +222,8 @@ export const launchKernelEpic = (
           of(
             actions.launchKernelFailed({
               error,
-              kernelRef: action.payload.kernelRef
+              kernelRef: action.payload.kernelRef,
+              contentRef: action.payload.contentRef
             })
           )
         )

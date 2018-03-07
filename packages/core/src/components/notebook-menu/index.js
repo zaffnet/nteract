@@ -22,10 +22,10 @@ type Props = {
   openKeys?: Array<string>,
   cellFocused: ?string,
   currentKernelRef: ?KernelRef,
-  saveNotebook: ?() => void,
-  executeCell: ?(cellId: ?string) => void,
-  executeAllCells: ?() => void,
-  executeAllCellsBelow: ?() => void,
+  saveNotebook: ?(payload: *) => void,
+  executeCell: ?(payload: *) => void,
+  executeAllCells: ?(payload: *) => void,
+  executeAllCellsBelow: ?(payload: *) => void,
   clearAllOutputs: ?(payload: *) => void,
   unhideAll: ?(*) => void,
   cutCell: ?(payload: *) => void,
@@ -102,7 +102,8 @@ class PureNotebookMenu extends React.Component<Props> {
     switch (action) {
       case MENU_ITEM_ACTIONS.SAVE_NOTEBOOK:
         if (saveNotebook) {
-          saveNotebook();
+          // TODO: #2618
+          saveNotebook({});
         }
         break;
       case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
@@ -158,12 +159,14 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS:
         if (executeAllCells) {
-          executeAllCells();
+          // TODO: #2618
+          executeAllCells({});
         }
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW:
         if (executeAllCellsBelow) {
-          executeAllCellsBelow();
+          // TODO: #2618
+          executeAllCellsBelow({});
         }
         break;
       case MENU_ITEM_ACTIONS.UNHIDE_ALL:
@@ -369,10 +372,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveNotebook: () => dispatch(actions.save()),
-  executeCell: cellId => dispatch(actions.executeCell(cellId)),
-  executeAllCells: () => dispatch(actions.executeAllCells()),
-  executeAllCellsBelow: () => dispatch(actions.executeAllCellsBelow()),
+  saveNotebook: (payload: *) => dispatch(actions.save(payload)),
+  executeCell: (payload: *) => dispatch(actions.executeCell(payload)),
+  executeAllCells: (payload: *) => dispatch(actions.executeAllCells(payload)),
+  executeAllCellsBelow: (payload: *) =>
+    dispatch(actions.executeAllCellsBelow(payload)),
   clearAllOutputs: (payload: *) => dispatch(actions.clearAllOutputs(payload)),
   unhideAll: payload => dispatch(actions.unhideAll(payload)),
   cutCell: (payload: *) => dispatch(actions.cutCell(payload)),

@@ -15,7 +15,7 @@ describe("save", () => {
         connectionFile: false
       })
     });
-    const state = reducers.app(originalState, actions.save());
+    const state = reducers.app(originalState, actions.save({}));
     expect(state.isSaving).toBe(true);
   });
 });
@@ -26,7 +26,7 @@ describe("saveFailed", () => {
       isSaving: true
     });
 
-    const state = reducers.app(originalState, actions.saveFailed());
+    const state = reducers.app(originalState, actions.saveFailed({}));
     expect(state.isSaving).toBe(false);
   });
 });

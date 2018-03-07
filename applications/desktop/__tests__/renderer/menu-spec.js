@@ -212,25 +212,19 @@ describe("menu", () => {
         .document.getIn(["notebook", "cellMap"])
         .filter(cell => cell.get("cell_type") === "markdown");
       store.dispatch = jest.fn();
-
       menu.dispatchRunAllBelow(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "EXECUTE_ALL_CELLS_BELOW"
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.executeAllCellsBelow({})
+      );
     });
   });
 
   describe("dispatchRunAll", () => {
-    test("dispatches EXECUTE_CELL for all cells action", () => {
+    test("dispatches executeAllCells action", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-
       menu.dispatchRunAll(store);
-
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "EXECUTE_ALL_CELLS"
-      });
+      expect(store.dispatch).toHaveBeenCalledWith(actions.executeAllCells({}));
     });
   });
 
@@ -297,7 +291,7 @@ describe("menu", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
       menu.dispatchSave(store);
-      expect(store.dispatch).toHaveBeenCalledWith(actions.save());
+      expect(store.dispatch).toHaveBeenCalledWith(actions.save({}));
     });
   });
 
@@ -307,7 +301,7 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.saveAs("test-ipynb.ipynb")
+        actions.saveAs({ filename: "test-ipynb.ipynb" })
       );
     });
   });
@@ -395,7 +389,7 @@ describe("menu", () => {
 
       menu.triggerWindowRefresh(store, filename);
 
-      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs(filename));
+      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs({ filename }));
     });
   });
 

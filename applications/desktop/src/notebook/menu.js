@@ -22,7 +22,7 @@ export function cwdKernelFallback() {
 }
 
 export function dispatchSaveAs(store: *, evt: Event, filename: string) {
-  store.dispatch(actions.saveAs(filename));
+  store.dispatch(actions.saveAs({ filename }));
 }
 
 const dialog = remote.dialog;
@@ -71,7 +71,7 @@ export function triggerWindowRefresh(store: *, filename: string) {
   if (!filename) {
     return;
   }
-  store.dispatch(actions.saveAs(filename));
+  store.dispatch(actions.saveAs({ filename }));
 }
 
 export function dispatchRestartKernel(store: *) {
@@ -137,7 +137,8 @@ export function dispatchSave(store: *) {
   if (!filename) {
     triggerSaveAs(store);
   } else {
-    store.dispatch(actions.save());
+    // TODO: #2618
+    store.dispatch(actions.save({}));
   }
 }
 
@@ -184,11 +185,13 @@ export function dispatchPublishUserGist(
  * @param {Object} store - The Redux store
  */
 export function dispatchRunAllBelow(store: *) {
-  store.dispatch(actions.executeAllCellsBelow());
+  // TODO: #2618
+  store.dispatch(actions.executeAllCellsBelow({}));
 }
 
 export function dispatchRunAll(store: *) {
-  store.dispatch(actions.executeAllCells());
+  // TODO: #2618
+  store.dispatch(actions.executeAllCells({}));
 }
 
 export function dispatchClearAll(store: *) {
