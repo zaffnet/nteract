@@ -50,7 +50,8 @@ export function fetchContentEpic(
             return actions.fetchContentFulfilled({
               path: action.payload.path,
               model: xhr.response,
-              kernelRef: action.payload.kernelRef
+              kernelRef: action.payload.kernelRef,
+              contentRef: action.payload.contentRef
             });
           }),
           catchError((xhrError: any) =>
@@ -58,7 +59,8 @@ export function fetchContentEpic(
               actions.fetchContentFailed({
                 path: action.payload.path,
                 error: xhrError,
-                kernelRef: action.payload.kernelRef
+                kernelRef: action.payload.kernelRef,
+                contentRef: action.payload.contentRef
               })
             )
           )
@@ -81,7 +83,10 @@ export function saveContentEpic(
       // notebook-centric.
       if (!currentNotebook) {
         return of(
-          actions.saveFailed({ error: new Error("Notebook was not set.") })
+          actions.saveFailed({
+            error: new Error("Notebook was not set."),
+            contentRef: action.payload.contentRef
+          })
         );
       }
 
@@ -102,9 +107,15 @@ export function saveContentEpic(
       };
 
       return contents.save(serverConfig, filename, model).pipe(
-        // TODO: #2618
-        mapTo(actions.saveFulfilled({})),
-        catchError((error: Error) => of(actions.saveFailed({ error })))
+        mapTo(actions.saveFulfilled({ contentRef: action.payload.contentRef })),
+        catchError((error: Error) =>
+          of(
+            actions.saveFailed({
+              error,
+              contentRef: action.payload.contentRef
+            })
+          )
+        )
       );
     })
   );
@@ -131,11 +142,11 @@ export function setNotebookEpic(
         action.payload.model.type === "notebook"
     ),
     map((action: FetchContentFulfilled) =>
-      // TODO: #2618
       actions.setNotebook({
         filename: action.payload.path,
         notebook: fromJS(action.payload.model.content),
-        kernelRef: action.payload.kernelRef
+        kernelRef: action.payload.kernelRef,
+        contentRef: action.payload.contentRef
       })
     ),
     catchError((xhrError: any) =>

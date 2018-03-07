@@ -137,7 +137,8 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
           actions.fetchContentFulfilled({
             path: model.path,
             model,
-            kernelRef: action.payload.kernelRef
+            kernelRef: action.payload.kernelRef,
+            contentRef: action.payload.contentRef
           })
         ),
         catchError((err: Error) =>
@@ -145,7 +146,8 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
             actions.fetchContentFailed({
               path: filepath,
               error: err,
-              kernelRef: action.payload.kernelRef
+              kernelRef: action.payload.kernelRef,
+              contentRef: action.payload.contentRef
             })
           )
         )
@@ -168,7 +170,8 @@ export const launchKernelWhenNotebookSetEpic = (
         kernelSpecName,
         cwd,
         kernelRef: action.payload.kernelRef,
-        selectNextKernel: true
+        selectNextKernel: true,
+        contentRef: action.payload.contentRef
       });
     })
   );
@@ -194,7 +197,11 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
         notebook = notebook.setIn(["metadata", "kernelspec"], spec);
       }
 
-      // TODO: #2618
-      return actions.setNotebook({ filename: null, notebook, kernelRef });
+      return actions.setNotebook({
+        filename: null,
+        notebook,
+        kernelRef,
+        contentRef: action.payload.contentRef
+      });
     })
   );

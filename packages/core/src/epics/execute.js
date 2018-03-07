@@ -18,6 +18,8 @@ import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
 import { _throw } from "rxjs/observable/throw";
 
+import type { ContentRef } from "../state/refs";
+
 import {
   groupBy,
   filter,
@@ -67,7 +69,8 @@ const Immutable = require("immutable");
 export function executeCellStream(
   channels: Channels,
   id: string,
-  message: ExecuteRequest
+  message: ExecuteRequest,
+  contentRef?: ContentRef
 ) {
   if (!channels || !channels.pipe) {
     return _throw(new Error("kernel not connected"));
@@ -83,36 +86,31 @@ export function executeCellStream(
 
   const cellAction$ = merge(
     payloadStream.pipe(
-      // TODO: #2618
-      map(payload => actions.acceptPayloadMessage({ id, payload }))
+      map(payload => actions.acceptPayloadMessage({ id, payload, contentRef }))
     ),
 
     // All actions for updating cell status
     cellMessages.pipe(
       kernelStatuses(),
-      // TODO: #2618
-      map(status => actions.updateCellStatus({ id, status }))
+      map(status => actions.updateCellStatus({ id, status, contentRef }))
     ),
 
     // Update the input numbering: `[ ]`
     cellMessages.pipe(
       executionCounts(),
-      // TODO: #2618
-      map(ct => actions.updateCellExecutionCount({ id, value: ct }))
+      map(ct => actions.updateCellExecutionCount({ id, value: ct, contentRef }))
     ),
 
     // All actions for new outputs
     cellMessages.pipe(
       outputs(),
-      // TODO: #2618
-      map(output => actions.appendOutput({ id, output }))
+      map(output => actions.appendOutput({ id, output, contentRef }))
     ),
 
     // clear_output display message
     cellMessages.pipe(
       ofMessageType("clear_output"),
-      // TODO: #2618
-      mapTo(actions.clearOutputs({ id }))
+      mapTo(actions.clearOutputs({ id, contentRef }))
     )
   );
 
@@ -128,7 +126,8 @@ export function createExecuteCellStream(
   action$: ActionsObservable<*>,
   store: any,
   message: ExecuteRequest,
-  id: string
+  id: string,
+  contentRef?: ContentRef
 ) {
   const kernel = selectors.currentKernel(store.getState());
 
@@ -140,13 +139,15 @@ export function createExecuteCellStream(
     !(kernel.status === "starting" || kernel.status === "not connected");
 
   if (!kernelConnected || !channels) {
-    // TODO: #2618
     return of(
-      actions.executeFailed({ error: new Error("Kernel not connected!") })
+      actions.executeFailed({
+        error: new Error("Kernel not connected!"),
+        contentRef
+      })
     );
   }
 
-  const cellStream = executeCellStream(channels, id, message).pipe(
+  const cellStream = executeCellStream(channels, id, message, contentRef).pipe(
     takeUntil(
       merge(
         action$.pipe(
@@ -169,8 +170,7 @@ export function createExecuteCellStream(
   return merge(
     // We make sure to propagate back to "ourselves" the actual message
     // that we sent to the kernel with the sendExecuteRequest action
-    // TODO: #2618
-    of(actions.sendExecuteRequest({ id, message })),
+    of(actions.sendExecuteRequest({ id, message, contentRef })),
     // Merging it in with the actual stream
     cellStream
   );
@@ -188,9 +188,11 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
       } else if (action.type === actionTypes.EXECUTE_ALL_CELLS_BELOW) {
         codeCellIds = selectors.currentCodeCellIdsBelow(state);
       }
-
-      // TODO: #2618
-      return of(...codeCellIds.map(id => actions.executeCell({ id })));
+      return of(
+        ...codeCellIds.map(id =>
+          actions.executeCell({ id, contentRef: action.payload.contentRef })
+        )
+      );
     })
   );
 }
@@ -208,8 +210,9 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         if (!id) {
           throw new Error("attempted to execute without an id");
         }
-        // TODO: #2618
-        return of(actions.executeCell({ id }));
+        return of(
+          actions.executeCell({ id, contentRef: action.payload.contentRef })
+        );
       }
       return of(action);
     }),
@@ -247,13 +250,20 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 
           const message = createExecuteRequest(source);
 
-          return createExecuteCellStream(action$, store, message, id);
+          return createExecuteCellStream(
+            action$,
+            store,
+            message,
+            id,
+            action.payload.contentRef
+          );
         })
       )
     ),
     // Bring back all the inner Observables into one stream
     mergeAll(),
-    // TODO: #2618
+    // TODO: #2618: This one is a little tricky since the contentRef is out of
+    // scope.
     catchError((error, source) =>
       merge(of(actions.executeFailed({ error })), source)
     )
@@ -267,10 +277,20 @@ export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
     switchMap((action: NewKernelAction) =>
       action.payload.kernel.channels.pipe(
         ofMessageType("update_display_data"),
-        // TODO: #2618
-        map(msg => actions.updateDisplay({ content: msg.content })),
-        // TODO: #2618
-        catchError(error => of(actions.updateDisplayFailed({ error })))
+        map(msg =>
+          actions.updateDisplay({
+            content: msg.content,
+            contentRef: action.payload.contentRef
+          })
+        ),
+        catchError(error =>
+          of(
+            actions.updateDisplayFailed({
+              error,
+              contentRef: action.payload.contentRef
+            })
+          )
+        )
       )
     )
   );

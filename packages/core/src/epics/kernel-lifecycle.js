@@ -133,7 +133,8 @@ export const launchKernelWhenNotebookSetEpic = (
         kernelSpecName,
         cwd,
         kernelRef: action.payload.kernelRef,
-        selectNextKernel: true
+        selectNextKernel: true,
+        contentRef: action.payload.contentRef
       });
     })
   );
@@ -183,7 +184,8 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
           kernelSpecName: oldKernel.kernelSpecName,
           cwd: oldKernel.cwd,
           kernelRef: createKernelRef(),
-          selectNextKernel: true
+          selectNextKernel: true,
+          contentRef: action.payload.contentRef
         })
       );
     })

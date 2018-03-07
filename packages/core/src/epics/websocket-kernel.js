@@ -53,7 +53,13 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 
           kernel.channels.next(kernelInfoRequest());
 
-          return of(actions.launchKernelSuccessful({ kernel, kernelRef }));
+          return of(
+            actions.launchKernelSuccessful({
+              kernel,
+              kernelRef,
+              contentRef: action.payload.contentRef
+            })
+          );
         })
       );
     })

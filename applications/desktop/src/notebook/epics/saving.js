@@ -47,11 +47,18 @@ export function saveEpic(
               level: "success"
             });
           }
-          // TODO: #2618
-          return actions.saveFulfilled({});
+          return actions.saveFulfilled({
+            contentRef: action.payload.contentRef
+          });
         }),
-        // TODO: #2618
-        catchError((error: Error) => of(actions.saveFailed({ error })))
+        catchError((error: Error) =>
+          of(
+            actions.saveFailed({
+              error,
+              contentRef: action.payload.contentRef
+            })
+          )
+        )
       );
     })
   );
@@ -69,10 +76,13 @@ export function saveAsEpic(action$: ActionsObservable<*>) {
       return [
         // order matters here, since we need the filename set in the state
         // before we save the document
-        // TODO: #2618
-        actions.changeFilename({ filename: action.payload.filename }),
-        // TODO: #2618
-        actions.save({})
+        actions.changeFilename({
+          filename: action.payload.filename,
+          contentRef: action.payload.contentRef
+        }),
+        actions.save({
+          contentRef: action.payload.contentRef
+        })
       ];
     })
   );
