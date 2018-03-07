@@ -80,7 +80,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.executeAllCells).not.toHaveBeenCalled();
       executeAllCellsItem.simulate("click");
       expect(props.executeAllCells).toHaveBeenCalledTimes(1);
-      expect(props.executeAllCells).toHaveBeenCalledWith();
+      expect(props.executeAllCells).toHaveBeenCalledWith({});
 
       const executeAllCellsBelowItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
@@ -88,7 +88,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.executeAllCellsBelow).not.toHaveBeenCalled();
       executeAllCellsBelowItem.simulate("click");
       expect(props.executeAllCellsBelow).toHaveBeenCalledTimes(1);
-      expect(props.executeAllCellsBelow).toHaveBeenCalledWith();
+      expect(props.executeAllCellsBelow).toHaveBeenCalledWith({});
 
       const cutCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CUT_CELL })

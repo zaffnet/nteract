@@ -184,11 +184,13 @@ export function dispatchPublishUserGist(
  * @param {Object} store - The Redux store
  */
 export function dispatchRunAllBelow(store: *) {
-  store.dispatch(actions.executeAllCellsBelow());
+  // TODO: #2618
+  store.dispatch(actions.executeAllCellsBelow({}));
 }
 
 export function dispatchRunAll(store: *) {
-  store.dispatch(actions.executeAllCells());
+  // TODO: #2618
+  store.dispatch(actions.executeAllCells({}));
 }
 
 export function dispatchClearAll(store: *) {

@@ -42,7 +42,15 @@ import * as selectors from "../selectors";
 
 import type { ActionsObservable } from "redux-observable";
 
-import type { NewKernelAction } from "../actionTypes";
+import type {
+  NewKernelAction,
+  ExecuteCell,
+  ExecuteFocusedCell,
+  ExecuteAllCells,
+  ExecuteAllCellsBelow,
+  ExecuteCanceled,
+  RemoveCell
+} from "../actionTypes";
 
 const Immutable = require("immutable");
 
@@ -132,7 +140,10 @@ export function createExecuteCellStream(
     !(kernel.status === "starting" || kernel.status === "not connected");
 
   if (!kernelConnected || !channels) {
-    return of(actions.executeFailed(new Error("Kernel not connected!")));
+    // TODO: #2618
+    return of(
+      actions.executeFailed({ error: new Error("Kernel not connected!") })
+    );
   }
 
   const cellStream = executeCellStream(channels, id, message).pipe(
@@ -140,11 +151,8 @@ export function createExecuteCellStream(
       merge(
         action$.pipe(
           ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL),
-          // TODO: Type this when payloads are equivalent and simplify...
           filter(
-            laterAction =>
-              (laterAction.payload && laterAction.payload.id === id) ||
-              laterAction.id === id
+            (action: ExecuteCanceled | RemoveCell) => action.payload.id === id
           )
         ),
         action$.pipe(
@@ -171,7 +179,7 @@ export function createExecuteCellStream(
 export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
-    concatMap(action => {
+    concatMap((action: ExecuteAllCells | ExecuteAllCellsBelow) => {
       const state = store.getState();
       let codeCellIds = Immutable.List();
 
@@ -181,7 +189,8 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
         codeCellIds = selectors.currentCodeCellIdsBelow(state);
       }
 
-      return of(...codeCellIds.map(id => actions.executeCell(id)));
+      // TODO: #2618
+      return of(...codeCellIds.map(id => actions.executeCell({ id })));
     })
   );
 }
@@ -193,29 +202,31 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
 export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_CELL, actionTypes.EXECUTE_FOCUSED_CELL),
-    mergeMap(action => {
+    mergeMap((action: ExecuteCell | ExecuteFocusedCell) => {
       if (action.type === actionTypes.EXECUTE_FOCUSED_CELL) {
         const id = selectors.currentFocusedCellId(store.getState());
         if (!id) {
           throw new Error("attempted to execute without an id");
         }
-        return of(actions.executeCell(id));
+        // TODO: #2618
+        return of(actions.executeCell({ id }));
       }
       return of(action);
     }),
-    tap(action => {
-      if (!action.id) {
+    tap((action: ExecuteCell) => {
+      if (!action.payload.id) {
         throw new Error("execute cell needs an id");
       }
     }),
     // Split stream by cell IDs
-    groupBy(action => action.id),
+    groupBy((action: ExecuteCell) => action.payload.id),
     // Work on each cell's stream
-    map(cellActionStream =>
-      cellActionStream.pipe(
+    map(cellAction$ =>
+      cellAction$.pipe(
         // When a new EXECUTE_CELL comes in with the current ID, we create a
         // a new stream and unsubscribe from the old one.
-        switchMap(({ id }) => {
+        switchMap((action: ExecuteCell) => {
+          const { id } = action.payload;
           const cellMap = selectors.currentCellMap(store.getState());
 
           // If for some reason this is run *outside* the context of viewing
@@ -242,7 +253,10 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     ),
     // Bring back all the inner Observables into one stream
     mergeAll(),
-    catchError((err, source) => merge(of(actions.executeFailed(err)), source))
+    // TODO: #2618
+    catchError((error, source) =>
+      merge(of(actions.executeFailed({ error })), source)
+    )
   );
 }
 

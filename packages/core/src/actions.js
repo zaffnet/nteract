@@ -34,8 +34,8 @@ import type {
   ShutdownReplySucceeded,
   DeleteConnectionFileFailedAction,
   DeleteConnectionFileSuccessfulAction,
-  ExecuteCellAction,
-  ExecuteFocusedCellAction,
+  ExecuteCell,
+  ExecuteFocusedCell,
   ExecuteAllCells,
   ExecuteAllCellsBelow,
   ExecuteCanceled,
@@ -708,28 +708,34 @@ export function toggleOutputExpansion(payload: {
   };
 }
 
-export function executeCell(id: string): ExecuteCellAction {
+// TODO: #2618
+export function executeCell(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ExecuteCell {
   return {
     type: actionTypes.EXECUTE_CELL,
-    id
+    payload
   };
 }
 
-export function executeAllCells(): ExecuteAllCells {
+// TODO: #2618
+export function executeAllCells(payload: {
+  contentRef?: ContentRef
+}): ExecuteAllCells {
   return {
-    type: actionTypes.EXECUTE_ALL_CELLS
+    type: actionTypes.EXECUTE_ALL_CELLS,
+    payload
   };
 }
 
-export function executeAllCellsBelow(): ExecuteAllCellsBelow {
+// TODO: #2618
+export function executeAllCellsBelow(payload: {
+  contentRef?: ContentRef
+}): ExecuteAllCellsBelow {
   return {
-    type: actionTypes.EXECUTE_ALL_CELLS_BELOW
-  };
-}
-
-export function executeFocusedCell(): ExecuteFocusedCellAction {
-  return {
-    type: actionTypes.EXECUTE_FOCUSED_CELL
+    type: actionTypes.EXECUTE_ALL_CELLS_BELOW,
+    payload
   };
 }
 
@@ -745,17 +751,36 @@ export function sendExecuteRequest(payload: {
   };
 }
 
-export function executeCanceled(): ExecuteCanceled {
+// TODO: #2618
+export function executeFocusedCell(payload: {
+  contentRef?: ContentRef
+}): ExecuteFocusedCell {
   return {
-    type: actionTypes.EXECUTE_CANCELED
+    type: actionTypes.EXECUTE_FOCUSED_CELL,
+    payload
   };
 }
 
-export function executeFailed(error: Error): ExecuteFailed {
+// TODO: #2618
+export function executeCanceled(payload: {
+  id: string,
+  contentRef?: ContentRef
+}): ExecuteCanceled {
+  return {
+    type: actionTypes.EXECUTE_CANCELED,
+    payload
+  };
+}
+
+// TODO: #2618
+export function executeFailed(payload: {
+  error: Error,
+  contentRef?: ContentRef
+}): ExecuteFailed {
   return {
     type: actionTypes.EXECUTE_FAILED,
     error: true,
-    payload: error
+    payload
   };
 }
 

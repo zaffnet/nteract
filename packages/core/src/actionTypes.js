@@ -317,37 +317,62 @@ export type SendExecuteRequest = {
   }
 };
 
+// TODO: #2618
 export const EXECUTE_CELL = "EXECUTE_CELL";
-export type ExecuteCellAction = {
+export type ExecuteCell = {
   type: "EXECUTE_CELL",
-  id: CellID
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_ALL_CELLS = "EXECUTE_ALL_CELLS";
 export type ExecuteAllCells = {
-  type: "EXECUTE_ALL_CELLS"
+  type: "EXECUTE_ALL_CELLS",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_ALL_CELLS_BELOW = "EXECUTE_ALL_CELLS_BELOW";
 export type ExecuteAllCellsBelow = {
-  type: "EXECUTE_ALL_CELLS_BELOW"
+  type: "EXECUTE_ALL_CELLS_BELOW",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_FOCUSED_CELL = "EXECUTE_FOCUSED_CELL";
-export type ExecuteFocusedCellAction = {
-  type: "EXECUTE_FOCUSED_CELL"
+export type ExecuteFocusedCell = {
+  type: "EXECUTE_FOCUSED_CELL",
+  payload: {
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_CANCELED = "EXECUTE_CANCELED";
 export type ExecuteCanceled = {
-  type: "EXECUTE_CANCELED"
+  type: "EXECUTE_CANCELED",
+  payload: {
+    id: CellID,
+    contentRef?: ContentRef
+  }
 };
 
+// TODO: #2618
 export const EXECUTE_FAILED = "EXECUTE_FAILED";
 export type ExecuteFailed = {
   type: "EXECUTE_FAILED",
-  error: true,
-  payload: Error
+  payload: {
+    error: Error,
+    contentRef?: ContentRef
+  },
+  error: true
 };
 
 // TODO: #2618
