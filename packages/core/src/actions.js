@@ -194,9 +194,11 @@ export const fetchKernelspecsFailed = (payload: {
   payload
 });
 
+// TODO: #2618
 export function launchKernelFailed(payload: {
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): LaunchKernelFailed {
   return {
     type: actionTypes.LAUNCH_KERNEL_FAILED,
@@ -205,9 +207,11 @@ export function launchKernelFailed(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernelSuccessful(payload: {
   kernel: LocalKernelProps | RemoteKernelProps,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -215,11 +219,13 @@ export function launchKernelSuccessful(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
   kernelRef: KernelRef,
-  selectNextKernel: boolean
+  selectNextKernel: boolean,
+  contentRef?: ContentRef
 }): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -227,11 +233,13 @@ export function launchKernel(payload: {
   };
 }
 
+// TODO: #2618
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
   kernelRef: KernelRef,
-  selectNextKernel: boolean
+  selectNextKernel: boolean,
+  contentRef?: ContentRef
 }): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,
@@ -1030,9 +1038,11 @@ export function shutdownReplyTimedOut(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernel(payload: {
   clearOutputs: boolean,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernel {
   return {
     type: actionTypes.RESTART_KERNEL,
@@ -1040,9 +1050,11 @@ export function restartKernel(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernelFailed(payload: {
   error: Error,
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernelFailed {
   return {
     type: actionTypes.RESTART_KERNEL_FAILED,
@@ -1051,8 +1063,10 @@ export function restartKernelFailed(payload: {
   };
 }
 
+// TODO: #2618
 export function restartKernelSuccessful(payload: {
-  kernelRef: KernelRef
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
 }): RestartKernelSuccessful {
   return {
     type: actionTypes.RESTART_KERNEL_SUCCESSFUL,

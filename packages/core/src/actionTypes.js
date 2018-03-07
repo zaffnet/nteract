@@ -715,33 +715,40 @@ export type SetGithubTokenAction = {
   githubToken: string
 };
 
+// TODO: #2618
 export const RESTART_KERNEL = "RESTART_KERNEL";
 export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
     clearOutputs: boolean,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
 export type RestartKernelFailed = {
   type: "RESTART_KERNEL_FAILED",
   payload: {
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
 
+// TODO: #2618
 export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
   type: "RESTART_KERNEL_SUCCESSFUL",
   payload: {
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
@@ -749,10 +756,12 @@ export type LaunchKernelAction = {
     kernelRef: KernelRef,
     kernelSpec: Object,
     cwd: string,
-    selectNextKernel: boolean
+    selectNextKernel: boolean,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",
@@ -760,26 +769,31 @@ export type LaunchKernelByNameAction = {
     kernelSpecName: string,
     cwd: string,
     kernelRef: KernelRef,
-    selectNextKernel: boolean
+    selectNextKernel: boolean,
+    contentRef?: ContentRef
   }
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
 export type LaunchKernelFailed = {
   type: "LAUNCH_KERNEL_FAILED",
   payload: {
     error: Error,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   },
   error: true
 };
 
+// TODO: #2618
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
-    kernelRef: KernelRef
+    kernelRef: KernelRef,
+    contentRef?: ContentRef
   }
 };
 
