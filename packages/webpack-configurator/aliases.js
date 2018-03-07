@@ -5,7 +5,10 @@ const ignored = new Set([
   // we don't reuse the desktop app as a library
   "nteract",
 
-  // commuter frontend is a next app, will actually rely on this package
+  // commuter is a next app -- if people need modules from it, they should be
+  // made into new packages
+  "@nteract/commuter",
+  // Deprecated frontend package (it's part of commuter itself now)
   "@nteract/commuter-frontend",
 
   // TODO: Is there a possible way to make this get built by webpack?
@@ -14,8 +17,6 @@ const ignored = new Set([
   // self, obviously we should skip ourselves
   "@nteract/webpack-configurator",
 
-  // Just a note that we _will_ resolve the direct src of commuter the server
-  // app since we it gets transpiled in the same way as our other packages
   // "@nteract/commuter",
 
   // These are all next.js apps and will rely on this package
