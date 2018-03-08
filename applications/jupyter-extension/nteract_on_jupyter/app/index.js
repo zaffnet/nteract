@@ -27,8 +27,9 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
-    componentDidMount(): void {
+    componentWillMount(): void {
       const hostRef = state.createHostRef();
+      const contentRef = state.createContentRef();
       const kernelRef = state.createKernelRef();
       const kernelspecsRef = state.createKernelspecsRef();
       store.dispatch(
@@ -51,7 +52,8 @@ function createApp(jupyterConfigData: JupyterConfigData) {
         actions.fetchContent({
           path: jupyterConfigData.contentsPath,
           params: {},
-          kernelRef
+          kernelRef,
+          contentRef
         })
       );
       store.dispatch(actions.fetchKernelspecs({ hostRef, kernelspecsRef }));
