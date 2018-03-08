@@ -16,7 +16,9 @@ In order to build a signed copy with working auto-update, you will need to join 
 
 1. Make sure the release is working by running `npm run dist` and testing the built app inside the `./applications/desktop/dist/` folder. You can build for all platforms using `npm run dist:all`.
 
-1. Run `npm publish` to publish everything, which also runs the verification steps. You will have to pick versions for everything.
+1. Double check that publish will really work by running `npm run verifyBeforePublish` first
+
+1. Run `lerna publish` to publish everything, which also runs the verification steps. You will have to pick versions for everything.
 
 1. From GitHub go to [nteract's releases](https://github.com/nteract/nteract/releases), verify everything works and edit the release notes. The name should follow our [naming guidelines](https://github.com/nteract/naming), namely that we use the last name of the next scientist in the list with an adjective in front.
    Example:
