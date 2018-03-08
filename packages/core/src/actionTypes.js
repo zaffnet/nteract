@@ -53,7 +53,6 @@ export type AddHost = {
   payload: { hostRef: HostRef, host: HostRecord }
 };
 
-// TODO: #2618
 export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
@@ -61,11 +60,10 @@ export type FetchContent = {
     path: string,
     params: Object,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FETCH_CONTENT_FULFILLED = "CORE/FETCH_CONTENT_FULFILLED";
 export type FetchContentFulfilled = {
   type: "CORE/FETCH_CONTENT_FULFILLED",
@@ -73,11 +71,10 @@ export type FetchContentFulfilled = {
     path: string,
     model: any, // literal response from API
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FETCH_CONTENT_FAILED = "CORE/FETCH_CONTENT_FAILED";
 export type FetchContentFailed = {
   type: "CORE/FETCH_CONTENT_FAILED",
@@ -85,7 +82,7 @@ export type FetchContentFailed = {
     path: string,
     error: Error,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   },
   error: true
 };
@@ -119,17 +116,15 @@ export type FetchKernelspecsFailed = {
   }
 };
 
-// TODO: #2618
 export const CHANGE_FILENAME = "CHANGE_FILENAME";
 export type ChangeFilenameAction = {
   type: "CHANGE_FILENAME",
   payload: {
     filename: ?string,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SET_IN_CELL = "SET_IN_CELL";
 export type SetInCell<T> = {
   type: "SET_IN_CELL",
@@ -137,11 +132,10 @@ export type SetInCell<T> = {
     id: CellID,
     path: Array<string>,
     value: T,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const MOVE_CELL = "MOVE_CELL";
 export type MoveCell = {
   type: "MOVE_CELL",
@@ -149,21 +143,19 @@ export type MoveCell = {
     id: CellID,
     destinationId: CellID,
     above: boolean,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const REMOVE_CELL = "REMOVE_CELL";
 export type RemoveCell = {
   type: "REMOVE_CELL",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
 export type CreateCellAfter = {
   type: "CREATE_CELL_AFTER",
@@ -171,53 +163,48 @@ export type CreateCellAfter = {
     id: CellID,
     cellType: CellType,
     source: string,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CREATE_CELL_BEFORE = "CREATE_CELL_BEFORE";
 export type CreateCellBefore = {
   type: "CREATE_CELL_BEFORE",
   payload: {
     cellType: CellType,
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CREATE_CELL_APPEND = "CREATE_CELL_APPEND";
 export type CreateCellAppend = {
   type: "CREATE_CELL_APPEND",
   payload: {
     cellType: CellType,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
 export type MergeCellAfter = {
   type: "MERGE_CELL_AFTER",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const APPEND_OUTPUT = "APPEND_OUTPUT";
 export type AppendOutput = {
   type: "APPEND_OUTPUT",
   payload: {
     id: CellID,
     output: Output,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const UPDATE_DISPLAY = "UPDATE_DISPLAY";
 export type UpdateDisplay = {
   type: "UPDATE_DISPLAY",
@@ -227,260 +214,235 @@ export type UpdateDisplay = {
       metadata: JSONObject,
       transient: { display_id: string }
     },
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const UPDATE_DISPLAY_FAILED = "UPDATE_DISPLAY_FAILED";
 export type UpdateDisplayFailed = {
   type: "UPDATE_DISPLAY_FAILED",
   payload: {
     error: Error,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   },
   error: true
 };
 
-// TODO: #2618
 export const UNHIDE_ALL = "UNHIDE_ALL";
 export type UnhideAll = {
   type: "UNHIDE_ALL",
   payload: {
     inputHidden: boolean,
     outputHidden: boolean,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
 export type ToggleCellOutputVisibility = {
   type: "TOGGLE_CELL_OUTPUT_VISIBILITY",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
 export type ToggleCellInputVisibility = {
   type: "TOGGLE_CELL_INPUT_VISIBILITY",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CLEAR_OUTPUTS = "CLEAR_OUTPUTS";
 export type ClearOutputs = {
   type: "CLEAR_OUTPUTS",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CLEAR_ALL_OUTPUTS = "CLEAR_ALL_OUTPUTS";
 export type ClearAllOutputs = {
   type: "CLEAR_ALL_OUTPUTS",
-  payload: { contentRef?: ContentRef }
+  payload: { contentRef: ContentRef }
 };
 
-// TODO: #2618
 export const ACCEPT_PAYLOAD_MESSAGE = "ACCEPT_PAYLOAD_MESSAGE";
 export type AcceptPayloadMessage = {
   type: "ACCEPT_PAYLOAD_MESSAGE",
   payload: {
     id: CellID,
     payload: *,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
 export type SetLanguageInfo = {
   type: "SET_LANGUAGE_INFO",
   payload: {
     langInfo: LanguageInfoMetadata,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SEND_EXECUTE_REQUEST = "SEND_EXECUTE_REQUEST";
 export type SendExecuteRequest = {
   type: "SEND_EXECUTE_REQUEST",
   payload: {
     id: CellID,
     message: ExecuteRequest,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_CELL = "EXECUTE_CELL";
 export type ExecuteCell = {
   type: "EXECUTE_CELL",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_ALL_CELLS = "EXECUTE_ALL_CELLS";
 export type ExecuteAllCells = {
   type: "EXECUTE_ALL_CELLS",
   payload: {
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_ALL_CELLS_BELOW = "EXECUTE_ALL_CELLS_BELOW";
 export type ExecuteAllCellsBelow = {
   type: "EXECUTE_ALL_CELLS_BELOW",
   payload: {
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_FOCUSED_CELL = "EXECUTE_FOCUSED_CELL";
 export type ExecuteFocusedCell = {
   type: "EXECUTE_FOCUSED_CELL",
   payload: {
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_CANCELED = "EXECUTE_CANCELED";
 export type ExecuteCanceled = {
   type: "EXECUTE_CANCELED",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const EXECUTE_FAILED = "EXECUTE_FAILED";
 export type ExecuteFailed = {
   type: "EXECUTE_FAILED",
   payload: {
     error: Error,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   },
   error: true
 };
 
-// TODO: #2618
 export const FOCUS_CELL = "FOCUS_CELL";
 export type FocusCell = {
   type: "FOCUS_CELL",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FOCUS_NEXT_CELL = "FOCUS_NEXT_CELL";
 export type FocusNextCell = {
   type: "FOCUS_NEXT_CELL",
   payload: {
     id: ?CellID,
     createCellIfUndefined: boolean,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FOCUS_PREVIOUS_CELL = "FOCUS_PREVIOUS_CELL";
 export type FocusPreviousCell = {
   type: "FOCUS_PREVIOUS_CELL",
   payload: {
     id: ?CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FOCUS_CELL_EDITOR = "FOCUS_CELL_EDITOR";
 export type FocusCellEditor = {
   type: "FOCUS_CELL_EDITOR",
   payload: {
     id: ?CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FOCUS_NEXT_CELL_EDITOR = "FOCUS_NEXT_CELL_EDITOR";
 export type FocusNextCellEditor = {
   type: "FOCUS_NEXT_CELL_EDITOR",
   payload: {
     id: ?CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const FOCUS_PREVIOUS_CELL_EDITOR = "FOCUS_PREVIOUS_CELL_EDITOR";
 export type FocusPreviousCellEditor = {
   type: "FOCUS_PREVIOUS_CELL_EDITOR",
   payload: {
     id: ?CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
 export type SetKernelInfo = {
   type: "SET_KERNEL_INFO",
   payload: {
     kernelInfo: KernelInfo,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const OVERWRITE_METADATA_FIELD = "OVERWRITE_METADATA_FIELD";
 export type OverwriteMetadataField = {
   type: "OVERWRITE_METADATA_FIELD",
   payload: {
     field: string,
     value: any,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const DELETE_METADATA_FIELD = "DELETE_METADATA_FIELD";
 export type DeleteMetadataField = {
   type: "DELETE_METADATA_FIELD",
   payload: {
     field: string,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const UPDATE_CELL_STATUS = "UPDATE_CELL_STATUS";
 export type UpdateCellStatus = {
   type: "UPDATE_CELL_STATUS",
   payload: {
     id: CellID,
     status: string,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
@@ -529,45 +491,40 @@ export type SaveConfigAction = { type: "SAVE_CONFIG" };
 export const DONE_SAVING_CONFIG = "DONE_SAVING_CONFIG";
 export type DoneSavingConfigAction = { type: "DONE_SAVING_CONFIG" };
 
-// TODO: #2618
 export const TOGGLE_OUTPUT_EXPANSION = "TOGGLE_OUTPUT_EXPANSION";
 export type ToggleCellExpansion = {
   type: "TOGGLE_OUTPUT_EXPANSION",
   payload: {
     id: CellID,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const CUT_CELL = "CUT_CELL";
 export type CutCell = {
   type: "CUT_CELL",
-  payload: { id: CellID, contentRef?: ContentRef }
+  payload: { id: CellID, contentRef: ContentRef }
 };
 
-// TODO: #2618
 export const COPY_CELL = "COPY_CELL";
 export type CopyCell = {
   type: "COPY_CELL",
-  payload: { id: CellID, contentRef?: ContentRef }
+  payload: { id: CellID, contentRef: ContentRef }
 };
 
-// TODO: #2618
 export const PASTE_CELL = "PASTE_CELL";
 export type PasteCell = {
   type: "PASTE_CELL",
-  payload: { contentRef?: ContentRef }
+  payload: { contentRef: ContentRef }
 };
 
-// TODO: #2618
 export const CHANGE_CELL_TYPE = "CHANGE_CELL_TYPE";
 export type ChangeCellType = {
   type: "CHANGE_CELL_TYPE",
   payload: {
     id: CellID,
     to: CellType,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
@@ -586,55 +543,49 @@ export type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 
-// TODO: #2618
 export const SAVE = "SAVE";
 export type Save = {
   type: "SAVE",
   payload: {
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SAVE_AS = "SAVE_AS";
 export type SaveAs = {
   type: "SAVE_AS",
   payload: {
     filename: string,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SAVE_FAILED = "SAVE_FAILED";
 export type SaveFailed = {
   type: "SAVE_FAILED",
   payload: {
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const SAVE_FULFILLED = "SAVE_FULFILLED";
 export type SaveFulfilled = {
   type: "SAVE_FULFILLED",
-  payload: { contentRef?: ContentRef }
+  payload: { contentRef: ContentRef }
 };
 
-// TODO: #2618
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";
 export type NewNotebook = {
   type: "NEW_NOTEBOOK",
   payload: {
     kernelSpec: Object,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
 // TODO: Make this action JSON serializable (don't use the Immutable.js version
 //       of the notebook in this action)
-// TODO: #2618
 export const SET_NOTEBOOK = "SET_NOTEBOOK";
 export type SetNotebook = {
   type: "SET_NOTEBOOK",
@@ -642,7 +593,7 @@ export type SetNotebook = {
     notebook: ImmutableNotebook,
     filename: ?string,
     kernelRef: KernelRef,
-    contentRef?: ContentRef,
+    contentRef: ContentRef,
     lastSaved: ?Date,
     name: ?string,
     created: ?Date
@@ -708,40 +659,36 @@ export type SetGithubTokenAction = {
   githubToken: string
 };
 
-// TODO: #2618
 export const RESTART_KERNEL = "RESTART_KERNEL";
 export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
     clearOutputs: boolean,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const RESTART_KERNEL_FAILED = "RESTART_KERNEL_FAILED";
 export type RestartKernelFailed = {
   type: "RESTART_KERNEL_FAILED",
   payload: {
     error: Error,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   },
   error: true
 };
 
-// TODO: #2618
 export const RESTART_KERNEL_SUCCESSFUL = "RESTART_KERNEL_SUCCESSFUL";
 export type RestartKernelSuccessful = {
   type: "RESTART_KERNEL_SUCCESSFUL",
   payload: {
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const LAUNCH_KERNEL = "LAUNCH_KERNEL";
 export type LaunchKernelAction = {
   type: "LAUNCH_KERNEL",
@@ -750,11 +697,10 @@ export type LaunchKernelAction = {
     kernelSpec: Object,
     cwd: string,
     selectNextKernel: boolean,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",
@@ -763,30 +709,28 @@ export type LaunchKernelByNameAction = {
     cwd: string,
     kernelRef: KernelRef,
     selectNextKernel: boolean,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 
-// TODO: #2618
 export const LAUNCH_KERNEL_FAILED = "LAUNCH_KERNEL_FAILED";
 export type LaunchKernelFailed = {
   type: "LAUNCH_KERNEL_FAILED",
   payload: {
     error: Error,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   },
   error: true
 };
 
-// TODO: #2618
 export const LAUNCH_KERNEL_SUCCESSFUL = "LAUNCH_KERNEL_SUCCESSFUL";
 export type NewKernelAction = {
   type: "LAUNCH_KERNEL_SUCCESSFUL",
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef: ContentRef
   }
 };
 

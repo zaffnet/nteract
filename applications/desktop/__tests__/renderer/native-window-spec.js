@@ -2,6 +2,7 @@ import Immutable from "immutable";
 import { remote } from "electron";
 
 import { from } from "rxjs/observable/from";
+import { of } from "rxjs/observable/of";
 
 import * as nativeWindow from "../../src/notebook/native-window";
 import { state as stateModule } from "@nteract/core";
@@ -47,12 +48,37 @@ describe("setTitleFromAttributes", () => {
 });
 
 describe("createTitleFeed", () => {
-  test("creates an observable that updates title attributes for modified notebook", done => {
+  test("creates an observable that updates title attributes for modified notebook", async function() {
+    const kernelRef = stateModule.createKernelRef();
+    const currentContentRef = stateModule.createContentRef();
+
     const notebook = new Immutable.Map().setIn(
       ["metadata", "kernelspec", "display_name"],
       "python3000"
     );
     const state = {
+      core: stateModule.makeStateRecord({
+        kernelRef,
+        currentContentRef,
+        entities: stateModule.makeEntitiesRecord({
+          contents: stateModule.makeContentsRecord({
+            byRef: Immutable.Map({
+              // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
+              [currentContentRef]: stateModule.makeNotebookContentRecord({
+                path: "titled.ipynb"
+              })
+            })
+          }),
+          kernels: stateModule.makeKernelsRecord({
+            byRef: Immutable.Map({
+              // $FlowFixMe: This really is a kernel ref, Flow can't handle typing it though
+              [kernelRef]: stateModule.makeRemoteKernelRecord({
+                status: "not connected"
+              })
+            })
+          })
+        })
+      }),
       document: stateModule.makeDocumentRecord({
         notebook,
         filename: "titled.ipynb"
@@ -60,59 +86,13 @@ describe("createTitleFeed", () => {
       app: stateModule.makeAppRecord()
     };
 
-    const state$ = from([state]);
+    const state$ = of(state);
 
-    const allAttributes = [];
-    nativeWindow.createTitleFeed(state$).subscribe(
-      attributes => {
-        allAttributes.push(attributes);
-      },
-      null,
-      () => {
-        expect(allAttributes).toEqual([
-          {
-            modified: process.platform === "darwin" ? true : false,
-            fullpath: "titled.ipynb",
-            kernelStatus: "not connected"
-          }
-        ]);
-        done();
-      }
-    );
-  });
-
-  test("creates an observable that updates title attributes", done => {
-    const notebook = new Immutable.Map().setIn(
-      ["metadata", "kernelspec", "display_name"],
-      "python3000"
-    );
-    const state = {
-      document: stateModule.makeDocumentRecord({
-        notebook,
-        savedNotebook: notebook,
-        filename: "titled.ipynb"
-      }),
-      app: stateModule.makeAppRecord()
-    };
-
-    const state$ = from([state]);
-
-    const allAttributes = [];
-    nativeWindow.createTitleFeed(state$).subscribe(
-      attributes => {
-        allAttributes.push(attributes);
-      },
-      null,
-      () => {
-        expect(allAttributes).toEqual([
-          {
-            modified: false,
-            fullpath: "titled.ipynb",
-            kernelStatus: "not connected"
-          }
-        ]);
-        done();
-      }
-    );
+    const attributes = await nativeWindow.createTitleFeed(state$).toPromise();
+    expect(attributes).toEqual({
+      modified: false,
+      fullpath: "titled.ipynb",
+      kernelStatus: "not connected"
+    });
   });
 });

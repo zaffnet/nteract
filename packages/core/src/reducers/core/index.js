@@ -22,9 +22,9 @@ const kernelRef = (state = null, action) => {
 
 const currentContentRef = (state = null, action) => {
   switch (action.type) {
+    case actionTypes.NEW_NOTEBOOK:
     case actionTypes.FETCH_CONTENT:
-      // TODO: #2618 We should not need the `null` guard.
-      return action.payload.contentRef || null;
+      return action.payload.contentRef;
     default:
       return state;
   }

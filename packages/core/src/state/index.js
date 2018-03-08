@@ -158,10 +158,12 @@ export const makeAppRecord: Immutable.RecordFactory<
 
 export type AppRecord = Immutable.RecordOf<AppRecordProps>;
 
+export type CoreRecord = Immutable.RecordOf<StateRecordProps>;
+
 export type AppState = {
   app: Immutable.RecordOf<AppRecordProps>,
   document: Immutable.RecordOf<DocumentRecordProps>,
   comms: Immutable.RecordOf<CommsRecordProps>,
   config: ConfigState,
-  core: Immutable.RecordOf<StateRecordProps>
+  core: CoreRecord
 };

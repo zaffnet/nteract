@@ -30,7 +30,7 @@ export const makeDocumentRecord: Immutable.RecordFactory<
   editorFocused: null,
   cellFocused: null,
   copied: Immutable.Map(),
-  filename: ""
+  filename: null
 });
 
 export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
@@ -39,7 +39,7 @@ export type NotebookContentRecordProps = {
   created: ?Date,
   format: "json",
   lastSaved: ?Date,
-  model: ?DocumentRecord,
+  model: DocumentRecord,
   name: ?string,
   path: ?string,
   type: "notebook",
@@ -54,40 +54,21 @@ export const makeNotebookContentRecord: Immutable.RecordFactory<
   lastSaved: null,
   model: makeDocumentRecord(),
   name: null,
-  path: "",
+  path: null,
   type: "notebook",
   writable: true
 });
 
+export const makeContentRecord = makeNotebookContentRecord;
+
+export type NotebookContentRecord = Immutable.RecordOf<
+  NotebookContentRecordProps
+>;
 // TODO: this will be a merger of notebook, directory, and file eventually.
-export type ContentRecordProps = {
-  created: ?Date,
-  format: null | "json",
-  lastSaved: ?Date,
-  mimetype: ?string,
-  model: DocumentRecord | Immutable.Map<*, *>,
-  name: ?string,
-  path: ?string,
-  type: "notebook",
-  writable: boolean
-};
-
-export const makeContentRecord: Immutable.RecordFactory<
-  ContentRecordProps
-> = Immutable.Record({
-  created: null,
-  format: null,
-  lastSaved: null,
-  mimetype: null,
-  model: Immutable.Map(),
-  name: null,
-  path: ".",
-  type: "notebook",
-  writable: true
-});
+export type ContentRecord = NotebookContentRecord; // || DirectoryContentRecord
 
 export type ContentsRecordProps = {
-  byRef: Immutable.Map<ContentRef, Immutable.RecordOf<ContentRecordProps>>
+  byRef: Immutable.Map<ContentRef, ContentRecord>
 };
 
 export const makeContentsRecord: Immutable.RecordFactory<

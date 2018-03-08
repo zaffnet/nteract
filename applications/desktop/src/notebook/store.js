@@ -5,11 +5,11 @@ import type { AppState } from "@nteract/core/src/state";
 
 import middlewares from "./middlewares";
 
-import { reducers } from "@nteract/core";
+import { reducers, state as stateModule } from "@nteract/core";
 
 const rootReducer = combineReducers({
   app: reducers.app,
-  document: reducers.document,
+  document: (state = stateModule.makeDocumentRecord()) => state,
   comms: reducers.comms,
   config: reducers.config,
   core: reducers.core

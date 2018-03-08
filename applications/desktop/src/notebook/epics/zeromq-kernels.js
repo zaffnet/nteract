@@ -70,7 +70,7 @@ export function launchKernelObservable(
   kernelSpec: KernelInfo,
   cwd: string,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 ) {
   const spec = kernelSpec.spec;
 

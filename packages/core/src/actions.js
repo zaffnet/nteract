@@ -133,34 +133,31 @@ export const addHost = (payload: {
   payload
 });
 
-// TODO: #2618
 export const fetchContent = (payload: {
   path: string,
   params: Object,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FetchContent => ({
   type: actionTypes.FETCH_CONTENT,
   payload
 });
 
-// TODO: #2618
 export const fetchContentFulfilled = (payload: {
   path: string,
   model: any,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FetchContentFulfilled => ({
   type: actionTypes.FETCH_CONTENT_FULFILLED,
   payload
 });
 
-// TODO: #2618
 export const fetchContentFailed = (payload: {
   path: string,
   error: Error,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FetchContentFailed => ({
   type: actionTypes.FETCH_CONTENT_FAILED,
   payload,
@@ -193,11 +190,10 @@ export const fetchKernelspecsFailed = (payload: {
   payload
 });
 
-// TODO: #2618
 export function launchKernelFailed(payload: {
   error: Error,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): LaunchKernelFailed {
   return {
     type: actionTypes.LAUNCH_KERNEL_FAILED,
@@ -206,11 +202,10 @@ export function launchKernelFailed(payload: {
   };
 }
 
-// TODO: #2618
 export function launchKernelSuccessful(payload: {
   kernel: LocalKernelProps | RemoteKernelProps,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -218,13 +213,12 @@ export function launchKernelSuccessful(payload: {
   };
 }
 
-// TODO: #2618
 export function launchKernel(payload: {
   kernelSpec: any,
   cwd: string,
   kernelRef: KernelRef,
   selectNextKernel: boolean,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
@@ -232,13 +226,12 @@ export function launchKernel(payload: {
   };
 }
 
-// TODO: #2618
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,
   kernelRef: KernelRef,
   selectNextKernel: boolean,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): LaunchKernelByNameAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_BY_NAME,
@@ -267,10 +260,9 @@ export function kernelRawStderr(payload: {
 }
 
 // TODO: Does this need to pass KernelRef information?
-// TODO: #2618
 export function setKernelInfo(payload: {
   kernelInfo: any,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SetKernelInfo {
   return {
     type: actionTypes.SET_KERNEL_INFO,
@@ -288,10 +280,9 @@ export function setExecutionState(payload: {
   };
 }
 
-// TODO: #2618
 export function clearOutputs(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ClearOutputs {
   return {
     type: actionTypes.CLEAR_OUTPUTS,
@@ -299,9 +290,8 @@ export function clearOutputs(payload: {
   };
 }
 
-// TODO: #2618
 export function clearAllOutputs(payload: {
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ClearAllOutputs {
   return {
     type: actionTypes.CLEAR_ALL_OUTPUTS,
@@ -309,12 +299,11 @@ export function clearAllOutputs(payload: {
   };
 }
 
-// TODO: #2618
 export function moveCell(payload: {
   id: string,
   destinationId: string,
   above: boolean,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): MoveCell {
   return {
     type: actionTypes.MOVE_CELL,
@@ -322,10 +311,9 @@ export function moveCell(payload: {
   };
 }
 
-// TODO: #2618
 export function removeCell(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): RemoveCell {
   return {
     type: actionTypes.REMOVE_CELL,
@@ -333,12 +321,11 @@ export function removeCell(payload: {
   };
 }
 
-// TODO: #2618
 export function createCellAfter(payload: {
   id: CellID,
   cellType: CellType,
   source: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): CreateCellAfter {
   return {
     type: actionTypes.CREATE_CELL_AFTER,
@@ -346,11 +333,10 @@ export function createCellAfter(payload: {
   };
 }
 
-// TODO: #2618
 export function createCellBefore(payload: {
   cellType: CellType,
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): CreateCellBefore {
   return {
     type: actionTypes.CREATE_CELL_BEFORE,
@@ -358,10 +344,9 @@ export function createCellBefore(payload: {
   };
 }
 
-// TODO: #2618
 export function createCellAppend(payload: {
   cellType: CellType,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): CreateCellAppend {
   return {
     type: actionTypes.CREATE_CELL_APPEND,
@@ -369,10 +354,9 @@ export function createCellAppend(payload: {
   };
 }
 
-// TODO: #2618
 export function mergeCellAfter(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): MergeCellAfter {
   return {
     type: actionTypes.MERGE_CELL_AFTER,
@@ -380,7 +364,6 @@ export function mergeCellAfter(payload: {
   };
 }
 
-// TODO: #2618
 /**
  * setInCell can generically be used to set any attribute on a cell, including
  * and especially for changing metadata per cell.
@@ -406,7 +389,7 @@ export function setInCell<T>(payload: {
   id: CellID,
   path: Array<string>,
   value: T,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SetInCell<T> {
   return {
     type: actionTypes.SET_IN_CELL,
@@ -416,23 +399,24 @@ export function setInCell<T>(payload: {
 
 export function updateCellSource(payload: {
   id: string,
-  value: string
+  value: string,
+  contentRef: ContentRef
 }): SetInCell<string> {
   return setInCell({ ...payload, path: ["source"] });
 }
 
 export function updateCellExecutionCount(payload: {
   id: string,
-  value: number
+  value: number,
+  contentRef: ContentRef
 }): SetInCell<number> {
   return setInCell({ ...payload, path: ["execution_count"] });
 }
 
-// TODO: #2618
 export function unhideAll(payload: {
   outputHidden: boolean,
   inputHidden: boolean,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): UnhideAll {
   return {
     type: "UNHIDE_ALL",
@@ -440,10 +424,9 @@ export function unhideAll(payload: {
   };
 }
 
-// TODO: #2618
 export function toggleCellOutputVisibility(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ToggleCellOutputVisibility {
   return {
     type: actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY,
@@ -451,10 +434,9 @@ export function toggleCellOutputVisibility(payload: {
   };
 }
 
-// TODO: #2618
 export function toggleCellInputVisibility(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ToggleCellInputVisibility {
   return {
     type: actionTypes.TOGGLE_CELL_INPUT_VISIBILITY,
@@ -462,11 +444,10 @@ export function toggleCellInputVisibility(payload: {
   };
 }
 
-// TODO: #2618
 export function updateCellStatus(payload: {
   id: string,
   status: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): UpdateCellStatus {
   return {
     type: actionTypes.UPDATE_CELL_STATUS,
@@ -476,10 +457,9 @@ export function updateCellStatus(payload: {
 
 /* Unlike focus next & previous, to set focus, we require an ID,
    because the others are based on there already being a focused cell */
-// TODO: #2618
 export function focusCell(payload: {
   id: CellID,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusCell {
   return {
     type: actionTypes.FOCUS_CELL,
@@ -487,11 +467,10 @@ export function focusCell(payload: {
   };
 }
 
-// TODO: #2618
 export function focusNextCell(payload: {
   id: ?string,
   createCellIfUndefined: boolean,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusNextCell {
   return {
     type: actionTypes.FOCUS_NEXT_CELL,
@@ -499,10 +478,9 @@ export function focusNextCell(payload: {
   };
 }
 
-// TODO: #2618
 export function focusNextCellEditor(payload: {
   id: ?string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusNextCellEditor {
   return {
     type: actionTypes.FOCUS_NEXT_CELL_EDITOR,
@@ -510,10 +488,9 @@ export function focusNextCellEditor(payload: {
   };
 }
 
-// TODO: #2618
 export function focusPreviousCell(payload: {
   id: ?string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusPreviousCell {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL,
@@ -521,10 +498,9 @@ export function focusPreviousCell(payload: {
   };
 }
 
-// TODO: #2618
 export function focusCellEditor(payload: {
   id: ?string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusCellEditor {
   return {
     type: actionTypes.FOCUS_CELL_EDITOR,
@@ -532,10 +508,9 @@ export function focusCellEditor(payload: {
   };
 }
 
-// TODO: #2618
 export function focusPreviousCellEditor(payload: {
   id: ?string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): FocusPreviousCellEditor {
   return {
     type: actionTypes.FOCUS_PREVIOUS_CELL_EDITOR,
@@ -543,11 +518,10 @@ export function focusPreviousCellEditor(payload: {
   };
 }
 
-// TODO: #2618
 export function overwriteMetadataField(payload: {
   field: string,
   value: any,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): OverwriteMetadataField {
   return {
     type: actionTypes.OVERWRITE_METADATA_FIELD,
@@ -555,10 +529,9 @@ export function overwriteMetadataField(payload: {
   };
 }
 
-// TODO: #2618
 export function deleteMetadataField(payload: {
   field: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): DeleteMetadataField {
   return {
     type: actionTypes.DELETE_METADATA_FIELD,
@@ -634,10 +607,9 @@ export function setNotificationSystem(
   };
 }
 
-// TODO: #2618
 export function copyCell(payload: {
   id: CellID,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): CopyCell {
   return {
     type: actionTypes.COPY_CELL,
@@ -645,10 +617,9 @@ export function copyCell(payload: {
   };
 }
 
-// TODO: #2618
 export function cutCell(payload: {
   id: CellID,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): CutCell {
   return {
     type: actionTypes.CUT_CELL,
@@ -656,19 +627,17 @@ export function cutCell(payload: {
   };
 }
 
-// TODO: #2618
-export function pasteCell(payload: { contentRef?: ContentRef }): PasteCell {
+export function pasteCell(payload: { contentRef: ContentRef }): PasteCell {
   return {
     type: actionTypes.PASTE_CELL,
     payload
   };
 }
 
-// TODO: #2618
 export function changeCellType(payload: {
   id: CellID,
   to: CellType,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ChangeCellType {
   return {
     type: actionTypes.CHANGE_CELL_TYPE,
@@ -699,10 +668,9 @@ export function setCursorBlink(value: string): SetConfigAction<string> {
   return setConfigAtKey("cursorBlinkRate", value);
 }
 
-// TODO: #2618
 export function toggleOutputExpansion(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ToggleCellExpansion {
   return {
     type: actionTypes.TOGGLE_OUTPUT_EXPANSION,
@@ -710,11 +678,10 @@ export function toggleOutputExpansion(payload: {
   };
 }
 
-// TODO: #2618
 export function sendExecuteRequest(payload: {
   id: string,
   message: *,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SendExecuteRequest {
   return {
     type: actionTypes.SEND_EXECUTE_REQUEST,
@@ -722,10 +689,9 @@ export function sendExecuteRequest(payload: {
   };
 }
 
-// TODO: #2618
 export function executeCell(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteCell {
   return {
     type: actionTypes.EXECUTE_CELL,
@@ -733,9 +699,8 @@ export function executeCell(payload: {
   };
 }
 
-// TODO: #2618
 export function executeAllCells(payload: {
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteAllCells {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS,
@@ -743,9 +708,8 @@ export function executeAllCells(payload: {
   };
 }
 
-// TODO: #2618
 export function executeAllCellsBelow(payload: {
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteAllCellsBelow {
   return {
     type: actionTypes.EXECUTE_ALL_CELLS_BELOW,
@@ -753,9 +717,8 @@ export function executeAllCellsBelow(payload: {
   };
 }
 
-// TODO: #2618
 export function executeFocusedCell(payload: {
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteFocusedCell {
   return {
     type: actionTypes.EXECUTE_FOCUSED_CELL,
@@ -763,10 +726,9 @@ export function executeFocusedCell(payload: {
   };
 }
 
-// TODO: #2618
 export function executeCanceled(payload: {
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteCanceled {
   return {
     type: actionTypes.EXECUTE_CANCELED,
@@ -774,10 +736,9 @@ export function executeCanceled(payload: {
   };
 }
 
-// TODO: #2618
 export function executeFailed(payload: {
   error: Error,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ExecuteFailed {
   return {
     type: actionTypes.EXECUTE_FAILED,
@@ -786,10 +747,9 @@ export function executeFailed(payload: {
   };
 }
 
-// TODO: #2618
 export function changeFilename(payload: {
   filename: ?string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): ChangeFilenameAction {
   return {
     type: actionTypes.CHANGE_FILENAME,
@@ -797,18 +757,16 @@ export function changeFilename(payload: {
   };
 }
 
-// TODO: #2618
-export function save(payload: { contentRef?: ContentRef }): Save {
+export function save(payload: { contentRef: ContentRef }): Save {
   return {
     type: actionTypes.SAVE,
     payload
   };
 }
 
-// TODO: #2618
 export function saveAs(payload: {
   filename: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SaveAs {
   return {
     type: actionTypes.SAVE_AS,
@@ -816,10 +774,9 @@ export function saveAs(payload: {
   };
 }
 
-// TODO: #2618
 export function saveFailed(payload: {
   error: Error,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SaveFailed {
   return {
     type: actionTypes.SAVE_FAILED,
@@ -828,9 +785,8 @@ export function saveFailed(payload: {
   };
 }
 
-// TODO: #2618
 export function saveFulfilled(payload: {
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SaveFulfilled {
   return {
     type: actionTypes.SAVE_FULFILLED,
@@ -843,7 +799,7 @@ export function newNotebook(payload: {
   kernelSpec: Object,
   cwd: string,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): NewNotebook {
   return {
     type: actionTypes.NEW_NOTEBOOK,
@@ -860,12 +816,11 @@ export function newNotebook(payload: {
 }
 
 // Expects notebook to be JS Object or Immutable.js
-// TODO: #2618
 export const setNotebook = (payload: {
   filename: ?string,
   notebook: ImmutableNotebook,
   kernelRef: KernelRef,
-  contentRef?: ContentRef,
+  contentRef: ContentRef,
   lastSaved: ?Date,
   name: ?string,
   created: ?Date
@@ -925,11 +880,10 @@ export function commMessageAction(message: any) {
   };
 }
 
-// TODO: #2618
 export function appendOutput(payload: {
   id: CellID,
   output: Output,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): AppendOutput {
   return {
     type: actionTypes.APPEND_OUTPUT,
@@ -937,11 +891,10 @@ export function appendOutput(payload: {
   };
 }
 
-// TODO: #2618
 export function acceptPayloadMessage(payload: {
   id: CellID,
   payload: *,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): AcceptPayloadMessage {
   return {
     type: actionTypes.ACCEPT_PAYLOAD_MESSAGE,
@@ -949,14 +902,13 @@ export function acceptPayloadMessage(payload: {
   };
 }
 
-// TODO: #2618
 export function updateDisplay(payload: {
   content: {
     data: MimeBundle,
     metadata: JSONObject,
     transient: { display_id: string }
   },
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): UpdateDisplay {
   return {
     type: actionTypes.UPDATE_DISPLAY,
@@ -964,10 +916,9 @@ export function updateDisplay(payload: {
   };
 }
 
-// TODO: #2618
 export function updateDisplayFailed(payload: {
   error: Error,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): UpdateDisplayFailed {
   return {
     type: actionTypes.UPDATE_DISPLAY_FAILED,
@@ -976,11 +927,10 @@ export function updateDisplayFailed(payload: {
   };
 }
 
-// TODO: #2618
 export function setLanguageInfo(payload: {
   langInfo: LanguageInfoMetadata,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): SetLanguageInfo {
   return {
     type: actionTypes.SET_LANGUAGE_INFO,
@@ -1029,11 +979,10 @@ export function shutdownReplyTimedOut(payload: {
   };
 }
 
-// TODO: #2618
 export function restartKernel(payload: {
   clearOutputs: boolean,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): RestartKernel {
   return {
     type: actionTypes.RESTART_KERNEL,
@@ -1041,11 +990,10 @@ export function restartKernel(payload: {
   };
 }
 
-// TODO: #2618
 export function restartKernelFailed(payload: {
   error: Error,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): RestartKernelFailed {
   return {
     type: actionTypes.RESTART_KERNEL_FAILED,
@@ -1054,10 +1002,9 @@ export function restartKernelFailed(payload: {
   };
 }
 
-// TODO: #2618
 export function restartKernelSuccessful(payload: {
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 }): RestartKernelSuccessful {
   return {
     type: actionTypes.RESTART_KERNEL_SUCCESSFUL,

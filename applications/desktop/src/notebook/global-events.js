@@ -20,10 +20,8 @@ export function unload(store: Store<AppState, Action>) {
 
 export function beforeUnload(store: Store<AppState, Action>, e: any) {
   const state = store.getState();
-  const saved = is(
-    selectors.currentNotebook(state),
-    selectors.currentSavedNotebook(state)
-  );
+  const saved = selectors.hasBeenSaved(state);
+
   if (!saved) {
     // Will prevent closing "will-prevent-unload"
     e.returnValue = true;

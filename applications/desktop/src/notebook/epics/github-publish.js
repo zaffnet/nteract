@@ -1,6 +1,7 @@
 // @flow
 import { shell } from "electron";
 
+import type { ContentRef } from "@nteract/core/src/state";
 import { selectors, actions, actionTypes } from "@nteract/core";
 
 const path = require("path");
@@ -56,7 +57,8 @@ export function notifyUser(
 export function createGistCallback(
   observer: Observer<*>,
   filename: string,
-  notificationSystem: any
+  notificationSystem: any,
+  contentRef: ContentRef
 ) {
   return function gistCallback(err: Error, response: any) {
     if (err) {
@@ -65,82 +67,16 @@ export function createGistCallback(
       return;
     }
     const gistID = response.data.id;
-    // TODO: #2618
     observer.next(
-      actions.overwriteMetadataField({ field: "gist_id", value: gistID })
+      actions.overwriteMetadataField({
+        field: "gist_id",
+        value: gistID,
+        contentRef
+      })
     );
     notifyUser(filename, gistID, notificationSystem);
     observer.complete();
   };
-}
-
-/**
- * Notebook Observable for the purpose of tracking every time a user
- * wishes to publish a gist.
- * @param {object} github - The github api for authenticating and publishing
- * the gist.
- * @param {object} notebook - The notebook to be converted to its JSON.
- * @param {string} filename - The filename of the notebook to be published.
- * @param {function} notificationSystem - To be passed information for
- * notification of the user that the gist has been published.
- */
-export function publishNotebookObservable(
-  github: any,
-  notebookString: string,
-  githubUsername?: string,
-  gistId?: string,
-  filepath: string,
-  notificationSystem: any,
-  publishAsUser: boolean
-) {
-  return Observable.create(observer => {
-    const filename = filepath ? path.parse(filepath).base : "Untitled.ipynb";
-    const files = {};
-    files[filename] = { content: notebookString };
-
-    if (publishAsUser) {
-      github.users.get({}, (err, res) => {
-        if (err) throw err;
-        notificationSystem.addNotification({
-          title: "Authenticated",
-          message: `Authenticated as ${res.data.login}`,
-          level: "info"
-        });
-        if (githubUsername !== (res.data.login || undefined)) {
-          observer.next(
-            actions.overwriteMetadataField({
-              field: "github_username",
-              value: res.data.login
-            })
-          );
-          // TODO: #2618
-          observer.next(actions.deleteMetadataField({ field: "gist_id" }));
-        }
-      });
-    }
-    notificationSystem.addNotification({
-      title: "Uploading gist...",
-      message: "Your notebook is being uploaded as a GitHub gist",
-      level: "info"
-    });
-    // Already in a gist belonging to the user, update the gist
-
-    const gistRequest =
-      gistId && publishAsUser
-        ? { files, id: gistId, public: false }
-        : { files, public: false };
-    if (gistRequest.id) {
-      github.gists.edit(
-        gistRequest,
-        createGistCallback(observer, filename, notificationSystem)
-      );
-    } else {
-      github.gists.create(
-        gistRequest,
-        createGistCallback(observer, filename, notificationSystem)
-      );
-    }
-  });
 }
 
 /**
@@ -164,23 +100,68 @@ export function handleGistAction(store: any, action: any) {
   const notebookString = selectors.currentNotebookString(state);
   const githubUsername = selectors.currentNotebookGithubUsername(state);
   const gistId = selectors.currentNotebookGistId(state);
-  const filename = selectors.currentFilename(state);
+  const filepath = selectors.currentFilename(state);
   const notificationSystem = selectors.notificationSystem(state);
+  const contentRef = selectors.currentContentRef(state);
+
   let publishAsUser = false;
+
   if (action.type === actionTypes.PUBLISH_USER_GIST) {
     const githubToken = state.app.get("githubToken");
     github.authenticate({ type: "oauth", token: githubToken });
     publishAsUser = true;
   }
-  return publishNotebookObservable(
-    github,
-    notebookString,
-    githubUsername,
-    gistId,
-    filename,
-    notificationSystem,
-    publishAsUser
-  );
+
+  return Observable.create(observer => {
+    const filename = filepath ? path.parse(filepath).base : "Untitled.ipynb";
+    const files = {};
+    files[filename] = { content: notebookString };
+
+    if (publishAsUser) {
+      github.users.get({}, (err, res) => {
+        if (err) throw err;
+        notificationSystem.addNotification({
+          title: "Authenticated",
+          message: `Authenticated as ${res.data.login}`,
+          level: "info"
+        });
+        if (githubUsername !== (res.data.login || undefined)) {
+          observer.next(
+            actions.overwriteMetadataField({
+              field: "github_username",
+              value: res.data.login,
+              contentRef
+            })
+          );
+          observer.next(
+            actions.deleteMetadataField({ field: "gist_id", contentRef })
+          );
+        }
+      });
+    }
+    notificationSystem.addNotification({
+      title: "Uploading gist...",
+      message: "Your notebook is being uploaded as a GitHub gist",
+      level: "info"
+    });
+    // Already in a gist belonging to the user, update the gist
+
+    const gistRequest =
+      gistId && publishAsUser
+        ? { files, id: gistId, public: false }
+        : { files, public: false };
+    if (gistRequest.id) {
+      github.gists.edit(
+        gistRequest,
+        createGistCallback(observer, filename, notificationSystem, contentRef)
+      );
+    } else {
+      github.gists.create(
+        gistRequest,
+        createGistCallback(observer, filename, notificationSystem, contentRef)
+      );
+    }
+  });
 }
 
 /**

@@ -10,10 +10,6 @@ import * as Immutable from "immutable";
 const byRef = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTENT:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({
@@ -23,10 +19,6 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.FETCH_CONTENT_FULFILLED:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({
@@ -36,10 +28,6 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.FETCH_CONTENT_FAILED:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({
@@ -50,10 +38,6 @@ const byRef = (state = Immutable.Map(), action) => {
       );
     case actionTypes.SAVE:
     case actionTypes.SAVE_AS:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({
@@ -63,10 +47,6 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.SAVE_FULFILLED:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({
@@ -76,10 +56,6 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.SAVE_FAILED:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeContentCommunicationRecord({

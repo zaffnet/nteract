@@ -42,7 +42,7 @@ type Props = {
   restartKernelAndClearOutputs: ?(payload: *) => void,
   killKernel: ?(payload: *) => void,
   interruptKernel: ?(payload: *) => void,
-  currentContentRef?: ContentRef
+  currentContentRef: ContentRef
 };
 
 class PureNotebookMenu extends React.Component<Props> {
