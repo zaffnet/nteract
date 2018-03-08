@@ -89,6 +89,9 @@ describe("newNotebookEpic", () => {
         type: actionTypes.SET_NOTEBOOK,
         payload: {
           filename: null,
+          name: null,
+          created: null,
+          lastSaved: null,
           notebook: monocellNotebook.setIn(
             ["metadata", "kernel_info", "name"],
             "hylang"

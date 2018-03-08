@@ -877,7 +877,10 @@ export const setNotebook = (payload: {
   filename: ?string,
   notebook: ImmutableNotebook,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef?: ContentRef,
+  lastSaved: ?Date,
+  name: ?string,
+  created: ?Date
 }): SetNotebook => ({
   type: actionTypes.SET_NOTEBOOK,
   payload

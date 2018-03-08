@@ -146,7 +146,10 @@ export function setNotebookEpic(
         filename: action.payload.path,
         notebook: fromJS(action.payload.model.content),
         kernelRef: action.payload.kernelRef,
-        contentRef: action.payload.contentRef
+        contentRef: action.payload.contentRef,
+        lastSaved: action.payload.model.last_modified,
+        name: action.payload.model.name,
+        created: action.payload.model.created
       })
     ),
     catchError((xhrError: any) =>

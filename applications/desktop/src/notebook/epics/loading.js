@@ -201,7 +201,10 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
         filename: null,
         notebook,
         kernelRef,
-        contentRef: action.payload.contentRef
+        contentRef: action.payload.contentRef,
+        created: null,
+        lastSaved: null,
+        name: null
       });
     })
   );
