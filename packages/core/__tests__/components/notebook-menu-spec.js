@@ -37,18 +37,21 @@ describe("PureNotebookMenu ", () => {
         executeCell: jest.fn(),
         executeAllCells: jest.fn(),
         executeAllCellsBelow: jest.fn(),
+        unhideAll: jest.fn(),
+        clearAllOutputs: jest.fn(),
         cutCell: jest.fn(),
         copyCell: jest.fn(),
         pasteCell: jest.fn(),
-        createCodeCell: jest.fn(),
-        createMarkdownCell: jest.fn(),
+        createCellAfter: jest.fn(),
         mergeCellAfter: jest.fn(),
-        setCellTypeCode: jest.fn(),
-        setCellTypeMarkdown: jest.fn(),
+        changeCellType: jest.fn(),
         setTheme: jest.fn(),
         saveNotebook: jest.fn(),
         openAboutModal: jest.fn(),
         interruptKernel: jest.fn(),
+        restartKernel: jest.fn(),
+        restartKernelAndClearOutputs: jest.fn(),
+        killKernel: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
@@ -57,6 +60,8 @@ describe("PureNotebookMenu ", () => {
         cellOrder: Immutable.List(),
         notebook: Immutable.Map(),
         filename: "fake.ipynb",
+        currentContentRef: "fake-content-ref",
+        currentKernelRef: "fake-kernel-ref",
 
         // menu props, note that we force all menus to be open to click.
         defaultOpenKeys: Object.values(MENUS)
@@ -80,7 +85,9 @@ describe("PureNotebookMenu ", () => {
       expect(props.executeAllCells).not.toHaveBeenCalled();
       executeAllCellsItem.simulate("click");
       expect(props.executeAllCells).toHaveBeenCalledTimes(1);
-      expect(props.executeAllCells).toHaveBeenCalledWith({});
+      expect(props.executeAllCells).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
 
       const executeAllCellsBelowItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW })
@@ -88,7 +95,31 @@ describe("PureNotebookMenu ", () => {
       expect(props.executeAllCellsBelow).not.toHaveBeenCalled();
       executeAllCellsBelowItem.simulate("click");
       expect(props.executeAllCellsBelow).toHaveBeenCalledTimes(1);
-      expect(props.executeAllCellsBelow).toHaveBeenCalledWith({});
+      expect(props.executeAllCellsBelow).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
+
+      const unhideAllItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.UNHIDE_ALL })
+        .first();
+      expect(props.unhideAll).not.toHaveBeenCalled();
+      unhideAllItem.simulate("click");
+      expect(props.unhideAll).toHaveBeenCalledTimes(1);
+      expect(props.unhideAll).toHaveBeenCalledWith({
+        outputHidden: false,
+        inputHidden: false,
+        contentRef: props.currentContentRef
+      });
+
+      const clearAllOutputsItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS })
+        .first();
+      expect(props.clearAllOutputs).not.toHaveBeenCalled();
+      clearAllOutputsItem.simulate("click");
+      expect(props.clearAllOutputs).toHaveBeenCalledTimes(1);
+      expect(props.clearAllOutputs).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
 
       const cutCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CUT_CELL })
@@ -96,7 +127,10 @@ describe("PureNotebookMenu ", () => {
       expect(props.cutCell).not.toHaveBeenCalled();
       cutCellItem.simulate("click");
       expect(props.cutCell).toHaveBeenCalledTimes(1);
-      expect(props.cutCell).toHaveBeenCalledWith({ id: props.cellFocused });
+      expect(props.cutCell).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        contentRef: props.currentContentRef
+      });
 
       const copyCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.COPY_CELL })
@@ -104,7 +138,10 @@ describe("PureNotebookMenu ", () => {
       expect(props.copyCell).not.toHaveBeenCalled();
       copyCellItem.simulate("click");
       expect(props.copyCell).toHaveBeenCalledTimes(1);
-      expect(props.copyCell).toHaveBeenCalledWith({ id: props.cellFocused });
+      expect(props.copyCell).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        contentRef: props.currentContentRef
+      });
 
       const pasteCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.PASTE_CELL })
@@ -112,7 +149,9 @@ describe("PureNotebookMenu ", () => {
       expect(props.pasteCell).not.toHaveBeenCalled();
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalledTimes(1);
-      expect(props.pasteCell).toHaveBeenCalledWith({});
+      expect(props.pasteCell).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
 
       const mergeCellAfterItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.MERGE_CELL_AFTER })
@@ -121,40 +160,61 @@ describe("PureNotebookMenu ", () => {
       mergeCellAfterItem.simulate("click");
       expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
       expect(props.mergeCellAfter).toHaveBeenCalledWith({
-        id: props.cellFocused
+        id: props.cellFocused,
+        contentRef: props.currentContentRef
       });
 
       const createMarkdownCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })
         .first();
-      expect(props.createMarkdownCell).not.toHaveBeenCalled();
+      expect(props.createCellAfter).not.toHaveBeenCalled();
       createMarkdownCellItem.simulate("click");
-      expect(props.createMarkdownCell).toHaveBeenCalledTimes(1);
-      expect(props.createMarkdownCell).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.createCellAfter).toHaveBeenCalledTimes(1);
+      expect(props.createCellAfter).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        cellType: "markdown",
+        contentRef: props.currentContentRef,
+        source: ""
+      });
 
+      props.createCellAfter.mockClear();
       const createCodeCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_CODE_CELL })
         .first();
-      expect(props.createCodeCell).not.toHaveBeenCalled();
+      expect(props.createCellAfter).not.toHaveBeenCalled();
       createCodeCellItem.simulate("click");
-      expect(props.createCodeCell).toHaveBeenCalledTimes(1);
-      expect(props.createCodeCell).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.createCellAfter).toHaveBeenCalledTimes(1);
+      expect(props.createCellAfter).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        cellType: "code",
+        contentRef: props.currentContentRef,
+        source: ""
+      });
 
       const setCellTypeCodeItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE })
         .first();
-      expect(props.setCellTypeCode).not.toHaveBeenCalled();
+      expect(props.changeCellType).not.toHaveBeenCalled();
       setCellTypeCodeItem.simulate("click");
-      expect(props.setCellTypeCode).toHaveBeenCalledTimes(1);
-      expect(props.setCellTypeCode).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.changeCellType).toHaveBeenCalledTimes(1);
+      expect(props.changeCellType).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        to: "code",
+        contentRef: props.currentContentRef
+      });
 
+      props.changeCellType.mockClear();
       const setCellTypeMarkdownItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN })
         .first();
-      expect(props.setCellTypeMarkdown).not.toHaveBeenCalled();
+      expect(props.changeCellType).not.toHaveBeenCalled();
       setCellTypeMarkdownItem.simulate("click");
-      expect(props.setCellTypeMarkdown).toHaveBeenCalledTimes(1);
-      expect(props.setCellTypeMarkdown).toHaveBeenCalledWith(props.cellFocused);
+      expect(props.changeCellType).toHaveBeenCalledTimes(1);
+      expect(props.changeCellType).toHaveBeenCalledWith({
+        id: props.cellFocused,
+        to: "markdown",
+        contentRef: props.currentContentRef
+      });
 
       const setThemeLightItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.SET_THEME_LIGHT })
@@ -179,6 +239,9 @@ describe("PureNotebookMenu ", () => {
       expect(props.saveNotebook).not.toHaveBeenCalled();
       saveNotebookItem.simulate("click");
       expect(props.saveNotebook).toHaveBeenCalledTimes(1);
+      expect(props.saveNotebook).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
 
       const openAboutItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.OPEN_ABOUT })
@@ -186,6 +249,7 @@ describe("PureNotebookMenu ", () => {
       expect(props.openAboutModal).not.toHaveBeenCalled();
       openAboutItem.simulate("click");
       expect(props.openAboutModal).toHaveBeenCalledTimes(1);
+      expect(props.openAboutModal).toHaveBeenCalledWith();
 
       const interruptKernelItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.INTERRUPT_KERNEL })
@@ -193,6 +257,41 @@ describe("PureNotebookMenu ", () => {
       expect(props.interruptKernel).not.toHaveBeenCalled();
       interruptKernelItem.simulate("click");
       expect(props.interruptKernel).toHaveBeenCalledTimes(1);
+      expect(props.interruptKernel).toHaveBeenCalledWith({
+        kernelRef: props.currentKernelRef
+      });
+
+      const restartKernelItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.RESTART_KERNEL })
+        .first();
+      expect(props.restartKernel).not.toHaveBeenCalled();
+      restartKernelItem.simulate("click");
+      expect(props.restartKernel).toHaveBeenCalledTimes(1);
+      expect(props.restartKernel).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef,
+        kernelRef: props.currentKernelRef
+      });
+
+      const restartKernelAndClearOutputsItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS })
+        .first();
+      expect(props.restartKernelAndClearOutputs).not.toHaveBeenCalled();
+      restartKernelAndClearOutputsItem.simulate("click");
+      expect(props.restartKernelAndClearOutputs).toHaveBeenCalledTimes(1);
+      expect(props.restartKernelAndClearOutputs).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef,
+        kernelRef: props.currentKernelRef
+      });
+
+      const killKernelItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.KILL_KERNEL })
+        .first();
+      expect(props.killKernel).not.toHaveBeenCalled();
+      killKernelItem.simulate("click");
+      expect(props.killKernel).toHaveBeenCalledTimes(1);
+      expect(props.killKernel).toHaveBeenCalledWith({
+        kernelRef: props.currentKernelRef
+      });
     });
   });
 });

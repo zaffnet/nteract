@@ -2,6 +2,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as selectors from "../selectors";
+import type { ContentRef } from "../state/refs";
 
 import { focusCell, focusCellEditor, updateCellSource } from "../actions";
 
@@ -15,7 +16,8 @@ type Props = CodeMirrorEditorProps & {
   cellFocused: boolean,
   channels: any,
   kernelStatus: string,
-  options: Object
+  options: Object,
+  contentRef?: ContentRef
 };
 
 function mapStateToProps(
@@ -45,20 +47,17 @@ class Editor extends React.Component<Props> {
   }
 
   onChange(text: string): void {
-    const { dispatch, id } = this.props;
-    // TODO: #2618
-    dispatch(updateCellSource({ id, value: text }));
+    const { dispatch, id, contentRef } = this.props;
+    dispatch(updateCellSource({ id, value: text, contentRef }));
   }
 
   onFocusChange(focused: boolean): void {
-    const { cellFocused, dispatch, id } = this.props;
+    const { cellFocused, dispatch, id, contentRef } = this.props;
 
     if (focused) {
-      // TODO: #2618
-      dispatch(focusCellEditor({ id }));
+      dispatch(focusCellEditor({ id, contentRef }));
       if (!cellFocused) {
-        // TODO: #2618
-        dispatch(focusCell({ id }));
+        dispatch(focusCell({ id, contentRef }));
       }
     }
   }
