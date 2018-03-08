@@ -5,6 +5,7 @@ import { communication } from "./communication";
 import { entities } from "./entities";
 import { makeStateRecord } from "../../state";
 
+// TODO: #2618: This should at a minimum be moved into a contents entry.
 // TODO: This is temporary until we have sessions in place. Ideally, we point to
 // a document, which knows about its session and that session knows about its
 // kernel. For now, we need to keep a reference to the currently targeted kernel
@@ -19,9 +20,20 @@ const kernelRef = (state = null, action) => {
   }
 };
 
+const currentContentRef = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_CONTENT:
+      // TODO: #2618 We should not need the `null` guard.
+      return action.payload.contentRef || null;
+    default:
+      return state;
+  }
+};
+
 const core = combineReducers(
   {
     communication,
+    currentContentRef,
     entities,
     kernelRef
   },

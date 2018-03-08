@@ -1,11 +1,17 @@
 /* @flow */
-
 import * as Immutable from "immutable";
-import * as uuid from "uuid";
-
-import { escapeCarriageReturnSafe } from "escape-carriage";
-
 import * as actionTypes from "../../../actionTypes";
+import * as uuid from "uuid";
+import type { DocumentRecord } from "../../../state/entities/contents";
+import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+import { escapeCarriageReturnSafe } from "escape-carriage";
+import {
+  makeContentRecord,
+  makeContentsRecord,
+  makeDocumentRecord,
+  makeNotebookContentRecord
+} from "../../../state/entities/contents";
+import { combineReducers } from "redux-immutable";
 
 // TODO: With the new document plan, I think it starts to make sense to decouple
 //       the document view actions and the underlying document format
@@ -49,21 +55,6 @@ import type {
   SendExecuteRequest
 } from "../../../actionTypes";
 
-import type { DocumentRecord } from "../../../state/entities/contents";
-
-import { makeDocumentRecord } from "../../../state/entities/contents";
-
-import {
-  emptyCodeCell,
-  emptyMarkdownCell,
-  insertCellAt,
-  insertCellAfter,
-  removeCell,
-  emptyNotebook,
-  createImmutableOutput,
-  createImmutableMimeBundle
-} from "@nteract/commutable";
-
 import type {
   ImmutableCell,
   ImmutableCellMap,
@@ -76,7 +67,17 @@ import type {
   MimeBundle
 } from "@nteract/commutable";
 
-import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+  insertCellAt,
+  insertCellAfter,
+  removeCell,
+  emptyNotebook,
+  createImmutableOutput,
+  createImmutableMimeBundle
+} from "@nteract/commutable";
+import { fromJS } from "../../../../../commutable/lib";
 
 type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
@@ -864,3 +865,111 @@ function document(
 // TODO: we should not export this after we ensure that apps are looking into
 // core state for contents.
 export { document };
+
+const byRef = (state = Immutable.Map(), action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_CONTENT:
+      // TODO: #2618
+      if (!action.payload.contentRef) {
+        return state;
+      }
+      // TODO: we might be able to get around this by looking at the
+      // communication state first and not requesting this information until
+      // the communication state shows that it should exist.
+      return state.set(
+        action.payload.contentRef,
+        makeContentRecord({
+          path: action.payload.path || ""
+          // TODO: we can set kernelRef when the content record uses it.
+        })
+      );
+    case actionTypes.FETCH_CONTENT_FULFILLED:
+      // TODO: we *should* be able to handle this for non-notebook types in the
+      // future. The reason we cannot do this for notebooks now is that we need
+      // the in-memory notebook mirrored here (from the old state.document). We
+      // need to reuse that notebook because it has cell ids that must match
+      // up.
+      return state;
+    case actionTypes.SET_NOTEBOOK:
+      // TODO: #2618
+      if (!action.payload.contentRef) {
+        return state;
+      }
+      return state.set(
+        action.payload.contentRef,
+        makeNotebookContentRecord({
+          created: action.payload.created,
+          lastSaved: action.payload.lastSaved,
+          name: action.payload.name,
+          path: action.payload.filename ? action.payload.filename : "",
+          model: makeDocumentRecord({
+            notebook: action.payload.notebook,
+            savedNotebook: action.payload.notebook,
+            transient: Immutable.Map({
+              keyPathsForDisplays: Immutable.Map(),
+              cellMap: Immutable.Map()
+            }),
+            cellFocused: action.payload.notebook.getIn(["cellOrder", 0]),
+            filename: action.payload.filename ? action.payload.filename : ""
+          })
+        })
+      );
+    case actionTypes.SAVE_FULFILLED:
+      // TODO: #2618
+      if (!action.payload.contentRef) {
+        return state;
+      }
+      const path = [action.payload.contentRef, "model"];
+      const model = state.getIn(path);
+      return state
+        .setIn(path, document(model, action))
+        .set("lastSaved", new Date());
+    case actionTypes.SEND_EXECUTE_REQUEST:
+    case actionTypes.FOCUS_CELL:
+    case actionTypes.CLEAR_OUTPUTS:
+    case actionTypes.CLEAR_ALL_OUTPUTS:
+    case actionTypes.RESTART_KERNEL:
+    case actionTypes.APPEND_OUTPUT:
+    case actionTypes.UPDATE_DISPLAY:
+    case actionTypes.FOCUS_NEXT_CELL:
+    case actionTypes.FOCUS_PREVIOUS_CELL:
+    case actionTypes.FOCUS_CELL_EDITOR:
+    case actionTypes.FOCUS_NEXT_CELL_EDITOR:
+    case actionTypes.FOCUS_PREVIOUS_CELL_EDITOR:
+    case actionTypes.TOGGLE_STICKY_CELL:
+    case actionTypes.SET_IN_CELL:
+    case actionTypes.MOVE_CELL:
+    case actionTypes.REMOVE_CELL:
+    case actionTypes.CREATE_CELL_AFTER:
+    case actionTypes.CREATE_CELL_BEFORE:
+    case actionTypes.MERGE_CELL_AFTER:
+    case actionTypes.CREATE_CELL_APPEND:
+    case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:
+    case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:
+    case actionTypes.ACCEPT_PAYLOAD_MESSAGE:
+    case actionTypes.UPDATE_CELL_STATUS:
+    case actionTypes.SET_LANGUAGE_INFO:
+    case actionTypes.SET_KERNEL_INFO:
+    case actionTypes.OVERWRITE_METADATA_FIELD:
+    case actionTypes.DELETE_METADATA_FIELD:
+    case actionTypes.COPY_CELL:
+    case actionTypes.CUT_CELL:
+    case actionTypes.PASTE_CELL:
+    case actionTypes.CHANGE_CELL_TYPE:
+    case actionTypes.TOGGLE_OUTPUT_EXPANSION:
+    case actionTypes.UNHIDE_ALL:
+    case actionTypes.CHANGE_FILENAME: {
+      // TODO: #2618
+      if (!action.payload.contentRef) {
+        return state;
+      }
+      const path = [action.payload.contentRef, "model"];
+      const model = state.getIn(path);
+      return state.setIn(path, document(model, action));
+    }
+    default:
+      return state;
+  }
+};
+
+export const contents = combineReducers({ byRef }, makeContentsRecord);
