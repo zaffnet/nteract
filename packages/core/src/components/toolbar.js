@@ -7,6 +7,7 @@
 // TODO: All the `<li>` below that have role button should just be `<button>` with proper styling
 
 import * as React from "react";
+import type { ContentRef } from "../state/refs";
 
 import { connect } from "react-redux";
 import * as actions from "../actions";
@@ -33,7 +34,8 @@ export type PureToolbarProps = {|
   toggleCellInputVisibility: () => void,
   toggleCellOutputVisibility: () => void,
   toggleOutputExpansion: () => void,
-  changeCellType: () => void
+  changeCellType: () => void,
+  contentRef?: ContentRef
 |};
 
 export class PureToolbar extends React.Component<PureToolbarProps> {
@@ -260,31 +262,26 @@ type ConnectedProps = {
   toggleOutputExpansion: () => void
 };
 
-const mapDispatchToProps = (dispatch, { id, type }) => ({
-  // TODO: #2618
-  toggleStickyCell: () => dispatch(actions.toggleStickyCell({ id })),
-  // TODO: #2618
-  removeCell: () => dispatch(actions.removeCell({ id })),
-  // TODO: #2618
-  executeCell: () => dispatch(actions.executeCell({ id })),
-  // TODO: #2618
-  clearOutputs: () => dispatch(actions.clearOutputs({ id })),
-  // TODO: #2618
+const mapDispatchToProps = (dispatch, { id, type, contentRef }) => ({
+  toggleStickyCell: () =>
+    dispatch(actions.toggleStickyCell({ id, contentRef })),
+  removeCell: () => dispatch(actions.removeCell({ id, contentRef })),
+  executeCell: () => dispatch(actions.executeCell({ id, contentRef })),
+  clearOutputs: () => dispatch(actions.clearOutputs({ id, contentRef })),
   toggleCellOutputVisibility: () =>
-    dispatch(actions.toggleCellOutputVisibility({ id })),
-  // TODO: #2618
+    dispatch(actions.toggleCellOutputVisibility({ id, contentRef })),
   toggleCellInputVisibility: () =>
-    dispatch(actions.toggleCellInputVisibility({ id })),
-  // TODO: #2618
+    dispatch(actions.toggleCellInputVisibility({ id, contentRef })),
   changeCellType: () =>
     dispatch(
       actions.changeCellType({
         id,
-        to: type === "markdown" ? "code" : "markdown"
+        to: type === "markdown" ? "code" : "markdown",
+        contentRef
       })
     ),
-  // TODO: #2618
-  toggleOutputExpansion: () => dispatch(actions.toggleOutputExpansion({ id }))
+  toggleOutputExpansion: () =>
+    dispatch(actions.toggleOutputExpansion({ id, contentRef }))
 });
 
 export default connect(null, mapDispatchToProps)(PureToolbar);

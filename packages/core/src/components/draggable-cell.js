@@ -4,6 +4,7 @@
 
 import * as React from "react";
 import { DragSource, DropTarget } from "react-dnd";
+import type { ContentRef } from "../state/refs";
 
 /**
   The cell drag preview image is just a little stylized version of
@@ -44,7 +45,8 @@ type Props = {|
   isDragging: boolean,
   isOver: boolean,
   moveCell: (payload: *) => Object,
-  children: React.Element<any>
+  children: React.Element<any>,
+  contentRef: ContentRef
 |};
 
 type State = {|
@@ -74,11 +76,11 @@ const cellTarget = {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
-      // TODO: #2618
       props.moveCell({
         id: monitor.getItem().id,
         destinationId: props.id,
-        above: hoverUpperHalf
+        above: hoverUpperHalf,
+        contentRef: props.contentRef
       });
     }
   },
@@ -125,8 +127,8 @@ class DraggableCellView extends React.Component<Props, State> {
   }
 
   selectCell = () => {
-    // TODO: #2618
-    this.props.focusCell({ id: this.props.id });
+    const { focusCell, id, contentRef } = this.props;
+    focusCell({ id, contentRef });
   };
 
   render(): ?React$Element<any> {

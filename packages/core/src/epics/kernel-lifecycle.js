@@ -10,7 +10,7 @@ import { createKernelRef } from "../state/refs";
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
-import type { KernelRef } from "../state/refs";
+import type { ContentRef, KernelRef } from "../state/refs";
 
 const path = require("path");
 
@@ -54,7 +54,8 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
         map(msg =>
           actions.setExecutionState({
             kernelStatus: msg.content.execution_state,
-            kernelRef: action.payload.kernelRef
+            kernelRef: action.payload.kernelRef,
+            contentRef: action.payload.contentRef
           })
         )
       )
@@ -67,7 +68,11 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
  * @param  {Object}  channels  A object containing the kernel channels
  * @returns  {Observable}  The reply from the server
  */
-export function acquireKernelInfo(channels: Channels, kernelRef: KernelRef) {
+export function acquireKernelInfo(
+  channels: Channels,
+  kernelRef: KernelRef,
+  contentRef?: ContentRef
+) {
   const message = createMessage("kernel_info_request");
 
   const obs = channels.pipe(
@@ -75,8 +80,9 @@ export function acquireKernelInfo(channels: Channels, kernelRef: KernelRef) {
     ofMessageType("kernel_info_reply"),
     first(),
     pluck("content", "language_info"),
-    // TODO: #2618
-    map(langInfo => actions.setLanguageInfo({ langInfo, kernelRef }))
+    map(langInfo =>
+      actions.setLanguageInfo({ langInfo, kernelRef, contentRef })
+    )
   );
 
   return Observable.create(observer => {
@@ -95,8 +101,10 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: NewKernelAction) => {
-      const { payload: { kernel: { channels }, kernelRef } } = action;
-      return acquireKernelInfo(channels, kernelRef);
+      const {
+        payload: { kernel: { channels }, kernelRef, contentRef }
+      } = action;
+      return acquireKernelInfo(channels, kernelRef, contentRef);
     })
   );
 

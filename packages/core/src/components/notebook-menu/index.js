@@ -5,7 +5,7 @@ import * as actions from "../../actions";
 import * as extraHandlers from "./extra-handlers";
 import * as selectors from "../../selectors";
 import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
-import type { KernelRef } from "../../state/refs";
+import type { ContentRef, KernelRef } from "../../state/refs";
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import { MODAL_TYPES } from "../modal-controller";
 import { connect } from "react-redux";
@@ -34,16 +34,15 @@ type Props = {
   filename: ?string,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?(payload: *) => void,
-  createCodeCell: ?(cellId: ?string) => void,
-  createMarkdownCell: ?(cellId: ?string) => void,
-  setCellTypeCode: ?(cellId: ?string) => void,
-  setCellTypeMarkdown: ?(cellId: ?string) => void,
+  createCellAfter: ?(payload: *) => void,
+  changeCellType: ?(payload: *) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
   restartKernel: ?(payload: *) => void,
   restartKernelAndClearOutputs: ?(payload: *) => void,
   killKernel: ?(payload: *) => void,
-  interruptKernel: ?(payload: *) => void
+  interruptKernel: ?(payload: *) => void,
+  currentContentRef?: ContentRef
 };
 
 class PureNotebookMenu extends React.Component<Props> {
@@ -61,8 +60,7 @@ class PureNotebookMenu extends React.Component<Props> {
     mergeCellAfter: null,
     notebook: null,
     pasteCell: null,
-    createCodeCell: null,
-    createMarkdownCell: null,
+    createCellAfter: null,
     setCellTypeCode: null,
     setCellTypeMarkdown: null,
     setTheme: null,
@@ -77,8 +75,7 @@ class PureNotebookMenu extends React.Component<Props> {
       cellFocused,
       currentKernelRef,
       copyCell,
-      createCodeCell,
-      createMarkdownCell,
+      createCellAfter,
       cutCell,
       executeCell,
       executeAllCells,
@@ -90,20 +87,19 @@ class PureNotebookMenu extends React.Component<Props> {
       notebook,
       openAboutModal,
       pasteCell,
-      setCellTypeCode,
-      setCellTypeMarkdown,
       setTheme,
+      changeCellType,
       restartKernel,
       restartKernelAndClearOutputs,
       killKernel,
-      interruptKernel
+      interruptKernel,
+      currentContentRef
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
       case MENU_ITEM_ACTIONS.SAVE_NOTEBOOK:
         if (saveNotebook) {
-          // TODO: #2618
-          saveNotebook({});
+          saveNotebook({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
@@ -115,70 +111,84 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.COPY_CELL:
         if (copyCell) {
-          // TODO: #2618
-          copyCell({ id: cellFocused });
+          copyCell({ id: cellFocused, contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CUT_CELL:
         if (cutCell) {
-          // TODO: #2618
-          cutCell({ id: cellFocused });
+          cutCell({ id: cellFocused, contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.PASTE_CELL:
         if (pasteCell) {
-          // TODO: #2618
-          pasteCell({});
+          pasteCell({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
         if (mergeCellAfter) {
-          // TODO: #2618
-          mergeCellAfter({ id: cellFocused });
+          mergeCellAfter({ id: cellFocused, contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
-        if (createCodeCell) {
-          createCodeCell(cellFocused);
+        if (createCellAfter) {
+          createCellAfter({
+            cellType: "code",
+            id: cellFocused,
+            source: "",
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL:
-        if (createMarkdownCell) {
-          createMarkdownCell(cellFocused);
+        if (createCellAfter) {
+          createCellAfter({
+            cellType: "markdown",
+            id: cellFocused,
+            source: "",
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE:
-        if (setCellTypeCode) {
-          setCellTypeCode(cellFocused);
+        if (changeCellType) {
+          changeCellType({
+            id: cellFocused,
+            to: "code",
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN:
-        if (setCellTypeMarkdown) {
-          setCellTypeMarkdown(cellFocused);
+        if (changeCellType) {
+          changeCellType({
+            id: cellFocused,
+            to: "markdown",
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS:
         if (executeAllCells) {
-          // TODO: #2618
-          executeAllCells({});
+          executeAllCells({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS_BELOW:
         if (executeAllCellsBelow) {
-          // TODO: #2618
-          executeAllCellsBelow({});
+          executeAllCellsBelow({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.UNHIDE_ALL:
         if (unhideAll) {
-          // TODO: #2618
-          unhideAll({ outputHidden: false, inputHidden: false });
+          unhideAll({
+            outputHidden: false,
+            inputHidden: false,
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.CLEAR_ALL_OUTPUTS:
         if (clearAllOutputs) {
-          // TODO: #2618
-          clearAllOutputs({});
+          clearAllOutputs({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.SET_THEME_DARK:
@@ -203,7 +213,10 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.RESTART_KERNEL:
         if (restartKernel) {
-          restartKernel({ kernelRef: currentKernelRef });
+          restartKernel({
+            kernelRef: currentKernelRef,
+            contentRef: currentContentRef
+          });
         }
         break;
       case MENU_ITEM_ACTIONS.KILL_KERNEL:
@@ -213,7 +226,10 @@ class PureNotebookMenu extends React.Component<Props> {
         break;
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
-          restartKernelAndClearOutputs({ kernelRef: currentKernelRef });
+          restartKernelAndClearOutputs({
+            kernelRef: currentKernelRef,
+            contentRef: currentContentRef
+          });
         }
         break;
 
@@ -368,7 +384,8 @@ const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
   filename: selectors.currentFilename(state),
   notebook: selectors.currentNotebook(state),
-  currentKernelRef: selectors.currentKernelRef(state)
+  currentKernelRef: selectors.currentKernelRef(state),
+  currentContentRef: selectors.currentContentRef(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -383,20 +400,8 @@ const mapDispatchToProps = dispatch => ({
   copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
   pasteCell: (payload: *) => dispatch(actions.pasteCell(payload)),
   mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload)),
-  // TODO: #2618
-  createCodeCell: cellId =>
-    dispatch(
-      actions.createCellAfter({ cellType: "code", id: cellId, source: "" })
-    ),
-  createMarkdownCell: cellId =>
-    dispatch(
-      actions.createCellAfter({ cellType: "markdown", id: cellId, source: "" })
-    ),
-  // TODO: #2618
-  setCellTypeCode: cellId =>
-    dispatch(actions.changeCellType({ id: cellId, to: "code" })),
-  setCellTypeMarkdown: cellId =>
-    dispatch(actions.changeCellType({ id: cellId, to: "markdown" })),
+  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
+  changeCellType: (payload: *) => dispatch(actions.changeCellType(payload)),
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),

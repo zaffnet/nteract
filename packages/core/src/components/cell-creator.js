@@ -2,6 +2,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
+import type { ContentRef } from "../state/refs";
 
 type Props = {
   above: boolean,
@@ -15,7 +16,8 @@ type ConnectedProps = {
   createCellBefore: (payload: *) => void,
   createCellAfter: (payload: *) => void,
   mergeCellAfter: (payload: *) => void,
-  id?: string
+  id?: string,
+  contentRef?: ContentRef
 };
 
 import {
@@ -136,28 +138,26 @@ class CellCreator extends React.Component<ConnectedProps> {
       createCellAfter,
       createCellAppend,
       createCellBefore,
-      id
+      id,
+      contentRef
     } = this.props;
 
     if (!id) {
-      // TODO: #2618
-      createCellAppend({ cellType: type });
+      createCellAppend({ cellType: type, contentRef });
       return;
     }
 
-    // TODO: #2618
     above
-      ? createCellBefore({ cellType: type, id })
-      : createCellAfter({ cellType: type, id, source: "" });
+      ? createCellBefore({ cellType: type, id, contentRef })
+      : createCellAfter({ cellType: type, id, source: "", contentRef });
   }
 
   mergeCell(): void {
-    const { mergeCellAfter, id } = this.props;
+    const { mergeCellAfter, id, contentRef } = this.props;
 
     // We can't merge cells if we don't have a cell ID
     if (id) {
-      // TODO: #2618
-      mergeCellAfter({ id });
+      mergeCellAfter({ id, contentRef });
     }
   }
 

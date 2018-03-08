@@ -121,37 +121,54 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 
 export const models = createSelector([comms], comms => comms.get("models"));
 
+export const currentModel = createSelector(
+  (state: AppState) => state.document,
+  (state: AppState) => currentContentRef(state),
+  (state: AppState) => currentContent(state),
+  // TODO: if an application is setting the currentContent, assume we want to
+  // use that. Otherwise, use the old method of looking into state.document.
+  (document, currentContentRef, currentContent) => {
+    if (currentContentRef) {
+      // TODO: The app assumes that the model is not null. HOWEVER, the model
+      // should really *be* nullable. I.e., components should check
+      // communication before accessing nested values here.
+      return currentContent.model;
+    }
+    return document;
+  }
+);
+
 // TODO: if we're not looking at a notebook in the UI, there may not _be_ a
 // notebook object to get. Do we return null? Throw an error?
-export const currentNotebook = createSelector(
-  (state: AppState) => state.document.get("notebook", null),
-  identity
+export const currentNotebook = createSelector(currentModel, model =>
+  model.get("notebook", null)
 );
 
-export const currentSavedNotebook = createSelector(
-  (state: AppState) => state.document.get("savedNotebook"),
-  identity
+export const currentSavedNotebook = createSelector(currentModel, model =>
+  model.get("savedNotebook")
 );
 
-export const currentStickyCells = createSelector(
-  (state: AppState) => state.document.get("stickyCells"),
-  identity
+export const currentStickyCells = createSelector(currentModel, model =>
+  model.get("stickyCells")
 );
 
-export const cellPagers = createSelector(
-  (state: AppState) => state.document.get("cellPagers"),
-  identity
+export const cellPagers = createSelector(currentModel, model =>
+  model.get("cellPagers")
 );
 
 export const currentLastSaved = createSelector(
   (state: AppState) => state.app.get("lastSaved"),
-  identity
+  (state: AppState) => currentContentRef(state),
+  (state: AppState) => currentContent(state),
+  // TODO: if an application is setting the currentContent, assume we want to
+  // use that. Otherwise, use the old method of looking into state.document.
+  (lastSaved, currentContentRef, currentContent) => {
+    return currentContentRef ? currentContent.lastSaved : lastSaved;
+  }
 );
 
-export const currentNotebookMetadata = createSelector(
-  (state: AppState) =>
-    state.document.getIn(["notebook", "metadata"], Immutable.Map()),
-  identity
+export const currentNotebookMetadata = createSelector(currentModel, model =>
+  model.getIn(["notebook", "metadata"], Immutable.Map())
 );
 
 const CODE_MIRROR_MODE_DEFAULT = "text";
@@ -196,20 +213,16 @@ export const currentNotebookString = createSelector(
   }
 );
 
-export const currentFocusedCellId = createSelector(
-  (state: AppState) => state.document.get("cellFocused"),
-  identity
+export const currentFocusedCellId = createSelector(currentModel, model =>
+  model.get("cellFocused")
 );
 
-export const currentFocusedEditorId = createSelector(
-  (state: AppState) => state.document.get("editorFocused"),
-  identity
+export const currentFocusedEditorId = createSelector(currentModel, model =>
+  model.get("editorFocused")
 );
 
-export const transientCellMap = createSelector(
-  (state: AppState) =>
-    state.document.getIn(["transient", "cellMap"], Immutable.Map()),
-  identity
+export const transientCellMap = createSelector(currentModel, model =>
+  model.getIn(["transient", "cellMap"], Immutable.Map())
 );
 
 export const currentCellMap = createSelector([currentNotebook], notebook => {
@@ -276,9 +289,19 @@ export const currentIdsOfHiddenOutputs = createSelector(
   }
 );
 
+// TODO: we can get the filename from the top-level instead of the model?
 export const currentFilename: (state: *) => string = createSelector(
-  (state: AppState) => state.document.get("filename"),
-  identity
+  (state: AppState) => state.document,
+  (state: AppState) => currentContentRef(state),
+  (state: AppState) => currentContent(state),
+  // TODO: if an application is setting the currentContent, assume we want to
+  // use that. Otherwise, use the old method of looking into state.document.
+  (document, currentContentRef, currentContent) => {
+    if (currentContentRef) {
+      return currentContent.path;
+    }
+    return document.filename;
+  }
 );
 
 export const modalType = createSelector(
@@ -309,6 +332,23 @@ export const communicationKernelspecsByRefCore = createSelector(
 export const kernelspecsByRefCore = createSelector(
   (state: AppState, { kernelspecsRef }) =>
     state.core.getIn(["entities", "kernelspecs", "byRef", kernelspecsRef]),
+  identity
+);
+
+export const currentContentRef = createSelector(
+  (state: AppState) => state.core.currentContentRef,
+  identity
+);
+
+export const currentContent = createSelector(
+  (state: AppState) => state.core.currentContentRef,
+  (state: AppState) => state.core.entities.contents.byRef,
+  (contentRef, byRef) => byRef.get(contentRef)
+);
+
+export const contentByRef = createSelector(
+  (state: AppState, { contentRef }) =>
+    state.core.entities.contents.byRef.get(contentRef),
   identity
 );
 

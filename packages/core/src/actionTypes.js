@@ -652,7 +652,10 @@ export type SetNotebook = {
     notebook: ImmutableNotebook,
     filename: ?string,
     kernelRef: KernelRef,
-    contentRef?: ContentRef
+    contentRef?: ContentRef,
+    lastSaved: ?Date,
+    name: ?string,
+    created: ?Date
   }
 };
 
