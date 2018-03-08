@@ -7,7 +7,7 @@ import type {
   LocalKernelProps,
   RemoteKernelProps
 } from "./entities";
-import type { KernelRef } from "./refs";
+import type { ContentRef, KernelRef } from "./refs";
 import type {
   LocalHostRecordProps,
   JupyterHostRecordProps
@@ -101,6 +101,7 @@ export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
   kernelRef: ?KernelRef,
+  currentContentRef: ?ContentRef,
   communication: Immutable.RecordOf<CommunicationRecordProps>,
   entities: Immutable.RecordOf<EntitiesRecordProps>
 };
@@ -109,6 +110,7 @@ export const makeStateRecord: Immutable.RecordFactory<
   StateRecordProps
 > = Immutable.Record({
   kernelRef: null,
+  currentContentRef: null,
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()
 });
