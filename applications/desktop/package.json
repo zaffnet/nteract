@@ -17,8 +17,10 @@
     "url": "https://github.com/nteract/nteract/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "dry-run": true
   },
+  "private": true,
   "homepage": "https://nteract.io",
   "scripts": {
     "clean": "rimraf lib dist",
