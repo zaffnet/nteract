@@ -117,7 +117,7 @@
   },
   "devDependencies": {
     "@nteract/commutable": "^4.0.0",
-    "@nteract/core": "^4.0.2",
+    "@nteract/core": "^4.0.3",
     "@nteract/display-area": "^4.0.1",
     "@nteract/editor": "^7.0.2",
     "@nteract/markdown": "^1.0.0",
