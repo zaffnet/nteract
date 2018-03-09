@@ -33,6 +33,9 @@ describe("PureNotebookMenu ", () => {
     });
     test("calls appropriate handlers on click", () => {
       const props = {
+        // keep menu open after clicks
+        persistAfterClick: true,
+
         // action functions
         executeCell: jest.fn(),
         executeAllCells: jest.fn(),
