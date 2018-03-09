@@ -318,29 +318,6 @@ describe("focusPreviousCellEditor", () => {
   });
 });
 
-describe("toggleStickyCell", () => {
-  test("should stick the cell given its ID", () => {
-    const doc = initialDocument
-      .set("notebook", dummyCommutable)
-      .set("stickyCells", new Set());
-    const originalState = doc;
-
-    const id = originalState.getIn(["notebook", "cellOrder"]).first();
-    const state = reducers(originalState, actions.toggleStickyCell({ id }));
-    expect(state.hasIn(["stickyCells", id])).toBe(true);
-  });
-  test("should unstick a stuck cell given its ID", () => {
-    const id = dummyCommutable.get("cellOrder").first();
-    const doc = initialDocument
-      .set("notebook", dummyCommutable)
-      .set("stickyCells", new Set([id]));
-
-    const originalState = doc;
-    const state = reducers(originalState, actions.toggleStickyCell({ id }));
-    expect(state.hasIn(["stickyCells", id])).toBe(false);
-  });
-});
-
 describe("updateExecutionCount", () => {
   test("updates the execution count by id", () => {
     const originalState = monocellDocument;

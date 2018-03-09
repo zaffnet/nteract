@@ -33,8 +33,6 @@ import DraggableCell from "./draggable-cell";
 import CellCreator from "./cell-creator";
 import StatusBar from "./status-bar";
 
-import { PinnedPlaceHolderCell, StickyCellContainer } from "./pinned-cell";
-
 import * as actions from "../actions";
 
 // NOTE: PropTypes are required for the sake of contextTypes
@@ -290,7 +288,6 @@ type PureNotebookProps = {
   displayOrder?: Array<string>,
   cellOrder?: ImmutableList<any>,
   transforms?: Object,
-  stickyCells?: ImmutableSet<string>,
   theme?: string,
   lastSaved?: Date,
   languageDisplayName?: string,
@@ -303,7 +300,6 @@ type NotebookStateProps = {
   displayOrder: Array<string>,
   cellOrder: ImmutableList<any>,
   transforms: Object,
-  stickyCells: ImmutableSet<string>,
   theme: string,
   lastSaved: Date,
   languageDisplayName: string,
@@ -328,7 +324,6 @@ const mapStateToProps = (
     theme: selectors.userPreferences(state).theme,
     lastSaved: selectors.currentLastSaved(state),
     cellOrder: selectors.currentCellOrder(state) || Immutable.List(),
-    stickyCells: selectors.currentStickyCells(state),
     kernelStatus: selectors.currentKernelStatus(state),
     languageDisplayName: selectors.currentDisplayName(state),
     transforms: ownProps.transforms || transforms,
@@ -413,29 +408,6 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     }
   }
 
-  renderStickyCells(): React.Node {
-    const cellOrder = this.props.cellOrder;
-    const stickyCells = cellOrder.filter(id => this.props.stickyCells.get(id));
-    if (stickyCells.size === 0) {
-      return null;
-    }
-
-    return (
-      <StickyCellContainer>
-        {stickyCells.map(id => (
-          <div key={`sticky-cell-container-${id}`} className="sticky-cell">
-            {this.renderCell(id)}
-          </div>
-        ))}
-        <style jsx>{`
-          .sticky-cell {
-            padding-right: 20px;
-          }
-        `}</style>
-      </StickyCellContainer>
-    );
-  }
-
   renderCell(id: string): ?React$Element<any> {
     const { contentRef } = this.props;
     return (
@@ -450,22 +422,17 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
   }
 
   createCellElement(id: string): React$Element<*> {
-    const isStickied = this.props.stickyCells.get(id);
     const { moveCell, focusCell, contentRef } = this.props;
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
-        {isStickied ? (
-          <PinnedPlaceHolderCell />
-        ) : (
-          <DraggableCell
-            moveCell={moveCell}
-            id={id}
-            focusCell={focusCell}
-            contentRef={contentRef}
-          >
-            {this.renderCell(id)}
-          </DraggableCell>
-        )}
+        <DraggableCell
+          moveCell={moveCell}
+          id={id}
+          focusCell={focusCell}
+          contentRef={contentRef}
+        >
+          {this.renderCell(id)}
+        </DraggableCell>
         <CellCreator
           key={`creator-${id}`}
           id={id}
@@ -479,9 +446,6 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
   render(): ?React$Element<any> {
     return (
       <React.Fragment>
-        {/* Sticky cells */}
-        {this.renderStickyCells()}
-        {/* Actual cells! */}
         <div className="cells">
           <CellCreator
             id={this.props.cellOrder.get(0)}

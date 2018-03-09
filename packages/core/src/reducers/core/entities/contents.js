@@ -44,7 +44,6 @@ import type {
   CreateCellAppend,
   MergeCellAfter,
   MoveCell,
-  ToggleStickyCell,
   FocusPreviousCell,
   SetKernelInfo,
   SetLanguageInfo,
@@ -410,16 +409,6 @@ function focusPreviousCellEditor(
   return state.set("editorFocused", cellOrder.get(nextIndex));
 }
 
-function toggleStickyCell(state: DocumentRecord, action: ToggleStickyCell) {
-  const { id } = action.payload;
-  const stickyCells = state.get("stickyCells", Immutable.Set());
-
-  if (stickyCells.has(id)) {
-    return state.set("stickyCells", stickyCells.delete(id));
-  }
-  return state.set("stickyCells", stickyCells.add(id));
-}
-
 function moveCell(state: DocumentRecord, action: MoveCell) {
   return state.updateIn(
     ["notebook", "cellOrder"],
@@ -738,7 +727,6 @@ function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
 }
 
 type DocumentAction =
-  | ToggleStickyCell
   | FocusPreviousCellEditor
   | FocusPreviousCell
   | FocusNextCellEditor
@@ -810,8 +798,6 @@ function document(
       return focusNextCellEditor(state, action);
     case actionTypes.FOCUS_PREVIOUS_CELL_EDITOR:
       return focusPreviousCellEditor(state, action);
-    case actionTypes.TOGGLE_STICKY_CELL:
-      return toggleStickyCell(state, action);
     case actionTypes.SET_IN_CELL:
       return setInCell(state, action);
     case actionTypes.MOVE_CELL:
@@ -936,7 +922,6 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.FOCUS_CELL_EDITOR:
     case actionTypes.FOCUS_NEXT_CELL_EDITOR:
     case actionTypes.FOCUS_PREVIOUS_CELL_EDITOR:
-    case actionTypes.TOGGLE_STICKY_CELL:
     case actionTypes.SET_IN_CELL:
     case actionTypes.MOVE_CELL:
     case actionTypes.REMOVE_CELL:

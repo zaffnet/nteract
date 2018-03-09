@@ -443,16 +443,6 @@ export type FocusPreviousCellEditor = {
 };
 
 // TODO: #2618
-export const TOGGLE_STICKY_CELL = "TOGGLE_STICKY_CELL";
-export type ToggleStickyCell = {
-  type: "TOGGLE_STICKY_CELL",
-  payload: {
-    id: CellID,
-    contentRef?: ContentRef
-  }
-};
-
-// TODO: #2618
 export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
 export type SetKernelInfo = {
   type: "SET_KERNEL_INFO",

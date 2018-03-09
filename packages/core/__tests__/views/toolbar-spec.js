@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import { dummyStore } from "../../src/dummy";
 
 import {
-  TOGGLE_STICKY_CELL,
   REMOVE_CELL,
   SEND_EXECUTE_REQUEST,
   CLEAR_OUTPUTS,
@@ -91,21 +90,6 @@ describe.skip("toolbar provider", () => {
         <Toolbar {...props} />
       </Provider>
     );
-
-  test("toggle Sticky Cell works", done => {
-    const dispatch = action => {
-      expect(action.id).toBe("cell");
-      expect(action.type).toBe(TOGGLE_STICKY_CELL);
-      done();
-    };
-    store.dispatch = dispatch;
-    const toolbar = setup({ id: "cell" });
-    toolbar
-      .find("ToolbarView")
-      .childAt(0)
-      .getElement()
-      .toggleStickyCell();
-  });
 
   test("Remove Cell works", done => {
     const dispatch = action => {

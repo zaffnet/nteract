@@ -52,47 +52,6 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
         </span>
       </button>
       <button
-        className="jsx-2145412815 stickyButton"
-        title="pin cell"
-      >
-        <span
-          className="jsx-2145412815 octicon"
-        >
-          <PinOcticon>
-            <SVGWrapper
-              height={16}
-              outerProps={Object {}}
-              viewBox="0 0 16 16"
-              width={16}
-            >
-              <span>
-                <svg
-                  height={16}
-                  style={
-                    Object {
-                      "display": "inline-block",
-                      "fill": "currentColor",
-                      "verticalAlign": "text-bottom",
-                    }
-                  }
-                  viewBox="0 0 16 16"
-                  width={16}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>
-                    Pin Cell to Top
-                  </title>
-                  <path
-                    d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </span>
-            </SVGWrapper>
-          </PinOcticon>
-        </span>
-      </button>
-      <button
         className="jsx-2145412815 deleteButton"
         title="delete cell"
       >
@@ -256,47 +215,6 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
               </span>
             </SVGWrapper>
           </TriangleRightOcticon>
-        </span>
-      </button>
-      <button
-        className="jsx-2145412815 stickyButton"
-        title="pin cell"
-      >
-        <span
-          className="jsx-2145412815 octicon"
-        >
-          <PinOcticon>
-            <SVGWrapper
-              height={16}
-              outerProps={Object {}}
-              viewBox="0 0 16 16"
-              width={16}
-            >
-              <span>
-                <svg
-                  height={16}
-                  style={
-                    Object {
-                      "display": "inline-block",
-                      "fill": "currentColor",
-                      "verticalAlign": "text-bottom",
-                    }
-                  }
-                  viewBox="0 0 16 16"
-                  width={16}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>
-                    Pin Cell to Top
-                  </title>
-                  <path
-                    d="M10 1.2V2l.5 1L6 6H2.2c-.44 0-.67.53-.34.86L5 10l-4 5 5-4 3.14 3.14a.5.5 0 0 0 .86-.34V10l3-4.5 1 .5h.8c.44 0 .67-.53.34-.86L10.86.86a.5.5 0 0 0-.86.34z"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </span>
-            </SVGWrapper>
-          </PinOcticon>
         </span>
       </button>
       <button
