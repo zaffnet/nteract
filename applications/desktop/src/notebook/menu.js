@@ -110,7 +110,7 @@ export function promptUserAboutNewKernel(
       index => {
         if (index === 0) {
           const state = store.getState();
-          const kernel = selectors.currentKernelRef(state);
+          const kernel = selectors.currentKernel(state);
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
