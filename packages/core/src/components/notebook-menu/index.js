@@ -18,6 +18,7 @@ const createActionKey = (action, ...args) => [action, ...args].join(":");
 const parseActionKey = key => key.split(":");
 
 type Props = {
+  persistAfterClick?: boolean,
   defaultOpenKeys?: Array<string>,
   openKeys?: Array<string>,
   cellFocused: ?string,
@@ -45,7 +46,11 @@ type Props = {
   currentContentRef?: ContentRef
 };
 
-class PureNotebookMenu extends React.Component<Props> {
+type State = {
+  openKeys?: Array<string>
+};
+
+class PureNotebookMenu extends React.Component<Props, State> {
   static defaultProps = {
     cellFocused: null,
     saveNotebook: null,
@@ -69,8 +74,10 @@ class PureNotebookMenu extends React.Component<Props> {
     killKernel: null,
     interruptKernel: null
   };
+  state = {};
   handleClick = ({ key }: { key: string }) => {
     const {
+      persistAfterClick,
       saveNotebook,
       cellFocused,
       currentKernelRef,
@@ -236,17 +243,37 @@ class PureNotebookMenu extends React.Component<Props> {
       default:
         console.log(`unhandled action: ${action}`);
     }
+
+    if (!persistAfterClick) {
+      this.setState({ openKeys: [] });
+    }
   };
+  handleOpenChange = (openKeys: Array<string>) => {
+    if (!this.props.persistAfterClick) {
+      this.setState({ openKeys });
+    }
+  };
+  componentWillMount() {
+    // This ensures that we can still initially set defaultOpenKeys when
+    // persistAfterClick is true.
+    this.setState({ openKeys: this.props.defaultOpenKeys });
+  }
   render() {
-    const { defaultOpenKeys } = this.props;
+    const { defaultOpenKeys, persistAfterClick } = this.props;
+    const { openKeys } = this.state;
+    const menuProps: Object = {
+      mode: "horizontal",
+      onClick: this.handleClick,
+      onOpenChange: this.handleOpenChange,
+      defaultOpenKeys: defaultOpenKeys,
+      selectable: false
+    };
+    if (!persistAfterClick) {
+      menuProps.openKeys = openKeys;
+    }
     return (
       <div>
-        <Menu
-          mode="horizontal"
-          onClick={this.handleClick}
-          defaultOpenKeys={defaultOpenKeys}
-          selectable={false}
-        >
+        <Menu {...menuProps}>
           <SubMenu key={MENUS.FILE} title="File">
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SAVE_NOTEBOOK)}>
               Save
