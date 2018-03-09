@@ -29,7 +29,6 @@ export type PureToolbarProps = {|
   type: "markdown" | "code" | "raw",
   executeCell: () => void,
   removeCell: () => void,
-  toggleStickyCell: () => void,
   clearOutputs: () => void,
   toggleCellInputVisibility: () => void,
   toggleCellOutputVisibility: () => void,
@@ -81,7 +80,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
     this.props.changeCellType();
   }
   render(): React$Element<any> {
-    const { type, executeCell, removeCell, toggleStickyCell } = this.props;
+    const { type, executeCell, removeCell } = this.props;
 
     return (
       <div className="cell-toolbar-mask">
@@ -97,15 +96,6 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
               </span>
             </button>
           )}
-          <button
-            onClick={toggleStickyCell}
-            title="pin cell"
-            className="stickyButton"
-          >
-            <span className="octicon">
-              <PinOcticon />
-            </span>
-          </button>
           <button
             onClick={removeCell}
             title="delete cell"
@@ -254,7 +244,6 @@ type ConnectedProps = {
   type: "markdown" | "code" | "raw",
   executeCell: () => void,
   removeCell: () => void,
-  toggleStickyCell: () => void,
   clearOutputs: () => void,
   toggleCellOutputVisibility: () => void,
   toggleCellInputVisibility: () => void,
@@ -263,8 +252,6 @@ type ConnectedProps = {
 };
 
 const mapDispatchToProps = (dispatch, { id, type, contentRef }) => ({
-  toggleStickyCell: () =>
-    dispatch(actions.toggleStickyCell({ id, contentRef })),
   removeCell: () => dispatch(actions.removeCell({ id, contentRef })),
   executeCell: () => dispatch(actions.executeCell({ id, contentRef })),
   clearOutputs: () => dispatch(actions.clearOutputs({ id, contentRef })),

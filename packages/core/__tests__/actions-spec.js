@@ -350,17 +350,6 @@ describe("createCellBefore", () => {
   });
 });
 
-describe("toggleStickyCell", () => {
-  test("creates a TOGGLE_STICKY_CELL action", () => {
-    expect(actions.toggleStickyCell({ id: "1234" })).toEqual({
-      type: actionTypes.TOGGLE_STICKY_CELL,
-      payload: {
-        id: "1234"
-      }
-    });
-  });
-});
-
 describe("createCellAppend", () => {
   test("creates a CREATE_CELL_APPEND action", () => {
     expect(actions.createCellAppend({ cellType: "markdown" })).toEqual({

@@ -148,10 +148,6 @@ export const currentSavedNotebook = createSelector(currentModel, model =>
   model.get("savedNotebook")
 );
 
-export const currentStickyCells = createSelector(currentModel, model =>
-  model.get("stickyCells")
-);
-
 export const cellPagers = createSelector(currentModel, model =>
   model.get("cellPagers")
 );
