@@ -37,7 +37,6 @@ const store = configureStore({
     host: stateModule.makeLocalHostRecord(),
     version: remote.app.getVersion()
   }),
-  document: stateModule.makeDocumentRecord(),
   comms: stateModule.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"

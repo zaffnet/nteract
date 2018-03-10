@@ -64,22 +64,7 @@ describe("createExecuteCellStream", () => {
         }),
         app: {
           notificationSystem: { addNotification: jest.fn() }
-        },
-        document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
-        })
+        }
       }
     };
     const action$ = ActionsObservable.of(actions.sendExecuteRequest({}));
@@ -121,22 +106,7 @@ describe("createExecuteCellStream", () => {
           })
         }),
         app: {
-          notificationSystem: { addNotification: jest.fn() },
-          document: Immutable.fromJS({
-            notebook: {
-              cellMap: {
-                first: {
-                  source: "woo",
-                  cell_type: "code"
-                },
-                second: {
-                  source: "eh",
-                  cell_type: "code"
-                }
-              },
-              cellOrder: ["first", "second"]
-            }
-          })
+          notificationSystem: { addNotification: jest.fn() }
         }
       }
     };
@@ -233,22 +203,7 @@ describe("executeCellEpic", () => {
         }),
         app: {
           notificationSystem: { addNotification: jest.fn() }
-        },
-        document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
-        })
+        }
       }
     };
 

@@ -14,7 +14,7 @@ import {
 
 /* Our createStore */
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import { document, comms, config, core } from "../reducers";
+import { comms, config, core } from "../reducers";
 
 export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
 
@@ -22,7 +22,6 @@ import * as stateModule from "../state";
 
 const rootReducer = combineReducers({
   app: (state = stateModule.makeAppRecord(), action) => state,
-  document,
   comms,
   config,
   core
@@ -131,7 +130,6 @@ export function dummyStore(config: *) {
         })
       })
     }),
-    document: stateModule.makeDocumentRecord(),
     app: stateModule.makeAppRecord({
       notificationSystem: {
         addNotification: () => {} // most of the time you'll want to mock this

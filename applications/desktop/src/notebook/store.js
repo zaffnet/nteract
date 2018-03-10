@@ -9,7 +9,6 @@ import { reducers, state as stateModule } from "@nteract/core";
 
 const rootReducer = combineReducers({
   app: reducers.app,
-  document: (state = stateModule.makeDocumentRecord()) => state,
   comms: reducers.comms,
   config: reducers.config,
   core: reducers.core

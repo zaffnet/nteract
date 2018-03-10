@@ -20,7 +20,6 @@ export type JupyterConfigData = {
 
 const rootReducer = combineReducers({
   app: reducers.app,
-  document: (state = stateModule.makeDocumentRecord()) => state,
   comms: reducers.comms,
   config: reducers.config,
   core: reducers.core
@@ -40,7 +39,6 @@ export default function configureStore({
       }),
       version: `nteract-on-jupyter@${config.appVersion}`
     }),
-    document: state.makeDocumentRecord(),
     comms: state.makeCommsRecord(),
     config: ImmutableMap({
       theme: "light"

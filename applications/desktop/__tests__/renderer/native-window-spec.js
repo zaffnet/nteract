@@ -79,10 +79,6 @@ describe("createTitleFeed", () => {
           })
         })
       }),
-      document: stateModule.makeDocumentRecord({
-        notebook,
-        filename: "titled.ipynb"
-      }),
       app: stateModule.makeAppRecord()
     };
 

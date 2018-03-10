@@ -11,7 +11,6 @@ const epics = coreEpics.allEpics;
 
 const rootReducer = combineReducers({
   app: reducers.app,
-  document: reducers.document,
   comms: reducers.comms,
   config: reducers.config,
   core: reducers.core
@@ -19,7 +18,6 @@ const rootReducer = combineReducers({
 
 const defaultState = {
   app: state.makeAppRecord(),
-  document: state.makeDocumentRecord(),
   comms: state.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
