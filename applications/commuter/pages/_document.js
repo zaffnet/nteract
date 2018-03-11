@@ -54,9 +54,8 @@ class MyDocument extends Document {
           <link rel="shortcut icon" href="/static/favicon.ico" />
 
           <link
-            href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700,300,200,500,600,900"
+            href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,500,600,700,900&amp;subset=latin-ext"
             rel="stylesheet"
-            type="text/css"
           />
 
           <link
