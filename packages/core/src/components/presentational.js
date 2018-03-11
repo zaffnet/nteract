@@ -1,8 +1,7 @@
 // @flow
 import * as React from "react";
 
-import SyntaxHighlighter from "react-syntax-highlighter";
-import syntax from "../themes/syntax-highlighting";
+import Highlighter from "./syntax-highlighter";
 
 export type PagersProps = {
   children: React.Node,
@@ -241,7 +240,7 @@ export type SourceProps = {
 export class Source extends React.Component<SourceProps> {
   static defaultProps = {
     children: "",
-    language: "python",
+    language: "text",
     className: "input",
     theme: "light"
   };
@@ -253,18 +252,12 @@ export class Source extends React.Component<SourceProps> {
     // Ref: https://github.com/nteract/notebook-preview/issues/20
     if (typeof this.props.children === "string") {
       return (
-        <SyntaxHighlighter
-          style={syntax}
+        <Highlighter
           language={this.props.language}
           className={this.props.className}
-          customStyle={{
-            padding: "10px 0px 10px 10px",
-            margin: "0px",
-            backgroundColor: "var(--cm-background, #fafafa)"
-          }}
         >
           {this.props.children}
-        </SyntaxHighlighter>
+        </Highlighter>
       );
     }
     // Otherwise assume they have their own editor component
