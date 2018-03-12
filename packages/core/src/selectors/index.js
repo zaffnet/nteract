@@ -136,7 +136,9 @@ export const currentModel: (
 
 // TODO: if we're not looking at a notebook in the UI, there may not _be_ a
 // notebook object to get. Do we return null? Throw an error?
-export const currentNotebook = createSelector(currentModel, model =>
+export const currentNotebook: (
+  state: AppState
+) => ?Immutable.Map<string, any> = createSelector(currentModel, model =>
   model.get("notebook", null)
 );
 

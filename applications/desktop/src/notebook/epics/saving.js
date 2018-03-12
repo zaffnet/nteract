@@ -28,6 +28,15 @@ export function saveEpic(
     mergeMap((action: Save) => {
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
+      if (!currentNotebook) {
+        return of(
+          actions.saveFailed({
+            error: new Error("no notebook loaded to save"),
+            contentRef: action.payload.contentRef
+          })
+        );
+      }
+
       const filename = selectors.currentFilename(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
