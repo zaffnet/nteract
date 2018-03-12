@@ -34,13 +34,13 @@ import type {
  * Determines the right kernel to launch based on a notebook
  */
 export const extractNewKernel = (
-  filename: ?string,
+  filepath: ?string,
   notebook: ImmutableNotebook
 ) => {
   // TODO: There's some incongruence between desktop and web app here, regarding path vs. filename
   //       Instead, this function is slightly repeated between here and @nteract/core
   const cwd =
-    (filename && path.dirname(path.resolve(filename))) || process.cwd();
+    (filepath && path.dirname(path.resolve(filepath))) || process.cwd();
   const kernelSpecName = notebook.getIn(
     ["metadata", "kernelspec", "name"],
     notebook.getIn(["metadata", "language_info", "name"], "python3")
@@ -116,14 +116,14 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
     tap((action: FetchContent) => {
-      // If there isn't a filename, save-as it instead
-      if (!action.payload.path) {
+      // If there isn't a filepath, save-as it instead
+      if (!action.payload.filepath) {
         throw new Error("fetch content needs a path");
       }
     }),
     // Switch map since we want the last load request to be the lead
     switchMap(action => {
-      const filepath = action.payload.path;
+      const filepath = action.payload.filepath;
 
       return forkJoin(
         readFileObservable(filepath),
@@ -135,7 +135,7 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
         timeout(60 * 1000),
         map(model =>
           actions.fetchContentFulfilled({
-            path: model.path,
+            filepath: model.path,
             model,
             kernelRef: action.payload.kernelRef,
             contentRef: action.payload.contentRef
@@ -144,7 +144,7 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
         catchError((err: Error) =>
           of(
             actions.fetchContentFailed({
-              path: filepath,
+              filepath,
               error: err,
               kernelRef: action.payload.kernelRef,
               contentRef: action.payload.contentRef
@@ -162,7 +162,7 @@ export const launchKernelWhenNotebookSetEpic = (
     ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
-        action.payload.filename,
+        action.payload.filepath,
         action.payload.notebook
       );
 
@@ -198,13 +198,12 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
       }
 
       return actions.setNotebook({
-        filename: null,
+        filepath: null,
         notebook,
         kernelRef,
         contentRef: action.payload.contentRef,
         created: null,
-        lastSaved: null,
-        name: null
+        lastSaved: null
       });
     })
   );

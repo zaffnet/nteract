@@ -283,7 +283,6 @@ export const currentIdsOfHiddenOutputs = createSelector(
   }
 );
 
-// TODO: we can get the filename from the top-level instead of the model?
 export const currentFilename: (state: *) => string = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {

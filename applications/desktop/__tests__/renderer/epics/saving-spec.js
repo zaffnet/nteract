@@ -32,14 +32,14 @@ describe("saveAsEpic", () => {
     const store = dummyStore();
 
     const responses = await saveAsEpic(
-      ActionsObservable.of(actions.saveAs({ filename: "great-filename" })),
+      ActionsObservable.of(actions.saveAs({ filepath: "great-filename" })),
       store
     )
       .pipe(toArray())
       .toPromise();
 
     expect(responses).toEqual([
-      actions.changeFilename({ filename: "great-filename" }),
+      actions.changeFilename({ filepath: "great-filename" }),
       actions.save({})
     ]);
   });

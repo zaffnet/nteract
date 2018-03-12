@@ -870,29 +870,6 @@ describe("cleanCellTransient", () => {
   });
 });
 
-describe("changeFilename", () => {
-  test("returns the same originalState if filename is null", () => {
-    const originalState = makeDocumentRecord({
-      filename: "original.ipynb"
-    });
-    const state = reducers(
-      originalState,
-      actions.changeFilename({ filename: null })
-    );
-    expect(state.filename).toBe("original.ipynb");
-  });
-  test("sets the filename if given a valid one", () => {
-    const originalState = makeDocumentRecord({
-      filename: "original.ipynb"
-    });
-    const state = reducers(
-      originalState,
-      actions.changeFilename({ filename: "test.ipynb" })
-    );
-    expect(state.filename).toBe("test.ipynb");
-  });
-});
-
 describe("sendExecuteRequest", () => {
   test("cleans up the outputs, pagers, and status", () => {
     const notebook = appendCellToNotebook(emptyNotebook, emptyCodeCell);

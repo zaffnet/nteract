@@ -86,7 +86,7 @@ export function saveAsEpic(action$: ActionsObservable<*>) {
         // order matters here, since we need the filename set in the state
         // before we save the document
         actions.changeFilename({
-          filename: action.payload.filename,
+          filepath: action.payload.filepath,
           contentRef: action.payload.contentRef
         }),
         actions.save({

@@ -143,7 +143,7 @@ function main(rootEl: Element, dataEl: Node | null) {
           byRef: Immutable.Map().set(
             contentRef,
             state.makeContentRecord({
-              path: config.contentsPath
+              filepath: config.contentsPath
             })
           )
         })
@@ -159,7 +159,7 @@ function main(rootEl: Element, dataEl: Node | null) {
 
   store.dispatch(
     actions.fetchContent({
-      path: config.contentsPath,
+      filepath: config.contentsPath,
       params: {},
       kernelRef,
       contentRef

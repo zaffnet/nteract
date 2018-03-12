@@ -134,7 +134,7 @@ export const addHost = (payload: {
 });
 
 export const fetchContent = (payload: {
-  path: string,
+  filepath: string,
   params: Object,
   kernelRef: KernelRef,
   contentRef: ContentRef
@@ -144,7 +144,7 @@ export const fetchContent = (payload: {
 });
 
 export const fetchContentFulfilled = (payload: {
-  path: string,
+  filepath: string,
   model: any,
   kernelRef: KernelRef,
   contentRef: ContentRef
@@ -154,7 +154,7 @@ export const fetchContentFulfilled = (payload: {
 });
 
 export const fetchContentFailed = (payload: {
-  path: string,
+  filepath: string,
   error: Error,
   kernelRef: KernelRef,
   contentRef: ContentRef
@@ -748,7 +748,7 @@ export function executeFailed(payload: {
 }
 
 export function changeFilename(payload: {
-  filename: ?string,
+  filepath: ?string,
   contentRef: ContentRef
 }): ChangeFilenameAction {
   return {
@@ -765,7 +765,7 @@ export function save(payload: { contentRef: ContentRef }): Save {
 }
 
 export function saveAs(payload: {
-  filename: string,
+  filepath: string,
   contentRef: ContentRef
 }): SaveAs {
   return {
@@ -817,12 +817,11 @@ export function newNotebook(payload: {
 
 // Expects notebook to be JS Object or Immutable.js
 export const setNotebook = (payload: {
-  filename: ?string,
+  filepath: ?string,
   notebook: ImmutableNotebook,
   kernelRef: KernelRef,
   contentRef: ContentRef,
   lastSaved: ?Date,
-  name: ?string,
   created: ?Date
 }): SetNotebook => ({
   type: actionTypes.SET_NOTEBOOK,

@@ -57,7 +57,7 @@ export const FETCH_CONTENT = "CORE/FETCH_CONTENT";
 export type FetchContent = {
   type: "CORE/FETCH_CONTENT",
   payload: {
-    path: string,
+    filepath: string,
     params: Object,
     kernelRef: KernelRef,
     contentRef: ContentRef
@@ -68,7 +68,7 @@ export const FETCH_CONTENT_FULFILLED = "CORE/FETCH_CONTENT_FULFILLED";
 export type FetchContentFulfilled = {
   type: "CORE/FETCH_CONTENT_FULFILLED",
   payload: {
-    path: string,
+    filepath: string,
     model: any, // literal response from API
     kernelRef: KernelRef,
     contentRef: ContentRef
@@ -79,7 +79,7 @@ export const FETCH_CONTENT_FAILED = "CORE/FETCH_CONTENT_FAILED";
 export type FetchContentFailed = {
   type: "CORE/FETCH_CONTENT_FAILED",
   payload: {
-    path: string,
+    filepath: string,
     error: Error,
     kernelRef: KernelRef,
     contentRef: ContentRef
@@ -120,7 +120,7 @@ export const CHANGE_FILENAME = "CHANGE_FILENAME";
 export type ChangeFilenameAction = {
   type: "CHANGE_FILENAME",
   payload: {
-    filename: ?string,
+    filepath: ?string,
     contentRef: ContentRef
   }
 };
@@ -555,7 +555,7 @@ export const SAVE_AS = "SAVE_AS";
 export type SaveAs = {
   type: "SAVE_AS",
   payload: {
-    filename: string,
+    filepath: string,
     contentRef: ContentRef
   }
 };
@@ -591,11 +591,10 @@ export type SetNotebook = {
   type: "SET_NOTEBOOK",
   payload: {
     notebook: ImmutableNotebook,
-    filename: ?string,
+    filepath: ?string,
     kernelRef: KernelRef,
     contentRef: ContentRef,
     lastSaved: ?Date,
-    name: ?string,
     created: ?Date
   }
 };

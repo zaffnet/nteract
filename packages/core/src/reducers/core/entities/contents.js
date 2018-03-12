@@ -153,11 +153,10 @@ export function cleanCellTransient(state: DocumentRecord, id: string) {
 }
 
 function setNotebook(state: DocumentRecord, action: SetNotebook) {
-  const { payload: { notebook, filename } } = action;
+  const { payload: { notebook } } = action;
 
   return state
     .set("notebook", notebook)
-    .update("filename", oldFilename => (filename ? filename : oldFilename))
     .set("cellFocused", notebook.getIn(["cellOrder", 0]))
     .setIn(["transient", "cellMap"], new Immutable.Map());
 }
@@ -742,14 +741,6 @@ function toggleOutputExpansion(
   );
 }
 
-function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
-  const { filename } = action.payload;
-  if (filename) {
-    return state.set("filename", filename);
-  }
-  return state;
-}
-
 type DocumentAction =
   | FocusPreviousCellEditor
   | FocusPreviousCell
@@ -864,8 +855,6 @@ function document(
       return toggleOutputExpansion(state, action);
     case actionTypes.UNHIDE_ALL:
       return unhideAll(state, action);
-    case actionTypes.CHANGE_FILENAME:
-      return changeFilename(state, action);
     default:
       (action: empty);
       return state;
@@ -885,7 +874,7 @@ const byRef = (state = Immutable.Map(), action) => {
       return state.set(
         action.payload.contentRef,
         makeContentRecord({
-          filepath: action.payload.path || ""
+          filepath: action.payload.filepath || ""
           // TODO: we can set kernelRef when the content record uses it.
         })
       );
@@ -902,7 +891,7 @@ const byRef = (state = Immutable.Map(), action) => {
         makeNotebookContentRecord({
           created: action.payload.created,
           lastSaved: action.payload.lastSaved,
-          filepath: action.payload.filename,
+          filepath: action.payload.filepath,
           model: makeDocumentRecord({
             notebook: action.payload.notebook,
             savedNotebook: action.payload.notebook,
@@ -910,17 +899,14 @@ const byRef = (state = Immutable.Map(), action) => {
               keyPathsForDisplays: Immutable.Map(),
               cellMap: Immutable.Map()
             }),
-            cellFocused: action.payload.notebook.getIn(["cellOrder", 0]),
-            filename: action.payload.filename ? action.payload.filename : ""
+            cellFocused: action.payload.notebook.getIn(["cellOrder", 0])
           })
         })
       );
     case actionTypes.CHANGE_FILENAME: {
-      // TODO / FIXME: Our contents state should only store path, while `name`
-      // is something we use a selector for
       return state.updateIn([action.payload.contentRef], contentRecord =>
         contentRecord.merge({
-          filepath: action.payload.filename
+          filepath: action.payload.filepath
         })
       );
     }

@@ -109,11 +109,10 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   );
 
 export const extractNewKernel = (
-  filename: ?string,
+  filepath: ?string,
   notebook: ImmutableNotebook
 ) => {
-  // TODO: There's some incongruence between desktop and web app here, regarding path vs. filename
-  const cwd = (filename && path.dirname(filename)) || "/";
+  const cwd = (filepath && path.dirname(filepath)) || "/";
 
   const kernelSpecName = notebook.getIn(
     ["metadata", "kernelspec", "name"],
@@ -133,7 +132,7 @@ export const launchKernelWhenNotebookSetEpic = (
     ofType(actionTypes.SET_NOTEBOOK),
     map((action: SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
-        action.payload.filename,
+        action.payload.filepath,
         action.payload.notebook
       );
 
