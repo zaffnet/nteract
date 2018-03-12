@@ -88,6 +88,12 @@ const mapStateToCellProps = (state, { id }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
+  const cellPagers = selectors.cellPagers(state);
+  const pager =
+    cellPagers && cellPagers.get
+      ? cellPagers.get(id, ImmutableList())
+      : ImmutableList();
+
   return {
     cellType,
     source: cell.get("source", ""),
@@ -95,7 +101,7 @@ const mapStateToCellProps = (state, { id }) => {
     executionCount: cell.get("execution_count"),
     outputs,
     models: selectors.models(state),
-    pager: selectors.cellPagers(state).get(id, ImmutableList()),
+    pager,
     cellFocused: selectors.currentFocusedCellId(state) === id,
     editorFocused: selectors.currentFocusedEditorId(state) === id,
     sourceHidden,
