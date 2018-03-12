@@ -322,7 +322,7 @@ export function removeCell(payload: {
 }
 
 export function createCellAfter(payload: {
-  id: CellID,
+  id?: CellID,
   cellType: CellType,
   source: string,
   contentRef: ContentRef
@@ -335,7 +335,7 @@ export function createCellAfter(payload: {
 
 export function createCellBefore(payload: {
   cellType: CellType,
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): CreateCellBefore {
   return {
@@ -608,7 +608,7 @@ export function setNotificationSystem(
 }
 
 export function copyCell(payload: {
-  id: CellID,
+  id?: CellID,
   contentRef: ContentRef
 }): CopyCell {
   return {
@@ -618,7 +618,7 @@ export function copyCell(payload: {
 }
 
 export function cutCell(payload: {
-  id: CellID,
+  id?: CellID,
   contentRef: ContentRef
 }): CutCell {
   return {

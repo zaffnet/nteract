@@ -160,7 +160,7 @@ export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
 export type CreateCellAfter = {
   type: "CREATE_CELL_AFTER",
   payload: {
-    id: CellID,
+    id?: CellID,
     cellType: CellType,
     source: string,
     contentRef: ContentRef
@@ -172,7 +172,7 @@ export type CreateCellBefore = {
   type: "CREATE_CELL_BEFORE",
   payload: {
     cellType: CellType,
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };
@@ -503,13 +503,13 @@ export type ToggleCellExpansion = {
 export const CUT_CELL = "CUT_CELL";
 export type CutCell = {
   type: "CUT_CELL",
-  payload: { id: CellID, contentRef: ContentRef }
+  payload: { id?: CellID, contentRef: ContentRef }
 };
 
 export const COPY_CELL = "COPY_CELL";
 export type CopyCell = {
   type: "COPY_CELL",
-  payload: { id: CellID, contentRef: ContentRef }
+  payload: { id?: CellID, contentRef: ContentRef }
 };
 
 export const PASTE_CELL = "PASTE_CELL";

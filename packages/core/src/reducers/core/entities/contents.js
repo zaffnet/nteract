@@ -438,7 +438,12 @@ function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
 }
 
 function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
-  const { cellType, id, source } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType, source } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -448,7 +453,12 @@ function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
 }
 
 function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
-  const { cellType, id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -650,14 +660,22 @@ function deleteMetadataField(
 }
 
 function copyCell(state: DocumentRecord, action: CopyCell) {
-  const { id } = action.payload;
+  let id = action.payload.id;
+  if (!id) {
+    id = state.cellFocused;
+  }
+
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
   const cell = cellMap.get(id);
   return state.set("copied", Immutable.Map({ id, cell }));
 }
 
 function cutCell(state: DocumentRecord, action: CutCell) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
   const cell: ?ImmutableCell = cellMap.get(id);
 
