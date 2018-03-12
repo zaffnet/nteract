@@ -2,7 +2,7 @@ import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
 import { dummyStore } from "@nteract/core/dummy";
 import * as menu from "../../src/notebook/menu";
-import { actions, actionTypes } from "@nteract/core";
+import { selectors, actions, actionTypes } from "@nteract/core";
 
 describe("menu", () => {
   describe("dispatchCreateCellAfter", () => {
@@ -11,7 +11,12 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchCreateCellAfter(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.createCellAfter({ cellType: "code", id: null, source: "" })
+        actions.createCellAfter({
+          cellType: "code",
+          id: null,
+          source: "",
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -22,7 +27,12 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchCreateTextCellAfter(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.createCellAfter({ cellType: "markdown", id: null, source: "" })
+        actions.createCellAfter({
+          cellType: "markdown",
+          id: null,
+          source: "",
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -32,7 +42,11 @@ describe("menu", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
       menu.dispatchPasteCell(store);
-      expect(store.dispatch).toHaveBeenCalledWith(actions.pasteCell({}));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.pasteCell({
+          contentRef: selectors.currentContentRef(store.getState())
+        })
+      );
     });
   });
 
@@ -42,7 +56,10 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchCutCell(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.cutCell({ id: null })
+        actions.cutCell({
+          id: null,
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -53,7 +70,10 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchCopyCell(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.copyCell({ id: null })
+        actions.copyCell({
+          id: null,
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -135,7 +155,8 @@ describe("menu", () => {
         type: actionTypes.RESTART_KERNEL,
         payload: {
           clearOutputs: true,
-          kernelRef: expect.any(String)
+          kernelRef: expect.any(String),
+          contentRef: selectors.currentContentRef(store.getState())
         }
       });
     });
@@ -152,7 +173,8 @@ describe("menu", () => {
         type: actionTypes.RESTART_KERNEL,
         payload: {
           clearOutputs: false,
-          kernelRef: expect.any(String)
+          kernelRef: expect.any(String),
+          contentRef: selectors.currentContentRef(store.getState())
         }
       });
     });
@@ -200,21 +222,27 @@ describe("menu", () => {
 
       menu.dispatchClearAll(store);
 
-      expect(store.dispatch).toHaveBeenCalledWith(actions.clearAllOutputs({}));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.clearAllOutputs({
+          contentRef: selectors.currentContentRef(store.getState())
+        })
+      );
     });
   });
 
   describe("dispatchRunAllBelow", () => {
     test("runs all code cells below the focused cell", () => {
       const store = dummyStore({ codeCellCount: 4, markdownCellCount: 4 });
-      const markdownCells = store
-        .getState()
-        .document.getIn(["notebook", "cellMap"])
+      const state = store.getState();
+      const markdownCells = selectors
+        .currentCellMap(state)
         .filter(cell => cell.get("cell_type") === "markdown");
       store.dispatch = jest.fn();
       menu.dispatchRunAllBelow(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.executeAllCellsBelow({})
+        actions.executeAllCellsBelow({
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -224,7 +252,11 @@ describe("menu", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
       menu.dispatchRunAll(store);
-      expect(store.dispatch).toHaveBeenCalledWith(actions.executeAllCells({}));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.executeAllCells({
+          contentRef: selectors.currentContentRef(store.getState())
+        })
+      );
     });
   });
 
@@ -234,7 +266,11 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchUnhideAll(store);
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.unhideAll({ outputHidden: false, inputHidden: false })
+        actions.unhideAll({
+          outputHidden: false,
+          inputHidden: false,
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -280,7 +316,8 @@ describe("menu", () => {
           kernelSpec: { spec: "hokey" },
           cwd: process.cwd(),
           selectNextKernel: true,
-          kernelRef: expect.any(String)
+          kernelRef: expect.any(String),
+          contentRef: selectors.currentContentRef(store.getState())
         }
       });
     });
@@ -291,7 +328,11 @@ describe("menu", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
       menu.dispatchSave(store);
-      expect(store.dispatch).toHaveBeenCalledWith(actions.save({}));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.save({
+          contentRef: selectors.currentContentRef(store.getState())
+        })
+      );
     });
   });
 
@@ -301,7 +342,10 @@ describe("menu", () => {
       store.dispatch = jest.fn();
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith(
-        actions.saveAs({ filename: "test-ipynb.ipynb" })
+        actions.saveAs({
+          filename: "test-ipynb.ipynb",
+          contentRef: selectors.currentContentRef(store.getState())
+        })
       );
     });
   });
@@ -317,7 +361,8 @@ describe("menu", () => {
         payload: {
           path: "test-ipynb.ipynb",
           params: {},
-          kernelRef: expect.any(String)
+          kernelRef: expect.any(String),
+          contentRef: selectors.currentContentRef(store.getState())
         }
       });
     });
@@ -334,7 +379,8 @@ describe("menu", () => {
         payload: {
           kernelSpec: { spec: "hokey" },
           cwd: process.cwd(),
-          kernelRef: expect.any(String)
+          kernelRef: expect.any(String),
+          contentRef: selectors.currentContentRef(store.getState())
         }
       });
     });
@@ -389,7 +435,12 @@ describe("menu", () => {
 
       menu.triggerWindowRefresh(store, filename);
 
-      expect(store.dispatch).toHaveBeenCalledWith(actions.saveAs({ filename }));
+      expect(store.dispatch).toHaveBeenCalledWith(
+        actions.saveAs({
+          filename,
+          contentRef: selectors.currentContentRef(store.getState())
+        })
+      );
     });
   });
 

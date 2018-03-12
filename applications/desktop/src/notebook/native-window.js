@@ -4,6 +4,8 @@ import { is } from "immutable";
 
 import path from "path";
 
+import { selectors } from "@nteract/core";
+
 import { of } from "rxjs/observable/of";
 // $FlowFixMe: This exists, we're missing a flow definition
 import { combineLatest } from "rxjs/observable/combineLatest";
@@ -13,7 +15,8 @@ import {
   map,
   distinctUntilChanged,
   debounceTime,
-  switchMap
+  switchMap,
+  filter
 } from "rxjs/operators";
 
 const HOME = remote.app.getPath("home");
@@ -60,24 +63,19 @@ export function setTitleFromAttributes(attributes: *) {
 
 export function createTitleFeed(state$: *) {
   const modified$ = state$.pipe(
-    map(
-      state =>
-        process.platform === "darwin"
-          ? !is(
-              state.document.get("savedNotebook"),
-              state.document.get("notebook")
-            )
-          : false
-    ),
+    filter(state => selectors.currentContentRef(state)),
+    map(state => !selectors.hasBeenSaved(state)),
     distinctUntilChanged()
   );
 
   const fullpath$ = state$.pipe(
-    map(state => state.document.get("filename") || "Untitled")
+    filter(state => selectors.currentContentRef(state)),
+    map(state => selectors.currentFilename(state) || "Untitled")
   );
 
   const kernelStatus$ = state$.pipe(
-    map(state => state.app.getIn(["kernel", "status"], "not connected")),
+    filter(state => selectors.currentContentRef(state)),
+    map(state => selectors.currentKernelStatus(state) || "not connected"),
     debounceTime(200)
   );
 

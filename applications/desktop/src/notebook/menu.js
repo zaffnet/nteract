@@ -22,7 +22,10 @@ export function cwdKernelFallback() {
 }
 
 export function dispatchSaveAs(store: *, evt: Event, filename: string) {
-  store.dispatch(actions.saveAs({ filename }));
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+
+  store.dispatch(actions.saveAs({ filename, contentRef }));
 }
 
 const dialog = remote.dialog;
@@ -71,14 +74,20 @@ export function triggerWindowRefresh(store: *, filename: string) {
   if (!filename) {
     return;
   }
-  store.dispatch(actions.saveAs({ filename }));
+
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.saveAs({ filename, contentRef }));
 }
 
 export function dispatchRestartKernel(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
+  const contentRef = selectors.currentContentRef(state);
 
-  store.dispatch(actions.restartKernel({ clearOutputs: false, kernelRef }));
+  store.dispatch(
+    actions.restartKernel({ clearOutputs: false, kernelRef, contentRef })
+  );
 }
 
 export function promptUserAboutNewKernel(
@@ -100,20 +109,23 @@ export function promptUserAboutNewKernel(
       },
       index => {
         if (index === 0) {
-          const kernel = selectors.currentKernelRef(store.getState());
+          const state = store.getState();
+          const kernel = selectors.currentKernel(state);
           const cwd = filename
             ? path.dirname(path.resolve(filename))
             : cwdKernelFallback();
 
           // Create a brand new kernel
           const kernelRef = stateModule.createKernelRef();
+          const contentRef = selectors.currentContentRef(state);
 
           store.dispatch(
             actions.launchKernelByName({
               kernelSpecName: kernel.kernelSpecName,
               cwd,
               selectNextKernel: true,
-              kernelRef
+              kernelRef,
+              contentRef
             })
           );
         }
@@ -133,17 +145,20 @@ export function triggerSaveAs(store: *) {
 }
 
 export function dispatchSave(store: *) {
-  const filename = selectors.currentFilename(store.getState());
+  const state = store.getState();
+  const filename = selectors.currentFilename(state);
   if (!filename) {
     triggerSaveAs(store);
   } else {
-    // TODO: #2618
-    store.dispatch(actions.save({}));
+    const contentRef = selectors.currentContentRef(state);
+    store.dispatch(actions.save({ contentRef }));
   }
 }
 
 export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
-  const filename = selectors.currentFilename(store.getState());
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  const filename = selectors.currentFilename(state);
   const cwd = filename
     ? path.dirname(path.resolve(filename))
     : cwdKernelFallback();
@@ -156,7 +171,8 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
       kernelSpec: spec,
       cwd,
       selectNextKernel: true,
-      kernelRef
+      kernelRef,
+      contentRef
     })
   );
 }
@@ -185,26 +201,31 @@ export function dispatchPublishUserGist(
  * @param {Object} store - The Redux store
  */
 export function dispatchRunAllBelow(store: *) {
-  // TODO: #2618
-  store.dispatch(actions.executeAllCellsBelow({}));
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.executeAllCellsBelow({ contentRef }));
 }
 
 export function dispatchRunAll(store: *) {
-  // TODO: #2618
-  store.dispatch(actions.executeAllCells({}));
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.executeAllCells({ contentRef }));
 }
 
 export function dispatchClearAll(store: *) {
-  // TODO: #2618
-  store.dispatch(actions.clearAllOutputs({}));
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.clearAllOutputs({ contentRef }));
 }
 
 export function dispatchUnhideAll(store: *) {
-  // TODO: #2618
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
   store.dispatch(
     actions.unhideAll({
       outputHidden: false,
-      inputHidden: false
+      inputHidden: false,
+      contentRef
     })
   );
 }
@@ -235,8 +256,11 @@ export function dispatchInterruptKernel(store: *) {
 export function dispatchRestartClearAll(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
+  const contentRef = selectors.currentContentRef(state);
 
-  store.dispatch(actions.restartKernel({ clearOutputs: true, kernelRef }));
+  store.dispatch(
+    actions.restartKernel({ clearOutputs: true, kernelRef, contentRef })
+  );
 }
 
 export function dispatchZoomIn() {
@@ -262,46 +286,58 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  // TODO: #2618
-  store.dispatch(actions.copyCell({ id: focused }));
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.copyCell({ id: focused, contentRef }));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
   const focused = selectors.currentFocusedCellId(state);
-  // TODO: #2618
-  store.dispatch(actions.cutCell({ id: focused }));
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.cutCell({ id: focused, contentRef }));
 }
 
 export function dispatchPasteCell(store: *) {
-  // TODO: #2618
-  store.dispatch(actions.pasteCell({}));
+  const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
+  store.dispatch(actions.pasteCell({ contentRef }));
 }
 
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
   const focused = selectors.currentFocusedCellId(state);
-  // TODO: #2618
   store.dispatch(
-    actions.createCellAfter({ cellType: "code", id: focused, source: "" })
+    actions.createCellAfter({
+      cellType: "code",
+      id: focused,
+      source: "",
+      contentRef
+    })
   );
 }
 
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
   const focused = selectors.currentFocusedCellId(state);
-  // TODO: #2618
   store.dispatch(
-    actions.createCellAfter({ cellType: "markdown", id: focused, source: "" })
+    actions.createCellAfter({
+      cellType: "markdown",
+      id: focused,
+      source: "",
+      contentRef
+    })
   );
 }
 
 export function dispatchLoad(store: *, event: Event, filename: string) {
   const state = store.getState();
   const kernelRef = stateModule.createKernelRef();
+  const contentRef = selectors.currentContentRef(state);
 
   store.dispatch(
-    actions.fetchContent({ path: filename, params: {}, kernelRef })
+    actions.fetchContent({ path: filename, params: {}, kernelRef, contentRef })
   );
 }
 
@@ -310,13 +346,20 @@ export function dispatchNewNotebook(
   event: Event,
   kernelSpec: Object
 ) {
+  const state = store.getState();
   const kernelRef = stateModule.createKernelRef();
+  const contentRef = selectors.currentContentRef(state);
 
   store.dispatch(
+    // for desktop, we _can_ assume this has no path except for living in `cwd`
+    // which I suppose _could_ be called `${cwd}/UntitledN.ipynb`
+    // for jupyter extension, we _would_ call this `${cwd}/UntitledN.ipynb`
+
     actions.newNotebook({
       kernelSpec,
       cwd: cwdKernelFallback(),
-      kernelRef
+      kernelRef,
+      contentRef
     })
   );
 }
@@ -335,6 +378,7 @@ export function exportPDF(
   notificationSystem: *
 ): void {
   const state = store.getState();
+  const contentRef = selectors.currentContentRef(state);
 
   const unexpandedCells = selectors.currentIdsOfHiddenOutputs(state);
   // TODO: we should not be modifying the document to print PDFs
@@ -342,8 +386,7 @@ export function exportPDF(
   //       run through before we print...
   // Expand unexpanded cells
   unexpandedCells.map(cellID =>
-    // TODO: #2618
-    store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
+    store.dispatch(actions.toggleOutputExpansion({ id: cellID, contentRef }))
   );
 
   remote.getCurrentWindow().webContents.printToPDF(
@@ -355,7 +398,9 @@ export function exportPDF(
 
       // Restore the modified cells to their unexpanded state.
       unexpandedCells.map(cellID =>
-        store.dispatch(actions.toggleOutputExpansion({ id: cellID }))
+        store.dispatch(
+          actions.toggleOutputExpansion({ id: cellID, contentRef })
+        )
       );
 
       fs.writeFile(`${filename}.pdf`, data, error_fs => {

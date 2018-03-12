@@ -4,7 +4,7 @@ import { List, Map, Set, is } from "immutable";
 
 import * as actionTypes from "../src/actionTypes";
 import * as actions from "../src/actions";
-import { document as reducers } from "../src/reducers";
+import { document as reducers } from "../src/reducers/core/entities/contents";
 
 import {
   emptyCodeCell,

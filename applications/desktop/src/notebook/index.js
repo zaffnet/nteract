@@ -20,19 +20,35 @@ import { initMenuHandlers } from "./menu";
 import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
 
-import { state } from "@nteract/core";
+import { state as stateModule } from "@nteract/core";
+import type { ContentRef, ContentRecord } from "@nteract/core/src/state";
+
+import * as Immutable from "immutable";
+
+const contentRef = stateModule.createContentRef();
+
+const initialRefs: Immutable.Map<
+  ContentRef,
+  ContentRecord
+> = Immutable.Map().set(contentRef, stateModule.makeNotebookContentRecord());
 
 const store = configureStore({
-  app: state.makeAppRecord({
-    host: state.makeLocalHostRecord(),
+  app: stateModule.makeAppRecord({
+    host: stateModule.makeLocalHostRecord(),
     version: remote.app.getVersion()
   }),
-  document: state.makeDocumentRecord(),
-  comms: state.makeCommsRecord(),
+  comms: stateModule.makeCommsRecord(),
   config: ImmutableMap({
     theme: "light"
   }),
-  core: state.makeStateRecord()
+  core: stateModule.makeStateRecord({
+    currentContentRef: contentRef,
+    entities: stateModule.makeEntitiesRecord({
+      contents: stateModule.makeContentsRecord({
+        byRef: initialRefs
+      })
+    })
+  })
 });
 
 // Register for debugging

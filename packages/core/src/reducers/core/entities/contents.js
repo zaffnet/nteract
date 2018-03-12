@@ -528,9 +528,9 @@ function acceptPayloadMessage(
       // FIXME: This is a weird pattern. We're basically faking a dispatch here
       // inside a reducer and then appending to the result. I think that both of
       // these reducers should just handle the original action.
-      // TODO: #2618
       return createCellAfter(state, {
         type: actionTypes.CREATE_CELL_AFTER,
+        // $FlowFixMe: Switch this over to creating a cell after without having to take an action
         payload: {
           cellType: "code",
           // TODO: is payload.text guaranteed to be defined?
@@ -553,10 +553,16 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
   // FIXME: This is a weird pattern. We're basically faking a dispatch here
   // inside a reducer and then appending to the result. I think that both of
   // these reducers should just handle the original action.
-  // TODO: #2618
   return clearOutputs(state, {
     type: "CLEAR_OUTPUTS",
-    payload: { id }
+    // $FlowFixMe: Switch this over to clearing outputs without having to take an action
+    payload: {
+      id
+      // FIXME: this needs to set a contentRef
+      // Since this is part of the actual document though, maybe we don't need it
+      // in here -- we could basically swap the `clearOutputs` function used here
+      // to be one that doesn't need a content ref
+    }
   }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
@@ -855,10 +861,6 @@ export { document };
 const byRef = (state = Immutable.Map(), action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTENT:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       // TODO: we might be able to get around this by looking at the
       // communication state first and not requesting this information until
       // the communication state shows that it should exist.
@@ -877,10 +879,6 @@ const byRef = (state = Immutable.Map(), action) => {
       // up.
       return state;
     case actionTypes.SET_NOTEBOOK:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       return state.set(
         action.payload.contentRef,
         makeNotebookContentRecord({
@@ -900,11 +898,18 @@ const byRef = (state = Immutable.Map(), action) => {
           })
         })
       );
+    case actionTypes.CHANGE_FILENAME: {
+      // TODO / FIXME: Our contents state should only store path, while `name`
+      // is something we use a selector for
+      return state.updateIn([action.payload.contentRef], contentRecord =>
+        contentRecord.merge({
+          // FIXME: trim this to just the "name"
+          name: action.payload.filename,
+          path: action.payload.filename
+        })
+      );
+    }
     case actionTypes.SAVE_FULFILLED:
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
       const path = [action.payload.contentRef, "model"];
       const model = state.getIn(path);
       return state
@@ -942,12 +947,7 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.PASTE_CELL:
     case actionTypes.CHANGE_CELL_TYPE:
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:
-    case actionTypes.UNHIDE_ALL:
-    case actionTypes.CHANGE_FILENAME: {
-      // TODO: #2618
-      if (!action.payload.contentRef) {
-        return state;
-      }
+    case actionTypes.UNHIDE_ALL: {
       const path = [action.payload.contentRef, "model"];
       const model = state.getIn(path);
       return state.setIn(path, document(model, action));

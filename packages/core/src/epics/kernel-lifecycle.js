@@ -71,7 +71,7 @@ export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
 export function acquireKernelInfo(
   channels: Channels,
   kernelRef: KernelRef,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 ) {
   const message = createMessage("kernel_info_request");
 

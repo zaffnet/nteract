@@ -42,7 +42,7 @@ const themes = require("../themes");
 
 type AnyCellProps = {
   id: string,
-  contentRef?: ContentRef,
+  contentRef: ContentRef,
   cellType: "markdown" | "code" | "raw",
   theme: string,
   source: string,
@@ -293,6 +293,9 @@ type PureNotebookProps = {
   languageDisplayName?: string,
   kernelStatus?: string,
   codeMirrorMode?: string | ImmutableMap<string, *>,
+  // TODO: Once we're willing to do multi-contents views, we should require this
+  //       to be passed in
+  // TODO: Fill in more from the convo with Andrew here
   contentRef?: ContentRef
 };
 
@@ -305,7 +308,7 @@ type NotebookStateProps = {
   languageDisplayName: string,
   kernelStatus: string,
   codeMirrorMode: string | ImmutableMap<string, *>,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 };
 
 type NotebookDispatchProps = {
@@ -330,7 +333,7 @@ const mapStateToProps = (
     displayOrder: ownProps.displayOrder || displayOrder,
     codeMirrorMode: selectors.codeMirrorMode(state),
     // TODO: this will need to be a currentNotebookContentRef or some such...
-    contentRef: selectors.currentContentRef(state)
+    contentRef: ownProps.contentRef || selectors.currentContentRef(state)
   };
 };
 

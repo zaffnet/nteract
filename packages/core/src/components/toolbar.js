@@ -34,7 +34,7 @@ export type PureToolbarProps = {|
   toggleCellOutputVisibility: () => void,
   toggleOutputExpansion: () => void,
   changeCellType: () => void,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 |};
 
 export class PureToolbar extends React.Component<PureToolbarProps> {

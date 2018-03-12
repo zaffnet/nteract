@@ -3,7 +3,7 @@ import * as globalEvents from "../../src/notebook/global-events";
 
 describe("beforeUnload", () => {
   test("should set event.returnValue if notebook is modified to prevent unload", () => {
-    const store = dummyStore();
+    const store = dummyStore({ saved: false });
 
     const event = {};
 

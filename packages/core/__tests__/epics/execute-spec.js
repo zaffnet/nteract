@@ -64,22 +64,7 @@ describe("createExecuteCellStream", () => {
         }),
         app: {
           notificationSystem: { addNotification: jest.fn() }
-        },
-        document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
-        })
+        }
       }
     };
     const action$ = ActionsObservable.of(actions.sendExecuteRequest({}));
@@ -121,22 +106,7 @@ describe("createExecuteCellStream", () => {
           })
         }),
         app: {
-          notificationSystem: { addNotification: jest.fn() },
-          document: Immutable.fromJS({
-            notebook: {
-              cellMap: {
-                first: {
-                  source: "woo",
-                  cell_type: "code"
-                },
-                second: {
-                  source: "eh",
-                  cell_type: "code"
-                }
-              },
-              cellOrder: ["first", "second"]
-            }
-          })
+          notificationSystem: { addNotification: jest.fn() }
         }
       }
     };
@@ -206,7 +176,7 @@ describe("executeCellEpic", () => {
       err => done.fail(err)
     );
   });
-  test("Informs about disconnected kernels, allows reconnection", done => {
+  test("Informs about disconnected kernels, allows reconnection", async function() {
     const store = {
       getState() {
         return this.state;
@@ -214,7 +184,13 @@ describe("executeCellEpic", () => {
       state: {
         core: stateModule.makeStateRecord({
           kernelRef: "fake",
+          currentContentRef: "fakeContent",
           entities: stateModule.makeEntitiesRecord({
+            contents: stateModule.makeContentsRecord({
+              byRef: Immutable.Map({
+                fakeContent: stateModule.makeNotebookContentRecord()
+              })
+            }),
             kernels: stateModule.makeKernelsRecord({
               byRef: Immutable.Map({
                 fake: stateModule.makeRemoteKernelRecord({
@@ -227,38 +203,15 @@ describe("executeCellEpic", () => {
         }),
         app: {
           notificationSystem: { addNotification: jest.fn() }
-        },
-        document: Immutable.fromJS({
-          notebook: {
-            cellMap: {
-              first: {
-                source: "woo",
-                cell_type: "code"
-              },
-              second: {
-                source: "eh",
-                cell_type: "code"
-              }
-            },
-            cellOrder: ["first", "second"]
-          }
-        })
+        }
       }
     };
 
-    const action$ = ActionsObservable.of(
-      actions.executeCell({ id: "first" })
-    ).pipe(share());
-    const responseActions = executeCellEpic(action$, store);
-    responseActions.subscribe(
-      x => {
-        expect(x.payload.error.toString()).toEqual(
-          "Error: Kernel not connected!"
-        );
-        done();
-      },
-      err => done.fail(err)
-    );
+    const action$ = ActionsObservable.of(actions.executeCell({ id: "first" }));
+    const responses = await executeCellEpic(action$, store)
+      .pipe(toArray())
+      .toPromise();
+    expect(responses).toEqual([]);
   });
 });
 

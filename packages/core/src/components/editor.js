@@ -17,7 +17,7 @@ type Props = CodeMirrorEditorProps & {
   channels: any,
   kernelStatus: string,
   options: Object,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 };
 
 function mapStateToProps(

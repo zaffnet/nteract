@@ -14,16 +14,14 @@ import {
 
 /* Our createStore */
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import { document, comms, config, core } from "../reducers";
+import { comms, config, core } from "../reducers";
 
 export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
 
 import * as stateModule from "../state";
 
 const rootReducer = combineReducers({
-  // Fake out app, since it comes from
   app: (state = stateModule.makeAppRecord(), action) => state,
-  document,
   comms,
   config,
   core
@@ -92,11 +90,35 @@ export function dummyStore(config: *) {
   const channels = mockShell;
 
   const kernelRef = stateModule.createKernelRef();
+  const currentContentRef = stateModule.createContentRef();
 
   return createStore(rootReducer, {
     core: stateModule.makeStateRecord({
       kernelRef,
+      currentContentRef,
       entities: stateModule.makeEntitiesRecord({
+        contents: stateModule.makeContentsRecord({
+          byRef: Immutable.Map({
+            // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
+            [currentContentRef]: stateModule.makeNotebookContentRecord({
+              path: config && config.noFilename ? "" : "dummy-store-nb.ipynb",
+              model: stateModule.makeDocumentRecord({
+                notebook: dummyNotebook,
+                savedNotebook:
+                  config && config.saved === true
+                    ? dummyNotebook
+                    : emptyNotebook,
+                cellPagers: new Immutable.Map(),
+                cellFocused:
+                  config && config.codeCellCount > 1
+                    ? dummyNotebook.get("cellOrder", Immutable.List()).get(1)
+                    : null,
+                filename:
+                  config && config.noFilename ? "" : "dummy-store-nb.ipynb"
+              })
+            })
+          })
+        }),
         kernels: stateModule.makeKernelsRecord({
           byRef: Immutable.Map({
             // $FlowFixMe: This really is a kernel ref, Flow can't handle typing it though
@@ -107,17 +129,6 @@ export function dummyStore(config: *) {
           })
         })
       })
-    }),
-    document: stateModule.makeDocumentRecord({
-      notebook: dummyNotebook,
-      savedNotebook:
-        config && config.saved === true ? dummyNotebook : emptyNotebook,
-      cellPagers: new Immutable.Map(),
-      cellFocused:
-        config && config.codeCellCount > 1
-          ? dummyNotebook.get("cellOrder", Immutable.List()).get(1)
-          : null,
-      filename: config && config.noFilename ? "" : "dummy-store-nb.ipynb"
     }),
     app: stateModule.makeAppRecord({
       notificationSystem: {

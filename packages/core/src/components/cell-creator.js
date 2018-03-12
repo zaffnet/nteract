@@ -17,7 +17,7 @@ type ConnectedProps = {
   createCellAfter: (payload: *) => void,
   mergeCellAfter: (payload: *) => void,
   id?: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 };
 
 import {

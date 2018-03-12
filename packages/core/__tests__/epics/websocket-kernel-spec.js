@@ -22,9 +22,6 @@ describe("launchWebSocketKernelEpic", () => {
           }),
           kernel: null,
           notificationSystem: { addNotification: jest.fn() }
-        }),
-        document: Immutable.fromJS({
-          notebook: emptyNotebook
         })
       }
     };
@@ -90,9 +87,6 @@ describe("interruptKernelEpic", () => {
             serverUrl: "http://localhost:8888/"
           }),
           notificationSystem: { addNotification: jest.fn() }
-        }),
-        document: stateModule.makeDocumentRecord({
-          notebook: emptyNotebook
         })
       }
     };

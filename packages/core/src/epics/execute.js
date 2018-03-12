@@ -70,7 +70,7 @@ export function executeCellStream(
   channels: Channels,
   id: string,
   message: ExecuteRequest,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 ) {
   if (!channels || !channels.pipe) {
     return _throw(new Error("kernel not connected"));
@@ -127,7 +127,7 @@ export function createExecuteCellStream(
   store: any,
   message: ExecuteRequest,
   id: string,
-  contentRef?: ContentRef
+  contentRef: ContentRef
 ) {
   const kernel = selectors.currentKernel(store.getState());
 
@@ -256,15 +256,28 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
             message,
             id,
             action.payload.contentRef
+          ).pipe(
+            catchError((error, source) =>
+              merge(
+                of(
+                  actions.executeFailed({
+                    error,
+                    contentRef: action.payload.contentRef
+                  })
+                ),
+                source
+              )
+            )
           );
         })
       )
     ),
     // Bring back all the inner Observables into one stream
     mergeAll(),
-    // TODO: #2618: This one is a little tricky since the contentRef is out of
-    // scope.
     catchError((error, source) =>
+      // Either we ensure that all errors are caught when the action.payload.contentRef
+      // is in scope or we make this be a generic ERROR
+      // $FlowFixMe: see above
       merge(of(actions.executeFailed({ error })), source)
     )
   );

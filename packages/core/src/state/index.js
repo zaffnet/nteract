@@ -1,7 +1,6 @@
 // @flow
 import * as Immutable from "immutable";
 import type { CommunicationRecordProps } from "./communication";
-import type { DocumentRecordProps } from "./entities/contents";
 import type {
   EntitiesRecordProps,
   LocalKernelProps,
@@ -158,10 +157,11 @@ export const makeAppRecord: Immutable.RecordFactory<
 
 export type AppRecord = Immutable.RecordOf<AppRecordProps>;
 
+export type CoreRecord = Immutable.RecordOf<StateRecordProps>;
+
 export type AppState = {
   app: Immutable.RecordOf<AppRecordProps>,
-  document: Immutable.RecordOf<DocumentRecordProps>,
   comms: Immutable.RecordOf<CommsRecordProps>,
   config: ConfigState,
-  core: Immutable.RecordOf<StateRecordProps>
+  core: CoreRecord
 };

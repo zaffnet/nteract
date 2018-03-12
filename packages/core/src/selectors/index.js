@@ -8,11 +8,10 @@ type AppState = {
   // The old way
   app: Object,
   comms: *,
-  document: Object,
   config: Object
 };
 
-import type { KernelRef } from "../state/refs";
+import type { ContentRef, KernelRef } from "../state/refs";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
@@ -119,22 +118,16 @@ export const isCurrentKernelJupyterWebsocket = createSelector(
 
 export const comms = createSelector((state: AppState) => state.comms, identity);
 
+// NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
 export const currentModel = createSelector(
-  (state: AppState) => state.document,
-  (state: AppState) => currentContentRef(state),
   (state: AppState) => currentContent(state),
-  // TODO: if an application is setting the currentContent, assume we want to
-  // use that. Otherwise, use the old method of looking into state.document.
-  (document, currentContentRef, currentContent) => {
-    if (currentContentRef) {
-      // TODO: The app assumes that the model is not null. HOWEVER, the model
-      // should really *be* nullable. I.e., components should check
-      // communication before accessing nested values here.
-      return currentContent.model;
-    }
-    return document;
+  currentContent => {
+    // TODO: The app assumes that the model is not null. HOWEVER, the model
+    // should really *be* nullable. I.e., components should check
+    // communication before accessing nested values here.
+    return currentContent.model;
   }
 );
 
@@ -148,19 +141,19 @@ export const currentSavedNotebook = createSelector(currentModel, model =>
   model.get("savedNotebook")
 );
 
+export const hasBeenSaved = createSelector(
+  currentNotebook,
+  currentSavedNotebook,
+  (original, disk) => Immutable.is(original, disk)
+);
+
 export const cellPagers = createSelector(currentModel, model =>
   model.get("cellPagers")
 );
 
 export const currentLastSaved = createSelector(
-  (state: AppState) => state.app.get("lastSaved"),
-  (state: AppState) => currentContentRef(state),
   (state: AppState) => currentContent(state),
-  // TODO: if an application is setting the currentContent, assume we want to
-  // use that. Otherwise, use the old method of looking into state.document.
-  (lastSaved, currentContentRef, currentContent) => {
-    return currentContentRef ? currentContent.lastSaved : lastSaved;
-  }
+  currentContent => currentContent.lastSaved
 );
 
 export const currentNotebookMetadata = createSelector(currentModel, model =>
@@ -287,16 +280,9 @@ export const currentIdsOfHiddenOutputs = createSelector(
 
 // TODO: we can get the filename from the top-level instead of the model?
 export const currentFilename: (state: *) => string = createSelector(
-  (state: AppState) => state.document,
-  (state: AppState) => currentContentRef(state),
   (state: AppState) => currentContent(state),
-  // TODO: if an application is setting the currentContent, assume we want to
-  // use that. Otherwise, use the old method of looking into state.document.
-  (document, currentContentRef, currentContent) => {
-    if (currentContentRef) {
-      return currentContent.path;
-    }
-    return document.filename;
+  currentContent => {
+    return currentContent.path;
   }
 );
 
@@ -331,7 +317,9 @@ export const kernelspecsByRefCore = createSelector(
   identity
 );
 
-export const currentContentRef = createSelector(
+export const currentContentRef: (
+  state: AppState
+) => ContentRef = createSelector(
   (state: AppState) => state.core.currentContentRef,
   identity
 );
