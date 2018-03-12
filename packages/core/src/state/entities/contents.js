@@ -46,6 +46,20 @@ export type NotebookContentRecordProps = {
   writable: boolean
 };
 
+export type DummyContentRecordProps = {
+  type: "dummy",
+  path: string
+};
+
+export const makeDummyContentRecord: Immutable.RecordFactory<
+  DummyContentRecordProps
+> = Immutable.Record({
+  type: "dummy",
+  path: ""
+});
+
+export type DummyContentRecord = Immutable.RecordOf<DummyContentRecordProps>;
+
 export const makeNotebookContentRecord: Immutable.RecordFactory<
   NotebookContentRecordProps
 > = Immutable.Record({
@@ -64,8 +78,9 @@ export const makeContentRecord = makeNotebookContentRecord;
 export type NotebookContentRecord = Immutable.RecordOf<
   NotebookContentRecordProps
 >;
+
 // TODO: this will be a merger of notebook, directory, and file eventually.
-export type ContentRecord = NotebookContentRecord; // || DirectoryContentRecord
+export type ContentRecord = NotebookContentRecord | DummyContentRecord; // || DirectoryContentRecord
 
 export type ContentsRecordProps = {
   byRef: Immutable.Map<ContentRef, ContentRecord>
