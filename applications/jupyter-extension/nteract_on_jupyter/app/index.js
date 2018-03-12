@@ -124,13 +124,16 @@ function main(rootEl: Element, dataEl: Node | null) {
 
   const initialState = {
     app: state.makeAppRecord({
-      version: `nteract-on-jupyter@${config.appVersion}`
+      version: `nteract-on-jupyter@${config.appVersion}`,
+      // TODO: Move into core as a "current" host
+      host: jupyterHostRecord
     }),
     comms: state.makeCommsRecord(),
     config: Immutable.Map({
       theme: "light"
     }),
     core: state.makeStateRecord({
+      // TODO: non-prioritized -- set the currentHostRef here
       currentContentRef: contentRef,
       entities: state.makeEntitiesRecord({
         hosts: state.makeHostsRecord({
