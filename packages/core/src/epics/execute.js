@@ -33,7 +33,8 @@ import {
   takeUntil,
   catchError,
   concatMap,
-  tap
+  tap,
+  share
 } from "rxjs/operators";
 
 import { ofType } from "redux-observable";
@@ -79,7 +80,7 @@ export function executeCellStream(
   const executeRequest = message;
 
   // All the streams intended for all frontends
-  const cellMessages = channels.pipe(childOf(executeRequest));
+  const cellMessages = channels.pipe(childOf(executeRequest), share());
 
   // All the payload streams, intended for one user
   const payloadStream = cellMessages.pipe(payloads());
