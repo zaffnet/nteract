@@ -111,46 +111,49 @@ function main(rootEl: Element, dataEl: Node | null) {
     return;
   }
 
+  const jupyterHostRecord = state.makeJupyterHostRecord({
+    id: null,
+    type: "jupyter",
+    defaultKernelName: "python",
+    token: config.token,
+    serverUrl: location.origin + config.baseUrl
+  });
+
+  const hostRef = state.createHostRef();
+  const contentRef = state.createContentRef();
+
   const initialState = {
     app: state.makeAppRecord({
-      host: state.makeJupyterHostRecord({
-        token: config.token,
-        // TODO: Use URL join, even though we know these are right
-        serverUrl: location.origin + config.baseUrl
-      }),
       version: `nteract-on-jupyter@${config.appVersion}`
     }),
     comms: state.makeCommsRecord(),
     config: Immutable.Map({
       theme: "light"
     }),
-    core: state.makeStateRecord()
+    core: state.makeStateRecord({
+      currentContentRef: contentRef,
+      entities: state.makeEntitiesRecord({
+        hosts: state.makeHostsRecord({
+          byRef: Immutable.Map().set(hostRef, jupyterHostRecord)
+        }),
+        contents: state.makeContentsRecord({
+          byRef: Immutable.Map().set(
+            contentRef,
+            state.makeContentRecord({
+              path: config.contentsPath
+            })
+          )
+        })
+      })
+    })
   };
 
-  const hostRef = state.createHostRef();
-  const contentRef = state.createContentRef();
   const kernelRef = state.createKernelRef();
   const kernelspecsRef = state.createKernelspecsRef();
 
   const store = configureStore(initialState);
   window.store = store;
 
-  store.dispatch(
-    actions.addHost({
-      hostRef,
-
-      // TODO: are we missing some host info here?
-      host: {
-        id: null,
-        type: "jupyter",
-        defaultKernelName: "python",
-        token: config.token,
-        serverUrl: location.origin + config.baseUrl
-      }
-    })
-  );
-
-  // TODO: we should likely be passing in a hostRef to fetchContent too.
   store.dispatch(
     actions.fetchContent({
       path: config.contentsPath,
