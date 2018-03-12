@@ -12,6 +12,7 @@ type AppState = {
 };
 
 import type { ContentRef, KernelRef } from "../state/refs";
+import type { ContentRecord, DocumentRecord } from "../state/entities/contents";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
@@ -121,13 +122,15 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel = createSelector(
+export const currentModel: (
+  state: AppState
+) => DocumentRecord | Immutable.Map<string, any> = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     // TODO: The app assumes that the model is not null. HOWEVER, the model
     // should really *be* nullable. I.e., components should check
     // communication before accessing nested values here.
-    return currentContent.model;
+    return currentContent ? currentContent.model : Immutable.Map();
   }
 );
 
@@ -153,7 +156,7 @@ export const cellPagers = createSelector(currentModel, model =>
 
 export const currentLastSaved = createSelector(
   (state: AppState) => currentContent(state),
-  currentContent => currentContent.lastSaved
+  currentContent => (currentContent ? currentContent.lastSaved : null)
 );
 
 export const currentNotebookMetadata = createSelector(currentModel, model =>
@@ -282,7 +285,7 @@ export const currentIdsOfHiddenOutputs = createSelector(
 export const currentFilename: (state: *) => string = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
-    return currentContent.path;
+    return currentContent ? currentContent.filepath : "";
   }
 );
 
@@ -324,7 +327,9 @@ export const currentContentRef: (
   identity
 );
 
-export const currentContent = createSelector(
+export const currentContent: (
+  state: AppState
+) => ?ContentRecord = createSelector(
   (state: AppState) => state.core.currentContentRef,
   (state: AppState) => state.core.entities.contents.byRef,
   (contentRef, byRef) => byRef.get(contentRef)

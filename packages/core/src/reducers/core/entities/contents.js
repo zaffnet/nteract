@@ -867,7 +867,7 @@ const byRef = (state = Immutable.Map(), action) => {
       return state.set(
         action.payload.contentRef,
         makeContentRecord({
-          path: action.payload.path || ""
+          filepath: action.payload.path || ""
           // TODO: we can set kernelRef when the content record uses it.
         })
       );
@@ -884,8 +884,7 @@ const byRef = (state = Immutable.Map(), action) => {
         makeNotebookContentRecord({
           created: action.payload.created,
           lastSaved: action.payload.lastSaved,
-          name: action.payload.name,
-          path: action.payload.filename ? action.payload.filename : "",
+          filepath: action.payload.filename,
           model: makeDocumentRecord({
             notebook: action.payload.notebook,
             savedNotebook: action.payload.notebook,
@@ -903,9 +902,7 @@ const byRef = (state = Immutable.Map(), action) => {
       // is something we use a selector for
       return state.updateIn([action.payload.contentRef], contentRecord =>
         contentRecord.merge({
-          // FIXME: trim this to just the "name"
-          name: action.payload.filename,
-          path: action.payload.filename
+          filepath: action.payload.filename
         })
       );
     }

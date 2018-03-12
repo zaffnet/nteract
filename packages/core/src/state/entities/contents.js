@@ -40,8 +40,7 @@ export type NotebookContentRecordProps = {
   format: "json",
   lastSaved: ?Date,
   model: DocumentRecord,
-  name: ?string,
-  path: ?string,
+  filepath: string,
   type: "notebook",
   writable: boolean
 };
@@ -67,8 +66,7 @@ export const makeNotebookContentRecord: Immutable.RecordFactory<
   format: "json",
   lastSaved: null,
   model: makeDocumentRecord(),
-  name: null,
-  path: null,
+  filepath: "",
   type: "notebook",
   writable: true
 });

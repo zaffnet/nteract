@@ -304,7 +304,7 @@ type NotebookStateProps = {
   cellOrder: ImmutableList<any>,
   transforms: Object,
   theme: string,
-  lastSaved: Date,
+  lastSaved: ?Date,
   languageDisplayName: string,
   kernelStatus: string,
   codeMirrorMode: string | ImmutableMap<string, *>,
