@@ -10,14 +10,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 import { reducers, state, epics as coreEpics } from "@nteract/core";
 
-export type JupyterConfigData = {
-  token: string,
-  page: "tree" | "view" | "edit",
-  contentsPath: string,
-  baseUrl: string,
-  appVersion: string
-};
-
 const rootReducer = combineReducers({
   app: reducers.app,
   comms: reducers.comms,
@@ -25,27 +17,7 @@ const rootReducer = combineReducers({
   core: reducers.core
 });
 
-export default function configureStore({
-  config
-}: {
-  config: JupyterConfigData
-}) {
-  const initialState = {
-    app: state.makeAppRecord({
-      host: state.makeJupyterHostRecord({
-        token: config.token,
-        // TODO: Use URL join, even though we know these are right
-        serverUrl: location.origin + config.baseUrl
-      }),
-      version: `nteract-on-jupyter@${config.appVersion}`
-    }),
-    comms: state.makeCommsRecord(),
-    config: ImmutableMap({
-      theme: "light"
-    }),
-    core: state.makeStateRecord()
-  };
-
+export default function configureStore(initialState: *) {
   const rootEpic = combineEpics(...coreEpics.allEpics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 

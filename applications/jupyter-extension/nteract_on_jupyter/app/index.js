@@ -3,12 +3,11 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
+import * as Immutable from "immutable";
 
 import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
-
-import type { JupyterConfigData } from "./store";
 
 import {
   ModalController,
@@ -20,44 +19,9 @@ import {
   state
 } from "@nteract/core";
 
-function createApp(jupyterConfigData: JupyterConfigData) {
-  const store = configureStore({ config: jupyterConfigData });
-  window.store = store;
-
+function createApp(store: *) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
-
-    componentWillMount(): void {
-      const hostRef = state.createHostRef();
-      const contentRef = state.createContentRef();
-      const kernelRef = state.createKernelRef();
-      const kernelspecsRef = state.createKernelspecsRef();
-      store.dispatch(
-        actions.addHost({
-          hostRef,
-
-          // TODO: are we missing some host info here?
-          host: {
-            id: null,
-            type: "jupyter",
-            defaultKernelName: "python",
-            token: jupyterConfigData.token,
-            serverUrl: location.origin + jupyterConfigData.baseUrl
-          }
-        })
-      );
-
-      // TODO: we should likely be passing in a hostRef to fetchContent too.
-      store.dispatch(
-        actions.fetchContent({
-          path: jupyterConfigData.contentsPath,
-          params: {},
-          kernelRef,
-          contentRef
-        })
-      );
-      store.dispatch(actions.fetchKernelspecs({ hostRef, kernelspecsRef }));
-    }
 
     render(): React$Element<any> {
       return (
@@ -114,6 +78,14 @@ function createApp(jupyterConfigData: JupyterConfigData) {
   return App;
 }
 
+export type JupyterConfigData = {
+  token: string,
+  page: "tree" | "view" | "edit",
+  contentsPath: string,
+  baseUrl: string,
+  appVersion: string
+};
+
 function main(rootEl: Element, dataEl: Node | null) {
   // When the data element isn't there, provide an error message
   // Primarily for development usage
@@ -130,16 +102,66 @@ function main(rootEl: Element, dataEl: Node | null) {
     return;
   }
 
-  let jupyterConfigData: JupyterConfigData;
+  let config: JupyterConfigData;
 
   try {
-    jupyterConfigData = JSON.parse(dataEl.textContent);
+    config = JSON.parse(dataEl.textContent);
   } catch (err) {
     ReactDOM.render(<ErrorPage error={err} />, rootEl);
     return;
   }
 
-  const App = createApp(jupyterConfigData);
+  const initialState = {
+    app: state.makeAppRecord({
+      host: state.makeJupyterHostRecord({
+        token: config.token,
+        // TODO: Use URL join, even though we know these are right
+        serverUrl: location.origin + config.baseUrl
+      }),
+      version: `nteract-on-jupyter@${config.appVersion}`
+    }),
+    comms: state.makeCommsRecord(),
+    config: Immutable.Map({
+      theme: "light"
+    }),
+    core: state.makeStateRecord()
+  };
+
+  const hostRef = state.createHostRef();
+  const contentRef = state.createContentRef();
+  const kernelRef = state.createKernelRef();
+  const kernelspecsRef = state.createKernelspecsRef();
+
+  const store = configureStore(initialState);
+  window.store = store;
+
+  store.dispatch(
+    actions.addHost({
+      hostRef,
+
+      // TODO: are we missing some host info here?
+      host: {
+        id: null,
+        type: "jupyter",
+        defaultKernelName: "python",
+        token: config.token,
+        serverUrl: location.origin + config.baseUrl
+      }
+    })
+  );
+
+  // TODO: we should likely be passing in a hostRef to fetchContent too.
+  store.dispatch(
+    actions.fetchContent({
+      path: config.contentsPath,
+      params: {},
+      kernelRef,
+      contentRef
+    })
+  );
+  store.dispatch(actions.fetchKernelspecs({ hostRef, kernelspecsRef }));
+
+  const App = createApp(store);
   ReactDOM.render(<App />, rootEl);
 }
 
