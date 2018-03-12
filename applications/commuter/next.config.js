@@ -18,11 +18,6 @@ function webpackConfig(_config, options) {
   } else {
   }
 
-  // Workaround util.inherits conflict amongst assert, webpack, etc.
-  config.resolve.alias["util"] = path.resolve(
-    __dirname,
-    "../node_modules/util"
-  );
   return config;
 }
 
