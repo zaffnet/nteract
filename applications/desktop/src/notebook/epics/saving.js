@@ -37,7 +37,7 @@ export function saveEpic(
         );
       }
 
-      const filename = selectors.currentFilepath(state);
+      const filepath = selectors.currentFilepath(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
       const notebook = stringifyNotebook(
@@ -45,7 +45,7 @@ export function saveEpic(
           currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
         )
       );
-      return writeFileObservable(filename, notebook).pipe(
+      return writeFileObservable(filepath, notebook).pipe(
         map(() => {
           if (process.platform !== "darwin") {
             const state = store.getState();

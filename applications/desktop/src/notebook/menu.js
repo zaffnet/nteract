@@ -192,14 +192,6 @@ export function dispatchPublishUserGist(
   store.dispatch({ type: "PUBLISH_USER_GIST" });
 }
 
-/**
- * Redux dispatch function to run the focused cell and all cells below it.
- * It obtains the focused cell cell id and all code cell cell ids below.
- * It dispatches the {@link executeCell} action on all of those retrieved cells.
- *
- * @exports
- * @param {Object} store - The Redux store
- */
 export function dispatchRunAllBelow(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
@@ -285,16 +277,14 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
-  const focused = selectors.currentFocusedCellId(state);
   const contentRef = selectors.currentContentRef(state);
-  store.dispatch(actions.copyCell({ id: focused, contentRef }));
+  store.dispatch(actions.copyCell({ contentRef }));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
-  const focused = selectors.currentFocusedCellId(state);
   const contentRef = selectors.currentContentRef(state);
-  store.dispatch(actions.cutCell({ id: focused, contentRef }));
+  store.dispatch(actions.cutCell({ contentRef }));
 }
 
 export function dispatchPasteCell(store: *) {
@@ -306,11 +296,9 @@ export function dispatchPasteCell(store: *) {
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(
     actions.createCellAfter({
       cellType: "code",
-      id: focused,
       source: "",
       contentRef
     })
@@ -320,11 +308,9 @@ export function dispatchCreateCellAfter(store: *) {
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(
     actions.createCellAfter({
       cellType: "markdown",
-      id: focused,
       source: "",
       contentRef
     })

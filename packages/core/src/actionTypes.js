@@ -190,7 +190,7 @@ export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
 export type MergeCellAfter = {
   type: "MERGE_CELL_AFTER",
   payload: {
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };
@@ -242,7 +242,7 @@ export const TOGGLE_CELL_OUTPUT_VISIBILITY = "TOGGLE_CELL_OUTPUT_VISIBILITY";
 export type ToggleCellOutputVisibility = {
   type: "TOGGLE_CELL_OUTPUT_VISIBILITY",
   payload: {
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };
@@ -251,7 +251,7 @@ export const TOGGLE_CELL_INPUT_VISIBILITY = "TOGGLE_CELL_INPUT_VISIBILITY";
 export type ToggleCellInputVisibility = {
   type: "TOGGLE_CELL_INPUT_VISIBILITY",
   payload: {
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };
@@ -260,7 +260,7 @@ export const CLEAR_OUTPUTS = "CLEAR_OUTPUTS";
 export type ClearOutputs = {
   type: "CLEAR_OUTPUTS",
   payload: {
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };

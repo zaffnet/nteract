@@ -281,7 +281,7 @@ export function setExecutionState(payload: {
 }
 
 export function clearOutputs(payload: {
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): ClearOutputs {
   return {
@@ -355,7 +355,7 @@ export function createCellAppend(payload: {
 }
 
 export function mergeCellAfter(payload: {
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): MergeCellAfter {
   return {
@@ -398,7 +398,7 @@ export function setInCell<T>(payload: {
 }
 
 export function updateCellSource(payload: {
-  id: string,
+  id: CellID,
   value: string,
   contentRef: ContentRef
 }): SetInCell<string> {
@@ -406,7 +406,7 @@ export function updateCellSource(payload: {
 }
 
 export function updateCellExecutionCount(payload: {
-  id: string,
+  id: CellID,
   value: number,
   contentRef: ContentRef
 }): SetInCell<number> {
@@ -425,7 +425,7 @@ export function unhideAll(payload: {
 }
 
 export function toggleCellOutputVisibility(payload: {
-  id: string,
+  id?: CellID,
   contentRef: ContentRef
 }): ToggleCellOutputVisibility {
   return {
@@ -435,7 +435,7 @@ export function toggleCellOutputVisibility(payload: {
 }
 
 export function toggleCellInputVisibility(payload: {
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): ToggleCellInputVisibility {
   return {
