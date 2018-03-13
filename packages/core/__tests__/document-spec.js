@@ -2,6 +2,8 @@
 /* eslint-disable max-len */
 import { List, Map, Set, is } from "immutable";
 
+import { v4 as uuid } from "uuid";
+
 import * as actionTypes from "../src/actionTypes";
 import * as actions from "../src/actions";
 import { document as reducers } from "../src/reducers/core/entities/contents";
@@ -622,49 +624,100 @@ describe("setLanguageInfo", () => {
 
 describe("copyCell", () => {
   test("copies a cell", () => {
-    const originalState = monocellDocument;
+    const firstId = uuid();
+    const secondId = uuid();
+    const thirdId = uuid();
 
-    const id = originalState.getIn(["notebook", "cellOrder"]).first();
-    const cell = originalState.getIn(["notebook", "cellMap", id]);
-    const state = reducers(originalState, actions.copyCell({ id }));
-    expect(state.getIn(["copied", "cell"])).toBe(cell);
-    expect(state.getIn(["copied", "id"])).toBe(id);
+    const originalState = makeDocumentRecord({
+      notebook: Immutable.fromJS({
+        cellOrder: [firstId, secondId, thirdId],
+        cellMap: {
+          [firstId]: emptyCodeCell.set("source", "data"),
+          [secondId]: emptyCodeCell,
+          [thirdId]: emptyCodeCell
+        }
+      }),
+      cellFocused: secondId,
+      copied: null
+    });
+
+    const state = reducers(originalState, actions.copyCell({ id: firstId }));
+
+    expect(state.get("copied")).toEqual(emptyCodeCell.set("source", "data"));
+
+    expect(state.get("notebook")).toEqual(
+      Immutable.fromJS({
+        cellOrder: [firstId, secondId, thirdId],
+        cellMap: {
+          [firstId]: emptyCodeCell.set("source", "data"),
+          [secondId]: emptyCodeCell,
+          [thirdId]: emptyCodeCell
+        }
+      })
+    );
   });
 });
 
 describe("cutCell", () => {
   test("cuts a cell", () => {
-    const originalState = monocellDocument;
+    const firstId = uuid();
+    const secondId = uuid();
+    const thirdId = uuid();
 
-    const id = originalState.getIn(["notebook", "cellOrder"]).first();
-    const cell = originalState.getIn(["notebook", "cellMap", id]);
-    const state = reducers(originalState, actions.cutCell({ id }));
-    expect(state.getIn(["copied", "cell"])).toBe(cell);
-    expect(state.getIn(["copied", "id"])).toBe(id);
-    expect(state.getIn(["notebook", "cellMap", id])).toBeUndefined();
+    const originalState = makeDocumentRecord({
+      notebook: Immutable.fromJS({
+        cellOrder: [firstId, secondId, thirdId],
+        cellMap: {
+          [firstId]: emptyCodeCell.set("source", "data"),
+          [secondId]: emptyCodeCell,
+          [thirdId]: emptyCodeCell
+        }
+      }),
+      cellFocused: secondId,
+      copied: null
+    });
+
+    const state = reducers(originalState, actions.cutCell({ id: firstId }));
+
+    expect(state.get("copied")).toEqual(emptyCodeCell.set("source", "data"));
+    expect(state.getIn(["notebook", "cellMap", firstId])).toBeUndefined();
   });
 });
 
 describe("pasteCell", () => {
   test("pastes a cell", () => {
-    const id = monocellDocument.getIn(["notebook", "cellOrder"]).first();
-    const cell = monocellDocument.getIn(["notebook", "cellMap", id]);
+    const firstId = uuid();
+    const secondId = uuid();
+    const thirdId = uuid();
 
-    const originalState = monocellDocument.set(
-      "copied",
-      new Map({
-        cell,
-        id
-      })
-    );
+    const originalState = makeDocumentRecord({
+      notebook: Immutable.fromJS({
+        cellOrder: [firstId, secondId, thirdId],
+        cellMap: {
+          [firstId]: emptyCodeCell,
+          [secondId]: emptyCodeCell,
+          [thirdId]: emptyCodeCell
+        }
+      }),
+      cellFocused: secondId,
+      copied: emptyCodeCell.set("source", "COPY PASTA")
+    });
+
+    // We will paste the cell after the focused cell
     const state = reducers(originalState, actions.pasteCell({}));
-    const copiedId = state.getIn(["notebook", "cellOrder", 1]);
 
-    expect(state.getIn(["notebook", "cellOrder"]).size).toBe(4);
-    expect(copiedId).not.toBe(id);
-    expect(state.getIn(["notebook", "cellMap", copiedId, "source"])).toBe(
-      cell.get("source")
+    // The third cell should be our copied cell
+    const newCellId = state.getIn(["notebook", "cellOrder", 2]);
+    expect(state.getIn(["notebook", "cellMap", newCellId])).toEqual(
+      emptyCodeCell.set("source", "COPY PASTA")
     );
+
+    expect(state.getIn(["notebook", "cellOrder"])).toEqual(
+      Immutable.List([firstId, secondId, newCellId, thirdId])
+    );
+
+    // Ensure it's a new cell
+    expect(Set([firstId, secondId, thirdId]).has(newCellId)).toBeFalsy();
   });
 });
 

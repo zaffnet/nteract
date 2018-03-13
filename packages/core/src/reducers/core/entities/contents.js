@@ -683,9 +683,11 @@ function copyCell(state: DocumentRecord, action: CopyCell) {
     id = state.cellFocused;
   }
 
-  const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
-  const cell = cellMap.get(id);
-  return state.set("copied", Immutable.Map({ id, cell }));
+  const cell = state.getIn(["notebook", "cellMap", id]);
+  if (!cell) {
+    return state;
+  }
+  return state.set("copied", cell);
 }
 
 function cutCell(state: DocumentRecord, action: CutCell) {
@@ -694,29 +696,23 @@ function cutCell(state: DocumentRecord, action: CutCell) {
     return state;
   }
 
-  const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
-  const cell: ?ImmutableCell = cellMap.get(id);
+  const cell = state.getIn(["notebook", "cellMap", id]);
 
   if (!cell) {
     return state;
   }
 
   // FIXME: If the cell that was cut was the focused cell, focus the cell below
-
   return state
-    .set("copied", Immutable.Map({ id, cell }))
+    .set("copied", cell)
     .update("notebook", (notebook: ImmutableNotebook) =>
       removeCell(notebook, id)
     );
 }
 
 function pasteCell(state: DocumentRecord, action: PasteCell) {
-  const copiedCell: ImmutableCell | null = state.getIn(
-    ["copied", "cell"],
-    null
-  );
+  const copiedCell: ImmutableCell | null = state.get("copied");
 
-  // TODO: Should this default to
   const pasteAfter = state.cellFocused;
 
   if (copiedCell === null || pasteAfter === null) {
