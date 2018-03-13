@@ -355,16 +355,18 @@ export function dispatchNewNotebook(
  * It will expand all cell outputs before printing and restore cells it expanded when complete.
  *
  * @param {object} store - The Redux store
- * @param {string} filepath - filepath of PDF to be saved.
+ * @param {string} basepath - basepath of the PDF to be saved.
  * @param {any} notificationSystem - reference to global notification system
  */
 export function exportPDF(
   store: *,
-  filepath: string,
+  basepath: string,
   notificationSystem: *
 ): void {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  const pdfPath = `${basepath}.pdf`;
 
   const unexpandedCells = selectors.currentIdsOfHiddenOutputs(state);
   // TODO: we should not be modifying the document to print PDFs
@@ -389,17 +391,17 @@ export function exportPDF(
         )
       );
 
-      fs.writeFile(`${filepath}.pdf`, data, error_fs => {
+      fs.writeFile(pdfPath, data, error_fs => {
         notificationSystem.addNotification({
           title: "PDF exported",
-          message: `Notebook ${filepath} has been exported as a pdf.`,
+          message: `Notebook ${basepath} has been exported as a pdf.`,
           dismissible: true,
           position: "tr",
           level: "success",
           action: {
             label: "Open PDF",
             callback: function openPDF() {
-              shell.openItem(`${filepath}.pdf`);
+              shell.openItem(pdfPath);
             }
           }
         });
@@ -445,8 +447,8 @@ export function storeToPDF(store: *) {
       }
     });
   } else {
-    const filepath = path.join(path.dirname(notebookName), basename);
-    exportPDF(store, filepath, notificationSystem);
+    const basepath = path.join(path.dirname(notebookName), basename);
+    exportPDF(store, basepath, notificationSystem);
   }
 }
 
