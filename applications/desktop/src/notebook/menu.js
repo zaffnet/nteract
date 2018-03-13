@@ -439,9 +439,9 @@ export function triggerSaveAsPDF(store: *) {
 export function storeToPDF(store: *) {
   const state = store.getState();
   const notebookName = selectors.currentFilename(state);
-  let filepath = path.basename(notebookName, ".ipynb");
+  const basename = path.basename(notebookName, ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
-  if (filepath === "") {
+  if (basename === "") {
     notificationSystem.addNotification({
       title: "File has not been saved!",
       message: [
@@ -459,7 +459,7 @@ export function storeToPDF(store: *) {
       }
     });
   } else {
-    filepath = path.join(path.dirname(notebookName), filepath);
+    const filepath = path.join(path.dirname(notebookName), basename);
     exportPDF(store, filepath, notificationSystem);
   }
 }
