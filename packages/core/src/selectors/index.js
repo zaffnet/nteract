@@ -283,7 +283,7 @@ export const currentIdsOfHiddenOutputs = createSelector(
   }
 );
 
-export const currentFilename: (state: *) => string = createSelector(
+export const currentFilepath: (state: *) => string = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     return currentContent ? currentContent.filepath : "";

@@ -100,7 +100,7 @@ export function handleGistAction(store: any, action: any) {
   const notebookString = selectors.currentNotebookString(state);
   const githubUsername = selectors.currentNotebookGithubUsername(state);
   const gistId = selectors.currentNotebookGistId(state);
-  const filepath = selectors.currentFilename(state);
+  const filepath = selectors.currentFilepath(state);
   const notificationSystem = selectors.notificationSystem(state);
   const contentRef = selectors.currentContentRef(state);
 

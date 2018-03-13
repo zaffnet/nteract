@@ -146,7 +146,7 @@ export function triggerSaveAs(store: *) {
 
 export function dispatchSave(store: *) {
   const state = store.getState();
-  const filepath = selectors.currentFilename(state);
+  const filepath = selectors.currentFilepath(state);
   if (!filepath) {
     triggerSaveAs(store);
   } else {
@@ -158,7 +158,7 @@ export function dispatchSave(store: *) {
 export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const filepath = selectors.currentFilename(state);
+  const filepath = selectors.currentFilepath(state);
   const cwd = filepath
     ? path.dirname(path.resolve(filepath))
     : cwdKernelFallback();
@@ -438,7 +438,7 @@ export function triggerSaveAsPDF(store: *) {
 
 export function storeToPDF(store: *) {
   const state = store.getState();
-  const notebookName = selectors.currentFilename(state);
+  const notebookName = selectors.currentFilepath(state);
   const basename = path.basename(notebookName, ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
   if (basename === "") {

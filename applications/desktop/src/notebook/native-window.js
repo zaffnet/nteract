@@ -70,7 +70,7 @@ export function createTitleFeed(state$: *) {
 
   const fullpath$ = state$.pipe(
     filter(state => selectors.currentContentRef(state)),
-    map(state => selectors.currentFilename(state) || "Untitled")
+    map(state => selectors.currentFilepath(state) || "Untitled")
   );
 
   const kernelStatus$ = state$.pipe(

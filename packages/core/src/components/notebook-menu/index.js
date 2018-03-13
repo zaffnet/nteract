@@ -409,7 +409,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
 // available...
 const mapStateToProps = state => ({
   cellFocused: selectors.currentFocusedCellId(state),
-  filename: selectors.currentFilename(state),
+  filename: selectors.currentFilepath(state),
   notebook: selectors.currentNotebook(state),
   currentKernelRef: selectors.currentKernelRef(state),
   currentContentRef: selectors.currentContentRef(state)

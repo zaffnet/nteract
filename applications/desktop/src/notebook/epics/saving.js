@@ -37,7 +37,7 @@ export function saveEpic(
         );
       }
 
-      const filename = selectors.currentFilename(state);
+      const filename = selectors.currentFilepath(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
       const notebook = stringifyNotebook(
