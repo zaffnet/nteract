@@ -13,7 +13,6 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.createCellAfter({
           cellType: "code",
-          id: null,
           source: "",
           contentRef: selectors.currentContentRef(store.getState())
         })
@@ -29,7 +28,6 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.createCellAfter({
           cellType: "markdown",
-          id: null,
           source: "",
           contentRef: selectors.currentContentRef(store.getState())
         })
@@ -57,7 +55,6 @@ describe("menu", () => {
       menu.dispatchCutCell(store);
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.cutCell({
-          id: null,
           contentRef: selectors.currentContentRef(store.getState())
         })
       );
@@ -71,7 +68,6 @@ describe("menu", () => {
       menu.dispatchCopyCell(store);
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.copyCell({
-          id: null,
           contentRef: selectors.currentContentRef(store.getState())
         })
       );
@@ -343,7 +339,7 @@ describe("menu", () => {
       menu.dispatchSaveAs(store, {}, "test-ipynb.ipynb");
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.saveAs({
-          filename: "test-ipynb.ipynb",
+          filepath: "test-ipynb.ipynb",
           contentRef: selectors.currentContentRef(store.getState())
         })
       );
@@ -359,7 +355,7 @@ describe("menu", () => {
       expect(store.dispatch).toHaveBeenCalledWith({
         type: "CORE/FETCH_CONTENT",
         payload: {
-          path: "test-ipynb.ipynb",
+          filepath: "test-ipynb.ipynb",
           params: {},
           kernelRef: expect.any(String),
           contentRef: selectors.currentContentRef(store.getState())
@@ -430,14 +426,14 @@ describe("menu", () => {
     });
     test("sends a SAVE_AS action if given filename", () => {
       const store = dummyStore();
-      const filename = "dummy-nb.ipynb";
+      const filepath = "dummy-nb.ipynb";
       store.dispatch = jest.fn();
 
-      menu.triggerWindowRefresh(store, filename);
+      menu.triggerWindowRefresh(store, filepath);
 
       expect(store.dispatch).toHaveBeenCalledWith(
         actions.saveAs({
-          filename,
+          filepath,
           contentRef: selectors.currentContentRef(store.getState())
         })
       );
@@ -448,11 +444,11 @@ describe("menu", () => {
     test.skip("it notifies a user upon successful write", () => {
       const store = dummyStore();
       const notificationSystem = { addNotification: jest.fn() };
-      const filename = "thisisafilename.ipynb";
-      menu.exportPDF(store, filename, notificationSystem);
+      const filepath = "thisisafilename.ipynb";
+      menu.exportPDF(store, filepath, notificationSystem);
       expect(notificationSystem.addNotification).toHaveBeenCalledWith({
         title: "PDF exported",
-        message: `Notebook ${filename} has been exported as a pdf.`,
+        message: `Notebook ${filepath} has been exported as a pdf.`,
         dismissible: true,
         position: "tr",
         level: "success"
