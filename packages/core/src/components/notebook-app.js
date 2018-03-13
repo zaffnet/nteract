@@ -88,11 +88,9 @@ const mapStateToCellProps = (state, { id }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
-  const cellPagers = selectors.cellPagers(state);
-  const pager =
-    cellPagers && cellPagers.get
-      ? cellPagers.get(id, ImmutableList())
-      : ImmutableList();
+  const pager = selectors
+    .currentModel(state)
+    .getIn(["cellPagers", id], Immutable.List());
 
   return {
     cellType,

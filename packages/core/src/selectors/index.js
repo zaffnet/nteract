@@ -152,10 +152,6 @@ export const hasBeenSaved = createSelector(
   (original, disk) => Immutable.is(original, disk)
 );
 
-export const cellPagers = createSelector(currentModel, model =>
-  model.get("cellPagers")
-);
-
 export const currentLastSaved = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => (currentContent ? currentContent.lastSaved : null)
