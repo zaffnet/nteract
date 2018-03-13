@@ -62,7 +62,7 @@ describe("PureNotebookMenu ", () => {
         cellMap: Immutable.Map(),
         cellOrder: Immutable.List(),
         notebook: Immutable.Map(),
-        filename: "fake.ipynb",
+        filepath: "fake.ipynb",
         currentContentRef: "fake-content-ref",
         currentKernelRef: "fake-kernel-ref",
 
@@ -79,7 +79,7 @@ describe("PureNotebookMenu ", () => {
       expect(extraHandlers.downloadNotebook).toHaveBeenCalledTimes(1);
       expect(extraHandlers.downloadNotebook).toHaveBeenCalledWith(
         props.notebook,
-        props.filename
+        props.filepath
       );
 
       const executeAllCellsItem = wrapper
@@ -131,7 +131,6 @@ describe("PureNotebookMenu ", () => {
       cutCellItem.simulate("click");
       expect(props.cutCell).toHaveBeenCalledTimes(1);
       expect(props.cutCell).toHaveBeenCalledWith({
-        id: props.cellFocused,
         contentRef: props.currentContentRef
       });
 
@@ -142,7 +141,6 @@ describe("PureNotebookMenu ", () => {
       copyCellItem.simulate("click");
       expect(props.copyCell).toHaveBeenCalledTimes(1);
       expect(props.copyCell).toHaveBeenCalledWith({
-        id: props.cellFocused,
         contentRef: props.currentContentRef
       });
 
@@ -163,7 +161,6 @@ describe("PureNotebookMenu ", () => {
       mergeCellAfterItem.simulate("click");
       expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
       expect(props.mergeCellAfter).toHaveBeenCalledWith({
-        id: props.cellFocused,
         contentRef: props.currentContentRef
       });
 
@@ -174,7 +171,6 @@ describe("PureNotebookMenu ", () => {
       createMarkdownCellItem.simulate("click");
       expect(props.createCellAfter).toHaveBeenCalledTimes(1);
       expect(props.createCellAfter).toHaveBeenCalledWith({
-        id: props.cellFocused,
         cellType: "markdown",
         contentRef: props.currentContentRef,
         source: ""
@@ -188,7 +184,6 @@ describe("PureNotebookMenu ", () => {
       createCodeCellItem.simulate("click");
       expect(props.createCellAfter).toHaveBeenCalledTimes(1);
       expect(props.createCellAfter).toHaveBeenCalledWith({
-        id: props.cellFocused,
         cellType: "code",
         contentRef: props.currentContentRef,
         source: ""
@@ -201,7 +196,6 @@ describe("PureNotebookMenu ", () => {
       setCellTypeCodeItem.simulate("click");
       expect(props.changeCellType).toHaveBeenCalledTimes(1);
       expect(props.changeCellType).toHaveBeenCalledWith({
-        id: props.cellFocused,
         to: "code",
         contentRef: props.currentContentRef
       });
@@ -214,7 +208,6 @@ describe("PureNotebookMenu ", () => {
       setCellTypeMarkdownItem.simulate("click");
       expect(props.changeCellType).toHaveBeenCalledTimes(1);
       expect(props.changeCellType).toHaveBeenCalledWith({
-        id: props.cellFocused,
         to: "markdown",
         contentRef: props.currentContentRef
       });

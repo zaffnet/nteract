@@ -50,7 +50,7 @@ describe("loadingEpic", () => {
   test("errors when file cant be read", async function() {
     const action$ = ActionsObservable.of({
       type: "CORE/FETCH_CONTENT",
-      payload: { path: "file" }
+      payload: { filepath: "file" }
     });
 
     const responseActions = await fetchContentEpic(action$)
@@ -61,7 +61,7 @@ describe("loadingEpic", () => {
       {
         payload: {
           error: expect.anything(),
-          path: "file"
+          filepath: "file"
         },
         error: true,
         type: "CORE/FETCH_CONTENT_FAILED"
@@ -88,8 +88,7 @@ describe("newNotebookEpic", () => {
       {
         type: actionTypes.SET_NOTEBOOK,
         payload: {
-          filename: null,
-          name: null,
+          filepath: null,
           created: null,
           lastSaved: null,
           notebook: monocellNotebook.setIn(
