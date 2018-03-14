@@ -1,6 +1,6 @@
 {
   "name": "@nteract/core",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "description": "core modules and components for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -23,7 +23,7 @@
     "@nteract/mathjax": "^1.0.0",
     "@nteract/messaging": "^4.0.0",
     "@nteract/octicons": "^0.2.0",
-    "@nteract/styles": "^1.0.0",
+    "@nteract/styles": "^1.0.1",
     "@nteract/transforms": "^4.0.1",
     "@nteract/types": "^2.0.0",
     "date-fns": "^1.29.0",
