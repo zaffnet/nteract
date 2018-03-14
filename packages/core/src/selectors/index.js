@@ -18,7 +18,9 @@ import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
 import { createSelector } from "reselect";
 
-const identity = thing => thing;
+function identity<T>(thing: T): T {
+  return thing;
+}
 
 const serverUrl = (state: AppState) => state.app.host.serverUrl;
 const crossDomain = (state: AppState) => state.app.host.crossDomain;
