@@ -101,7 +101,6 @@ export function dummyStore(config: *) {
           byRef: Immutable.Map({
             // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
             [currentContentRef]: stateModule.makeNotebookContentRecord({
-              path: config && config.noFilename ? "" : "dummy-store-nb.ipynb",
               model: stateModule.makeDocumentRecord({
                 notebook: dummyNotebook,
                 savedNotebook:
@@ -112,10 +111,10 @@ export function dummyStore(config: *) {
                 cellFocused:
                   config && config.codeCellCount > 1
                     ? dummyNotebook.get("cellOrder", Immutable.List()).get(1)
-                    : null,
-                filename:
-                  config && config.noFilename ? "" : "dummy-store-nb.ipynb"
-              })
+                    : null
+              }),
+              filepath:
+                config && config.noFilename ? "" : "dummy-store-nb.ipynb"
             })
           })
         }),

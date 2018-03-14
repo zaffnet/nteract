@@ -28,7 +28,16 @@ export function saveEpic(
     mergeMap((action: Save) => {
       const state = store.getState();
       const currentNotebook = selectors.currentNotebook(state);
-      const filename = selectors.currentFilename(state);
+      if (!currentNotebook) {
+        return of(
+          actions.saveFailed({
+            error: new Error("no notebook loaded to save"),
+            contentRef: action.payload.contentRef
+          })
+        );
+      }
+
+      const filepath = selectors.currentFilepath(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
       const notebook = stringifyNotebook(
@@ -36,7 +45,7 @@ export function saveEpic(
           currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
         )
       );
-      return writeFileObservable(filename, notebook).pipe(
+      return writeFileObservable(filepath, notebook).pipe(
         map(() => {
           if (process.platform !== "darwin") {
             const state = store.getState();
@@ -77,7 +86,7 @@ export function saveAsEpic(action$: ActionsObservable<*>) {
         // order matters here, since we need the filename set in the state
         // before we save the document
         actions.changeFilename({
-          filename: action.payload.filename,
+          filepath: action.payload.filepath,
           contentRef: action.payload.contentRef
         }),
         actions.save({

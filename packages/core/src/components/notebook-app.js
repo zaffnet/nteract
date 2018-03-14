@@ -88,6 +88,10 @@ const mapStateToCellProps = (state, { id }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
+  const pager = selectors
+    .currentModel(state)
+    .getIn(["cellPagers", id], Immutable.List());
+
   return {
     cellType,
     source: cell.get("source", ""),
@@ -95,7 +99,7 @@ const mapStateToCellProps = (state, { id }) => {
     executionCount: cell.get("execution_count"),
     outputs,
     models: selectors.models(state),
-    pager: selectors.cellPagers(state).get(id, ImmutableList()),
+    pager,
     cellFocused: selectors.currentFocusedCellId(state) === id,
     editorFocused: selectors.currentFocusedEditorId(state) === id,
     sourceHidden,
@@ -304,7 +308,7 @@ type NotebookStateProps = {
   cellOrder: ImmutableList<any>,
   transforms: Object,
   theme: string,
-  lastSaved: Date,
+  lastSaved: ?Date,
   languageDisplayName: string,
   kernelStatus: string,
   codeMirrorMode: string | ImmutableMap<string, *>,

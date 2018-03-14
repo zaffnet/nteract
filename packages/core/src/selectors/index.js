@@ -12,12 +12,15 @@ type AppState = {
 };
 
 import type { ContentRef, KernelRef } from "../state/refs";
+import type { ContentRecord, DocumentRecord } from "../state/entities/contents";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
 import { createSelector } from "reselect";
 
-const identity = thing => thing;
+function identity<T>(thing: T): T {
+  return thing;
+}
 
 const serverUrl = (state: AppState) => state.app.host.serverUrl;
 const crossDomain = (state: AppState) => state.app.host.crossDomain;
@@ -121,19 +124,23 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel = createSelector(
+export const currentModel: (
+  state: AppState
+) => DocumentRecord | Immutable.Map<string, any> = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     // TODO: The app assumes that the model is not null. HOWEVER, the model
     // should really *be* nullable. I.e., components should check
     // communication before accessing nested values here.
-    return currentContent.model;
+    return currentContent ? currentContent.model : Immutable.Map();
   }
 );
 
 // TODO: if we're not looking at a notebook in the UI, there may not _be_ a
 // notebook object to get. Do we return null? Throw an error?
-export const currentNotebook = createSelector(currentModel, model =>
+export const currentNotebook: (
+  state: AppState
+) => ?Immutable.Map<string, any> = createSelector(currentModel, model =>
   model.get("notebook", null)
 );
 
@@ -147,13 +154,9 @@ export const hasBeenSaved = createSelector(
   (original, disk) => Immutable.is(original, disk)
 );
 
-export const cellPagers = createSelector(currentModel, model =>
-  model.get("cellPagers")
-);
-
 export const currentLastSaved = createSelector(
   (state: AppState) => currentContent(state),
-  currentContent => currentContent.lastSaved
+  currentContent => (currentContent ? currentContent.lastSaved : null)
 );
 
 export const currentNotebookMetadata = createSelector(currentModel, model =>
@@ -278,11 +281,10 @@ export const currentIdsOfHiddenOutputs = createSelector(
   }
 );
 
-// TODO: we can get the filename from the top-level instead of the model?
-export const currentFilename: (state: *) => string = createSelector(
+export const currentFilepath: (state: *) => string = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
-    return currentContent.path;
+    return currentContent ? currentContent.filepath : "";
   }
 );
 
@@ -324,7 +326,9 @@ export const currentContentRef: (
   identity
 );
 
-export const currentContent = createSelector(
+export const currentContent: (
+  state: AppState
+) => ?ContentRecord = createSelector(
   (state: AppState) => state.core.currentContentRef,
   (state: AppState) => state.core.entities.contents.byRef,
   (contentRef, byRef) => byRef.get(contentRef)

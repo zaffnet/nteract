@@ -153,11 +153,10 @@ export function cleanCellTransient(state: DocumentRecord, id: string) {
 }
 
 function setNotebook(state: DocumentRecord, action: SetNotebook) {
-  const { payload: { notebook, filename } } = action;
+  const { payload: { notebook } } = action;
 
   return state
     .set("notebook", notebook)
-    .update("filename", oldFilename => (filename ? filename : oldFilename))
     .set("cellFocused", notebook.getIn(["cellOrder", 0]))
     .setIn(["transient", "cellMap"], new Immutable.Map());
 }
@@ -172,7 +171,10 @@ function focusCell(state: DocumentRecord, action: FocusCell) {
 }
 
 function clearOutputs(state: DocumentRecord, action: ClearOutputs) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
 
   const type = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
@@ -438,7 +440,12 @@ function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
 }
 
 function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
-  const { cellType, id, source } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType, source } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -448,7 +455,12 @@ function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
 }
 
 function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
-  const { cellType, id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const cellID = uuid.v4();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
@@ -462,7 +474,11 @@ function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
 }
 
 function mergeCellAfter(state: DocumentRecord, action: MergeCellAfter) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   const cellOrder: ImmutableCellOrder = state.getIn(
     ["notebook", "cellOrder"],
     Immutable.List()
@@ -545,7 +561,11 @@ function acceptPayloadMessage(
 }
 
 function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   // TODO: Record the last execute request for this cell
 
   // * Clear outputs
@@ -578,7 +598,11 @@ function toggleCellOutputVisibility(
   state: DocumentRecord,
   action: ToggleCellOutputVisibility
 ) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   return state.setIn(
     ["notebook", "cellMap", id, "metadata", "outputHidden"],
     !state.getIn(["notebook", "cellMap", id, "metadata", "outputHidden"])
@@ -604,7 +628,11 @@ function toggleCellInputVisibility(
   state: DocumentRecord,
   action: ToggleCellInputVisibility
 ) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   return state.setIn(
     ["notebook", "cellMap", id, "metadata", "inputHidden"],
     !state.getIn(["notebook", "cellMap", id, "metadata", "inputHidden"])
@@ -650,47 +678,62 @@ function deleteMetadataField(
 }
 
 function copyCell(state: DocumentRecord, action: CopyCell) {
-  const { id } = action.payload;
-  const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
-  const cell = cellMap.get(id);
-  return state.set("copied", Immutable.Map({ id, cell }));
+  let id = action.payload.id;
+  if (!id) {
+    id = state.cellFocused;
+  }
+
+  const cell = state.getIn(["notebook", "cellMap", id]);
+  if (!cell) {
+    return state;
+  }
+  return state.set("copied", cell);
 }
 
 function cutCell(state: DocumentRecord, action: CutCell) {
-  const { id } = action.payload;
-  const cellMap = state.getIn(["notebook", "cellMap"], Immutable.Map());
-  const cell: ?ImmutableCell = cellMap.get(id);
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const cell = state.getIn(["notebook", "cellMap", id]);
 
   if (!cell) {
     return state;
   }
 
+  // FIXME: If the cell that was cut was the focused cell, focus the cell below
   return state
-    .set("copied", Immutable.Map({ id, cell }))
+    .set("copied", cell)
     .update("notebook", (notebook: ImmutableNotebook) =>
       removeCell(notebook, id)
     );
 }
 
-function pasteCell(state: DocumentRecord) {
-  const copiedCell: ImmutableCell | null = state.getIn(
-    ["copied", "cell"],
-    null
-  );
-  const copiedId: string | null = state.getIn(["copied", "id"], null);
+function pasteCell(state: DocumentRecord, action: PasteCell) {
+  const copiedCell: ImmutableCell | null = state.get("copied");
 
-  if (copiedCell === null || copiedId === null) {
+  const pasteAfter = state.cellFocused;
+
+  if (copiedCell === null || pasteAfter === null) {
     return state;
   }
 
+  // Create a new cell with `id` that will come after the currently focused cell
+  // using the contents of the originally copied cell
   const id = uuid.v4();
 
   return state.update("notebook", (notebook: ImmutableNotebook) =>
-    insertCellAfter(notebook, copiedCell, id, copiedId)
+    insertCellAfter(notebook, copiedCell, id, pasteAfter)
   );
 }
 function changeCellType(state: DocumentRecord, action: ChangeCellType) {
-  const { id, to } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { to } = action.payload;
   const from = state.getIn(["notebook", "cellMap", id, "cell_type"]);
 
   if (from === to) {
@@ -715,21 +758,17 @@ function toggleOutputExpansion(
   state: DocumentRecord,
   action: ToggleCellExpansion
 ) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
   return state.updateIn(["notebook", "cellMap"], (cells: ImmutableCellMap) =>
     cells.setIn(
       [id, "metadata", "outputExpanded"],
       !cells.getIn([id, "metadata", "outputExpanded"])
     )
   );
-}
-
-function changeFilename(state: DocumentRecord, action: ChangeFilenameAction) {
-  const { filename } = action.payload;
-  if (filename) {
-    return state.set("filename", filename);
-  }
-  return state;
 }
 
 type DocumentAction =
@@ -839,15 +878,13 @@ function document(
     case actionTypes.CUT_CELL:
       return cutCell(state, action);
     case actionTypes.PASTE_CELL:
-      return pasteCell(state);
+      return pasteCell(state, action);
     case actionTypes.CHANGE_CELL_TYPE:
       return changeCellType(state, action);
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:
       return toggleOutputExpansion(state, action);
     case actionTypes.UNHIDE_ALL:
       return unhideAll(state, action);
-    case actionTypes.CHANGE_FILENAME:
-      return changeFilename(state, action);
     default:
       (action: empty);
       return state;
@@ -867,7 +904,7 @@ const byRef = (state = Immutable.Map(), action) => {
       return state.set(
         action.payload.contentRef,
         makeContentRecord({
-          path: action.payload.path || ""
+          filepath: action.payload.filepath || ""
           // TODO: we can set kernelRef when the content record uses it.
         })
       );
@@ -884,8 +921,7 @@ const byRef = (state = Immutable.Map(), action) => {
         makeNotebookContentRecord({
           created: action.payload.created,
           lastSaved: action.payload.lastSaved,
-          name: action.payload.name,
-          path: action.payload.filename ? action.payload.filename : "",
+          filepath: action.payload.filepath,
           model: makeDocumentRecord({
             notebook: action.payload.notebook,
             savedNotebook: action.payload.notebook,
@@ -893,19 +929,14 @@ const byRef = (state = Immutable.Map(), action) => {
               keyPathsForDisplays: Immutable.Map(),
               cellMap: Immutable.Map()
             }),
-            cellFocused: action.payload.notebook.getIn(["cellOrder", 0]),
-            filename: action.payload.filename ? action.payload.filename : ""
+            cellFocused: action.payload.notebook.getIn(["cellOrder", 0])
           })
         })
       );
     case actionTypes.CHANGE_FILENAME: {
-      // TODO / FIXME: Our contents state should only store path, while `name`
-      // is something we use a selector for
       return state.updateIn([action.payload.contentRef], contentRecord =>
         contentRecord.merge({
-          // FIXME: trim this to just the "name"
-          name: action.payload.filename,
-          path: action.payload.filename
+          filepath: action.payload.filepath
         })
       );
     }

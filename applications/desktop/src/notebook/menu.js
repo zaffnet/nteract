@@ -21,11 +21,11 @@ export function cwdKernelFallback() {
   return process.cwd();
 }
 
-export function dispatchSaveAs(store: *, evt: Event, filename: string) {
+export function dispatchSaveAs(store: *, evt: Event, filepath: string) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
 
-  store.dispatch(actions.saveAs({ filename, contentRef }));
+  store.dispatch(actions.saveAs({ filepath, contentRef }));
 }
 
 const dialog = remote.dialog;
@@ -51,33 +51,33 @@ export function showSaveAsDialog(): Promise<string> {
       options.defaultPath = defaultPath;
     }
 
-    dialog.showSaveDialog(options, filename => {
-      // If there was a filename set and the extension name for it is blank,
+    dialog.showSaveDialog(options, filepath => {
+      // If there was a filepath set and the extension name for it is blank,
       // append `.ipynb`
-      if (filename && path.extname(filename) === "") {
-        resolve(`${filename}.ipynb`);
+      if (filepath && path.extname(filepath) === "") {
+        resolve(`${filepath}.ipynb`);
         return;
       }
       // Adhere to the electron API by resolving undefined
       // This happens when the user cancels the dialog
-      if (filename === undefined) {
-        resolve(filename);
+      if (filepath === undefined) {
+        resolve(filepath);
         return;
       }
       // Assume it was a good path otherwise
-      resolve(filename);
+      resolve(filepath);
     });
   });
 }
 
-export function triggerWindowRefresh(store: *, filename: string) {
-  if (!filename) {
+export function triggerWindowRefresh(store: *, filepath: string) {
+  if (!filepath) {
     return;
   }
 
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  store.dispatch(actions.saveAs({ filename, contentRef }));
+  store.dispatch(actions.saveAs({ filepath, contentRef }));
 }
 
 export function dispatchRestartKernel(store: *) {
@@ -92,7 +92,7 @@ export function dispatchRestartKernel(store: *) {
 
 export function promptUserAboutNewKernel(
   store: *,
-  filename: string
+  filepath: string
 ): Promise<*> {
   return new Promise(resolve => {
     dialog.showMessageBox(
@@ -111,8 +111,8 @@ export function promptUserAboutNewKernel(
         if (index === 0) {
           const state = store.getState();
           const kernel = selectors.currentKernel(state);
-          const cwd = filename
-            ? path.dirname(path.resolve(filename))
+          const cwd = filepath
+            ? path.dirname(path.resolve(filepath))
             : cwdKernelFallback();
 
           // Create a brand new kernel
@@ -136,18 +136,18 @@ export function promptUserAboutNewKernel(
 }
 
 export function triggerSaveAs(store: *) {
-  showSaveAsDialog().then(filename => {
-    if (filename) {
-      triggerWindowRefresh(store, filename);
-      promptUserAboutNewKernel(store, filename);
+  showSaveAsDialog().then(filepath => {
+    if (filepath) {
+      triggerWindowRefresh(store, filepath);
+      promptUserAboutNewKernel(store, filepath);
     }
   });
 }
 
 export function dispatchSave(store: *) {
   const state = store.getState();
-  const filename = selectors.currentFilename(state);
-  if (!filename) {
+  const filepath = selectors.currentFilepath(state);
+  if (!filepath) {
     triggerSaveAs(store);
   } else {
     const contentRef = selectors.currentContentRef(state);
@@ -158,9 +158,9 @@ export function dispatchSave(store: *) {
 export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const filename = selectors.currentFilename(state);
-  const cwd = filename
-    ? path.dirname(path.resolve(filename))
+  const filepath = selectors.currentFilepath(state);
+  const cwd = filepath
+    ? path.dirname(path.resolve(filepath))
     : cwdKernelFallback();
 
   // Create a brand new kernel
@@ -192,14 +192,6 @@ export function dispatchPublishUserGist(
   store.dispatch({ type: "PUBLISH_USER_GIST" });
 }
 
-/**
- * Redux dispatch function to run the focused cell and all cells below it.
- * It obtains the focused cell cell id and all code cell cell ids below.
- * It dispatches the {@link executeCell} action on all of those retrieved cells.
- *
- * @exports
- * @param {Object} store - The Redux store
- */
 export function dispatchRunAllBelow(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
@@ -285,16 +277,14 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
-  const focused = selectors.currentFocusedCellId(state);
   const contentRef = selectors.currentContentRef(state);
-  store.dispatch(actions.copyCell({ id: focused, contentRef }));
+  store.dispatch(actions.copyCell({ contentRef }));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
-  const focused = selectors.currentFocusedCellId(state);
   const contentRef = selectors.currentContentRef(state);
-  store.dispatch(actions.cutCell({ id: focused, contentRef }));
+  store.dispatch(actions.cutCell({ contentRef }));
 }
 
 export function dispatchPasteCell(store: *) {
@@ -306,11 +296,9 @@ export function dispatchPasteCell(store: *) {
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(
     actions.createCellAfter({
       cellType: "code",
-      id: focused,
       source: "",
       contentRef
     })
@@ -320,24 +308,22 @@ export function dispatchCreateCellAfter(store: *) {
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
-  const focused = selectors.currentFocusedCellId(state);
   store.dispatch(
     actions.createCellAfter({
       cellType: "markdown",
-      id: focused,
       source: "",
       contentRef
     })
   );
 }
 
-export function dispatchLoad(store: *, event: Event, filename: string) {
+export function dispatchLoad(store: *, event: Event, filepath: string) {
   const state = store.getState();
   const kernelRef = stateModule.createKernelRef();
   const contentRef = selectors.currentContentRef(state);
 
   store.dispatch(
-    actions.fetchContent({ path: filename, params: {}, kernelRef, contentRef })
+    actions.fetchContent({ filepath, params: {}, kernelRef, contentRef })
   );
 }
 
@@ -369,16 +355,18 @@ export function dispatchNewNotebook(
  * It will expand all cell outputs before printing and restore cells it expanded when complete.
  *
  * @param {object} store - The Redux store
- * @param {string} filename - filename of PDF to be saved.
+ * @param {string} basepath - basepath of the PDF to be saved.
  * @param {any} notificationSystem - reference to global notification system
  */
 export function exportPDF(
   store: *,
-  filename: string,
+  basepath: string,
   notificationSystem: *
 ): void {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  const pdfPath = `${basepath}.pdf`;
 
   const unexpandedCells = selectors.currentIdsOfHiddenOutputs(state);
   // TODO: we should not be modifying the document to print PDFs
@@ -403,17 +391,17 @@ export function exportPDF(
         )
       );
 
-      fs.writeFile(`${filename}.pdf`, data, error_fs => {
+      fs.writeFile(pdfPath, data, error_fs => {
         notificationSystem.addNotification({
           title: "PDF exported",
-          message: `Notebook ${filename} has been exported as a pdf.`,
+          message: `Notebook ${basepath} has been exported as a pdf.`,
           dismissible: true,
           position: "tr",
           level: "success",
           action: {
             label: "Open PDF",
             callback: function openPDF() {
-              shell.openItem(`${filename}.pdf`);
+              shell.openItem(pdfPath);
             }
           }
         });
@@ -424,9 +412,9 @@ export function exportPDF(
 
 export function triggerSaveAsPDF(store: *) {
   showSaveAsDialog()
-    .then(filename => {
-      if (filename) {
-        return Promise.all([triggerWindowRefresh(store, filename)]).then(() =>
+    .then(filepath => {
+      if (filepath) {
+        return Promise.all([triggerWindowRefresh(store, filepath)]).then(() =>
           storeToPDF(store)
         );
       }
@@ -438,10 +426,10 @@ export function triggerSaveAsPDF(store: *) {
 
 export function storeToPDF(store: *) {
   const state = store.getState();
-  const notebookName = selectors.currentFilename(state);
-  let filename = path.basename(notebookName, ".ipynb");
+  const notebookName = selectors.currentFilepath(state);
+  const basename = path.basename(notebookName, ".ipynb");
   const notificationSystem = state.app.get("notificationSystem");
-  if (filename === "") {
+  if (basename === "") {
     notificationSystem.addNotification({
       title: "File has not been saved!",
       message: [
@@ -459,8 +447,8 @@ export function storeToPDF(store: *) {
       }
     });
   } else {
-    filename = path.join(path.dirname(notebookName), filename);
-    exportPDF(store, filename, notificationSystem);
+    const basepath = path.join(path.dirname(notebookName), basename);
+    exportPDF(store, basepath, notificationSystem);
   }
 }
 

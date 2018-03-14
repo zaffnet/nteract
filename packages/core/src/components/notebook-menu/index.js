@@ -21,7 +21,6 @@ type Props = {
   persistAfterClick?: boolean,
   defaultOpenKeys?: Array<string>,
   openKeys?: Array<string>,
-  cellFocused: ?string,
   currentKernelRef: ?KernelRef,
   saveNotebook: ?(payload: *) => void,
   executeCell: ?(payload: *) => void,
@@ -32,7 +31,7 @@ type Props = {
   cutCell: ?(payload: *) => void,
   copyCell: ?(payload: *) => void,
   mergeCellAfter: ?(payload: *) => void,
-  filename: ?string,
+  filepath: ?string,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?(payload: *) => void,
   createCellAfter: ?(payload: *) => void,
@@ -79,7 +78,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
     const {
       persistAfterClick,
       saveNotebook,
-      cellFocused,
       currentKernelRef,
       copyCell,
       createCellAfter,
@@ -89,7 +87,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       executeAllCellsBelow,
       clearAllOutputs,
       unhideAll,
-      filename,
+      filepath,
       mergeCellAfter,
       notebook,
       openAboutModal,
@@ -113,17 +111,17 @@ class PureNotebookMenu extends React.Component<Props, State> {
         // This gets us around a Flow fail on document.body.
         const body = document.body;
         if (body) {
-          extraHandlers.downloadNotebook(notebook, filename);
+          extraHandlers.downloadNotebook(notebook, filepath);
         }
         break;
       case MENU_ITEM_ACTIONS.COPY_CELL:
         if (copyCell) {
-          copyCell({ id: cellFocused, contentRef: currentContentRef });
+          copyCell({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CUT_CELL:
         if (cutCell) {
-          cutCell({ id: cellFocused, contentRef: currentContentRef });
+          cutCell({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.PASTE_CELL:
@@ -133,14 +131,13 @@ class PureNotebookMenu extends React.Component<Props, State> {
         break;
       case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
         if (mergeCellAfter) {
-          mergeCellAfter({ id: cellFocused, contentRef: currentContentRef });
+          mergeCellAfter({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
         if (createCellAfter) {
           createCellAfter({
             cellType: "code",
-            id: cellFocused,
             source: "",
             contentRef: currentContentRef
           });
@@ -150,7 +147,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
         if (createCellAfter) {
           createCellAfter({
             cellType: "markdown",
-            id: cellFocused,
             source: "",
             contentRef: currentContentRef
           });
@@ -159,7 +155,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
       case MENU_ITEM_ACTIONS.SET_CELL_TYPE_CODE:
         if (changeCellType) {
           changeCellType({
-            id: cellFocused,
             to: "code",
             contentRef: currentContentRef
           });
@@ -168,7 +163,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
       case MENU_ITEM_ACTIONS.SET_CELL_TYPE_MARKDOWN:
         if (changeCellType) {
           changeCellType({
-            id: cellFocused,
             to: "markdown",
             contentRef: currentContentRef
           });
@@ -408,8 +402,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
 // information about the current document to decide which menu items are
 // available...
 const mapStateToProps = state => ({
-  cellFocused: selectors.currentFocusedCellId(state),
-  filename: selectors.currentFilename(state),
+  filepath: selectors.currentFilepath(state),
   notebook: selectors.currentNotebook(state),
   currentKernelRef: selectors.currentKernelRef(state),
   currentContentRef: selectors.currentContentRef(state)

@@ -65,7 +65,7 @@ describe("createTitleFeed", () => {
             byRef: Immutable.Map({
               // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
               [currentContentRef]: stateModule.makeNotebookContentRecord({
-                path: "titled.ipynb"
+                filepath: "titled.ipynb"
               })
             })
           }),

@@ -31,7 +31,7 @@ export function fetchContentEpic(
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
     tap((action: FetchContent) => {
-      if (!action.payload || !action.payload.path) {
+      if (!action.payload || !action.payload.filepath) {
         throw new Error("fetching content needs a path");
       }
     }),
@@ -39,7 +39,7 @@ export function fetchContentEpic(
       const serverConfig = selectors.serverConfig(store.getState());
 
       return contents
-        .get(serverConfig, action.payload.path, action.payload.params)
+        .get(serverConfig, action.payload.filepath, action.payload.params)
         .pipe(
           tap(xhr => {
             if (xhr.status !== 200) {
@@ -48,7 +48,7 @@ export function fetchContentEpic(
           }),
           map(xhr => {
             return actions.fetchContentFulfilled({
-              path: action.payload.path,
+              filepath: action.payload.filepath,
               model: xhr.response,
               kernelRef: action.payload.kernelRef,
               contentRef: action.payload.contentRef
@@ -57,7 +57,7 @@ export function fetchContentEpic(
           catchError((xhrError: any) =>
             of(
               actions.fetchContentFailed({
-                path: action.payload.path,
+                filepath: action.payload.filepath,
                 error: xhrError,
                 kernelRef: action.payload.kernelRef,
                 contentRef: action.payload.contentRef
@@ -90,7 +90,7 @@ export function saveContentEpic(
         );
       }
 
-      const filename = selectors.currentFilename(state);
+      const filename = selectors.currentFilepath(state);
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
@@ -143,12 +143,11 @@ export function setNotebookEpic(
     ),
     map((action: FetchContentFulfilled) =>
       actions.setNotebook({
-        filename: action.payload.path,
+        filepath: action.payload.filepath,
         notebook: fromJS(action.payload.model.content),
         kernelRef: action.payload.kernelRef,
         contentRef: action.payload.contentRef,
         lastSaved: action.payload.model.last_modified,
-        name: action.payload.model.name,
         created: action.payload.model.created
       })
     ),

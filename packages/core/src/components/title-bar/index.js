@@ -40,7 +40,7 @@ export const TitleBar = (props: TitleBarProps) => (
 
 const mapStateToProps = state => ({
   title: selectors
-    .currentFilename(state)
+    .currentFilepath(state)
     .split("/")
     .pop()
     .split(".ipynb")

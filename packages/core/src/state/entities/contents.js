@@ -7,7 +7,6 @@ export type DocumentRecordProps = {
   // TODO: This _needs_ to become a Record
   notebook: Immutable.Map<string, any>,
   savedNotebook: Immutable.Map<string, any>,
-  filename: ?string,
   transient: Immutable.Map<string, any>, // has the keypaths for updating displays
   // transient should be more fully typed (be a record itself)
   // right now it's keypaths and then it looks like it's able to handle any per
@@ -29,8 +28,7 @@ export const makeDocumentRecord: Immutable.RecordFactory<
   cellPagers: Immutable.Map(),
   editorFocused: null,
   cellFocused: null,
-  copied: Immutable.Map(),
-  filename: null
+  copied: Immutable.Map()
 });
 
 export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
@@ -40,22 +38,25 @@ export type NotebookContentRecordProps = {
   format: "json",
   lastSaved: ?Date,
   model: DocumentRecord,
-  name: ?string,
-  path: ?string,
+  filepath: string,
   type: "notebook",
   writable: boolean
 };
 
 export type DummyContentRecordProps = {
   type: "dummy",
-  path: string
+  lastSaved: null,
+  filepath: string,
+  model: Immutable.Map<string, any>
 };
 
 export const makeDummyContentRecord: Immutable.RecordFactory<
   DummyContentRecordProps
 > = Immutable.Record({
   type: "dummy",
-  path: ""
+  lastSaved: null,
+  filepath: "",
+  model: Immutable.Map()
 });
 
 export type DummyContentRecord = Immutable.RecordOf<DummyContentRecordProps>;
@@ -67,8 +68,7 @@ export const makeNotebookContentRecord: Immutable.RecordFactory<
   format: "json",
   lastSaved: null,
   model: makeDocumentRecord(),
-  name: null,
-  path: null,
+  filepath: "",
   type: "notebook",
   writable: true
 });
