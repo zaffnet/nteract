@@ -20,6 +20,12 @@ In order to build a signed copy with working auto-update, you will need to join 
 
 1. Run `lerna publish` to publish everything, which also runs the verification steps. You will have to pick versions for everything.
 
+1. Run the following to ship the built desktop app
+
+```
+lerna run ship --scope nteract --stream
+```
+
 1. From GitHub go to [nteract's releases](https://github.com/nteract/nteract/releases), verify everything works and edit the release notes. The name should follow our [naming guidelines](https://github.com/nteract/naming), namely that we use the last name of the next scientist in the list with an adjective in front.
    Example:
 
