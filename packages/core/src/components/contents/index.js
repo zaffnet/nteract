@@ -26,10 +26,6 @@ const mapStateToProps = (state: *, ownProps: *): * => {
   };
 };
 
-const mapDispatchToProps = (state: *, ownProps: *): * => {
-  return {};
-};
-
 class Contents extends React.PureComponent<*, *> {
   render() {
     switch (this.props.contentType) {
@@ -54,4 +50,4 @@ class Contents extends React.PureComponent<*, *> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contents);
+export default connect(mapStateToProps)(Contents);
