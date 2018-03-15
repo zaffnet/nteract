@@ -9,15 +9,7 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import {
-  ModalController,
-  NotebookApp,
-  NotebookMenu,
-  Styles,
-  TitleBar,
-  actions,
-  state
-} from "@nteract/core";
+import { Contents, Styles, actions, state } from "@nteract/core";
 
 function createApp(store: *) {
   class App extends React.Component<*> {
@@ -28,16 +20,13 @@ function createApp(store: *) {
         <Provider store={store}>
           <React.Fragment>
             <Styles>
-              <TitleBar />
-              <NotebookMenu />
-              <NotebookApp />
-              <NotificationSystem
-                ref={notificationSystem => {
-                  this.notificationSystem = notificationSystem;
-                }}
-              />
-              <ModalController />
+              <Contents />
             </Styles>
+            <NotificationSystem
+              ref={notificationSystem => {
+                this.notificationSystem = notificationSystem;
+              }}
+            />
             <style jsx global>{`
               body {
                 font-family: "Source Sans Pro";
@@ -142,7 +131,7 @@ function main(rootEl: Element, dataEl: Node | null) {
         contents: state.makeContentsRecord({
           byRef: Immutable.Map().set(
             contentRef,
-            state.makeContentRecord({
+            state.makeDummyContentRecord({
               filepath: config.contentsPath
             })
           )

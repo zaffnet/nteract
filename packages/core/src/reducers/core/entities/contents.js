@@ -7,6 +7,7 @@ import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 import {
   makeContentRecord,
+  makeDummyContentRecord,
   makeContentsRecord,
   makeDocumentRecord,
   makeNotebookContentRecord
@@ -903,7 +904,7 @@ const byRef = (state = Immutable.Map(), action) => {
       // the communication state shows that it should exist.
       return state.set(
         action.payload.contentRef,
-        makeContentRecord({
+        makeDummyContentRecord({
           filepath: action.payload.filepath || ""
           // TODO: we can set kernelRef when the content record uses it.
         })

@@ -2,43 +2,29 @@
 /* @flow */
 import * as Immutable from "immutable";
 import * as React from "react";
+
+import * as actions from "../actions";
 import * as selectors from "../selectors";
+const themes = require("../themes");
 import type { ContentRef } from "../state/refs";
-import { DragDropContext as dragDropContext } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
-import { connect } from "react-redux";
-import {
-  List as ImmutableList,
-  Map as ImmutableMap,
-  Set as ImmutableSet,
-  isImmutable
-} from "immutable";
-
-import { HijackScroll } from "./hijack-scroll";
-
-import MathJax from "@nteract/mathjax";
-
-import MarkdownPreviewer from "./markdown-preview";
-import Toolbar from "./toolbar";
-
-import { Display, RichestMime } from "@nteract/display-area";
-
-import Editor from "./editor";
-
-import { displayOrder, transforms } from "@nteract/transforms";
 
 import { Input, Prompt, Source, Pagers, Outputs, Cell } from "./presentational";
 
 import DraggableCell from "./draggable-cell";
 import CellCreator from "./cell-creator";
 import StatusBar from "./status-bar";
+import MarkdownPreviewer from "./markdown-preview";
+import Editor from "./editor";
+import Toolbar from "./toolbar";
+import { HijackScroll } from "./hijack-scroll";
 
-import * as actions from "../actions";
+import { DragDropContext as dragDropContext } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
+import { connect } from "react-redux";
 
-// NOTE: PropTypes are required for the sake of contextTypes
-const PropTypes = require("prop-types");
-
-const themes = require("../themes");
+import MathJax from "@nteract/mathjax";
+import { Display, RichestMime } from "@nteract/display-area";
+import { displayOrder, transforms } from "@nteract/transforms";
 
 type AnyCellProps = {
   id: string,
@@ -47,8 +33,8 @@ type AnyCellProps = {
   theme: string,
   source: string,
   executionCount: *,
-  outputs: ImmutableList<*>,
-  pager: ImmutableList<*>,
+  outputs: Immutable.List<*>,
+  pager: Immutable.List<*>,
   cellStatus: string,
   cellFocused: boolean, // not the ID of which is focused
   editorFocused: boolean,
@@ -57,7 +43,7 @@ type AnyCellProps = {
   outputExpanded: boolean,
   displayOrder: typeof displayOrder,
   transforms: typeof transforms,
-  models: ImmutableMap<string, *>,
+  models: Immutable.Map<string, *>,
   codeMirrorMode: *,
   selectCell: () => void,
   focusEditor: () => void,
@@ -74,7 +60,7 @@ const mapStateToCellProps = (state, { id }) => {
   }
 
   const cellType = cell.get("cell_type");
-  const outputs = cell.get("outputs", ImmutableList());
+  const outputs = cell.get("outputs", Immutable.List());
 
   const sourceHidden =
     cellType === "code" &&
@@ -127,10 +113,6 @@ const mapDispatchToCellProps = (dispatch, { id, contentRef }) => ({
 });
 
 class AnyCell extends React.PureComponent<AnyCellProps, *> {
-  static contextTypes = {
-    store: PropTypes.object
-  };
-
   render(): ?React$Element<any> {
     const {
       cellFocused,
@@ -173,7 +155,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                   focusAbove={focusAboveCell}
                   focusBelow={focusBelowCell}
                   options={{
-                    mode: isImmutable(this.props.codeMirrorMode)
+                    mode: Immutable.isImmutable(this.props.codeMirrorMode)
                       ? this.props.codeMirrorMode.toJS()
                       : this.props.codeMirrorMode
                   }}
@@ -290,13 +272,13 @@ type NotebookProps = NotebookStateProps & NotebookDispatchProps;
 
 type PureNotebookProps = {
   displayOrder?: Array<string>,
-  cellOrder?: ImmutableList<any>,
+  cellOrder?: Immutable.List<any>,
   transforms?: Object,
   theme?: string,
   lastSaved?: Date,
   languageDisplayName?: string,
   kernelStatus?: string,
-  codeMirrorMode?: string | ImmutableMap<string, *>,
+  codeMirrorMode?: string | Immutable.Map<string, *>,
   // TODO: Once we're willing to do multi-contents views, we should require this
   //       to be passed in
   // TODO: Fill in more from the convo with Andrew here
@@ -305,13 +287,13 @@ type PureNotebookProps = {
 
 type NotebookStateProps = {
   displayOrder: Array<string>,
-  cellOrder: ImmutableList<any>,
+  cellOrder: Immutable.List<any>,
   transforms: Object,
   theme: string,
   lastSaved: ?Date,
   languageDisplayName: string,
   kernelStatus: string,
-  codeMirrorMode: string | ImmutableMap<string, *>,
+  codeMirrorMode: string | Immutable.Map<string, *>,
   contentRef: ContentRef
 };
 
@@ -356,10 +338,6 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     theme: "light",
     displayOrder,
     transforms
-  };
-
-  static contextTypes = {
-    store: PropTypes.object
   };
 
   constructor(): void {
