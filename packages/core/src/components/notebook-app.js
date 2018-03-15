@@ -3,9 +3,6 @@
 import * as Immutable from "immutable";
 import * as React from "react";
 
-// NOTE: PropTypes are required for the sake of contextTypes
-const PropTypes = require("prop-types");
-
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 const themes = require("../themes");
@@ -116,10 +113,6 @@ const mapDispatchToCellProps = (dispatch, { id, contentRef }) => ({
 });
 
 class AnyCell extends React.PureComponent<AnyCellProps, *> {
-  static contextTypes = {
-    store: PropTypes.object
-  };
-
   render(): ?React$Element<any> {
     const {
       cellFocused,
@@ -345,10 +338,6 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     theme: "light",
     displayOrder,
     transforms
-  };
-
-  static contextTypes = {
-    store: PropTypes.object
   };
 
   constructor(): void {
