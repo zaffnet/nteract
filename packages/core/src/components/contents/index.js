@@ -41,6 +41,13 @@ class Contents extends React.PureComponent<*, *> {
             <NotebookApp />
           </React.Fragment>
         );
+      case "dummy":
+        return (
+          <React.Fragment>
+            <TitleBar />
+            <div>loading...</div>
+          </React.Fragment>
+        );
       default:
         return <div>loading or something</div>;
     }
