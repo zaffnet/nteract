@@ -136,6 +136,13 @@ export const currentModel: (
   }
 );
 
+export const currentContentType: (
+  state: AppState
+) => "notebook" | "dummy" | null = createSelector(
+  (state: AppState) => currentContent(state),
+  content => (content ? content.type : null)
+);
+
 // TODO: if we're not looking at a notebook in the UI, there may not _be_ a
 // notebook object to get. Do we return null? Throw an error?
 export const currentNotebook: (
