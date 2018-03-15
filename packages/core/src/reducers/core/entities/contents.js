@@ -75,9 +75,9 @@ import {
   removeCell,
   emptyNotebook,
   createImmutableOutput,
-  createImmutableMimeBundle
+  createImmutableMimeBundle,
+  fromJS
 } from "@nteract/commutable";
-import { fromJS } from "../../../../../commutable/lib";
 
 type KeyPath = Immutable.List<string | number>;
 type KeyPaths = Immutable.List<KeyPath>;
