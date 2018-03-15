@@ -74,9 +74,15 @@ const mapStateToCellProps = (state, { id }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
-  const pager = selectors
-    .currentModel(state)
-    .getIn(["cellPagers", id], Immutable.List());
+  const model = selectors.currentModel(state);
+
+  if (model.type !== "notebook") {
+    throw new Error(
+      "Cell components should not be used with non-notebook models"
+    );
+  }
+
+  const pager = model.getIn(["cellPagers", id], Immutable.List());
 
   return {
     cellType,

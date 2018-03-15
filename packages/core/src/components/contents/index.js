@@ -44,8 +44,17 @@ class Contents extends React.PureComponent<*, *> {
             <div>loading...</div>
           </React.Fragment>
         );
+      case "directory":
+        return (
+          <React.Fragment>
+            <TitleBar />
+            <div>it is a directory!</div>
+          </React.Fragment>
+        );
       default:
-        return <div>loading or something</div>;
+        return (
+          <div>{`content type ${this.props.contentType} not implemented`}</div>
+        );
     }
   }
 }
