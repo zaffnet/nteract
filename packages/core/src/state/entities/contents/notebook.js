@@ -34,6 +34,7 @@ export const makeDocumentRecord: Immutable.RecordFactory<
 export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
 
 export type NotebookContentRecordProps = {
+  mimetype: ?string,
   created: ?Date,
   format: "json",
   lastSaved: ?Date,
@@ -46,6 +47,7 @@ export type NotebookContentRecordProps = {
 export const makeNotebookContentRecord: Immutable.RecordFactory<
   NotebookContentRecordProps
 > = Immutable.Record({
+  mimetype: null,
   created: null,
   format: "json",
   lastSaved: null,

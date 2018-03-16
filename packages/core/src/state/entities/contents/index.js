@@ -2,18 +2,29 @@
 import * as Immutable from "immutable";
 import type { ContentRef } from "../../refs";
 
-import type { NotebookContentRecord } from "./notebook";
-import type { DirectoryContentRecord } from "./directory";
-import type { DummyContentRecord } from "./dummy";
+import type {
+  NotebookContentRecord,
+  DocumentRecord as NotebookModel
+} from "./notebook";
+import type { DirectoryContentRecord, DirectoryModelRecord } from "./directory";
+import type { DummyContentRecord, EmptyModelRecord } from "./dummy";
+import type { FileContentRecord, FileModelRecord } from "./file";
 
 export * from "./notebook";
 export * from "./directory";
 export * from "./dummy";
+export * from "./file";
 
-// TODO: this will be a merger of notebook, directory, and file eventually.
+export type ContentModel =
+  | NotebookModel
+  | DirectoryModelRecord
+  | FileModelRecord
+  | EmptyModelRecord;
+
 export type ContentRecord =
   | NotebookContentRecord
   | DummyContentRecord
+  | FileContentRecord
   | DirectoryContentRecord;
 
 export type ContentsRecordProps = {

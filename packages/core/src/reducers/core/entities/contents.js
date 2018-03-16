@@ -9,6 +9,8 @@ import type { DocumentRecord } from "../../../state/entities/contents";
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 import {
+  makeFileContentRecord,
+  makeFileModelRecord,
   makeDummyContentRecord,
   makeContentsRecord,
   makeDirectoryContentRecord,
@@ -917,6 +919,21 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.FETCH_CONTENT_FULFILLED:
+      if (action.payload.model.type === "file") {
+        return state.set(
+          action.payload.contentRef,
+          makeFileContentRecord({
+            mimetype: action.payload.model.mimetype,
+            created: action.payload.model.created,
+            lastSaved: action.payload.model.last_modified,
+            filepath: action.payload.filepath,
+            model: makeFileModelRecord({
+              text: action.payload.model.content
+            })
+          })
+        );
+      }
+
       if (action.payload.model.type === "directory") {
         // TODO
         // For each entry in the directory listing, create a new contentRef
@@ -932,6 +949,7 @@ const byRef = (state = Immutable.Map(), action) => {
             return [
               createContentRef(),
               makeDummyContentRecord({
+                mimetype: entry.mimetype,
                 // TODO: We can store the type of this content,
                 // it just doesn't have a model
                 // entry.type

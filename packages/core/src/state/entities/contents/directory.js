@@ -19,6 +19,7 @@ export type DirectoryModelRecord = Immutable.RecordOf<
 >;
 
 export type DirectoryContentRecordProps = {
+  mimetype: null,
   type: "directory",
   created: ?Date,
   format: "json",
@@ -29,6 +30,7 @@ export type DirectoryContentRecordProps = {
 export const makeDirectoryContentRecord: Immutable.RecordFactory<
   DirectoryContentRecordProps
 > = Immutable.Record({
+  mimetype: null,
   type: "directory",
   created: null,
   format: "json",

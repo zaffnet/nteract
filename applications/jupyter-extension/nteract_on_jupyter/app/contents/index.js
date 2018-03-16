@@ -13,6 +13,7 @@ import {
 } from "@nteract/core";
 
 import { default as Directory } from "./directory";
+import { default as File } from "./file";
 
 type ContentRef = stateModule.ContentRef;
 
@@ -25,7 +26,7 @@ const mapStateToProps = (state: *, ownProps: *): * => {
   };
 };
 
-class Contents extends React.PureComponent<*, *> {
+class Contents extends React.Component<*, *> {
   render() {
     switch (this.props.contentType) {
       case "notebook":
@@ -34,6 +35,13 @@ class Contents extends React.PureComponent<*, *> {
             <TitleBar />
             <NotebookMenu />
             <NotebookApp />
+          </React.Fragment>
+        );
+      case "file":
+        return (
+          <React.Fragment>
+            <TitleBar />
+            <File contentRef={this.props.contentRef} />
           </React.Fragment>
         );
       case "dummy":

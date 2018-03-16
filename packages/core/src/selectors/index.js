@@ -1,12 +1,7 @@
 // @flow
 
 import type { ContentRef, KernelRef } from "../state/refs";
-import type {
-  ContentRecord,
-  DocumentRecord,
-  DirectoryModelRecord,
-  EmptyModelRecord
-} from "../state/entities/contents";
+import type { ContentRecord, ContentModel } from "../state/entities/contents";
 
 import type { AppRecord, HostRecord, JupyterHostRecord } from "../state";
 
@@ -128,9 +123,7 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel: (
-  state: AppState
-) => DocumentRecord | DirectoryModelRecord | EmptyModelRecord = createSelector(
+export const currentModel: (state: AppState) => ContentModel = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     return currentContent ? currentContent.model : makeEmptyModel();
@@ -139,7 +132,7 @@ export const currentModel: (
 
 export const currentContentType: (
   state: AppState
-) => "notebook" | "dummy" | "directory" | null = createSelector(
+) => "notebook" | "dummy" | "directory" | "file" | null = createSelector(
   (state: AppState) => currentContent(state),
   content => (content ? content.type : null)
 );

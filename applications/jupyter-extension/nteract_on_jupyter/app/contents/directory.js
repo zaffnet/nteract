@@ -35,7 +35,9 @@ class DirectoryEntry extends React.PureComponent<DirectoryEntryProps, *> {
     );
 
     let type = this.props.entry.type;
-    type = type === "dummy" ? this.props.entry.assumedType : type;
+    if (this.props.entry.type === "dummy") {
+      type = this.props.entry.assumedType;
+    }
 
     let Icon = FileText;
 
