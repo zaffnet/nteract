@@ -18,6 +18,7 @@ import {
 import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
+import { empty } from "rxjs/observable/empty";
 
 import { kernels, shutdown } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
@@ -37,8 +38,15 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap((action: LaunchKernelByNameAction) => {
+      const state = store.getState();
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const config = selectors.serverConfig(host);
+
       const { payload: { kernelSpecName, cwd, kernelRef } } = action;
-      const config = selectors.serverConfig(store.getState());
 
       return kernels.start(config, kernelSpecName, cwd).pipe(
         mergeMap(data => {
@@ -74,7 +82,14 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     // interrupt, instead doing it after the last one happens
     concatMap((action: InterruptKernel) => {
       const state = store.getState();
-      const serverConfig = selectors.serverConfig(state);
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
       const kernel = selectors.currentKernel(state);
       const id = kernel.id;
 
@@ -105,7 +120,14 @@ export const killKernelEpic = (action$: *, store: *) =>
     // kill, instead doing it after the last one happens
     concatMap((action: KillKernelAction) => {
       const state = store.getState();
-      const serverConfig = selectors.serverConfig(state);
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
       const kernel = selectors.currentKernel(state);
       const id = kernel.id;
 

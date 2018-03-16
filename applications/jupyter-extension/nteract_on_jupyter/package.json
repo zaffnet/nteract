@@ -31,7 +31,8 @@
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "rx-jupyter": "^3.0.0",
-    "rxjs": "^5.5.6"
+    "rxjs": "^5.5.6",
+    "url-join": "^4.0.0"
   },
   "devDependencies": {
     "next": "^5.0.0",

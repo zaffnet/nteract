@@ -36,7 +36,14 @@ export function fetchContentEpic(
       }
     }),
     switchMap((action: FetchContent) => {
-      const serverConfig = selectors.serverConfig(store.getState());
+      const state = store.getState();
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
 
       return contents
         .get(serverConfig, action.payload.filepath, action.payload.params)
@@ -77,6 +84,14 @@ export function saveContentEpic(
     ofType(actionTypes.SAVE),
     mergeMap((action: Save) => {
       const state = store.getState();
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
       const currentNotebook = selectors.currentNotebook(state);
 
       // TODO: this will likely make more sense when this becomes less
@@ -98,8 +113,6 @@ export function saveContentEpic(
       const notebook = toJS(
         currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
       );
-
-      const serverConfig = selectors.serverConfig(state);
 
       const model = {
         content: notebook,

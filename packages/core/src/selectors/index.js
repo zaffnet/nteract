@@ -1,16 +1,5 @@
 // @flow
 
-// FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
-type AppState = {
-  // The new way
-  core: any,
-
-  // The old way
-  app: Object,
-  comms: *,
-  config: Object
-};
-
 import type { ContentRef, KernelRef } from "../state/refs";
 import type {
   ContentRecord,
@@ -18,6 +7,19 @@ import type {
   DirectoryModelRecord,
   EmptyModelRecord
 } from "../state/entities/contents";
+
+import type { AppRecord, HostRecord, JupyterHostRecord } from "../state";
+
+// FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
+type AppState = {
+  // The new way
+  core: any,
+
+  // The old way
+  app: AppRecord,
+  comms: *,
+  config: Object
+};
 
 import { makeEmptyModel } from "../state/entities/contents";
 
@@ -29,18 +31,13 @@ function identity<T>(thing: T): T {
   return thing;
 }
 
-const serverUrl = (state: AppState) => state.app.host.serverUrl;
-const crossDomain = (state: AppState) => state.app.host.crossDomain;
-const token = (state: AppState) => state.app.host.token;
-
-export const serverConfig = createSelector(
-  [serverUrl, crossDomain, token],
-  (serverUrl, crossDomain, token) => ({
-    endpoint: serverUrl,
-    crossDomain,
-    token
-  })
-);
+export const serverConfig = (host: JupyterHostRecord) => {
+  return {
+    endpoint: host.origin + host.basePath,
+    crossDomain: host.crossDomain,
+    token: host.token
+  };
+};
 
 export const userPreferences = createSelector(
   (state: AppState) => state.config,
