@@ -4,6 +4,9 @@ import * as React from "react";
 import * as Immutable from "immutable";
 const urljoin = require("url-join");
 
+import TimeAgo from "@nteract/timeago";
+import { Book, FileText, FileDirectory } from "@nteract/octicons";
+
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
 // Workaround flow limitation for getting these types
