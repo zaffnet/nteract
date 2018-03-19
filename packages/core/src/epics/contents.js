@@ -30,12 +30,15 @@ export function fetchContentEpic(
 ) {
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
-    tap((action: FetchContent) => {
-      if (!action.payload || !action.payload.filepath) {
-        throw new Error("fetching content needs a path");
-      }
-    }),
     switchMap((action: FetchContent) => {
+      if (!action.payload || typeof action.payload.filepath !== "string") {
+        return of({
+          type: "ERROR",
+          error: true,
+          payload: { error: new Error("fetching content needs a payload") }
+        });
+      }
+
       const state = store.getState();
 
       const host = selectors.currentHost(state);
