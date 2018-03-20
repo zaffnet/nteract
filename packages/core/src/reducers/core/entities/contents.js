@@ -919,66 +919,65 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.FETCH_CONTENT_FULFILLED:
-      if (action.payload.model.type === "file") {
-        return state.set(
-          action.payload.contentRef,
-          makeFileContentRecord({
-            mimetype: action.payload.model.mimetype,
-            created: action.payload.model.created,
-            lastSaved: action.payload.model.last_modified,
-            filepath: action.payload.filepath,
-            model: makeFileModelRecord({
-              text: action.payload.model.content
+      switch (action.payload.model.type) {
+        case "file":
+          return state.set(
+            action.payload.contentRef,
+            makeFileContentRecord({
+              mimetype: action.payload.model.mimetype,
+              created: action.payload.model.created,
+              lastSaved: action.payload.model.last_modified,
+              filepath: action.payload.filepath,
+              model: makeFileModelRecord({
+                text: action.payload.model.content
+              })
             })
-          })
-        );
-      }
+          );
+        case "directory": {
+          // For each entry in the directory listing, create a new contentRef
+          // and a "filler" contents object
 
-      if (action.payload.model.type === "directory") {
-        // TODO
-        // For each entry in the directory listing, create a new contentRef
-        // and a "filler" contents object
-        // Optional: run through all the current contents to see if they're
-        //           a file we already have (?)
-        const listingDraft: Array<Object> = action.payload.model.content;
+          // Optional: run through all the current contents to see if they're
+          //           a file we already have (?)
 
-        // Create a map of <ContentRef, ContentRecord> that we merge into the
-        // content refs state
-        const dummyRecords = Immutable.Map(
-          listingDraft.map(entry => {
-            return [
-              createContentRef(),
-              makeDummyContentRecord({
-                mimetype: entry.mimetype,
-                // TODO: We can store the type of this content,
-                // it just doesn't have a model
-                // entry.type
-                assumedType: entry.type,
-                lastSaved: entry.last_modified,
-                filepath: entry.path
-              })
-            ];
-          })
-        );
+          // Create a map of <ContentRef, ContentRecord> that we merge into the
+          // content refs state
+          const dummyRecords = Immutable.Map(
+            action.payload.model.content.map(entry => {
+              return [
+                createContentRef(),
+                makeDummyContentRecord({
+                  mimetype: entry.mimetype,
+                  // TODO: We can store the type of this content,
+                  // it just doesn't have a model
+                  // entry.type
+                  assumedType: entry.type,
+                  lastSaved: entry.last_modified,
+                  filepath: entry.path
+                })
+              ];
+            })
+          );
 
-        return (
-          state
-            // Bring in all the listed records
-            .merge(dummyRecords)
-            // Set up the base directory
-            .set(
-              action.payload.contentRef,
-              makeDirectoryContentRecord({
-                model: makeDirectoryModel({
-                  // The listing is all these contents in aggregate
-                  listing: Immutable.Set(dummyRecords.keys())
-                }),
-                filepath: action.payload.filepath,
-                lastSaved: action.payload.model.last_modified,
-                created: action.payload.model.created
-              })
-            )
-        );
+          return (
+            state
+              // Bring in all the listed records
+              .merge(dummyRecords)
+              // Set up the base directory
+              .set(
+                action.payload.contentRef,
+                makeDirectoryContentRecord({
+                  model: makeDirectoryModel({
+                    // The listing is all these contents in aggregate
+                    listing: Immutable.Set(dummyRecords.keys())
+                  }),
+                  filepath: action.payload.filepath,
+                  lastSaved: action.payload.model.last_modified,
+                  created: action.payload.model.created
+                })
+              )
+          );
+        }
       }
 
       // TODO: we *should* be able to handle this for non-notebook types in the
