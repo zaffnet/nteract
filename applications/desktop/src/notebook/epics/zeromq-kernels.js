@@ -233,7 +233,7 @@ export const launchKernelEpic = (
 
       // Kill the old kernel by emitting the action to kill it if it exists
       let cleanupOldKernel$ = empty();
-      if (oldKernelRef && oldKernelRef !== action.payloadRef) {
+      if (oldKernelRef && oldKernelRef !== action.payload.kernelRef) {
         cleanupOldKernel$ = of(
           actions.killKernel({ restarting: false, kernelRef: oldKernelRef })
         );

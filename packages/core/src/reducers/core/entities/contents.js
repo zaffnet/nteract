@@ -2,6 +2,9 @@
 import * as Immutable from "immutable";
 import * as actionTypes from "../../../actionTypes";
 import * as uuid from "uuid";
+
+import { has } from "lodash";
+
 import type { DocumentRecord } from "../../../state/entities/contents";
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
@@ -235,7 +238,7 @@ function appendOutput(state: DocumentRecord, action: AppendOutput) {
   // display data
   if (
     output.output_type !== "display_data" ||
-    !(output && output.transient && output.transient.display_id)
+    !has(output, "transient.display_id")
   ) {
     return state.updateIn(
       ["notebook", "cellMap", cellID, "outputs"],
