@@ -969,7 +969,7 @@ const byRef = (state = Immutable.Map(), action) => {
                 makeDirectoryContentRecord({
                   model: makeDirectoryModel({
                     // The listing is all these contents in aggregate
-                    listing: Immutable.Set(dummyRecords.keys())
+                    items: Immutable.List(dummyRecords.keys())
                   }),
                   filepath: action.payload.filepath,
                   lastSaved: action.payload.model.last_modified,

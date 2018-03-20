@@ -107,7 +107,7 @@ export class Directory extends React.PureComponent<DirectoryProps, *> {
           // When we're not at the root of the tree, show `..`
           <a href="..">..</a>
         )}
-        {this.props.content.model.listing.map(contentRef => (
+        {this.props.content.model.items.map(contentRef => (
           <li key={contentRef}>
             <ConnectedEntry contentRef={contentRef} />
           </li>
