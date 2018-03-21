@@ -17,7 +17,7 @@ type DirectoryContentRecord = stateModule.DirectoryContentRecord;
 import { connect } from "react-redux";
 
 type DirectoryEntryProps = {
-  type: "dummy" | "notebook" | "directory" | "file",
+  type: "unknown" | "notebook" | "directory" | "file",
   href: string,
   displayName: string
 };
@@ -71,7 +71,7 @@ class DirectoryEntry extends React.PureComponent<DirectoryEntryProps, *> {
 }
 
 const mapStateToEntryProps = (
-  state: Object,
+  state: stateModule.AppState,
   ownProps: { contentRef: ContentRef }
 ): DirectoryEntryProps => {
   const host = selectors.currentHost(state);
@@ -80,6 +80,15 @@ const mapStateToEntryProps = (
   }
 
   const entry = selectors.contentByRef(state, ownProps);
+  if (!entry) {
+    // TODO: Determine what we do if we try to load content that isn't in the byRef structure
+    return {
+      type: "unknown",
+      href: "",
+      displayName: "Unknown Content"
+    };
+  }
+
   const basePath = host.basePath;
 
   const displayName = entry.filepath.split("/").pop() || "";
@@ -100,19 +109,26 @@ const mapStateToEntryProps = (
 const ConnectedEntry = connect(mapStateToEntryProps)(DirectoryEntry);
 
 type DirectoryProps = {
-  content: DirectoryContentRecord
+  content: DirectoryContentRecord,
+  basePath: string
 };
 
 export class Directory extends React.PureComponent<DirectoryProps, *> {
   render() {
     const atRoot = this.props.content.filepath === "/";
 
+    const dotdothref = urljoin(
+      this.props.basePath,
+      "/nteract/edit/",
+      urljoin(this.props.content.filepath, "..")
+    );
+
     return (
       <ul>
         {atRoot ? null : (
           // TODO: Create a contentRef for `..`, even though it's a placeholder
           // When we're not at the root of the tree, show `..`
-          <DirectoryEntry href="#yolo" displayName=".." type="directory" />
+          <DirectoryEntry href={dotdothref} displayName=".." type="directory" />
         )}
         {this.props.content.model.items.map(contentRef => (
           <li key={contentRef}>
@@ -130,10 +146,20 @@ export class Directory extends React.PureComponent<DirectoryProps, *> {
 }
 
 const mapStateToDirectoryProps = (
-  state: Object,
+  state: stateModule.AppState,
   ownProps: { contentRef: ContentRef }
 ): DirectoryProps => {
-  return { content: selectors.contentByRef(state, ownProps) };
+  const host = selectors.currentHost(state);
+  if (host.type !== "jupyter") {
+    throw new Error("This component only works with jupyter servers");
+  }
+
+  const basePath = host.basePath;
+
+  return {
+    content: selectors.contentByRef(state, ownProps),
+    basePath
+  };
 };
 
 export const ConnectedDirectory = connect(mapStateToDirectoryProps)(Directory);

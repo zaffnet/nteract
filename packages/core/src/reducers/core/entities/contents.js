@@ -959,6 +959,17 @@ const byRef = (state = Immutable.Map(), action) => {
             })
           );
 
+          const items = Immutable.List(dummyRecords.keys());
+          const sorted = items.sort((aRef, bRef) => {
+            const a = dummyRecords.get(aRef);
+            const b = dummyRecords.get(bRef);
+
+            if (a.assumedType === b.assumedType) {
+              return a.filepath.localeCompare(b.filepath);
+            }
+            return a.assumedType.localeCompare(b.assumedType);
+          });
+
           return (
             state
               // Bring in all the listed records
@@ -969,7 +980,7 @@ const byRef = (state = Immutable.Map(), action) => {
                 makeDirectoryContentRecord({
                   model: makeDirectoryModel({
                     // The listing is all these contents in aggregate
-                    items: Immutable.List(dummyRecords.keys())
+                    items: sorted
                   }),
                   filepath: action.payload.filepath,
                   lastSaved: action.payload.model.last_modified,
