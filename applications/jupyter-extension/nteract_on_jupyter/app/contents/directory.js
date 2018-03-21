@@ -17,8 +17,9 @@ type DirectoryContentRecord = stateModule.DirectoryContentRecord;
 import { connect } from "react-redux";
 
 type DirectoryEntryProps = {
-  basePath: string,
-  entry: ContentRecord
+  type: "dummy" | "notebook" | "directory" | "file",
+  href: string,
+  displayName: string
 };
 
 /**
@@ -30,17 +31,7 @@ type DirectoryEntryProps = {
 
 class DirectoryEntry extends React.PureComponent<DirectoryEntryProps, *> {
   render() {
-    const displayName = this.props.entry.filepath.split("/").pop();
-    const href = urljoin(
-      this.props.basePath,
-      "/nteract/edit/",
-      this.props.entry.filepath
-    );
-
-    let type = this.props.entry.type;
-    if (this.props.entry.type === "dummy") {
-      type = this.props.entry.assumedType;
-    }
+    const { href, type, displayName } = this.props;
 
     let Icon = FileText;
 
@@ -88,9 +79,21 @@ const mapStateToEntryProps = (
     throw new Error("This component only works with jupyter servers");
   }
 
+  const entry = selectors.contentByRef(state, ownProps);
+  const basePath = host.basePath;
+
+  const displayName = entry.filepath.split("/").pop() || "";
+  const href = urljoin(basePath, "/nteract/edit/", entry.filepath);
+
+  let type = entry.type;
+  if (entry.type === "dummy") {
+    type = entry.assumedType;
+  }
+
   return {
-    entry: selectors.contentByRef(state, ownProps),
-    basePath: host.basePath
+    type,
+    href,
+    displayName
   };
 };
 
@@ -107,8 +110,9 @@ export class Directory extends React.PureComponent<DirectoryProps, *> {
     return (
       <ul>
         {atRoot ? null : (
+          // TODO: Create a contentRef for `..`, even though it's a placeholder
           // When we're not at the root of the tree, show `..`
-          <a href="..">..</a>
+          <DirectoryEntry href="#yolo" displayName=".." type="directory" />
         )}
         {this.props.content.model.items.map(contentRef => (
           <li key={contentRef}>
