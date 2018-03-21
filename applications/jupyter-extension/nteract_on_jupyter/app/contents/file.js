@@ -21,7 +21,10 @@ type TextFileProps = {
 
 export class TextFile extends React.PureComponent<TextFileProps, null> {
   static handles(mimetype: string) {
-    return mimetype.startsWith("text/");
+    return (
+      mimetype.startsWith("text/") ||
+      mimetype.startsWith("application/javascript")
+    );
   }
   render() {
     return <pre>{this.props.data}</pre>;
