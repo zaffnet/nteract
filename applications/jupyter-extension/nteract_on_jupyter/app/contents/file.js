@@ -5,6 +5,8 @@ import * as Immutable from "immutable";
 
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
+import { JSONTransform } from "@nteract/transforms";
+
 // Workaround flow limitation for getting these types
 type ContentRef = stateModule.ContentRef;
 type FileContentRecord = stateModule.FileContentRecord;
@@ -15,15 +17,16 @@ type FileProps = {
   content: FileContentRecord
 };
 
-type TextFileProps = {
+type FileTransformProps = {
   data: string
 };
 
-export class TextFile extends React.PureComponent<TextFileProps, null> {
+export class TextFile extends React.PureComponent<FileTransformProps, null> {
   static handles(mimetype: string) {
     return (
       mimetype.startsWith("text/") ||
-      mimetype.startsWith("application/javascript")
+      mimetype.startsWith("application/javascript") ||
+      mimetype.startsWith("application/json")
     );
   }
   render() {
@@ -40,9 +43,13 @@ export class File extends React.PureComponent<FileProps, *> {
     }
 
     const mimetype = this.props.content.mimetype;
+    const text = this.props.content.model.text;
 
-    if (TextFile.handles(mimetype)) {
-      return <TextFile data={this.props.content.model.text} />;
+    if (JSONTransform.handles(mimetype)) {
+      const data = JSON.parse(text);
+      return <JSONTransform data={data} />;
+    } else if (TextFile.handles(mimetype)) {
+      return <TextFile data={text} />;
     }
 
     return <pre>Can not render this file type</pre>;
