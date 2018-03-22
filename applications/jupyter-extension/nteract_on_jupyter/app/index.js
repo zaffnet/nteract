@@ -9,7 +9,9 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { Contents, Styles, actions, state } from "@nteract/core";
+import { Styles, actions, state } from "@nteract/core";
+
+import { default as Contents } from "./contents";
 
 function createApp(store: *) {
   class App extends React.Component<*> {
@@ -105,7 +107,8 @@ function main(rootEl: Element, dataEl: Node | null) {
     type: "jupyter",
     defaultKernelName: "python",
     token: config.token,
-    serverUrl: location.origin + config.baseUrl
+    origin: location.origin,
+    basePath: config.baseUrl
   });
 
   const hostRef = state.createHostRef();

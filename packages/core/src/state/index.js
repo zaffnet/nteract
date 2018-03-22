@@ -8,12 +8,14 @@ import type {
 } from "./entities";
 import type { ContentRef, KernelRef } from "./refs";
 import type {
+  HostRecord,
   LocalHostRecordProps,
   JupyterHostRecordProps
 } from "./entities/hosts";
 import type { Subject } from "rxjs/Subject";
+
 import { makeCommunicationRecord } from "./communication";
-import { makeEntitiesRecord } from "./entities";
+import { makeEntitiesRecord, makeEmptyHostRecord } from "./entities";
 
 export * from "./communication";
 export * from "./entities";
@@ -115,9 +117,7 @@ export const makeStateRecord: Immutable.RecordFactory<
 });
 
 export type AppRecordProps = {
-  host:
-    | ?Immutable.RecordOf<LocalHostRecordProps>
-    | ?Immutable.RecordOf<JupyterHostRecordProps>,
+  host: HostRecord,
   githubToken: ?string,
   notificationSystem: { addNotification: Function },
   isSaving: boolean,
@@ -131,7 +131,7 @@ export type AppRecordProps = {
 export const makeAppRecord: Immutable.RecordFactory<
   AppRecordProps
 > = Immutable.Record({
-  host: null,
+  host: makeEmptyHostRecord(),
   githubToken: null,
   notificationSystem: {
     addNotification: (msg: { level?: "error" | "warning" }) => {
@@ -156,12 +156,11 @@ export const makeAppRecord: Immutable.RecordFactory<
 });
 
 export type AppRecord = Immutable.RecordOf<AppRecordProps>;
-
 export type CoreRecord = Immutable.RecordOf<StateRecordProps>;
 
 export type AppState = {
-  app: Immutable.RecordOf<AppRecordProps>,
-  comms: Immutable.RecordOf<CommsRecordProps>,
+  app: AppRecord,
+  comms: CommsRecord,
   config: ConfigState,
   core: CoreRecord
 };

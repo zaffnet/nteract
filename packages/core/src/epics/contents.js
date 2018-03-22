@@ -30,13 +30,23 @@ export function fetchContentEpic(
 ) {
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
-    tap((action: FetchContent) => {
-      if (!action.payload || !action.payload.filepath) {
-        throw new Error("fetching content needs a path");
-      }
-    }),
     switchMap((action: FetchContent) => {
-      const serverConfig = selectors.serverConfig(store.getState());
+      if (!action.payload || typeof action.payload.filepath !== "string") {
+        return of({
+          type: "ERROR",
+          error: true,
+          payload: { error: new Error("fetching content needs a payload") }
+        });
+      }
+
+      const state = store.getState();
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
 
       return contents
         .get(serverConfig, action.payload.filepath, action.payload.params)
@@ -77,6 +87,14 @@ export function saveContentEpic(
     ofType(actionTypes.SAVE),
     mergeMap((action: Save) => {
       const state = store.getState();
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
       const currentNotebook = selectors.currentNotebook(state);
 
       // TODO: this will likely make more sense when this becomes less
@@ -98,8 +116,6 @@ export function saveContentEpic(
       const notebook = toJS(
         currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
       );
-
-      const serverConfig = selectors.serverConfig(state);
 
       const model = {
         content: notebook,

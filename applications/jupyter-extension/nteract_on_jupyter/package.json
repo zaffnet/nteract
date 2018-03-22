@@ -18,6 +18,8 @@
     "@nteract/commutable": "^4.0.0",
     "@nteract/core": "^4.0.5",
     "@nteract/notebook-preview": "^7.0.5",
+    "@nteract/octicons": "^0.2.0",
+    "@nteract/timeago": "^3.4.9",
     "@nteract/transform-dataresource": "^3.0.2",
     "@nteract/transform-vega": "^3.1.0",
     "@nteract/transforms": "^4.0.1",
@@ -28,13 +30,13 @@
     "react-dom": "^16.2.0",
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "rx-jupyter": "^3.0.0",
-    "rxjs": "^5.5.6"
-  },
-  "devDependencies": {
-    "next": "^5.0.0",
-    "styled-jsx": "^2.2.5"
+    "rxjs": "^5.5.6",
+    "styled-jsx": "^2.2.5",
+    "url-join": "^4.0.0",
+    "webpack": "^4.0.1"
   }
 }

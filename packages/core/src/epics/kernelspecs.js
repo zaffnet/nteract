@@ -7,6 +7,7 @@ import { of } from "rxjs/observable/of";
 import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
 import type { FetchKernelspecs } from "../actionTypes";
+import { empty } from "rxjs/observable/empty";
 
 import * as selectors from "../selectors";
 
@@ -18,7 +19,15 @@ export const fetchKernelspecsEpic = (
     ofType(actionTypes.FETCH_KERNELSPECS),
     mergeMap((action: FetchKernelspecs) => {
       const { payload: { hostRef, kernelspecsRef } } = action;
-      const serverConfig = selectors.serverConfig(store.getState());
+      const state = store.getState();
+
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
       return kernelspecs.list(serverConfig).pipe(
         map(data => {
           const defaultKernelName = data.response.default;

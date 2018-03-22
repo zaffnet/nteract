@@ -1,9 +1,10 @@
 // @flow
 import * as Immutable from "immutable";
-import type { ContentRef } from "../refs";
+
 import { emptyNotebook } from "@nteract/commutable";
 
 export type DocumentRecordProps = {
+  type: "notebook",
   // TODO: This _needs_ to become a Record
   notebook: Immutable.Map<string, any>,
   savedNotebook: Immutable.Map<string, any>,
@@ -16,10 +17,10 @@ export type DocumentRecordProps = {
   cellFocused: any,
   copied: Immutable.Map<any, any>
 };
-
 export const makeDocumentRecord: Immutable.RecordFactory<
   DocumentRecordProps
 > = Immutable.Record({
+  type: "notebook",
   notebook: emptyNotebook,
   savedNotebook: emptyNotebook,
   transient: Immutable.Map({
@@ -30,10 +31,10 @@ export const makeDocumentRecord: Immutable.RecordFactory<
   cellFocused: null,
   copied: Immutable.Map()
 });
-
 export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
 
 export type NotebookContentRecordProps = {
+  mimetype: ?string,
   created: ?Date,
   format: "json",
   lastSaved: ?Date,
@@ -43,27 +44,10 @@ export type NotebookContentRecordProps = {
   writable: boolean
 };
 
-export type DummyContentRecordProps = {
-  type: "dummy",
-  lastSaved: null,
-  filepath: string,
-  model: Immutable.Map<string, any>
-};
-
-export const makeDummyContentRecord: Immutable.RecordFactory<
-  DummyContentRecordProps
-> = Immutable.Record({
-  type: "dummy",
-  lastSaved: null,
-  filepath: "",
-  model: Immutable.Map()
-});
-
-export type DummyContentRecord = Immutable.RecordOf<DummyContentRecordProps>;
-
 export const makeNotebookContentRecord: Immutable.RecordFactory<
   NotebookContentRecordProps
 > = Immutable.Record({
+  mimetype: null,
   created: null,
   format: "json",
   lastSaved: null,
@@ -73,21 +57,6 @@ export const makeNotebookContentRecord: Immutable.RecordFactory<
   writable: true
 });
 
-export const makeContentRecord = makeNotebookContentRecord;
-
 export type NotebookContentRecord = Immutable.RecordOf<
   NotebookContentRecordProps
 >;
-
-// TODO: this will be a merger of notebook, directory, and file eventually.
-export type ContentRecord = NotebookContentRecord | DummyContentRecord; // || DirectoryContentRecord
-
-export type ContentsRecordProps = {
-  byRef: Immutable.Map<ContentRef, ContentRecord>
-};
-
-export const makeContentsRecord: Immutable.RecordFactory<
-  ContentsRecordProps
-> = Immutable.Record({
-  byRef: Immutable.Map()
-});

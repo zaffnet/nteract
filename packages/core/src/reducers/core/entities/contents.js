@@ -9,12 +9,18 @@ import type { DocumentRecord } from "../../../state/entities/contents";
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 import {
-  makeContentRecord,
+  makeFileContentRecord,
+  makeFileModelRecord,
   makeDummyContentRecord,
   makeContentsRecord,
+  makeDirectoryContentRecord,
+  makeDirectoryModel,
   makeDocumentRecord,
   makeNotebookContentRecord
 } from "../../../state/entities/contents";
+
+import { createContentRef } from "../../../state/refs";
+
 import { combineReducers } from "redux-immutable";
 
 // TODO: With the new document plan, I think it starts to make sense to decouple
@@ -913,6 +919,78 @@ const byRef = (state = Immutable.Map(), action) => {
         })
       );
     case actionTypes.FETCH_CONTENT_FULFILLED:
+      switch (action.payload.model.type) {
+        case "file":
+          return state.set(
+            action.payload.contentRef,
+            makeFileContentRecord({
+              mimetype: action.payload.model.mimetype,
+              created: action.payload.model.created,
+              lastSaved: action.payload.model.last_modified,
+              filepath: action.payload.filepath,
+              model: makeFileModelRecord({
+                text: action.payload.model.content
+              })
+            })
+          );
+        case "directory": {
+          // For each entry in the directory listing, create a new contentRef
+          // and a "filler" contents object
+
+          // Optional: run through all the current contents to see if they're
+          //           a file we already have (?)
+
+          // Create a map of <ContentRef, ContentRecord> that we merge into the
+          // content refs state
+          const dummyRecords = Immutable.Map(
+            action.payload.model.content.map(entry => {
+              return [
+                createContentRef(),
+                makeDummyContentRecord({
+                  mimetype: entry.mimetype,
+                  // TODO: We can store the type of this content,
+                  // it just doesn't have a model
+                  // entry.type
+                  assumedType: entry.type,
+                  lastSaved: entry.last_modified,
+                  filepath: entry.path
+                })
+              ];
+            })
+          );
+
+          const items = Immutable.List(dummyRecords.keys());
+          const sorted = items.sort((aRef, bRef) => {
+            const a = dummyRecords.get(aRef);
+            const b = dummyRecords.get(bRef);
+
+            if (a.assumedType === b.assumedType) {
+              return a.filepath.localeCompare(b.filepath);
+            }
+            return a.assumedType.localeCompare(b.assumedType);
+          });
+
+          return (
+            state
+              // Bring in all the listed records
+              .merge(dummyRecords)
+              // Set up the base directory
+              .set(
+                action.payload.contentRef,
+                makeDirectoryContentRecord({
+                  model: makeDirectoryModel({
+                    // The listing is all these contents in aggregate
+                    items: sorted
+                  }),
+                  filepath: action.payload.filepath,
+                  lastSaved: action.payload.model.last_modified,
+                  created: action.payload.model.created
+                })
+              )
+          );
+        }
+      }
+
       // TODO: we *should* be able to handle this for non-notebook types in the
       // future. The reason we cannot do this for notebooks now is that we need
       // the in-memory notebook mirrored here (from the old state.document). We

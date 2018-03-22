@@ -1,18 +1,22 @@
 // @flow
 
+import type { ContentRef, KernelRef } from "../state/refs";
+import type { ContentRecord, ContentModel } from "../state/entities/contents";
+
+import type { AppRecord, HostRecord, JupyterHostRecord } from "../state";
+
 // FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
 type AppState = {
   // The new way
   core: any,
 
   // The old way
-  app: Object,
+  app: AppRecord,
   comms: *,
   config: Object
 };
 
-import type { ContentRef, KernelRef } from "../state/refs";
-import type { ContentRecord, DocumentRecord } from "../state/entities/contents";
+import { makeEmptyModel } from "../state/entities/contents";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import * as Immutable from "immutable";
@@ -22,18 +26,13 @@ function identity<T>(thing: T): T {
   return thing;
 }
 
-const serverUrl = (state: AppState) => state.app.host.serverUrl;
-const crossDomain = (state: AppState) => state.app.host.crossDomain;
-const token = (state: AppState) => state.app.host.token;
-
-export const serverConfig = createSelector(
-  [serverUrl, crossDomain, token],
-  (serverUrl, crossDomain, token) => ({
-    endpoint: serverUrl,
-    crossDomain,
-    token
-  })
-);
+export const serverConfig = (host: JupyterHostRecord) => {
+  return {
+    endpoint: host.origin + host.basePath,
+    crossDomain: host.crossDomain,
+    token: host.token
+  };
+};
 
 export const userPreferences = createSelector(
   (state: AppState) => state.config,
@@ -124,21 +123,16 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel: (
-  state: AppState
-) => DocumentRecord | Immutable.Map<string, any> = createSelector(
+export const currentModel: (state: AppState) => ContentModel = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
-    // TODO: The app assumes that the model is not null. HOWEVER, the model
-    // should really *be* nullable. I.e., components should check
-    // communication before accessing nested values here.
-    return currentContent ? currentContent.model : Immutable.Map();
+    return currentContent ? currentContent.model : makeEmptyModel();
   }
 );
 
 export const currentContentType: (
   state: AppState
-) => "notebook" | "dummy" | null = createSelector(
+) => "notebook" | "dummy" | "directory" | "file" | null = createSelector(
   (state: AppState) => currentContent(state),
   content => (content ? content.type : null)
 );
@@ -147,12 +141,14 @@ export const currentContentType: (
 // notebook object to get. Do we return null? Throw an error?
 export const currentNotebook: (
   state: AppState
-) => ?Immutable.Map<string, any> = createSelector(currentModel, model =>
-  model.get("notebook", null)
+) => ?Immutable.Map<string, any> = createSelector(
+  currentModel,
+  model => (model.type === "notebook" ? model.notebook : null)
 );
 
-export const currentSavedNotebook = createSelector(currentModel, model =>
-  model.get("savedNotebook")
+export const currentSavedNotebook = createSelector(
+  currentModel,
+  model => (model.type === "notebook" ? model.savedNotebook : null)
 );
 
 export const hasBeenSaved = createSelector(
@@ -166,8 +162,12 @@ export const currentLastSaved = createSelector(
   currentContent => (currentContent ? currentContent.lastSaved : null)
 );
 
-export const currentNotebookMetadata = createSelector(currentModel, model =>
-  model.getIn(["notebook", "metadata"], Immutable.Map())
+export const currentNotebookMetadata = createSelector(
+  currentModel,
+  model =>
+    model.type === "notebook"
+      ? model.notebook.get("metadata", Immutable.Map())
+      : Immutable.Map()
 );
 
 const CODE_MIRROR_MODE_DEFAULT = "text";
@@ -212,16 +212,22 @@ export const currentNotebookString = createSelector(
   }
 );
 
-export const currentFocusedCellId = createSelector(currentModel, model =>
-  model.get("cellFocused")
+export const currentFocusedCellId = createSelector(
+  currentModel,
+  model => (model.type === "notebook" ? model.cellFocused : null)
 );
 
-export const currentFocusedEditorId = createSelector(currentModel, model =>
-  model.get("editorFocused")
+export const currentFocusedEditorId = createSelector(
+  currentModel,
+  model => (model.type === "notebook" ? model.editorFocused : null)
 );
 
-export const transientCellMap = createSelector(currentModel, model =>
-  model.getIn(["transient", "cellMap"], Immutable.Map())
+export const transientCellMap = createSelector(
+  currentModel,
+  model =>
+    model.type === "notebook"
+      ? model.transient.get("cellMap", Immutable.Map())
+      : Immutable.Map()
 );
 
 export const currentCellMap = createSelector([currentNotebook], notebook => {
