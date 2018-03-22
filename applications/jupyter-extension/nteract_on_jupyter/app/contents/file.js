@@ -5,7 +5,7 @@ import * as Immutable from "immutable";
 
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
-import { JSONTransform } from "@nteract/transforms";
+import { JSONTransform, TextTransform } from "@nteract/transforms";
 
 // Workaround flow limitation for getting these types
 type ContentRef = stateModule.ContentRef;
@@ -30,7 +30,11 @@ export class TextFile extends React.PureComponent<FileTransformProps, null> {
     );
   }
   render() {
-    return <pre>{this.props.data}</pre>;
+    return (
+      <pre>
+        <TextTransform data={this.props.data} />
+      </pre>
+    );
   }
 }
 

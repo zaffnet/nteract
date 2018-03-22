@@ -26,6 +26,19 @@ const mapStateToProps = (state: *, ownProps: *): * => {
   };
 };
 
+const Container = ({ children }) => (
+  <div>
+    {children}
+    <style jsx>{`
+      div {
+        padding-left: var(--nt-spacing-l, 10px);
+        padding-top: var(--nt-spacing-m, 10px);
+        padding-right: var(--nt-spacing-m, 10px);
+      }
+    `}</style>
+  </div>
+);
+
 class Contents extends React.Component<*, *> {
   render() {
     switch (this.props.contentType) {
@@ -41,14 +54,15 @@ class Contents extends React.Component<*, *> {
         return (
           <React.Fragment>
             <TitleBar />
-            <File contentRef={this.props.contentRef} />
+            <Container>
+              <File contentRef={this.props.contentRef} />
+            </Container>
           </React.Fragment>
         );
       case "dummy":
         return (
           <React.Fragment>
             <TitleBar />
-            <div>loading...</div>
           </React.Fragment>
         );
       case "directory":
