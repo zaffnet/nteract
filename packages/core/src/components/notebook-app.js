@@ -452,9 +452,9 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
         />
         <style jsx>{`
           .cells {
-            padding-top: 10px;
-            padding-left: 10px;
-            padding-right: 10px;
+            padding-top: var(--nt-spacing-m, 10px);
+            padding-left: var(--nt-spacing-m, 10px);
+            padding-right: var(--nt-spacing-m, 10px);
           }
         `}</style>
         <style
