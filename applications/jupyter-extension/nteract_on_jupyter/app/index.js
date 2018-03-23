@@ -13,7 +13,7 @@ import { Styles, actions, state } from "@nteract/core";
 
 import { default as Contents } from "./contents";
 
-import("./fonts");
+require("./fonts");
 
 function createApp(store: *) {
   class App extends React.Component<*> {
