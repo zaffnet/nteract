@@ -20,7 +20,7 @@ import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
 
-import { kernels, shutdown } from "rx-jupyter";
+import { kernels, shutdown, sessions } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
 
 import * as actions from "../actions";
@@ -44,18 +44,41 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
         // Dismiss any usage that isn't targeting a jupyter server
         return empty();
       }
-      const config = selectors.serverConfig(host);
+      const serverConfig = selectors.serverConfig(host);
 
-      const { payload: { kernelSpecName, cwd, kernelRef } } = action;
+      const {
+        payload: { kernelSpecName, cwd, kernelRef, contentRef }
+      } = action;
 
-      return kernels.start(config, kernelSpecName, cwd).pipe(
+      const content = selectors.content(state, { contentRef });
+      if (!content || content.type !== "notebook") {
+        return empty();
+      }
+
+      // TODO: Create a START_SESSION action instead (?)
+      const sessionPayload = {
+        kernel: {
+          id: null,
+          name: kernelSpecName
+        },
+        name: "",
+        path: content.filepath,
+        type: "notebook"
+      };
+
+      // TODO: Handle failure cases here
+      return sessions.create(serverConfig, sessionPayload).pipe(
         mergeMap(data => {
-          const session = uuid();
+          const session = data.response;
 
-          const kernel = Object.assign({}, data.response, {
+          const kernel = Object.assign({}, session.kernel, {
             type: "websocket",
             cwd,
-            channels: kernels.connect(config, data.response.id, session),
+            channels: kernels.connect(
+              serverConfig,
+              session.kernel.id,
+              session.id
+            ),
             kernelSpecName
           });
 
@@ -130,6 +153,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
   );
 
 export const killKernelEpic = (action$: *, store: *) =>
+  // TODO: Use the sessions API for this
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),
     // This epic can only interrupt kernels on jupyter websockets
