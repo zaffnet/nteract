@@ -114,7 +114,8 @@
     "ijavascript": "^5.0.17",
     "jmp": "^1.0.0",
     "mathjax-electron": "^2.0.1",
-    "nteract-assets": "^4.0.0"
+    "nteract-assets": "^4.0.0",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@nteract/commutable": "^4.0.0",
