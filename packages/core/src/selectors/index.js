@@ -311,27 +311,6 @@ export const currentTheme: (state: *) => string = createSelector(
   identity
 );
 
-// TODO: These selectors all have "Core" suffixes that will be removed when we
-// fully switch over to using the new state tree under state.core.
-
-export const hostByRefCore = createSelector(
-  (state: AppState, { hostRef }) =>
-    state.core.getIn(["entities", "hosts", "byRef", hostRef]),
-  identity
-);
-
-export const communicationKernelspecsByRefCore = createSelector(
-  (state: AppState, { kernelspecsRef }) =>
-    state.core.getIn(["communication", "kernelspecs", "byRef", kernelspecsRef]),
-  identity
-);
-
-export const kernelspecsByRefCore = createSelector(
-  (state: AppState, { kernelspecsRef }) =>
-    state.core.getIn(["entities", "kernelspecs", "byRef", kernelspecsRef]),
-  identity
-);
-
 export const currentContentRef: (
   state: AppState
 ) => ContentRef = createSelector(
