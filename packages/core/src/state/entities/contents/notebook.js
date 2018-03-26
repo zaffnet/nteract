@@ -36,8 +36,7 @@ export const makeDocumentRecord: Immutable.RecordFactory<
   copied: Immutable.Map(),
   kernelRef: null
 });
-export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
-export type NotebookModel = DocumentRecord;
+export type NotebookModel = Immutable.RecordOf<DocumentRecordProps>;
 
 export type NotebookContentRecordProps = {
   mimetype: ?string,

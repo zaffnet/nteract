@@ -5,7 +5,7 @@ import * as uuid from "uuid";
 
 import { has } from "lodash";
 
-import type { DocumentRecord } from "../../../state/entities/contents";
+import type { NotebookModel } from "../../../state/entities/contents";
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 import {
@@ -147,7 +147,7 @@ export function reduceOutputs(
   return outputs.push(createImmutableOutput(streamOutput));
 }
 
-export function cleanCellTransient(state: DocumentRecord, id: string) {
+export function cleanCellTransient(state: NotebookModel, id: string) {
   // Clear out key paths that should no longer be referenced
   return state
     .setIn(["cellPagers", id], new Immutable.List())
@@ -162,7 +162,7 @@ export function cleanCellTransient(state: DocumentRecord, id: string) {
     .setIn(["transient", "cellMap", id], new Immutable.Map());
 }
 
-function setNotebook(state: DocumentRecord, action: SetNotebook) {
+function setNotebook(state: NotebookModel, action: SetNotebook) {
   const { payload: { notebook } } = action;
 
   return state
@@ -171,16 +171,16 @@ function setNotebook(state: DocumentRecord, action: SetNotebook) {
     .setIn(["transient", "cellMap"], new Immutable.Map());
 }
 
-function setNotebookCheckpoint(state: DocumentRecord, action: SaveFulfilled) {
+function setNotebookCheckpoint(state: NotebookModel, action: SaveFulfilled) {
   // Use the current version of the notebook document
   return state.set("savedNotebook", state.get("notebook"));
 }
 
-function focusCell(state: DocumentRecord, action: FocusCell) {
+function focusCell(state: NotebookModel, action: FocusCell) {
   return state.set("cellFocused", action.payload.id);
 }
 
-function clearOutputs(state: DocumentRecord, action: ClearOutputs) {
+function clearOutputs(state: NotebookModel, action: ClearOutputs) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -199,7 +199,7 @@ function clearOutputs(state: DocumentRecord, action: ClearOutputs) {
 }
 
 function clearAllOutputs(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: ClearAllOutputs | RestartKernel
 ) {
   // If we get a restart kernel action that said to clear outputs, we'll
@@ -236,7 +236,7 @@ function clearAllOutputs(
     .set("transient", transient);
 }
 
-function appendOutput(state: DocumentRecord, action: AppendOutput) {
+function appendOutput(state: NotebookModel, action: AppendOutput) {
   const output = action.payload.output;
   const cellID = action.payload.id;
 
@@ -294,7 +294,7 @@ function appendOutput(state: DocumentRecord, action: AppendOutput) {
   // We'll reduce the overall state based on each keypath, updating output
   return keyPaths
     .reduce(
-      (currState: DocumentRecord, kp: KeyPath) =>
+      (currState: NotebookModel, kp: KeyPath) =>
         // $FlowFixMe: gnarly one we need to FIXME
         currState.setIn(kp, immutableOutput),
       state
@@ -302,7 +302,7 @@ function appendOutput(state: DocumentRecord, action: AppendOutput) {
     .setIn(["transient", "keyPathsForDisplays", displayID], keyPaths);
 }
 
-function updateDisplay(state: DocumentRecord, action: UpdateDisplay) {
+function updateDisplay(state: NotebookModel, action: UpdateDisplay) {
   const { content } = action.payload;
   if (!(content && content.transient && content.transient.display_id)) {
     return state;
@@ -321,7 +321,7 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplay) {
   };
 
   return keyPaths.reduce(
-    (currState: DocumentRecord, kp: KeyPath) =>
+    (currState: NotebookModel, kp: KeyPath) =>
       // $FlowFixMe: gnarly one we need to FIXME
       currState.updateIn(kp, output => {
         return output.merge(updatedContent);
@@ -330,7 +330,7 @@ function updateDisplay(state: DocumentRecord, action: UpdateDisplay) {
   );
 }
 
-function focusNextCell(state: DocumentRecord, action: FocusNextCell) {
+function focusNextCell(state: NotebookModel, action: FocusNextCell) {
   const cellOrder = state.getIn(["notebook", "cellOrder"], Immutable.List());
 
   const id = action.payload.id ? action.payload.id : state.get("cellFocused");
@@ -366,9 +366,9 @@ function focusNextCell(state: DocumentRecord, action: FocusNextCell) {
 }
 
 function focusPreviousCell(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: FocusPreviousCell
-): DocumentRecord {
+): NotebookModel {
   const cellOrder = state.getIn(["notebook", "cellOrder"], Immutable.List());
   const curIndex = cellOrder.findIndex(
     (id: CellID) => id === action.payload.id
@@ -378,12 +378,12 @@ function focusPreviousCell(
   return state.set("cellFocused", cellOrder.get(nextIndex));
 }
 
-function focusCellEditor(state: DocumentRecord, action: FocusCellEditor) {
+function focusCellEditor(state: NotebookModel, action: FocusCellEditor) {
   return state.set("editorFocused", action.payload.id);
 }
 
 function focusNextCellEditor(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: FocusNextCellEditor
 ) {
   const cellOrder: ImmutableCellOrder = state.getIn(
@@ -406,7 +406,7 @@ function focusNextCellEditor(
 }
 
 function focusPreviousCellEditor(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: FocusPreviousCellEditor
 ) {
   const cellOrder: ImmutableCellOrder = state.getIn(
@@ -421,7 +421,7 @@ function focusPreviousCellEditor(
   return state.set("editorFocused", cellOrder.get(nextIndex));
 }
 
-function moveCell(state: DocumentRecord, action: MoveCell) {
+function moveCell(state: NotebookModel, action: MoveCell) {
   return state.updateIn(
     ["notebook", "cellOrder"],
     (cellOrder: ImmutableCellOrder) => {
@@ -439,7 +439,7 @@ function moveCell(state: DocumentRecord, action: MoveCell) {
   );
 }
 
-function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
+function removeCellFromState(state: NotebookModel, action: RemoveCell) {
   const { id } = action.payload;
   return cleanCellTransient(
     state.update("notebook", (notebook: ImmutableNotebook) =>
@@ -449,7 +449,7 @@ function removeCellFromState(state: DocumentRecord, action: RemoveCell) {
   );
 }
 
-function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
+function createCellAfter(state: NotebookModel, action: CreateCellAfter) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -464,7 +464,7 @@ function createCellAfter(state: DocumentRecord, action: CreateCellAfter) {
   });
 }
 
-function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
+function createCellBefore(state: NotebookModel, action: CreateCellBefore) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -483,7 +483,7 @@ function createCellBefore(state: DocumentRecord, action: CreateCellBefore) {
   });
 }
 
-function mergeCellAfter(state: DocumentRecord, action: MergeCellAfter) {
+function mergeCellAfter(state: NotebookModel, action: MergeCellAfter) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -519,7 +519,7 @@ function mergeCellAfter(state: DocumentRecord, action: MergeCellAfter) {
   );
 }
 
-function createCellAppend(state: DocumentRecord, action: CreateCellAppend) {
+function createCellAppend(state: NotebookModel, action: CreateCellAppend) {
   const { cellType } = action.payload;
   const notebook: ImmutableNotebook = state.get("notebook");
   const cellOrder: ImmutableCellOrder = notebook.get(
@@ -534,9 +534,9 @@ function createCellAppend(state: DocumentRecord, action: CreateCellAppend) {
 }
 
 function acceptPayloadMessage(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: AcceptPayloadMessage
-): DocumentRecord {
+): NotebookModel {
   const { id, payload } = action.payload;
 
   if (payload.source === "page") {
@@ -570,7 +570,7 @@ function acceptPayloadMessage(
   return state;
 }
 
-function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
+function sendExecuteRequest(state: NotebookModel, action: SendExecuteRequest) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -596,7 +596,7 @@ function sendExecuteRequest(state: DocumentRecord, action: SendExecuteRequest) {
   }).setIn(["transient", "cellMap", id, "status"], "queued");
 }
 
-function setInCell(state: DocumentRecord, action: SetInCell<*>) {
+function setInCell(state: NotebookModel, action: SetInCell<*>) {
   // $FlowFixMe: Flow is complaining because the first arg has unknown length?
   return state.setIn(
     ["notebook", "cellMap", action.payload.id].concat(action.payload.path),
@@ -605,7 +605,7 @@ function setInCell(state: DocumentRecord, action: SetInCell<*>) {
 }
 
 function toggleCellOutputVisibility(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: ToggleCellOutputVisibility
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
@@ -619,7 +619,7 @@ function toggleCellOutputVisibility(
   );
 }
 
-function unhideAll(state: DocumentRecord, action: UnhideAll) {
+function unhideAll(state: NotebookModel, action: UnhideAll) {
   return state.updateIn(["notebook", "cellMap"], cellMap =>
     cellMap.map(cell => {
       if (cell.get("cell_type") === "code") {
@@ -635,7 +635,7 @@ function unhideAll(state: DocumentRecord, action: UnhideAll) {
 }
 
 function toggleCellInputVisibility(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: ToggleCellInputVisibility
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
@@ -649,16 +649,16 @@ function toggleCellInputVisibility(
   );
 }
 
-function updateCellStatus(state: DocumentRecord, action: UpdateCellStatus) {
+function updateCellStatus(state: NotebookModel, action: UpdateCellStatus) {
   const { id, status } = action.payload;
   return state.setIn(["transient", "cellMap", id, "status"], status);
 }
-function setLanguageInfo(state: DocumentRecord, action: SetLanguageInfo) {
+function setLanguageInfo(state: NotebookModel, action: SetLanguageInfo) {
   const langInfo = Immutable.fromJS(action.payload.langInfo);
   return state.setIn(["notebook", "metadata", "language_info"], langInfo);
 }
 
-function setKernelInfo(state: DocumentRecord, action: SetKernelInfo) {
+function setKernelInfo(state: NotebookModel, action: SetKernelInfo) {
   const { kernelInfo } = action.payload;
   return state
     .setIn(
@@ -673,21 +673,21 @@ function setKernelInfo(state: DocumentRecord, action: SetKernelInfo) {
 }
 
 function overwriteMetadataField(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: OverwriteMetadataField
 ) {
   const { field, value } = action.payload;
   return state.setIn(["notebook", "metadata", field], Immutable.fromJS(value));
 }
 function deleteMetadataField(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: DeleteMetadataField
 ) {
   const { field } = action.payload;
   return state.deleteIn(["notebook", "metadata", field]);
 }
 
-function copyCell(state: DocumentRecord, action: CopyCell) {
+function copyCell(state: NotebookModel, action: CopyCell) {
   let id = action.payload.id;
   if (!id) {
     id = state.cellFocused;
@@ -700,7 +700,7 @@ function copyCell(state: DocumentRecord, action: CopyCell) {
   return state.set("copied", cell);
 }
 
-function cutCell(state: DocumentRecord, action: CutCell) {
+function cutCell(state: NotebookModel, action: CutCell) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -720,7 +720,7 @@ function cutCell(state: DocumentRecord, action: CutCell) {
     );
 }
 
-function pasteCell(state: DocumentRecord, action: PasteCell) {
+function pasteCell(state: NotebookModel, action: PasteCell) {
   const copiedCell: ImmutableCell | null = state.get("copied");
 
   const pasteAfter = state.cellFocused;
@@ -738,7 +738,7 @@ function pasteCell(state: DocumentRecord, action: PasteCell) {
   );
 }
 
-function changeCellType(state: DocumentRecord, action: ChangeCellType) {
+function changeCellType(state: NotebookModel, action: ChangeCellType) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -766,7 +766,7 @@ function changeCellType(state: DocumentRecord, action: ChangeCellType) {
 }
 
 function toggleOutputExpansion(
-  state: DocumentRecord,
+  state: NotebookModel,
   action: ToggleCellExpansion
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
@@ -818,12 +818,12 @@ type DocumentAction =
   | ClearAllOutputs
   | SetInCell<*>;
 
-const defaultDocument: DocumentRecord = makeDocumentRecord({
+const defaultDocument: NotebookModel = makeDocumentRecord({
   notebook: emptyNotebook
 });
 
 function document(
-  state: DocumentRecord = defaultDocument,
+  state: NotebookModel = defaultDocument,
   action: DocumentAction
 ) {
   switch (action.type) {

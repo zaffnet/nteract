@@ -16,24 +16,27 @@ export const cellById = (model: NotebookModel, { id }: { id: CellID }) =>
   cellMap(model).get(id);
 
 export const cellOrder = (model: NotebookModel): Immutable.List<CellID> =>
-  model.notebook.get("cellMap", Immutable.List());
+  model.notebook.get("cellOrder", Immutable.List());
 
-export const cellFocused = (model: NotebookModel) => model.cellFocused;
-export const editorFocusedId = (model: NotebookModel) => model.editorFocused;
+export const cellFocused = (model: NotebookModel): ?CellID => model.cellFocused;
+export const editorFocusedId = (model: NotebookModel): ?CellID =>
+  model.editorFocused;
 
-export const codeCellIdsBelow = createSelector(
-  [cellMap, cellOrder, cellFocused],
-  (cellMap, cellOrder, cellFocused) => {
-    if (!cellFocused) {
-      return Immutable.List();
-    }
-    const index = cellOrder.indexOf(cellFocused);
-    // NOTE: if there is no focused cell, this runs all of them
-    return cellOrder
-      .skip(index)
-      .filter(id => cellMap.getIn([id, "cell_type"]) === "code");
+export const codeCellIdsBelow = (model: NotebookModel) => {
+  const cellFocused = model.cellFocused;
+  if (!cellFocused) {
+    // NOTE: if there is no focused cell, this runs none of the cells
+    return Immutable.List();
   }
-);
+  const cellOrder = model.notebook.get("cellOrder", Immutable.List());
+
+  const index = cellOrder.indexOf(cellFocused);
+  return cellOrder
+    .skip(index)
+    .filter(
+      id => model.notebook.getIn(["cellMap", id, "cell_type"]) === "code"
+    );
+};
 
 export const hiddenCellIds = createSelector(
   [cellMap, cellOrder],

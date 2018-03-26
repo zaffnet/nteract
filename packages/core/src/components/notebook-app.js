@@ -53,8 +53,14 @@ type AnyCellProps = {
 };
 
 const mapStateToCellProps = (state, { id }) => {
-  const cellMap = selectors.currentCellMap(state);
-  const cell = cellMap && cellMap.get(id);
+  const model = selectors.currentModel(state);
+  if (model.type !== "notebook") {
+    throw new Error(
+      "Cell components should not be used with non-notebook models"
+    );
+  }
+
+  const cell = selectors.notebook.cellById(model, { id });
   if (!cell) {
     throw new Error("cell not found inside cell map");
   }
@@ -74,14 +80,6 @@ const mapStateToCellProps = (state, { id }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
-  const model = selectors.currentModel(state);
-
-  if (model.type !== "notebook") {
-    throw new Error(
-      "Cell components should not be used with non-notebook models"
-    );
-  }
-
   const pager = model.getIn(["cellPagers", id], Immutable.List());
 
   return {
@@ -92,12 +90,12 @@ const mapStateToCellProps = (state, { id }) => {
     outputs,
     models: selectors.models(state),
     pager,
-    cellFocused: selectors.currentFocusedCellId(state) === id,
-    editorFocused: selectors.currentFocusedEditorId(state) === id,
+    cellFocused: model.cellFocused === id,
+    editorFocused: model.editorFocused === id,
     sourceHidden,
     outputHidden,
     outputExpanded,
-    cellStatus: selectors.transientCellMap(state).getIn([id, "status"])
+    cellStatus: model.transient.getIn(["cellMap", id, "status"])
   };
 };
 
@@ -315,18 +313,31 @@ const mapStateToProps = (
   state: Object,
   ownProps: PureNotebookProps
 ): NotebookStateProps => {
+  // TODO: Switch to ownProps
+  const contentRef = ownProps.contentRef || selectors.currentContentRef(state);
+  if (!contentRef) {
+    throw new Error("<Notebook /> has to have a contentRef");
+  }
+  const content = selectors.content(state, { contentRef });
+  const model = selectors.model(state, { contentRef });
+
+  if (!model || !content || model.type !== "notebook") {
+    throw new Error(
+      "<Notebook /> has to have content & model that are notebook types"
+    );
+  }
+
   return {
     theme: selectors.userPreferences(state).theme,
-    lastSaved: selectors.currentLastSaved(state),
-    cellOrder: selectors.currentCellOrder(state) || Immutable.List(),
+    lastSaved: content.lastSaved,
+    cellOrder: selectors.notebook.cellOrder(model),
+    // TODO: deal with current kernel ref
     kernelStatus: selectors.currentKernelStatus(state),
-    languageDisplayName: selectors.currentDisplayName(state),
+    languageDisplayName: selectors.notebook.displayName(model),
     transforms: ownProps.transforms || transforms,
     displayOrder: ownProps.displayOrder || displayOrder,
-    codeMirrorMode: selectors.codeMirrorMode(state),
-    // TODO: this will need to be a currentNotebookContentRef or some such...
-    // $FlowFixMe: Make the notebook app take a contentRef and use it
-    contentRef: ownProps.contentRef || selectors.currentContentRef(state)
+    codeMirrorMode: selectors.notebook.codeMirrorMode(model),
+    contentRef
   };
 };
 

@@ -483,7 +483,14 @@ export function exportPDF(
 
   const pdfPath = `${basepath}.pdf`;
 
-  const unexpandedCells = selectors.currentIdsOfHiddenOutputs(state);
+  const model = selectors.model(state, { contentRef });
+  if (!model || model.type !== "notebook") {
+    throw new Error(
+      "Massive strangeness in the desktop app if someone is exporting a non-notebook to PDF"
+    );
+  }
+
+  const unexpandedCells = selectors.notebook.hiddenCellIds(model);
   // TODO: we should not be modifying the document to print PDFs
   //       and we especially shouldn't be relying on all these actions to
   //       run through before we print...

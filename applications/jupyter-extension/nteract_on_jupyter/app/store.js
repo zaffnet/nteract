@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   core: reducers.core
 });
 
-export default function configureStore(initialState: *) {
+export default function configureStore(initialState: stateModule.AppState) {
   const rootEpic = combineEpics(...coreEpics.allEpics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 

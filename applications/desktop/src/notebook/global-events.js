@@ -22,11 +22,23 @@ export function unload(store: Store<AppState, Action>) {
   return;
 }
 
+function hasBeenSaved(state: AppState) {
+  const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    return false;
+  }
+  const model = selectors.model(state, { contentRef });
+  if (!model || model.type !== "notebook") {
+    return false;
+  }
+
+  return selectors.notebook.hasBeenSaved(model);
+}
+
 export function beforeUnload(store: Store<AppState, Action>, e: any) {
   const state = store.getState();
-  const saved = selectors.hasBeenSaved(state);
 
-  if (!saved) {
+  if (!hasBeenSaved(state)) {
     // Will prevent closing "will-prevent-unload"
     e.returnValue = true;
   }

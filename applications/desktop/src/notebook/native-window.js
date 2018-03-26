@@ -64,7 +64,18 @@ export function setTitleFromAttributes(attributes: *) {
 export function createTitleFeed(state$: *) {
   const modified$ = state$.pipe(
     filter(state => selectors.currentContentRef(state)),
-    map(state => !selectors.hasBeenSaved(state)),
+    map(state => {
+      const contentRef = selectors.currentContentRef(state);
+      if (!contentRef) {
+        return false;
+      }
+      const model = selectors.model(state, { contentRef });
+      if (!model || model.type !== "notebook") {
+        return false;
+      }
+
+      return !selectors.notebook.hasBeenSaved(model);
+    }),
     distinctUntilChanged()
   );
 

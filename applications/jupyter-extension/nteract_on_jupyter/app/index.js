@@ -114,7 +114,7 @@ function main(rootEl: Element, dataEl: Node | null) {
   const hostRef = state.createHostRef();
   const contentRef = state.createContentRef();
 
-  const initialState = {
+  const initialState: state.AppState = {
     app: state.makeAppRecord({
       version: `nteract-on-jupyter@${config.appVersion}`,
       // TODO: Move into core as a "current" host
@@ -125,7 +125,6 @@ function main(rootEl: Element, dataEl: Node | null) {
       theme: "light"
     }),
     core: state.makeStateRecord({
-      // TODO: non-prioritized -- set the currentHostRef here
       currentContentRef: contentRef,
       entities: state.makeEntitiesRecord({
         hosts: state.makeHostsRecord({

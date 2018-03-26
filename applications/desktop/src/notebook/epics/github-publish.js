@@ -100,16 +100,28 @@ export function handleGistError(err: Error) {
 export function handleGistAction(store: any, action: any) {
   const github = new Github();
   const state = store.getState();
-  const notebookString = selectors.currentNotebookString(state);
-  const githubUsername = selectors.currentNotebookGithubUsername(state);
-  const gistId = selectors.currentNotebookGistId(state);
+
   const filepath = selectors.currentFilepath(state);
   const notificationSystem = selectors.notificationSystem(state);
-  const contentRef = selectors.currentContentRef(state);
 
+  // TODO: Switch GitHub publishing actions to content refs
+  const contentRef = selectors.currentContentRef(state);
   if (!contentRef) {
     return empty();
   }
+  // TODO: Switch GitHub publishing actions to content refs
+  const content = selectors.content(state, { contentRef });
+  // NOTE: This could save by having selectors for each model type
+  //       have toDisk() selectors
+  if (!content || content.type !== "notebook") {
+    return empty();
+  }
+
+  const model = content.model;
+
+  const notebookString = selectors.notebook.asString(model);
+  const githubUsername = selectors.notebook.githubUsername(model);
+  const gistId = selectors.notebook.gistId(model);
 
   let publishAsUser = false;
 

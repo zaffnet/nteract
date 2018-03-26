@@ -195,7 +195,7 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
       if (action.type === actionTypes.EXECUTE_ALL_CELLS) {
         codeCellIds = selectors.notebook.codeCellIds(model);
       } else if (action.type === actionTypes.EXECUTE_ALL_CELLS_BELOW) {
-        codeCellIds = selectors.notebook.codeCellIdsBelow(state);
+        codeCellIds = selectors.notebook.codeCellIdsBelow(model);
       }
       return of(
         ...codeCellIds.map(id =>

@@ -330,7 +330,6 @@ function killSpawn(spawn: *): void {
   spawn.stderr.destroy();
 
   // Kill the process fully
-  // $FlowFixMe - Flow's built-in definitions are missing kill
   spawn.kill("SIGKILL");
 }
 
