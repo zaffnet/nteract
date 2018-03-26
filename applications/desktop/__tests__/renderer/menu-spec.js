@@ -230,9 +230,6 @@ describe("menu", () => {
     test("runs all code cells below the focused cell", () => {
       const store = dummyStore({ codeCellCount: 4, markdownCellCount: 4 });
       const state = store.getState();
-      const markdownCells = selectors
-        .currentCellMap(state)
-        .filter(cell => cell.get("cell_type") === "markdown");
       store.dispatch = jest.fn();
       menu.dispatchRunAllBelow(store);
       expect(store.dispatch).toHaveBeenCalledWith(
