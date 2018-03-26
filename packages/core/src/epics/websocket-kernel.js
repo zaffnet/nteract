@@ -91,6 +91,24 @@ export const interruptKernelEpic = (action$: *, store: *) =>
       const serverConfig = selectors.serverConfig(host);
 
       const kernel = selectors.currentKernel(state);
+      if (!kernel) {
+        return of(
+          actions.interruptKernelFailed({
+            error: new Error("Can't interrupt a kernel we don't have"),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
+
+      if (kernel.type !== "websocket" || !kernel.id) {
+        return of(
+          actions.interruptKernelFailed({
+            error: new Error("Invalid kernel type for interrupting"),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
+
       const id = kernel.id;
 
       return kernels.interrupt(serverConfig, id).pipe(
@@ -129,6 +147,26 @@ export const killKernelEpic = (action$: *, store: *) =>
       const serverConfig = selectors.serverConfig(host);
 
       const kernel = selectors.currentKernel(state);
+      if (!kernel) {
+        return of(
+          actions.killKernelFailed({
+            error: new Error("kernel not available for killing"),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
+
+      if (kernel.type !== "websocket" || !kernel.id) {
+        return of(
+          actions.killKernelFailed({
+            error: new Error(
+              "websocket kernel epic can only kill websocket kernels with an id"
+            ),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
+
       const id = kernel.id;
 
       return kernels.kill(serverConfig, id).pipe(

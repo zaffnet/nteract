@@ -3,13 +3,17 @@
 import type { ContentRef, KernelRef } from "../state/refs";
 import type { ContentRecord, ContentModel } from "../state/entities/contents";
 
-import type { AppRecord, HostRecord, JupyterHostRecord } from "../state";
+import type {
+  AppRecord,
+  HostRecord,
+  JupyterHostRecord,
+  CoreRecord
+} from "../state";
 
 // FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
 type AppState = {
   // The new way
-  core: any,
-
+  core: CoreRecord,
   // The old way
   app: AppRecord,
   comms: *,
@@ -53,29 +57,39 @@ export const currentHost = createSelector(
   identity
 );
 
-export const kernelsByRef = createSelector(
-  (state: AppState) => state.core.getIn(["entities", "kernels", "byRef"]),
-  identity
+export const contentByRef = (state: AppState) =>
+  state.core.entities.contents.byRef;
+
+export const content = (
+  state: AppState,
+  { contentRef }: { contentRef: ContentRef }
+) => contentByRef(state).get(contentRef);
+
+export const currentContentRef = (state: AppState) =>
+  state.core.currentContentRef;
+
+export const currentContent: (
+  state: AppState
+) => ?ContentRecord = createSelector(
+  currentContentRef,
+  contentByRef,
+  (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
 );
 
-// Get a kernel by kernelRef, using the `props` argument
-export const kernel = createSelector(
-  (state: AppState, { kernelRef }: { kernelRef: KernelRef }) =>
-    kernelsByRef(state).get(kernelRef),
-  identity
-);
+export const kernelsByRef = (state: AppState) =>
+  state.core.entities.kernels.byRef;
 
-export const currentKernelRef = createSelector(
-  (state: AppState) => state.core.kernelRef,
-  identity
-);
+export const kernel = (
+  state: AppState,
+  { kernelRef }: { kernelRef: KernelRef }
+) => kernelsByRef(state).get(kernelRef);
+
+export const currentKernelRef = (state: AppState) => state.core.kernelRef;
 
 export const currentKernel = createSelector(
   currentKernelRef,
-  (state: AppState) => state.core.getIn(["entities", "kernels", "byRef"]),
-  (kernelRef, kernelsByRef) => {
-    return kernelsByRef.get(kernelRef);
-  }
+  kernelsByRef,
+  (kernelRef, byRef) => (kernelRef ? byRef.get(kernelRef) : null)
 );
 
 export const currentKernelType = createSelector([currentKernel], kernel => {
@@ -308,27 +322,6 @@ export const modalType = createSelector(
 
 export const currentTheme: (state: *) => string = createSelector(
   (state: AppState) => state.config.get("theme", "light"),
-  identity
-);
-
-export const currentContentRef: (
-  state: AppState
-) => ContentRef = createSelector(
-  (state: AppState) => state.core.currentContentRef,
-  identity
-);
-
-export const currentContent: (
-  state: AppState
-) => ?ContentRecord = createSelector(
-  (state: AppState) => state.core.currentContentRef,
-  (state: AppState) => state.core.entities.contents.byRef,
-  (contentRef, byRef) => byRef.get(contentRef)
-);
-
-export const contentByRef = createSelector(
-  (state: AppState, { contentRef }) =>
-    state.core.entities.contents.byRef.get(contentRef),
   identity
 );
 

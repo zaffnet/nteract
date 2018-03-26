@@ -176,7 +176,8 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
       //       This only mirrors the old behavior of restart kernel (for now)
       notificationSystem.addNotification({
         title: "Kernel Restarted",
-        message: `Kernel ${oldKernel.kernelSpecName} has been restarted.`,
+        message: `Kernel ${oldKernel.kernelSpecName ||
+          "unknown"} has been restarted.`,
         dismissible: true,
         position: "tr",
         level: "success"

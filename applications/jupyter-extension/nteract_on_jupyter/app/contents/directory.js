@@ -17,7 +17,7 @@ type DirectoryContentRecord = stateModule.DirectoryContentRecord;
 import { connect } from "react-redux";
 
 type DirectoryEntryProps = {
-  type: "unknown" | "notebook" | "directory" | "file",
+  type: "unknown" | "notebook" | "directory" | "file" | "dummy",
   href: string,
   displayName: string
 };
@@ -79,7 +79,8 @@ const mapStateToEntryProps = (
     throw new Error("This component only works with jupyter servers");
   }
 
-  const entry = selectors.contentByRef(state, ownProps);
+  const entry = selectors.contentByRef(state).get(ownProps.contentRef);
+
   if (!entry) {
     // TODO: Determine what we do if we try to load content that isn't in the byRef structure
     return {
@@ -150,14 +151,22 @@ const mapStateToDirectoryProps = (
   ownProps: { contentRef: ContentRef }
 ): DirectoryProps => {
   const host = selectors.currentHost(state);
+  const content = selectors.content(state, ownProps);
+
   if (host.type !== "jupyter") {
     throw new Error("This component only works with jupyter servers");
+  }
+
+  if (!content || content.type !== "directory") {
+    throw new Error(
+      "The directory component should only be used with file contents"
+    );
   }
 
   const basePath = host.basePath;
 
   return {
-    content: selectors.contentByRef(state, ownProps),
+    content,
     basePath
   };
 };

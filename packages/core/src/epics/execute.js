@@ -275,12 +275,12 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
     ),
     // Bring back all the inner Observables into one stream
     mergeAll(),
-    catchError((error, source) =>
+    catchError((error, source) => {
       // Either we ensure that all errors are caught when the action.payload.contentRef
       // is in scope or we make this be a generic ERROR
       // $FlowFixMe: see above
-      merge(of(actions.executeFailed({ error })), source)
-    )
+      return merge(of(actions.executeFailed({ error })), source);
+    })
   );
 }
 

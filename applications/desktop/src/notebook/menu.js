@@ -24,6 +24,10 @@ export function cwdKernelFallback() {
 export function dispatchSaveAs(store: *, evt: Event, filepath: string) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
 
   store.dispatch(actions.saveAs({ filepath, contentRef }));
 }
@@ -77,6 +81,11 @@ export function triggerWindowRefresh(store: *, filepath: string) {
 
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.saveAs({ filepath, contentRef }));
 }
 
@@ -84,6 +93,11 @@ export function dispatchRestartKernel(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
   const contentRef = selectors.currentContentRef(state);
+
+  if (!kernelRef || !contentRef) {
+    console.error("kernelRef or contentRef not set in state for menu");
+    return;
+  }
 
   store.dispatch(
     actions.restartKernel({ clearOutputs: false, kernelRef, contentRef })
@@ -118,6 +132,14 @@ export function promptUserAboutNewKernel(
           // Create a brand new kernel
           const kernelRef = stateModule.createKernelRef();
           const contentRef = selectors.currentContentRef(state);
+          if (!contentRef) {
+            console.error("content ref not set in store for menu");
+            return;
+          }
+          if (!kernel) {
+            console.error("kernel not available for relaunch");
+            return;
+          }
 
           store.dispatch(
             actions.launchKernelByName({
@@ -151,6 +173,11 @@ export function dispatchSave(store: *) {
     triggerSaveAs(store);
   } else {
     const contentRef = selectors.currentContentRef(state);
+    if (!contentRef) {
+      console.error("content ref not set in store for menu");
+      return;
+    }
+
     store.dispatch(actions.save({ contentRef }));
   }
 }
@@ -162,6 +189,11 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   const cwd = filepath
     ? path.dirname(path.resolve(filepath))
     : cwdKernelFallback();
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
 
   // Create a brand new kernel
   const kernelRef = stateModule.createKernelRef();
@@ -195,24 +227,45 @@ export function dispatchPublishUserGist(
 export function dispatchRunAllBelow(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.executeAllCellsBelow({ contentRef }));
 }
 
 export function dispatchRunAll(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.executeAllCells({ contentRef }));
 }
 
 export function dispatchClearAll(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.clearAllOutputs({ contentRef }));
 }
 
 export function dispatchUnhideAll(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(
     actions.unhideAll({
       outputHidden: false,
@@ -225,6 +278,11 @@ export function dispatchUnhideAll(store: *) {
 export function dispatchKillKernel(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
+  if (!kernelRef) {
+    console.error("kernel ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.killKernel({ restarting: false, kernelRef }));
 }
 
@@ -240,6 +298,10 @@ export function dispatchInterruptKernel(store: *) {
     });
   } else {
     const kernelRef = selectors.currentKernelRef(state);
+    if (!kernelRef) {
+      console.error("kernel ref not set in store for menu");
+      return;
+    }
 
     store.dispatch(actions.interruptKernel({ kernelRef }));
   }
@@ -249,6 +311,15 @@ export function dispatchRestartClearAll(store: *) {
   const state = store.getState();
   const kernelRef = selectors.currentKernelRef(state);
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+  if (!kernelRef) {
+    console.error("kernel ref not set in store for menu");
+    return;
+  }
 
   store.dispatch(
     actions.restartKernel({ clearOutputs: true, kernelRef, contentRef })
@@ -278,24 +349,47 @@ export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
 export function dispatchCopyCell(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.copyCell({ contentRef }));
 }
 
 export function dispatchCutCell(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.cutCell({ contentRef }));
 }
 
 export function dispatchPasteCell(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(actions.pasteCell({ contentRef }));
 }
 
 export function dispatchCreateCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(
     actions.createCellAfter({
       cellType: "code",
@@ -308,6 +402,12 @@ export function dispatchCreateCellAfter(store: *) {
 export function dispatchCreateTextCellAfter(store: *) {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(
     actions.createCellAfter({
       cellType: "markdown",
@@ -322,6 +422,11 @@ export function dispatchLoad(store: *, event: Event, filepath: string) {
   const kernelRef = stateModule.createKernelRef();
   const contentRef = selectors.currentContentRef(state);
 
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
+
   store.dispatch(
     actions.fetchContent({ filepath, params: {}, kernelRef, contentRef })
   );
@@ -335,6 +440,11 @@ export function dispatchNewNotebook(
   const state = store.getState();
   const kernelRef = stateModule.createKernelRef();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
 
   store.dispatch(
     // for desktop, we _can_ assume this has no path except for living in `cwd`
@@ -365,6 +475,11 @@ export function exportPDF(
 ): void {
   const state = store.getState();
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    console.error("content ref not set in store for menu");
+    return;
+  }
 
   const pdfPath = `${basepath}.pdf`;
 

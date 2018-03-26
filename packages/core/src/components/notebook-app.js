@@ -325,6 +325,7 @@ const mapStateToProps = (
     displayOrder: ownProps.displayOrder || displayOrder,
     codeMirrorMode: selectors.codeMirrorMode(state),
     // TODO: this will need to be a currentNotebookContentRef or some such...
+    // $FlowFixMe: Make the notebook app take a contentRef and use it
     contentRef: ownProps.contentRef || selectors.currentContentRef(state)
   };
 };

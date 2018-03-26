@@ -7,8 +7,8 @@
 // We call it "castTo*" to make it clear that you're not getting anything unique
 // out of the function.
 
-export opaque type HostId = string;
-export opaque type KernelId = string;
+export opaque type HostId: string = string;
+export opaque type KernelId: string = string;
 
 export const castToHostId = (id: string): HostId => id;
 export const castToKernelId = (id: string): KernelId => id;

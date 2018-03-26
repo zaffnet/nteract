@@ -11,6 +11,9 @@ import type { ActionsObservable } from "redux-observable";
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
+
+import { empty } from "rxjs/observable/empty";
+
 import { mergeMap, catchError } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
@@ -103,6 +106,10 @@ export function handleGistAction(store: any, action: any) {
   const filepath = selectors.currentFilepath(state);
   const notificationSystem = selectors.notificationSystem(state);
   const contentRef = selectors.currentContentRef(state);
+
+  if (!contentRef) {
+    return empty();
+  }
 
   let publishAsUser = false;
 

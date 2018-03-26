@@ -62,7 +62,15 @@ export class File extends React.PureComponent<FileProps, *> {
 
 export const ConnectedFile = connect(
   (state: Object, ownProps: { contentRef: ContentRef }): FileProps => {
-    return { content: selectors.contentByRef(state, ownProps) };
+    const content = selectors.content(state, ownProps);
+
+    if (!content || content.type !== "file") {
+      throw new Error(
+        "The file component should only be used with file contents"
+      );
+    }
+
+    return { content };
   }
 )(File);
 
