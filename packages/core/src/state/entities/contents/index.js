@@ -2,10 +2,7 @@
 import * as Immutable from "immutable";
 import type { ContentRef } from "../../refs";
 
-import type {
-  NotebookContentRecord,
-  DocumentRecord as NotebookModel
-} from "./notebook";
+import type { NotebookContentRecord, NotebookModel } from "./notebook";
 import type { DirectoryContentRecord, DirectoryModelRecord } from "./directory";
 import type { DummyContentRecord, EmptyModelRecord } from "./dummy";
 import type { FileContentRecord, FileModelRecord } from "./file";

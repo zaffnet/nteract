@@ -3,6 +3,9 @@
 import type { ContentRef, KernelRef } from "../state/refs";
 import type { ContentRecord, ContentModel } from "../state/entities/contents";
 
+import * as notebook from "./notebook";
+export { notebook };
+
 import type {
   AppRecord,
   HostRecord,
@@ -64,6 +67,17 @@ export const content = (
   state: AppState,
   { contentRef }: { contentRef: ContentRef }
 ) => contentByRef(state).get(contentRef);
+
+export const model = (
+  state: AppState,
+  { contentRef }: { contentRef: ContentRef }
+) => {
+  const content = contentByRef(state).get(contentRef);
+  if (!content) {
+    return null;
+  }
+  return content.model;
+};
 
 export const currentContentRef = (state: AppState) =>
   state.core.currentContentRef;
@@ -151,161 +165,9 @@ export const currentContentType: (
   content => (content ? content.type : null)
 );
 
-// TODO: if we're not looking at a notebook in the UI, there may not _be_ a
-// notebook object to get. Do we return null? Throw an error?
-export const currentNotebook: (
-  state: AppState
-) => ?Immutable.Map<string, any> = createSelector(
-  currentModel,
-  model => (model.type === "notebook" ? model.notebook : null)
-);
-
-export const currentSavedNotebook = createSelector(
-  currentModel,
-  model => (model.type === "notebook" ? model.savedNotebook : null)
-);
-
-export const hasBeenSaved = createSelector(
-  currentNotebook,
-  currentSavedNotebook,
-  (original, disk) => Immutable.is(original, disk)
-);
-
 export const currentLastSaved = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => (currentContent ? currentContent.lastSaved : null)
-);
-
-export const currentNotebookMetadata = createSelector(
-  currentModel,
-  model =>
-    model.type === "notebook"
-      ? model.notebook.get("metadata", Immutable.Map())
-      : Immutable.Map()
-);
-
-const CODE_MIRROR_MODE_DEFAULT = "text";
-export const codeMirrorMode = createSelector(
-  [currentNotebookMetadata],
-  metadata =>
-    metadata.getIn(["language_info", "codemirror_mode"]) ||
-    metadata.getIn(["kernel_info", "language"]) ||
-    metadata.getIn(["kernelspec", "language"]) ||
-    CODE_MIRROR_MODE_DEFAULT
-);
-
-export const currentDisplayName = createSelector(
-  [currentNotebookMetadata],
-  metadata => metadata.getIn(["kernelspec", "display_name"], "")
-);
-
-export const currentNotebookGithubUsername = createSelector(
-  [currentNotebookMetadata],
-  metadata => metadata.get("github_username", null)
-);
-
-export const currentNotebookGistId = createSelector(
-  [currentNotebookMetadata],
-  metadata => metadata.get("gist_id", null)
-);
-
-export const currentNotebookJS = createSelector([currentNotebook], notebook => {
-  if (notebook) {
-    return toJS(notebook);
-  }
-  return null;
-});
-
-export const currentNotebookString = createSelector(
-  [currentNotebookJS],
-  notebookJS => {
-    if (notebookJS) {
-      return stringifyNotebook(notebookJS);
-    }
-    return "";
-  }
-);
-
-export const currentFocusedCellId = createSelector(
-  currentModel,
-  model => (model.type === "notebook" ? model.cellFocused : null)
-);
-
-export const currentFocusedEditorId = createSelector(
-  currentModel,
-  model => (model.type === "notebook" ? model.editorFocused : null)
-);
-
-export const transientCellMap = createSelector(
-  currentModel,
-  model =>
-    model.type === "notebook"
-      ? model.transient.get("cellMap", Immutable.Map())
-      : Immutable.Map()
-);
-
-export const currentCellMap = createSelector([currentNotebook], notebook => {
-  if (notebook) {
-    return notebook.get("cellMap", Immutable.Map());
-  }
-  return null;
-});
-
-export const currentCellOrder = createSelector([currentNotebook], notebook => {
-  if (notebook) {
-    return notebook.get("cellOrder");
-  }
-  return null;
-});
-
-export const currentCodeCellIds = createSelector(
-  [currentCellMap, currentCellOrder],
-  (cellMap, cellOrder) => {
-    if (cellMap && cellOrder) {
-      return cellOrder.filter(
-        id => cellMap.getIn([id, "cell_type"]) === "code"
-      );
-    }
-    return Immutable.List();
-  }
-);
-
-export const currentCodeCellIdsBelow = createSelector(
-  [currentFocusedCellId, currentCellMap, currentCellOrder],
-  (focusedCellId, cellMap, cellOrder) => {
-    if (cellMap && cellOrder) {
-      const index = cellOrder.indexOf(focusedCellId);
-      return cellOrder
-        .skip(index)
-        .filter(id => cellMap.getIn([id, "cell_type"]) === "code");
-    }
-    return Immutable.List();
-  }
-);
-
-export const currentHiddenCellIds = createSelector(
-  [currentCellMap, currentCellOrder],
-  (cellMap, cellOrder) => {
-    if (cellMap && cellOrder) {
-      return cellOrder.filter(id =>
-        cellMap.getIn([id, "metadata", "inputHidden"])
-      );
-    }
-    return null;
-  }
-);
-
-export const currentIdsOfHiddenOutputs = createSelector(
-  [currentCellMap, currentCellOrder],
-  (cellMap, cellOrder): Immutable.List<any> => {
-    if (!cellOrder || !cellMap) {
-      return Immutable.List();
-    }
-
-    return cellOrder.filter(cellId =>
-      cellMap.getIn([cellId, "metadata", "outputHidden"])
-    );
-  }
 );
 
 export const currentFilepath: (state: *) => string = createSelector(
