@@ -3,6 +3,8 @@ import * as Immutable from "immutable";
 
 import { emptyNotebook } from "@nteract/commutable";
 
+import type { KernelRef } from "../..";
+
 export type DocumentRecordProps = {
   type: "notebook",
   // TODO: This _needs_ to become a Record
@@ -15,7 +17,8 @@ export type DocumentRecordProps = {
   cellPagers: any,
   editorFocused: any,
   cellFocused: any,
-  copied: Immutable.Map<any, any>
+  copied: Immutable.Map<any, any>,
+  kernelRef: ?KernelRef
 };
 export const makeDocumentRecord: Immutable.RecordFactory<
   DocumentRecordProps
@@ -29,7 +32,8 @@ export const makeDocumentRecord: Immutable.RecordFactory<
   cellPagers: Immutable.Map(),
   editorFocused: null,
   cellFocused: null,
-  copied: Immutable.Map()
+  copied: Immutable.Map(),
+  kernelRef: null
 });
 export type DocumentRecord = Immutable.RecordOf<DocumentRecordProps>;
 
