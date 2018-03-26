@@ -725,7 +725,7 @@ function pasteCell(state: DocumentRecord, action: PasteCell) {
 
   const pasteAfter = state.cellFocused;
 
-  if (copiedCell === null || pasteAfter === null) {
+  if (!copiedCell || !pasteAfter) {
     return state;
   }
 
@@ -737,6 +737,7 @@ function pasteCell(state: DocumentRecord, action: PasteCell) {
     insertCellAfter(notebook, copiedCell, id, pasteAfter)
   );
 }
+
 function changeCellType(state: DocumentRecord, action: ChangeCellType) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
