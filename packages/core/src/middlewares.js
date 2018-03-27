@@ -26,6 +26,7 @@ export const errorMiddleware = (
   } else {
     errorText = JSON.stringify(action, null, 2);
   }
+
   const state = store.getState();
   const notificationSystem = selectors.notificationSystem(state);
   if (notificationSystem) {

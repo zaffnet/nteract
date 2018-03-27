@@ -13,8 +13,10 @@ describe("saveEpic", () => {
   test("saves the file using the notebook in the state tree", async function() {
     const store = dummyStore();
 
+    const contentRef = store.getState().core.currentContentRef;
+
     const responses = await saveEpic(
-      ActionsObservable.of(actions.save({})),
+      ActionsObservable.of(actions.save({ contentRef })),
       store
     )
       .pipe(toArray())
@@ -23,7 +25,7 @@ describe("saveEpic", () => {
     // TODO: This should be testing that the mocks for fs were called with the
     // filename and notebook from the state tree
 
-    expect(responses).toEqual([actions.saveFulfilled({})]);
+    expect(responses).toEqual([actions.saveFulfilled({ contentRef })]);
   });
 });
 
@@ -32,15 +34,17 @@ describe("saveAsEpic", () => {
     const store = dummyStore();
 
     const responses = await saveAsEpic(
-      ActionsObservable.of(actions.saveAs({ filepath: "great-filename" })),
+      ActionsObservable.of(
+        actions.saveAs({ filepath: "great-filename", contentRef: "567" })
+      ),
       store
     )
       .pipe(toArray())
       .toPromise();
 
     expect(responses).toEqual([
-      actions.changeFilename({ filepath: "great-filename" }),
-      actions.save({})
+      actions.changeFilename({ filepath: "great-filename", contentRef: "567" }),
+      actions.save({ contentRef: "567" })
     ]);
   });
 });

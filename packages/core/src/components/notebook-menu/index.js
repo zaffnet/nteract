@@ -401,12 +401,26 @@ class PureNotebookMenu extends React.Component<Props, State> {
 // That said, we *may* not have a great way of getting around this as we'll need
 // information about the current document to decide which menu items are
 // available...
-const mapStateToProps = state => ({
-  filepath: selectors.currentFilepath(state),
-  notebook: selectors.currentNotebook(state),
-  currentKernelRef: selectors.currentKernelRef(state),
-  currentContentRef: selectors.currentContentRef(state)
-});
+const mapStateToProps = state => {
+  const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    throw new Error("There must be a contentRef for this menu");
+  }
+
+  // TODO: Move the downloader to an epic so we're not putting the notebook _in_
+  //       the menu data -- this will re-render on every keypress
+  const model = selectors.model(state, { contentRef });
+  if (!model || model.type !== "notebook") {
+    throw new Error("This menu is only designed for notebooks");
+  }
+
+  return {
+    filepath: selectors.currentFilepath(state),
+    notebook: model.notebook,
+    currentKernelRef: selectors.currentKernelRef(state),
+    currentContentRef: contentRef
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   saveNotebook: (payload: *) => dispatch(actions.save(payload)),

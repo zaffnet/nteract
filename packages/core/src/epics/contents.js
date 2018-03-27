@@ -95,11 +95,19 @@ export function saveContentEpic(
       }
       const serverConfig = selectors.serverConfig(host);
 
-      const currentNotebook = selectors.currentNotebook(state);
+      const contentRef = action.payload.contentRef;
+      const content = selectors.content(state, { contentRef });
+      // NOTE: This could save by having selectors for each model type
+      //       have toDisk() selectors
+      if (!content || content.type !== "notebook") {
+        return empty();
+      }
+
+      const notebookModel = content.model.notebook;
 
       // TODO: this will likely make more sense when this becomes less
       // notebook-centric.
-      if (!currentNotebook) {
+      if (!notebookModel) {
         return of(
           actions.saveFailed({
             error: new Error("Notebook was not set."),
@@ -114,7 +122,7 @@ export function saveContentEpic(
 
       // contents API takes notebook as raw JSON
       const notebook = toJS(
-        currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
+        notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
       );
 
       const model = {

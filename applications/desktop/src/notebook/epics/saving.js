@@ -27,8 +27,11 @@ export function saveEpic(
     ofType(actionTypes.SAVE),
     mergeMap((action: Save) => {
       const state = store.getState();
-      const currentNotebook = selectors.currentNotebook(state);
-      if (!currentNotebook) {
+      const contentRef = action.payload.contentRef;
+
+      const model = selectors.model(state, { contentRef });
+
+      if (!model || model.type !== "notebook") {
         return of(
           actions.saveFailed({
             error: new Error("no notebook loaded to save"),
@@ -42,7 +45,7 @@ export function saveEpic(
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
       const notebook = stringifyNotebook(
         toJS(
-          currentNotebook.setIn(["metadata", "nteract", "version"], appVersion)
+          model.notebook.setIn(["metadata", "nteract", "version"], appVersion)
         )
       );
       return writeFileObservable(filepath, notebook).pipe(

@@ -1,5 +1,9 @@
 /* @flow */
-import type { ContentRef, KernelRef } from "@nteract/core/src/state";
+import type {
+  ContentRef,
+  KernelRef,
+  LocalKernelRecord
+} from "@nteract/core/src/state";
 import { unlinkObservable } from "fs-observable";
 
 import type { ChildProcess } from "child_process";
@@ -276,6 +280,23 @@ export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
     // interrupt, instead doing it after the last one happens
     concatMap((action: InterruptKernel) => {
       const kernel = selectors.currentKernel(store.getState());
+      if (!kernel) {
+        return of(
+          actions.interruptKernelFailed({
+            error: new Error("Can't interrupt a kernel we don't have"),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
+
+      if (kernel.type !== "zeromq" || !kernel.spawn) {
+        return of(
+          actions.interruptKernelFailed({
+            error: new Error("Invalid kernel type for interrupting"),
+            kernelRef: action.payload.kernelRef
+          })
+        );
+      }
 
       const spawn = kernel.spawn;
 
@@ -287,31 +308,41 @@ export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
       // This is instead handled in the watchSpawnEpic below
       spawn.kill("SIGINT");
 
-      return merge(
-        of(
-          actions.interruptKernelSuccessful({
-            kernelRef: action.payload.kernelRef
-          })
-        )
+      return of(
+        actions.interruptKernelSuccessful({
+          kernelRef: action.payload.kernelRef
+        })
       );
     })
   );
 
-export function killKernelImmediately(kernel: *): void {
-  kernel.channels.complete();
-
+function killSpawn(spawn: *): void {
   // Clean up all the terminal streams
   // "pause" stdin, which puts it back in its normal state
-  if (kernel.spawn.stdin) {
-    kernel.spawn.stdin.pause();
+  // $FlowFixMe - Flow's built-in definitions are missing pause
+  if (spawn.stdin && kernel.spawn.stdin.pause) {
+    // $FlowFixMe - Flow's built-in definitions are missing pause
+    spawn.stdin.pause();
   }
-  kernel.spawn.stdout.destroy();
-  kernel.spawn.stderr.destroy();
+  // $FlowFixMe - Flow's built-in definitions are missing destroy
+  spawn.stdout.destroy();
+  // $FlowFixMe - Flow's built-in definitions are missing destroy
+  spawn.stderr.destroy();
 
   // Kill the process fully
-  kernel.spawn.kill("SIGKILL");
+  spawn.kill("SIGKILL");
+}
 
-  fs.unlinkSync(kernel.connectionFile);
+export function killKernelImmediately(kernel: LocalKernelRecord): void {
+  kernel.channels.complete();
+
+  if (kernel.spawn) {
+    killSpawn(kernel.spawn);
+  }
+
+  if (kernel.connectionFile) {
+    fs.unlinkSync(kernel.connectionFile);
+  }
 }
 
 export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
@@ -323,6 +354,16 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
       const state = store.getState();
       const kernelRef = action.payload.kernelRef;
       const kernel = selectors.kernel(state, { kernelRef });
+      if (!kernel) {
+        console.warn("tried to kill a kernel that doesn't exist");
+        return empty();
+      }
+
+      if (kernel.type !== "zeromq") {
+        console.warn("tried to kill a non-zeromq kernel");
+        return empty();
+      }
+
       const request = shutdownRequest({ restart: false });
 
       // Try to make a shutdown request
@@ -345,24 +386,26 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
           // End all communication on the channels
           kernel.channels.complete();
 
-          // Clean up all the terminal streams
-          // "pause" stdin, which puts it back in its normal state
-          if (kernel.spawn.stdin) {
-            kernel.spawn.stdin.pause();
+          if (kernel.spawn) {
+            killSpawn(kernel.spawn);
           }
-          kernel.spawn.stdout.destroy();
-          kernel.spawn.stderr.destroy();
-
-          // Kill the process fully
-          kernel.spawn.kill("SIGKILL");
 
           // Delete the connection file
-          const del$ = unlinkObservable(kernel.connectionFile).pipe(
-            map(() => actions.deleteConnectionFileSuccessful({ kernelRef })),
-            catchError(err =>
-              of(actions.deleteConnectionFileFailed({ error: err, kernelRef }))
-            )
-          );
+          const del$ = kernel.connectionFile
+            ? unlinkObservable(kernel.connectionFile).pipe(
+                map(() =>
+                  actions.deleteConnectionFileSuccessful({ kernelRef })
+                ),
+                catchError(err =>
+                  of(
+                    actions.deleteConnectionFileFailed({
+                      error: err,
+                      kernelRef
+                    })
+                  )
+                )
+              )
+            : empty();
 
           return merge(
             // Pass on our intermediate action
