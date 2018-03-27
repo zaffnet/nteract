@@ -22,7 +22,10 @@ export function unload(store: Store<AppState, Action>) {
   return;
 }
 
-function hasBeenSaved(state: AppState) {
+function isDirty(state: AppState) {
+  // Desktop should never be in a state that it has loaded a non-notebook
+  // document, nor that contents wouldn't be on the page, so we let those cases
+  // pass through
   const contentRef = selectors.currentContentRef(state);
   if (!contentRef) {
     return false;
@@ -32,13 +35,13 @@ function hasBeenSaved(state: AppState) {
     return false;
   }
 
-  return selectors.notebook.hasBeenSaved(model);
+  return selectors.notebook.isDirty(model);
 }
 
 export function beforeUnload(store: Store<AppState, Action>, e: any) {
   const state = store.getState();
 
-  if (!hasBeenSaved(state)) {
+  if (isDirty(state)) {
     // Will prevent closing "will-prevent-unload"
     e.returnValue = true;
   }

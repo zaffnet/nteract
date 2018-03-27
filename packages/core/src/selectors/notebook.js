@@ -84,10 +84,10 @@ export const gistId = createSelector([metadata], metadata =>
 export const notebook = (model: NotebookModel) => model.notebook;
 export const savedNotebook = (model: NotebookModel) => model.savedNotebook;
 
-export const hasBeenSaved = createSelector(
+export const isDirty = createSelector(
   notebook,
   savedNotebook,
-  (original, disk) => Immutable.is(original, disk)
+  (original, disk) => !Immutable.is(original, disk)
 );
 
 export const asJSON = createSelector([notebook], notebook => {

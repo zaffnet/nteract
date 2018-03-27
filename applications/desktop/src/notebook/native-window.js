@@ -74,7 +74,7 @@ export function createTitleFeed(state$: *) {
         return false;
       }
 
-      return !selectors.notebook.hasBeenSaved(model);
+      return selectors.notebook.isDirty(model);
     }),
     distinctUntilChanged()
   );
