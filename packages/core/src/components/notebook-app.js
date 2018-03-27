@@ -52,9 +52,9 @@ type AnyCellProps = {
   focusBelowCell: () => void
 };
 
-const mapStateToCellProps = (state, { id }) => {
-  const model = selectors.currentModel(state);
-  if (model.type !== "notebook") {
+const mapStateToCellProps = (state, { id, contentRef }) => {
+  const model = selectors.model(state, { contentRef });
+  if (!model || model.type !== "notebook") {
     throw new Error(
       "Cell components should not be used with non-notebook models"
     );
@@ -83,6 +83,7 @@ const mapStateToCellProps = (state, { id }) => {
   const pager = model.getIn(["cellPagers", id], Immutable.List());
 
   return {
+    contentRef,
     cellType,
     source: cell.get("source", ""),
     theme: selectors.userPreferences(state).theme,
@@ -321,7 +322,28 @@ const mapStateToProps = (
   const content = selectors.content(state, { contentRef });
   const model = selectors.model(state, { contentRef });
 
-  if (!model || !content || model.type !== "notebook") {
+  if (!model || !content) {
+    throw new Error(
+      "<Notebook /> has to have content & model that are notebook types"
+    );
+  }
+
+  if (model.type === "dummy" || model.type === "unknown") {
+    return {
+      theme: selectors.userPreferences(state).theme,
+      lastSaved: content.lastSaved,
+      cellOrder: Immutable.List(),
+      // TODO: deal with current kernel ref
+      kernelStatus: selectors.currentKernelStatus(state),
+      languageDisplayName: "unknown",
+      transforms: ownProps.transforms || transforms,
+      displayOrder: ownProps.displayOrder || displayOrder,
+      codeMirrorMode: Immutable.Map({ name: "text/plain" }),
+      contentRef
+    };
+  }
+
+  if (model.type !== "notebook") {
     throw new Error(
       "<Notebook /> has to have content & model that are notebook types"
     );
