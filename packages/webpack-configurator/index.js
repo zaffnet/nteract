@@ -58,6 +58,17 @@ function nextWebpack(
   config /*: WebpackConfig */,
   options /*: ?NextWebPackOptions */
 ) /*: WebpackConfig */ {
+  config.module.rules = config.module.rules.map(rule => {
+    if (
+      rule.test.source.includes("js") &&
+      typeof rule.exclude !== "undefined"
+    ) {
+      rule.exclude = exclude;
+    }
+
+    return rule;
+  });
+
   config.module.rules.push({
     test: /\.js$/,
     exclude: exclude,

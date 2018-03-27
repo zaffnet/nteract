@@ -33,7 +33,7 @@ export const makeJupyterHostRecord: Immutable.RecordFactory<
   id: null,
   defaultKernelName: "python",
   token: null,
-  origin: location.origin,
+  origin: typeof location === "undefined" ? "" : location.origin,
   basePath: "/",
   crossDomain: false
 });
