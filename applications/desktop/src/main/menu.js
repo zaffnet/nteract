@@ -231,10 +231,12 @@ export function loadFullMenu(store: * = global.store) {
     generateSubMenu
   );
 
-  const newNotebookItems = Object.keys(kernelSpecs).map(kernelSpecName => ({
-    label: kernelSpecs[kernelSpecName].spec.display_name,
-    click: () => launchNewNotebook(kernelSpecs[kernelSpecName])
-  }));
+  const newNotebookItems = sortBy(kernelSpecs, "spec.display_name").map(
+    kernel => ({
+      label: kernel.spec.display_name,
+      click: () => launchNewNotebook(kernel)
+    })
+  );
 
   const fileSubMenus = {
     new: {
