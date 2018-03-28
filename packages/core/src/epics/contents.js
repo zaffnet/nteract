@@ -12,6 +12,8 @@ import {
 } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
+import FileSaver from "file-saver";
+
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
@@ -22,15 +24,13 @@ import { contents } from "rx-jupyter";
 
 import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
 
-import type { FetchContent, FetchContentFulfilled, Save } from "../actionTypes";
-
 export function fetchContentEpic(
   action$: ActionsObservable<*>,
   store: Store<*, *>
 ) {
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
-    switchMap((action: FetchContent) => {
+    switchMap((action: actionTypes.FetchContent) => {
       if (!action.payload || typeof action.payload.filepath !== "string") {
         return of({
           type: "ERROR",
@@ -79,69 +79,97 @@ export function fetchContentEpic(
   );
 }
 
+export function downloadNotebook(notebook: Object, filepath: string) {
+  const filename = (filepath || "notebook.ipynb").split("/").pop();
+  const data = stringifyNotebook(notebook);
+  const blob = new Blob([data], { type: "application/json" });
+  // NOTE: There is no callback for this, we have to rely on the browser
+  //       to do this well, so we assume it worked
+  FileSaver.saveAs(blob, filename);
+}
+
 export function saveContentEpic(
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<Action>,
   store: Store<*, *>
 ) {
   return action$.pipe(
-    ofType(actionTypes.SAVE),
-    mergeMap((action: Save) => {
-      const state = store.getState();
+    ofType(actionTypes.SAVE, actionTypes.DOWNLOAD_CONTENT),
+    mergeMap(
+      (
+        action: actionTypes.Save | actionTypes.DownloadContent
+      ): ActionsObservable<Action> => {
+        const state = store.getState();
 
-      const host = selectors.currentHost(state);
-      if (host.type !== "jupyter") {
-        // Dismiss any usage that isn't targeting a jupyter server
-        return empty();
-      }
-      const serverConfig = selectors.serverConfig(host);
-
-      const contentRef = action.payload.contentRef;
-      const content = selectors.content(state, { contentRef });
-      // NOTE: This could save by having selectors for each model type
-      //       have toDisk() selectors
-      if (!content || content.type !== "notebook") {
-        return empty();
-      }
-
-      const notebookModel = content.model.notebook;
-
-      // TODO: this will likely make more sense when this becomes less
-      // notebook-centric.
-      if (!notebookModel) {
-        return of(
-          actions.saveFailed({
+        const host = selectors.currentHost(state);
+        if (host.type !== "jupyter") {
+          // Dismiss any usage that isn't targeting a jupyter server
+          return empty();
+        }
+        const contentRef = action.payload.contentRef;
+        const content = selectors.content(state, { contentRef });
+        // NOTE: This could save by having selectors for each model type
+        //       have toDisk() selectors
+        //       It will need to be cased off when we have more than one type
+        //       of content we actually save
+        if (
+          !content ||
+          content.type !== "notebook" ||
+          !content.model.notebook
+        ) {
+          const errorPayload = {
             error: new Error("Notebook was not set."),
             contentRef: action.payload.contentRef
-          })
+          };
+          if (action.type === actionTypes.DownloadContent) {
+            return of(actions.downloadContentFailed(errorPayload));
+          }
+          return of(actions.saveFailed(errorPayload));
+        }
+
+        const notebookModel = content.model.notebook;
+
+        const filepath = content.filepath;
+        // TODO: this default version should probably not be here.
+        const appVersion = selectors.appVersion(state) || "0.0.0-beta";
+
+        // contents API takes notebook as raw JSON whereas downloading takes
+        // a string
+        const notebook = toJS(
+          notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
         );
-      }
 
-      const filename = selectors.currentFilepath(state);
-      // TODO: this default version should probably not be here.
-      const appVersion = selectors.appVersion(state) || "0.0.0-beta";
-
-      // contents API takes notebook as raw JSON
-      const notebook = toJS(
-        notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
-      );
-
-      const model = {
-        content: notebook,
-        type: "notebook"
-      };
-
-      return contents.save(serverConfig, filename, model).pipe(
-        mapTo(actions.saveFulfilled({ contentRef: action.payload.contentRef })),
-        catchError((error: Error) =>
-          of(
-            actions.saveFailed({
-              error,
+        if (action.type === actionTypes.DOWNLOAD_CONTENT) {
+          downloadNotebook(notebook, filepath);
+          return of(
+            actions.downloadContentFulfilled({
               contentRef: action.payload.contentRef
             })
+          );
+        }
+
+        const serverConfig = selectors.serverConfig(host);
+
+        const model = {
+          content: notebook,
+          type: "notebook"
+        };
+
+        // if (action.type === actionTypes.SAVE)
+        return contents.save(serverConfig, filepath, model).pipe(
+          mapTo(
+            actions.saveFulfilled({ contentRef: action.payload.contentRef })
+          ),
+          catchError((error: Error) =>
+            of(
+              actions.saveFailed({
+                error,
+                contentRef: action.payload.contentRef
+              })
+            )
           )
-        )
-      );
-    })
+        );
+      }
+    )
   );
 }
 
@@ -152,7 +180,7 @@ export function setNotebookEpic(
 ) {
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
-    tap((action: FetchContentFulfilled) => {
+    tap((action: actionTypes.FetchContentFulfilled) => {
       if (
         !action.payload ||
         !action.payload.model ||
@@ -162,10 +190,10 @@ export function setNotebookEpic(
       }
     }),
     filter(
-      (action: FetchContentFulfilled) =>
+      (action: actionTypes.FetchContentFulfilled) =>
         action.payload.model.type === "notebook"
     ),
-    map((action: FetchContentFulfilled) =>
+    map((action: actionTypes.FetchContentFulfilled) =>
       actions.setNotebook({
         filepath: action.payload.filepath,
         notebook: fromJS(action.payload.model.content),

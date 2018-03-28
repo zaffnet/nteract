@@ -694,6 +694,24 @@ export function downloadContent(payload: {
   };
 }
 
+export function downloadContentFailed(payload: {
+  contentRef: ContentRef
+}): actionTypes.DownloadContentFailed {
+  return {
+    type: actionTypes.DOWNLOAD_CONTENT_FAILED,
+    payload
+  };
+}
+
+export function downloadContentFulfilled(payload: {
+  contentRef: ContentRef
+}): actionTypes.DownloadContentFulfilled {
+  return {
+    type: actionTypes.DOWNLOAD_CONTENT_FULFILLED,
+    payload
+  };
+}
+
 export function save(payload: { contentRef: ContentRef }): actionTypes.Save {
   return {
     type: actionTypes.SAVE,

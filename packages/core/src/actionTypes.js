@@ -551,6 +551,18 @@ export type DownloadContent = {
   }
 };
 
+export const DOWNLOAD_CONTENT_FAILED = "CORE/DOWNLOAD_CONTENT_FAILED";
+export type DownloadContentFailed = {
+  type: "CORE/DOWNLOAD_CONTENT_FAILED",
+  payload: { contentRef: ContentRef }
+};
+
+export const DOWNLOAD_CONTENT_FULFILLED = "CORE/DOWNLOAD_CONTENT_FULFILLED";
+export type DownloadContentFulfilled = {
+  type: "CORE/DOWNLOAD_CONTENT_FULFILLED",
+  payload: { contentRef: ContentRef }
+};
+
 export const SAVE = "SAVE";
 export type Save = {
   type: "SAVE",
