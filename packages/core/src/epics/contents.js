@@ -138,36 +138,43 @@ export function saveContentEpic(
           notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
         );
 
-        if (action.type === actionTypes.DOWNLOAD_CONTENT) {
-          downloadNotebook(notebook, filepath);
-          return of(
-            actions.downloadContentFulfilled({
-              contentRef: action.payload.contentRef
-            })
-          );
-        }
-
-        const serverConfig = selectors.serverConfig(host);
-
-        const model = {
-          content: notebook,
-          type: "notebook"
-        };
-
-        // if (action.type === actionTypes.SAVE)
-        return contents.save(serverConfig, filepath, model).pipe(
-          mapTo(
-            actions.saveFulfilled({ contentRef: action.payload.contentRef })
-          ),
-          catchError((error: Error) =>
-            of(
-              actions.saveFailed({
-                error,
+        switch (action.type) {
+          case actionTypes.DOWNLOAD_CONTENT: {
+            downloadNotebook(notebook, filepath);
+            return of(
+              actions.downloadContentFulfilled({
                 contentRef: action.payload.contentRef
               })
-            )
-          )
-        );
+            );
+          }
+          case actionTypes.SAVE: {
+            const serverConfig = selectors.serverConfig(host);
+
+            const model = {
+              content: notebook,
+              type: "notebook"
+            };
+
+            // if (action.type === actionTypes.SAVE)
+            return contents.save(serverConfig, filepath, model).pipe(
+              mapTo(
+                actions.saveFulfilled({ contentRef: action.payload.contentRef })
+              ),
+              catchError((error: Error) =>
+                of(
+                  actions.saveFailed({
+                    error,
+                    contentRef: action.payload.contentRef
+                  })
+                )
+              )
+            );
+          }
+          default:
+            // NOTE: Flow types and our ofType should prevent reaching here, this
+            // is here merely as safety
+            return empty();
+        }
       }
     )
   );
