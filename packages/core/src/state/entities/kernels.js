@@ -2,7 +2,7 @@
 import * as Immutable from "immutable";
 import type { ChildProcess } from "child_process";
 import type { HostRef, KernelRef } from "../refs";
-import type { KernelId } from "../ids";
+import type { KernelId, SessionId } from "../ids";
 import { Subject } from "rxjs/Subject";
 
 export type LocalKernelProps = {
@@ -51,6 +51,7 @@ export type RemoteKernelProps = {
   //   shutting down, not connected.
   status: ?string,
   type: "websocket",
+  sessionId: ?SessionId,
   id: ?KernelId
 };
 
@@ -64,6 +65,7 @@ export const makeRemoteKernelRecord: Immutable.RecordFactory<
   hostRef: null,
   lastActivity: null,
   channels: new Subject(),
+  sessionId: null,
   status: null
 });
 

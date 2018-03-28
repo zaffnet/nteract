@@ -28,6 +28,8 @@ import * as selectors from "../selectors";
 import * as actionTypes from "../actionTypes";
 import { castToSessionId } from "../state/ids";
 
+import type { RemoteKernelProps } from "../state/entities/kernels";
+
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 
 export const launchWebSocketKernelEpic = (action$: *, store: *) =>
@@ -74,8 +76,9 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
 
           const sessionId = castToSessionId(session.id);
 
-          const kernel = Object.assign({}, session.kernel, {
+          const kernel: RemoteKernelProps = Object.assign({}, session.kernel, {
             type: "websocket",
+            sessionId: sessionId,
             cwd,
             channels: kernels.connect(
               serverConfig,
@@ -183,7 +186,7 @@ export const killKernelEpic = (action$: *, store: *) =>
         );
       }
 
-      if (kernel.type !== "websocket" || !kernel.id) {
+      if (kernel.type !== "websocket" || !kernel.id || !kernel.sessionId) {
         return of(
           actions.killKernelFailed({
             error: new Error(
@@ -194,9 +197,10 @@ export const killKernelEpic = (action$: *, store: *) =>
         );
       }
 
-      const id = kernel.id;
-
-      return kernels.kill(serverConfig, id).pipe(
+      // TODO: If this was a kernel language change, we shouldn't be using this
+      //       kill kernel epic because we need to make sure that creation happens
+      //       after deletion
+      return sessions.destroy(serverConfig, kernel.sessionId).pipe(
         map(() =>
           actions.killKernelSuccessful({
             kernelRef: action.payload.kernelRef
