@@ -30,10 +30,20 @@ const currentContentRef = (state = null, action) => {
   }
 };
 
+const currentKernelspecsRef = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.FETCH_KERNELSPECS:
+      return action.payload.kernelspecsRef;
+    default:
+      return state;
+  }
+};
+
 const core = combineReducers(
   {
     communication,
     currentContentRef,
+    currentKernelspecsRef,
     entities,
     kernelRef
   },
