@@ -2,7 +2,6 @@
 import * as Immutable from "immutable";
 import * as React from "react";
 import * as actions from "../../actions";
-import * as extraHandlers from "./extra-handlers";
 import * as selectors from "../../selectors";
 import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
 import type { ContentRef, KernelRef } from "../../state/refs";
@@ -23,6 +22,7 @@ type Props = {
   openKeys?: Array<string>,
   currentKernelRef: ?KernelRef,
   saveNotebook: ?(payload: *) => void,
+  downloadNotebook: ?(payload: *) => void,
   executeCell: ?(payload: *) => void,
   executeAllCells: ?(payload: *) => void,
   executeAllCellsBelow: ?(payload: *) => void,
@@ -31,7 +31,6 @@ type Props = {
   cutCell: ?(payload: *) => void,
   copyCell: ?(payload: *) => void,
   mergeCellAfter: ?(payload: *) => void,
-  filepath: ?string,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?(payload: *) => void,
   createCellAfter: ?(payload: *) => void,
@@ -53,6 +52,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
   static defaultProps = {
     cellFocused: null,
     saveNotebook: null,
+    downloadNotebook: null,
     currentKernelRef: null,
     executeCell: null,
     executeAllCells: null,
@@ -62,7 +62,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
     cutCell: null,
     copyCell: null,
     mergeCellAfter: null,
-    notebook: null,
     pasteCell: null,
     createCellAfter: null,
     setCellTypeCode: null,
@@ -78,6 +77,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
     const {
       persistAfterClick,
       saveNotebook,
+      downloadNotebook,
       currentKernelRef,
       copyCell,
       createCellAfter,
@@ -87,9 +87,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       executeAllCellsBelow,
       clearAllOutputs,
       unhideAll,
-      filepath,
       mergeCellAfter,
-      notebook,
       openAboutModal,
       pasteCell,
       setTheme,
@@ -108,10 +106,8 @@ class PureNotebookMenu extends React.Component<Props, State> {
         }
         break;
       case MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK:
-        // This gets us around a Flow fail on document.body.
-        const body = document.body;
-        if (body) {
-          extraHandlers.downloadNotebook(notebook, filepath);
+        if (downloadNotebook) {
+          downloadNotebook({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.COPY_CELL:
@@ -407,16 +403,7 @@ const mapStateToProps = state => {
     throw new Error("There must be a contentRef for this menu");
   }
 
-  // TODO: Move the downloader to an epic so we're not putting the notebook _in_
-  //       the menu data -- this will re-render on every keypress
-  const model = selectors.model(state, { contentRef });
-  if (!model || model.type !== "notebook") {
-    throw new Error("This menu is only designed for notebooks");
-  }
-
   return {
-    filepath: selectors.currentFilepath(state),
-    notebook: model.notebook,
     currentKernelRef: selectors.currentKernelRef(state),
     currentContentRef: contentRef
   };
@@ -424,6 +411,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   saveNotebook: (payload: *) => dispatch(actions.save(payload)),
+  downloadNotebook: (payload: *) => dispatch(actions.downloadContent(payload)),
   executeCell: (payload: *) => dispatch(actions.executeCell(payload)),
   executeAllCells: (payload: *) => dispatch(actions.executeAllCells(payload)),
   executeAllCellsBelow: (payload: *) =>

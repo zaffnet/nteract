@@ -1,10 +1,6 @@
 // @flow
-jest.mock("../../src/components/notebook-menu/extra-handlers");
-
 import React from "react";
 import renderer from "react-test-renderer";
-import * as Immutable from "immutable";
-import * as extraHandlers from "../../src/components/notebook-menu/extra-handlers";
 import { shallow, mount } from "enzyme";
 import { PureNotebookMenu } from "../../src/components/notebook-menu";
 import {
@@ -55,14 +51,10 @@ describe("PureNotebookMenu ", () => {
         restartKernel: jest.fn(),
         restartKernelAndClearOutputs: jest.fn(),
         killKernel: jest.fn(),
+        downloadNotebook: jest.fn(),
 
         // document state (we mock out the implementation, so these are just
         // dummy variables.
-        cellFocused: "fake",
-        cellMap: Immutable.Map(),
-        cellOrder: Immutable.List(),
-        notebook: Immutable.Map(),
-        filepath: "fake.ipynb",
         currentContentRef: "fake-content-ref",
         currentKernelRef: "fake-kernel-ref",
 
@@ -74,13 +66,12 @@ describe("PureNotebookMenu ", () => {
       const downloadNotebookItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK })
         .first();
-      expect(extraHandlers.downloadNotebook).not.toHaveBeenCalled();
+      expect(props.downloadNotebook).not.toHaveBeenCalled();
       downloadNotebookItem.simulate("click");
-      expect(extraHandlers.downloadNotebook).toHaveBeenCalledTimes(1);
-      expect(extraHandlers.downloadNotebook).toHaveBeenCalledWith(
-        props.notebook,
-        props.filepath
-      );
+      expect(props.downloadNotebook).toHaveBeenCalledTimes(1);
+      expect(props.downloadNotebook).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef
+      });
 
       const executeAllCellsItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.EXECUTE_ALL_CELLS })
