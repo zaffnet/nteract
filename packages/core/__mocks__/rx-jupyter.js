@@ -54,5 +54,9 @@ module.exports = {
   },
   kernelspecs: {
     list: config => of({ response: mockListReponse })
+  },
+  sessions: {
+    create: (config, payload) =>
+      of({ response: { id: "1", kernel: { id: "0" } } })
   }
 };

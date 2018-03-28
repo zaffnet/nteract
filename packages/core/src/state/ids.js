@@ -9,6 +9,8 @@
 
 export opaque type HostId: string = string;
 export opaque type KernelId: string = string;
+export opaque type SessionId: string = string;
 
 export const castToHostId = (id: string): HostId => id;
 export const castToKernelId = (id: string): KernelId => id;
+export const castToSessionId = (id: string): SessionId => id;

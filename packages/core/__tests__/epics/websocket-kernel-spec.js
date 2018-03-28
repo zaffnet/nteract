@@ -8,6 +8,8 @@ import { toArray } from "rxjs/operators";
 
 describe("launchWebSocketKernelEpic", () => {
   test("", async function() {
+    const contentRef = stateModule.createContentRef();
+
     const store = {
       getState() {
         return this.state;
@@ -20,14 +22,36 @@ describe("launchWebSocketKernelEpic", () => {
             token: "eh",
             serverUrl: "http://localhost:8888/"
           }),
-          kernel: null,
           notificationSystem: { addNotification: jest.fn() }
+        }),
+        core: stateModule.makeStateRecord({
+          kernelRef: "fake",
+          entities: stateModule.makeEntitiesRecord({
+            contents: stateModule.makeContentsRecord({
+              byRef: Immutable.Map().set(
+                contentRef,
+                stateModule.makeNotebookContentRecord()
+              )
+            }),
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                fake: stateModule.makeRemoteKernelRecord({
+                  type: "websocket",
+                  channels: jest.fn(),
+                  kernelSpecName: "fancy",
+                  // $FlowFixMe: This is looking for real KernelId.
+                  id: "0"
+                })
+              })
+            })
+          })
         })
       }
     };
 
     const action$ = ActionsObservable.of(
       actions.launchKernelByName({
+        contentRef,
         kernelSpecName: "fancy",
         cwd: "/",
         selectNextKernel: true
@@ -43,7 +67,9 @@ describe("launchWebSocketKernelEpic", () => {
       {
         type: "LAUNCH_KERNEL_SUCCESSFUL",
         payload: {
+          contentRef,
           kernel: {
+            sessionId: "1",
             type: "websocket",
             channels: expect.any(Subject),
             kernelSpecName: "fancy",
