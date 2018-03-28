@@ -543,6 +543,14 @@ export type SetNotificationSystemAction = {
   notificationSystem: Object
 };
 
+export const DOWNLOAD_CONTENT = "CORE/DOWNLOAD_CONTENT";
+export type DownloadContent = {
+  type: "CORE/DOWNLOAD_CONTENT",
+  payload: {
+    contentRef: ContentRef
+  }
+};
+
 export const SAVE = "SAVE";
 export type Save = {
   type: "SAVE",
