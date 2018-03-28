@@ -26,6 +26,7 @@ import { v4 as uuid } from "uuid";
 import * as actions from "../actions";
 import * as selectors from "../selectors";
 import * as actionTypes from "../actionTypes";
+import { castToSessionId } from "../state/ids";
 
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 
@@ -71,13 +72,15 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
         mergeMap(data => {
           const session = data.response;
 
+          const sessionId = castToSessionId(session.id);
+
           const kernel = Object.assign({}, session.kernel, {
             type: "websocket",
             cwd,
             channels: kernels.connect(
               serverConfig,
               session.kernel.id,
-              session.id
+              sessionId
             ),
             kernelSpecName
           });
