@@ -1,39 +1,27 @@
 // @flow
 
-import type { ContentRef, KernelRef } from "../state/refs";
-import type { ContentRecord, ContentModel } from "../state/entities/contents";
-
 import * as notebook from "./notebook";
-export { notebook };
+import * as stateModule from "../state";
+import { createSelector } from "reselect";
+import { makeEmptyModel } from "../state/entities/contents";
 
-import type {
-  AppRecord,
-  HostRecord,
-  JupyterHostRecord,
-  CoreRecord
-} from "../state";
+export { notebook };
 
 // FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
 type AppState = {
   // The new way
-  core: CoreRecord,
+  core: stateModule.CoreRecord,
   // The old way
-  app: AppRecord,
+  app: stateModule.AppRecord,
   comms: *,
   config: Object
 };
-
-import { makeEmptyModel } from "../state/entities/contents";
-
-import { toJS, stringifyNotebook } from "@nteract/commutable";
-import * as Immutable from "immutable";
-import { createSelector } from "reselect";
 
 function identity<T>(thing: T): T {
   return thing;
 }
 
-export const serverConfig = (host: JupyterHostRecord) => {
+export const serverConfig = (host: stateModule.JupyterHostRecord) => {
   return {
     endpoint: host.origin + host.basePath,
     crossDomain: host.crossDomain,
@@ -65,12 +53,12 @@ export const contentByRef = (state: AppState) =>
 
 export const content = (
   state: AppState,
-  { contentRef }: { contentRef: ContentRef }
+  { contentRef }: { contentRef: stateModule.ContentRef }
 ) => contentByRef(state).get(contentRef);
 
 export const model = (
   state: AppState,
-  { contentRef }: { contentRef: ContentRef }
+  { contentRef }: { contentRef: stateModule.ContentRef }
 ) => {
   const content = contentByRef(state).get(contentRef);
   if (!content) {
@@ -84,7 +72,7 @@ export const currentContentRef = (state: AppState) =>
 
 export const currentContent: (
   state: AppState
-) => ?ContentRecord = createSelector(
+) => ?stateModule.ContentRecord = createSelector(
   currentContentRef,
   contentByRef,
   (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
@@ -95,7 +83,7 @@ export const kernelsByRef = (state: AppState) =>
 
 export const kernel = (
   state: AppState,
-  { kernelRef }: { kernelRef: KernelRef }
+  { kernelRef }: { kernelRef: stateModule.KernelRef }
 ) => kernelsByRef(state).get(kernelRef);
 
 export const currentKernelRef = (state: AppState) => state.core.kernelRef;
@@ -151,7 +139,9 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel: (state: AppState) => ContentModel = createSelector(
+export const currentModel: (
+  state: AppState
+) => stateModule.ContentModel = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     return currentContent ? currentContent.model : makeEmptyModel();
