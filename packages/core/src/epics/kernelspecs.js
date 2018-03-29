@@ -37,7 +37,12 @@ export const fetchKernelspecsEpic = (
             kernelspecs[key] = {
               name: value.name,
               resources: value.resources,
-              ...value.spec
+              argv: value.spec.argv,
+              displayName: value.spec.display_name,
+              env: value.spec.env,
+              interruptMode: value.spec.interrupt_mode,
+              language: value.spec.language,
+              metadata: value.spec.metadata
             };
           });
           return actions.fetchKernelspecsFulfilled({
