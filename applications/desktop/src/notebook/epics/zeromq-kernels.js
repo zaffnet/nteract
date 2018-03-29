@@ -146,7 +146,12 @@ export function launchKernelObservable(
           };
 
           observer.next(
-            actions.launchKernelSuccessful({ kernel, kernelRef, contentRef })
+            actions.launchKernelSuccessful({
+              kernel,
+              kernelRef,
+              contentRef,
+              selectNextKernel: true
+            })
           );
           // TODO: Request status right after
           observer.next(

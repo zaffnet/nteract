@@ -749,7 +749,8 @@ export type NewKernelAction = {
   payload: {
     kernel: LocalKernelProps | RemoteKernelProps,
     kernelRef: KernelRef,
-    contentRef: ContentRef
+    contentRef: ContentRef,
+    selectNextKernel: boolean
   }
 };
 
