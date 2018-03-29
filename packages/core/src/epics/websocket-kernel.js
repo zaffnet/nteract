@@ -1,9 +1,4 @@
 // @flow
-import type {
-  InterruptKernel,
-  KillKernelAction,
-  LaunchKernelByNameAction
-} from "../actionTypes";
 
 import { ofType } from "redux-observable";
 
@@ -40,7 +35,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // TODO: When a switchMap happens, we need to close down the originating
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
-    switchMap((action: LaunchKernelByNameAction) => {
+    switchMap((action: actionTypes.LaunchKernelByNameAction) => {
       const state = store.getState();
       const host = selectors.currentHost(state);
       if (host.type !== "jupyter") {
@@ -109,7 +104,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
-    concatMap((action: InterruptKernel) => {
+    concatMap((action: actionTypes.InterruptKernel) => {
       const state = store.getState();
 
       const host = selectors.currentHost(state);
@@ -166,7 +161,7 @@ export const killKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ kills, we shouldn't interrupt the in-flight
     // kill, instead doing it after the last one happens
-    concatMap((action: KillKernelAction) => {
+    concatMap((action: actionTypes.KillKernelAction) => {
       const state = store.getState();
 
       const host = selectors.currentHost(state);
