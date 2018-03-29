@@ -919,6 +919,13 @@ const byRef = (state = Immutable.Map(), action) => {
           // TODO: we can set kernelRef when the content record uses it.
         })
       );
+    case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
+      // TODO: is this reasonable? We launched the kernel on behalf of this
+      // content... so it makes sense to swap it, right?
+      return state.setIn(
+        [action.payload.contentRef, "model", "kernelRef"],
+        action.payload.kernelRef
+      );
     case actionTypes.FETCH_CONTENT_FULFILLED:
       switch (action.payload.model.type) {
         case "file":
