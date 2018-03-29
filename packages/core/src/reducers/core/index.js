@@ -15,6 +15,8 @@ const kernelRef = (state = null, action) => {
     case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
       return action.payload.selectNextKernel ? action.payload.kernelRef : state;
+    case actionTypes.LAUNCH_KERNEL_SUCCESSFUL:
+      return action.payload.selectNextKernel ? action.payload.kernelRef : state;
     default:
       return state;
   }

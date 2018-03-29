@@ -720,6 +720,16 @@ export type LaunchKernelAction = {
   }
 };
 
+export const CHANGE_KERNEL_BY_NAME = "CHANGE_KERNEL_BY_NAME";
+export type ChangeKernelByName = {
+  type: "CHANGE_KERNEL_BY_NAME",
+  payload: {
+    kernelSpecName: string,
+    kernelRef: KernelRef,
+    contentRef: ContentRef
+  }
+};
+
 export const LAUNCH_KERNEL_BY_NAME = "LAUNCH_KERNEL_BY_NAME";
 export type LaunchKernelByNameAction = {
   type: "LAUNCH_KERNEL_BY_NAME",

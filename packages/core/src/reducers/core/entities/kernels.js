@@ -28,6 +28,8 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
       return state.setIn([action.payload.kernelRef, "status"], "launching");
+    case actionTypes.CHANGE_KERNEL_BY_NAME:
+      return state.setIn([action.payload.kernelRef, "status"], "changing");
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
         [action.payload.kernelRef, "status"],

@@ -146,6 +146,17 @@ export function launchKernel(payload: {
   };
 }
 
+export function changeKernelByName(payload: {
+  kernelSpecName: any,
+  kernelRef: KernelRef,
+  contentRef: ContentRef
+}): actionTypes.ChangeKernelByName {
+  return {
+    type: actionTypes.CHANGE_KERNEL_BY_NAME,
+    payload
+  };
+}
+
 export function launchKernelByName(payload: {
   kernelSpecName: any,
   cwd: string,

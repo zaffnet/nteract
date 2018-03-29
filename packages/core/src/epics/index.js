@@ -11,7 +11,8 @@ import { commListenEpic } from "./comm";
 import {
   launchWebSocketKernelEpic,
   interruptKernelEpic,
-  killKernelEpic
+  killKernelEpic,
+  changeWebSocketKernelEpic
 } from "./websocket-kernel";
 
 import {
@@ -34,6 +35,7 @@ const allEpics = [
   executeAllCellsEpic,
   commListenEpic,
   launchWebSocketKernelEpic,
+  changeWebSocketKernelEpic,
   interruptKernelEpic,
   killKernelEpic,
   acquireKernelInfoEpic,
@@ -53,6 +55,7 @@ export {
   executeAllCellsEpic,
   commListenEpic,
   launchWebSocketKernelEpic,
+  changeWebSocketKernelEpic,
   interruptKernelEpic,
   killKernelEpic,
   acquireKernelInfoEpic,
