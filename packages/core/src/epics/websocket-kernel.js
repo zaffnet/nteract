@@ -1,9 +1,4 @@
 // @flow
-import type {
-  InterruptKernel,
-  KillKernelAction,
-  LaunchKernelByNameAction
-} from "../actionTypes";
 
 import { ofType } from "redux-observable";
 
@@ -19,6 +14,7 @@ import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
+import { extractNewKernel } from "./kernel-lifecycle";
 
 import { kernels, shutdown, sessions } from "rx-jupyter";
 import { v4 as uuid } from "uuid";
@@ -27,6 +23,7 @@ import * as actions from "../actions";
 import * as selectors from "../selectors";
 import * as actionTypes from "../actionTypes";
 import { castToSessionId } from "../state/ids";
+import { createKernelRef } from "../state/refs";
 
 import type { RemoteKernelProps } from "../state/entities/kernels";
 
@@ -40,7 +37,7 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
     // TODO: When a switchMap happens, we need to close down the originating
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
-    switchMap((action: LaunchKernelByNameAction) => {
+    switchMap((action: actionTypes.LaunchKernelByNameAction) => {
       const state = store.getState();
       const host = selectors.currentHost(state);
       if (host.type !== "jupyter") {
@@ -94,10 +91,100 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
             actions.launchKernelSuccessful({
               kernel,
               kernelRef,
-              contentRef: action.payload.contentRef
+              contentRef: action.payload.contentRef,
+              selectNextKernel: true
             })
           );
         })
+      );
+    })
+  );
+
+export const changeWebSocketKernelEpic = (action$: *, store: *) =>
+  action$.pipe(
+    ofType(actionTypes.CHANGE_KERNEL_BY_NAME),
+    // Only accept jupyter servers for the host with this epic
+    filter(() => selectors.isCurrentHostJupyter(store.getState())),
+    // TODO: When a switchMap happens, we need to close down the originating
+    // kernel, likely by sending a different action. Right now this gets
+    // coordinated in a different way.
+    switchMap((action: actionTypes.ChangeKernelByName) => {
+      const { payload: { contentRef, oldKernelRef, kernelSpecName } } = action;
+      const state = store.getState();
+      const host = selectors.currentHost(state);
+      if (host.type !== "jupyter") {
+        // Dismiss any usage that isn't targeting a jupyter server
+        return empty();
+      }
+      const serverConfig = selectors.serverConfig(host);
+
+      // TODO: This is the case where we didn't have a kernel before
+      //       and they chose to switch kernels. Instead we need to allow
+      //       "switching" by disregarding the previous kernel and creating a
+      //       new session
+      if (!oldKernelRef) {
+        return empty();
+      }
+
+      const oldKernel = selectors.kernel(state, { kernelRef: oldKernelRef });
+      if (!oldKernel || oldKernel.type !== "websocket") {
+        return empty();
+      }
+      const { sessionId } = oldKernel;
+      if (!sessionId) {
+        return empty();
+      }
+
+      const content = selectors.content(state, { contentRef });
+      if (!content || content.type !== "notebook") {
+        return empty();
+      }
+      const { filepath, model: { notebook } } = content;
+      const { cwd } = extractNewKernel(filepath, notebook);
+
+      const kernelRef = createKernelRef();
+      return kernels.start(serverConfig, kernelSpecName, cwd).pipe(
+        mergeMap(({ response }) => {
+          const { id: kernelId } = response;
+          const sessionPayload = {
+            kernel: { id: kernelId, name: kernelSpecName }
+          };
+          // The sessions API will close down the old kernel for us if it is
+          // on this session
+          return sessions.update(serverConfig, sessionId, sessionPayload).pipe(
+            mergeMap(({ response: session }) => {
+              const kernel: RemoteKernelProps = Object.assign(
+                {},
+                session.kernel,
+                {
+                  type: "websocket",
+                  sessionId,
+                  cwd,
+                  channels: kernels.connect(
+                    serverConfig,
+                    session.kernel.id,
+                    sessionId
+                  ),
+                  kernelSpecName
+                }
+              );
+              return of(
+                actions.launchKernelSuccessful({
+                  kernel,
+                  kernelRef,
+                  contentRef: action.payload.contentRef,
+                  selectNextKernel: true
+                })
+              );
+            }),
+            catchError(error =>
+              of(actions.launchKernelFailed({ error, kernelRef, contentRef }))
+            )
+          );
+        }),
+        catchError(error =>
+          of(actions.launchKernelFailed({ error, kernelRef, contentRef }))
+        )
       );
     })
   );
@@ -109,7 +196,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
-    concatMap((action: InterruptKernel) => {
+    concatMap((action: actionTypes.InterruptKernel) => {
       const state = store.getState();
 
       const host = selectors.currentHost(state);
@@ -166,7 +253,7 @@ export const killKernelEpic = (action$: *, store: *) =>
     filter(() => selectors.isCurrentHostJupyter(store.getState())),
     // If the user fires off _more_ kills, we shouldn't interrupt the in-flight
     // kill, instead doing it after the last one happens
-    concatMap((action: KillKernelAction) => {
+    concatMap((action: actionTypes.KillKernelAction) => {
       const state = store.getState();
 
       const host = selectors.currentHost(state);

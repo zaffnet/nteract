@@ -9,6 +9,7 @@ import { toArray } from "rxjs/operators";
 describe("launchWebSocketKernelEpic", () => {
   test("", async function() {
     const contentRef = stateModule.createContentRef();
+    const kernelRef = "fake";
 
     const store = {
       getState() {
@@ -52,6 +53,7 @@ describe("launchWebSocketKernelEpic", () => {
     const action$ = ActionsObservable.of(
       actions.launchKernelByName({
         contentRef,
+        kernelRef,
         kernelSpecName: "fancy",
         cwd: "/",
         selectNextKernel: true
@@ -68,6 +70,8 @@ describe("launchWebSocketKernelEpic", () => {
         type: "LAUNCH_KERNEL_SUCCESSFUL",
         payload: {
           contentRef,
+          kernelRef,
+          selectNextKernel: true,
           kernel: {
             sessionId: "1",
             type: "websocket",

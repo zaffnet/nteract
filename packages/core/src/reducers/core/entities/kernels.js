@@ -11,7 +11,19 @@ import * as Immutable from "immutable";
 // TODO: we need to clean up references to old kernels at some point. Listening
 // for KILL_KERNEL_SUCCESSFUL seems like a good candidate, but I think you can
 // also end up with a dead kernel if that fails and you hit KILL_KERNEL_FAILED.
-const byRef = (state = Immutable.Map(), action) => {
+const byRef = (
+  state = Immutable.Map(),
+  action:
+    | actionTypes.SetLanguageInfo
+    | actionTypes.RestartKernel
+    | actionTypes.KillKernelSuccessful
+    | actionTypes.KillKernelFailed
+    | actionTypes.NewKernelAction
+    | actionTypes.LaunchKernelAction
+    | actionTypes.LaunchKernelByNameAction
+    | actionTypes.ChangeKernelByName
+    | actionTypes.SetExecutionStateAction
+) => {
   switch (action.type) {
     case actionTypes.SET_LANGUAGE_INFO:
       // TODO: Should the kernel hold language info?
@@ -28,6 +40,8 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.LAUNCH_KERNEL:
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
       return state.setIn([action.payload.kernelRef, "status"], "launching");
+    case actionTypes.CHANGE_KERNEL_BY_NAME:
+      return state.setIn([action.payload.oldKernelRef, "status"], "changing");
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
         [action.payload.kernelRef, "status"],

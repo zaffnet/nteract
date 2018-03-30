@@ -64,6 +64,7 @@ describe("launchKernelEpic", () => {
     const action$ = ActionsObservable.of(
       actions.launchKernel({
         kernelSpec: { spec: "hokey", name: "woohoo" },
+        contentRef: "abc",
         cwd: "~",
         selectNextKernel: true,
         kernelRef: "123"
@@ -88,7 +89,10 @@ describe("launchKernelEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.setKernelInfo({ kernelInfo: { spec: "hokey", name: "woohoo" } }),
+      actions.setKernelInfo({
+        kernelInfo: { spec: "hokey", name: "woohoo" },
+        contentRef: "abc"
+      }),
       actions.launchKernelSuccessful({
         kernel: {
           kernelRef: expect.any(String),
@@ -102,6 +106,8 @@ describe("launchKernelEpic", () => {
           kernelSpecName: "woohoo",
           status: "launched"
         },
+        selectNextKernel: true,
+        contentRef: "abc",
         kernelRef: "123"
       }),
       actions.setExecutionState({

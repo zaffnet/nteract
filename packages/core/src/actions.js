@@ -124,7 +124,8 @@ export function launchKernelFailed(payload: {
 export function launchKernelSuccessful(payload: {
   kernel: LocalKernelProps | RemoteKernelProps,
   kernelRef: KernelRef,
-  contentRef: ContentRef
+  contentRef: ContentRef,
+  selectNextKernel: boolean
 }): actionTypes.NewKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL_SUCCESSFUL,
@@ -141,6 +142,17 @@ export function launchKernel(payload: {
 }): actionTypes.LaunchKernelAction {
   return {
     type: actionTypes.LAUNCH_KERNEL,
+    payload
+  };
+}
+
+export function changeKernelByName(payload: {
+  kernelSpecName: any,
+  oldKernelRef: ?KernelRef,
+  contentRef: ContentRef
+}): actionTypes.ChangeKernelByName {
+  return {
+    type: actionTypes.CHANGE_KERNEL_BY_NAME,
     payload
   };
 }

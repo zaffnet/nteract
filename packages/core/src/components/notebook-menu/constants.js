@@ -11,6 +11,7 @@ export const MENU_ITEM_ACTIONS = {
   RESTART_KERNEL: "restart-kernel",
   RESTART_AND_CLEAR_OUTPUTS: "restart-kernel-and-clear-outputs",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",
+  CHANGE_KERNEL: "change-kernel",
   UNHIDE_ALL: "unhide-all",
   CREATE_CODE_CELL: "create-code-cell",
   CREATE_MARKDOWN_CELL: "create-markdown-cell",
@@ -39,5 +40,6 @@ export const MENUS = {
   VIEW: "view",
   VIEW_THEMES: "view-themes",
   RUNTIME: "runtime",
+  RUNTIME_CHANGE_KERNEL: "runtime-change-kernel",
   HELP: "help"
 };

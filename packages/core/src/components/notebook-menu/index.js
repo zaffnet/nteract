@@ -4,7 +4,8 @@ import * as React from "react";
 import * as actions from "../../actions";
 import * as selectors from "../../selectors";
 import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
-import type { ContentRef, KernelRef } from "../../state/refs";
+import type { ContentRef, KernelRef, KernelspecsRef } from "../../state/refs";
+import type { KernelspecsByRefRecord } from "../../state/entities";
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import { MODAL_TYPES } from "../modal-controller";
 import { connect } from "react-redux";
@@ -37,11 +38,18 @@ type Props = {
   changeCellType: ?(payload: *) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
+  changeKernelByName: ?(payload: {
+    kernelSpecName: string,
+    oldKernelRef: ?KernelRef,
+    contentRef: ContentRef
+  }) => void,
   restartKernel: ?(payload: *) => void,
   restartKernelAndClearOutputs: ?(payload: *) => void,
   killKernel: ?(payload: *) => void,
   interruptKernel: ?(payload: *) => void,
-  currentContentRef: ContentRef
+  currentContentRef: ContentRef,
+  currentKernelspecsRef: ?KernelspecsRef,
+  currentKernelspecs: ?KernelspecsByRefRecord
 };
 
 type State = {
@@ -68,9 +76,12 @@ class PureNotebookMenu extends React.Component<Props, State> {
     setCellTypeMarkdown: null,
     setTheme: null,
     openAboutModal: null,
+    changeKernelByName: null,
     restartKernel: null,
     killKernel: null,
-    interruptKernel: null
+    interruptKernel: null,
+    currentKernelspecsRef: null,
+    currentKernelspecs: null
   };
   state = {};
   handleClick = ({ key }: { key: string }) => {
@@ -78,6 +89,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       persistAfterClick,
       saveNotebook,
       downloadNotebook,
+      changeKernelByName,
       currentKernelRef,
       copyCell,
       createCellAfter,
@@ -96,7 +108,9 @@ class PureNotebookMenu extends React.Component<Props, State> {
       restartKernelAndClearOutputs,
       killKernel,
       interruptKernel,
-      currentContentRef
+      currentContentRef,
+      currentKernelspecsRef,
+      currentKernelspecs
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {
@@ -229,7 +243,15 @@ class PureNotebookMenu extends React.Component<Props, State> {
           });
         }
         break;
-
+      case MENU_ITEM_ACTIONS.CHANGE_KERNEL:
+        if (changeKernelByName) {
+          changeKernelByName({
+            oldKernelRef: currentKernelRef,
+            contentRef: currentContentRef,
+            kernelSpecName: args[0]
+          });
+        }
+        break;
       default:
         console.log(`unhandled action: ${action}`);
     }
@@ -249,7 +271,11 @@ class PureNotebookMenu extends React.Component<Props, State> {
     this.setState({ openKeys: this.props.defaultOpenKeys });
   }
   render() {
-    const { defaultOpenKeys, persistAfterClick } = this.props;
+    const {
+      currentKernelspecs,
+      defaultOpenKeys,
+      persistAfterClick
+    } = this.props;
     const { openKeys } = this.state;
     const menuProps: Object = {
       mode: "horizontal",
@@ -366,10 +392,34 @@ class PureNotebookMenu extends React.Component<Props, State> {
             >
               Restart and Clear All Cells
             </MenuItem>
-            {/*
-              <Divider />
-              <SwitchToKernelSpecsMenu />
-            */}
+            <Divider />
+            <SubMenu
+              key={MENUS.RUNTIME_CHANGE_KERNEL}
+              title="Change Kernel"
+              disabled={!currentKernelspecs}
+            >
+              {currentKernelspecs
+                ? currentKernelspecs.byName
+                    .keySeq()
+                    .map(name => [
+                      name,
+                      currentKernelspecs.byName.getIn([name, "displayName"])
+                    ])
+                    .toArray()
+                    .map(([name, displayName]) => {
+                      return (
+                        <MenuItem
+                          key={createActionKey(
+                            MENU_ITEM_ACTIONS.CHANGE_KERNEL,
+                            name
+                          )}
+                        >
+                          {displayName}
+                        </MenuItem>
+                      );
+                    })
+                : null}
+            </SubMenu>
           </SubMenu>
 
           <SubMenu key={MENUS.HELP} title="Help">
@@ -405,7 +455,9 @@ const mapStateToProps = state => {
 
   return {
     currentKernelRef: selectors.currentKernelRef(state),
-    currentContentRef: contentRef
+    currentContentRef: contentRef,
+    currentKernelspecsRef: selectors.currentKernelspecsRef(state),
+    currentKernelspecs: selectors.currentKernelspecs(state)
   };
 };
 
@@ -427,6 +479,7 @@ const mapDispatchToProps = dispatch => ({
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>
     dispatch(actions.openModal({ modalType: MODAL_TYPES.ABOUT })),
+  changeKernelByName: payload => dispatch(actions.changeKernelByName(payload)),
   restartKernel: payload => dispatch(actions.restartKernel(payload)),
   restartKernelAndClearOutputs: payload =>
     dispatch(actions.restartKernel({ ...payload, clearOutputs: true })),

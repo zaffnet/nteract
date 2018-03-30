@@ -1,5 +1,6 @@
 // @flow
 
+import * as Immutable from "immutable";
 import * as notebook from "./notebook";
 import * as stateModule from "../state";
 import { createSelector } from "reselect";
@@ -76,6 +77,20 @@ export const currentContent: (
   currentContentRef,
   contentByRef,
   (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
+);
+
+export const currentKernelspecsRef = (state: AppState) =>
+  state.core.currentKernelspecsRef;
+
+export const kernelspecsByRef = (state: AppState) =>
+  state.core.entities.kernelspecs.byRef;
+
+export const currentKernelspecs: (
+  state: AppState
+) => ?stateModule.KernelspecsByRefRecord = createSelector(
+  currentKernelspecsRef,
+  kernelspecsByRef,
+  (ref, byRef) => (ref ? byRef.get(ref) : null)
 );
 
 export const kernelsByRef = (state: AppState) =>

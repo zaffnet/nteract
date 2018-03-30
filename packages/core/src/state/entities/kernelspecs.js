@@ -31,6 +31,8 @@ export type KernelspecsByRefRecordProps = {
   byName: Map<string, RecordOf<KernelspecProps>>
 };
 
+export type KernelspecsByRefRecord = RecordOf<KernelspecsByRefRecordProps>;
+
 export const makeKernelspecsByRefRecord: RecordFactory<
   KernelspecsByRefRecordProps
 > = Record({
