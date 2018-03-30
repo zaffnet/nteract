@@ -1,5 +1,9 @@
 // @flow
 
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
+/* eslint jsx-a11y/click-events-have-key-events: 0 */
+/* eslint jsx-a11y/no-noninteractive-tabindex: 0 */
+
 /**
  * Plan:
  *
