@@ -725,7 +725,7 @@ export type ChangeKernelByName = {
   type: "CHANGE_KERNEL_BY_NAME",
   payload: {
     kernelSpecName: string,
-    kernelRef: KernelRef,
+    oldKernelRef: ?KernelRef,
     contentRef: ContentRef
   }
 };

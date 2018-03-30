@@ -148,7 +148,7 @@ export function launchKernel(payload: {
 
 export function changeKernelByName(payload: {
   kernelSpecName: any,
-  kernelRef: KernelRef,
+  oldKernelRef: ?KernelRef,
   contentRef: ContentRef
 }): actionTypes.ChangeKernelByName {
   return {

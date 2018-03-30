@@ -109,9 +109,7 @@ export const changeWebSocketKernelEpic = (action$: *, store: *) =>
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap((action: actionTypes.ChangeKernelByName) => {
-      const {
-        payload: { contentRef, kernelRef: oldKernelRef, kernelSpecName }
-      } = action;
+      const { payload: { contentRef, oldKernelRef, kernelSpecName } } = action;
       const state = store.getState();
       const host = selectors.currentHost(state);
       if (host.type !== "jupyter") {
@@ -119,6 +117,14 @@ export const changeWebSocketKernelEpic = (action$: *, store: *) =>
         return empty();
       }
       const serverConfig = selectors.serverConfig(host);
+
+      // TODO: This is the case where we didn't have a kernel before
+      //       and they chose to switch kernels. Instead we need to allow
+      //       "switching" by disregarding the previous kernel and creating a
+      //       new session
+      if (!oldKernelRef) {
+        return empty();
+      }
 
       const oldKernel = selectors.kernel(state, { kernelRef: oldKernelRef });
       if (!oldKernel || oldKernel.type !== "websocket") {

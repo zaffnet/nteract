@@ -38,7 +38,11 @@ type Props = {
   changeCellType: ?(payload: *) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
-  changeKernelByName: ?(payload: *) => void,
+  changeKernelByName: ?(payload: {
+    kernelSpecName: string,
+    oldKernelRef: ?KernelRef,
+    contentRef: ContentRef
+  }) => void,
   restartKernel: ?(payload: *) => void,
   restartKernelAndClearOutputs: ?(payload: *) => void,
   killKernel: ?(payload: *) => void,
@@ -242,7 +246,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       case MENU_ITEM_ACTIONS.CHANGE_KERNEL:
         if (changeKernelByName) {
           changeKernelByName({
-            kernelRef: currentKernelRef,
+            oldKernelRef: currentKernelRef,
             contentRef: currentContentRef,
             kernelSpecName: args[0]
           });
