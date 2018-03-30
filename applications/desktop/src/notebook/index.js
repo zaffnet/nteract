@@ -4,6 +4,9 @@ import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
 import { Provider } from "react-redux";
 
+// Load the nteract fonts
+require("./fonts");
+
 import MathJax from "@nteract/mathjax";
 
 import { Map as ImmutableMap } from "immutable";

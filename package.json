@@ -208,5 +208,8 @@
     "xhr2": "*",
     "xmlhttprequest": "^1.8.0",
     "yargs": "^11.0.0"
+  },
+  "dependencies": {
+    "webfontloader": "^1.6.28"
   }
 }
