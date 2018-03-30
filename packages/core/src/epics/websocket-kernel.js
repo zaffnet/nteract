@@ -149,6 +149,8 @@ export const changeWebSocketKernelEpic = (action$: *, store: *) =>
           const sessionPayload = {
             kernel: { id: kernelId, name: kernelSpecName }
           };
+          // The sessions API will close down the old kernel for us if it is
+          // on this session
           return sessions.update(serverConfig, sessionId, sessionPayload).pipe(
             mergeMap(({ response: session }) => {
               const kernel: RemoteKernelProps = Object.assign(
