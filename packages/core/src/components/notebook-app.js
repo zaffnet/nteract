@@ -281,9 +281,6 @@ type PureNotebookProps = {
   cellOrder?: Immutable.List<any>,
   transforms?: Object,
   theme?: string,
-  lastSaved?: Date,
-  languageDisplayName?: string,
-  kernelStatus?: string,
   codeMirrorMode?: string | Immutable.Map<string, *>,
   contentRef: ContentRef,
   kernelRef?: KernelRef
@@ -294,9 +291,6 @@ type NotebookStateProps = {
   cellOrder: Immutable.List<any>,
   transforms: Object,
   theme: string,
-  lastSaved: ?Date,
-  languageDisplayName: string,
-  kernelStatus: string,
   codeMirrorMode: string | Immutable.Map<string, *>,
   contentRef: ContentRef,
   kernelRef: ?KernelRef
@@ -330,10 +324,7 @@ const mapStateToProps = (
   if (model.type === "dummy" || model.type === "unknown") {
     return {
       theme: selectors.userPreferences(state).theme,
-      lastSaved: content.lastSaved,
       cellOrder: Immutable.List(),
-      kernelStatus: "unknown",
-      languageDisplayName: "unknown",
       transforms: ownProps.transforms || transforms,
       displayOrder: ownProps.displayOrder || displayOrder,
       codeMirrorMode: Immutable.Map({ name: "text/plain" }),
@@ -352,31 +343,23 @@ const mapStateToProps = (
   const kernelRef =
     selectors.currentKernelRef(state) || ownProps.kernelRef || model.kernelRef;
 
-  let kernel = {
-    kernelSpecName: null,
-    status: null,
-    info: null
-  };
+  let kernelInfo = null;
 
   if (kernelRef) {
-    kernel = selectors.kernel(state, { kernelRef }) || kernel;
+    const kernel = selectors.kernel(state, { kernelRef });
+    if (kernel) {
+      kernelInfo = kernel.info;
+    }
   }
 
-  // TODO: We need kernels associated to the kernelspec they came from
-  //       so we can pluck off the display_name and provide it here
-  const languageDisplayName =
-    kernel.kernelSpecName || selectors.notebook.displayName(model);
   // TODO: Rely on the kernel's codeMirror version first and foremost, then fallback on notebook
-  const codeMirrorMode = kernel.info
-    ? kernel.info.codemirrorMode
+  const codeMirrorMode = kernelInfo
+    ? kernelInfo.codemirrorMode
     : selectors.notebook.codeMirrorMode(model);
 
   return {
     theme: selectors.userPreferences(state).theme,
-    lastSaved: content.lastSaved,
     cellOrder: selectors.notebook.cellOrder(model),
-    kernelStatus: kernel.status || "not connected",
-    languageDisplayName,
     transforms: ownProps.transforms || transforms,
     displayOrder: ownProps.displayOrder || displayOrder,
     codeMirrorMode,
