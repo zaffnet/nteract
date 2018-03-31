@@ -124,6 +124,7 @@ export function launchKernelObservable(
 
           const kernel: stateModule.LocalKernelProps = {
             kernelRef,
+            info: null,
             type: "zeromq",
             hostRef: null,
             channels,

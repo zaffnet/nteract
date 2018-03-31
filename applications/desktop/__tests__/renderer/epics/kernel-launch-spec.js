@@ -95,6 +95,7 @@ describe("launchKernelEpic", () => {
       }),
       actions.launchKernelSuccessful({
         kernel: {
+          info: null,
           kernelRef: expect.any(String),
           lastActivity: null,
           type: "zeromq",
