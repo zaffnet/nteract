@@ -86,7 +86,9 @@ export function acquireKernelInfo(
           langInfo: msg.content.language_info,
           kernelRef,
           contentRef
-        }),
+        })
+        /*
+        // TODO: #2719 -- put the kernel info on the kernel object
         {
           type: "ACTUAL_KERNEL_INFO",
           payload: {
@@ -94,6 +96,7 @@ export function acquireKernelInfo(
             content: msg.content
           }
         }
+        */
       );
     })
   );

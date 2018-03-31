@@ -40,11 +40,6 @@ describe("acquireKernelInfo", () => {
       {
         payload: { langInfo: { language: "python" } },
         type: "SET_LANGUAGE_INFO"
-      },
-      {
-        // FIXME: either tear out the extra action created in the epic or test it well
-        payload: expect.any(Object),
-        type: "ACTUAL_KERNEL_INFO"
       }
     ]);
 
