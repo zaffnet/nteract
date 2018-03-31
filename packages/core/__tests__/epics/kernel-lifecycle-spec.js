@@ -15,7 +15,7 @@ import { of } from "rxjs/observable/of";
 import { toArray, share } from "rxjs/operators";
 
 describe("acquireKernelInfo", () => {
-  test("sends a kernel_info_request and processes kernel_info_reply", done => {
+  test("sends a kernel_info_request and processes kernel_info_reply", async function(done) {
     const sent = new Subject();
     const received = new Subject();
 
@@ -34,13 +34,21 @@ describe("acquireKernelInfo", () => {
 
     const obs = acquireKernelInfo(mockSocket);
 
-    obs.subscribe(langAction => {
-      expect(langAction).toEqual({
+    const actions = await obs.pipe(toArray()).toPromise();
+
+    expect(actions).toEqual([
+      {
         payload: { langInfo: { language: "python" } },
         type: "SET_LANGUAGE_INFO"
-      });
-      done();
-    });
+      },
+      {
+        // FIXME: either tear out the extra action created in the epic or test it well
+        payload: expect.any(Object),
+        type: "ACTUAL_KERNEL_INFO"
+      }
+    ]);
+
+    done();
   });
 });
 

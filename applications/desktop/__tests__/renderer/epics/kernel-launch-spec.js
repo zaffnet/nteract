@@ -89,7 +89,7 @@ describe("launchKernelEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.setKernelInfo({
+      actions.setKernelspecInfo({
         kernelInfo: { spec: "hokey", name: "woohoo" },
         contentRef: "abc"
       }),

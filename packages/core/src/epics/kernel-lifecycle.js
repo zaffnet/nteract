@@ -94,15 +94,6 @@ export function acquireKernelInfo(
             content: msg.content
           }
         }
-        // The outer data for more uses
-        /*
-        TODO: switch the current actions.setKernelInfo to
-              setKernelspecInfo
-        actions.setKernelInfo({
-          kernelInfo: msg.content,
-          kernelRef,
-          contentRef
-        })*/
       );
     })
   );
