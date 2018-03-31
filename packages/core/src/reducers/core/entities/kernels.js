@@ -50,10 +50,22 @@ const byRef = (
     case actionTypes.CHANGE_KERNEL_BY_NAME:
       return state.setIn([action.payload.oldKernelRef, "status"], "changing");
     case actionTypes.SET_KERNEL_INFO:
-      const codemirrorMode =
-        typeof action.payload.info.codemirrorMode === "string"
-          ? action.payload.info.codemirrorMode
-          : Immutable.Map(action.payload.info.codemirrorMode);
+      let codemirrorMode = action.payload.info.codemirrorMode;
+      // If the codemirror mode isn't set, fallback on the language name
+      if (!codemirrorMode) {
+        codemirrorMode = action.payload.info.languageName;
+      }
+      switch (typeof codemirrorMode) {
+        case "string":
+          // already set as we want it
+          break;
+        case "object":
+          codemirrorMode = Immutable.Map(codemirrorMode);
+          break;
+        default:
+          // any other case results in falling back to language name
+          codemirrorMode = action.payload.info.languageName;
+      }
 
       const helpLinks = action.payload.info.helpLinks
         ? Immutable.List(action.payload.info.helpLinks.map(makeHelpLinkRecord))

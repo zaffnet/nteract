@@ -356,19 +356,21 @@ const mapStateToProps = (
 
   let kernel = {
     kernelSpecName: null,
-    status: null
+    status: null,
+    info: null
   };
 
   if (kernelRef) {
     kernel = selectors.kernel(state, { kernelRef }) || kernel;
   }
 
-  // NOTE: We should use what the kernel reports before using what the notebook "reports"
-  // TODO: The kernel object should contain it's own information
+  // TODO: This should be pulled from the kernelspec for the `kernel`
   const languageDisplayName =
     kernel.kernelSpecName || selectors.notebook.displayName(model);
   // TODO: Rely on the kernel's codeMirror version first and foremost, then fallback on notebook
-  const codeMirrorMode = selectors.notebook.codeMirrorMode(model);
+  const codeMirrorMode = kernel.info
+    ? kernel.info.codemirrorMode
+    : selectors.notebook.codeMirrorMode(model);
 
   return {
     theme: selectors.userPreferences(state).theme,
