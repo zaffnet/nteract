@@ -1,4 +1,5 @@
-// @flow
+// FIXME: To make it easier to iterate on supported apps, flow is disabled for
+// this file
 import * as React from "react";
 import fetch from "isomorphic-fetch";
 import { monocellNotebook, fromJS, toJS } from "@nteract/commutable";

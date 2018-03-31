@@ -1,4 +1,6 @@
-// @flow
+// FIXME: To make it easier to iterate on supported apps, flow is disabled for
+// this file
+
 import * as React from "react";
 import { Router } from "../routes";
 

@@ -285,10 +285,7 @@ type PureNotebookProps = {
   languageDisplayName?: string,
   kernelStatus?: string,
   codeMirrorMode?: string | Immutable.Map<string, *>,
-  // TODO: Once we're willing to do multi-contents views, we should require this
-  //       to be passed in
-  // TODO: Fill in more from the convo with Andrew here
-  contentRef?: ContentRef,
+  contentRef: ContentRef,
   kernelRef?: KernelRef
 };
 
@@ -302,7 +299,7 @@ type NotebookStateProps = {
   kernelStatus: string,
   codeMirrorMode: string | Immutable.Map<string, *>,
   contentRef: ContentRef,
-  kernelRef?: KernelRef
+  kernelRef: ?KernelRef
 };
 
 type NotebookDispatchProps = {
@@ -317,9 +314,7 @@ const mapStateToProps = (
   state: AppState,
   ownProps: PureNotebookProps
 ): NotebookStateProps => {
-  // TODO: Switch to ownProps
-  const contentRef = ownProps.contentRef || selectors.currentContentRef(state);
-  const kernelRef = ownProps.kernelRef || selectors.currentKernelRef(state);
+  const contentRef = ownProps.contentRef;
 
   if (!contentRef) {
     throw new Error("<Notebook /> has to have a contentRef");
@@ -332,18 +327,17 @@ const mapStateToProps = (
       "<Notebook /> has to have content & model that are notebook types"
     );
   }
-
   if (model.type === "dummy" || model.type === "unknown") {
     return {
       theme: selectors.userPreferences(state).theme,
       lastSaved: content.lastSaved,
       cellOrder: Immutable.List(),
-      // TODO: deal with current kernel ref
       kernelStatus: "unknown",
       languageDisplayName: "unknown",
       transforms: ownProps.transforms || transforms,
       displayOrder: ownProps.displayOrder || displayOrder,
       codeMirrorMode: Immutable.Map({ name: "text/plain" }),
+      kernelRef: null,
       contentRef
     };
   }
@@ -353,6 +347,10 @@ const mapStateToProps = (
       "<Notebook /> has to have content & model that are notebook types"
     );
   }
+
+  // TODO: Determine and fix things so we have one reliable place for the kernelRef
+  const kernelRef =
+    selectors.currentKernelRef(state) || ownProps.kernelRef || model.kernelRef;
 
   let kernel = {
     kernelSpecName: null,
@@ -377,13 +375,13 @@ const mapStateToProps = (
     theme: selectors.userPreferences(state).theme,
     lastSaved: content.lastSaved,
     cellOrder: selectors.notebook.cellOrder(model),
-    // TODO: deal with current kernel ref
     kernelStatus: kernel.status || "not connected",
     languageDisplayName,
     transforms: ownProps.transforms || transforms,
     displayOrder: ownProps.displayOrder || displayOrder,
     codeMirrorMode,
-    contentRef
+    contentRef,
+    kernelRef
   };
 };
 
@@ -504,9 +502,8 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
           {this.props.cellOrder.map(this.createCellElement)}
         </div>
         <StatusBar
-          lastSaved={this.props.lastSaved}
-          kernelSpecDisplayName={this.props.languageDisplayName}
-          kernelStatus={this.props.kernelStatus}
+          contentRef={this.props.contentRef}
+          kernelRef={this.props.kernelRef}
         />
         <style jsx>{`
           .cells {

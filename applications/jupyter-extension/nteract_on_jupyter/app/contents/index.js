@@ -47,7 +47,7 @@ class Contents extends React.Component<*, *> {
           <React.Fragment>
             <TitleBar />
             <NotebookMenu />
-            <NotebookApp />
+            <NotebookApp contentRef={this.props.contentRef} />
           </React.Fragment>
         );
       case "file":

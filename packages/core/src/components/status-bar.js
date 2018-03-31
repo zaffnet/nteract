@@ -1,6 +1,13 @@
 /* @flow */
 import React from "react";
+
+import { connect } from "react-redux";
+
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+
+import * as selectors from "../selectors";
+import type { AppState } from "../state";
+import type { ContentRef, KernelRef } from "../state/refs";
 
 type Props = {
   lastSaved: ?Date,
@@ -8,7 +15,7 @@ type Props = {
   kernelStatus: string
 };
 
-export default class StatusBar extends React.Component<Props> {
+export class StatusBar extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     if (
       this.props.lastSaved !== nextProps.lastSaved ||
@@ -62,3 +69,27 @@ export default class StatusBar extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (
+  state: AppState,
+  ownProps: { contentRef: ContentRef, kernelRef: ?KernelRef }
+): Props => {
+  const { contentRef, kernelRef } = ownProps;
+  const content = selectors.content(state, { contentRef });
+  const kernel = kernelRef ? selectors.kernel(state, { kernelRef }) : null;
+
+  const lastSaved =
+    content && content.lastSaved ? content.lastSaved : undefined;
+  const kernelStatus =
+    kernel && kernel.status ? kernel.status : "not connected";
+  const kernelSpecDisplayName =
+    kernel && kernel.kernelSpecName ? kernel.kernelSpecName : "kernel";
+
+  return {
+    lastSaved,
+    kernelStatus,
+    kernelSpecDisplayName
+  };
+};
+
+export default connect(mapStateToProps)(StatusBar);
