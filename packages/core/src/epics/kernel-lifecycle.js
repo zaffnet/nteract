@@ -79,10 +79,25 @@ export function acquireKernelInfo(
     childOf(message),
     ofMessageType("kernel_info_reply"),
     first(),
-    pluck("content", "language_info"),
-    map(langInfo =>
-      actions.setLanguageInfo({ langInfo, kernelRef, contentRef })
-    )
+    mergeMap(msg => {
+      return of(
+        // The original action we were using
+        actions.setLanguageInfo({
+          langInfo: msg.content.language_info,
+          kernelRef,
+          contentRef
+        })
+        // The outer data for more uses
+        /*
+        TODO: switch the current actions.setKernelInfo to
+              setKernelspecInfo
+        actions.setKernelInfo({
+          kernelInfo: msg.content,
+          kernelRef,
+          contentRef
+        })*/
+      );
+    })
   );
 
   return Observable.create(observer => {
