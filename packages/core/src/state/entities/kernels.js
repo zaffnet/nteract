@@ -5,8 +5,12 @@ import type { HostRef, KernelRef } from "../refs";
 import type { KernelId, SessionId } from "../ids";
 import { Subject } from "rxjs/Subject";
 
+import type { KernelInfo } from "./kernel-info";
+export type { KernelInfo };
+
 export type LocalKernelProps = {
   kernelSpecName: ?string,
+  info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
   channels: rxjs$Subject<*>,
@@ -27,6 +31,7 @@ export const makeLocalKernelRecord: Immutable.RecordFactory<
 > = Immutable.Record({
   type: "zeromq",
   cwd: ".",
+  info: null,
   kernelSpecName: null,
   hostRef: null,
   lastActivity: null,
@@ -40,6 +45,7 @@ export type LocalKernelRecord = Immutable.RecordOf<LocalKernelProps>;
 
 export type RemoteKernelProps = {
   kernelSpecName: ?string,
+  info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
   channels: rxjs$Subject<*>,
@@ -59,6 +65,7 @@ export const makeRemoteKernelRecord: Immutable.RecordFactory<
   RemoteKernelProps
 > = Immutable.Record({
   type: "websocket",
+  info: null,
   cwd: ".",
   id: null,
   kernelSpecName: null,
