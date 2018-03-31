@@ -1,9 +1,4 @@
 /* @flow */
-import type {
-  ContentRef,
-  KernelRef,
-  LocalKernelRecord
-} from "@nteract/core/src/state";
 import { unlinkObservable } from "fs-observable";
 
 import type { ChildProcess } from "child_process";
@@ -45,8 +40,6 @@ import { ipcRenderer as ipc } from "electron";
 import { createMainChannel } from "enchannel-zmq-backend";
 import * as jmp from "jmp";
 
-import type { NewKernelAction } from "@nteract/core/src/actionTypes";
-
 import {
   selectors,
   actions,
@@ -60,12 +53,6 @@ import {
   ofMessageType,
   shutdownRequest
 } from "@nteract/messaging";
-import type {
-  InterruptKernel,
-  LaunchKernelAction,
-  LaunchKernelByNameAction,
-  KillKernelAction
-} from "@nteract/core/src/actionTypes";
 
 /**
  * Instantiate a connection to a new kernel.
@@ -76,8 +63,8 @@ import type {
 export function launchKernelObservable(
   kernelSpec: stateModule.KernelspecInfo,
   cwd: string,
-  kernelRef: KernelRef,
-  contentRef: ContentRef
+  kernelRef: stateModule.KernelRef,
+  contentRef: stateModule.ContentRef
 ) {
   const spec = kernelSpec.spec;
 
@@ -187,12 +174,12 @@ export const launchKernelByNameEpic = (
 ): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_BY_NAME),
-    tap((action: LaunchKernelByNameAction) => {
+    tap((action: actionTypes.LaunchKernelByNameAction) => {
       if (!action.payload.kernelSpecName) {
         throw new Error("launchKernelByNameEpic requires a kernel name");
       }
     }),
-    mergeMap((action: LaunchKernelByNameAction) =>
+    mergeMap((action: actionTypes.LaunchKernelByNameAction) =>
       kernelSpecsObservable.pipe(
         mergeMap(specs =>
           // Defer to a launchKernel action to _actually_ launch
@@ -223,7 +210,7 @@ export const launchKernelEpic = (
     ofType(actionTypes.LAUNCH_KERNEL),
     // We must kill the previous kernel now
     // Then launch the next one
-    switchMap((action: LaunchKernelAction) => {
+    switchMap((action: actionTypes.LaunchKernelAction) => {
       if (
         !action.payload ||
         !action.payload.kernelSpec ||
@@ -286,7 +273,7 @@ export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
     filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
-    concatMap((action: InterruptKernel) => {
+    concatMap((action: actionTypes.InterruptKernel) => {
       const kernel = selectors.currentKernel(store.getState());
       if (!kernel) {
         return of(
@@ -341,7 +328,9 @@ function killSpawn(spawn: *): void {
   spawn.kill("SIGKILL");
 }
 
-export function killKernelImmediately(kernel: LocalKernelRecord): void {
+export function killKernelImmediately(
+  kernel: stateModule.LocalKernelRecord
+): void {
   kernel.channels.complete();
 
   if (kernel.spawn) {
@@ -358,7 +347,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
     ofType(actionTypes.KILL_KERNEL),
     // This epic can only kill direct zeromq connected kernels
     filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
-    concatMap((action: KillKernelAction) => {
+    concatMap((action: actionTypes.KillKernelAction) => {
       const state = store.getState();
       const kernelRef = action.payload.kernelRef;
       const kernel = selectors.kernel(state, { kernelRef });
@@ -447,7 +436,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
 export function watchSpawn(action$: *, store: *) {
   return action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap((action: NewKernelAction) => {
+    switchMap((action: actionTypes.NewKernelAction) => {
       if (!action.payload.kernel.type === "zeromq") {
         throw new Error("kernel.type is not zeromq.");
       }

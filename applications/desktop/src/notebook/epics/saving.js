@@ -1,10 +1,8 @@
 /* @flow */
-import type { Save, SaveAs } from "@nteract/core/src/actionTypes";
+import { ofType } from "redux-observable";
 
-import {
-  ActionsObservable,
-  ofType
-} from "redux-observable"; /* eslint-disable no-unused-vars */
+import type { ActionsObservable } from "redux-observable";
+
 import { writeFileObservable } from "fs-observable";
 
 import { actionTypes, selectors, actions } from "@nteract/core";
@@ -25,7 +23,7 @@ export function saveEpic(
 ) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
-    mergeMap((action: Save) => {
+    mergeMap((action: actionTypes.Save) => {
       const state = store.getState();
       const contentRef = action.payload.contentRef;
 
@@ -84,7 +82,7 @@ export function saveEpic(
 export function saveAsEpic(action$: ActionsObservable<*>) {
   return action$.pipe(
     ofType(actionTypes.SAVE_AS),
-    mergeMap((action: SaveAs) => {
+    mergeMap((action: actionTypes.SaveAs) => {
       return [
         // order matters here, since we need the filename set in the state
         // before we save the document

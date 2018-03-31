@@ -9,13 +9,16 @@ require("./fonts");
 
 import MathJax from "@nteract/mathjax";
 
-import { Map as ImmutableMap } from "immutable";
-
 import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { actions, NotebookApp, Styles } from "@nteract/core";
+import {
+  actions,
+  NotebookApp,
+  Styles,
+  state as stateModule
+} from "@nteract/core";
 
 import { displayOrder, transforms } from "@nteract/transforms-full";
 
@@ -23,16 +26,13 @@ import { initMenuHandlers } from "./menu";
 import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
 
-import { state as stateModule } from "@nteract/core";
-import type { ContentRef, ContentRecord } from "@nteract/core/src/state";
-
 import * as Immutable from "immutable";
 
 const contentRef = stateModule.createContentRef();
 
 const initialRefs: Immutable.Map<
-  ContentRef,
-  ContentRecord
+  stateModule.ContentRef,
+  stateModule.ContentRecord
 > = Immutable.Map().set(contentRef, stateModule.makeNotebookContentRecord());
 
 const store = configureStore({
@@ -41,7 +41,7 @@ const store = configureStore({
     version: remote.app.getVersion()
   }),
   comms: stateModule.makeCommsRecord(),
-  config: ImmutableMap({
+  config: Immutable.Map({
     theme: "light"
   }),
   core: stateModule.makeStateRecord({
