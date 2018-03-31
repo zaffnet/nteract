@@ -26,7 +26,50 @@ describe("acquireKernelInfo", () => {
 
       const response = createMessage("kernel_info_reply");
       response.parent_header = msg.header;
-      response.content = { language_info: { language: "python" } };
+      response.content = {
+        status: "ok",
+        protocol_version: "5.1",
+        implementation: "ipython",
+        implementation_version: "6.2.1",
+        language_info: {
+          name: "python",
+          version: "3.6.5",
+          mimetype: "text/x-python",
+          codemirror_mode: { name: "ipython", version: 3 },
+          pygments_lexer: "ipython3",
+          nbconvert_exporter: "python",
+          file_extension: ".py"
+        },
+        banner:
+          "Python 3.6.5 (default, Mar 30 2018, 06:41:53) \nType 'copyright', 'credits' or 'license' for more information\nIPython 6.2.1 -- An enhanced Interactive Python. Type '?' for help.\n",
+        help_links: [
+          { text: "Python Reference", url: "https://docs.python.org/3.6" },
+          {
+            text: "IPython Reference",
+            url: "https://ipython.org/documentation.html"
+          },
+          {
+            text: "NumPy Reference",
+            url: "https://docs.scipy.org/doc/numpy/reference/"
+          },
+          {
+            text: "SciPy Reference",
+            url: "https://docs.scipy.org/doc/scipy/reference/"
+          },
+          {
+            text: "Matplotlib Reference",
+            url: "https://matplotlib.org/contents.html"
+          },
+          {
+            text: "SymPy Reference",
+            url: "http://docs.sympy.org/latest/index.html"
+          },
+          {
+            text: "pandas Reference",
+            url: "https://pandas.pydata.org/pandas-docs/stable/"
+          }
+        ]
+      };
 
       // TODO: Get the Rx handling proper here
       setTimeout(() => received.next(response), 100);
@@ -38,8 +81,64 @@ describe("acquireKernelInfo", () => {
 
     expect(actions).toEqual([
       {
-        payload: { langInfo: { language: "python" } },
+        payload: {
+          langInfo: {
+            name: "python",
+            version: "3.6.5",
+            mimetype: "text/x-python",
+            codemirror_mode: { name: "ipython", version: 3 },
+            pygments_lexer: "ipython3",
+            nbconvert_exporter: "python",
+            file_extension: ".py"
+          }
+        },
         type: "SET_LANGUAGE_INFO"
+      },
+      {
+        type: "CORE/SET_KERNEL_INFO",
+        payload: {
+          info: {
+            protocolVersion: "5.1",
+            implementation: "ipython",
+            implementationVersion: "6.2.1",
+            banner:
+              "Python 3.6.5 (default, Mar 30 2018, 06:41:53) \nType 'copyright', 'credits' or 'license' for more information\nIPython 6.2.1 -- An enhanced Interactive Python. Type '?' for help.\n",
+            helpLinks: [
+              { text: "Python Reference", url: "https://docs.python.org/3.6" },
+              {
+                text: "IPython Reference",
+                url: "https://ipython.org/documentation.html"
+              },
+              {
+                text: "NumPy Reference",
+                url: "https://docs.scipy.org/doc/numpy/reference/"
+              },
+              {
+                text: "SciPy Reference",
+                url: "https://docs.scipy.org/doc/scipy/reference/"
+              },
+              {
+                text: "Matplotlib Reference",
+                url: "https://matplotlib.org/contents.html"
+              },
+              {
+                text: "SymPy Reference",
+                url: "http://docs.sympy.org/latest/index.html"
+              },
+              {
+                text: "pandas Reference",
+                url: "https://pandas.pydata.org/pandas-docs/stable/"
+              }
+            ],
+            languageName: "python",
+            languageVersion: "3.6.5",
+            mimetype: "text/x-python",
+            fileExtension: ".py",
+            pygmentsLexer: "ipython3",
+            codemirrorMode: { name: "ipython", version: 3 },
+            nbconvertExporter: "python"
+          }
+        }
       }
     ]);
 

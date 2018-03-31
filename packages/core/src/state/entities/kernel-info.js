@@ -2,6 +2,18 @@
 
 import * as Immutable from "immutable";
 
+export type HelpLink = {
+  text: string,
+  url: string
+};
+export const makeHelpLinkRecord: Immutable.RecordFactory<
+  HelpLink
+> = Immutable.Record({
+  text: "",
+  url: "#"
+});
+export type HelpLinkRecord = Immutable.RecordOf<HelpLink>;
+
 //
 // The kernel info object is determined by making a kernel_info_request to the
 // kernel after it has been started
@@ -35,8 +47,11 @@ export type KernelInfo = {
 
   // Optional: A list of dictionaries, each with keys 'text' and 'url'.
   // These can be displayed in the help menu for the UI.
+  // NOTE: To make it easy to use the KernelInfo type as a plain object in
+  //       actions, we allow this type to be an array of plain objects or the
+  //       fully immutable variety
   // SPEC: help_links
-  helpLinks?: Array<{ text: string, url: string }>,
+  helpLinks?: Array<HelpLink> | Immutable.List<HelpLinkRecord>,
 
   // This section is all from the language_info object, flattened to the top
   // level here
