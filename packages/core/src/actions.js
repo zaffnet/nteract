@@ -297,6 +297,16 @@ export function mergeCellAfter(payload: {
   };
 }
 
+export function toggleTagInCell(payload: {
+  id: CellID,
+  tag: string
+}): actionTypes.ToggleTagInCell {
+  return {
+    type: actionTypes.TOGGLE_TAG_IN_CELL,
+    payload
+  };
+}
+
 /**
  * setInCell can generically be used to set any attribute on a cell, including
  * and especially for changing metadata per cell.
