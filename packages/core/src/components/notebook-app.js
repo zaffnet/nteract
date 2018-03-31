@@ -364,7 +364,8 @@ const mapStateToProps = (
     kernel = selectors.kernel(state, { kernelRef }) || kernel;
   }
 
-  // TODO: This should be pulled from the kernelspec for the `kernel`
+  // TODO: We need kernels associated to the kernelspec they came from
+  //       so we can pluck off the display_name and provide it here
   const languageDisplayName =
     kernel.kernelSpecName || selectors.notebook.displayName(model);
   // TODO: Rely on the kernel's codeMirror version first and foremost, then fallback on notebook
