@@ -15,6 +15,8 @@ type Props = {
   kernelStatus: string
 };
 
+const NOT_CONNECTED = "not connected";
+
 export class StatusBar extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     if (
@@ -80,10 +82,18 @@ const mapStateToProps = (
 
   const lastSaved =
     content && content.lastSaved ? content.lastSaved : undefined;
-  const kernelStatus =
-    kernel && kernel.status ? kernel.status : "not connected";
-  const kernelSpecDisplayName =
-    kernel && kernel.kernelSpecName ? kernel.kernelSpecName : "kernel";
+
+  const kernelStatus = kernel && kernel.status ? kernel.status : NOT_CONNECTED;
+
+  let kernelSpecDisplayName = " ";
+  if (kernelStatus === NOT_CONNECTED) {
+    kernelSpecDisplayName = "no kernel";
+  } else if (kernel && kernel.kernelSpecName) {
+    kernelSpecDisplayName = kernel.kernelSpecName;
+  } else if (content && content.type === "notebook") {
+    kernelSpecDisplayName =
+      selectors.notebook.displayName(content.model) || " ";
+  }
 
   return {
     lastSaved,
