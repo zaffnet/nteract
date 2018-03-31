@@ -86,7 +86,14 @@ export function acquireKernelInfo(
           langInfo: msg.content.language_info,
           kernelRef,
           contentRef
-        })
+        }),
+        {
+          type: "ACTUAL_KERNEL_INFO",
+          payload: {
+            kernelRef,
+            content: msg.content
+          }
+        }
         // The outer data for more uses
         /*
         TODO: switch the current actions.setKernelInfo to
