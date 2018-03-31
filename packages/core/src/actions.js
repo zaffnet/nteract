@@ -190,13 +190,14 @@ export function kernelRawStderr(payload: {
   };
 }
 
-// TODO: Does this need to pass KernelRef information?
-export function setKernelInfo(payload: {
+// "legacy" action that pushes kernelspec info back up
+// for the notebook document
+export function setKernelspecInfo(payload: {
   kernelInfo: any,
   contentRef: ContentRef
-}): actionTypes.SetKernelInfo {
+}): actionTypes.SetKernelspecInfo {
   return {
-    type: actionTypes.SET_KERNEL_INFO,
+    type: actionTypes.SET_KERNELSPEC_INFO,
     payload
   };
 }

@@ -47,9 +47,12 @@ import * as jmp from "jmp";
 
 import type { NewKernelAction } from "@nteract/core/src/actionTypes";
 
-import type { KernelInfo, LocalKernelProps } from "@nteract/core/src/state";
-
-import { selectors, actions, actionTypes } from "@nteract/core";
+import {
+  selectors,
+  actions,
+  actionTypes,
+  state as stateModule
+} from "@nteract/core";
 
 import {
   createMessage,
@@ -71,7 +74,7 @@ import type {
  * @param  {String}  cwd The working directory to launch the kernel in
  */
 export function launchKernelObservable(
-  kernelSpec: KernelInfo,
+  kernelSpec: stateModule.KernelspecInfo,
   cwd: string,
   kernelRef: KernelRef,
   contentRef: ContentRef
@@ -126,13 +129,13 @@ export function launchKernelObservable(
       createMainChannel(config, undefined, undefined, jmp)
         .then((channels: Channels) => {
           observer.next(
-            actions.setKernelInfo({
+            actions.setKernelspecInfo({
               kernelInfo: kernelSpec,
               contentRef: contentRef
             })
           );
 
-          const kernel: LocalKernelProps = {
+          const kernel: stateModule.LocalKernelProps = {
             kernelRef,
             type: "zeromq",
             hostRef: null,

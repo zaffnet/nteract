@@ -18,7 +18,7 @@ import type {
 } from "@nteract/commutable";
 
 import type {
-  KernelInfo,
+  KernelspecInfo,
   LanguageInfoMetadata,
   LocalKernelProps,
   RemoteKernelProps
@@ -408,11 +408,13 @@ export type FocusPreviousCellEditor = {
   }
 };
 
-export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
-export type SetKernelInfo = {
-  type: "SET_KERNEL_INFO",
+// "legacy" action that pushes kernelspec info back up
+// for the notebook document
+export const SET_KERNELSPEC_INFO = "SET_KERNELSPEC_INFO";
+export type SetKernelspecInfo = {
+  type: "SET_KERNELSPEC_INFO",
   payload: {
-    kernelInfo: KernelInfo,
+    kernelInfo: KernelspecInfo,
     contentRef: ContentRef
   }
 };

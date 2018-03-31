@@ -52,7 +52,7 @@ type KernelspecMetadata = {
 };
 
 // Note: this is the kernelspec as formed by spawnteract and jupyter kernelspecs --json
-export type KernelInfo = {
+export type KernelspecInfo = {
   name: string,
   spec: KernelspecMetadata
 };
