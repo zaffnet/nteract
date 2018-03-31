@@ -27,6 +27,7 @@ exports[`App renders app 1`] = `
         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"
       >
         <Connect(DragDropContext(NotebookApp))
+          contentRef="f6b6fcea-ae7f-4778-b754-878b6a121790"
           displayOrder={
             Array [
               "application/vnd.vega.v3+json",

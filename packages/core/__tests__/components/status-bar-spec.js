@@ -2,7 +2,7 @@ import React from "react";
 
 import { shallow } from "enzyme";
 
-import StatusBar from "../../src/components/status-bar";
+import { StatusBar } from "../../src/components/status-bar";
 import { dummyCommutable } from "../../src/dummy";
 
 describe("StatusBar", () => {
