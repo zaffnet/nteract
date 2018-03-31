@@ -50,13 +50,21 @@ const byRef = (
     case actionTypes.CHANGE_KERNEL_BY_NAME:
       return state.setIn([action.payload.oldKernelRef, "status"], "changing");
     case actionTypes.SET_KERNEL_INFO:
+      const codemirrorMode =
+        typeof action.payload.info.codemirrorMode === "string"
+          ? action.payload.info.codemirrorMode
+          : Immutable.Map(action.payload.info.codemirrorMode);
+
       const helpLinks = action.payload.info.helpLinks
         ? Immutable.List(action.payload.info.helpLinks.map(makeHelpLinkRecord))
         : Immutable.List();
 
       return state.setIn(
         [action.payload.kernelRef, "info"],
-        makeKernelInfoRecord(action.payload.info).set("helpLinks", helpLinks)
+        makeKernelInfoRecord(action.payload.info).merge({
+          helpLinks,
+          codemirrorMode
+        })
       );
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(

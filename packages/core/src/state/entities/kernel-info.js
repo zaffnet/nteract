@@ -83,7 +83,7 @@ export type KernelInfo = {
   // Codemirror mode, for for highlighting in the notebook.
   // Only needed if it differs from the 'name' field.
   // SPEC: language_info.codemirror_mode
-  codemirrorMode: string,
+  codemirrorMode: string | Object | Immutable.Map<string, JSONType>,
 
   // Nbconvert exporter, if notebooks written with this kernel should
   // be exported with something other than the general 'script'
