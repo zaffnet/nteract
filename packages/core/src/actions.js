@@ -14,7 +14,8 @@ import type { KernelspecProps } from "./state/entities/kernelspecs";
 import type {
   LanguageInfoMetadata,
   LocalKernelProps,
-  RemoteKernelProps
+  RemoteKernelProps,
+  KernelInfo
 } from "./state";
 
 import type {
@@ -891,6 +892,16 @@ export function updateDisplayFailed(payload: {
     type: actionTypes.UPDATE_DISPLAY_FAILED,
     payload,
     error: true
+  };
+}
+
+export function setKernelInfo(payload: {
+  kernelRef: KernelRef,
+  info: KernelInfo
+}): actionTypes.SetKernelInfo {
+  return {
+    type: actionTypes.SET_KERNEL_INFO,
+    payload
   };
 }
 

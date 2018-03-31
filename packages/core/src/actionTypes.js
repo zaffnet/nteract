@@ -7,6 +7,7 @@ import type {
 } from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
+import type { KernelInfo } from "./state/entities/kernel-info";
 
 import type {
   Notebook,
@@ -278,6 +279,15 @@ export type AcceptPayloadMessage = {
     id: CellID,
     payload: *,
     contentRef: ContentRef
+  }
+};
+
+export const SET_KERNEL_INFO = "CORE/SET_KERNEL_INFO";
+export type SetKernelInfo = {
+  type: "CORE/SET_KERNEL_INFO",
+  payload: {
+    kernelRef: KernelRef,
+    info: KernelInfo
   }
 };
 
