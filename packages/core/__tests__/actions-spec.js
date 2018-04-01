@@ -169,11 +169,11 @@ describe("launchKernelByName", () => {
   });
 });
 
-describe("setKernelInfo", () => {
-  test("creates a SET_KERNEL_INFO action", () => {
+describe("setKernelspecInfo", () => {
+  test("creates a SET_KERNELSPEC_INFO action", () => {
     const kernelInfo = { name: "japanese" };
-    expect(actions.setKernelInfo({ kernelInfo })).toEqual({
-      type: actionTypes.SET_KERNEL_INFO,
+    expect(actions.setKernelspecInfo({ kernelInfo })).toEqual({
+      type: actionTypes.SET_KERNELSPEC_INFO,
       payload: {
         kernelInfo: {
           name: "japanese"

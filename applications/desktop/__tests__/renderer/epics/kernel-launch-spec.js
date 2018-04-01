@@ -89,12 +89,13 @@ describe("launchKernelEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.setKernelInfo({
+      actions.setKernelspecInfo({
         kernelInfo: { spec: "hokey", name: "woohoo" },
         contentRef: "abc"
       }),
       actions.launchKernelSuccessful({
         kernel: {
+          info: null,
           kernelRef: expect.any(String),
           lastActivity: null,
           type: "zeromq",

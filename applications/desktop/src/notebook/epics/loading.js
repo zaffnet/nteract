@@ -24,12 +24,6 @@ import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
 import { actionTypes, actions } from "@nteract/core";
 
-import type {
-  FetchContent,
-  NewNotebook,
-  SetNotebook
-} from "@nteract/core/src/actionTypes";
-
 /**
  * Determines the right kernel to launch based on a notebook
  */
@@ -115,7 +109,7 @@ function createContentsResponse(
 export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
-    tap((action: FetchContent) => {
+    tap((action: actionTypes.FetchContent) => {
       // If there isn't a filepath, save-as it instead
       if (!action.payload.filepath) {
         throw new Error("fetch content needs a path");
@@ -160,7 +154,7 @@ export const launchKernelWhenNotebookSetEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.SET_NOTEBOOK),
-    map((action: SetNotebook) => {
+    map((action: actionTypes.SetNotebook) => {
       const { cwd, kernelSpecName } = extractNewKernel(
         action.payload.filepath,
         action.payload.notebook
@@ -184,7 +178,7 @@ export const launchKernelWhenNotebookSetEpic = (
 export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
-    map((action: NewNotebook) => {
+    map((action: actionTypes.NewNotebook) => {
       const { payload: { kernelSpec: { name, spec }, kernelRef } } = action;
 
       let notebook = monocellNotebook;

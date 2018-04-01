@@ -7,6 +7,7 @@ import type {
 } from "./state/refs";
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
+import type { KernelInfo } from "./state/entities/kernel-info";
 
 import type {
   Notebook,
@@ -18,7 +19,7 @@ import type {
 } from "@nteract/commutable";
 
 import type {
-  KernelInfo,
+  KernelspecInfo,
   LanguageInfoMetadata,
   LocalKernelProps,
   RemoteKernelProps
@@ -281,6 +282,15 @@ export type AcceptPayloadMessage = {
   }
 };
 
+export const SET_KERNEL_INFO = "CORE/SET_KERNEL_INFO";
+export type SetKernelInfo = {
+  type: "CORE/SET_KERNEL_INFO",
+  payload: {
+    kernelRef: KernelRef,
+    info: KernelInfo
+  }
+};
+
 export const SET_LANGUAGE_INFO = "SET_LANGUAGE_INFO";
 export type SetLanguageInfo = {
   type: "SET_LANGUAGE_INFO",
@@ -408,11 +418,13 @@ export type FocusPreviousCellEditor = {
   }
 };
 
-export const SET_KERNEL_INFO = "SET_KERNEL_INFO";
-export type SetKernelInfo = {
-  type: "SET_KERNEL_INFO",
+// "legacy" action that pushes kernelspec info back up
+// for the notebook document
+export const SET_KERNELSPEC_INFO = "SET_KERNELSPEC_INFO";
+export type SetKernelspecInfo = {
+  type: "SET_KERNELSPEC_INFO",
   payload: {
-    kernelInfo: KernelInfo,
+    kernelInfo: KernelspecInfo,
     contentRef: ContentRef
   }
 };

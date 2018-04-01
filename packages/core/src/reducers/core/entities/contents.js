@@ -55,7 +55,7 @@ import type {
   MergeCellAfter,
   MoveCell,
   FocusPreviousCell,
-  SetKernelInfo,
+  SetKernelspecInfo,
   SetLanguageInfo,
   UpdateCellStatus,
   ToggleCellInputVisibility,
@@ -658,7 +658,7 @@ function setLanguageInfo(state: NotebookModel, action: SetLanguageInfo) {
   return state.setIn(["notebook", "metadata", "language_info"], langInfo);
 }
 
-function setKernelInfo(state: NotebookModel, action: SetKernelInfo) {
+function setKernelspecInfo(state: NotebookModel, action: SetKernelspecInfo) {
   const { kernelInfo } = action.payload;
   return state
     .setIn(
@@ -803,7 +803,7 @@ type DocumentAction =
   | ToggleCellInputVisibility
   | UpdateCellStatus
   | SetLanguageInfo
-  | SetKernelInfo
+  | SetKernelspecInfo
   | OverwriteMetadataField
   | DeleteMetadataField
   | CopyCell
@@ -878,8 +878,8 @@ function document(
       return updateCellStatus(state, action);
     case actionTypes.SET_LANGUAGE_INFO:
       return setLanguageInfo(state, action);
-    case actionTypes.SET_KERNEL_INFO:
-      return setKernelInfo(state, action);
+    case actionTypes.SET_KERNELSPEC_INFO:
+      return setKernelspecInfo(state, action);
     case actionTypes.OVERWRITE_METADATA_FIELD:
       return overwriteMetadataField(state, action);
     case actionTypes.DELETE_METADATA_FIELD:
@@ -1060,7 +1060,7 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.ACCEPT_PAYLOAD_MESSAGE:
     case actionTypes.UPDATE_CELL_STATUS:
     case actionTypes.SET_LANGUAGE_INFO:
-    case actionTypes.SET_KERNEL_INFO:
+    case actionTypes.SET_KERNELSPEC_INFO:
     case actionTypes.OVERWRITE_METADATA_FIELD:
     case actionTypes.DELETE_METADATA_FIELD:
     case actionTypes.COPY_CELL:

@@ -39,6 +39,7 @@ import type {
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
+import * as stateModule from "../state";
 
 /**
  * Sets the execution state after a kernel has been launched.
@@ -79,10 +80,38 @@ export function acquireKernelInfo(
     childOf(message),
     ofMessageType("kernel_info_reply"),
     first(),
-    pluck("content", "language_info"),
-    map(langInfo =>
-      actions.setLanguageInfo({ langInfo, kernelRef, contentRef })
-    )
+    mergeMap(msg => {
+      const c = msg.content;
+      const l = c.language_info;
+
+      const info: stateModule.KernelInfo = {
+        protocolVersion: c.protocol_version,
+        implementation: c.implementation,
+        implementationVersion: c.implementation_version,
+        banner: c.banner,
+        helpLinks: c.help_links,
+        languageName: l.name,
+        languageVersion: l.version,
+        mimetype: l.mimetype,
+        fileExtension: l.file_extension,
+        pygmentsLexer: l.pygments_lexer,
+        codemirrorMode: l.codemirror_mode,
+        nbconvertExporter: l.nbconvert_exporter
+      };
+
+      return of(
+        // The original action we were using
+        actions.setLanguageInfo({
+          langInfo: msg.content.language_info,
+          kernelRef,
+          contentRef
+        }),
+        actions.setKernelInfo({
+          kernelRef,
+          info
+        })
+      );
+    })
   );
 
   return Observable.create(observer => {

@@ -7,7 +7,7 @@ import { actions, state as stateModule, epics as coreEpics } from "../../src";
 import { toArray } from "rxjs/operators";
 
 describe("launchWebSocketKernelEpic", () => {
-  test("", async function() {
+  test("launches remote kernels", async function() {
     const contentRef = stateModule.createContentRef();
     const kernelRef = "fake";
 
@@ -73,6 +73,7 @@ describe("launchWebSocketKernelEpic", () => {
           kernelRef,
           selectNextKernel: true,
           kernel: {
+            info: null,
             sessionId: "1",
             type: "websocket",
             channels: expect.any(Subject),

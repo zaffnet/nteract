@@ -4,6 +4,12 @@ import {
   makeRemoteKernelRecord,
   makeKernelsRecord
 } from "../../../state/entities/kernels";
+
+import {
+  makeKernelInfoRecord,
+  makeHelpLinkRecord
+} from "../../../state/entities/kernel-info";
+
 import * as actionTypes from "../../../actionTypes";
 import { combineReducers } from "redux-immutable";
 import * as Immutable from "immutable";
@@ -23,6 +29,7 @@ const byRef = (
     | actionTypes.LaunchKernelByNameAction
     | actionTypes.ChangeKernelByName
     | actionTypes.SetExecutionStateAction
+    | actionTypes.SetKernelInfo
 ) => {
   switch (action.type) {
     case actionTypes.SET_LANGUAGE_INFO:
@@ -42,6 +49,35 @@ const byRef = (
       return state.setIn([action.payload.kernelRef, "status"], "launching");
     case actionTypes.CHANGE_KERNEL_BY_NAME:
       return state.setIn([action.payload.oldKernelRef, "status"], "changing");
+    case actionTypes.SET_KERNEL_INFO:
+      let codemirrorMode = action.payload.info.codemirrorMode;
+      // If the codemirror mode isn't set, fallback on the language name
+      if (!codemirrorMode) {
+        codemirrorMode = action.payload.info.languageName;
+      }
+      switch (typeof codemirrorMode) {
+        case "string":
+          // already set as we want it
+          break;
+        case "object":
+          codemirrorMode = Immutable.Map(codemirrorMode);
+          break;
+        default:
+          // any other case results in falling back to language name
+          codemirrorMode = action.payload.info.languageName;
+      }
+
+      const helpLinks = action.payload.info.helpLinks
+        ? Immutable.List(action.payload.info.helpLinks.map(makeHelpLinkRecord))
+        : Immutable.List();
+
+      return state.setIn(
+        [action.payload.kernelRef, "info"],
+        makeKernelInfoRecord(action.payload.info).merge({
+          helpLinks,
+          codemirrorMode
+        })
+      );
     case actionTypes.SET_EXECUTION_STATE:
       return state.setIn(
         [action.payload.kernelRef, "status"],

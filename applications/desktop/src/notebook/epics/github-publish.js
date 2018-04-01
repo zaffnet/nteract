@@ -1,8 +1,12 @@
 // @flow
 import { shell } from "electron";
 
-import type { ContentRef } from "@nteract/core/src/state";
-import { selectors, actions, actionTypes } from "@nteract/core";
+import {
+  selectors,
+  actions,
+  actionTypes,
+  state as stateModule
+} from "@nteract/core";
 
 const path = require("path");
 
@@ -61,7 +65,7 @@ export function createGistCallback(
   observer: Observer<*>,
   filename: string,
   notificationSystem: any,
-  contentRef: ContentRef
+  contentRef: stateModule.ContentRef
 ) {
   return function gistCallback(err: Error, response: any) {
     if (err) {

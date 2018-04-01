@@ -1,15 +1,14 @@
 /* @flow */
 
 import type { Store } from "redux";
-import type { AppState } from "@nteract/core/src/state";
 
 import { dialog } from "electron";
 import { is } from "immutable";
-import { selectors } from "@nteract/core";
+import { selectors, state as stateModule } from "@nteract/core";
 
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
-export function unload(store: Store<AppState, Action>) {
+export function unload(store: Store<stateModule.AppState, Action>) {
   const kernel = selectors.currentKernel(store.getState());
   if (kernel && kernel.type === "zeromq") {
     // TODO: Do we need to provide a KernelRef here?
@@ -22,7 +21,7 @@ export function unload(store: Store<AppState, Action>) {
   return;
 }
 
-function isDirty(state: AppState) {
+function isDirty(state: stateModule.AppState) {
   // Desktop should never be in a state that it has loaded a non-notebook
   // document, nor that contents wouldn't be on the page, so we let those cases
   // pass through
@@ -38,7 +37,10 @@ function isDirty(state: AppState) {
   return selectors.notebook.isDirty(model);
 }
 
-export function beforeUnload(store: Store<AppState, Action>, e: any) {
+export function beforeUnload(
+  store: Store<stateModule.AppState, Action>,
+  e: any
+) {
   const state = store.getState();
 
   if (isDirty(state)) {
@@ -47,7 +49,7 @@ export function beforeUnload(store: Store<AppState, Action>, e: any) {
   }
 }
 
-export function initGlobalHandlers(store: Store<AppState, Action>) {
+export function initGlobalHandlers(store: Store<stateModule.AppState, Action>) {
   window.onbeforeunload = beforeUnload.bind(null, store);
   window.onunload = unload.bind(null, store);
 }

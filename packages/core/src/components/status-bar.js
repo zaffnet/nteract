@@ -1,6 +1,12 @@
 /* @flow */
 import React from "react";
+
+import { connect } from "react-redux";
+
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
+
+import * as selectors from "../selectors";
+import type { AppState, ContentRef, KernelRef } from "../state";
 
 type Props = {
   lastSaved: ?Date,
@@ -8,7 +14,9 @@ type Props = {
   kernelStatus: string
 };
 
-export default class StatusBar extends React.Component<Props> {
+const NOT_CONNECTED = "not connected";
+
+export class StatusBar extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     if (
       this.props.lastSaved !== nextProps.lastSaved ||
@@ -62,3 +70,36 @@ export default class StatusBar extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (
+  state: AppState,
+  ownProps: { contentRef: ContentRef, kernelRef: ?KernelRef }
+): Props => {
+  const { contentRef, kernelRef } = ownProps;
+  const content = selectors.content(state, { contentRef });
+  const kernel = kernelRef ? selectors.kernel(state, { kernelRef }) : null;
+
+  const lastSaved = content && content.lastSaved ? content.lastSaved : null;
+
+  const kernelStatus = kernel && kernel.status ? kernel.status : NOT_CONNECTED;
+
+  // TODO: We need kernels associated to the kernelspec they came from
+  //       so we can pluck off the display_name and provide it here
+  let kernelSpecDisplayName = " ";
+  if (kernelStatus === NOT_CONNECTED) {
+    kernelSpecDisplayName = "no kernel";
+  } else if (kernel && kernel.kernelSpecName) {
+    kernelSpecDisplayName = kernel.kernelSpecName;
+  } else if (content && content.type === "notebook") {
+    kernelSpecDisplayName =
+      selectors.notebook.displayName(content.model) || " ";
+  }
+
+  return {
+    lastSaved,
+    kernelStatus,
+    kernelSpecDisplayName
+  };
+};
+
+export default connect(mapStateToProps)(StatusBar);

@@ -10,8 +10,6 @@ import { throttle } from "lodash";
 
 import { actions, selectors, state as stateModule } from "@nteract/core";
 
-import type { KernelRef } from "@nteract/core/src/state/refs";
-
 export function cwdKernelFallback() {
   // HACK: If we see they're at /, we assume that was the OS launching the Application
   //       from a launcher (launchctl on macOS)
