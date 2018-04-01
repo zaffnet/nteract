@@ -803,6 +803,7 @@ function toggleOutputExpansion(
 }
 
 type DocumentAction =
+  | actionTypes.ToggleTagInCell
   | actionTypes.FocusPreviousCellEditor
   | actionTypes.FocusPreviousCell
   | actionTypes.FocusNextCellEditor
@@ -847,6 +848,8 @@ function document(
   action: DocumentAction
 ) {
   switch (action.type) {
+    case actionTypes.TOGGLE_TAG_IN_CELL:
+      return toggleTagInCell(state, action);
     case actionTypes.SEND_EXECUTE_REQUEST:
       return sendExecuteRequest(state, action);
     case actionTypes.SET_NOTEBOOK:
@@ -1088,6 +1091,7 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.PASTE_CELL:
     case actionTypes.CHANGE_CELL_TYPE:
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:
+    case actionTypes.TOGGLE_TAG_IN_CELL:
     case actionTypes.UNHIDE_ALL: {
       const path = [action.payload.contentRef, "model"];
       const model = state.getIn(path);

@@ -133,7 +133,8 @@ export type ToggleTagInCell = {
   type: "CORE/TOGGLE_TAG_IN_CELL",
   payload: {
     id: CellID,
-    tag: string
+    tag: string,
+    contentRef: ContentRef
   }
 };
 
