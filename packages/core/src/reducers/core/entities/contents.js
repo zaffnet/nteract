@@ -160,6 +160,25 @@ function clearOutputs(state: NotebookModel, action: actionTypes.ClearOutputs) {
   return cleanedState;
 }
 
+function toggleTagInCell(
+  state: NotebookModel,
+  action: actionTypes.ToggleTagInCell
+): NotebookModel {
+  const { id, tag } = action.payload;
+
+  return state.updateIn(
+    ["notebook", "cellMap", id, "metadata", "tags"],
+    // When tags haven't been initialized, we set them up as a new set
+    Immutable.Set(),
+    tags => {
+      if (tags.has(tag)) {
+        return tags.remove(tag);
+      }
+      return tags.add(tag);
+    }
+  );
+}
+
 function clearAllOutputs(
   state: NotebookModel,
   action: actionTypes.ClearAllOutputs | actionTypes.RestartKernel
