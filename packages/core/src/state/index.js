@@ -22,29 +22,6 @@ export * from "./entities";
 export * from "./ids";
 export * from "./refs";
 
-/*
-
-This is the definition of JSON that Flow provides
-
-type JSON = | string | number | boolean | null | JSONObject | JSONArray;
-type JSONObject = { [key:string]: JSON };
-type JSONArray = Array<JSON>;
-
-Which we'll adapt for our use of Immutable.js
-
-*/
-type ImmutableJSON =
-  | string
-  | number
-  | boolean
-  | null
-  | ImmutableJSONMap
-  | ImmutableJSONList; // eslint-disable-line no-use-before-define
-
-type ImmutableJSONMap = Immutable.Map<string, ImmutableJSON>;
-
-type ImmutableJSONList = Immutable.List<ImmutableJSON>;
-
 type KernelspecMetadata = {
   name: string,
   display_name: string,
