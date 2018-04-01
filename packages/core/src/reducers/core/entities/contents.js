@@ -170,12 +170,7 @@ function toggleTagInCell(
     ["notebook", "cellMap", id, "metadata", "tags"],
     // When tags haven't been initialized, we set them up as a new set
     Immutable.Set(),
-    tags => {
-      if (tags.has(tag)) {
-        return tags.remove(tag);
-      }
-      return tags.add(tag);
-    }
+    tags => (tags.has(tag) ? tags.remove(tag) : tags.add(tag))
   );
 }
 
