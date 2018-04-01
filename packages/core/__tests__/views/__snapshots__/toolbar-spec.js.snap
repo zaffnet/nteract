@@ -385,8 +385,22 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-2145412815 changeType"
+                  className="jsx-2145412815"
                   key=".4"
+                  onClick={[Function]}
+                  role="option"
+                  tabIndex="0"
+                >
+                  <a
+                    className="jsx-2145412815"
+                  >
+                    Toggle Parameter Cell
+                  </a>
+                </li>
+                <li
+                  aria-selected="false"
+                  className="jsx-2145412815 changeType"
+                  key=".5"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"

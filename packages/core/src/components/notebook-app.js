@@ -29,6 +29,7 @@ import { displayOrder, transforms } from "@nteract/transforms";
 
 type AnyCellProps = {
   id: string,
+  tags: Immutable.Set<string>,
   contentRef: ContentRef,
   cellType: "markdown" | "code" | "raw",
   theme: string,
@@ -81,11 +82,14 @@ const mapStateToCellProps = (state, { id, contentRef }) => {
   const outputExpanded =
     cellType === "code" && cell.getIn(["metadata", "outputExpanded"]);
 
+  const tags = cell.getIn(["metadata", "tags"], Immutable.Set());
+
   const pager = model.getIn(["cellPagers", id], Immutable.List());
 
   return {
     contentRef,
     cellType,
+    tags,
     source: cell.get("source", ""),
     theme: selectors.userPreferences(state).theme,
     executionCount: cell.get("execution_count"),
@@ -118,6 +122,24 @@ const mapDispatchToCellProps = (dispatch, { id, contentRef }) => ({
   }
 });
 
+const CellBanner = (props: { children: * }) => {
+  return (
+    <React.Fragment>
+      <div>{props.children}</div>
+      <style jsx>{`
+        div {
+          background-color: darkblue;
+          color: ghostwhite;
+          padding: 9px 16px;
+
+          font-size: 12px;
+          line-height: 20px;
+        }
+      `}</style>
+    </React.Fragment>
+  );
+};
+
 class AnyCell extends React.PureComponent<AnyCellProps, *> {
   render(): ?React$Element<any> {
     const {
@@ -129,6 +151,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
       focusBelowCell,
       focusEditor,
       id,
+      tags,
       selectCell,
       unfocusEditor,
       contentRef
@@ -246,6 +269,15 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
     return (
       <HijackScroll focused={cellFocused} onClick={selectCell}>
         <Cell isSelected={cellFocused}>
+          {/* The following banners come from when papermill's acknowledged
+              cell.metadata.tags are set
+          */}
+          {tags.has("parameters") ? (
+            <CellBanner>Papermill - Parametrized</CellBanner>
+          ) : null}
+          {tags.has("default parameters") ? (
+            <CellBanner>Papermill - Default Parameters</CellBanner>
+          ) : null}
           <Toolbar
             type={cellType}
             id={id}

@@ -126,6 +126,18 @@ export type ChangeFilenameAction = {
   }
 };
 
+export const TOGGLE_TAG_IN_CELL = "CORE/TOGGLE_TAG_IN_CELL";
+export type ToggleTagInCell = {
+  // expectation is that if a tag doesn't exist, it will set it
+  // if the tag is already in the collection of tags it will delete it
+  type: "CORE/TOGGLE_TAG_IN_CELL",
+  payload: {
+    id: CellID,
+    tag: string,
+    contentRef: ContentRef
+  }
+};
+
 export const SET_IN_CELL = "SET_IN_CELL";
 export type SetInCell<T> = {
   type: "SET_IN_CELL",

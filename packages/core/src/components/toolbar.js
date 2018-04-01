@@ -27,58 +27,22 @@ import {
 
 export type PureToolbarProps = {|
   type: "markdown" | "code" | "raw",
-  executeCell: () => void,
-  removeCell: () => void,
-  clearOutputs: () => void,
-  toggleCellInputVisibility: () => void,
-  toggleCellOutputVisibility: () => void,
-  toggleOutputExpansion: () => void,
-  changeCellType: () => void,
+  executeCell: ?() => void,
+  removeCell: ?() => void,
+  clearOutputs: ?() => void,
+  toggleParameterCell: ?() => void,
+  toggleCellInputVisibility: ?() => void,
+  toggleCellOutputVisibility: ?() => void,
+  toggleOutputExpansion: ?() => void,
+  changeCellType: ?() => void,
   contentRef: ContentRef
 |};
 
 export class PureToolbar extends React.Component<PureToolbarProps> {
-  clearOutputs: () => void;
-  toggleCellInputVisibility: () => void;
-  toggleCellOutputVisibility: () => void;
-  changeCellType: () => void;
-  toggleOutputExpansion: () => void;
-  dropdown: any;
-
   static defaultProps = {
     type: "code"
   };
 
-  constructor(props: PureToolbarProps) {
-    super(props);
-    this.clearOutputs = this.clearOutputs.bind(this);
-    this.toggleCellInputVisibility = this.toggleCellInputVisibility.bind(this);
-    this.toggleCellOutputVisibility = this.toggleCellOutputVisibility.bind(
-      this
-    );
-    this.toggleOutputExpansion = this.toggleOutputExpansion.bind(this);
-    this.changeCellType = this.changeCellType.bind(this);
-  }
-
-  clearOutputs(): void {
-    this.props.clearOutputs();
-  }
-
-  toggleCellOutputVisibility(): void {
-    this.props.toggleCellOutputVisibility();
-  }
-
-  toggleCellInputVisibility(): void {
-    this.props.toggleCellInputVisibility();
-  }
-
-  toggleOutputExpansion(): void {
-    this.props.toggleOutputExpansion();
-  }
-
-  changeCellType(): void {
-    this.props.changeCellType();
-  }
   render(): React$Element<any> {
     const { type, executeCell, removeCell } = this.props;
 
@@ -116,7 +80,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
             {type === "code" ? (
               <DropdownContent>
                 <li
-                  onClick={() => this.clearOutputs()}
+                  onClick={this.props.clearOutputs}
                   className="clearOutput"
                   role="option"
                   aria-selected="false"
@@ -125,7 +89,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
                   <a>Clear Cell Output</a>
                 </li>
                 <li
-                  onClick={() => this.toggleCellInputVisibility()}
+                  onClick={this.props.toggleCellInputVisibility}
                   className="inputVisibility"
                   role="option"
                   aria-selected="false"
@@ -134,7 +98,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
                   <a>Toggle Input Visibility</a>
                 </li>
                 <li
-                  onClick={() => this.toggleCellOutputVisibility()}
+                  onClick={this.props.toggleCellOutputVisibility}
                   className="outputVisibility"
                   role="option"
                   aria-selected="false"
@@ -143,7 +107,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
                   <a>Toggle Output Visibility</a>
                 </li>
                 <li
-                  onClick={() => this.toggleOutputExpansion()}
+                  onClick={this.props.toggleOutputExpansion}
                   className="outputExpanded"
                   role="option"
                   aria-selected="false"
@@ -152,7 +116,16 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
                   <a>Toggle Expanded Output</a>
                 </li>
                 <li
-                  onClick={() => this.changeCellType()}
+                  onClick={this.props.toggleParameterCell}
+                  role="option"
+                  aria-selected="false"
+                  tabIndex="0"
+                >
+                  <a>Toggle Parameter Cell</a>
+                </li>
+
+                <li
+                  onClick={this.props.changeCellType}
                   className="changeType"
                   role="option"
                   aria-selected="false"
@@ -164,7 +137,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
             ) : (
               <DropdownContent>
                 <li
-                  onClick={() => this.changeCellType()}
+                  onClick={this.props.changeCellType}
                   className="changeType"
                   role="option"
                   aria-selected="false"
@@ -252,6 +225,8 @@ type ConnectedProps = {
 };
 
 const mapDispatchToProps = (dispatch, { id, type, contentRef }) => ({
+  toggleParameterCell: () =>
+    dispatch(actions.toggleParameterCell({ id, contentRef })),
   removeCell: () => dispatch(actions.removeCell({ id, contentRef })),
   executeCell: () => dispatch(actions.executeCell({ id, contentRef })),
   clearOutputs: () => dispatch(actions.clearOutputs({ id, contentRef })),
@@ -271,4 +246,6 @@ const mapDispatchToProps = (dispatch, { id, type, contentRef }) => ({
     dispatch(actions.toggleOutputExpansion({ id, contentRef }))
 });
 
+// TODO: This toolbar could easily make use of ownProps (contentRef, cellId)
+//       and pluck exactly the state it wants
 export default connect(null, mapDispatchToProps)(PureToolbar);
