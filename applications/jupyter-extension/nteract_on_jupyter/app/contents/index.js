@@ -33,7 +33,8 @@ type ContentsProps = {
   contentRef: ContentRef,
   filepath: string,
   basePath: string,
-  serverConfig: *
+  serverConfig: *,
+  appVersion: string
 };
 
 const mapStateToProps = (
@@ -56,12 +57,15 @@ const mapStateToProps = (
     throw new Error("need content to view content, check your contentRefs");
   }
 
+  const appVersion = selectors.appVersion(state);
+
   return {
     contentType: content.type,
     contentRef,
     filepath: content.filepath,
     basePath: host.basePath,
-    serverConfig
+    serverConfig,
+    appVersion
   };
 };
 
@@ -110,6 +114,9 @@ class Contents extends React.Component<ContentsProps, null> {
           display_name: ks.displayName,
           language: ks.language,
           name: ks.name
+        },
+        nteract: {
+          version: this.props.appVersion
         }
       },
       nbformat: 4,
@@ -152,7 +159,7 @@ class Contents extends React.Component<ContentsProps, null> {
           return forkJoin(
             // Get their kernel started up
             sessions.create(this.props.serverConfig, sessionPayload),
-            // Save our initial notebook document
+            // Save the initial notebook document
             contents.save(this.props.serverConfig, filepath, {
               type: "notebook",
               content: notebook
