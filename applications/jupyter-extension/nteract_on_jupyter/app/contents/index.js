@@ -28,7 +28,7 @@ type ContentRef = stateModule.ContentRef;
 import { connect } from "react-redux";
 
 type ContentsProps = {
-  contentType: "dummy" | "notebook" | "directory" | "file" | null,
+  contentType: "dummy" | "notebook" | "directory" | "file",
   contentRef: ContentRef,
   filepath: string,
   basePath: string,
@@ -52,13 +52,7 @@ const mapStateToProps = (
 
   const content = selectors.content(state, { contentRef });
   if (!content) {
-    return {
-      contentType: null,
-      contentRef,
-      filepath: "",
-      basePath: host.basePath,
-      serverConfig
-    };
+    throw new Error("need content to view content, check your contentRefs");
   }
 
   return {
@@ -198,13 +192,6 @@ class Contents extends React.Component<ContentsProps, null> {
             <TitleBar />
             <NewNotebookNavigation onClick={this.openNotebook} />
             <Directory contentRef={this.props.contentRef} />
-          </React.Fragment>
-        );
-      case null:
-        return (
-          <React.Fragment>
-            <TitleBar />
-            <pre>🤷‍♀️ Oops! We shouldn't be here</pre>
           </React.Fragment>
         );
       default:
