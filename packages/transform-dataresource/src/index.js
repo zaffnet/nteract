@@ -1,7 +1,6 @@
 /* @flow */
 import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
-import PlotlyTransform from "@nteract/transform-plotly";
 import {
   GraphOcticon as BarGraphOcticon,
   PulseOcticon as LineGraphOcticon,
@@ -9,6 +8,14 @@ import {
   TelescopeOcticon,
   Beaker
 } from "@nteract/octicons";
+import {
+  XYFrame,
+  OrdinalFrame,
+  ResponsiveOrdinalFrame,
+  ResponsiveXYFrame
+} from "semiotic";
+
+import { scaleLinear } from "d3-scale";
 
 type Props = {
   data: Object,
@@ -40,36 +47,308 @@ const DataResourceTransformGrid = ({
   );
 };
 
-type LINE_VIEW = "line";
-type BAR_VIEW = "bar";
-type SCATTER_VIEW = "scatter";
-type GRID_VIEW = "grid";
+const colors = [
+  "#DA752E",
+  "#E5C209",
+  "#1441A0",
+  "#B86117",
+  "#4D430C",
+  "#1DB390",
+  "#B3331D",
+  "#088EB2",
+  "#417505",
+  "#E479A8",
+  "#F9F39E",
+  "#5782DC",
+  "#EBA97B",
+  "#A2AB60",
+  "#B291CF",
+  "#8DD2C2",
+  "#E6A19F",
+  "#3DC7E0",
+  "#98CE5B"
+];
 
-const viewTypeToPlotlyTraceProps = {
-  grid: {}, // avoid our lookup
-  line: {},
-  bar: { type: "bar" },
-  scatter: { mode: "markers" }
+const availableLineTypes = [
+  {
+    type: "line",
+    label: "Line Chart"
+  },
+  {
+    type: "stackedarea",
+    label: "Stacked Area Chart"
+  },
+  {
+    type: "stackedpercent",
+    label: "Stacked Area Chart (Percent)"
+  },
+  {
+    type: "bumparea",
+    label: "Ranked Area Chart"
+  }
+];
+
+const metricDimSelector = (values, selectionFunction, title) => (
+  <div style={{ display: "inline-block", margin: "0 10px" }}>
+    <h2>{title}</h2>
+    <select onChange={e => selectionFunction(e.target.value)}>
+      {[undefined, ...values].map(d => (
+        <option key={`selector-option-${d}`} value={d} label={d || "None"}>
+          {d || "None"}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
+const semioticLineChartTransform = (data, schema, options) => {
+  let lineData;
+
+  const { timeseries, selectedMetrics, lineType } = options;
+
+  if (!timeseries) {
+    lineData = schema.fields
+      .map((d, i) => {
+        return {
+          color: colors[i % colors.length],
+          label: d.name,
+          type: d.type,
+          coordinates: data.map((p, q) => ({
+            value: p[d.name],
+            x: q,
+            label: d.name,
+            color: colors[i % colors.length]
+          }))
+        };
+      })
+      .filter(
+        d =>
+          (selectedMetrics.length === 0 &&
+            (d.type === "integer" || d.type === "number")) ||
+          selectedMetrics.find(p => p === d.label)
+      );
+  }
+
+  return {
+    lineType: lineType,
+    lines: lineData,
+    renderKey: (d, i) => {
+      return d.coordinates ? `line-${d.label}` : `linepoint=${d.label}-${i}`;
+    },
+    lineStyle: d => ({ fill: d.color, stroke: d.color, fillOpacity: 0.75 }),
+    pointStyle: d => {
+      return {
+        fill: d.color,
+        fillOpacity: 0.75
+      };
+    },
+    axes: [{ orient: "left" }, { orient: "bottom", ticks: 10 }],
+    hoverAnnotation: true,
+    xAccessor: "x",
+    yAccessor: "value",
+    showLinePoints: true,
+    margin: { top: 20, right: 20, bottom: 50, left: 50 },
+    legend: {
+      title: "Legend",
+      position: "right",
+      width: 200,
+      legendGroups: [
+        {
+          label: "",
+          styleFn: d => ({ fill: d.color }),
+          items: lineData
+        }
+      ]
+    },
+    tooltipContent: d => {
+      return (
+        <div className="tooltip-content">
+          <p>{d.parentLine && d.parentLine.label}</p>
+          <p>
+            {d.label}: {d.value}
+          </p>
+          <p>X: {d.x}</p>
+        </div>
+      );
+    }
+  };
 };
 
-const plotViewTypes = Object.keys(viewTypeToPlotlyTraceProps);
+const semioticBarChartTransform = (data, schema, options) => {
+  const additionalSettings = {};
+  const colorHash = {};
 
-const DataResourceTransformPlot = ({
-  data: { data, schema },
-  type: givenType
-}) => {
-  const figure = { data: [] };
-  const traceProps = viewTypeToPlotlyTraceProps[givenType];
-  schema.fields.forEach(({ name }, i) => {
-    figure.data[i] = { name, y: [], ...traceProps };
-  });
-  data.forEach((row, j) => {
-    schema.fields.forEach(({ name }, i) => {
-      figure.data[i].y[j] = row[name];
+  const {
+    categorical,
+    sizeValue,
+    colorValue,
+    quantitative,
+    selectedMetrics,
+    selectedDimensions
+  } = options;
+
+  const oAccessor =
+    selectedDimensions.length === 0
+      ? categorical
+      : d => selectedDimensions.map(p => d[p]).join(",");
+
+  const rAccessor = quantitative;
+
+  if (sizeValue && sizeValue !== "None") {
+    additionalSettings.dynamicColumnWidth = sizeValue;
+  }
+
+  if (colorValue && colorValue !== "None") {
+    const uniqueValues = data.reduce(
+      (p, c) =>
+        (!p.find(d => d === c[colorValue]) && [...p, c[colorValue]]) || p,
+      []
+    );
+
+    uniqueValues.forEach((d, i) => {
+      colorHash[d] = colors[i % colors.length];
     });
-  });
-  return <PlotlyTransform data={figure} />;
+
+    additionalSettings.legend = {
+      title: "Legend",
+      position: "right",
+      width: 200,
+      legendGroups: [
+        {
+          label: colorValue,
+          styleFn: d => ({ fill: colorHash[d.label] }),
+          items: uniqueValues.map(d => ({ label: d }))
+        }
+      ]
+    };
+  }
+
+  return {
+    type: "bar",
+    data: data,
+    oAccessor,
+    rAccessor,
+    style: d => ({ fill: colorHash[d[colorValue]] || colors[0] }),
+    oPadding: 5,
+    oLabel: d => <text transform="rotate(90)">{d}</text>,
+    hoverAnnotation: true,
+    margin: { top: 10, right: 10, bottom: 100, left: 70 },
+    axis: { orient: "left", label: rAccessor },
+    ...additionalSettings
+  };
 };
+
+const semioticScatterplotTransform = (data, schema, options) => {
+  const {
+    colorValue,
+    sizeValue,
+    labelValue,
+    quantitative,
+    secondQuantitative,
+    height
+  } = options;
+  let sizeScale = () => 5;
+  const colorHash = {};
+  const additionalSettings = {};
+
+  let annotations;
+
+  if (labelValue && labelValue !== "None") {
+    const topQ = [...data]
+      .sort((a, b) => b[quantitative] - a[quantitative])
+      .filter((d, i) => i < 3);
+    const topSecondQ = [...data]
+      .sort((a, b) => b[secondQuantitative] - a[secondQuantitative])
+      .filter(d => topQ.indexOf(d) === -1)
+      .filter((d, i) => i < 3);
+
+    annotations = [...topQ, ...topSecondQ].map(d => ({
+      type: "react-annotation",
+      label: d[labelValue],
+      ...d
+    }));
+  }
+
+  if (sizeValue && sizeValue !== "None") {
+    const dataMin = Math.min(...data.map(d => d[sizeValue]));
+    const dataMax = Math.max(...data.map(d => d[sizeValue]));
+    sizeScale = scaleLinear()
+      .domain([dataMin, dataMax])
+      .range([2, 20]);
+  }
+  if (colorValue && colorValue !== "None") {
+    const uniqueValues = data.reduce(
+      (p, c) =>
+        (!p.find(d => d === c[colorValue]) && [...p, c[colorValue]]) || p,
+      []
+    );
+
+    uniqueValues.forEach((d, i) => {
+      colorHash[d] = colors[i % colors.length];
+    });
+
+    additionalSettings.legend = {
+      title: "Legend",
+      position: "right",
+      width: 200,
+      legendGroups: [
+        {
+          label: colorValue,
+          styleFn: d => ({ fill: colorHash[d.label] }),
+          items: uniqueValues.map(d => ({ label: d }))
+        }
+      ]
+    };
+  }
+  return {
+    xAccessor: quantitative,
+    yAccessor: secondQuantitative,
+    axes: [
+      { orient: "left", ticks: 6, label: secondQuantitative },
+      { orient: "bottom", ticks: 6, label: quantitative }
+    ],
+    points: data,
+    pointStyle: d => ({
+      r: sizeScale(d[sizeValue]),
+      fill: colorHash[d[colorValue]] || "black",
+      fillOpacity: 0.75,
+      stroke: "black",
+      strokeOpacity: 0.9
+    }),
+    hoverAnnotation: true,
+    responsiveWidth: false,
+    size: [height + 25, height],
+    margin: { left: 75, bottom: 50, right: 20, top: 20 },
+    annotations: annotations,
+    annotationSettings: {
+      layout: { type: "bump" }
+    },
+    ...additionalSettings
+  };
+};
+
+const semioticSettings = {
+  line: {
+    Frame: ResponsiveXYFrame,
+    controls: "switch between linetype",
+    transformation: semioticLineChartTransform
+  },
+  scatter: {
+    Frame: ResponsiveXYFrame,
+    controls: "switch between modes",
+    transformation: semioticScatterplotTransform
+  },
+  bar: {
+    Frame: ResponsiveOrdinalFrame,
+    controls: "switch between modes",
+    transformation: semioticBarChartTransform
+  }
+};
+
+/*
+  contour is an option for scatterplot
+  pie is a transform on bar
+*/
 
 const MetadataWarning = ({ metadata }) => {
   const warning =
@@ -127,6 +406,8 @@ const MetadataWarning = ({ metadata }) => {
   );
 };
 
+///////////////////////////////
+
 class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
@@ -134,7 +415,16 @@ class DataResourceTransform extends React.Component<Props, State> {
     metadata: {}
   };
 
-  state = { view: "grid" };
+  state = {
+    view: "grid",
+    lineType: "line",
+    metric: undefined,
+    dimension: undefined,
+    selectedDimensions: [],
+    selectedMetrics: [],
+    pieceType: "bar",
+    summaryType: undefined
+  };
 
   shouldComponentUpdate(): boolean {
     return true;
@@ -156,15 +446,203 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.setState({ view: "scatter" });
   };
 
+  setLineType = e => {
+    this.setState({ lineType: e });
+  };
+
+  updateDimensions = e => {
+    const oldDims = this.state.selectedDimensions;
+    const newDimensions =
+      oldDims.indexOf(e) === -1
+        ? [...oldDims, e]
+        : oldDims.filter(d => d !== e);
+    this.setState({ selectedDimensions: newDimensions });
+  };
+  updateMetrics = e => {
+    const oldDims = this.state.selectedMetrics;
+    const newMetrics =
+      oldDims.indexOf(e) === -1
+        ? [...oldDims, e]
+        : oldDims.filter(d => d !== e);
+    this.setState({ selectedMetrics: newMetrics });
+  };
+
   render(): ?React$Element<any> {
     const { view } = this.state;
 
     let display = null;
 
+    const dimensions = this.props.data.schema.fields.filter(
+      d => d.type === "string"
+    );
+    const metrics = this.props.data.schema.fields.filter(
+      d => d.type === "integer" || d.type === "number"
+    );
+
+    const categorical = dimensions[0];
+    const quantitative = this.state.xValue || metrics[0].name;
+    const secondQuantitative = this.state.yValue || metrics[1].name;
+
     if (view === "grid") {
       display = <DataResourceTransformGrid {...this.props} />;
-    } else if (plotViewTypes.includes(view)) {
-      display = <DataResourceTransformPlot {...this.props} type={view} />;
+    } else if (["line", "scatter", "bar"].includes(view)) {
+      const { Frame, transformation } = semioticSettings[view];
+      const frameSettings = transformation(
+        this.props.data.data,
+        this.props.data.schema,
+        {
+          categorical,
+          quantitative,
+          secondQuantitative,
+          colors: colors,
+          height: this.props.height,
+          lineType: this.state.lineType,
+          selectedDimensions: this.state.selectedDimensions,
+          selectedMetrics: this.state.selectedMetrics,
+          sizeValue: this.state.sizeValue,
+          colorValue: this.state.colorValue,
+          labelValue: this.state.labelValue,
+          pieceType: this.state.pieceType,
+          summaryType: this.state.summaryType
+        }
+      );
+
+      display = (
+        <div style={{ width: "calc(100% - 200px)" }}>
+          <Frame
+            responsiveWidth={true}
+            size={[500, this.props.height]}
+            {...frameSettings}
+          />
+          {(view === "scatter" || view === "bar") &&
+            metricDimSelector(
+              metrics.map(d => d.name),
+              d => this.setState({ xValue: d }),
+              view === "grid" ? "Metric" : "X"
+            )}
+          {view === "scatter" &&
+            metricDimSelector(
+              metrics.map(d => d.name),
+              d => this.setState({ yValue: d }),
+              "Y"
+            )}
+          {(view === "scatter" || view === "bar") &&
+            metricDimSelector(
+              metrics.map(d => d.name),
+              d => this.setState({ sizeValue: d }),
+              "SIZE"
+            )}
+          {(view === "scatter" || view === "bar") &&
+            metricDimSelector(
+              dimensions.map(d => d.name),
+              d => this.setState({ colorValue: d }),
+              "COLOR"
+            )}
+          {view === "scatter" &&
+            metricDimSelector(
+              dimensions.map(d => d.name),
+              d => this.setState({ labelValue: d }),
+              "LABELS"
+            )}
+          {view === "line" && (
+            <div>
+              {availableLineTypes.map(d => (
+                <a
+                  style={{
+                    marginLeft: "20px",
+                    color:
+                      this.state.lineType === d.type ? "lightgray" : "black"
+                  }}
+                  onClick={() => this.setLineType(d.type)}
+                >
+                  {d.label}
+                </a>
+              ))}
+            </div>
+          )}
+          {view === "bar" && (
+            <div>
+              <h1>Dimensions</h1>
+              {dimensions.map(d => (
+                <a
+                  key={`dimensions-select-${d.name}`}
+                  style={{
+                    marginLeft: "20px",
+                    color:
+                      this.state.selectedDimensions.indexOf(d.name) !== -1
+                        ? "black"
+                        : "lightgray"
+                  }}
+                  onClick={() => this.updateDimensions(d.name)}
+                >
+                  {d.name}
+                </a>
+              ))}
+            </div>
+          )}
+          {view === "line" && (
+            <div>
+              <h1>Metrics</h1>
+              {metrics.map(d => (
+                <a
+                  key={`metrics-select-${d.name}`}
+                  style={{
+                    marginLeft: "20px",
+                    color:
+                      this.state.selectedMetrics.indexOf(d.name) !== -1
+                        ? "black"
+                        : "lightgray"
+                  }}
+                  onClick={() => this.updateMetrics(d.name)}
+                >
+                  {d.name}
+                </a>
+              ))}
+            </div>
+          )}
+          <style jsx>{`
+            :global(.tooltip-content) {
+              color: black;
+              padding: 10px;
+              z-index: 999999;
+              min-width: 120px;
+              background: white;
+              border: 1px solid black;
+              position: relative;
+              transform: translate(calc(-50% + 7px), calc(-100% - 20px));
+            }
+            :global(.tooltip-content:before) {
+              border-right: inherit;
+              border-bottom: inherit;
+              bottom: -8px;
+              left: calc(50% - 15px);
+              background: inherit;
+              content: "";
+              padding: 0px;
+              transform: rotate(45deg);
+              width: 15px;
+              height: 15px;
+              position: absolute;
+              z-index: 99;
+            }
+
+            :global(.tick > path) {
+              stroke: lightgray;
+            }
+
+            :global(.axis-labels) {
+              fill: lightgray;
+            }
+            :global(.axis-baseline) {
+              stroke-opacity: 0.25;
+            }
+            :global(circle.frame-hover) {
+              fill: none;
+              stroke: gray;
+            }
+          `}</style>
+        </div>
+      );
     }
 
     return (
@@ -209,6 +687,8 @@ class DataResourceTransform extends React.Component<Props, State> {
     );
   }
 }
+
+/////////////////////////////
 
 type IconButtonProps = {
   message: string,
