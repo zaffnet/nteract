@@ -1,5 +1,9 @@
 // @flow
 
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
+/* eslint jsx-a11y/click-events-have-key-events: 0 */
+/* eslint jsx-a11y/no-noninteractive-tabindex: 0 */
+
 /**
  * Plan:
  *
@@ -12,33 +16,33 @@
 
 import * as React from "react";
 
-import type { KernelspecProps } from "../../state/entities/kernelspecs";
+import { connect } from "react-redux";
 
-import * as logos from "./logos";
+import type { AppState } from "../../state";
+
+import type {
+  KernelspecRecord,
+  KernelspecProps
+} from "../../state/entities/kernelspecs";
+
+import { default as Logo } from "./logos";
+
+import * as Immutable from "immutable";
 
 export type AvailableNotebook = {
-  kernelspec: KernelspecProps
+  kernelspec: KernelspecRecord | KernelspecProps
 };
 
-export type AvailableNotebooks = Array<AvailableNotebook>;
+export type AvailableNotebooks =
+  | Immutable.List<AvailableNotebook>
+  | Array<AvailableNotebook>;
 
 export const NewNotebook = (
   props: AvailableNotebook & {
     href?: string,
-    onClick?: (ks: KernelspecProps) => void
+    onClick?: (ks: KernelspecRecord | KernelspecProps) => void
   }
 ) => {
-  const Logo = logos.builtins[props.kernelspec.language];
-
-  const inner = (
-    <React.Fragment>
-      <div className="display-name">{props.kernelspec.displayName}</div>
-      <div className="logo">
-        <Logo />
-      </div>
-    </React.Fragment>
-  );
-
   const onClick = () => {
     if (props.onClick) {
       props.onClick(props.kernelspec);
@@ -47,55 +51,97 @@ export const NewNotebook = (
 
   return (
     <React.Fragment>
-      {props.href ? (
-        <a className="newNotebook" href={props.href}>
-          {inner}
-        </a>
-      ) : (
-        <button className="newNotebook" onClick={onClick}>
-          {inner}
-        </button>
-      )}
+      <div tabIndex={0} className="new-notebook" onClick={onClick}>
+        <div className="logo-box">
+          <div className="logo">
+            <Logo language={props.kernelspec.language} />
+          </div>
+        </div>
+        <div className="text-box">
+          <p className="display-name-short" title={props.kernelspec.language}>
+            {props.kernelspec.language}
+          </p>
+          <p className="display-name-long" title={props.kernelspec.displayName}>
+            {props.kernelspec.displayName}
+          </p>
+        </div>
+      </div>
       <style jsx>{`
-        .newNotebook :global(*) {
+        .new-notebook :global(*) {
           color: var(--nt-color-midnight-light);
+          cursor: pointer;
         }
 
         a {
           padding-top: 20px;
         }
 
-        .newNotebook {
-          font-size: 20px;
-          text-align: center;
+        .new-notebook {
           font-family: var(--nt-font-family-normal);
-          background-color: var(--nt-color-midnight-lightest);
-          height: 212px;
-          width: 150px;
           color: var(--nt-color-midnight-light);
-
-          margin-right: 20px;
-
+          margin: 20px 20px 0 0;
           flex: 0 0 auto;
-
-          --logo-off: currentColor;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          height: 220px;
+          width: 150px;
         }
 
-        .newNotebook:focus,
-        .newNotebook:hover {
-          --logo-off: unset;
+        .new-notebook:hover {
+          box-shadow: var(--theme-primary-shadow-hover);
         }
 
-        .newNotebook:focus {
-          outline: 1px solid var(--nt-color-midnight-lighter);
+        .new-notebook:focus {
+          box-shadow: var(--theme-primary-shadow-focus);
+        }
+        .logo {
+          width: 3em;
+          box-sizing: border-box;
+          margin: 0 auto;
         }
 
-        .newNotebook:hover {
-          background-color: var(--nt-color-midnight-lighter);
+        .logo-box {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 30px;
+          background-color: var(--theme-app-bg);
+          flex: 1;
         }
 
-        .display-name {
-          padding-bottom: 30px;
+        .text-box {
+          padding: 8px 6px 8px 6px;
+          font-size: 0.8em;
+          width: 150px;
+          box-sizing: border-box;
+          background-color: var(--theme-primary-bg);
+          border-top: 1px solid var(--theme-app-border);
+        }
+
+        .display-name-short {
+          text-transform: capitalize;
+          margin: 0 5px 0 0;
+          font-weight: 600;
+          color: var(--theme-app-fg);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .display-name-long {
+          margin: 0;
+          color: var(--theme-primary-fg);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .new-notebook:hover .display-name-long,
+        .new-notebook:focus .display-name-long {
+          white-space: initial;
+          overflow: initial;
+          text-overflow: initial;
         }
       `}</style>
     </React.Fragment>
@@ -111,12 +157,13 @@ const NotebookCollection = (props: { children: React.Node }) => (
     {props.children}
     <style jsx>{`
       .collection {
-        margin: 20px 0px 20px 0px;
-        height: 240px;
-
+        padding: 0 0 20px 0;
+        box-sizing: border-box;
+        min-width: 0;
         display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: -ms-autohiding-scrollbar;
       }
@@ -124,9 +171,9 @@ const NotebookCollection = (props: { children: React.Node }) => (
   </div>
 );
 
-export const NewNotebookNavigation = (props: {
+export const PureNewNotebookNavigation = (props: {
   availableNotebooks: AvailableNotebooks,
-  onClick?: (ks: KernelspecProps) => void
+  onClick?: (ks: KernelspecRecord | KernelspecProps) => void
 }) => (
   <React.Fragment>
     <div className="banner">
@@ -155,5 +202,26 @@ export const NewNotebookNavigation = (props: {
     `}</style>
   </React.Fragment>
 );
+
+const mapStateToProps = (state: AppState) => {
+  const availableKernels = state.core.entities.kernelspecs.byRef
+    .flatMap((kss, ksRef) => {
+      return kss.byName.map((ks, name) => {
+        return { kernelspec: ks };
+      });
+    })
+    .toList();
+
+  return {
+    availableNotebooks: availableKernels
+  };
+};
+
+const mapDispatchToProps = dispatch => ({});
+
+export const NewNotebookNavigation = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PureNewNotebookNavigation);
 
 export default NewNotebookNavigation;
