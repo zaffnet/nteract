@@ -6,17 +6,21 @@ import { connect } from "react-redux";
 import { Logo } from "./logos";
 
 import * as selectors from "../../selectors";
+import type { AppState } from "../../state";
 
 type TitleBarProps = {
   title: string,
   theme: "light" | "dark",
-  onTitleChange?: (title: string) => void
+  onTitleChange?: (title: string) => void,
+  logoHref?: string
 };
 
 export const TitleBar = (props: TitleBarProps) => (
   <React.Fragment>
     <header>
-      <Logo height={20} theme={props.theme} />
+      <a href={props.logoHref}>
+        <Logo height={20} theme={props.theme} />
+      </a>
       <p>{props.title}</p>
     </header>
     <style jsx>{`
@@ -27,25 +31,31 @@ export const TitleBar = (props: TitleBarProps) => (
         padding: 10px 16px;
       }
 
-      header > * {
+      a {
+        display: inline-block;
         margin: 0 30px;
       }
 
-      header pre {
+      p {
         display: inline-block;
+        margin: 0 30px;
       }
     `}</style>
   </React.Fragment>
 );
 
-const mapStateToProps = state => ({
+const mapStateToProps = (
+  state: AppState,
+  ownProps: { logoHref?: string }
+): TitleBarProps => ({
   title: selectors
     .currentFilepath(state)
     .split("/")
     .pop()
     .split(".ipynb")
     .shift(),
-  theme: selectors.currentTheme(state)
+  theme: selectors.currentTheme(state),
+  logoHref: ownProps.logoHref
 });
 
 const mapDispatchToProps = dispatch => ({
