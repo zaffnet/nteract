@@ -91,7 +91,7 @@ const availableLineTypes = [
 const metricDimSelector = (values, selectionFunction, title) => (
   <div style={{ display: "inline-block", margin: "0 10px" }}>
     <h2>{title}</h2>
-    <select onChange={e => selectionFunction(e.target.value)}>
+    <select onBlur={e => selectionFunction(e.target.value)}>
       {[undefined, ...values].map(d => (
         <option key={`selector-option-${d}`} value={d} label={d || "None"}>
           {d || "None"}
@@ -547,7 +547,7 @@ class DataResourceTransform extends React.Component<Props, State> {
           {view === "line" && (
             <div>
               {availableLineTypes.map(d => (
-                <a
+                <button
                   style={{
                     marginLeft: "20px",
                     color:
@@ -556,7 +556,7 @@ class DataResourceTransform extends React.Component<Props, State> {
                   onClick={() => this.setLineType(d.type)}
                 >
                   {d.label}
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -564,7 +564,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <div>
               <h1>Dimensions</h1>
               {dimensions.map(d => (
-                <a
+                <button
                   key={`dimensions-select-${d.name}`}
                   style={{
                     marginLeft: "20px",
@@ -576,7 +576,7 @@ class DataResourceTransform extends React.Component<Props, State> {
                   onClick={() => this.updateDimensions(d.name)}
                 >
                   {d.name}
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -584,7 +584,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <div>
               <h1>Metrics</h1>
               {metrics.map(d => (
-                <a
+                <button
                   key={`metrics-select-${d.name}`}
                   style={{
                     marginLeft: "20px",
@@ -596,7 +596,7 @@ class DataResourceTransform extends React.Component<Props, State> {
                   onClick={() => this.updateMetrics(d.name)}
                 >
                   {d.name}
-                </a>
+                </button>
               ))}
             </div>
           )}
