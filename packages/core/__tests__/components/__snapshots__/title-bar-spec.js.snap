@@ -111,19 +111,23 @@ exports[`logos should be able to render 2`] = `
 exports[`title-bar should be able to render 1`] = `
 <React.Fragment>
   <header
-    className="jsx-2506228511"
+    className="jsx-2967022987"
   >
-    <Logo
-      height={20}
-      theme="light"
-    />
+    <a
+      className="jsx-2967022987"
+    >
+      <Logo
+        height={20}
+        theme="light"
+      />
+    </a>
     <p
-      className="jsx-2506228511"
+      className="jsx-2967022987"
     />
   </header>
   <JSXStyle
-    css="header.jsx-2506228511{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;-ms-flex-pack:start;justify-content:flex-start;background-color:var(--theme-title-bar-bg,rgb(250,250,250));padding:10px 16px;}header.jsx-2506228511>*.jsx-2506228511{margin:0 30px;}header.jsx-2506228511 pre.jsx-2506228511{display:inline-block;}"
-    styleId="2506228511"
+    css="header.jsx-2967022987{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;-ms-flex-pack:start;justify-content:flex-start;background-color:var(--theme-title-bar-bg,rgb(250,250,250));padding:10px 16px;}a.jsx-2967022987{display:inline-block;margin:0 30px;}p.jsx-2967022987{display:inline-block;margin:0 30px;}"
+    styleId="2967022987"
   />
 </React.Fragment>
 `;
@@ -131,21 +135,25 @@ exports[`title-bar should be able to render 1`] = `
 exports[`title-bar should be able to render 2`] = `
 <React.Fragment>
   <header
-    className="jsx-2506228511"
+    className="jsx-2967022987"
   >
-    <Logo
-      height={20}
-      theme="dark"
-    />
+    <a
+      className="jsx-2967022987"
+    >
+      <Logo
+        height={20}
+        theme="dark"
+      />
+    </a>
     <p
-      className="jsx-2506228511"
+      className="jsx-2967022987"
     >
       great
     </p>
   </header>
   <JSXStyle
-    css="header.jsx-2506228511{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;-ms-flex-pack:start;justify-content:flex-start;background-color:var(--theme-title-bar-bg,rgb(250,250,250));padding:10px 16px;}header.jsx-2506228511>*.jsx-2506228511{margin:0 30px;}header.jsx-2506228511 pre.jsx-2506228511{display:inline-block;}"
-    styleId="2506228511"
+    css="header.jsx-2967022987{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-webkit-justify-content:flex-start;-ms-flex-pack:start;justify-content:flex-start;background-color:var(--theme-title-bar-bg,rgb(250,250,250));padding:10px 16px;}a.jsx-2967022987{display:inline-block;margin:0 30px;}p.jsx-2967022987{display:inline-block;margin:0 30px;}"
+    styleId="2967022987"
   />
 </React.Fragment>
 `;

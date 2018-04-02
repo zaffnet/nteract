@@ -187,7 +187,7 @@ export const modalType = createSelector(
   identity
 );
 
-export const currentTheme: (state: *) => string = createSelector(
+export const currentTheme: (state: *) => "light" | "dark" = createSelector(
   (state: AppState) => state.config.get("theme", "light"),
   identity
 );

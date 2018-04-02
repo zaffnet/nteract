@@ -32,9 +32,10 @@ type ContentsProps = {
   contentType: "dummy" | "notebook" | "directory" | "file",
   contentRef: ContentRef,
   filepath: string,
-  basePath: string,
+  appPath: string,
   serverConfig: *,
-  appVersion: string
+  appVersion: string,
+  baseDir: string
 };
 
 const mapStateToProps = (
@@ -59,13 +60,19 @@ const mapStateToProps = (
 
   const appVersion = selectors.appVersion(state);
 
+  // Our base directory is the literal directory we're in otherwise it's relative
+  // to the file being viewed.
+  const baseDir =
+    content.type === "directory" ? content.filepath : dirname(content.filepath);
+
   return {
     contentType: content.type,
     contentRef,
     filepath: content.filepath,
-    basePath: host.basePath,
+    appPath: host.basePath,
     serverConfig,
-    appVersion
+    appVersion,
+    baseDir
   };
 };
 
@@ -89,13 +96,6 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 
   openNotebook(ks: stateModule.KernelspecRecord | stateModule.KernelspecProps) {
-    // Our base directory is the literal directory we're in otherwise it's relative
-    // to the file being viewed.
-    const baseDir =
-      this.props.contentType === "directory"
-        ? this.props.filepath
-        : dirname(this.props.filepath);
-
     const serverConfig = this.props.serverConfig;
 
     // The notebook they get to start with
@@ -127,7 +127,7 @@ class Contents extends React.Component<ContentsProps, null> {
     //       happening here instead of an epic
     contents
       // Create UntitledXYZ.ipynb by letting the server do it
-      .create(this.props.serverConfig, baseDir, {
+      .create(this.props.serverConfig, this.props.baseDir, {
         type: "notebook"
         // NOTE: The contents API appears to ignore the content field for new
         // notebook creation.
@@ -172,7 +172,7 @@ class Contents extends React.Component<ContentsProps, null> {
 
           const url = urljoin(
             // User path
-            this.props.basePath,
+            this.props.appPath,
             // nteract edit path
             "/nteract/edit",
             // Actual file
@@ -191,7 +191,13 @@ class Contents extends React.Component<ContentsProps, null> {
       case "notebook":
         return (
           <React.Fragment>
-            <TitleBar />
+            <TitleBar
+              logoHref={urljoin(
+                this.props.appPath,
+                "/nteract/edit/",
+                this.props.baseDir
+              )}
+            />
             <NotebookMenu />
             <NotebookApp contentRef={this.props.contentRef} />
           </React.Fragment>
@@ -199,7 +205,13 @@ class Contents extends React.Component<ContentsProps, null> {
       case "file":
         return (
           <React.Fragment>
-            <TitleBar />
+            <TitleBar
+              logoHref={urljoin(
+                this.props.appPath,
+                "/nteract/edit/",
+                this.props.baseDir
+              )}
+            />
             <Container>
               <File contentRef={this.props.contentRef} />
             </Container>
@@ -208,13 +220,21 @@ class Contents extends React.Component<ContentsProps, null> {
       case "dummy":
         return (
           <React.Fragment>
-            <TitleBar />
+            <TitleBar
+              logoHref={urljoin(
+                this.props.appPath,
+                "/nteract/edit/",
+                this.props.baseDir
+              )}
+            />
           </React.Fragment>
         );
       case "directory":
         return (
           <React.Fragment>
-            <TitleBar />
+            <TitleBar
+              logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
+            />
             <NewNotebookNavigation onClick={this.openNotebook} />
             <Directory contentRef={this.props.contentRef} />
           </React.Fragment>
