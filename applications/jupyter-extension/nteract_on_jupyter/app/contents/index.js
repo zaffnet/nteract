@@ -14,9 +14,10 @@ import {
 } from "@nteract/core";
 
 // TODO: Make a proper epic
-import { contents } from "rx-jupyter";
+import { contents, sessions } from "rx-jupyter";
 const urljoin = require("url-join");
 import { first, map, mergeMap } from "rxjs/operators";
+import { forkJoin } from "rxjs/observable/forkJoin";
 
 import { dirname } from "path";
 
@@ -138,14 +139,30 @@ class Contents extends React.Component<ContentsProps, null> {
         mergeMap(({ response, status }) => {
           const filepath = response.path;
 
-          // Save our initial notebook document
-          return contents.save(this.props.serverConfig, filepath, {
-            type: "notebook",
-            content: notebook
-          });
+          const sessionPayload = {
+            kernel: {
+              id: null,
+              name: ks.name
+            },
+            name: "",
+            path: filepath,
+            type: "notebook"
+          };
+
+          return forkJoin(
+            // Get their kernel started up
+            sessions.create(this.props.serverConfig, sessionPayload),
+            // Save our initial notebook document
+            contents.save(this.props.serverConfig, filepath, {
+              type: "notebook",
+              content: notebook
+            })
+          );
         }),
         first(),
-        map(({ response, status }) => {
+        map(([session, content]) => {
+          const { response, status } = content;
+
           const url = urljoin(
             // User path
             this.props.basePath,
@@ -154,6 +171,7 @@ class Contents extends React.Component<ContentsProps, null> {
             // Actual file
             response.path
           );
+
           // Always open new notebooks in new windows
           window.open(url, "_blank");
         })
