@@ -129,6 +129,7 @@ class Main extends React.Component<*, *> {
             rel="prefetch"
             href="https://media.giphy.com/media/xUPGcguWZHRC2HyBRS/giphy.gif"
           />
+          <title>nteract play: Run interactive code</title>
         </Head>
         <header>
           <div className="left">
