@@ -12,7 +12,8 @@ import {
   XYFrame,
   OrdinalFrame,
   ResponsiveOrdinalFrame,
-  ResponsiveXYFrame
+  ResponsiveXYFrame,
+  ResponsiveNetworkFrame
 } from "semiotic";
 
 import { scaleLinear } from "d3-scale";
@@ -25,8 +26,29 @@ type Props = {
   height?: number
 };
 
+type LineType = "line" | "stackedarea" | "bumparea" | "stackedpercent";
+
 type State = {
-  view: "line" | "bar" | "scatter" | "grid"
+  view: "line" | "bar" | "scatter" | "grid" | "network",
+  selectedMetrics: Array<string>,
+  selectedDimensions: Array<string>,
+  networkType:
+    | "None"
+    | "force"
+    | "dendrogram"
+    | "treemap"
+    | "sankey"
+    | "circlepack",
+  pieceType: "None" | "bar" | "point" | "swarm" | "clusterbar",
+  colorValue: string,
+  sizeValue: string,
+  xValue: string,
+  yValue: string,
+  targetDimension: string,
+  sourceDimension: string,
+  labelValue: string,
+  summaryType: "None" | "violin" | "joy" | "histogram" | "heatmap" | "boxplot",
+  lineType: LineType
 };
 
 const DataResourceTransformGrid = ({
@@ -92,9 +114,9 @@ const metricDimSelector = (values, selectionFunction, title) => (
   <div style={{ display: "inline-block", margin: "0 10px" }}>
     <h2>{title}</h2>
     <select onBlur={e => selectionFunction(e.target.value)}>
-      {[undefined, ...values].map(d => (
-        <option key={`selector-option-${d}`} value={d} label={d || "None"}>
-          {d || "None"}
+      {["None", ...values].map(d => (
+        <option key={`selector-option-${d}`} value={d} label={d}>
+          {d}
         </option>
       ))}
     </select>
@@ -174,6 +196,58 @@ const semioticLineChartTransform = (data, schema, options) => {
   };
 };
 
+const semioticNetworkTransform = (data, schema, options) => {
+  const {
+    sourceDimension,
+    targetDimension,
+    networkType = "force",
+    quantitative
+  } = options;
+  if (
+    !sourceDimension ||
+    sourceDimension === "none" ||
+    !targetDimension ||
+    targetDimension === "none"
+  ) {
+    return {};
+  }
+  const edgeHash = {};
+  const networkData = [];
+  data.forEach(d => {
+    if (!edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`]) {
+      edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`] = {
+        source: d[sourceDimension],
+        target: d[targetDimension],
+        value: 0,
+        weight: 0
+      };
+      networkData.push(edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`]);
+    }
+    edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`].value +=
+      d[quantitative];
+    edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`].weight += 1;
+  });
+
+  const valueMin = Math.min(...networkData.map(d => d.value));
+  const valueMax = Math.max(...networkData.map(d => d.value));
+  const nodeScale = scaleLinear()
+    .domain([valueMin, valueMax])
+    .range([2, 20]);
+  return {
+    edges: networkData,
+    edgeType: "halfarrow",
+    edgeStyle: d => ({ fill: "lightgray", stroke: "gray" }),
+    nodeStyle: d => ({ fill: "lightgray", stroke: "black" }),
+    nodeLabels: true,
+    nodeSizeAccessor: d => d.degree,
+    networkType: { type: networkType, iterations: 1000 },
+    margin: { left: 100, right: 100, top: 10, bottom: 10 },
+    annotationSettings: {
+      layout: { type: "marginalia", orient: ["left", "right"] }
+    }
+  };
+};
+
 const semioticBarChartTransform = (data, schema, options) => {
   const additionalSettings = {};
   const colorHash = {};
@@ -234,6 +308,29 @@ const semioticBarChartTransform = (data, schema, options) => {
     hoverAnnotation: true,
     margin: { top: 10, right: 10, bottom: 100, left: 70 },
     axis: { orient: "left", label: rAccessor },
+    tooltipContent: d => {
+      return (
+        <div className="tooltip-content">
+          {/* colorValue &&
+            colorValue !== "none" && <p>{d.pieces[0][colorValue]}</p> */}
+          <p>
+            {typeof oAccessor === "function"
+              ? oAccessor(d.pieces[0])
+              : d.pieces[0][oAccessor]}
+          </p>
+          <p>
+            {rAccessor}:{" "}
+            {d.pieces.map(p => p[rAccessor]).reduce((p, c) => p + c, 0)}
+          </p>
+          {sizeValue &&
+            sizeValue !== "none" && (
+              <p>
+                {d.pieces.map(p => p[sizeValue]).reduce((p, c) => p + c, 0)}
+              </p>
+            )}
+        </div>
+      );
+    },
     ...additionalSettings
   };
 };
@@ -247,7 +344,7 @@ const semioticScatterplotTransform = (data, schema, options) => {
     secondQuantitative,
     height
   } = options;
-  let sizeScale = () => 5;
+  let sizeScale = e => 5;
   const colorHash = {};
   const additionalSettings = {};
 
@@ -342,6 +439,11 @@ const semioticSettings = {
     Frame: ResponsiveOrdinalFrame,
     controls: "switch between modes",
     transformation: semioticBarChartTransform
+  },
+  network: {
+    Frame: ResponsiveNetworkFrame,
+    controls: "switch between modes",
+    transformation: semioticNetworkTransform
   }
 };
 
@@ -423,7 +525,15 @@ class DataResourceTransform extends React.Component<Props, State> {
     selectedDimensions: [],
     selectedMetrics: [],
     pieceType: "bar",
-    summaryType: undefined
+    summaryType: "None",
+    networkType: "force",
+    sizeValue: "None",
+    colorValue: "None",
+    xValue: "None",
+    yValue: "None",
+    sourceDimension: "None",
+    targetDimension: "None",
+    labelValue: "None"
   };
 
   shouldComponentUpdate(): boolean {
@@ -446,11 +556,15 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.setState({ view: "scatter" });
   };
 
-  setLineType = e => {
+  setNetwork = () => {
+    this.setState({ view: "network" });
+  };
+
+  setLineType = (e: LineType) => {
     this.setState({ lineType: e });
   };
 
-  updateDimensions = e => {
+  updateDimensions = (e: string) => {
     const oldDims = this.state.selectedDimensions;
     const newDimensions =
       oldDims.indexOf(e) === -1
@@ -458,7 +572,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         : oldDims.filter(d => d !== e);
     this.setState({ selectedDimensions: newDimensions });
   };
-  updateMetrics = e => {
+  updateMetrics = (e: string) => {
     const oldDims = this.state.selectedMetrics;
     const newMetrics =
       oldDims.indexOf(e) === -1
@@ -469,6 +583,8 @@ class DataResourceTransform extends React.Component<Props, State> {
 
   render(): ?React$Element<any> {
     const { view } = this.state;
+
+    console.log("this.state", this.state);
 
     let display = null;
 
@@ -485,7 +601,7 @@ class DataResourceTransform extends React.Component<Props, State> {
 
     if (view === "grid") {
       display = <DataResourceTransformGrid {...this.props} />;
-    } else if (["line", "scatter", "bar"].includes(view)) {
+    } else if (["line", "scatter", "bar", "network"].includes(view)) {
       const { Frame, transformation } = semioticSettings[view];
       const frameSettings = transformation(
         this.props.data.data,
@@ -503,7 +619,11 @@ class DataResourceTransform extends React.Component<Props, State> {
           colorValue: this.state.colorValue,
           labelValue: this.state.labelValue,
           pieceType: this.state.pieceType,
-          summaryType: this.state.summaryType
+          summaryType: this.state.summaryType,
+          sourceDimension: this.state.sourceDimension,
+          targetDimension: this.state.targetDimension,
+          networkType: this.state.networkType,
+          timeseries: null
         }
       );
 
@@ -514,11 +634,11 @@ class DataResourceTransform extends React.Component<Props, State> {
             size={[500, this.props.height]}
             {...frameSettings}
           />
-          {(view === "scatter" || view === "bar") &&
+          {(view === "scatter" || view === "bar" || view === "network") &&
             metricDimSelector(
               metrics.map(d => d.name),
               d => this.setState({ xValue: d }),
-              view === "grid" ? "Metric" : "X"
+              view === "scatter" ? "X" : "Metric"
             )}
           {view === "scatter" &&
             metricDimSelector(
@@ -543,6 +663,24 @@ class DataResourceTransform extends React.Component<Props, State> {
               dimensions.map(d => d.name),
               d => this.setState({ labelValue: d }),
               "LABELS"
+            )}
+          {view === "network" &&
+            metricDimSelector(
+              dimensions.map(d => d.name),
+              d => this.setState({ sourceDimension: d }),
+              "SOURCE"
+            )}
+          {view === "network" &&
+            metricDimSelector(
+              dimensions.map(d => d.name),
+              d => this.setState({ targetDimension: d }),
+              "TARGET"
+            )}
+          {view === "network" &&
+            metricDimSelector(
+              ["force", "dendrogram", "treemap", "circlepack", "sankey"],
+              d => this.setState({ networkType: d }),
+              "TYPE"
             )}
           {view === "line" && (
             <div>
@@ -680,6 +818,9 @@ class DataResourceTransform extends React.Component<Props, State> {
             </IconButton>
             <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
               <TelescopeOcticon />
+            </IconButton>
+            <IconButton onClick={this.setNetwork} message={"Network"}>
+              <Beaker />
             </IconButton>
           </div>
         </div>
