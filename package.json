@@ -30,6 +30,7 @@
     "app:jupyter-extension": "lerna run dev --scope nteract-on-jupyter --stream",
     "start": "npm run app:desktop",
     "spawn": "lerna run spawn --scope nteract",
+    "spawn:debug": "lerna run spawn:debug --scope nteract",
     "showcase": "lerna run dev --scope @nteract/showcase --stream",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
