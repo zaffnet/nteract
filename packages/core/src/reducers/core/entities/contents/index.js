@@ -1,11 +1,11 @@
 /* @flow */
 import * as Immutable from "immutable";
-import * as actionTypes from "../../../actionTypes";
+import * as actionTypes from "../../../../actionTypes";
 import * as uuid from "uuid";
 
 import { has } from "lodash";
 
-import type { NotebookModel } from "../../../state/entities/contents";
+import type { NotebookModel } from "../../../../state/entities/contents";
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 import {
@@ -17,9 +17,9 @@ import {
   makeDirectoryModel,
   makeDocumentRecord,
   makeNotebookContentRecord
-} from "../../../state/entities/contents";
+} from "../../../../state/entities/contents";
 
-import { createContentRef } from "../../../state/refs";
+import { createContentRef } from "../../../../state/refs";
 
 import { combineReducers } from "redux-immutable";
 
