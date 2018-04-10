@@ -30,12 +30,6 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import * as uuid from "uuid";
 
-import type {
-  NewKernelAction,
-  RestartKernel,
-  SetNotebook
-} from "../actionTypes";
-
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
@@ -49,7 +43,7 @@ import * as stateModule from "../state";
 export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap((action: NewKernelAction) =>
+    switchMap((action: actionTypes.NewKernelAction) =>
       action.payload.kernel.channels.pipe(
         filter(msg => msg.header.msg_type === "status"),
         map(msg =>
@@ -129,7 +123,7 @@ export function acquireKernelInfo(
 export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
-    switchMap((action: NewKernelAction) => {
+    switchMap((action: actionTypes.NewKernelAction) => {
       const {
         payload: { kernel: { channels }, kernelRef, contentRef }
       } = action;
@@ -154,16 +148,39 @@ export const extractNewKernel = (
   };
 };
 
+/**
+ * NOTE: This function is _exactly_ the same as the desktop loading.js version
+ *       with one strong exception -- extractNewKernel
+ *       Can they be combined without incurring a penalty on the web app?
+ *       The native functions used are `path.dirname`, `path.resolve`, and `process.cwd()`
+ *       We could always inject those dependencies separately...
+ */
 export const launchKernelWhenNotebookSetEpic = (
-  action$: ActionsObservable<*>
+  action$: ActionsObservable<*>,
+  store: *
 ) =>
   action$.pipe(
-    ofType(actionTypes.SET_NOTEBOOK),
-    map((action: SetNotebook) => {
-      const { cwd, kernelSpecName } = extractNewKernel(
-        action.payload.filepath,
-        action.payload.notebook
-      );
+    ofType(actionTypes.FETCH_CONTENT_FULFILLED),
+    map((action: actionTypes.FetchContentFulfilled) => {
+      const state: stateModule.AppState = store.getState();
+
+      const contentRef = action.payload.contentRef;
+
+      const content = selectors.content(state, { contentRef });
+
+      if (
+        !content ||
+        content.type !== "notebook" ||
+        content.model.type !== "notebook"
+      ) {
+        // This epic only handles notebook content
+        return empty();
+      }
+
+      const filepath = content.filepath;
+      const notebook = content.model.notebook;
+
+      const { cwd, kernelSpecName } = extractNewKernel(filepath, notebook);
 
       return actions.launchKernelByName({
         kernelSpecName,
@@ -178,7 +195,7 @@ export const launchKernelWhenNotebookSetEpic = (
 export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
-    concatMap((action: RestartKernel) => {
+    concatMap((action: actionTypes.RestartKernel) => {
       const state = store.getState();
 
       const oldKernelRef = action.payload.kernelRef;

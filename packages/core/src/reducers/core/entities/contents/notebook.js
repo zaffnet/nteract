@@ -112,15 +112,6 @@ export function cleanCellTransient(state: NotebookModel, id: string) {
     .setIn(["transient", "cellMap", id], new Immutable.Map());
 }
 
-function setNotebook(state: NotebookModel, action: actionTypes.SetNotebook) {
-  const { payload: { notebook } } = action;
-
-  return state
-    .set("notebook", notebook)
-    .set("cellFocused", notebook.getIn(["cellOrder", 0]))
-    .setIn(["transient", "cellMap"], new Immutable.Map());
-}
-
 function setNotebookCheckpoint(
   state: NotebookModel,
   action: actionTypes.SaveFulfilled
@@ -796,7 +787,6 @@ type DocumentAction =
   | actionTypes.FocusNextCell
   | actionTypes.FocusCellEditor
   | actionTypes.FocusCell
-  | actionTypes.SetNotebook
   | actionTypes.ClearOutputs
   | actionTypes.AppendOutput
   | actionTypes.UpdateDisplay
@@ -838,8 +828,6 @@ export function notebook(
       return toggleTagInCell(state, action);
     case actionTypes.SEND_EXECUTE_REQUEST:
       return sendExecuteRequest(state, action);
-    case actionTypes.SET_NOTEBOOK:
-      return setNotebook(state, action);
     case actionTypes.SAVE_FULFILLED:
       return setNotebookCheckpoint(state, action);
     case actionTypes.FOCUS_CELL:

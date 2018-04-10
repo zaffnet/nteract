@@ -14,6 +14,8 @@ import {
   makeNotebookContentRecord
 } from "../../../../state/entities/contents";
 
+import { fromJS } from "@nteract/commutable";
+
 import { notebook } from "./notebook";
 
 import { createContentRef } from "../../../../state/refs";
@@ -111,32 +113,33 @@ const byRef = (state = Immutable.Map(), action) => {
               )
           );
         }
+        case "notebook": {
+          const notebook = fromJS(action.payload.model.content);
+
+          return state.set(
+            action.payload.contentRef,
+            makeNotebookContentRecord({
+              created: action.payload.created,
+              lastSaved: action.payload.lastSaved,
+              filepath: action.payload.filepath,
+              model: makeDocumentRecord({
+                notebook,
+                savedNotebook: notebook,
+                transient: Immutable.Map({
+                  keyPathsForDisplays: Immutable.Map(),
+                  cellMap: Immutable.Map()
+                }),
+                cellFocused: notebook.getIn(["cellOrder", 0])
+              })
+            })
+          );
+        }
       }
 
-      // TODO: we *should* be able to handle this for non-notebook types in the
-      // future. The reason we cannot do this for notebooks now is that we need
-      // the in-memory notebook mirrored here (from the old state.document). We
-      // need to reuse that notebook because it has cell ids that must match
-      // up.
+      // NOTE: There are no other content types (at the moment), so we will just
+      //       warn and return the current state
+      console.warn("Met some content type we don't support");
       return state;
-    case actionTypes.SET_NOTEBOOK:
-      return state.set(
-        action.payload.contentRef,
-        makeNotebookContentRecord({
-          created: action.payload.created,
-          lastSaved: action.payload.lastSaved,
-          filepath: action.payload.filepath,
-          model: makeDocumentRecord({
-            notebook: action.payload.notebook,
-            savedNotebook: action.payload.notebook,
-            transient: Immutable.Map({
-              keyPathsForDisplays: Immutable.Map(),
-              cellMap: Immutable.Map()
-            }),
-            cellFocused: action.payload.notebook.getIn(["cellOrder", 0])
-          })
-        })
-      );
     case actionTypes.CHANGE_FILENAME: {
       return state.updateIn([action.payload.contentRef], contentRecord =>
         contentRecord.merge({

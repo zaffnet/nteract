@@ -44,7 +44,6 @@ const epics = [
   coreEpics.updateDisplayEpic,
   coreEpics.commListenEpic,
   coreEpics.executeAllCellsEpic,
-  coreEpics.setNotebookEpic,
 
   launchKernelWhenNotebookSetEpic,
   watchSpawn,

@@ -5,6 +5,7 @@ import * as fs from "fs";
 
 import { of } from "rxjs/observable/of";
 import { forkJoin } from "rxjs/observable/forkJoin";
+import { empty } from "rxjs/observable/empty";
 import {
   map,
   tap,
@@ -19,10 +20,20 @@ import { ActionsObservable, ofType } from "redux-observable";
 import { readFileObservable, statObservable } from "fs-observable";
 
 import * as Immutable from "immutable";
-import { monocellNotebook, fromJS, parseNotebook } from "@nteract/commutable";
+import {
+  monocellNotebook,
+  fromJS,
+  parseNotebook,
+  toJS
+} from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
-import { actionTypes, actions } from "@nteract/core";
+import {
+  actionTypes,
+  actions,
+  state as stateModule,
+  selectors
+} from "@nteract/core";
 
 /**
  * Determines the right kernel to launch based on a notebook
@@ -150,15 +161,31 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   );
 
 export const launchKernelWhenNotebookSetEpic = (
-  action$: ActionsObservable<*>
+  action$: ActionsObservable<*>,
+  store: *
 ) =>
   action$.pipe(
-    ofType(actionTypes.SET_NOTEBOOK),
-    map((action: actionTypes.SetNotebook) => {
-      const { cwd, kernelSpecName } = extractNewKernel(
-        action.payload.filepath,
-        action.payload.notebook
-      );
+    ofType(actionTypes.FETCH_CONTENT_FULFILLED),
+    map((action: actionTypes.FetchContentFulfilled) => {
+      const state: stateModule.AppState = store.getState();
+
+      const contentRef = action.payload.contentRef;
+
+      const content = selectors.content(state, { contentRef });
+
+      if (
+        !content ||
+        content.type !== "notebook" ||
+        content.model.type !== "notebook"
+      ) {
+        // This epic only handles notebook content
+        return empty();
+      }
+
+      const filepath = content.filepath;
+      const notebook = content.model.notebook;
+
+      const { cwd, kernelSpecName } = extractNewKernel(filepath, notebook);
 
       return actions.launchKernelByName({
         kernelSpecName,
@@ -181,23 +208,40 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
     map((action: actionTypes.NewNotebook) => {
       const { payload: { kernelSpec: { name, spec }, kernelRef } } = action;
 
+      // TODO: work on a raw javascript object since we convert it over again
       let notebook = monocellNotebook;
-
       if (name) {
-        notebook = notebook.setIn(["metadata", "kernel_info", "name"], name);
+        notebook = notebook
+          .setIn(["metadata", "kernel_info", "name"], name)
+          .setIn(["metadata", "language_info", "name"], name);
       }
-
       if (spec) {
-        notebook = notebook.setIn(["metadata", "kernelspec"], spec);
+        notebook = notebook
+          .setIn(["metadata", "kernelspec"], spec)
+          .setIn(["metadata", "kernelspec", "name"], name);
       }
 
-      return actions.setNotebook({
-        filepath: null,
-        notebook,
-        kernelRef,
-        contentRef: action.payload.contentRef,
-        created: null,
-        lastSaved: null
+      const timestamp = new Date();
+
+      return actions.fetchContentFulfilled({
+        // NOTE: A new notebook on desktop does not have a filepath, unlike
+        //       the web app which uses UntitledX.ipynb
+        filepath: "",
+        model: {
+          type: "notebook",
+          mimetype: null,
+          format: "json",
+          // Back to JS, only to immutableify it inside of the reducer
+          content: toJS(notebook),
+          writable: true,
+          name: null,
+          // Since we have the filepath above, do we need it here (?)
+          path: null,
+          created: timestamp,
+          last_modified: timestamp
+        },
+        kernelRef: action.payload.kernelRef,
+        contentRef: action.payload.contentRef
       });
     })
   );
