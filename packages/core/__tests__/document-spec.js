@@ -1,12 +1,15 @@
 // @flow
 /* eslint-disable max-len */
-import { List, Map, Set, is } from "immutable";
 
 import { v4 as uuid } from "uuid";
 
 import * as actionTypes from "../src/actionTypes";
 import * as actions from "../src/actions";
-import { document as reducers } from "../src/reducers/core/entities/contents";
+import {
+  notebook as reducers,
+  reduceOutputs,
+  cleanCellTransient
+} from "../src/reducers/core/entities/contents/notebook";
 
 import {
   emptyCodeCell,
@@ -18,16 +21,11 @@ import {
 
 import { makeDocumentRecord } from "../src/state";
 
-import {
-  reduceOutputs,
-  cleanCellTransient
-} from "../src/reducers/core/entities/contents";
-
 import { dummyJSON, dummyCommutable } from "../src/dummy";
 
-const Immutable = require("immutable");
+import * as Immutable from "immutable";
 
-const initialDocument = new Map();
+const initialDocument = new Immutable.Map();
 const monocellDocument = initialDocument
   .set("notebook", appendCellToNotebook(dummyCommutable, emptyCodeCell))
   .set(
@@ -102,7 +100,7 @@ describe("reduceOutputs", () => {
       output_type: "stream"
     });
     expect(
-      is(
+      Immutable.is(
         outputs,
         Immutable.fromJS([
           { name: "stdout", text: "hello", output_type: "stream" }
@@ -116,7 +114,7 @@ describe("reduceOutputs", () => {
       output_type: "stream"
     });
     expect(
-      is(
+      Immutable.is(
         outputs,
         Immutable.fromJS([
           { name: "stdout", text: "hello world", output_type: "stream" }
@@ -432,7 +430,7 @@ describe("clearOutputs", () => {
 
     const state = reducers(originalState, actions.clearOutputs({ id }));
     const outputs = state.getIn(["notebook", "cellMap", id, "outputs"]);
-    expect(outputs).toBe(List.of());
+    expect(outputs).toBe(Immutable.List.of());
   });
   test("doesn't clear outputs on markdown cells", () => {
     const notebook = appendCellToNotebook(emptyNotebook, emptyMarkdownCell);
@@ -717,7 +715,9 @@ describe("pasteCell", () => {
     );
 
     // Ensure it's a new cell
-    expect(Set([firstId, secondId, thirdId]).has(newCellId)).toBeFalsy();
+    expect(
+      Immutable.Set([firstId, secondId, thirdId]).has(newCellId)
+    ).toBeFalsy();
   });
 });
 
@@ -787,7 +787,7 @@ describe("appendOutput", () => {
 
     const state = reducers(originalState, action);
     expect(
-      is(
+      Immutable.is(
         state.getIn(["notebook", "cellMap", id, "outputs"]),
         Immutable.fromJS([
           {
@@ -818,7 +818,7 @@ describe("appendOutput", () => {
 
     const state = reducers(originalState, action);
     expect(
-      is(
+      Immutable.is(
         state.getIn(["notebook", "cellMap", id, "outputs"]),
         Immutable.fromJS([
           {
@@ -829,7 +829,7 @@ describe("appendOutput", () => {
       )
     ).toBe(true);
     expect(
-      is(
+      Immutable.is(
         state.getIn(["transient", "keyPathsForDisplays", "1234"]),
         Immutable.fromJS([["notebook", "cellMap", id, "outputs", 0]])
       )
