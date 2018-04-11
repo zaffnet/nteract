@@ -24,7 +24,7 @@ import {
 
 import { fetchKernelspecsEpic } from "./kernelspecs";
 
-import { fetchContentEpic, setNotebookEpic, saveContentEpic } from "./contents";
+import { fetchContentEpic, saveContentEpic } from "./contents";
 
 // Because `@nteract/core` ends up being a commonjs import, we can't currently
 // rely on `import { epics } from ""@nteract/core"`
@@ -44,7 +44,6 @@ const allEpics = [
   restartKernelEpic,
   fetchKernelspecsEpic,
   fetchContentEpic,
-  setNotebookEpic,
   saveContentEpic
 ];
 
@@ -64,6 +63,5 @@ export {
   restartKernelEpic,
   fetchKernelspecsEpic,
   fetchContentEpic,
-  setNotebookEpic,
   saveContentEpic
 };

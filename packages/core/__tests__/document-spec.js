@@ -164,14 +164,6 @@ describe("reduceOutputs", () => {
   });
 });
 
-describe("setNotebook", () => {
-  test("converts a JSON notebook to our commutable notebook and puts in state", () => {
-    const notebook = fromJS(dummyJSON);
-    const state = reducers(initialDocument, actions.setNotebook({ notebook }));
-    expect(state.getIn(["notebook", "nbformat"])).toBe(4);
-  });
-});
-
 describe("setNotebookCheckpoint", () => {
   test("stores saved notebook", () => {
     const state = reducers(initialDocument, actions.saveFulfilled({}));

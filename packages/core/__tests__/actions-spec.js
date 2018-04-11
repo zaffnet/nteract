@@ -115,23 +115,6 @@ describe("newNotebook", () => {
   });
 });
 
-describe("setNotebook", () => {
-  test("sets a notebook", () => {
-    expect(
-      actions.setNotebook({
-        filename: "test",
-        notebook: { nbformat: 4, cells: [] }
-      })
-    ).toEqual({
-      type: actionTypes.SET_NOTEBOOK,
-      payload: {
-        filename: "test",
-        notebook: { nbformat: 4, cells: [] }
-      }
-    });
-  });
-});
-
 describe("setExecutionState", () => {
   test("creates a SET_EXECUTION_STATE action", () => {
     expect(actions.setExecutionState({ kernelStatus: "idle" })).toEqual({

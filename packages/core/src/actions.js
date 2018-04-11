@@ -807,19 +807,6 @@ export function newNotebook(payload: {
   };
 }
 
-// Expects notebook to be JS Object or Immutable.js
-export const setNotebook = (payload: {
-  filepath: ?string,
-  notebook: ImmutableNotebook,
-  kernelRef: KernelRef,
-  contentRef: ContentRef,
-  lastSaved: ?Date,
-  created: ?Date
-}): actionTypes.SetNotebook => ({
-  type: actionTypes.SET_NOTEBOOK,
-  payload
-});
-
 export const loadConfig = () => ({ type: actionTypes.LOAD_CONFIG });
 export const saveConfig = () => ({ type: actionTypes.SAVE_CONFIG });
 export const doneSavingConfig = () => ({

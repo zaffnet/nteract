@@ -10,8 +10,6 @@ import type { KernelspecProps } from "./state/entities/kernelspecs";
 import type { KernelInfo } from "./state/entities/kernel-info";
 
 import type {
-  Notebook,
-  ImmutableNotebook,
   CellID,
   CellType,
   ImmutableJSONType,
@@ -625,21 +623,6 @@ export type NewNotebook = {
     kernelSpec: Object,
     kernelRef: KernelRef,
     contentRef: ContentRef
-  }
-};
-
-// TODO: Make this action JSON serializable (don't use the Immutable.js version
-//       of the notebook in this action)
-export const SET_NOTEBOOK = "SET_NOTEBOOK";
-export type SetNotebook = {
-  type: "SET_NOTEBOOK",
-  payload: {
-    notebook: ImmutableNotebook,
-    filepath: ?string,
-    kernelRef: KernelRef,
-    contentRef: ContentRef,
-    lastSaved: ?Date,
-    created: ?Date
   }
 };
 
