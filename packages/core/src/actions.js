@@ -807,6 +807,19 @@ export function newNotebook(payload: {
   };
 }
 
+export function updateFileText(payload: {
+  contentRef: ContentRef,
+  text: string
+}): actionTypes.UpdateFileText {
+  return {
+    type: actionTypes.UPDATE_FILE_TEXT,
+    payload: {
+      contentRef: payload.contentRef,
+      text: payload.text
+    }
+  };
+}
+
 export const loadConfig = () => ({ type: actionTypes.LOAD_CONFIG });
 export const saveConfig = () => ({ type: actionTypes.SAVE_CONFIG });
 export const doneSavingConfig = () => ({

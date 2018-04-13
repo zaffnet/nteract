@@ -15,7 +15,9 @@ type FileContentRecord = stateModule.FileContentRecord;
 import { connect } from "react-redux";
 
 type FileProps = {
-  content: FileContentRecord
+  dispatch: Dispatch<*>,
+  content: FileContentRecord,
+  contentRef: ContentRef
 };
 
 export class TextFile extends React.PureComponent<FileProps, null> {
@@ -26,13 +28,32 @@ export class TextFile extends React.PureComponent<FileProps, null> {
       mimetype.startsWith("application/json")
     );
   }
+  handleChange(source: string) {
+    this.props.dispatch(
+      actions.updateFileText({
+        text: source,
+        contentRef: this.props.contentRef
+      })
+    );
+  }
   render() {
     return (
       <CodeMirrorEditor
         cellFocused
         editorFocused
         theme="light"
+        // TODO: This is the notebook implementation leaking into the editor
+        //       component. It shouldn't be here, I won't refactor it as part
+        //       of the current play PR though.
         id="not-really-a-cell"
+        onFocusChange={() => {}}
+        focusAbove={() => {}}
+        focusBelow={() => {}}
+        // END TODO for notebook leakage
+        // TODO: kernelStatus should be allowed to be null or undefined,
+        //       resulting in thought of as either idle or not connected by
+        //       default. This is primarily used for determining if code
+        //       completion should be enabled
         options={{
           lineNumbers: true,
           extraKeys: {
@@ -42,6 +63,8 @@ export class TextFile extends React.PureComponent<FileProps, null> {
           mode: this.props.content.mimetype
         }}
         value={this.props.content.model.text}
+        onChange={this.handleChange.bind(this)}
+        contentRef={this.props.contentRefk}
       />
     );
   }
@@ -62,7 +85,13 @@ export class File extends React.PureComponent<FileProps, *> {
       const data = JSON.parse(text);
       return <JSONTransform data={data} />;
     } else if (TextFile.handles(mimetype)) {
-      return <TextFile content={this.props.content} />;
+      return (
+        <TextFile
+          content={this.props.content}
+          contentRef={this.props.contentRef}
+          dispatch={this.props.dispatch}
+        />
+      );
     }
 
     return <pre>Can not render this file type</pre>;
@@ -79,7 +108,7 @@ export const ConnectedFile = connect(
       );
     }
 
-    return { content };
+    return { content: content, contentRef: ownProps.contentRef };
   }
 )(File);
 

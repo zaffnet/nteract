@@ -626,6 +626,15 @@ export type NewNotebook = {
   }
 };
 
+export const UPDATE_FILE_TEXT = "UPDATE_FILE_TEXT";
+export type UpdateFileText = {
+  type: "UPDATE_FILE_TEXT",
+  payload: {
+    text: string,
+    contentRef: ContentRef
+  }
+};
+
 export const INTERRUPT_KERNEL = "INTERRUPT_KERNEL";
 export type InterruptKernel = {
   type: "INTERRUPT_KERNEL",
