@@ -6,6 +6,7 @@ import * as Immutable from "immutable";
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
 import { JSONTransform, TextTransform } from "@nteract/transforms";
+import CodeMirrorEditor from "@nteract/editor";
 
 // Workaround flow limitation for getting these types
 type ContentRef = stateModule.ContentRef;
@@ -17,11 +18,7 @@ type FileProps = {
   content: FileContentRecord
 };
 
-type FileTransformProps = {
-  data: string
-};
-
-export class TextFile extends React.PureComponent<FileTransformProps, null> {
+export class TextFile extends React.PureComponent<FileProps, null> {
   static handles(mimetype: string) {
     return (
       mimetype.startsWith("text/") ||
@@ -31,9 +28,21 @@ export class TextFile extends React.PureComponent<FileTransformProps, null> {
   }
   render() {
     return (
-      <pre>
-        <TextTransform data={this.props.data} />
-      </pre>
+      <CodeMirrorEditor
+        cellFocused
+        editorFocused
+        theme="light"
+        id="not-really-a-cell"
+        options={{
+          lineNumbers: true,
+          extraKeys: {
+            "Ctrl-Space": "autocomplete"
+          },
+          cursorBlinkRate: 0,
+          mode: this.props.content.mimetype
+        }}
+        value={this.props.content.model.text}
+      />
     );
   }
 }
@@ -53,7 +62,7 @@ export class File extends React.PureComponent<FileProps, *> {
       const data = JSON.parse(text);
       return <JSONTransform data={data} />;
     } else if (TextFile.handles(mimetype)) {
-      return <TextFile data={text} />;
+      return <TextFile content={this.props.content} />;
     }
 
     return <pre>Can not render this file type</pre>;
