@@ -70,9 +70,6 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
         //       completion should be enabled
         options={{
           lineNumbers: true,
-          extraKeys: {
-            "Ctrl-Space": "autocomplete"
-          },
           cursorBlinkRate: 0,
           mode: this.props.content.mimetype
         }}
