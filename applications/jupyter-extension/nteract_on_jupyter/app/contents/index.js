@@ -180,7 +180,13 @@ class Contents extends React.Component<ContentsProps, null> {
           );
 
           // Always open new notebooks in new windows
-          window.open(url, "_blank");
+          const win = window.open(url, "_blank");
+
+          // If they block pop-ups, then we weren't allowed to open the window
+          if (win === null) {
+            // TODO: Show a link at the top to let the user open the notebook directly
+            window.location = url;
+          }
         })
       )
       .subscribe();
