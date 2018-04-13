@@ -40,6 +40,11 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
         contentRef: this.props.contentRef
       })
     );
+    this.props.dispatch(
+      actions.save({
+        contentRef: this.props.contentRef
+      })
+    );
   }
   render() {
     return (

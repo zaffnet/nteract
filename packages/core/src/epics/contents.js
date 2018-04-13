@@ -107,17 +107,14 @@ export function saveContentEpic(
         }
         const contentRef = action.payload.contentRef;
         const content = selectors.content(state, { contentRef });
+
         // NOTE: This could save by having selectors for each model type
         //       have toDisk() selectors
         //       It will need to be cased off when we have more than one type
         //       of content we actually save
-        if (
-          !content ||
-          content.type !== "notebook" ||
-          !content.model.notebook
-        ) {
+        if (!content) {
           const errorPayload = {
-            error: new Error("Notebook was not set."),
+            error: new Error("Content was not set."),
             contentRef: action.payload.contentRef
           };
           if (action.type === actionTypes.DownloadContent) {
@@ -126,21 +123,28 @@ export function saveContentEpic(
           return of(actions.saveFailed(errorPayload));
         }
 
-        const notebookModel = content.model.notebook;
-
         const filepath = content.filepath;
+
         // TODO: this default version should probably not be here.
         const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
-        // contents API takes notebook as raw JSON whereas downloading takes
-        // a string
-        const notebook = toJS(
-          notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
-        );
+        let serializedData;
+        if (content.type == "notebook") {
+          // contents API takes notebook as raw JSON whereas downloading takes
+          // a string
+          serializedData = toJS(
+            content.model.notebook.setIn(
+              ["metadata", "nteract", "version"],
+              appVersion
+            )
+          );
+        } else if (content.type == "file") {
+          serializedData = content.model.text;
+        }
 
         switch (action.type) {
           case actionTypes.DOWNLOAD_CONTENT: {
-            downloadNotebook(notebook, filepath);
+            downloadNotebook(serializedData, filepath);
             return of(
               actions.downloadContentFulfilled({
                 contentRef: action.payload.contentRef
@@ -151,8 +155,9 @@ export function saveContentEpic(
             const serverConfig = selectors.serverConfig(host);
 
             const model = {
-              content: notebook,
-              type: "notebook"
+              content: serializedData,
+              type: content.type,
+              format: "text"
             };
 
             // if (action.type === actionTypes.SAVE)
