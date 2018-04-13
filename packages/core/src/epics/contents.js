@@ -1,6 +1,8 @@
 /* @flow */
 import { empty } from "rxjs/observable/empty";
 import { of } from "rxjs/observable/of";
+import { interval } from "rxjs/observable/interval";
+
 import {
   tap,
   filter,
@@ -17,6 +19,7 @@ import FileSaver from "file-saver";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
+import * as stateModule from "../state";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -92,6 +95,35 @@ export function downloadString(
   FileSaver.saveAs(blob, filename);
 }
 
+export function autoSaveCurrentContentEpic(
+  action$: ActionsObservable<Action>,
+  store: Store<stateModule.AppState, *>
+) {
+  // Save every seven seconds, regardless of contentType
+  return interval(7000).pipe(
+    // TODO: Once we're switched to the coming redux observable 1.0.0 release,
+    // we should use the state$ stream to only save when the content has changed
+    mergeMap(() => {
+      const state = store.getState();
+      const contentRef = state.core.currentContentRef;
+
+      const content = selectors.content(state, { contentRef });
+      if (
+        // Don't bother saving nothing
+        content &&
+        // Only files and notebooks
+        (content.type === "file" || content.type === "notebook") &&
+        // Only save if they have a real filepath
+        content.filepath !== ""
+      ) {
+        return of(actions.save({ contentRef }));
+      } else {
+        return empty();
+      }
+    })
+  );
+}
+
 export function saveContentEpic(
   action$: ActionsObservable<Action>,
   store: Store<*, *>
@@ -127,6 +159,11 @@ export function saveContentEpic(
           return of(actions.saveFailed(errorPayload));
         }
 
+        if (content.type === "directory") {
+          // Don't save directories
+          return empty();
+        }
+
         let filepath = content.filepath;
 
         // TODO: this default version should probably not be here.
@@ -156,7 +193,7 @@ export function saveContentEpic(
             format: "text"
           };
         } else {
-          // This shouldn't happen, is here for safety
+          // We shouldn't save directories
           return empty();
         }
 
