@@ -15,12 +15,17 @@ type FileContentRecord = stateModule.FileContentRecord;
 import { connect } from "react-redux";
 
 type FileProps = {
+  content: FileContentRecord,
+  contentRef: ContentRef
+};
+
+type TextFileProps = {
   dispatch: Dispatch<*>,
   content: FileContentRecord,
   contentRef: ContentRef
 };
 
-export class TextFile extends React.PureComponent<FileProps, null> {
+export class TextFile extends React.PureComponent<TextFileProps, null> {
   static handles(mimetype: string) {
     return (
       mimetype.startsWith("text/") ||
@@ -41,6 +46,10 @@ export class TextFile extends React.PureComponent<FileProps, null> {
       <CodeMirrorEditor
         cellFocused
         editorFocused
+        channels
+        kernelStatus={"not connected"}
+        tip
+        completion
         theme="light"
         // TODO: This is the notebook implementation leaking into the editor
         //       component. It shouldn't be here, I won't refactor it as part
@@ -64,7 +73,7 @@ export class TextFile extends React.PureComponent<FileProps, null> {
         }}
         value={this.props.content.model.text}
         onChange={this.handleChange.bind(this)}
-        contentRef={this.props.contentRefk}
+        contentRef={this.props.contentRef}
       />
     );
   }
