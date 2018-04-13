@@ -20,9 +20,9 @@ type FileProps = {
 };
 
 type TextFileProps = {
-  dispatch: Dispatch<*>,
   content: FileContentRecord,
-  contentRef: ContentRef
+  contentRef: ContentRef,
+  handleChange: string => void
 };
 
 export class TextFile extends React.PureComponent<TextFileProps, null> {
@@ -34,17 +34,7 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
     );
   }
   handleChange(source: string) {
-    this.props.dispatch(
-      actions.updateFileText({
-        text: source,
-        contentRef: this.props.contentRef
-      })
-    );
-    this.props.dispatch(
-      actions.save({
-        contentRef: this.props.contentRef
-      })
-    );
+    this.props.handleChange(source);
   }
   render() {
     return (
@@ -81,6 +71,24 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
   }
 }
 
+const mapDispatchToTextFileProps = (dispatch, ownProps) => ({
+  handleChange: (source: string) => {
+    dispatch(
+      actions.updateFileText({
+        text: source,
+        contentRef: ownProps.contentRef
+      })
+    );
+    dispatch(
+      actions.save({
+        contentRef: ownProps.contentRef
+      })
+    );
+  }
+});
+
+const ConnectedTextFile = connect(null, mapDispatchToTextFileProps)(TextFile);
+
 export class File extends React.PureComponent<FileProps, *> {
   render() {
     if (!this.props.content.mimetype) {
@@ -97,10 +105,9 @@ export class File extends React.PureComponent<FileProps, *> {
       return <JSONTransform data={data} />;
     } else if (TextFile.handles(mimetype)) {
       return (
-        <TextFile
+        <ConnectedTextFile
           content={this.props.content}
           contentRef={this.props.contentRef}
-          dispatch={this.props.dispatch}
         />
       );
     }
@@ -109,18 +116,21 @@ export class File extends React.PureComponent<FileProps, *> {
   }
 }
 
-export const ConnectedFile = connect(
-  (state: Object, ownProps: { contentRef: ContentRef }): FileProps => {
-    const content = selectors.content(state, ownProps);
+const mapStateToProps = (
+  state: Object,
+  ownProps: { contentRef: ContentRef }
+): FileProps => {
+  const content = selectors.content(state, ownProps);
 
-    if (!content || content.type !== "file") {
-      throw new Error(
-        "The file component should only be used with file contents"
-      );
-    }
-
-    return { content: content, contentRef: ownProps.contentRef };
+  if (!content || content.type !== "file") {
+    throw new Error(
+      "The file component should only be used with file contents"
+    );
   }
-)(File);
+
+  return { content: content, contentRef: ownProps.contentRef };
+};
+
+export const ConnectedFile = connect(mapStateToProps)(File);
 
 export default ConnectedFile;
