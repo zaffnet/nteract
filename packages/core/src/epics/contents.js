@@ -129,7 +129,8 @@ export function saveContentEpic(
         const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
         let serializedData;
-        if (content.type == "notebook") {
+        let saveModel = {};
+        if (content.type === "notebook") {
           // contents API takes notebook as raw JSON whereas downloading takes
           // a string
           serializedData = toJS(
@@ -138,12 +139,22 @@ export function saveContentEpic(
               appVersion
             )
           );
-        } else if (content.type == "file") {
+          saveModel = {
+            content: serializedData,
+            type: content.type
+          };
+        } else if (content.type === "file") {
           serializedData = content.model.text;
+          saveModel = {
+            content: serializedData,
+            type: content.type,
+            format: "text"
+          };
         }
 
         switch (action.type) {
           case actionTypes.DOWNLOAD_CONTENT: {
+            // FIXME: Convert this to downloadString, so it works for both files & notebooks
             downloadNotebook(serializedData, filepath);
             return of(
               actions.downloadContentFulfilled({
@@ -154,14 +165,8 @@ export function saveContentEpic(
           case actionTypes.SAVE: {
             const serverConfig = selectors.serverConfig(host);
 
-            const model = {
-              content: serializedData,
-              type: content.type,
-              format: "text"
-            };
-
             // if (action.type === actionTypes.SAVE)
-            return contents.save(serverConfig, filepath, model).pipe(
+            return contents.save(serverConfig, filepath, saveModel).pipe(
               mapTo(
                 actions.saveFulfilled({ contentRef: action.payload.contentRef })
               ),
