@@ -199,7 +199,10 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.UPDATE_FILE_TEXT: {
       const path = [action.payload.contentRef, "model"];
       const model = state.getIn(path);
-      return state.setIn(path, file(model, action));
+      if (model && model.type === "file") {
+        return state.setIn(path, file(model, action));
+      }
+      return state;
     }
     default:
       return state;
