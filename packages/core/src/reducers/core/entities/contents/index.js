@@ -17,6 +17,7 @@ import {
 import { fromJS } from "@nteract/commutable";
 
 import { notebook } from "./notebook";
+import { file } from "./file";
 
 import { createContentRef } from "../../../../state/refs";
 
@@ -194,6 +195,14 @@ const byRef = (state = Immutable.Map(), action) => {
       const path = [action.payload.contentRef, "model"];
       const model = state.getIn(path);
       return state.setIn(path, notebook(model, action));
+    }
+    case actionTypes.UPDATE_FILE_TEXT: {
+      const path = [action.payload.contentRef, "model"];
+      const model = state.getIn(path);
+      if (model && model.type === "file") {
+        return state.setIn(path, file(model, action));
+      }
+      return state;
     }
     default:
       return state;

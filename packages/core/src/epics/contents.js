@@ -23,6 +23,7 @@ import type { ActionsObservable } from "redux-observable";
 import { contents } from "rx-jupyter";
 
 import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
+import type { Notebook } from "@nteract/commutable";
 
 export function fetchContentEpic(
   action$: ActionsObservable<*>,
@@ -79,10 +80,13 @@ export function fetchContentEpic(
   );
 }
 
-export function downloadNotebook(notebook: Object, filepath: string) {
-  const filename = (filepath || "notebook.ipynb").split("/").pop();
-  const data = stringifyNotebook(notebook);
-  const blob = new Blob([data], { type: "application/json" });
+export function downloadString(
+  fileContents: string,
+  filepath: string,
+  contentType: string
+) {
+  const filename = filepath.split("/").pop();
+  const blob = new Blob([fileContents], { type: contentType });
   // NOTE: There is no callback for this, we have to rely on the browser
   //       to do this well, so we assume it worked
   FileSaver.saveAs(blob, filename);
@@ -107,17 +111,14 @@ export function saveContentEpic(
         }
         const contentRef = action.payload.contentRef;
         const content = selectors.content(state, { contentRef });
+
         // NOTE: This could save by having selectors for each model type
         //       have toDisk() selectors
         //       It will need to be cased off when we have more than one type
         //       of content we actually save
-        if (
-          !content ||
-          content.type !== "notebook" ||
-          !content.model.notebook
-        ) {
+        if (!content) {
           const errorPayload = {
-            error: new Error("Notebook was not set."),
+            error: new Error("Content was not set."),
             contentRef: action.payload.contentRef
           };
           if (action.type === actionTypes.DownloadContent) {
@@ -126,21 +127,64 @@ export function saveContentEpic(
           return of(actions.saveFailed(errorPayload));
         }
 
-        const notebookModel = content.model.notebook;
+        let filepath = content.filepath;
 
-        const filepath = content.filepath;
         // TODO: this default version should probably not be here.
         const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
-        // contents API takes notebook as raw JSON whereas downloading takes
-        // a string
-        const notebook = toJS(
-          notebookModel.setIn(["metadata", "nteract", "version"], appVersion)
-        );
+        // This could be object for notebook, or string for files
+        let serializedData: Notebook | string;
+        let saveModel = {};
+        if (content.type === "notebook") {
+          // contents API takes notebook as raw JSON whereas downloading takes
+          // a string
+          serializedData = toJS(
+            content.model.notebook.setIn(
+              ["metadata", "nteract", "version"],
+              appVersion
+            )
+          );
+          saveModel = {
+            content: serializedData,
+            type: content.type
+          };
+        } else if (content.type === "file") {
+          serializedData = content.model.text;
+          saveModel = {
+            content: serializedData,
+            type: content.type,
+            format: "text"
+          };
+        } else {
+          // This shouldn't happen, is here for safety
+          return empty();
+        }
 
         switch (action.type) {
           case actionTypes.DOWNLOAD_CONTENT: {
-            downloadNotebook(notebook, filepath);
+            // FIXME: Convert this to downloadString, so it works for both files & notebooks
+            if (
+              content.type === "notebook" &&
+              typeof serializedData === "object"
+            ) {
+              downloadString(
+                stringifyNotebook(serializedData),
+                filepath || "notebook.ipynb",
+                "application/json"
+              );
+            } else if (
+              content.type === "file" &&
+              typeof serializedData === "string"
+            ) {
+              downloadString(
+                serializedData,
+                filepath,
+                content.mimetype || "application/octet-stream"
+              );
+            } else {
+              // This shouldn't happen, is here for safety
+              return empty();
+            }
             return of(
               actions.downloadContentFulfilled({
                 contentRef: action.payload.contentRef
@@ -150,13 +194,8 @@ export function saveContentEpic(
           case actionTypes.SAVE: {
             const serverConfig = selectors.serverConfig(host);
 
-            const model = {
-              content: notebook,
-              type: "notebook"
-            };
-
             // if (action.type === actionTypes.SAVE)
-            return contents.save(serverConfig, filepath, model).pipe(
+            return contents.save(serverConfig, filepath, saveModel).pipe(
               mapTo(
                 actions.saveFulfilled({ contentRef: action.payload.contentRef })
               ),
