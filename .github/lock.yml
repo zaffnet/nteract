@@ -4,9 +4,15 @@
 daysUntilLock: 120
 # Comment to post before locking. Set to `false` to disable
 lockComment: >
-  This thread has been automatically locked because it has not had recent
-  activity. Please open a new issue for related bugs and link to relevant
-  comments in this thread.
+  Howdy! I'm 🔓🤖!
+
+  In order to keep information timely (based on the most recent release), we want
+  all activity to be added to either new issues or open issues and PRs. In service
+  to that goal, I, the lock bot close inactive closed issues when they haven't had
+  activity in 120 days.
+
+  Feel free to open a new issue for related bugs and link to relevant comments from
+  this thread.
 # Issues or pull requests with these labels will not be locked
 exemptLabels:
   - no-locking
