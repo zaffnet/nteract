@@ -79,10 +79,13 @@ export function fetchContentEpic(
   );
 }
 
-export function downloadNotebook(notebook: Object, filepath: string) {
-  const filename = (filepath || "notebook.ipynb").split("/").pop();
-  const data = stringifyNotebook(notebook);
-  const blob = new Blob([data], { type: "application/json" });
+export function downloadString(
+  fileContents: string,
+  filepath: string,
+  contentType: string
+) {
+  const filename = filepath.split("/").pop();
+  const blob = new Blob([fileContents], { type: contentType });
   // NOTE: There is no callback for this, we have to rely on the browser
   //       to do this well, so we assume it worked
   FileSaver.saveAs(blob, filename);
@@ -123,7 +126,7 @@ export function saveContentEpic(
           return of(actions.saveFailed(errorPayload));
         }
 
-        const filepath = content.filepath;
+        let filepath = content.filepath;
 
         // TODO: this default version should probably not be here.
         const appVersion = selectors.appVersion(state) || "0.0.0-beta";
@@ -155,7 +158,14 @@ export function saveContentEpic(
         switch (action.type) {
           case actionTypes.DOWNLOAD_CONTENT: {
             // FIXME: Convert this to downloadString, so it works for both files & notebooks
-            downloadNotebook(serializedData, filepath);
+            if (content.type === "notebook") {
+              downloadString(
+                stringifyNotebook(serializedData),
+                filepath || "notebook.ipynb"
+              );
+            } else {
+              downloadString(serializedData, filepath);
+            }
             return of(
               actions.downloadContentFulfilled({
                 contentRef: action.payload.contentRef
