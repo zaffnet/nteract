@@ -23,6 +23,7 @@ import type { ActionsObservable } from "redux-observable";
 import { contents } from "rx-jupyter";
 
 import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
+import type { Notebook } from "@nteract/commutable";
 
 export function fetchContentEpic(
   action$: ActionsObservable<*>,
@@ -131,7 +132,8 @@ export function saveContentEpic(
         // TODO: this default version should probably not be here.
         const appVersion = selectors.appVersion(state) || "0.0.0-beta";
 
-        let serializedData;
+        // This could be object for notebook, or string for files
+        let serializedData: Notebook | string;
         let saveModel = {};
         if (content.type === "notebook") {
           // contents API takes notebook as raw JSON whereas downloading takes
@@ -153,18 +155,35 @@ export function saveContentEpic(
             type: content.type,
             format: "text"
           };
+        } else {
+          // This shouldn't happen, is here for safety
+          return empty();
         }
 
         switch (action.type) {
           case actionTypes.DOWNLOAD_CONTENT: {
             // FIXME: Convert this to downloadString, so it works for both files & notebooks
-            if (content.type === "notebook") {
+            if (
+              content.type === "notebook" &&
+              typeof serializedData === "object"
+            ) {
               downloadString(
                 stringifyNotebook(serializedData),
-                filepath || "notebook.ipynb"
+                filepath || "notebook.ipynb",
+                "application/json"
+              );
+            } else if (
+              content.type === "file" &&
+              typeof serializedData === "string"
+            ) {
+              downloadString(
+                serializedData,
+                filepath,
+                content.mimetype || "application/octet-stream"
               );
             } else {
-              downloadString(serializedData, filepath);
+              // This shouldn't happen, is here for safety
+              return empty();
             }
             return of(
               actions.downloadContentFulfilled({
