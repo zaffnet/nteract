@@ -100,7 +100,7 @@ export function autoSaveCurrentContentEpic(
   store: Store<stateModule.AppState, *>
 ) {
   // Save every seven seconds, regardless of contentType
-  return interval(7000).pipe(
+  return interval(3000).pipe(
     // TODO: Once we're switched to the coming redux observable 1.0.0 release,
     // we should use the state$ stream to only save when the content has changed
     mergeMap(() => {
@@ -108,6 +108,7 @@ export function autoSaveCurrentContentEpic(
       const contentRef = state.core.currentContentRef;
 
       const content = selectors.content(state, { contentRef });
+
       if (
         // Don't bother saving nothing
         content &&
@@ -166,13 +167,13 @@ export function saveContentEpic(
 
         let filepath = content.filepath;
 
-        // TODO: this default version should probably not be here.
-        const appVersion = selectors.appVersion(state) || "0.0.0-beta";
-
         // This could be object for notebook, or string for files
         let serializedData: Notebook | string;
         let saveModel = {};
         if (content.type === "notebook") {
+          // TODO: this default version should probably not be here.
+          const appVersion = selectors.appVersion(state) || "0.0.0-beta";
+
           // contents API takes notebook as raw JSON whereas downloading takes
           // a string
           serializedData = toJS(
@@ -231,19 +232,45 @@ export function saveContentEpic(
           case actionTypes.SAVE: {
             const serverConfig = selectors.serverConfig(host);
 
-            // if (action.type === actionTypes.SAVE)
-            return contents.save(serverConfig, filepath, saveModel).pipe(
-              mapTo(
-                actions.saveFulfilled({ contentRef: action.payload.contentRef })
-              ),
-              catchError((error: Error) =>
-                of(
-                  actions.saveFailed({
-                    error,
-                    contentRef: action.payload.contentRef
-                  })
-                )
-              )
+            // Check to see if the file was modified since the last time we saved
+            // TODO: Determine how we handle what to do
+            // Don't bother doing this if the file is new(?)
+            return contents.get(serverConfig, filepath, { content: 0 }).pipe(
+              // Make sure that the modified time is within some delta
+              mergeMap(xhr => {
+                // TODO: What does it mean if we have a failed GET on the content
+                if (xhr.status !== 200) {
+                  throw new Error(xhr.response);
+                }
+                const model = xhr.response;
+
+                const diskDate = new Date(model.last_modified);
+                const inMemoryDate = content.lastSaved
+                  ? new Date(content.lastSaved)
+                  : // FIXME: I'm unsure if we don't have a date if we should default
+                    diskDate;
+
+                if (Math.abs(diskDate - inMemoryDate) > 300) {
+                  // TODO: Determine our course of action or at the very least introduce
+                  throw new Error("open in another tab maybe");
+                }
+
+                return contents.save(serverConfig, filepath, saveModel).pipe(
+                  mapTo(
+                    actions.saveFulfilled({
+                      contentRef: action.payload.contentRef
+                    })
+                  ),
+                  catchError((error: Error) =>
+                    of(
+                      actions.saveFailed({
+                        error,
+                        contentRef: action.payload.contentRef
+                      })
+                    )
+                  )
+                );
+              })
             );
           }
           default:
