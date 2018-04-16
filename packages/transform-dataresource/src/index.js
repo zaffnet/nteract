@@ -336,13 +336,14 @@ const semioticBarChartTransform = (data, schema, options) => {
 };
 
 const semioticScatterplotTransform = (data, schema, options) => {
+  const height = options.height || 300;
+
   const {
     colorValue,
     sizeValue,
     labelValue,
     quantitative,
-    secondQuantitative,
-    height
+    secondQuantitative
   } = options;
   let sizeScale = e => 5;
   const colorHash = {};
@@ -514,7 +515,8 @@ class DataResourceTransform extends React.Component<Props, State> {
   static MIMETYPE = "application/vnd.dataresource+json";
 
   static defaultProps = {
-    metadata: {}
+    metadata: {},
+    height: 300
   };
 
   state = {
