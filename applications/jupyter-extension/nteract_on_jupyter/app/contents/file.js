@@ -38,35 +38,51 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
   }
   render() {
     return (
-      <CodeMirrorEditor
-        cellFocused
-        editorFocused
-        channels
-        kernelStatus={"not connected"}
-        tip
-        completion
-        theme="light"
-        // TODO: This is the notebook implementation leaking into the editor
-        //       component. It shouldn't be here, I won't refactor it as part
-        //       of the current play PR though.
-        id="not-really-a-cell"
-        onFocusChange={() => {}}
-        focusAbove={() => {}}
-        focusBelow={() => {}}
-        // END TODO for notebook leakage
-        // TODO: kernelStatus should be allowed to be null or undefined,
-        //       resulting in thought of as either idle or not connected by
-        //       default. This is primarily used for determining if code
-        //       completion should be enabled
-        options={{
-          lineNumbers: true,
-          cursorBlinkRate: 0,
-          mode: this.props.content.mimetype
-        }}
-        value={this.props.content.model.text}
-        onChange={this.handleChange.bind(this)}
-        contentRef={this.props.contentRef}
-      />
+      <div className="nteract-editor">
+        <CodeMirrorEditor
+          cellFocused
+          editorFocused
+          channels
+          kernelStatus={"not connected"}
+          tip
+          completion
+          theme="light"
+          // TODO: This is the notebook implementation leaking into the editor
+          //       component. It shouldn't be here, I won't refactor it as part
+          //       of the current play PR though.
+          id="not-really-a-cell"
+          onFocusChange={() => {}}
+          focusAbove={() => {}}
+          focusBelow={() => {}}
+          // END TODO for notebook leakage
+          // TODO: kernelStatus should be allowed to be null or undefined,
+          //       resulting in thought of as either idle or not connected by
+          //       default. This is primarily used for determining if code
+          //       completion should be enabled
+          options={{
+            lineNumbers: true,
+            cursorBlinkRate: 0,
+            mode: this.props.content.mimetype
+          }}
+          value={this.props.content.model.text}
+          onChange={this.handleChange.bind(this)}
+          contentRef={this.props.contentRef}
+        />
+        <style jsx>
+          {`
+            .nteract-editor {
+              position: absolute;
+              left: 0;
+              height: 100%;
+              width: 100%;
+            }
+
+            .nteract-editor :global(.CodeMirror) {
+              height: 100%;
+            }
+          `}
+        </style>
+      </div>
     );
   }
 }
