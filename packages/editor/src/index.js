@@ -20,6 +20,7 @@ import { tool } from "./jupyter/tooltip";
 import { debounce, merge } from "lodash";
 
 import type { Options, EditorChange, ScrollInfo, CMI, CMDoc } from "./types";
+export type { EditorChange, Options };
 
 import styles from "./styles";
 
@@ -32,19 +33,19 @@ function normalizeLineEndings(str) {
 }
 
 export type CodeMirrorEditorProps = {
-  id: string,
   editorFocused: boolean,
-  cellFocused: boolean,
   completion: boolean,
-  tip: boolean,
+  tip?: boolean,
   focusAbove: () => void,
   focusBelow: () => void,
   theme: string,
-  channels: any,
+  channels: ?any,
+  // TODO: We only check if this is idle, so the completion provider should only
+  //       care about this when kernelStatus === idle _and_ we're the active cell
+  //       could instead call it `canTriggerCompletion` and reduce our current re-renders
   kernelStatus: string,
   onChange: (value: string, change: EditorChange) => void,
-  onFocusChange: (focused: boolean) => void,
-  onScroll: (scrollInfo: ScrollInfo) => any,
+  onFocusChange: ?(focused: boolean) => void,
   value: string,
   defaultValue?: string,
   options: Options
@@ -71,7 +72,10 @@ class CodeMirrorEditor extends React.Component<
   keyupEventsSubscriber: Subscription;
 
   static defaultProps = {
-    onScroll: () => {}
+    tip: false,
+    kernelStatus: "not connected",
+    onChange: null,
+    onFocusChange: null
   };
 
   constructor(props: CodeMirrorEditorProps): void {
@@ -163,7 +167,6 @@ class CodeMirrorEditor extends React.Component<
 
     this.cm.on("focus", this.focusChanged.bind(this, true));
     this.cm.on("blur", this.focusChanged.bind(this, false));
-    this.cm.on("scroll", this.scrollChanged.bind(this));
     this.cm.on("change", this.codemirrorValueChanged.bind(this));
 
     const keyupEvents = fromEvent(this.cm, "keyup", (editor, ev) => ({
@@ -265,13 +268,9 @@ class CodeMirrorEditor extends React.Component<
     this.props.onFocusChange && this.props.onFocusChange(focused);
   }
 
-  scrollChanged(cm: CMI) {
-    this.props.onScroll(cm.getScrollInfo());
-  }
-
   completions(editor: Object, callback: Function): void {
     const { completion, channels } = this.props;
-    if (completion) {
+    if (completion && channels) {
       codeComplete(channels, editor).subscribe(callback);
     }
   }
@@ -368,7 +367,11 @@ class CodeMirrorEditor extends React.Component<
   }
 
   codemirrorValueChanged(doc: CMDoc, change: EditorChange) {
-    if (this.props.onChange && change.origin !== "setValue") {
+    if (
+      this.props.onChange &&
+      // When the change came from us setting the value, don't trigger another change
+      change.origin !== "setValue"
+    ) {
       this.props.onChange(doc.getValue(), change);
     }
   }

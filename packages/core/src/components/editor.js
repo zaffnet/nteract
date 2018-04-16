@@ -3,75 +3,60 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as selectors from "../selectors";
 import type { ContentRef } from "../state/refs";
+import type { AppState } from "../state";
+
+import { omit } from "lodash";
 
 import { focusCell, focusCellEditor, updateCellSource } from "../actions";
 
 import EditorView from "@nteract/editor";
 
-import type { CodeMirrorEditorProps } from "@nteract/editor";
-
-type Props = CodeMirrorEditorProps & {
-  dispatch: Dispatch<*>,
+type Props = {
   id: string,
   cellFocused: boolean,
-  channels: any,
-  kernelStatus: string,
-  options: Object,
-  contentRef: ContentRef
+  contentRef: ContentRef,
+  options: Object
 };
 
-function mapStateToProps(
-  state: Object,
-  ownProps: CodeMirrorEditorProps
-): Object {
+function mapStateToProps(state: AppState, ownProps: Props) {
   const kernel = selectors.currentKernel(state);
   const { cursorBlinkRate } = selectors.userPreferences(state);
   return {
-    options: ownProps.options
-      ? Object.assign(ownProps.options, { cursorBlinkRate })
-      : { cursorBlinkRate },
+    // Don't propagate props only used for setting up dispatch and computed props
+    ...omit(ownProps, [
+      "id",
+      "cellFocused",
+      "contentRef",
+      "options",
+      "channels",
+      "kernelStatus"
+    ]),
+    // Merge in our _one_ configurable options dealy
+    // Ideally this would be Immutable or remain consistent so that
+    // we're not thrashing updates and renders...
+    options: Object.assign({}, ownProps.options, { cursorBlinkRate }),
     channels: kernel ? kernel.channels : null,
-    kernelStatus: selectors.currentKernelStatus(state)
+    kernelStatus: selectors.currentKernelStatus(state) || "not connected"
   };
 }
 
-class Editor extends React.Component<Props> {
-  onChange: (text: string) => void;
-  onFocusChange: (focused: boolean) => void;
+const mapDispatchToProps = (dispatch: Dispatch<*>, ownProps: Props) => {
+  const { cellFocused, id, contentRef } = ownProps;
 
-  constructor(): void {
-    super();
+  return {
+    onChange: (text: string) => {
+      dispatch(updateCellSource({ id, value: text, contentRef }));
+    },
 
-    this.onChange = this.onChange.bind(this);
-    this.onFocusChange = this.onFocusChange.bind(this);
-  }
-
-  onChange(text: string): void {
-    const { dispatch, id, contentRef } = this.props;
-    dispatch(updateCellSource({ id, value: text, contentRef }));
-  }
-
-  onFocusChange(focused: boolean): void {
-    const { cellFocused, dispatch, id, contentRef } = this.props;
-
-    if (focused) {
-      dispatch(focusCellEditor({ id, contentRef }));
-      if (!cellFocused) {
-        dispatch(focusCell({ id, contentRef }));
+    onFocusChange(focused: boolean): void {
+      if (focused) {
+        dispatch(focusCellEditor({ id, contentRef }));
+        if (!cellFocused) {
+          dispatch(focusCell({ id, contentRef }));
+        }
       }
     }
-  }
+  };
+};
 
-  render(): React$Element<any> {
-    const props = {
-      ...this.props,
-      onChange: this.onChange,
-      onFocusChange: this.onFocusChange
-    };
-
-    return <EditorView {...props} />;
-  }
-}
-
-// $FlowFixMe: The editor ownProps and mapped props need addressing
-export default connect(mapStateToProps)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(EditorView);
