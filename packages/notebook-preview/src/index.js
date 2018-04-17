@@ -103,20 +103,19 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                     cell.get("outputs").size === 0 ||
                     cell.getIn(["metadata", "outputHidden"]);
 
-                  const papermillMetadata = cell.getIn(
-                    ["metadata", "papermill"],
-                    Immutable.Map()
+                  let papermillStatus = cell.getIn(
+                    ["metadata", "papermill", "status"],
+                    null
                   );
 
                   return (
                     <Cell key={cellID}>
-                      <PapermillView
-                        {...(Immutable.isImmutable(papermillMetadata)
-                          ? papermillMetadata.toJS()
-                          : papermillMetadata)}
-                      />
+                      <PapermillView status={papermillStatus} />
                       <Input hidden={sourceHidden}>
-                        <Prompt counter={cell.get("execution_count")} />
+                        <Prompt
+                          counter={cell.get("execution_count")}
+                          running={papermillStatus === "running"}
+                        />
                         <Source language={language} theme={this.props.theme}>
                           {source}
                         </Source>
