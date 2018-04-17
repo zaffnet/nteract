@@ -116,7 +116,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                           : papermillMetadata)}
                       />
                       <Input hidden={sourceHidden}>
-                        <Prompt />
+                        <Prompt counter={cell.get("execution_count")} />
                         <Source language={language} theme={this.props.theme}>
                           {source}
                         </Source>
