@@ -20,11 +20,10 @@
   },
   "dependencies": {
     "@nteract/commutable": "^4.0.1",
-    "@nteract/core": "^5.0.0",
     "@nteract/display-area": "^4.1.0",
-    "@nteract/editor": "^7.0.3",
     "@nteract/markdown": "^1.0.0",
     "@nteract/mathjax": "^1.0.0",
+    "@nteract/presentational-components": "^0.0.0",
     "@nteract/transforms": "^4.1.0"
   },
   "peerDependencies": {

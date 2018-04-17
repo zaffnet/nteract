@@ -21,7 +21,7 @@ import {
   Source,
   Outputs,
   Cells
-} from "@nteract/core";
+} from "@nteract/presentational-components";
 
 import { PapermillView } from "./papermill";
 
