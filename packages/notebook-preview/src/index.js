@@ -3,7 +3,10 @@ import React from "react";
 import * as Immutable from "immutable";
 
 import { Display } from "@nteract/display-area";
-import { displayOrder, transforms } from "@nteract/transforms";
+import {
+  displayOrder as defaultDisplayOrder,
+  transforms as defaultTransforms
+} from "@nteract/transforms";
 
 import {
   emptyNotebook,
@@ -41,8 +44,8 @@ type State = {
 
 export class NotebookPreview extends React.PureComponent<Props, State> {
   static defaultProps = {
-    displayOrder,
-    transforms,
+    displayOrder: defaultDisplayOrder,
+    transforms: defaultTransforms,
     notebook: appendCellToNotebook(
       emptyNotebook,
       createCodeCell().set("source", "# where's the content?")
@@ -129,8 +132,8 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                       >
                         <Display
                           outputs={cell.get("outputs").toJS()}
-                          transforms={transforms}
-                          displayOrder={displayOrder}
+                          transforms={this.props.transforms}
+                          displayOrder={this.props.displayOrder}
                         />
                       </Outputs>
                     </Cell>
