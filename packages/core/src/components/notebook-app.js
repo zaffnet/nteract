@@ -5,11 +5,18 @@ import * as React from "react";
 
 import * as actions from "../actions";
 import * as selectors from "../selectors";
-const themes = require("../themes");
 import type { AppState } from "../state";
 import type { ContentRef, KernelRef } from "../state/refs";
 
-import { Input, Prompt, Source, Pagers, Outputs, Cell } from "./presentational";
+import {
+  Input,
+  Prompt,
+  Source,
+  Pagers,
+  Outputs,
+  Cell,
+  themes
+} from "@nteract/presentational-components";
 
 import DraggableCell from "./draggable-cell";
 import CellCreator from "./cell-creator";

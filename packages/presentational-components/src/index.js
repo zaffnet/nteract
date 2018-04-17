@@ -3,6 +3,11 @@ import * as React from "react";
 
 import Highlighter from "./syntax-highlighter";
 
+export * from "./styles";
+
+import * as themes from "./themes";
+export { themes };
+
 export type PagersProps = {
   children: React.Node,
   hidden: boolean

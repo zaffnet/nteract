@@ -1,6 +1,6 @@
 // @flow
 
-export * from "./presentational";
+export * from "@nteract/presentational-components";
 export {
   default as NewNotebookNavigation,
   PureNewNotebookNavigation

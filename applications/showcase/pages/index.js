@@ -9,10 +9,9 @@ import {
   Source,
   Outputs,
   Cells,
-  Styles
-} from "@nteract/core";
-
-import { themes } from "@nteract/core";
+  Styles,
+  themes
+} from "@nteract/presentational-components";
 
 import ReactMarkdown from "react-markdown";
 

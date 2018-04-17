@@ -3,7 +3,7 @@
 import * as React from "react";
 import styles from "@nteract/styles";
 
-class Styles extends React.Component<*> {
+export class Styles extends React.Component<*> {
   render() {
     return (
       <React.Fragment>
@@ -13,5 +13,3 @@ class Styles extends React.Component<*> {
     );
   }
 }
-
-export default Styles;

@@ -15,6 +15,7 @@
     "@nteract/dropdown-menu": "^0.1.2",
     "@nteract/editor": "^7.0.3",
     "@nteract/notebook-preview": "^7.1.0",
+    "@nteract/presentational-components": "^0.0.0",
     "@nteract/transform-dataresource": "^3.0.2",
     "@nteract/transforms": "^4.1.0",
     "@nteract/transforms-full": "^5.1.0",
