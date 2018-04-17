@@ -3,7 +3,6 @@ import * as React from "react";
 
 import {
   Styles,
-  state as stateModule,
   themes,
   PureTitleBar,
   PureNewNotebookNavigation

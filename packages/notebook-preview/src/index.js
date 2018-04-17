@@ -1,6 +1,6 @@
 /* @flow */
 import React from "react";
-import { List as ImmutableList, Map as ImmutableMap } from "immutable";
+import * as Immutable from "immutable";
 
 import { Display } from "@nteract/display-area";
 import { displayOrder, transforms } from "@nteract/transforms";
@@ -103,12 +103,17 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
                     cell.get("outputs").size === 0 ||
                     cell.getIn(["metadata", "outputHidden"]);
 
+                  const papermillMetadata = cell.getIn(
+                    ["metadata", "papermill"],
+                    Immutable.Map()
+                  );
+
                   return (
                     <Cell key={cellID}>
                       <PapermillView
-                        {...cell
-                          .getIn(["metadata", "papermill"], ImmutableMap())
-                          .toJS()}
+                        {...(Immutable.isImmutable(papermillMetadata)
+                          ? papermillMetadata.toJS()
+                          : papermillMetadata)}
                       />
                       <Input hidden={sourceHidden}>
                         <Prompt />
