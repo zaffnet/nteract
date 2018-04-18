@@ -16,7 +16,10 @@ import { debounce, merge } from "lodash";
 
 export type { EditorChange, Options };
 
+import "monaco-editor/esm/vs/editor/standalone/browser/accessibilityHelp/accessibilityHelp.js";
+import "monaco-editor/esm/vs/editor/contrib/find/findController.js";
 import "monaco-editor/esm/vs/editor/browser/controller/coreCommands.js";
+
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api.js";
 
 function normalizeLineEndings(str) {
@@ -67,6 +70,9 @@ class MonacoEditor extends React.Component<
     );
   }
 
+  onDidChangeModelContent(e): void {
+    this.props.onChange(this.monaco.getValue());
+  }
   componentDidMount(): void {
     const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
     window.MonacoEnvironment = {
@@ -76,8 +82,16 @@ class MonacoEditor extends React.Component<
     };
     console.log(this);
     this.monaco = monaco.editor.create(this.monacoContainer, {
-      value: this.props.value
+      value: this.props.value,
+      language: "python",
+      minimap: {
+        enabled: false
+      }
     });
+
+    this.monaco.onDidChangeModelContent(
+      this.onDidChangeModelContent.bind(this)
+    );
   }
 
   componentDidUpdate(prevProps: MonacoEditorProps): void {
