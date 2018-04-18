@@ -6,7 +6,7 @@ import * as Immutable from "immutable";
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
 import { JSONTransform, TextTransform } from "@nteract/transforms";
-import CodeMirrorEditor from "@nteract/editor";
+import MonacoEditor from "@nteract/monaco-editor";
 
 // Workaround flow limitation for getting these types
 type ContentRef = stateModule.ContentRef;
@@ -39,26 +39,8 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
   render() {
     return (
       <div className="nteract-editor">
-        <CodeMirrorEditor
-          cellFocused
-          editorFocused
-          channels
-          kernelStatus={"not connected"}
-          tip
-          completion
+        <MonacoEditor
           theme="light"
-          // TODO: This is the notebook implementation leaking into the editor
-          //       component. It shouldn't be here, I won't refactor it as part
-          //       of the current play PR though.
-          id="not-really-a-cell"
-          onFocusChange={() => {}}
-          focusAbove={() => {}}
-          focusBelow={() => {}}
-          // END TODO for notebook leakage
-          // TODO: kernelStatus should be allowed to be null or undefined,
-          //       resulting in thought of as either idle or not connected by
-          //       default. This is primarily used for determining if code
-          //       completion should be enabled
           options={{
             lineNumbers: true,
             cursorBlinkRate: 0,
@@ -77,7 +59,7 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
               width: 100%;
             }
 
-            .nteract-editor :global(.CodeMirror) {
+            .nteract-editor :global(.monaco) {
               height: 100%;
             }
           `}

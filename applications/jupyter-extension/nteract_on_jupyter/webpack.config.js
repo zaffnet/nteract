@@ -15,7 +15,8 @@ module.exports = {
   mode: isProd ? "production" : "development",
   devtool: isProd ? "hidden-source-map" : "cheap-eval-source-map",
   entry: {
-    app: "./app/index.js"
+    app: "./app/index.js",
+    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js"
   },
   target: "web",
   output: {
@@ -28,6 +29,10 @@ module.exports = {
         test: /\.js$/,
         exclude: configurator.exclude,
         loader: "babel-loader"
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   },

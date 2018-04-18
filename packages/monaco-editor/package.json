@@ -1,8 +1,8 @@
 {
-  "name": "@nteract/editor",
+  "name": "@nteract/monaco-editor",
   "version": "7.0.4",
   "description": "The editor that lives inside cells in nteract",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "nteractDesktop": "src/index.js",
   "scripts": {
     "prepare": "npm run build",
@@ -14,12 +14,13 @@
     "build:lib:watch": "npm run build:lib -- --watch",
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
-  "repository": "https://github.com/nteract/nteract/tree/master/packages/editor",
+  "repository": "https://github.com/nteract/nteract/tree/master/packages/monaco-editor",
   "keywords": [
     "nteract",
     "editor",
     "notebook",
-    "jupyter"
+    "jupyter",
+    "monaco"
   ],
   "publishConfig": {
     "access": "public"
@@ -29,7 +30,6 @@
     "@nteract/messaging": "^4.0.0",
     "@nteract/transforms": "^4.1.1",
     "@nteract/types": "^2.0.0",
-    "codemirror": "5.37.0",
     "lodash": "^4.17.4",
     "rxjs": "^5.5.6",
     "monaco-editor": "^0.12.0"
