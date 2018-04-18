@@ -77,7 +77,8 @@ class MonacoEditor extends React.Component<
       language: this.props.mode,
       minimap: {
         enabled: false
-      }
+      },
+      autoIndent: true
     });
 
     this.monaco.onDidChangeModelContent(
@@ -94,11 +95,9 @@ class MonacoEditor extends React.Component<
   }
 
   componentWillUnmount() {
-    // TODO: is there a lighter weight way to remove the codemirror instance?
-    if (this.cm) {
-      this.cm.toTextArea();
+    if (this.monaco) {
+      this.monaco.dispose();
     }
-    this.keyupEventsSubscriber.unsubscribe();
   }
 
   focusChanged(focused: boolean) {
