@@ -4,7 +4,6 @@ const configurator = require("@nteract/webpack-configurator");
 
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const webpack = require("webpack");
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const path = require("path");
 
 const nodeEnv = process.env.NODE_ENV || "development";
