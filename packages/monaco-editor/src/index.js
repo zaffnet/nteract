@@ -74,8 +74,9 @@ class MonacoEditor extends React.Component<
         return "./editor.worker.bundle.js";
       }
     };
+    console.log(this);
     this.monaco = monaco.editor.create(this.monacoContainer, {
-      value: this.value
+      value: this.props.value
     });
   }
 
