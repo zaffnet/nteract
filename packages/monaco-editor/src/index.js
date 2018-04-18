@@ -71,12 +71,6 @@ class MonacoEditor extends React.Component<
 
   componentDidMount(): void {
     const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
-    window.MonacoEnvironment = {
-      getWorkerUrl: function(moduleId, label) {
-        console.log(moduleId);
-        return "./editor.worker.bundle.js";
-      }
-    };
     console.log(this);
     this.monaco = monaco.editor.create(this.monacoContainer, {
       value: this.props.value,
