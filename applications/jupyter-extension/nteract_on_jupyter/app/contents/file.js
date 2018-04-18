@@ -41,6 +41,7 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
       <div className="nteract-editor">
         <MonacoEditor
           theme="light"
+          mode={this.props.content.mimetype}
           options={{
             lineNumbers: true,
             cursorBlinkRate: 0,
