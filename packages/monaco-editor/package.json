@@ -1,7 +1,7 @@
 {
   "name": "@nteract/monaco-editor",
   "version": "7.0.4",
-  "description": "The editor that lives inside cells in nteract",
+  "description": "A React component for the monaco editor, tailored for nteract",
   "main": "src/index.js",
   "nteractDesktop": "src/index.js",
   "scripts": {
