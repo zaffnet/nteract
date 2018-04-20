@@ -22,40 +22,22 @@ function normalizeLineEndings(str) {
 }
 
 export type MonacoEditorProps = {
-  editorFocused: boolean,
   theme: string,
   mode: string,
-  channels: ?any,
-  // TODO: We only check if this is idle, so the completion provider should only
-  //       care about this when kernelStatus === idle _and_ we're the active cell
-  //       could instead call it `canTriggerCompletion` and reduce our current re-renders
-  kernelStatus: string,
-  onChange: (value: string, change: EditorChange) => void,
-  onFocusChange: ?(focused: boolean) => void,
-  value: string,
-  defaultValue?: string,
-  options: Options
+  onChange: (value: string) => void,
+  value: string
 };
 
-type MonacoEditorState = {
-  isFocused: boolean
-};
-
-class MonacoEditor extends React.Component<
-  MonacoEditorProps,
-  MonacoEditorState
-> {
-  executeTab: (editor: Object) => void;
-  keyupEventsSubscriber: Subscription;
+class MonacoEditor extends React.Component<MonacoEditorProps> {
+  monaco: ?monaco.IStandaloneCodeEditor;
+  monacoContainer: ?HTMLElement;
 
   static defaultProps = {
-    onChange: null,
-    onFocusChange: null
+    onChange: null
   };
 
   constructor(props: MonacoEditorProps): void {
     super(props);
-    this.state = { isFocused: true, tipElement: null };
   }
 
   componentWillMount() {
@@ -71,7 +53,6 @@ class MonacoEditor extends React.Component<
 
   componentDidMount(): void {
     const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
-    console.log(this);
     this.monaco = monaco.editor.create(this.monacoContainer, {
       value: this.props.value,
       language: this.props.mode,
@@ -91,20 +72,16 @@ class MonacoEditor extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: MonacoEditorProps) {
-    console.log(nextProps);
+    if (this.monaco.getValue() !== nextProps.value) {
+      // FIXME: calling setValue resets cursor position in monaco. It shouldn't!
+      this.monaco.setValue(nextProps.value);
+    }
   }
 
   componentWillUnmount() {
     if (this.monaco) {
       this.monaco.dispose();
     }
-  }
-
-  focusChanged(focused: boolean) {
-    this.setState({
-      isFocused: focused
-    });
-    this.props.onFocusChange && this.props.onFocusChange(focused);
   }
 
   render(): React$Element<any> {
