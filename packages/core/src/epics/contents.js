@@ -247,20 +247,25 @@ export function saveContentEpic(
                 const diskDate = new Date(model.last_modified);
                 const inMemoryDate = content.lastSaved
                   ? new Date(content.lastSaved)
-                  : // FIXME: I'm unsure if we don't have a date if we should default
+                  : // FIXME: I'm unsure if we don't have a date if we should default to the disk date
                     diskDate;
 
-                if (Math.abs(diskDate - inMemoryDate) > 300) {
-                  // TODO: Determine our course of action or at the very least introduce
-                  throw new Error("open in another tab maybe");
+                if (Math.abs(diskDate - inMemoryDate) > 600) {
+                  return of(
+                    actions.saveFailed({
+                      error: new Error("open in another tab possibly..."),
+                      contentRef: action.payload.contentRef
+                    })
+                  );
                 }
 
                 return contents.save(serverConfig, filepath, saveModel).pipe(
-                  mapTo(
-                    actions.saveFulfilled({
-                      contentRef: action.payload.contentRef
-                    })
-                  ),
+                  map(xhr => {
+                    return actions.saveFulfilled({
+                      contentRef: action.payload.contentRef,
+                      model: xhr.response
+                    });
+                  }),
                   catchError((error: Error) =>
                     of(
                       actions.saveFailed({

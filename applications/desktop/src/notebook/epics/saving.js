@@ -58,7 +58,10 @@ export function saveEpic(
             });
           }
           return actions.saveFulfilled({
-            contentRef: action.payload.contentRef
+            contentRef: action.payload.contentRef,
+            model: {
+              last_modified: new Date()
+            }
           });
         }),
         catchError((error: Error) =>

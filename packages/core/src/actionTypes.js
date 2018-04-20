@@ -613,7 +613,11 @@ export type SaveFailed = {
 export const SAVE_FULFILLED = "SAVE_FULFILLED";
 export type SaveFulfilled = {
   type: "SAVE_FULFILLED",
-  payload: { contentRef: ContentRef }
+  payload: {
+    contentRef: ContentRef,
+    // Literal response from contents API, for use with
+    model: any
+  }
 };
 
 export const NEW_NOTEBOOK = "NEW_NOTEBOOK";

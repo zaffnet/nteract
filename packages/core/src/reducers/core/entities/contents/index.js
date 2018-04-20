@@ -149,14 +149,21 @@ const byRef = (state = Immutable.Map(), action) => {
       );
     }
     case actionTypes.SAVE_FULFILLED:
-      const path = [action.payload.contentRef, "model"];
-      const model = state.getIn(path);
-      return (
-        state
-          .setIn(path, notebook(model, action))
-          // TODO: This is setting `lastSaved` on our top level model I think
-          .set("lastSaved", new Date())
-      );
+      let model = state.getIn([action.payload.contentRef, "model"]);
+
+      return state
+        .updateIn([action.payload.contentRef, "model"], model => {
+          // Notebook ends up needing this because we store a last saved version of the notebook
+          // Alternatively, we could be storing a hash of the content to compare 🤔
+          if (model && model.type === "notebook") {
+            return notebook(model, action);
+          }
+          return model;
+        })
+        .setIn(
+          [action.payload.contentRef, "lastSaved"],
+          action.payload.model.last_modified
+        );
     // Defer all notebook actions to the notebook reducer
     case actionTypes.SEND_EXECUTE_REQUEST:
     case actionTypes.FOCUS_CELL:
