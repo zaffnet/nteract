@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars, no-use-before-define */
-import { ipcRenderer as ipc, webFrame, remote, shell } from "electron";
+import { ipcRenderer as ipc, webFrame, shell, remote } from "electron";
 
 import * as path from "path";
 
@@ -207,19 +207,71 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   );
 }
 
-export function dispatchPublishAnonGist(store: *) {
-  store.dispatch({ type: "PUBLISH_ANONYMOUS_GIST" });
-}
+export function dispatchPublishGist(store: *, event: Event) {
+  const state = store.getState();
+  let githubToken = state.app.get("githubToken");
 
-export function dispatchPublishUserGist(
-  store: *,
-  event: Event,
-  githubToken: string
-) {
-  if (githubToken) {
-    store.dispatch(actions.setGithubToken(githubToken));
+  const contentRef = selectors.currentContentRef(state);
+  if (!contentRef) {
+    store.dispatch(
+      actions.coreError(
+        new Error("content ref should be set for github publishing")
+      )
+    );
+    return;
   }
-  store.dispatch({ type: "PUBLISH_USER_GIST" });
+
+  // The simple case -- we have a token and can publish
+  if (githubToken) {
+    store.dispatch(actions.publishGist({ contentRef }));
+    return;
+  }
+
+  // If the Github Token isn't set, use our oauth server to acquire a token
+
+  // Because the remote object from Electron main <--> renderer can be "cleaned up"
+  // we re-require electron here and get the remote object
+  const remote = require("electron").remote;
+
+  // Create our oauth window
+  const win = new remote.BrowserWindow({
+    show: false,
+    webPreferences: { zoomFactor: 0.75 }
+  });
+
+  win.webContents.on("dom-ready", () => {
+    // When we're at our callback code page, keep the page hidden
+    if (win.getURL().indexOf("callback?code=") !== -1) {
+      // Extract the text content
+      win.webContents.executeJavaScript(
+        `require('electron').ipcRenderer.send('auth', document.body.textContent);`
+      );
+      remote.ipcMain.on("auth", (event, auth) => {
+        try {
+          const accessToken = JSON.parse(auth).access_token;
+          store.dispatch(actions.setGithubToken(accessToken));
+
+          const notificationSystem = selectors.notificationSystem(state);
+
+          notificationSystem.addNotification({
+            title: "Authenticated",
+            message: `🔒`,
+            level: "info"
+          });
+
+          // We are now authenticated and can finally publish
+          store.dispatch(actions.publishGist({ contentRef }));
+        } catch (e) {
+          store.dispatch(actions.coreError(e));
+        } finally {
+          win.close();
+        }
+      });
+    } else {
+      win.show();
+    }
+  });
+  win.loadURL("https://oauth.nteract.io/github");
 }
 
 export function dispatchRunAllBelow(store: *) {
@@ -539,9 +591,7 @@ export function triggerSaveAsPDF(store: *) {
         );
       }
     })
-    .catch(e =>
-      store.dispatch({ type: "ERROR", payload: e.message, error: true })
-    );
+    .catch(e => store.dispatch(actions.coreError(e)));
 }
 
 export function storeToPDF(store: *) {
@@ -597,13 +647,12 @@ export function initMenuHandlers(store: *) {
     "menu:restart-and-clear-all",
     dispatchRestartClearAll.bind(null, store)
   );
-  ipc.on("menu:publish:gist", dispatchPublishAnonGist.bind(null, store));
   ipc.on("menu:zoom-in", dispatchZoomIn);
   ipc.on("menu:zoom-out", dispatchZoomOut);
   ipc.on("menu:zoom-reset", dispatchZoomReset);
   ipc.on("menu:theme", dispatchSetTheme.bind(null, store));
   ipc.on("menu:set-blink-rate", dispatchSetCursorBlink.bind(null, store));
-  ipc.on("menu:github:auth", dispatchPublishUserGist.bind(null, store));
+  ipc.on("menu:publish:gist", dispatchPublishGist.bind(null, store));
   ipc.on("menu:exportPDF", storeToPDF.bind(null, store));
   // OCD: This is more like the registration of main -> renderer thread
   ipc.on("main:load", dispatchLoad.bind(null, store));

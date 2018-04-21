@@ -268,31 +268,17 @@ describe("menu", () => {
     });
   });
 
-  describe("dispatchPublishAnonGist", () => {
-    test("dispatches PUBLISH_ANONYMOUS_GIST action", () => {
-      const store = dummyStore();
-      store.dispatch = jest.fn();
-      menu.dispatchPublishAnonGist(store);
-      expect(store.dispatch).toHaveBeenCalledWith({
-        type: "PUBLISH_ANONYMOUS_GIST"
-      });
-    });
-  });
-
   describe("dispatchPublishUserGist", () => {
-    test("sets github token if token provided", () => {
-      const store = dummyStore();
-      store.dispatch = jest.fn();
-      menu.dispatchPublishUserGist(store, {}, "TOKEN");
-      const expectedAction = { type: "SET_GITHUB_TOKEN", githubToken: "TOKEN" };
-      expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
-    });
     test("dispatches setUserGithub and publishes gist", () => {
       const store = dummyStore();
       store.dispatch = jest.fn();
-      menu.dispatchPublishUserGist(store, {});
-      const expectedSecondAction = { type: "PUBLISH_USER_GIST" };
-      expect(store.dispatch).toHaveBeenCalledWith(expectedSecondAction);
+      menu.dispatchPublishGist(store, {});
+      expect(store.dispatch).toHaveBeenCalledWith({
+        type: actionTypes.PUBLISH_GIST,
+        payload: {
+          contentRef: selectors.currentContentRef(store.getState())
+        }
+      });
     });
   });
 
@@ -402,7 +388,6 @@ describe("menu", () => {
         "menu:restart-kernel",
         "menu:restart-and-clear-all",
         "menu:publish:gist",
-        "menu:github:auth",
         "menu:zoom-in",
         "menu:zoom-out",
         "menu:theme",

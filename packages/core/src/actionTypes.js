@@ -837,6 +837,13 @@ export type ShutdownReplyTimedOut = {
 };
 
 // TODO: This action needs a proper flow type, its from desktop's github store
-export const PUBLISH_USER_GIST = "PUBLISH_USER_GIST";
-// TODO: This action needs a proper flow type, its from desktop's github store
-export const PUBLISH_ANONYMOUS_GIST = "PUBLISH_ANONYMOUS_GIST";
+export const PUBLISH_GIST = "CORE/PUBLISH_GIST";
+export type PublishGist = {
+  type: "CORE/PUBLISH_GIST",
+  payload: {
+    contentRef: ContentRef
+  }
+};
+
+export const ERROR = "CORE/ERROR";
+export type CoreError = ErrorAction<"CORE/ERROR">;
