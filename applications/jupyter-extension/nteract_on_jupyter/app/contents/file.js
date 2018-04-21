@@ -42,6 +42,7 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
         <MonacoEditor
           theme="light"
           mode={this.props.content.mimetype}
+          focused={true}
           options={{
             lineNumbers: true,
             cursorBlinkRate: 0,
