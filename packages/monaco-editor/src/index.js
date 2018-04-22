@@ -24,7 +24,7 @@ function normalizeLineEndings(str) {
 export type MonacoEditorProps = {
   theme: string,
   mode: ?string,
-  onChange: (value: string) => void,
+  onChange: ?(value: string) => void,
   value: string,
   editorFocused: boolean
 };
@@ -51,7 +51,9 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   }
 
   onDidChangeModelContent(e): void {
-    this.props.onChange(this.monaco.getValue());
+    if (this.monaco && this.props.onChange) {
+      this.props.onChange(this.monaco.getValue());
+    }
   }
 
   componentDidMount(): void {
@@ -78,7 +80,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   }
 
   componentWillReceiveProps(nextProps: MonacoEditorProps) {
-    if (this.monaco.getValue() !== nextProps.value) {
+    if (this.monaco && this.monaco.getValue() !== nextProps.value) {
       // FIXME: calling setValue resets cursor position in monaco. It shouldn't!
       this.monaco.setValue(nextProps.value);
     }
