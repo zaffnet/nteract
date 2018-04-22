@@ -43,11 +43,6 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
           theme="light"
           mode={this.props.content.mimetype}
           editorFocused={true}
-          options={{
-            lineNumbers: true,
-            cursorBlinkRate: 0,
-            mode: this.props.content.mimetype
-          }}
           value={this.props.content.model.text}
           onChange={this.handleChange.bind(this)}
           contentRef={this.props.contentRef}
