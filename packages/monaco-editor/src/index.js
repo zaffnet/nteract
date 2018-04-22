@@ -23,7 +23,7 @@ function normalizeLineEndings(str) {
 
 export type MonacoEditorProps = {
   theme: string,
-  mode: string,
+  mode: ?string,
   onChange: (value: string) => void,
   value: string,
   editorFocused: boolean
@@ -35,7 +35,8 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
 
   static defaultProps = {
     onChange: null,
-    editorFocused: false
+    editorFocused: false,
+    mode: "text/plain"
   };
 
   constructor(props: MonacoEditorProps): void {
