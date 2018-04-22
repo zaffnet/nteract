@@ -26,7 +26,7 @@ export type MonacoEditorProps = {
   mode: string,
   onChange: (value: string) => void,
   value: string,
-  focused: boolean
+  editorFocused: boolean
 };
 
 class MonacoEditor extends React.Component<MonacoEditorProps> {
@@ -35,7 +35,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
 
   static defaultProps = {
     onChange: null,
-    focused: false
+    editorFocused: false
   };
 
   constructor(props: MonacoEditorProps): void {
@@ -54,7 +54,6 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   }
 
   componentDidMount(): void {
-    const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
     this.monaco = monaco.editor.create(this.monacoContainer, {
       value: this.props.value,
       language: this.props.mode,
@@ -64,7 +63,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
       autoIndent: true
     });
 
-    if (this.props.focused) {
+    if (this.props.editorFocused) {
       this.monaco.focus();
     }
 
