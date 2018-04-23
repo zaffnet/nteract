@@ -243,11 +243,9 @@ export class Prompt extends React.Component<PromptProps> {
   }
 }
 
-type SourceChildren = string | React.Element<any> | Array<SourceChildren>;
-
 export type SourceProps = {
   language: string,
-  children: SourceChildren,
+  children: React.Node,
   className?: string,
   theme: "light" | "dark"
 };

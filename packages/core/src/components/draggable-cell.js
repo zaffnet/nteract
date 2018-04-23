@@ -45,7 +45,7 @@ type Props = {|
   isDragging: boolean,
   isOver: boolean,
   moveCell: (payload: *) => Object,
-  children: React.Element<any>,
+  children: React.Node,
   contentRef: ContentRef
 |};
 

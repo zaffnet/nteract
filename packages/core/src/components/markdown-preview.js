@@ -17,7 +17,7 @@ type Props = {
   focusBelow: () => void,
   cellFocused: boolean,
   editorFocused: boolean,
-  children: React$Element<*>
+  children: React$Element<any>
 };
 
 type State = {

@@ -161,7 +161,7 @@ class CellCreator extends React.Component<ConnectedProps> {
     }
   }
 
-  render(): React$Element<any> {
+  render() {
     return (
       <PureCellCreator
         above={this.props.above}

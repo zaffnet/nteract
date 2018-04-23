@@ -19,7 +19,7 @@ function createApp(store: *) {
   class App extends React.Component<*> {
     notificationSystem: NotificationSystem;
 
-    render(): React$Element<any> {
+    render() {
       return (
         <Provider store={store}>
           <React.Fragment>

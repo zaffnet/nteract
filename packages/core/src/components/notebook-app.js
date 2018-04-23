@@ -490,7 +490,7 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
     );
   }
 
-  createCellElement(id: string): React$Element<*> {
+  createCellElement(id: string): React$Element<any> {
     const { moveCell, focusCell, contentRef } = this.props;
     return (
       <div className="cell-container" key={`cell-container-${id}`}>
