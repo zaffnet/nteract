@@ -778,7 +778,8 @@ export function saveFailed(payload: {
 }
 
 export function saveFulfilled(payload: {
-  contentRef: ContentRef
+  contentRef: ContentRef,
+  model: any
 }): actionTypes.SaveFulfilled {
   return {
     type: actionTypes.SAVE_FULFILLED,

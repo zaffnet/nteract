@@ -95,11 +95,6 @@ const mapDispatchToTextFileProps = (dispatch, ownProps) => ({
         contentRef: ownProps.contentRef
       })
     );
-    dispatch(
-      actions.save({
-        contentRef: ownProps.contentRef
-      })
-    );
   }
 });
 

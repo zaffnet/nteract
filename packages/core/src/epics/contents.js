@@ -1,6 +1,8 @@
 /* @flow */
 import { empty } from "rxjs/observable/empty";
 import { of } from "rxjs/observable/of";
+import { interval } from "rxjs/observable/interval";
+
 import {
   tap,
   filter,
@@ -17,6 +19,7 @@ import FileSaver from "file-saver";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
+import * as stateModule from "../state";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -92,6 +95,36 @@ export function downloadString(
   FileSaver.saveAs(blob, filename);
 }
 
+export function autoSaveCurrentContentEpic(
+  action$: ActionsObservable<Action>,
+  store: Store<stateModule.AppState, *>
+) {
+  // Save every seven seconds, regardless of contentType
+  return interval(3000).pipe(
+    // TODO: Once we're switched to the coming redux observable 1.0.0 release,
+    // we should use the state$ stream to only save when the content has changed
+    mergeMap(() => {
+      const state = store.getState();
+      const contentRef = state.core.currentContentRef;
+
+      const content = selectors.content(state, { contentRef });
+
+      if (
+        // Don't bother saving nothing
+        content &&
+        // Only files and notebooks
+        (content.type === "file" || content.type === "notebook") &&
+        // Only save if they have a real filepath
+        content.filepath !== ""
+      ) {
+        return of(actions.save({ contentRef }));
+      } else {
+        return empty();
+      }
+    })
+  );
+}
+
 export function saveContentEpic(
   action$: ActionsObservable<Action>,
   store: Store<*, *>
@@ -127,15 +160,20 @@ export function saveContentEpic(
           return of(actions.saveFailed(errorPayload));
         }
 
-        let filepath = content.filepath;
+        if (content.type === "directory") {
+          // Don't save directories
+          return empty();
+        }
 
-        // TODO: this default version should probably not be here.
-        const appVersion = selectors.appVersion(state) || "0.0.0-beta";
+        let filepath = content.filepath;
 
         // This could be object for notebook, or string for files
         let serializedData: Notebook | string;
         let saveModel = {};
         if (content.type === "notebook") {
+          // TODO: this default version should probably not be here.
+          const appVersion = selectors.appVersion(state) || "0.0.0-beta";
+
           // contents API takes notebook as raw JSON whereas downloading takes
           // a string
           serializedData = toJS(
@@ -156,7 +194,7 @@ export function saveContentEpic(
             format: "text"
           };
         } else {
-          // This shouldn't happen, is here for safety
+          // We shouldn't save directories
           return empty();
         }
 
@@ -194,19 +232,50 @@ export function saveContentEpic(
           case actionTypes.SAVE: {
             const serverConfig = selectors.serverConfig(host);
 
-            // if (action.type === actionTypes.SAVE)
-            return contents.save(serverConfig, filepath, saveModel).pipe(
-              mapTo(
-                actions.saveFulfilled({ contentRef: action.payload.contentRef })
-              ),
-              catchError((error: Error) =>
-                of(
-                  actions.saveFailed({
-                    error,
-                    contentRef: action.payload.contentRef
-                  })
-                )
-              )
+            // Check to see if the file was modified since the last time we saved
+            // TODO: Determine how we handle what to do
+            // Don't bother doing this if the file is new(?)
+            return contents.get(serverConfig, filepath, { content: 0 }).pipe(
+              // Make sure that the modified time is within some delta
+              mergeMap(xhr => {
+                // TODO: What does it mean if we have a failed GET on the content
+                if (xhr.status !== 200) {
+                  throw new Error(xhr.response);
+                }
+                const model = xhr.response;
+
+                const diskDate = new Date(model.last_modified);
+                const inMemoryDate = content.lastSaved
+                  ? new Date(content.lastSaved)
+                  : // FIXME: I'm unsure if we don't have a date if we should default to the disk date
+                    diskDate;
+
+                if (Math.abs(diskDate - inMemoryDate) > 600) {
+                  return of(
+                    actions.saveFailed({
+                      error: new Error("open in another tab possibly..."),
+                      contentRef: action.payload.contentRef
+                    })
+                  );
+                }
+
+                return contents.save(serverConfig, filepath, saveModel).pipe(
+                  map(xhr => {
+                    return actions.saveFulfilled({
+                      contentRef: action.payload.contentRef,
+                      model: xhr.response
+                    });
+                  }),
+                  catchError((error: Error) =>
+                    of(
+                      actions.saveFailed({
+                        error,
+                        contentRef: action.payload.contentRef
+                      })
+                    )
+                  )
+                );
+              })
             );
           }
           default:

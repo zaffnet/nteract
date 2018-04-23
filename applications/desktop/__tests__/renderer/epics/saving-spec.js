@@ -25,7 +25,12 @@ describe("saveEpic", () => {
     // TODO: This should be testing that the mocks for fs were called with the
     // filename and notebook from the state tree
 
-    expect(responses).toEqual([actions.saveFulfilled({ contentRef })]);
+    expect(responses).toEqual([
+      actions.saveFulfilled({
+        contentRef,
+        model: { last_modified: expect.any(Date) }
+      })
+    ]);
   });
 });
 
