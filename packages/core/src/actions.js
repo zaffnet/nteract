@@ -1012,3 +1012,20 @@ export function restartKernelSuccessful(payload: {
     payload
   };
 }
+
+export function publishGist(payload: {
+  contentRef: ContentRef
+}): actionTypes.PublishGist {
+  return {
+    type: actionTypes.PUBLISH_GIST,
+    payload
+  };
+}
+
+export function coreError(payload: Error): actionTypes.CoreError {
+  return {
+    type: "CORE/ERROR",
+    payload,
+    error: true
+  };
+}
