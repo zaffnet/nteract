@@ -5,7 +5,7 @@
 import * as React from "react";
 
 type DropdownMenuProps = {
-  children: React.ChildrenArray<React.Element<any>>
+  children: React.ChildrenArray<React.Element<*>>
 };
 
 type DropdownMenuState = {
@@ -61,7 +61,7 @@ export class DropdownMenu extends React.Component<
 }
 
 export class DropdownTrigger extends React.Component<{
-  children: React.ChildrenArray<React.Element<any>>,
+  children: React.ChildrenArray<React.Element<*>>,
   onClick?: (ev: SyntheticEvent<*>) => void
 }> {
   render() {
@@ -81,7 +81,7 @@ export class DropdownTrigger extends React.Component<{
 }
 
 export class DropdownContent extends React.Component<{
-  children: React.ChildrenArray<React.Element<any>>,
+  children: React.ChildrenArray<React.Element<*>>,
   onItemClick: (ev: SyntheticEvent<*>) => void
 }> {
   static defaultProps = {

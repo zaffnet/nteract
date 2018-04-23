@@ -69,7 +69,7 @@ export default class App extends React.PureComponent<Object, Object> {
     ipc.send("react-ready");
   }
 
-  render(): ?React$Element<any> {
+  render() {
     // eslint-disable-line class-methods-use-this
     return (
       <Provider store={store}>
