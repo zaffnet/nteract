@@ -28,10 +28,12 @@ type LineType = "line" | "stackedarea" | "bumparea" | "stackedpercent";
 
 type State = {
   view: "line" | "bar" | "scatter" | "grid" | "network" | "summary",
+  metrics: Array<string>,
+  dimensions: Array<string>,
   selectedMetrics: Array<string>,
   selectedDimensions: Array<string>,
   networkType: "force" | "sankey",
-  networkType: "dendrogram" | "treemap" | "circlepack" | "partition",
+  hierarchyType: "dendrogram" | "treemap" | "partition",
   pieceType: "bar" | "point" | "swarm" | "clusterbar",
   colorValue: string,
   sizeValue: string,
@@ -41,16 +43,10 @@ type State = {
   sourceDimension: string,
   labelValue: string,
   summaryType: "violin" | "joy" | "histogram" | "heatmap" | "boxplot",
-  lineType: LineType
+  lineType: LineType,
+  chart: Object,
+  displayChart: Object
 };
-
-/*
-  [ ] HTML Legend
-  [ ] Hover Behavior (cross-highlight w/ legend)
-  [ ] sankey node padding
-  [ ] Timeline mode for line chart
-  [ ] Pie chart mode in Ordinal
-*/
 
 const generateChartKey = ({
   view,
@@ -61,12 +57,11 @@ const generateChartKey = ({
   summaryType,
   networkType,
   hierarchyType,
-  timeseries,
   chart
 }) =>
   `${view}-${lineType}-${selectedDimensions.join(",")}-${selectedMetrics.join(
     ","
-  )}-${pieceType}-${summaryType}-${networkType}-${hierarchyType}-${timeseries}-${JSON.stringify(
+  )}-${pieceType}-${summaryType}-${networkType}-${hierarchyType}-${JSON.stringify(
     chart
   )}`;
 
@@ -211,6 +206,14 @@ class DataResourceTransform extends React.Component<Props, State> {
       pieceType: "bar",
       summaryType: "violin",
       networkType: "force",
+      hierarchyType: "dendrogram",
+      colorValue: "none",
+      labelValue: "none",
+      sizeValue: "none",
+      sourceDimension: "none",
+      targetDimension: "none",
+      xValue: "none",
+      yValue: "none",
       dimensions,
       metrics,
       ui: {},
@@ -237,7 +240,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     return true;
   }
 
-  updateChart = updatedState => {
+  updateChart = (updatedState: Object) => {
     const {
       view,
       dimensions,
@@ -252,7 +255,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       hierarchyType
     } = { ...this.state, ...updatedState };
 
-    const { data, height } = this.props;
+    const { data, height = 500 } = this.props;
     const { primaryKey } = data.schema;
 
     const { Frame, chartGenerator } = semioticSettings[view];
@@ -266,23 +269,21 @@ class DataResourceTransform extends React.Component<Props, State> {
       summaryType,
       networkType,
       hierarchyType,
-      timeseries: null,
       chart
     });
 
     const frameSettings = chartGenerator(data.data, data.schema, {
       metrics,
       chart,
-      colors: colors,
-      height: height,
-      lineType: lineType,
-      selectedDimensions: selectedDimensions,
-      selectedMetrics: selectedMetrics,
-      pieceType: pieceType,
-      summaryType: summaryType,
-      networkType: networkType,
-      hierarchyType: hierarchyType,
-      timeseries: null,
+      colors,
+      height,
+      lineType,
+      selectedDimensions,
+      selectedMetrics,
+      pieceType,
+      summaryType,
+      networkType,
+      hierarchyType,
       primaryKey
     });
 
@@ -483,6 +484,8 @@ class DataResourceTransform extends React.Component<Props, State> {
         `}</style>
       </div>
     );
+    console.log("updatedState", updatedState);
+    console.log("this.state", this.state);
     this.setState({
       displayChart: {
         ...this.state.displayChart,
@@ -579,7 +582,6 @@ class DataResourceTransform extends React.Component<Props, State> {
         summaryType,
         networkType,
         hierarchyType,
-        timeseries: null,
         chart
       });
 

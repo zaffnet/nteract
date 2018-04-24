@@ -63,36 +63,27 @@ const hierarchicalColor = (colorHash, d) => {
 const semioticLineChart = (data, schema, options) => {
   let lineData;
 
-  const {
-    timeseries,
-    selectedMetrics,
-    lineType,
-    metrics,
-    primaryKey
-  } = options;
+  const { selectedMetrics, lineType, metrics, primaryKey } = options;
 
-  if (!timeseries) {
-    lineData = metrics
-      .map((d, i) => {
-        return {
-          color: colors[i % colors.length],
+  lineData = metrics
+    .map((d, i) => {
+      return {
+        color: colors[i % colors.length],
+        label: d.name,
+        type: d.type,
+        coordinates: data.map((p, q) => ({
+          value: p[d.name],
+          x: q,
           label: d.name,
-          type: d.type,
-          coordinates: data.map((p, q) => ({
-            value: p[d.name],
-            x: q,
-            label: d.name,
-            color: colors[i % colors.length],
-            originalData: p
-          }))
-        };
-      })
-      .filter(
-        d =>
-          selectedMetrics.length === 0 ||
-          selectedMetrics.find(p => p === d.label)
-      );
-  }
+          color: colors[i % colors.length],
+          originalData: p
+        }))
+      };
+    })
+    .filter(
+      d =>
+        selectedMetrics.length === 0 || selectedMetrics.find(p => p === d.label)
+    );
 
   return {
     lineType: lineType,
