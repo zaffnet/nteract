@@ -1,14 +1,13 @@
 {
-  "extends": [
-    "prettier",
-    "prettier/flowtype",
-    "plugin:jsx-a11y/recommended"
-  ],
+  "extends": ["prettier", "prettier/flowtype", "plugin:jsx-a11y/recommended"],
   "parser": "babel-eslint",
   "plugins": ["prettier", "flowtype", "jsx-a11y"],
   "env": {
     "browser": true,
     "node": true,
     "jest": true
+  },
+  "rules": {
+    "jsx-a11y/no-onchange": 0
   }
 }
