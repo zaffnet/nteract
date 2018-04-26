@@ -51,7 +51,7 @@ class NAppHandler(IPythonHandler):
                                            'TeX-AMS_HTML-full,Safe')
 
         asset_url = config.asset_url
-        
+
         if asset_url is "":
             asset_url = base_url
 
@@ -93,6 +93,7 @@ def add_handlers(web_app, config):
                       data['version'])
     config.name = config.name or data['name']
 
+
     handlers = [
         # TODO Redirect to /tree
         (url + r'/?', NAppHandler, {
@@ -114,7 +115,6 @@ def add_handlers(web_app, config):
         (url + r"/static/(.*)", FileFindHandler, {
             'path': assets_dir
         }),
-
     ]
 
     web_app.add_handlers(".*$", handlers)

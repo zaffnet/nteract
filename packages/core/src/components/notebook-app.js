@@ -32,7 +32,10 @@ import { connect } from "react-redux";
 
 import MathJax from "@nteract/mathjax";
 import { Display, RichestMime } from "@nteract/display-area";
-import { displayOrder, transforms } from "@nteract/transforms";
+import {
+  displayOrder as defaultDisplayOrder,
+  transforms as defaultTransforms
+} from "@nteract/transforms";
 
 type AnyCellProps = {
   id: string,
@@ -50,8 +53,8 @@ type AnyCellProps = {
   sourceHidden: boolean,
   outputHidden: boolean,
   outputExpanded: boolean,
-  displayOrder: typeof displayOrder,
-  transforms: typeof transforms,
+  displayOrder: typeof defaultDisplayOrder,
+  transforms: typeof defaultTransforms,
   models: Immutable.Map<string, *>,
   codeMirrorMode: *,
   selectCell: () => void,
@@ -364,8 +367,8 @@ const mapStateToProps = (
     return {
       theme: selectors.userPreferences(state).theme,
       cellOrder: Immutable.List(),
-      transforms: ownProps.transforms || transforms,
-      displayOrder: ownProps.displayOrder || displayOrder,
+      transforms: ownProps.transforms || defaultTransforms,
+      displayOrder: ownProps.displayOrder || defaultDisplayOrder,
       codeMirrorMode: Immutable.Map({ name: "text/plain" }),
       kernelRef: null,
       contentRef
@@ -399,8 +402,8 @@ const mapStateToProps = (
   return {
     theme: selectors.userPreferences(state).theme,
     cellOrder: selectors.notebook.cellOrder(model),
-    transforms: ownProps.transforms || transforms,
-    displayOrder: ownProps.displayOrder || displayOrder,
+    transforms: ownProps.transforms || defaultTransforms,
+    displayOrder: ownProps.displayOrder || defaultDisplayOrder,
     codeMirrorMode,
     contentRef,
     kernelRef
@@ -420,8 +423,8 @@ const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
 export class NotebookApp extends React.PureComponent<NotebookProps> {
   static defaultProps = {
     theme: "light",
-    displayOrder,
-    transforms
+    displayOrder: defaultTransforms,
+    transforms: defaultDisplayOrder
   };
 
   constructor(): void {

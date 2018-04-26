@@ -20,6 +20,7 @@ Distributed under the terms of the Modified BSD License.
     "wsUrl": "{{ ws_url }}",
     "publicUrl": "{{ public_url }}",
     "contentsPath": "{{ contents_path }}",
+    "assetUrl": "{{ asset_url }}",
     "page": "{{ page }}"
   }</script>
 
@@ -97,8 +98,7 @@ _remove_token_from_url();
 <div id="root">
 </div>
 
-<script src="{{ asset_url }}nteract/static/lib/vendor.js" type="text/javascript" charset="utf-8"></script>
-<script src="{{ asset_url }}nteract/static/lib/app.js" type="text/javascript" charset="utf-8"></script>
+<script src="{{ asset_url }}nteract/static/dist/app.js" type="text/javascript" charset="utf-8"></script>
 
 
 </body>
