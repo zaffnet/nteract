@@ -206,5 +206,8 @@
     "xhr2": "*",
     "xmlhttprequest": "^1.8.0",
     "yargs": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
   }
 }
