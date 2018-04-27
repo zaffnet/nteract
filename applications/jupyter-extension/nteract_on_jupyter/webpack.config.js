@@ -40,13 +40,6 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
     }),
-    new webpack.HashedModuleIdsPlugin(),
-
-    new webpack.IgnorePlugin(/\.(css|less)$/),
-
-    new webpack.SourceMapDevToolPlugin({
-      filename: "[name].js.map",
-      exclude: ["vendor.js"]
-    })
+    new webpack.IgnorePlugin(/\.(css|less)$/)
   ]
 };
