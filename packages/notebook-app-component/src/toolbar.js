@@ -7,10 +7,10 @@
 // TODO: All the `<li>` below that have role button should just be `<button>` with proper styling
 
 import * as React from "react";
-import type { ContentRef } from "../state/refs";
-
 import { connect } from "react-redux";
-import * as actions from "../actions";
+
+import { actions, state as stateModule } from "@nteract/core";
+type ContentRef = stateModule.ContentRef;
 
 import {
   DropdownMenu,

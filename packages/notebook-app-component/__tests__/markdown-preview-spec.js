@@ -3,7 +3,7 @@ import React from "react";
 
 import { shallow, mount } from "enzyme";
 
-import MarkdownPreview from "../../src/components/markdown-preview";
+import MarkdownPreview from "../src/markdown-preview";
 
 import { emptyMarkdownCell } from "@nteract/commutable";
 

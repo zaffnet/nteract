@@ -3,10 +3,11 @@
 import * as Immutable from "immutable";
 import * as React from "react";
 
-import * as actions from "../actions";
-import * as selectors from "../selectors";
-import type { AppState } from "../state";
-import type { ContentRef, KernelRef } from "../state/refs";
+import { actions, selectors, state as stateModule } from "@nteract/core";
+
+type AppState = stateModule.AppState;
+type ContentRef = stateModule.ContentRef;
+type KernelRef = stateModule.KernelRef;
 
 import {
   Input,

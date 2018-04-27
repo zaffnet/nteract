@@ -1,13 +1,13 @@
 // @flow
 import * as React from "react";
 import { connect } from "react-redux";
-import * as selectors from "../selectors";
-import type { ContentRef } from "../state/refs";
-import type { AppState } from "../state";
+
+import { actions, selectors, state as stateModule } from "@nteract/core";
+type ContentRef = stateModule.ContentRef;
+type AppState = stateModule.AppState;
+type KernelRef = stateModule.KernelRef;
 
 import { omit } from "lodash";
-
-import { focusCell, focusCellEditor, updateCellSource } from "../actions";
 
 import EditorView from "@nteract/editor";
 
@@ -45,14 +45,14 @@ const mapDispatchToProps = (dispatch: Dispatch<*>, ownProps: Props) => {
 
   return {
     onChange: (text: string) => {
-      dispatch(updateCellSource({ id, value: text, contentRef }));
+      dispatch(actions.updateCellSource({ id, value: text, contentRef }));
     },
 
     onFocusChange(focused: boolean): void {
       if (focused) {
-        dispatch(focusCellEditor({ id, contentRef }));
+        dispatch(actions.focusCellEditor({ id, contentRef }));
         if (!cellFocused) {
-          dispatch(focusCell({ id, contentRef }));
+          dispatch(actions.focusCell({ id, contentRef }));
         }
       }
     }
