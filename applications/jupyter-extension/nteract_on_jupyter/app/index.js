@@ -13,6 +13,8 @@ import { Styles, actions, state, themes } from "@nteract/core";
 
 import { default as Contents } from "./contents";
 
+const urljoin = require("url-join");
+
 require("./fonts");
 
 function createApp(store: *) {
@@ -77,7 +79,8 @@ export type JupyterConfigData = {
   page: "tree" | "view" | "edit",
   contentsPath: string,
   baseUrl: string,
-  appVersion: string
+  appVersion: string,
+  assetUrl: string
 };
 
 function main(rootEl: Element, dataEl: Node | null) {
@@ -104,6 +107,10 @@ function main(rootEl: Element, dataEl: Node | null) {
     ReactDOM.render(<ErrorPage error={err} />, rootEl);
     return;
   }
+
+  // Allow chunks from webpack to load from their built location
+  declare var __webpack_public_path__: string;
+  __webpack_public_path__ = urljoin(config.assetUrl, "nteract/static/dist/");
 
   const jupyterHostRecord = state.makeJupyterHostRecord({
     id: null,

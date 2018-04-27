@@ -8,8 +8,6 @@ import {
   selectors,
   actions,
   TitleBar,
-  NotebookApp,
-  NotebookMenu,
   NewNotebookNavigation
 } from "@nteract/core";
 
@@ -23,6 +21,7 @@ import { dirname } from "path";
 
 import { default as Directory } from "./directory";
 import { default as File } from "./file";
+import { default as Notebook } from "./notebook";
 
 type ContentRef = stateModule.ContentRef;
 
@@ -204,8 +203,7 @@ class Contents extends React.Component<ContentsProps, null> {
                 this.props.baseDir
               )}
             />
-            <NotebookMenu />
-            <NotebookApp contentRef={this.props.contentRef} />
+            <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
         );
       case "file":
