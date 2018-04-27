@@ -21,7 +21,7 @@
   "homepage": "https://github.com/nteract/nteract",
   "scripts": {
     "postinstall": "npm run lerna",
-    "lerna": "lerna bootstrap --hoist --loglevel verbose --nohoist='{electron-builder,electron-updater,lodash,ijavascript,zeromq,nteract-assets,mathjax-electron,jmp,canvas,canvas-prebuilt,util}'",
+    "lerna": "lerna bootstrap --hoist --loglevel verbose --nohoist='{electron-builder,electron-updater,lodash,ijavascript,zeromq,nteract-assets,mathjax-electron,jmp,vega,vega-embed,vega-lite,util}'",
     "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
     "app:showcase": "lerna run dev --scope @nteract/showcase --stream",
@@ -198,9 +198,7 @@
     "url-search-params": "^0.10.0",
     "uuid": "^3.1.0",
     "util": "^0.10.3",
-    "vega": "^2.6.5",
-    "vega-embed": "^2.2.0",
-    "vega-lite": "^1.3.1",
+    "webfontloader": "^1.6.28",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.9",
     "webpack-merge": "^4.1.2",
@@ -209,7 +207,7 @@
     "xmlhttprequest": "^1.8.0",
     "yargs": "^11.0.0"
   },
-  "dependencies": {
-    "webfontloader": "^1.6.28"
+  "engines": {
+    "node": ">=8.9.0"
   }
 }
