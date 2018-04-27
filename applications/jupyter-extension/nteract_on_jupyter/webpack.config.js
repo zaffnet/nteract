@@ -10,14 +10,13 @@ const path = require("path");
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
 
-const ASSET_PATH = process.env.ASSET_PATH || "/nteract/static/lib";
+const ASSET_PATH = process.env.ASSET_PATH || "/nteract/static/dist";
 
 module.exports = {
   mode: isProd ? "production" : "development",
   devtool: isProd ? "hidden-source-map" : "cheap-eval-source-map",
   entry: {
-    app: "./app/index.js",
-    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js"
+    app: "./app/index.js"
   },
   target: "web",
   output: {
