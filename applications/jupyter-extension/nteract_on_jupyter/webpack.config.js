@@ -37,6 +37,7 @@ module.exports = {
     alias: configurator.mergeDefaultAliases()
   },
   plugins: [
+    new LodashModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
     }),
