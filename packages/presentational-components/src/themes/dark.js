@@ -1,5 +1,5 @@
 // @flow
-module.exports = `
+export default `
 
   --theme-app-bg: #2b2b2b;
   --theme-app-fg: var(--nt-color-midnight-lightest);

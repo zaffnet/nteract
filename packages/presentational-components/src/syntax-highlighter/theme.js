@@ -1,5 +1,6 @@
 // @flow
-module.exports = {
+
+export default {
   hljs: {
     display: "block",
     overflowX: "auto",

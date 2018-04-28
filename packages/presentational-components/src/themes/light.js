@@ -6,7 +6,7 @@
  * Every thing below is more component specific. They should attempt to reuse
  * the general styles above as much as possible.
  */
-module.exports = `
+export default `
 
   --theme-app-bg: white;
   --theme-app-fg: var(--nt-color-midnight);

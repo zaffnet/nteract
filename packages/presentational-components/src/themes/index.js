@@ -1,8 +1,5 @@
 // @flow
-const dark = require("./dark");
-const light = require("./light");
+import dark from "./dark.js";
+import light from "./light.js";
 
-module.exports = {
-  dark,
-  light
-};
+export { dark, light };
