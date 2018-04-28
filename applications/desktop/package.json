@@ -125,6 +125,8 @@
     "@nteract/markdown": "^1.1.0",
     "@nteract/mathjax": "^1.0.0",
     "@nteract/messaging": "^4.0.0",
+    "@nteract/notebook-app-component": "^1.0.0",
+    "@nteract/presentational-components": "^0.0.1",
     "@nteract/transforms-full": "^5.1.1",
     "@nteract/types": "^2.0.0",
     "@nteract/webpack-configurator": "^1.0.2",

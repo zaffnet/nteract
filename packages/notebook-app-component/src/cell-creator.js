@@ -1,8 +1,9 @@
 // @flow
 import * as React from "react";
 import { connect } from "react-redux";
-import * as actions from "../actions";
-import type { ContentRef } from "../state/refs";
+
+import { actions, state as stateModule } from "@nteract/core";
+type ContentRef = stateModule.ContentRef;
 
 type Props = {
   above: boolean,

@@ -16,6 +16,8 @@
   "dependencies": {
     "@nteract/commutable": "^4.0.1",
     "@nteract/core": "^5.0.1",
+    "@nteract/notebook-app-component": "^1.0.0",
+    "@nteract/presentational-components": "^0.0.1",
     "@nteract/types": "^2.0.0",
     "@nteract/webpack-configurator": "^1.0.2",
     "isomorphic-fetch": "^2.2.1",

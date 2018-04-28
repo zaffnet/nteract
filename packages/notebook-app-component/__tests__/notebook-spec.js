@@ -7,9 +7,9 @@ import { shallow, mount } from "enzyme";
 import renderer from "react-test-renderer";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import { NotebookApp } from "../../src/components/notebook-app";
+import { NotebookApp } from "../src/notebook-app";
 
-import { dummyStore, dummyCommutable } from "../../src/dummy";
+import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
 const dummyCellStatuses = dummyCommutable
   .get("cellOrder")

@@ -7,7 +7,11 @@ import React from "react";
 
 import Markdown from "@nteract/markdown";
 
-import { Outputs, PromptBuffer, Input } from "./";
+import {
+  Outputs,
+  PromptBuffer,
+  Input
+} from "@nteract/presentational-components";
 
 type Props = {
   source: string,

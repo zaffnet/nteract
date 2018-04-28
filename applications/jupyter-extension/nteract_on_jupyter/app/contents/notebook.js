@@ -2,7 +2,9 @@
 
 import * as React from "react";
 
-import { NotebookApp, NotebookMenu, state as stateModule } from "@nteract/core";
+import NotebookApp from "@nteract/notebook-app-component";
+
+import { NotebookMenu, state as stateModule } from "@nteract/core";
 
 import {
   displayOrder as defaultDisplayOrder,

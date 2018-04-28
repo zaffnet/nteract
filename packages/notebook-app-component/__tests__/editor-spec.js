@@ -2,9 +2,9 @@ import React from "react";
 import { mount } from "enzyme";
 import { Provider } from "react-redux";
 
-import Editor from "../../src/components/editor";
-import { dummyStore } from "../../src/dummy";
-import { actionTypes } from "../../src";
+import Editor from "../src/editor";
+import { dummyStore } from "@nteract/core/dummy";
+import { actionTypes } from "@nteract/core";
 
 describe("EditorProvider", () => {
   const store = dummyStore();

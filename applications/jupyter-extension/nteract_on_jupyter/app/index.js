@@ -9,7 +9,8 @@ import NotificationSystem from "react-notification-system";
 
 import configureStore from "./store";
 
-import { Styles, actions, state, themes } from "@nteract/core";
+import { Styles, themes } from "@nteract/presentational-components";
+import { actions, state } from "@nteract/core";
 
 import { default as Contents } from "./contents";
 

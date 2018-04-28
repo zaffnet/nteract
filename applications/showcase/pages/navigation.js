@@ -1,12 +1,9 @@
 // @flow
 import * as React from "react";
 
-import {
-  Styles,
-  themes,
-  PureTitleBar,
-  PureNewNotebookNavigation
-} from "@nteract/core";
+import { Styles, themes } from "@nteract/presentational-components";
+
+import { PureTitleBar, PureNewNotebookNavigation } from "@nteract/core";
 
 import { List, Map, Record } from "immutable";
 

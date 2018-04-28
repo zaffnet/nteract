@@ -1,16 +1,61 @@
 // @flow
 import React from "react";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { Provider } from "react-redux";
 
-import CellCreator from "../../src/components/cell-creator";
-import { dummyStore } from "../../src/dummy";
-import {
-  CREATE_CELL_AFTER,
-  CREATE_CELL_BEFORE,
-  CREATE_CELL_APPEND,
-  MERGE_CELL_AFTER
-} from "../../src/actionTypes";
+import { actionTypes } from "@nteract/core";
+
+import { dummyStore } from "@nteract/core/dummy";
+
+import CellCreator, { PureCellCreator } from "../src/cell-creator";
+
+describe("CellCreatorView", () => {
+  const createCell = jest.fn();
+  const mergeCell = jest.fn();
+
+  const setup = id =>
+    shallow(
+      <PureCellCreator
+        createCell={createCell}
+        mergeCell={mergeCell}
+        above={false}
+        id={id}
+      />
+    );
+
+  test("can be constructed", () => {
+    const component = setup("test");
+    expect(component).not.toBeNull();
+  });
+  test("creates cell creator buttons if no cells exist", () => {
+    const component = setup(null);
+    const buttons = component.find(".cell-creator");
+    expect(buttons).toHaveLength(1);
+  });
+  test("has create text cell button", () => {
+    const component = setup(null);
+    expect(component.find(".add-text-cell").length).toBeGreaterThan(0);
+  });
+  test("has create code cell button", () => {
+    const component = setup(null);
+    expect(component.find(".add-code-cell").length).toBeGreaterThan(0);
+  });
+  test("clicking text cell button invokes createCell", () => {
+    const component = setup(null);
+    component.find(".add-text-cell").simulate("click");
+    expect(createCell).toHaveBeenCalledWith("markdown");
+  });
+  test("clicking code cell button invokes createCell", () => {
+    const component = setup(null);
+    component.find(".add-code-cell").simulate("click");
+    expect(createCell).toHaveBeenCalledWith("code");
+  });
+  test("clicking merge cell button invokes mergeCell", () => {
+    const component = setup(null);
+    component.find(".merge-cell").simulate("click");
+    expect(mergeCell).toHaveBeenCalled();
+  });
+});
 
 describe("CellCreatorProvider", () => {
   test("can be constructed", () => {
@@ -40,7 +85,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("markdown");
-        expect(action.type).toBe(CREATE_CELL_AFTER);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_AFTER);
         resolve();
       };
       store.dispatch = dispatch;
@@ -65,7 +110,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("code");
-        expect(action.type).toBe(CREATE_CELL_AFTER);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_AFTER);
         resolve();
       };
       store.dispatch = dispatch;
@@ -90,7 +135,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("code");
-        expect(action.type).toBe(CREATE_CELL_BEFORE);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_BEFORE);
         resolve();
       };
       store.dispatch = dispatch;
@@ -114,7 +159,7 @@ describe("CellCreatorProvider", () => {
     return new Promise(resolve => {
       const dispatch = action => {
         expect(action.payload.cellType).toBe("code");
-        expect(action.type).toBe(CREATE_CELL_APPEND);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_APPEND);
         resolve();
       };
       store.dispatch = dispatch;
@@ -138,7 +183,7 @@ describe("CellCreatorProvider", () => {
     return new Promise(resolve => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
-        expect(action.type).toBe(MERGE_CELL_AFTER);
+        expect(action.type).toBe(actionTypes.MERGE_CELL_AFTER);
         resolve();
       };
       store.dispatch = dispatch;
