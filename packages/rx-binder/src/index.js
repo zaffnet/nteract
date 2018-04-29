@@ -21,7 +21,7 @@ type BinderOptions = {
 }
 */
 
-function formBinderURL({
+export function formBinderURL({
   repo = "jupyter/notebook",
   ref = "master",
   binderURL = mybinderURL
@@ -43,7 +43,7 @@ const eventSourceFallback =
         );
       };
 
-function binder(
+export function binder(
   options /*: BinderOptions */,
   /** Allow overriding EventSource for testing and ponyfilling **/
   EventSourceDI /* :* */ = eventSourceFallback
@@ -91,8 +91,3 @@ function binder(
     };
   });
 }
-
-module.exports = {
-  formBinderURL,
-  binder
-};
