@@ -109,14 +109,16 @@ export class DropdownContent extends React.Component<{
             margin: 0px;
             padding: 0px;
 
+            width: 200px;
+
             opacity: 1;
             position: absolute;
             top: 0.2em;
             right: 0;
             border-style: none;
             padding: 0;
-            font-family: "Source Sans Pro";
-            font-size: 12px;
+            font-family: var(--nt-font-family-normal);
+            font-size: var(--nt-font-size-m);
             line-height: 1.5;
             margin: 20px 0;
             background-color: var(--theme-cell-menu-bg);
