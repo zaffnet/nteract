@@ -93,7 +93,8 @@ type core = {
   //   * User input
   //   * Kernel output
   entities: {
-    // Each host implementation has a set of kernels which may be activated.
+    // Each host implementation has a set of kernels which may be activated
+    // The way to run the kernel, the "spec", is called a kernelspec
     kernelspecs: {
       byRef: {
         [ref: Ref]: {
@@ -115,30 +116,24 @@ type core = {
     },
 
     hosts: {
-      // On desktop we'll have the one built-in local host that connects to
-      // zeromq directly. On jupyterhub backed apps, you'll be able to switch to
+      // On desktop we have the one built-in local host that connects to
+      // zeromq directly. On jupyterhub backed apps, you should be able to switch to
       // different hosts.
       byRef: {
         [ref: Ref]: {
           id: string,
           type: ("local" | "jupyter"),
-          kernelIds: Array<Id>, // the list of *active* kernels for a host.
           token: string,
           serverUrl: string,
-          crossDomain: boolean,
-
-          // TODO: I think we're attempting to split apart host and document.
-          //   1. what was the purpose of this?
-          //   2. can it be provided in some other way?
-          rootContentRef: Ref,
-          messages: Array<string> // binder only
+          crossDomain: boolean
         }
       }
       refs: Array<Ref>
     },
 
-    // A host may have one active kernel (but we allow multiple to allow smooth
-    // transitions between switching kernels).
+    // A notebook may have one active kernel (but we allow multiple to allow smooth
+    // transitions between switching kernels). This also allows us to have multiple kernels
+    // on the page if we ever expand scope to allow it.
     kernels: {
       byRef: {
         [ref: Ref]: {
