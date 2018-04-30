@@ -39,11 +39,8 @@ function createApp(store: *) {
               body {
                 font-family: "Source Sans Pro";
                 font-size: 16px;
-                line-height: 22px;
                 background-color: var(--theme-app-bg);
                 color: var(--theme-app-fg);
-                /* All the old theme setups declared this, putting it back for consistency */
-                line-height: 1.3 !important;
                 margin: 0;
               }
 
