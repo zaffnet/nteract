@@ -210,6 +210,19 @@ const mapStateToProps = (state: AppState) => {
         return { kernelspec: ks };
       });
     })
+    .sort((a, b) => {
+      const langCompare = a.kernelspec.language.localeCompare(
+        b.kernelspec.language
+      );
+      const displayCompare = a.kernelspec.displayName.localeCompare(
+        b.kernelspec.displayName
+      );
+
+      // Effectively, group by language then sort by display name within
+      let comparison = langCompare > 0 ? displayCompare : langCompare;
+
+      return comparison;
+    })
     .toList();
 
   return {
