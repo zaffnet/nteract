@@ -102,7 +102,7 @@ export const localCss = css`
     border: none;
     border-bottom: 1px solid var(--theme-app-border);
     box-shadow: none;
-    padding: 3px;
+    padding: 0 var(--nt-spacing-xs);
   }
   .rc-menu-horizontal > .rc-menu-item,
   .rc-menu-horizontal > .rc-menu-submenu > .rc-menu-submenu-title {
