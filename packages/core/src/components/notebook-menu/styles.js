@@ -59,7 +59,7 @@ export const localCss = css`
     display: block;
     padding: 7px 7px 7px 16px;
     white-space: nowrap;
-    font-size: 12px;
+    font-size: var(--nt-font-size-m);
     user-select: none;
   }
   .rc-menu-item.rc-menu-item-disabled,
