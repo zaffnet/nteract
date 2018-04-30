@@ -28,17 +28,17 @@ export const TitleBar = (props: TitleBarProps) => (
         display: flex;
         justify-content: flex-start;
         background-color: var(--theme-title-bar-bg, rgb(250, 250, 250));
-        padding: 10px 16px;
+        padding: var(--nt-spacing-m) var(--nt-spacing-xl);
       }
 
       a {
         display: inline-block;
-        margin: 0 30px;
+        margin: 0px var(--nt-spacing-xl) 0px 0px;
       }
 
       p {
         display: inline-block;
-        margin: 0 30px;
+        margin: 0px var(--nt-spacing-xl) 0px 0px;
       }
     `}</style>
   </React.Fragment>
