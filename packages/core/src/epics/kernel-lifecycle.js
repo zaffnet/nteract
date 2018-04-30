@@ -125,7 +125,11 @@ export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) => {
       const {
-        payload: { kernel: { channels }, kernelRef, contentRef }
+        payload: {
+          kernel: { channels },
+          kernelRef,
+          contentRef
+        }
       } = action;
       return acquireKernelInfo(channels, kernelRef, contentRef);
     })
@@ -161,7 +165,7 @@ export const launchKernelWhenNotebookSetEpic = (
 ) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
-    map((action: actionTypes.FetchContentFulfilled) => {
+    mergeMap((action: actionTypes.FetchContentFulfilled) => {
       const state: stateModule.AppState = store.getState();
 
       const contentRef = action.payload.contentRef;
@@ -182,13 +186,15 @@ export const launchKernelWhenNotebookSetEpic = (
 
       const { cwd, kernelSpecName } = extractNewKernel(filepath, notebook);
 
-      return actions.launchKernelByName({
-        kernelSpecName,
-        cwd,
-        kernelRef: action.payload.kernelRef,
-        selectNextKernel: true,
-        contentRef: action.payload.contentRef
-      });
+      return of(
+        actions.launchKernelByName({
+          kernelSpecName,
+          cwd,
+          kernelRef: action.payload.kernelRef,
+          selectNextKernel: true,
+          contentRef: action.payload.contentRef
+        })
+      );
     })
   );
 
