@@ -62,7 +62,8 @@ export const launchWebSocketKernelEpic = (action$: *, store: *) =>
           name: kernelSpecName
         },
         name: "",
-        path: content.filepath,
+        // TODO: Figure where the leading slash comes from in the content store
+        path: content.filepath.replace(/^\/+/g, ""),
         type: "notebook"
       };
 
@@ -110,7 +111,9 @@ export const changeWebSocketKernelEpic = (action$: *, store: *) =>
     // kernel, likely by sending a different action. Right now this gets
     // coordinated in a different way.
     switchMap((action: actionTypes.ChangeKernelByName) => {
-      const { payload: { contentRef, oldKernelRef, kernelSpecName } } = action;
+      const {
+        payload: { contentRef, oldKernelRef, kernelSpecName }
+      } = action;
       const state = store.getState();
       const host = selectors.currentHost(state);
       if (host.type !== "jupyter") {
@@ -140,7 +143,10 @@ export const changeWebSocketKernelEpic = (action$: *, store: *) =>
       if (!content || content.type !== "notebook") {
         return empty();
       }
-      const { filepath, model: { notebook } } = content;
+      const {
+        filepath,
+        model: { notebook }
+      } = content;
       const { cwd } = extractNewKernel(filepath, notebook);
 
       const kernelRef = createKernelRef();
