@@ -46,10 +46,9 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
     }),
-    new webpack.IgnorePlugin(/\.(css|less)$/),
+    //new webpack.IgnorePlugin(/\.(css|less)$/),
     new MonacoWebpackPlugin(),
 
-    //  new webpack.IgnorePlugin(/\.(css|less)$/),
     new webpack.IgnorePlugin(
       /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
       /vs\/language\/typescript\/lib/
