@@ -7,10 +7,10 @@
           "browsers": ["last 2 versions", "safari >= 7"]
         }
       }
-    ],
-    "next/babel"
+    ]
   ],
   "plugins": [
+    "styled-jsx/babel",
     "transform-class-properties",
     "transform-flow-strip-types",
     "transform-object-rest-spread"
