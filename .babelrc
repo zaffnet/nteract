@@ -1,10 +1,19 @@
 {
   "presets": ["env", "react"],
   "plugins": [
-    "styled-jsx/babel",
+    "transform-flow-strip-types",
     "syntax-dynamic-import",
     "transform-class-properties",
-    "transform-flow-strip-types",
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ],
+    "styled-jsx/babel"
   ]
 }
