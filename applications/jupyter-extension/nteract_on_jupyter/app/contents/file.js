@@ -36,6 +36,15 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
   handleChange(source: string) {
     this.props.handleChange(source);
   }
+  componentDidMount() {
+    let oldEnv = window.MonacoEnvironment;
+    window.MonacoEnvironment = {
+      getWorkerUrl: function(moduleId, label) {
+        return window.assetURL + oldEnv.getWorkerUrl(moduleId, label);
+      }
+    };
+    console.log("Set up new enviornment!");
+  }
   render() {
     return (
       <div className="nteract-editor">
