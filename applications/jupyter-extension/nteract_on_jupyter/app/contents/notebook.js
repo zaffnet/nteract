@@ -2,8 +2,6 @@
 
 import * as React from "react";
 
-import NotebookApp from "@nteract/notebook-app-component";
-
 import { NotebookMenu, state as stateModule } from "@nteract/core";
 
 import {
@@ -11,9 +9,17 @@ import {
   transforms as defaultTransforms
 } from "@nteract/transforms";
 
+class NotebookPlaceholder extends React.Component<Props, null> {
+  render() {
+    // TODO: Show an approximated notebook
+    return null;
+  }
+}
+
 type State = {
   transforms: typeof defaultTransforms,
-  displayOrder: typeof defaultDisplayOrder
+  displayOrder: typeof defaultDisplayOrder,
+  App: React.ComponentType<any>
 };
 
 type Props = {
@@ -25,11 +31,17 @@ export default class Notebook extends React.Component<Props, State> {
     super(props);
     this.state = {
       displayOrder: defaultDisplayOrder,
-      transforms: defaultTransforms
+      transforms: defaultTransforms,
+      // TODO: create a true placeholder element
+      App: NotebookPlaceholder
     };
   }
 
   loadTransforms() {
+    import("@nteract/notebook-app-component").then(module => {
+      this.setState({ App: module.default });
+    });
+
     /**
      * Goal: load transforms dynamically to allow expensive transforms to come after the app.
      *
@@ -57,10 +69,12 @@ export default class Notebook extends React.Component<Props, State> {
   }
 
   render() {
+    const App = this.state.App;
+
     return (
       <React.Fragment>
         <NotebookMenu />
-        <NotebookApp
+        <App
           contentRef={this.props.contentRef}
           displayOrder={this.state.displayOrder}
           transforms={this.state.transforms}
