@@ -202,6 +202,7 @@ class Contents extends React.Component<ContentsProps, null> {
                 "/nteract/edit/",
                 this.props.baseDir
               )}
+              logoTitle="Home"
             />
             <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
@@ -215,6 +216,7 @@ class Contents extends React.Component<ContentsProps, null> {
                 "/nteract/edit/",
                 this.props.baseDir
               )}
+              logoTitle="Home"
             />
             <Container>
               <File contentRef={this.props.contentRef} />
@@ -230,6 +232,7 @@ class Contents extends React.Component<ContentsProps, null> {
                 "/nteract/edit/",
                 this.props.baseDir
               )}
+              logoTitle="Home"
             />
           </React.Fragment>
         );
@@ -238,6 +241,7 @@ class Contents extends React.Component<ContentsProps, null> {
           <React.Fragment>
             <TitleBar
               logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
+              logoTitle="Home"
             />
             <NewNotebookNavigation onClick={this.openNotebook} />
             <Directory contentRef={this.props.contentRef} />

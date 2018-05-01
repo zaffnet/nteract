@@ -12,13 +12,14 @@ type TitleBarProps = {
   title: string,
   theme: "light" | "dark",
   onTitleChange?: (title: string) => void,
-  logoHref?: string
+  logoHref?: string,
+  logoTitle?: string
 };
 
 export const TitleBar = (props: TitleBarProps) => (
   <React.Fragment>
     <header>
-      <a href={props.logoHref}>
+      <a href={props.logoHref} title={props.logoTitle}>
         <Logo height={20} theme={props.theme} />
       </a>
       <p>{props.title}</p>
