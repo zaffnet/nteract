@@ -6,7 +6,6 @@ import * as Immutable from "immutable";
 import { selectors, actions, state as stateModule } from "@nteract/core";
 
 import { JSONTransform, TextTransform } from "@nteract/transforms";
-import MonacoEditor from "@nteract/monaco-editor";
 
 // Workaround flow limitation for getting these types
 type ContentRef = stateModule.ContentRef;
@@ -25,7 +24,21 @@ type TextFileProps = {
   handleChange: string => void
 };
 
-export class TextFile extends React.PureComponent<TextFileProps, null> {
+type TextFileState = {
+  Editor: React.ComponentType<any>
+};
+
+class EditorPlaceholder extends React.Component<any, null> {
+  render() {
+    // TODO: Show an approximated notebook
+    return null;
+  }
+}
+
+export class TextFile extends React.PureComponent<
+  TextFileProps,
+  TextFileState
+> {
   static handles(mimetype: string) {
     return (
       mimetype.startsWith("text/") ||
@@ -33,6 +46,14 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
       mimetype.startsWith("application/json")
     );
   }
+
+  constructor(props: TextFileProps) {
+    super(props);
+    this.state = {
+      Editor: EditorPlaceholder
+    };
+  }
+
   handleChange(source: string) {
     this.props.handleChange(source);
   }
@@ -43,12 +64,16 @@ export class TextFile extends React.PureComponent<TextFileProps, null> {
         return window.assetURL + oldEnv.getWorkerUrl(moduleId, label);
       }
     };
-    console.log("Set up new enviornment!");
+    import("@nteract/monaco-editor").then(module => {
+      this.setState({ Editor: module.default });
+    });
   }
   render() {
+    const Editor = this.state.Editor;
+
     return (
       <div className="nteract-editor">
-        <MonacoEditor
+        <Editor
           theme="light"
           mode={this.props.content.mimetype}
           editorFocused={true}
@@ -99,10 +124,7 @@ export class File extends React.PureComponent<FileProps, *> {
     const mimetype = this.props.content.mimetype;
     const text = this.props.content.model.text;
 
-    if (JSONTransform.handles(mimetype)) {
-      const data = JSON.parse(text);
-      return <JSONTransform data={data} />;
-    } else if (TextFile.handles(mimetype)) {
+    if (TextFile.handles(mimetype)) {
       return (
         <ConnectedTextFile
           content={this.props.content}
