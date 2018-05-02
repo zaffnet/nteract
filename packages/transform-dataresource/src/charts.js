@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import { nest } from "d3-collection";
 import { scaleLinear } from "d3-scale";
 import {
