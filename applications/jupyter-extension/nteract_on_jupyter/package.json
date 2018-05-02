@@ -6,7 +6,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "build:watch": "webpack --watch",
-    "dev": "echo 'run a notebook server with this' && npm run build:watch",
+    "dev": "concurrently \"webpack-dev-server --hot\" \"jupyter notebook --NteractConfig.asset_url='http://localhost:8080/' --NotebookApp.default_url='/nteract/edit/'\"",
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {
@@ -36,6 +36,7 @@
     "jquery": "^3.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-hot-loader": "^4.1.2",
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",

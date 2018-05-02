@@ -18,6 +18,12 @@ module.exports = {
   entry: {
     app: "./app/index.js"
   },
+  devServer: isProd
+    ? {}
+    : {
+        hot: true,
+        headers: { "Access-Control-Allow-Origin": "*" }
+      },
   target: "web",
   output: {
     // Note: this gets overriden by our use of __webpack_public_path__ later
