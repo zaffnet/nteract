@@ -64,9 +64,11 @@ export class TextFile extends React.PureComponent<
         return window.assetURL + oldEnv.getWorkerUrl(moduleId, label);
       }
     };
-    import("@nteract/monaco-editor").then(module => {
-      this.setState({ Editor: module.default });
-    });
+    import(/* webpackChunkName: "monaco-editor" */ "@nteract/monaco-editor").then(
+      module => {
+        this.setState({ Editor: module.default });
+      }
+    );
   }
   render() {
     const Editor = this.state.Editor;
