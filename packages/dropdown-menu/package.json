@@ -25,6 +25,7 @@
     "access": "public"
   },
   "peerDependencies": {
+    "react-hot-loader": "^4.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "styled-jsx": "^2.2.6"
