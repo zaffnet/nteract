@@ -19,6 +19,8 @@
     "@nteract/core": "^5.0.1",
     "@nteract/editor": "^7.0.4",
     "@nteract/notebook-app-component": "^1.0.0",
+    "@nteract/monaco-editor": "^7.0.4",
+    "monaco-editor-webpack-plugin": "^1.1.0",
     "@nteract/notebook-preview": "^7.1.1",
     "@nteract/octicons": "^0.2.0",
     "@nteract/presentational-components": "^0.0.1",

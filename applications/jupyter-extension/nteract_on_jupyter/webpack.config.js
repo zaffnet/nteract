@@ -4,12 +4,13 @@ const configurator = require("@nteract/webpack-configurator");
 
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const webpack = require("webpack");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const path = require("path");
 
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
 
-const ASSET_PATH = process.env.ASSET_PATH || "/nteract/static/lib";
+const ASSET_PATH = process.env.ASSET_PATH || "/nteract/static/dist";
 
 module.exports = {
   mode: isProd ? "production" : "development",
@@ -28,6 +29,10 @@ module.exports = {
         test: /\.js$/,
         exclude: configurator.exclude,
         loader: "babel-loader"
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   },
@@ -41,6 +46,12 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
     }),
-    new webpack.IgnorePlugin(/\.(css|less)$/)
+    //new webpack.IgnorePlugin(/\.(css|less)$/),
+    new MonacoWebpackPlugin(),
+
+    new webpack.IgnorePlugin(
+      /^((fs)|(path)|(os)|(crypto)|(source-map-support))$/,
+      /vs\/language\/typescript\/lib/
+    )
   ]
 };
