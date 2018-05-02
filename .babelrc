@@ -1,18 +1,19 @@
 {
-  "presets": [
+  "presets": ["env", "react"],
+  "plugins": [
+    "transform-flow-strip-types",
+    "syntax-dynamic-import",
+    "transform-class-properties",
+    "transform-object-rest-spread",
     [
-      "env",
+      "transform-runtime",
       {
-        "targets": {
-          "browsers": ["last 2 versions", "safari >= 7"]
-        }
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
       }
     ],
-    "next/babel"
-  ],
-  "plugins": [
-    "transform-class-properties",
-    "transform-flow-strip-types",
-    "transform-object-rest-spread"
+    "styled-jsx/babel"
   ]
 }

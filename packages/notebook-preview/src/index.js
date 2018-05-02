@@ -1,5 +1,5 @@
 /* @flow */
-import React from "react";
+import * as React from "react";
 import * as Immutable from "immutable";
 
 import { Display } from "@nteract/display-area";
