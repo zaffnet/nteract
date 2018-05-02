@@ -9,6 +9,19 @@ pip install nteract_on_jupyter
 jupyter serverextension enable nteract_on_jupyter
 ```
 
+## Configuration
+
+When you launch the jupyter notebook server, there is a new `NteractConfig` that allows setting:
+
+* `ga_code` - Google Analytics code to track usage
+* `asset_url` - Where to load nteract js from
+
+Example:
+
+```
+jupyter notebook --NteractConfig.asset_url="http://localhost:8080/" --NteractConfig.ga_code="GA-SOME-NUMBERS"
+```
+
 ## Development
 
 All code snippets assume you're starting from the root of the nteract/nteract monorepo.

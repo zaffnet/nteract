@@ -176,7 +176,7 @@ export const notebook = {
 };
 
 export const Example = () => (
-  <Cells selected="bde">
+  <Cells>
     {cellOrder.map(cellID => {
       const cell: CellData = cells[cellID];
 

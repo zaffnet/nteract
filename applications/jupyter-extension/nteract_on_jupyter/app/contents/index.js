@@ -1,5 +1,10 @@
 // @flow
 
+// NOTE: We can safely install and use react-hot-loader as a regular dependency
+// instead of a dev dependency as it automatically ensures it is not executed
+// in production and the footprint is minimal.
+import { hot } from "react-hot-loader";
+
 import * as React from "react";
 import * as Immutable from "immutable";
 
@@ -255,4 +260,4 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 }
 
-export default connect(mapStateToProps)(Contents);
+export default hot(module)(connect(mapStateToProps)(Contents));

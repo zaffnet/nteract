@@ -2,6 +2,10 @@
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
 /* eslint jsx-a11y/click-events-have-key-events: 0 */
 
+// react-hot-loader uses proxies to the original elements so we need to use
+// their comparison function in case a consumer of these components is
+// using hot module reloading
+import { areComponentsEqual } from "react-hot-loader";
 import * as React from "react";
 
 type DropdownMenuProps = {
@@ -27,13 +31,13 @@ export class DropdownMenu extends React.Component<
     return (
       <div className="dropdown">
         {React.Children.map(this.props.children, child => {
-          if (child.type === DropdownTrigger) {
+          if (areComponentsEqual(child.type, DropdownTrigger)) {
             return React.cloneElement(child, {
               onClick: ev => {
                 this.setState({ menuHidden: !this.state.menuHidden });
               }
             });
-          } else if (child.type === DropdownContent) {
+          } else if (areComponentsEqual(child.type, DropdownContent)) {
             if (this.state.menuHidden) {
               return null;
             } else {
