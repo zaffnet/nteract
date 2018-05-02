@@ -9,6 +9,44 @@ import {
   transforms as defaultTransforms
 } from "@nteract/transforms";
 
+const displayOrder = [
+  "application/vnd.vega.v3+json",
+  "application/vnd.vega.v2+json",
+  "application/vnd.vegalite.v2+json",
+  "application/vnd.vegalite.v1+json",
+  "application/geo+json",
+  "application/vnd.plotly.v1+json",
+  "text/vnd.plotly.v1+html",
+  "application/x-nteract-model-debug+json",
+  "application/vnd.dataresource+json",
+  "application/vdom.v1+json",
+  "application/json",
+  "application/javascript",
+  "text/html",
+  "text/markdown",
+  "text/latex",
+  "image/svg+xml",
+  "image/gif",
+  "image/png",
+  "image/jpeg",
+  "text/plain"
+];
+
+const NullTransform = () => null;
+// As the transforms are loaded, these get overridden with the better variants
+const transforms = {
+  ...defaultTransforms,
+  "application/vnd.vega.v3+json": NullTransform,
+  "application/vnd.vega.v2+json": NullTransform,
+  "application/vnd.vegalite.v2+json": NullTransform,
+  "application/vnd.vegalite.v1+json": NullTransform,
+  "application/geo+json": NullTransform,
+  "application/vnd.plotly.v1+json": NullTransform,
+  "text/vnd.plotly.v1+html": NullTransform,
+  "application/x-nteract-model-debug+json": NullTransform,
+  "application/vnd.dataresource+json": NullTransform
+};
+
 class NotebookPlaceholder extends React.Component<Props, null> {
   render() {
     // TODO: Show an approximated notebook
@@ -30,41 +68,57 @@ export default class Notebook extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      displayOrder: defaultDisplayOrder,
-      transforms: defaultTransforms,
+      displayOrder,
+      transforms,
       // TODO: create a true placeholder element
       App: NotebookPlaceholder
     };
   }
 
-  loadTransforms() {
+  registerTransform(transform: { MIMETYPE: string }) {
+    this.setState({
+      transforms: { ...this.state.transforms, [transform.MIMETYPE]: transform }
+    });
+  }
+
+  loadApp() {
     import("@nteract/notebook-app-component").then(module => {
       this.setState({ App: module.default });
     });
+  }
 
-    /**
-     * Goal: load transforms dynamically to allow expensive transforms to come after the app.
-     *
-     * I now wish that all our transforms exposed a top level `register`
-     * function that I can pass in the `displayOrder` and `transforms`.
-     *
-     * That or they need to supply a list of their own transforms with mimetypes and all that
-     * Goes to show what it looks like when I punt on extensibility
-     */
-    /**
-    const modules = await Promise.all([
-      import("@nteract/transform-plotly"),
-      import("@nteract/transform-model-debug"),
-      import("@nteract/transform-dataresource"),
-      import("@nteract/transform-vega"),
-      import("@nteract/transform-geojson")
-    ]);
+  loadTransforms() {
+    import("@nteract/transform-plotly").then(module => {
+      this.registerTransform(module.default);
+      this.registerTransform(module.PlotlyNullTransform);
+    });
 
-    console.log(modules);
-    **/
+    import("@nteract/transform-model-debug").then(module => {
+      this.registerTransform(module.default);
+    });
+
+    import("@nteract/transform-dataresource").then(module => {
+      this.registerTransform(module.default);
+    });
+
+    import("@nteract/transform-vega").then(module => {
+      this.setState({
+        transforms: {
+          ...this.state.transforms,
+          [module.VegaLite1.MIMETYPE]: module.VegaLite1,
+          [module.VegaLite1.MIMETYPE]: module.VegaLite2,
+          [module.VegaLite1.MIMETYPE]: module.Vega2,
+          [module.VegaLite1.MIMETYPE]: module.Vega3
+        }
+      });
+    });
+
+    // TODO: The geojson transform will likely need some work because of the basemap URL(s)
+    // import GeoJSONTransform from "@nteract/transform-geojson";
   }
 
   componentDidMount() {
+    this.loadApp();
     this.loadTransforms();
   }
 

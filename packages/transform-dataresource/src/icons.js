@@ -1,3 +1,4 @@
+import * as React from "react";
 import { SVGWrapper } from "@nteract/octicons";
 import {
   XYFrame,
