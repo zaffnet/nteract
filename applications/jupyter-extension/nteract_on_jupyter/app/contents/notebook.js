@@ -82,36 +82,44 @@ export default class Notebook extends React.Component<Props, State> {
   }
 
   loadApp() {
-    import("@nteract/notebook-app-component").then(module => {
-      this.setState({ App: module.default });
-    });
+    import(/* webpackChunkName: "notebook-app-component" */ "@nteract/notebook-app-component").then(
+      module => {
+        this.setState({ App: module.default });
+      }
+    );
   }
 
   loadTransforms() {
-    import("@nteract/transform-plotly").then(module => {
-      this.registerTransform(module.default);
-      this.registerTransform(module.PlotlyNullTransform);
-    });
+    import(/* webpackChunkName: "plotly" */ "@nteract/transform-plotly").then(
+      module => {
+        this.registerTransform(module.default);
+        this.registerTransform(module.PlotlyNullTransform);
+      }
+    );
+
+    import(/* webpackChunkName: "tabular-dataresource" */ "@nteract/transform-dataresource").then(
+      module => {
+        this.registerTransform(module.default);
+      }
+    );
 
     import("@nteract/transform-model-debug").then(module => {
       this.registerTransform(module.default);
     });
 
-    import("@nteract/transform-dataresource").then(module => {
-      this.registerTransform(module.default);
-    });
-
-    import("@nteract/transform-vega").then(module => {
-      this.setState({
-        transforms: {
-          ...this.state.transforms,
-          [module.VegaLite1.MIMETYPE]: module.VegaLite1,
-          [module.VegaLite1.MIMETYPE]: module.VegaLite2,
-          [module.VegaLite1.MIMETYPE]: module.Vega2,
-          [module.VegaLite1.MIMETYPE]: module.Vega3
-        }
-      });
-    });
+    import(/* webpackChunkName: "vega-transform" */ "@nteract/transform-vega").then(
+      module => {
+        this.setState({
+          transforms: {
+            ...this.state.transforms,
+            [module.VegaLite1.MIMETYPE]: module.VegaLite1,
+            [module.VegaLite1.MIMETYPE]: module.VegaLite2,
+            [module.VegaLite1.MIMETYPE]: module.Vega2,
+            [module.VegaLite1.MIMETYPE]: module.Vega3
+          }
+        });
+      }
+    );
 
     // TODO: The geojson transform will likely need some work because of the basemap URL(s)
     // import GeoJSONTransform from "@nteract/transform-geojson";

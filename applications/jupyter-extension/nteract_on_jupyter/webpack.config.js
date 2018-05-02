@@ -21,7 +21,8 @@ module.exports = {
   target: "web",
   output: {
     // Note: this gets overriden by our use of __webpack_public_path__ later
-    publicPath: ASSET_PATH
+    publicPath: ASSET_PATH,
+    chunkFilename: "[name]-[chunkhash].bundle.js"
   },
   module: {
     rules: [
