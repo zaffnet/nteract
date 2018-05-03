@@ -18,7 +18,9 @@ export const fetchKernelspecsEpic = (
   action$.pipe(
     ofType(actionTypes.FETCH_KERNELSPECS),
     mergeMap((action: FetchKernelspecs) => {
-      const { payload: { hostRef, kernelspecsRef } } = action;
+      const {
+        payload: { hostRef, kernelspecsRef }
+      } = action;
       const state = store.getState();
 
       const host = selectors.currentHost(state);

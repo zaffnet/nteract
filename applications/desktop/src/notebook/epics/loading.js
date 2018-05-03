@@ -206,7 +206,12 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
     map((action: actionTypes.NewNotebook) => {
-      const { payload: { kernelSpec: { name, spec }, kernelRef } } = action;
+      const {
+        payload: {
+          kernelSpec: { name, spec },
+          kernelRef
+        }
+      } = action;
 
       // TODO: work on a raw javascript object since we convert it over again
       let notebook = monocellNotebook;

@@ -5,8 +5,8 @@ import { shallow } from "enzyme";
 
 import toJSON from "enzyme-to-json";
 
-import { TitleBar } from "../../src/components/title-bar";
-import { Logo } from "../../src/components/title-bar/logos";
+import { TitleBar } from "../src/title-bar";
+import { Logo } from "../src/title-bar/logos";
 
 describe("title-bar", () => {
   test("should be able to render", () => {

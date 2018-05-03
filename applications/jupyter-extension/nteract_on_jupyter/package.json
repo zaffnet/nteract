@@ -16,6 +16,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@nteract/commutable": "^4.0.1",
+    "@nteract/connected-components": "^1.0.0",
     "@nteract/core": "^5.0.1",
     "@nteract/editor": "^7.0.4",
     "@nteract/notebook-app-component": "^1.0.0",

@@ -3,7 +3,10 @@ import * as React from "react";
 
 import { Styles, themes } from "@nteract/presentational-components";
 
-import { PureTitleBar, PureNewNotebookNavigation } from "@nteract/core";
+import {
+  PureTitleBar,
+  PureNewNotebookNavigation
+} from "@nteract/connected-components";
 
 import { List, Map, Record } from "immutable";
 

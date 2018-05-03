@@ -1,7 +1,7 @@
 {
-  "name": "@nteract/notebook-app-component",
+  "name": "@nteract/connected-components",
   "version": "1.0.0",
-  "description": "Editable notebook app component, backed by @nteract/core's store",
+  "description": "Connected components exported from @nteract/core",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
   "scripts": {
@@ -21,7 +21,6 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "@nteract/core": "^5.0.1",
-    "@nteract/connected-components": "^1.0.0",
     "@nteract/commutable": "^4.0.1",
     "@nteract/display-area": "^4.1.1",
     "@nteract/markdown": "^1.1.0",

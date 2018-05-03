@@ -7,18 +7,6 @@ import * as epics from "./epics";
 import * as selectors from "./selectors";
 import * as state from "./state";
 
-export * from "./components";
+export * from "./state";
 
-// keeping with backwards compatiblity for now
-const constants = actionTypes;
-
-export {
-  actions,
-  actionTypes,
-  constants,
-  middlewares,
-  reducers,
-  selectors,
-  epics,
-  state
-};
+export { actions, actionTypes, middlewares, reducers, selectors, epics, state };

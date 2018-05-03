@@ -10,8 +10,8 @@
 import React from "react";
 import { modalCss } from "./styles";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
-import * as selectors from "../../selectors";
+
+import { actions, selectors } from "@nteract/core";
 
 type Props = {
   appVersion?: string,
