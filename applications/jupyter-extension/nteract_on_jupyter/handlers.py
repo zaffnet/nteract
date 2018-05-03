@@ -38,7 +38,6 @@ class NAppHandler(IPythonHandler):
         base_url = self.settings['base_url']
         url = ujoin(base_url, config.page_url, '/static/')
 
-
         # Handle page config data.
         page_config = dict()
         page_config.update(self.settings.get('page_config_data', {}))
@@ -80,7 +79,6 @@ def add_handlers(web_app, config):
     base_url = web_app.settings['base_url']
     url = ujoin(base_url, config.page_url)
     assets_dir = config.assets_dir
-
 
     package_file = os.path.join(assets_dir, 'package.json')
     with open(package_file) as fid:

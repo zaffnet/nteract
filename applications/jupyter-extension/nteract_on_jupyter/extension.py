@@ -52,5 +52,4 @@ def load_jupyter_server_extension(nbapp):
 
     web_app.settings['nteract_config'] = config
 
-
     add_handlers(web_app, config)
