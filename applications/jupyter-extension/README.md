@@ -9,7 +9,7 @@ pip install nteract_on_jupyter
 jupyter serverextension enable nteract_on_jupyter
 ```
 
-## Configuration
+### Configuration
 
 When you launch the jupyter notebook server, there is a new `NteractConfig` that allows setting:
 
@@ -57,18 +57,4 @@ jupyter notebook
 npm run app:jupyter-extension
 ```
 
-### 5. Visit a notebook page (Browser)
-
-The default port is 8888, but that may be different for you.
-
-http://localhost:8888/nteract/edit/nteract_on_jupyter/example.ipynb
-
-### 6. Refresh browser page when you make changes
-
-There isn't currently a trigger to refresh the browser when making changes, so
-you have to manually do this when you update files in nteract_on_jupyter.
-
-## ROADMAP(ish)
-
-* In development mode, have a clean webpack build locally
-* In production, be able to toggle an endpoint to get the bundle from
+This both runs a live reload webpack server and a jupyter notebook server. Once the jupyter server is up, it will load a page that isn't really ready until the initial webpack bundle is built. You'll need to reload the page after.
