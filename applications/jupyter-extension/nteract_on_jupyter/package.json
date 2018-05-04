@@ -5,8 +5,10 @@
   "main": "app/index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack",
+    "build:asap": "webpack",
     "build:watch": "webpack --watch",
-    "dev": "concurrently \"webpack-dev-server --hot\" \"jupyter notebook --NteractConfig.asset_url='http://localhost:8080/' --NotebookApp.default_url='/nteract/edit/'\"",
+    "dev": "concurrently \"npm run hot\" \"jupyter nteract --dev\"",
+    "hot": "webpack-dev-server --hot",
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {
