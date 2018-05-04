@@ -14,7 +14,8 @@ import { TitleBar, NewNotebookNavigation } from "@nteract/connected-components";
 import type {
   KernelspecRecord,
   KernelspecProps,
-  AppState
+  AppState,
+  JupyterHostRecord
 } from "@nteract/core";
 
 // TODO: Make a proper epic
@@ -38,9 +39,9 @@ type ContentsProps = {
   contentRef: ContentRef,
   filepath: string,
   appPath: string,
-  serverConfig: *,
   appVersion: string,
-  baseDir: string
+  baseDir: string,
+  host: JupyterHostRecord
 };
 
 const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
@@ -49,7 +50,6 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
   if (host.type !== "jupyter") {
     throw new Error("this component only works with jupyter apps");
   }
-  const serverConfig = selectors.serverConfig(host);
 
   if (!contentRef) {
     throw new Error("cant display without a contentRef");
@@ -72,7 +72,7 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
     contentRef,
     filepath: content.filepath,
     appPath: host.basePath,
-    serverConfig,
+    host,
     appVersion,
     baseDir
   };
@@ -98,7 +98,7 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 
   openNotebook(ks: KernelspecRecord | KernelspecProps) {
-    const serverConfig = this.props.serverConfig;
+    const serverConfig = selectors.serverConfig(this.props.host);
 
     // The notebook they get to start with
     const notebook = {
@@ -129,7 +129,7 @@ class Contents extends React.Component<ContentsProps, null> {
     //       happening here instead of an epic
     contents
       // Create UntitledXYZ.ipynb by letting the server do it
-      .create(this.props.serverConfig, this.props.baseDir, {
+      .create(serverConfig, this.props.baseDir, {
         type: "notebook"
         // NOTE: The contents API appears to ignore the content field for new
         // notebook creation.
@@ -160,9 +160,9 @@ class Contents extends React.Component<ContentsProps, null> {
 
           return forkJoin(
             // Get their kernel started up
-            sessions.create(this.props.serverConfig, sessionPayload),
+            sessions.create(serverConfig, sessionPayload),
             // Save the initial notebook document
-            contents.save(this.props.serverConfig, filepath, {
+            contents.save(serverConfig, filepath, {
               type: "notebook",
               content: notebook
             })
