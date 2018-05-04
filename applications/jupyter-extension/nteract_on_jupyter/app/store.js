@@ -8,7 +8,7 @@ import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-import { reducers, state, epics as coreEpics } from "@nteract/core";
+import { reducers, epics as coreEpics } from "@nteract/core";
 
 const rootReducer = combineReducers({
   app: reducers.app,
