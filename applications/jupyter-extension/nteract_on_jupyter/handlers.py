@@ -6,7 +6,6 @@ HTTPError = web.HTTPError
 
 import notebook
 
-
 from notebook.base.handlers import (
     IPythonHandler,
     FileFindHandler,
@@ -20,8 +19,9 @@ from jinja2 import FileSystemLoader
 from notebook.utils import url_path_join as ujoin
 from traitlets import HasTraits, Unicode, Bool
 
-HERE = os.path.dirname(__file__)
-FILE_LOADER = FileSystemLoader(HERE)
+from . import PACKAGE_DIR
+
+FILE_LOADER = FileSystemLoader(PACKAGE_DIR)
 
 class NAppHandler(IPythonHandler):
     """Render the nteract view"""
@@ -37,9 +37,6 @@ class NAppHandler(IPythonHandler):
 
         base_url = self.settings['base_url']
         url = ujoin(base_url, config.page_url, '/static/')
-
-
-
 
         # Handle page config data.
         page_config = dict()
@@ -76,14 +73,12 @@ class NAppHandler(IPythonHandler):
         return FILE_LOADER.load(self.settings['jinja2_env'], name)
 
 
-
 def add_handlers(web_app, config):
     """Add the appropriate handlers to the web app.
     """
     base_url = web_app.settings['base_url']
     url = ujoin(base_url, config.page_url)
     assets_dir = config.assets_dir
-
 
     package_file = os.path.join(assets_dir, 'package.json')
     with open(package_file) as fid:
