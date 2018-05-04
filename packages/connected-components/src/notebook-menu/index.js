@@ -1,11 +1,17 @@
 // @flow
 import * as Immutable from "immutable";
 import * as React from "react";
-import * as actions from "../../actions";
-import * as selectors from "../../selectors";
 import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
-import type { ContentRef, KernelRef, KernelspecsRef } from "../../state/refs";
-import type { KernelspecsByRefRecord } from "../../state/entities";
+
+import { actions, selectors } from "@nteract/core";
+
+import type {
+  ContentRef,
+  KernelRef,
+  KernelspecsRef,
+  KernelspecsByRefRecord
+} from "@nteract/core";
+
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import { MODAL_TYPES } from "../modal-controller";
 import { connect } from "react-redux";

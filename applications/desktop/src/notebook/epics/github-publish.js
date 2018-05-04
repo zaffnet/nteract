@@ -1,12 +1,7 @@
 // @flow
 import { shell } from "electron";
 
-import {
-  selectors,
-  actions,
-  actionTypes,
-  state as stateModule
-} from "@nteract/core";
+import { selectors, actions, actionTypes } from "@nteract/core";
 
 const path = require("path");
 

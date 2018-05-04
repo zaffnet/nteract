@@ -5,8 +5,7 @@
 import * as React from "react";
 import { DragSource, DropTarget } from "react-dnd";
 
-import { state as stateModule } from "@nteract/core";
-type ContentRef = stateModule.ContentRef;
+import type { ContentRef } from "@nteract/core";
 
 /**
   The cell drag preview image is just a little stylized version of

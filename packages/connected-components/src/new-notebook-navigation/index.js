@@ -18,12 +18,11 @@ import * as React from "react";
 
 import { connect } from "react-redux";
 
-import type { AppState } from "../../state";
-
 import type {
+  AppState,
   KernelspecRecord,
   KernelspecProps
-} from "../../state/entities/kernelspecs";
+} from "@nteract/core";
 
 import { default as Logo } from "./logos";
 

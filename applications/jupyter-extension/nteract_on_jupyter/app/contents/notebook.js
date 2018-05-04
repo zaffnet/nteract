@@ -2,7 +2,9 @@
 
 import * as React from "react";
 
-import { NotebookMenu, state as stateModule } from "@nteract/core";
+import { NotebookMenu } from "@nteract/connected-components";
+
+import type { ContentRef } from "@nteract/core";
 
 import {
   displayOrder as defaultDisplayOrder,
@@ -61,7 +63,7 @@ type State = {
 };
 
 type Props = {
-  contentRef: stateModule.ContentRef
+  contentRef: ContentRef
 };
 
 export default class Notebook extends React.Component<Props, State> {

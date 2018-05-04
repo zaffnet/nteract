@@ -3,7 +3,7 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import { shallow, mount } from "enzyme";
-import { PureNewNotebookNavigation } from "../../src/components/new-notebook-navigation";
+import { PureNewNotebookNavigation } from "../src/new-notebook-navigation";
 
 import * as Immutable from "immutable";
 

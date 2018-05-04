@@ -14,7 +14,20 @@ import NotificationSystem from "react-notification-system";
 import configureStore from "./store";
 
 import { Styles } from "@nteract/presentational-components";
-import { actions, state as stateModule } from "@nteract/core";
+
+import {
+  actions,
+  createContentRef,
+  makeAppRecord,
+  makeStateRecord,
+  makeContentsRecord,
+  makeNotebookContentRecord,
+  makeCommsRecord,
+  makeLocalHostRecord,
+  makeEntitiesRecord
+} from "@nteract/core";
+
+import type { ContentRef, ContentRecord } from "@nteract/core";
 
 import NotebookApp from "@nteract/notebook-app-component";
 
@@ -26,26 +39,26 @@ import { initGlobalHandlers } from "./global-events";
 
 import * as Immutable from "immutable";
 
-const contentRef = stateModule.createContentRef();
+const contentRef = createContentRef();
 
 const initialRefs: Immutable.Map<
-  stateModule.ContentRef,
-  stateModule.ContentRecord
-> = Immutable.Map().set(contentRef, stateModule.makeNotebookContentRecord());
+  ContentRef,
+  ContentRecord
+> = Immutable.Map().set(contentRef, makeNotebookContentRecord());
 
 const store = configureStore({
-  app: stateModule.makeAppRecord({
-    host: stateModule.makeLocalHostRecord(),
+  app: makeAppRecord({
+    host: makeLocalHostRecord(),
     version: remote.app.getVersion()
   }),
-  comms: stateModule.makeCommsRecord(),
+  comms: makeCommsRecord(),
   config: Immutable.Map({
     theme: "light"
   }),
-  core: stateModule.makeStateRecord({
+  core: makeStateRecord({
     currentContentRef: contentRef,
-    entities: stateModule.makeEntitiesRecord({
-      contents: stateModule.makeContentsRecord({
+    entities: makeEntitiesRecord({
+      contents: makeContentsRecord({
         byRef: initialRefs
       })
     })

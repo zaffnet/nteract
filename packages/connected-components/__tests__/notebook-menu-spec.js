@@ -2,11 +2,9 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import { shallow, mount } from "enzyme";
-import { PureNotebookMenu } from "../../src/components/notebook-menu";
-import {
-  MENU_ITEM_ACTIONS,
-  MENUS
-} from "../../src/components/notebook-menu/constants";
+import { PureNotebookMenu } from "../src/notebook-menu";
+
+import { MENU_ITEM_ACTIONS, MENUS } from "../src/notebook-menu/constants";
 
 describe("PureNotebookMenu ", () => {
   describe("snapshots", () => {

@@ -3,7 +3,7 @@ import * as React from "react";
 import { MODAL_TYPES } from "./constants";
 import AboutModal from "./about-modal";
 import { connect } from "react-redux";
-import * as selectors from "../../selectors";
+import { selectors } from "@nteract/core";
 
 class ModalController extends React.Component<*, *> {
   getModal = () => {

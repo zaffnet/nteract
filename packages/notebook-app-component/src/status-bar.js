@@ -5,10 +5,8 @@ import { connect } from "react-redux";
 
 import distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 
-import { actions, selectors, state as stateModule } from "@nteract/core";
-type ContentRef = stateModule.ContentRef;
-type AppState = stateModule.AppState;
-type KernelRef = stateModule.KernelRef;
+import { actions, selectors } from "@nteract/core";
+import type { ContentRef, AppState, KernelRef } from "@nteract/core";
 
 type Props = {
   lastSaved: ?Date,

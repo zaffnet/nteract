@@ -19,7 +19,7 @@ import FileSaver from "file-saver";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
-import * as stateModule from "../state";
+import type { AppState } from "../state";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -97,7 +97,7 @@ export function downloadString(
 
 export function autoSaveCurrentContentEpic(
   action$: ActionsObservable<Action>,
-  store: Store<stateModule.AppState, *>
+  store: Store<AppState, *>
 ) {
   // Save every seven seconds, regardless of contentType
   return interval(3000).pipe(

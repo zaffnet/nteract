@@ -8,12 +8,13 @@ import { hot } from "react-hot-loader";
 import * as React from "react";
 import * as Immutable from "immutable";
 
-import {
-  state as stateModule,
-  selectors,
-  actions,
-  TitleBar,
-  NewNotebookNavigation
+import { selectors, actions } from "@nteract/core";
+import { TitleBar, NewNotebookNavigation } from "@nteract/connected-components";
+
+import type {
+  KernelspecRecord,
+  KernelspecProps,
+  AppState
 } from "@nteract/core";
 
 // TODO: Make a proper epic
@@ -28,7 +29,7 @@ import { default as Directory } from "./directory";
 import { default as File } from "./file";
 import { default as Notebook } from "./notebook";
 
-type ContentRef = stateModule.ContentRef;
+type ContentRef = ContentRef;
 
 import { connect } from "react-redux";
 
@@ -42,10 +43,7 @@ type ContentsProps = {
   baseDir: string
 };
 
-const mapStateToProps = (
-  state: stateModule.AppState,
-  ownProps: *
-): ContentsProps => {
+const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
   const contentRef = selectors.currentContentRef(state);
   const host = state.app.host;
   if (host.type !== "jupyter") {
@@ -99,7 +97,7 @@ class Contents extends React.Component<ContentsProps, null> {
     (this: any).openNotebook = this.openNotebook.bind(this);
   }
 
-  openNotebook(ks: stateModule.KernelspecRecord | stateModule.KernelspecProps) {
+  openNotebook(ks: KernelspecRecord | KernelspecProps) {
     const serverConfig = this.props.serverConfig;
 
     // The notebook they get to start with

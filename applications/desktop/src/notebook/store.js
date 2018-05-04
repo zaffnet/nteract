@@ -3,7 +3,8 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 
 import middlewares from "./middlewares";
 
-import { reducers, state as stateModule } from "@nteract/core";
+import { reducers } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 const rootReducer = combineReducers({
   app: reducers.app,
@@ -12,7 +13,7 @@ const rootReducer = combineReducers({
   core: reducers.core
 });
 
-export default function configureStore(initialState: stateModule.AppState) {
+export default function configureStore(initialState: AppState) {
   return createStore(
     rootReducer,
     initialState,

@@ -1,6 +1,6 @@
 import { ActionsObservable } from "redux-observable";
 
-import { actions, actionTypes, state as stateModule } from "@nteract/core";
+import { actions, actionTypes, makeStateRecord } from "@nteract/core";
 
 import {
   acquireKernelInfo,
@@ -72,7 +72,7 @@ describe("launchKernelEpic", () => {
     );
 
     const state = {
-      core: stateModule.makeStateRecord(),
+      core: makeStateRecord(),
       app: {
         kernel: null
       }

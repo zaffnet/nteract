@@ -28,12 +28,9 @@ import {
 } from "@nteract/commutable";
 import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
 
-import {
-  actionTypes,
-  actions,
-  state as stateModule,
-  selectors
-} from "@nteract/core";
+import { actionTypes, actions, selectors } from "@nteract/core";
+
+import type { AppState } from "@nteract/core";
 
 /**
  * Determines the right kernel to launch based on a notebook
@@ -167,7 +164,7 @@ export const launchKernelWhenNotebookSetEpic = (
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
     map((action: actionTypes.FetchContentFulfilled) => {
-      const state: stateModule.AppState = store.getState();
+      const state: AppState = store.getState();
 
       const contentRef = action.payload.contentRef;
 
@@ -206,7 +203,12 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
     map((action: actionTypes.NewNotebook) => {
-      const { payload: { kernelSpec: { name, spec }, kernelRef } } = action;
+      const {
+        payload: {
+          kernelSpec: { name, spec },
+          kernelRef
+        }
+      } = action;
 
       // TODO: work on a raw javascript object since we convert it over again
       let notebook = monocellNotebook;

@@ -56,7 +56,7 @@
     "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
     "publish": "lerna run publish",
-    "prettify": "prettier --write '**/*.{js,json}' '!**/{lib,.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
+    "prettify": "prettier --write '**/*.{js,json}' '!**/{dist,lib,.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
     "pack": "lerna run pack --scope nteract --stream",
     "dist": "lerna run dist --scope nteract --stream",
     "dist:all": "lerna run dist:all --scope nteract --stream"
