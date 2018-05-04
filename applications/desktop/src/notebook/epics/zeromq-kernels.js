@@ -40,11 +40,14 @@ import { ipcRenderer as ipc } from "electron";
 import { createMainChannel } from "enchannel-zmq-backend";
 import * as jmp from "jmp";
 
-import {
-  selectors,
-  actions,
-  actionTypes,
-  state as stateModule
+import { selectors, actions, actionTypes } from "@nteract/core";
+
+import type {
+  KernelspecInfo,
+  KernelRef,
+  ContentRef,
+  LocalKernelProps,
+  LocalKernelRecord
 } from "@nteract/core";
 
 import {
@@ -61,10 +64,10 @@ import {
  * @param  {String}  cwd The working directory to launch the kernel in
  */
 export function launchKernelObservable(
-  kernelSpec: stateModule.KernelspecInfo,
+  kernelSpec: KernelspecInfo,
   cwd: string,
-  kernelRef: stateModule.KernelRef,
-  contentRef: stateModule.ContentRef
+  kernelRef: KernelRef,
+  contentRef: ContentRef
 ) {
   const spec = kernelSpec.spec;
 
@@ -122,7 +125,7 @@ export function launchKernelObservable(
             })
           );
 
-          const kernel: stateModule.LocalKernelProps = {
+          const kernel: LocalKernelProps = {
             kernelRef,
             info: null,
             type: "zeromq",
@@ -329,9 +332,7 @@ function killSpawn(spawn: *): void {
   spawn.kill("SIGKILL");
 }
 
-export function killKernelImmediately(
-  kernel: stateModule.LocalKernelRecord
-): void {
+export function killKernelImmediately(kernel: LocalKernelRecord): void {
   kernel.channels.complete();
 
   if (kernel.spawn) {

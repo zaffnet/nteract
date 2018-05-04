@@ -2,8 +2,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { actions, state as stateModule } from "@nteract/core";
-type ContentRef = stateModule.ContentRef;
+import { actions } from "@nteract/core";
+import type { ContentRef } from "@nteract/core";
 
 type Props = {
   above: boolean,

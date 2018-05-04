@@ -2,7 +2,7 @@
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { createEpicMiddleware, combineEpics } from "redux-observable";
 
-import { state as stateModule } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 import { List as ImmutableList, Map as ImmutableMap } from "immutable";
 
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   core: reducers.core
 });
 
-export default function configureStore(initialState: stateModule.AppState) {
+export default function configureStore(initialState: AppState) {
   const rootEpic = combineEpics(...coreEpics.allEpics);
   const middlewares = [createEpicMiddleware(rootEpic)];
 

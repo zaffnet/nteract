@@ -2,10 +2,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { actions, selectors, state as stateModule } from "@nteract/core";
-type ContentRef = stateModule.ContentRef;
-type AppState = stateModule.AppState;
-type KernelRef = stateModule.KernelRef;
+import { actions, selectors } from "@nteract/core";
+import type { ContentRef, AppState, KernelRef } from "@nteract/core";
 
 import { omit } from "lodash";
 
@@ -20,7 +18,7 @@ type Props = {
 
 function mapStateToProps(state: AppState, ownProps: Props) {
   const kernel = selectors.currentKernel(state);
-  const { cursorBlinkRate } = selectors.userPreferences(state);
+  const cursorBlinkRate = state.config.get("cursorBlinkRate", 530);
   return {
     // Don't propagate props only used for setting up dispatch and computed props
     ...omit(ownProps, [

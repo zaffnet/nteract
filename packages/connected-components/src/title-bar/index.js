@@ -5,9 +5,8 @@ import { connect } from "react-redux";
 
 import { Logo } from "./logos";
 
-import { selectors, state as stateModule } from "@nteract/core";
-
-type AppState = stateModule.AppState;
+import { selectors } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 type TitleBarProps = {
   title: string,

@@ -7,12 +7,14 @@ const urljoin = require("url-join");
 import TimeAgo from "@nteract/timeago";
 import { Book, FileText, FileDirectory } from "@nteract/octicons";
 
-import { selectors, actions, state as stateModule } from "@nteract/core";
+import { selectors, actions } from "@nteract/core";
 
-// Workaround flow limitation for getting these types
-type ContentRef = stateModule.ContentRef;
-type ContentRecord = stateModule.ContentRecord;
-type DirectoryContentRecord = stateModule.DirectoryContentRecord;
+import type {
+  AppState,
+  ContentRef,
+  ContentRecord,
+  DirectoryContentRecord
+} from "@nteract/core";
 
 import { connect } from "react-redux";
 
@@ -99,7 +101,7 @@ class DirectoryEntry extends React.PureComponent<DirectoryEntryProps, *> {
 }
 
 const mapStateToEntryProps = (
-  state: stateModule.AppState,
+  state: AppState,
   ownProps: { contentRef: ContentRef }
 ): DirectoryEntryProps => {
   const host = selectors.currentHost(state);
@@ -183,7 +185,7 @@ export class Directory extends React.PureComponent<DirectoryProps, *> {
 }
 
 const mapStateToDirectoryProps = (
-  state: stateModule.AppState,
+  state: AppState,
   ownProps: { contentRef: ContentRef }
 ): DirectoryProps => {
   const host = selectors.currentHost(state);

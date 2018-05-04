@@ -33,7 +33,7 @@ import * as uuid from "uuid";
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
-import * as stateModule from "../state";
+import type { AppState, KernelInfo } from "../state";
 
 /**
  * Sets the execution state after a kernel has been launched.
@@ -78,7 +78,7 @@ export function acquireKernelInfo(
       const c = msg.content;
       const l = c.language_info;
 
-      const info: stateModule.KernelInfo = {
+      const info: KernelInfo = {
         protocolVersion: c.protocol_version,
         implementation: c.implementation,
         implementationVersion: c.implementation_version,
@@ -166,7 +166,7 @@ export const launchKernelWhenNotebookSetEpic = (
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
     mergeMap((action: actionTypes.FetchContentFulfilled) => {
-      const state: stateModule.AppState = store.getState();
+      const state: AppState = store.getState();
 
       const contentRef = action.payload.contentRef;
 

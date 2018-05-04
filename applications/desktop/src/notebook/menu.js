@@ -8,7 +8,8 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { actions, selectors, state as stateModule } from "@nteract/core";
+import { actions, selectors, createKernelRef } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 export function cwdKernelFallback() {
   // HACK: If we see they're at /, we assume that was the OS launching the Application
@@ -128,7 +129,7 @@ export function promptUserAboutNewKernel(
             : cwdKernelFallback();
 
           // Create a brand new kernel
-          const kernelRef = stateModule.createKernelRef();
+          const kernelRef = createKernelRef();
           const contentRef = selectors.currentContentRef(state);
           if (!contentRef) {
             console.error("content ref not set in store for menu");
@@ -194,7 +195,7 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
   }
 
   // Create a brand new kernel
-  const kernelRef = stateModule.createKernelRef();
+  const kernelRef = createKernelRef();
 
   store.dispatch(
     actions.launchKernel({
@@ -469,7 +470,7 @@ export function dispatchCreateTextCellAfter(store: *) {
 
 export function dispatchLoad(store: *, event: Event, filepath: string) {
   const state = store.getState();
-  const kernelRef = stateModule.createKernelRef();
+  const kernelRef = createKernelRef();
   const contentRef = selectors.currentContentRef(state);
 
   if (!contentRef) {
@@ -488,7 +489,7 @@ export function dispatchNewNotebook(
   kernelSpec: Object
 ) {
   const state = store.getState();
-  const kernelRef = stateModule.createKernelRef();
+  const kernelRef = createKernelRef();
   const contentRef = selectors.currentContentRef(state);
 
   if (!contentRef) {

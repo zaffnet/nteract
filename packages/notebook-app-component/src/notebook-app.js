@@ -3,11 +3,8 @@
 import * as Immutable from "immutable";
 import * as React from "react";
 
-import { actions, selectors, state as stateModule } from "@nteract/core";
-
-type AppState = stateModule.AppState;
-type ContentRef = stateModule.ContentRef;
-type KernelRef = stateModule.KernelRef;
+import { actions, selectors } from "@nteract/core";
+import type { AppState, ContentRef, KernelRef } from "@nteract/core";
 
 import {
   Input,
@@ -102,7 +99,7 @@ const mapStateToCellProps = (state, { id, contentRef }) => {
     cellType,
     tags,
     source: cell.get("source", ""),
-    theme: selectors.userPreferences(state).theme,
+    theme: selectors.userTheme(state),
     executionCount: cell.get("execution_count"),
     outputs,
     models: selectors.models(state),
@@ -366,7 +363,7 @@ const mapStateToProps = (
   }
   if (model.type === "dummy" || model.type === "unknown") {
     return {
-      theme: selectors.userPreferences(state).theme,
+      theme: selectors.userTheme(state),
       cellOrder: Immutable.List(),
       transforms: ownProps.transforms || defaultTransforms,
       displayOrder: ownProps.displayOrder || defaultDisplayOrder,
@@ -401,7 +398,7 @@ const mapStateToProps = (
     : selectors.notebook.codeMirrorMode(model);
 
   return {
-    theme: selectors.userPreferences(state).theme,
+    theme: selectors.userTheme(state),
     cellOrder: selectors.notebook.cellOrder(model),
     transforms: ownProps.transforms || defaultTransforms,
     displayOrder: ownProps.displayOrder || defaultDisplayOrder,

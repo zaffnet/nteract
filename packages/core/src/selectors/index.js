@@ -2,27 +2,27 @@
 
 import * as Immutable from "immutable";
 import * as notebook from "./notebook";
-import * as stateModule from "../state";
 import { createSelector } from "reselect";
 import { makeEmptyModel } from "../state/entities/contents";
 
-export { notebook };
+import type {
+  AppState,
+  JupyterHostRecord,
+  ContentRef,
+  ContentModel,
+  KernelRef,
+  KernelspecsByRefRecord,
+  ContentRecord
+} from "../state";
 
-// FIXME FIXME FIXME SUPER WRONG FIXME FIXME FIXME
-type AppState = {
-  // The new way
-  core: stateModule.CoreRecord,
-  // The old way
-  app: stateModule.AppRecord,
-  comms: *,
-  config: Object
-};
+// Export sub-selectors (those that operate on contents models for instance)
+export { notebook };
 
 function identity<T>(thing: T): T {
   return thing;
 }
 
-export const serverConfig = (host: stateModule.JupyterHostRecord) => {
+export const serverConfig = (host: JupyterHostRecord) => {
   return {
     endpoint: host.origin + host.basePath,
     crossDomain: host.crossDomain,
@@ -30,10 +30,8 @@ export const serverConfig = (host: stateModule.JupyterHostRecord) => {
   };
 };
 
-export const userPreferences = createSelector(
-  (state: AppState) => state.config,
-  config => config.toJS()
-);
+export const userTheme = (state: AppState): string =>
+  state.config.get("theme", "light");
 
 export const appVersion = createSelector(
   (state: AppState) => state.app.version,
@@ -54,12 +52,12 @@ export const contentByRef = (state: AppState) =>
 
 export const content = (
   state: AppState,
-  { contentRef }: { contentRef: stateModule.ContentRef }
+  { contentRef }: { contentRef: ContentRef }
 ) => contentByRef(state).get(contentRef);
 
 export const model = (
   state: AppState,
-  { contentRef }: { contentRef: stateModule.ContentRef }
+  { contentRef }: { contentRef: ContentRef }
 ) => {
   const content = contentByRef(state).get(contentRef);
   if (!content) {
@@ -73,7 +71,7 @@ export const currentContentRef = (state: AppState) =>
 
 export const currentContent: (
   state: AppState
-) => ?stateModule.ContentRecord = createSelector(
+) => ?ContentRecord = createSelector(
   currentContentRef,
   contentByRef,
   (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
@@ -87,7 +85,7 @@ export const kernelspecsByRef = (state: AppState) =>
 
 export const currentKernelspecs: (
   state: AppState
-) => ?stateModule.KernelspecsByRefRecord = createSelector(
+) => ?KernelspecsByRefRecord = createSelector(
   currentKernelspecsRef,
   kernelspecsByRef,
   (ref, byRef) => (ref ? byRef.get(ref) : null)
@@ -98,7 +96,7 @@ export const kernelsByRef = (state: AppState) =>
 
 export const kernel = (
   state: AppState,
-  { kernelRef }: { kernelRef: stateModule.KernelRef }
+  { kernelRef }: { kernelRef: KernelRef }
 ) => kernelsByRef(state).get(kernelRef);
 
 export const currentKernelRef = (state: AppState) => state.core.kernelRef;
@@ -154,9 +152,7 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel: (
-  state: AppState
-) => stateModule.ContentModel = createSelector(
+export const currentModel: (state: AppState) => ContentModel = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     return currentContent ? currentContent.model : makeEmptyModel();

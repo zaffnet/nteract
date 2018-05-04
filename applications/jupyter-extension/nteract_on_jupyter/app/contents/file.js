@@ -3,13 +3,10 @@
 import * as React from "react";
 import * as Immutable from "immutable";
 
-import { selectors, actions, state as stateModule } from "@nteract/core";
+import { selectors, actions } from "@nteract/core";
+import type { ContentRef, FileContentRecord } from "@nteract/core";
 
 import { JSONTransform, TextTransform } from "@nteract/transforms";
-
-// Workaround flow limitation for getting these types
-type ContentRef = stateModule.ContentRef;
-type FileContentRecord = stateModule.FileContentRecord;
 
 import { connect } from "react-redux";
 
