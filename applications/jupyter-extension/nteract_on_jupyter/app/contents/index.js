@@ -258,4 +258,4 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 }
 
-export default hot(module)(connect(mapStateToProps)(Contents));
+export default connect(mapStateToProps)(hot(module)(Contents));
