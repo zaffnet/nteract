@@ -99,8 +99,8 @@ export function autoSaveCurrentContentEpic(
   action$: ActionsObservable<Action>,
   store: Store<AppState, *>
 ) {
-  // Save every seven seconds, regardless of contentType
-  return interval(3000).pipe(
+  // Save every 30 seconds, regardless of contentType
+  return interval(30 * 1000).pipe(
     // TODO: Once we're switched to the coming redux observable 1.0.0 release,
     // we should use the state$ stream to only save when the content has changed
     mergeMap(() => {
