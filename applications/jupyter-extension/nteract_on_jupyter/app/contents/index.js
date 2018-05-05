@@ -18,6 +18,8 @@ import type {
   JupyterHostRecord
 } from "@nteract/core";
 
+import css from "styled-jsx/css";
+
 // TODO: Make a proper epic
 import { contents, sessions } from "rx-jupyter";
 const urljoin = require("url-join");
@@ -30,7 +32,9 @@ import { default as Directory } from "./directory";
 import { default as File } from "./file";
 import { default as Notebook } from "./notebook";
 
-import { Nav, NavSection } from "./file-info";
+import { WideLogo } from "@nteract/logos";
+
+import { Nav, NavSection } from "../components/nav";
 
 type ContentRef = ContentRef;
 
@@ -203,18 +207,47 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 
   render() {
-    switch (this.props.contentType) {
-      case "notebook":
-        return (
-          <React.Fragment>
-            <TitleBar
-              logoHref={urljoin(
+    const topNav = (
+      <React.Fragment>
+        <Nav>
+          <NavSection>
+            <a
+              href={urljoin(
                 this.props.appPath,
                 "/nteract/edit/",
                 this.props.baseDir
               )}
-              logoTitle="Home"
+              title="Home"
+            >
+              <WideLogo height={20} theme={"light"} />
+            </a>
+            <span>file.py</span>
+          </NavSection>
+          <NavSection>
+            <img
+              height="24"
+              width="24"
+              style={{ borderRadius: "50%", objectFit: "scale-down" }}
+              src="https://pbs.twimg.com/profile_images/992516246825414656/GNnp7Htu_400x400.jpg"
             />
+          </NavSection>
+        </Nav>
+        <style jsx>{`
+          :global(.nteract-nav) {
+            background-color: DeepPink;
+          }
+          a {
+            /* margin: 0px var(--nt-spacing-xl) 0px 0px; */
+          }
+        `}</style>
+      </React.Fragment>
+    );
+
+    switch (this.props.contentType) {
+      case "notebook":
+        return (
+          <React.Fragment>
+            {topNav}
             <TitleMenu />
             <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
@@ -222,23 +255,11 @@ class Contents extends React.Component<ContentsProps, null> {
       case "file":
         return (
           <React.Fragment>
+            {topNav}
             <TitleBar
-              logoHref={urljoin(
-                this.props.appPath,
-                "/nteract/edit/",
-                this.props.baseDir
-              )}
+              logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
               logoTitle="Home"
             />
-            <Nav>
-              <NavSection>
-                <button>Save</button>
-              </NavSection>
-              <NavSection>
-                <span>Last Saved: Just Now</span>
-                <span>Runtime: Python</span>
-              </NavSection>
-            </Nav>
             <Container>
               <File contentRef={this.props.contentRef} />
             </Container>
@@ -260,6 +281,7 @@ class Contents extends React.Component<ContentsProps, null> {
       case "directory":
         return (
           <React.Fragment>
+            {topNav}
             <TitleBar
               logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
               logoTitle="Home"
