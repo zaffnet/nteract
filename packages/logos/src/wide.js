@@ -19,7 +19,7 @@ const defaultWidth = 940;
 const defaultHeight = 274;
 const ratio = defaultWidth / defaultHeight;
 
-export const Logo = ({
+export const WideLogo = ({
   theme,
   height: requestedHeight,
   width: requestedWidth
@@ -85,8 +85,8 @@ export const Logo = ({
   );
 };
 
-Logo.defaultProps = {
+WideLogo.defaultProps = {
   theme: "light"
 };
 
-export default Logo;
+export default WideLogo;

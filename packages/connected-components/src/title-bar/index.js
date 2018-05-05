@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { connect } from "react-redux";
 
-import { Logo } from "./logos";
+import { WideLogo } from "@nteract/logos";
 
 import { selectors } from "@nteract/core";
 import type { AppState } from "@nteract/core";
@@ -20,7 +20,7 @@ export const TitleBar = (props: TitleBarProps) => (
   <React.Fragment>
     <header>
       <a href={props.logoHref} title={props.logoTitle}>
-        <Logo height={20} theme={props.theme} />
+        <WideLogo height={20} theme={props.theme} />
       </a>
       <p>{props.title}</p>
     </header>
