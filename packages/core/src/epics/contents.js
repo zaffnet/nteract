@@ -4,6 +4,7 @@ import { of } from "rxjs/observable/of";
 import { interval } from "rxjs/observable/interval";
 
 import {
+  startWith,
   tap,
   filter,
   map,
@@ -13,6 +14,8 @@ import {
   catchError
 } from "rxjs/operators";
 import { ofType } from "redux-observable";
+
+import { sample } from "lodash";
 
 import FileSaver from "file-saver";
 
@@ -95,21 +98,81 @@ export function downloadString(
   FileSaver.saveAs(blob, filename);
 }
 
+// Generated with Python + SymPy
+// >>> import sympy
+// >>> import random
+// >>> random.sample(list(sympy.primerange(28000, 32000)), 30)
+
+const someArbitraryPrimesAround30k = [
+  30137,
+  30713,
+  30593,
+  28403,
+  29153,
+  30509,
+  31727,
+  28229,
+  29327,
+  28867,
+  28201,
+  31907,
+  29167,
+  28433,
+  28151,
+  31063,
+  29833,
+  29243,
+  28901,
+  28909,
+  28607,
+  30517,
+  28307,
+  28547,
+  29009,
+  31183,
+  30773,
+  29017,
+  31601,
+  28109
+];
+
 export function autoSaveCurrentContentEpic(
   action$: ActionsObservable<Action>,
   store: Store<AppState, *>
 ) {
-  // Save every 30 seconds, regardless of contentType
-  return interval(30 * 1000).pipe(
+  // Pick an autosave duration that won't have the exact same cycle as another open tab
+  const duration = sample(someArbitraryPrimesAround30k);
+
+  return interval(duration).pipe(
     // TODO: Once we're switched to the coming redux observable 1.0.0 release,
     // we should use the state$ stream to only save when the content has changed
     mergeMap(() => {
       const state = store.getState();
+      // Someday we'll want to have autosave in place for each piece of content when hosting multiple types on a page
       const contentRef = state.core.currentContentRef;
 
       const content = selectors.content(state, { contentRef });
 
+      let isVisible = false;
+
+      // document.hidden appears well supported
+      if (typeof document.hidden !== "undefined") {
+        // // Opera 12.10 and Firefox 18 and later support
+        isVisible = !document.hidden;
+        // $FlowAllowFeatureDetection
+      } else if (typeof document.msHidden !== "undefined") {
+        isVisible = !document.msHidden;
+        // $FlowAllowFeatureDetection
+      } else if (typeof document.webkitHidden !== "undefined") {
+        isVisible = !document.webkitHidden;
+      } else {
+        // Final fallback -- this will say the window is hidden when devtools is open or if the
+        // user is interacting with an iframe
+        isVisible = document.hasFocus();
+      }
+
       if (
+        isVisible &&
         // Don't bother saving nothing
         content &&
         // Only files and notebooks
