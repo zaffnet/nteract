@@ -30,6 +30,8 @@ import { default as Directory } from "./directory";
 import { default as File } from "./file";
 import { default as Notebook } from "./notebook";
 
+import { Nav, NavSection } from "./file-info";
+
 type ContentRef = ContentRef;
 
 import { connect } from "react-redux";
@@ -77,6 +79,12 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
     baseDir
   };
 };
+
+class TitleMenu extends React.Component<*, *> {
+  render() {
+    return null;
+  }
+}
 
 const Container = ({ children }) => (
   <div>
@@ -207,6 +215,7 @@ class Contents extends React.Component<ContentsProps, null> {
               )}
               logoTitle="Home"
             />
+            <TitleMenu />
             <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
         );
@@ -221,6 +230,15 @@ class Contents extends React.Component<ContentsProps, null> {
               )}
               logoTitle="Home"
             />
+            <Nav>
+              <NavSection>
+                <button>Save</button>
+              </NavSection>
+              <NavSection>
+                <span>Last Saved: Just Now</span>
+                <span>Runtime: Python</span>
+              </NavSection>
+            </Nav>
             <Container>
               <File contentRef={this.props.contentRef} />
             </Container>
