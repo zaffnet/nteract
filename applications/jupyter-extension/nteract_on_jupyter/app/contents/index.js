@@ -11,8 +11,6 @@ import * as Immutable from "immutable";
 import { selectors, actions } from "@nteract/core";
 import { TitleBar, NewNotebookNavigation } from "@nteract/connected-components";
 
-import { openNotebook } from "../triggers/open-notebook";
-
 import type {
   KernelspecRecord,
   KernelspecProps,
@@ -43,7 +41,6 @@ type ContentsProps = {
   contentRef: ContentRef,
   filepath: string,
   appPath: string,
-  appVersion: string,
   baseDir: string,
   host: JupyterHostRecord
 };
@@ -64,8 +61,6 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
     throw new Error("need content to view content, check your contentRefs");
   }
 
-  const appVersion = selectors.appVersion(state);
-
   // Our base directory is the literal directory we're in otherwise it's relative
   // to the file being viewed.
   const baseDir =
@@ -77,7 +72,6 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
     filepath: content.filepath,
     appPath: host.basePath,
     host,
-    appVersion,
     baseDir
   };
 };
@@ -164,19 +158,6 @@ const Container = ({ children }) => (
 );
 
 class Contents extends React.Component<ContentsProps, null> {
-  constructor(props) {
-    super(props);
-    (this: any).openNotebook = this.openNotebook.bind(this);
-  }
-
-  openNotebook(ks: KernelspecRecord | KernelspecProps) {
-    openNotebook(this.props.host, ks, {
-      appVersion: this.props.appVersion,
-      baseDir: this.props.baseDir,
-      appPath: this.props.appPath
-    });
-  }
-
   render() {
     switch (this.props.contentType) {
       case "notebook":
@@ -213,17 +194,7 @@ class Contents extends React.Component<ContentsProps, null> {
           </React.Fragment>
         );
       case "directory":
-        return (
-          <React.Fragment>
-            <ConnectedFileNav
-              filename={this.props.filepath}
-              baseDir={this.props.baseDir}
-              appPath={this.props.appPath}
-            />
-            <NewNotebookNavigation onClick={this.openNotebook} />
-            <Directory contentRef={this.props.contentRef} />
-          </React.Fragment>
-        );
+        return <Directory contentRef={this.props.contentRef} />;
       default:
         return (
           <div>{`content type ${this.props.contentType} not implemented`}</div>

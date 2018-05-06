@@ -9,8 +9,18 @@ import { Book, FileText, FileDirectory } from "@nteract/octicons";
 
 import { selectors, actions } from "@nteract/core";
 
+import { WideLogo } from "@nteract/logos";
+
+import { openNotebook } from "../triggers/open-notebook";
+
+import { Nav, NavSection } from "../components/nav";
+import { NewNotebookNavigation } from "@nteract/connected-components";
+
 import type {
   AppState,
+  KernelspecRecord,
+  KernelspecProps,
+  JupyterHostRecord,
   ContentRef,
   ContentRecord,
   DirectoryContentRecord
@@ -141,45 +151,75 @@ const ConnectedEntry = connect(mapStateToEntryProps)(DirectoryEntry);
 
 type DirectoryProps = {
   content: DirectoryContentRecord,
-  basePath: string
+  host: JupyterHostRecord,
+  appVersion: string,
+  theme: "light" | "dark"
 };
 
-export class Directory extends React.PureComponent<DirectoryProps, *> {
+export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
+  constructor(props: DirectoryProps) {
+    super(props);
+    (this: any).openNotebook = this.openNotebook.bind(this);
+  }
+
+  openNotebook(ks: KernelspecRecord | KernelspecProps) {
+    openNotebook(this.props.host, ks, {
+      appVersion: this.props.appVersion,
+      baseDir: this.props.content.filepath,
+      appPath: this.props.host.basePath
+    });
+  }
+
   render() {
     const atRoot = this.props.content.filepath === "/";
 
     const dotdothref = urljoin(
-      this.props.basePath,
+      this.props.host.basePath,
       "/nteract/edit/",
       urljoin(this.props.content.filepath, "..")
     );
 
     return (
-      <ul>
-        {atRoot ? null : (
-          // TODO: Create a contentRef for `..`, even though it's a placeholder
-          // When we're not at the root of the tree, show `..`
-          <li>
-            <DirectoryEntry
-              href={dotdothref}
-              displayName=".."
-              type="directory"
-            />
-          </li>
-        )}
-        {this.props.content.model.items.map(contentRef => (
-          <li key={contentRef}>
-            <ConnectedEntry contentRef={contentRef} />
-          </li>
-        ))}
-        <style jsx>{`
-          ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-          }
-        `}</style>
-      </ul>
+      <React.Fragment>
+        <Nav>
+          <NavSection>
+            <a
+              href={urljoin(this.props.host.basePath, "/nteract/edit")}
+              title="Home"
+            >
+              <WideLogo height={20} theme={this.props.theme} />
+            </a>
+            <span>{this.props.content.filepath.split("/").pop()}</span>
+          </NavSection>
+        </Nav>
+        <NewNotebookNavigation onClick={this.openNotebook} />
+
+        <ul>
+          {atRoot ? null : (
+            // TODO: Create a contentRef for `..`, even though it's a placeholder
+            // When we're not at the root of the tree, show `..`
+            <li>
+              <DirectoryEntry
+                href={dotdothref}
+                displayName=".."
+                type="directory"
+              />
+            </li>
+          )}
+          {this.props.content.model.items.map(contentRef => (
+            <li key={contentRef}>
+              <ConnectedEntry contentRef={contentRef} />
+            </li>
+          ))}
+          <style jsx>{`
+            ul {
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+            }
+          `}</style>
+        </ul>
+      </React.Fragment>
     );
   }
 }
@@ -201,14 +241,16 @@ const mapStateToDirectoryProps = (
     );
   }
 
-  const basePath = host.basePath;
-
   return {
+    appVersion: selectors.appVersion(state),
     content,
-    basePath
+    host,
+    theme: selectors.currentTheme(state)
   };
 };
 
-export const ConnectedDirectory = connect(mapStateToDirectoryProps)(Directory);
+export const ConnectedDirectory = connect(mapStateToDirectoryProps)(
+  DirectoryApp
+);
 
 export default ConnectedDirectory;
