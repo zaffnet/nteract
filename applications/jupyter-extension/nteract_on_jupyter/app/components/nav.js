@@ -50,8 +50,7 @@ export class Nav extends React.Component<NavProps, null> {
           nav {
             background-color: var(--theme-title-bar-bg, rgb(250, 250, 250));
             padding: var(--nt-spacing-m) var(--nt-spacing-xl);
-            /** TODO: Should I declare the height here?? */
-            height: 32px;
+            box-sizing: border-box;
           }
 
           /** When we have a nav section that ends up on the right, reverse the padding order **/

@@ -84,6 +84,68 @@ const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
   };
 };
 
+type FileNavProps = {
+  displayName: string,
+  logoHref: string,
+  theme: "light" | "dark",
+  onNameChange: ?(string) => any
+};
+
+class FileNav extends React.Component<FileNavProps, *> {
+  render() {
+    return (
+      <React.Fragment>
+        <Nav>
+          <NavSection>
+            <a href={this.props.logoHref} title="Home">
+              <WideLogo height={20} theme={this.props.theme} />
+            </a>
+            <span>{this.props.displayName}</span>
+          </NavSection>
+        </Nav>
+        <style jsx>{`
+          :global(.nteract-nav) {
+            background-color: DeepPink;
+          }
+          a {
+            /* margin: 0px var(--nt-spacing-xl) 0px 0px; */
+          }
+        `}</style>
+      </React.Fragment>
+    );
+  }
+}
+
+const mapStateToFileNavProps = (
+  state: AppState,
+  ownProps: {
+    filename: string,
+    appPath: string,
+    baseDir: string
+  }
+) => ({
+  displayName: ownProps.filename
+    .split("/")
+    .pop()
+    .split(".ipynb")
+    .shift(),
+  theme: selectors.currentTheme(state),
+  logoHref: urljoin(ownProps.appPath, "/nteract/edit/", ownProps.baseDir)
+});
+
+const mapDispatchToFileNavProps = dispatch => ({
+  onNameChange: (filename: string) => {
+    // TODO: Once the content refs PR is finished use the ref to change
+    // the filename, noting that the URL path should also change
+    console.error("not implemented yet");
+  }
+});
+
+const ConnectedFileNav = connect(
+  mapStateToFileNavProps,
+  mapDispatchToFileNavProps
+)(FileNav);
+
 class TitleMenu extends React.Component<*, *> {
   render() {
     return null;
@@ -207,47 +269,15 @@ class Contents extends React.Component<ContentsProps, null> {
   }
 
   render() {
-    const topNav = (
-      <React.Fragment>
-        <Nav>
-          <NavSection>
-            <a
-              href={urljoin(
-                this.props.appPath,
-                "/nteract/edit/",
-                this.props.baseDir
-              )}
-              title="Home"
-            >
-              <WideLogo height={20} theme={"light"} />
-            </a>
-            <span>file.py</span>
-          </NavSection>
-          <NavSection>
-            <img
-              height="24"
-              width="24"
-              style={{ borderRadius: "50%", objectFit: "scale-down" }}
-              src="https://pbs.twimg.com/profile_images/992516246825414656/GNnp7Htu_400x400.jpg"
-            />
-          </NavSection>
-        </Nav>
-        <style jsx>{`
-          :global(.nteract-nav) {
-            background-color: DeepPink;
-          }
-          a {
-            /* margin: 0px var(--nt-spacing-xl) 0px 0px; */
-          }
-        `}</style>
-      </React.Fragment>
-    );
-
     switch (this.props.contentType) {
       case "notebook":
         return (
           <React.Fragment>
-            {topNav}
+            <ConnectedFileNav
+              filename={this.props.filepath}
+              baseDir={this.props.baseDir}
+              appPath={this.props.appPath}
+            />
             <TitleMenu />
             <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
@@ -255,36 +285,31 @@ class Contents extends React.Component<ContentsProps, null> {
       case "file":
         return (
           <React.Fragment>
-            {topNav}
-            <TitleBar
-              logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
-              logoTitle="Home"
+            <ConnectedFileNav
+              filename={this.props.filepath}
+              baseDir={this.props.baseDir}
+              appPath={this.props.appPath}
             />
-            <Container>
-              <File contentRef={this.props.contentRef} />
-            </Container>
+            <File contentRef={this.props.contentRef} />
           </React.Fragment>
         );
       case "dummy":
         return (
           <React.Fragment>
-            <TitleBar
-              logoHref={urljoin(
-                this.props.appPath,
-                "/nteract/edit/",
-                this.props.baseDir
-              )}
-              logoTitle="Home"
+            <ConnectedFileNav
+              filename={this.props.filepath}
+              baseDir={this.props.baseDir}
+              appPath={this.props.appPath}
             />
           </React.Fragment>
         );
       case "directory":
         return (
           <React.Fragment>
-            {topNav}
-            <TitleBar
-              logoHref={urljoin(this.props.appPath, "/nteract/edit/")}
-              logoTitle="Home"
+            <ConnectedFileNav
+              filename={this.props.filepath}
+              baseDir={this.props.baseDir}
+              appPath={this.props.appPath}
             />
             <NewNotebookNavigation onClick={this.openNotebook} />
             <Directory contentRef={this.props.contentRef} />
