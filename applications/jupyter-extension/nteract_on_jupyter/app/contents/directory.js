@@ -9,7 +9,7 @@ import { Book, FileText, FileDirectory } from "@nteract/octicons";
 
 import { selectors, actions } from "@nteract/core";
 
-import { WideLogo } from "@nteract/logos";
+import { ThemedLogo } from "../components/themed-logo.js";
 
 import { openNotebook } from "../triggers/open-notebook";
 
@@ -152,8 +152,7 @@ const ConnectedEntry = connect(mapStateToEntryProps)(DirectoryEntry);
 type DirectoryProps = {
   content: DirectoryContentRecord,
   host: JupyterHostRecord,
-  appVersion: string,
-  theme: "light" | "dark"
+  appVersion: string
 };
 
 export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
@@ -188,7 +187,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
               href={urljoin(this.props.host.basePath, "/nteract/edit")}
               title="Home"
             >
-              <WideLogo height={20} theme={this.props.theme} />
+              <ThemedLogo />
             </a>
             <span>{this.props.content.filepath.split("/").pop()}</span>
           </NavSection>
@@ -238,15 +237,14 @@ const mapStateToDirectoryProps = (
 
   if (!content || content.type !== "directory") {
     throw new Error(
-      "The directory component should only be used with file contents"
+      "The directory component should only be used with directory contents"
     );
   }
 
   return {
     appVersion: selectors.appVersion(state),
     content,
-    host,
-    theme: selectors.currentTheme(state)
+    host
   };
 };
 

@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 type MappedStateProps = {
   mimetype: string,
   text: string,
-  contentRef: ContentRef
+  contentRef: ContentRef,
+  theme: "light" | "dark"
 };
 
 type MappedDispatchProps = {
@@ -56,7 +57,7 @@ export class TextFile extends React.PureComponent<
     return (
       <div className="nteract-editor">
         <Editor
-          theme="light"
+          theme={this.props.theme === "dark" ? "vs-dark" : "vs"}
           mode={this.props.mimetype}
           editorFocused={true}
           value={this.props.text}
@@ -92,6 +93,7 @@ function mapStateToTextFileProps(
   const text = content.model ? content.model.text : "";
 
   return {
+    theme: selectors.currentTheme(state),
     mimetype: content.mimetype || "text/plain",
     text: text,
     contentRef: ownProps.contentRef

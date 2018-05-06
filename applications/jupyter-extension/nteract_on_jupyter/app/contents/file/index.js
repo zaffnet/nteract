@@ -6,11 +6,19 @@ import * as Immutable from "immutable";
 import { selectors, actions } from "@nteract/core";
 import type { ContentRef, FileContentRecord } from "@nteract/core";
 
+import { ThemedLogo } from "../../components/themed-logo";
+import { Nav, NavSection } from "../../components/nav";
+
+import { dirname } from "path";
+
 import * as TextFile from "./text-file.js";
+import { default as Notebook } from "../notebook";
 
 import { connect } from "react-redux";
 
-const Container = ({ children }) => (
+const urljoin = require("url-join");
+
+const PaddedContainer = ({ children }) => (
   <div>
     {children}
     <style jsx>{`
@@ -24,41 +32,77 @@ const Container = ({ children }) => (
 );
 
 type FileProps = {
+  type: "notebook" | "file" | "dummy",
   contentRef: ContentRef,
+  baseDir: string,
+  appBase: string,
+  displayName: string,
   mimetype: ?string
 };
 
 export class File extends React.PureComponent<FileProps, *> {
   render() {
-    if (!this.props.mimetype || !TextFile.handles(this.props.mimetype)) {
+    // Determine the file handler
+    let choice = null;
+
+    // notebooks don't report a mimetype so we'll use the content.type
+    if (this.props.type === "notebook") {
+      choice = <Notebook contentRef={this.props.contentRef} />;
+    } else if (this.props.type === "dummy") {
+      choice = null;
+    } else if (!this.props.mimetype || !TextFile.handles(this.props.mimetype)) {
       // TODO: Redirect to /files/ endpoint for them to download the file or view
       //       as is
-      return (
-        <Container>
+      choice = (
+        <PaddedContainer>
           <pre>Can not render this file type</pre>
-        </Container>
+        </PaddedContainer>
       );
+    } else {
+      choice = <TextFile.default contentRef={this.props.contentRef} />;
     }
 
     // Right now we only handle one kind of editor
     // If/when we support more modes, we would case them off here
-    return <TextFile.default contentRef={this.props.contentRef} />;
+    return (
+      <React.Fragment>
+        <Nav>
+          <NavSection>
+            <a
+              href={urljoin(this.props.appBase, this.props.baseDir)}
+              title="Home"
+            >
+              <ThemedLogo />
+            </a>
+            <span>{this.props.displayName}</span>
+          </NavSection>
+        </Nav>
+        {choice}
+      </React.Fragment>
+    );
   }
 }
 
 const mapStateToProps = (
   state: Object,
-  ownProps: { contentRef: ContentRef }
+  ownProps: { contentRef: ContentRef, appBase: string }
 ): FileProps => {
   const content = selectors.content(state, ownProps);
 
-  if (!content || content.type !== "file") {
+  if (!content || content.type === "directory") {
     throw new Error(
-      "The file component should only be used with file contents"
+      "The file component should only be used with files and notebooks"
     );
   }
 
-  return { mimetype: content.mimetype, contentRef: ownProps.contentRef };
+  return {
+    type: content.type,
+    mimetype: content.mimetype,
+    contentRef: ownProps.contentRef,
+    appBase: ownProps.appBase,
+    baseDir: dirname(content.filepath),
+    displayName: content.filepath.split("/").pop()
+  };
 };
 
 export const ConnectedFile = connect(mapStateToProps)(File);
