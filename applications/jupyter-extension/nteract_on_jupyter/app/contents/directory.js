@@ -165,6 +165,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
   openNotebook(ks: KernelspecRecord | KernelspecProps) {
     openNotebook(this.props.host, ks, {
       appVersion: this.props.appVersion,
+      // Since we're looking at a directory, the base dir is the directory we are in
       baseDir: this.props.content.filepath,
       appPath: this.props.host.basePath
     });

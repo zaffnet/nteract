@@ -86,24 +86,14 @@ type FileNavProps = {
 class FileNav extends React.Component<FileNavProps, *> {
   render() {
     return (
-      <React.Fragment>
-        <Nav>
-          <NavSection>
-            <a href={this.props.logoHref} title="Home">
-              <WideLogo height={20} theme={this.props.theme} />
-            </a>
-            <span>{this.props.displayName}</span>
-          </NavSection>
-        </Nav>
-        <style jsx>{`
-          :global(.nteract-nav) {
-            background-color: DeepPink;
-          }
-          a {
-            /* margin: 0px var(--nt-spacing-xl) 0px 0px; */
-          }
-        `}</style>
-      </React.Fragment>
+      <Nav>
+        <NavSection>
+          <a href={this.props.logoHref} title="Home">
+            <WideLogo height={20} theme={this.props.theme} />
+          </a>
+          <span>{this.props.displayName}</span>
+        </NavSection>
+      </Nav>
     );
   }
 }
@@ -138,25 +128,6 @@ const ConnectedFileNav = connect(
   mapDispatchToFileNavProps
 )(FileNav);
 
-class TitleMenu extends React.Component<*, *> {
-  render() {
-    return null;
-  }
-}
-
-const Container = ({ children }) => (
-  <div>
-    {children}
-    <style jsx>{`
-      div {
-        padding-left: var(--nt-spacing-l, 10px);
-        padding-top: var(--nt-spacing-m, 10px);
-        padding-right: var(--nt-spacing-m, 10px);
-      }
-    `}</style>
-  </div>
-);
-
 class Contents extends React.Component<ContentsProps, null> {
   render() {
     switch (this.props.contentType) {
@@ -168,7 +139,6 @@ class Contents extends React.Component<ContentsProps, null> {
               baseDir={this.props.baseDir}
               appPath={this.props.appPath}
             />
-            <TitleMenu />
             <Notebook contentRef={this.props.contentRef} />
           </React.Fragment>
         );
@@ -185,13 +155,11 @@ class Contents extends React.Component<ContentsProps, null> {
         );
       case "dummy":
         return (
-          <React.Fragment>
-            <ConnectedFileNav
-              filename={this.props.filepath}
-              baseDir={this.props.baseDir}
-              appPath={this.props.appPath}
-            />
-          </React.Fragment>
+          <ConnectedFileNav
+            filename={this.props.filepath}
+            baseDir={this.props.baseDir}
+            appPath={this.props.appPath}
+          />
         );
       case "directory":
         return <Directory contentRef={this.props.contentRef} />;
