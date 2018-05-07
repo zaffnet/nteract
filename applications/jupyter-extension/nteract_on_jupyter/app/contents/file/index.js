@@ -4,10 +4,14 @@ import * as React from "react";
 import * as Immutable from "immutable";
 
 import { selectors, actions } from "@nteract/core";
-import type { ContentRef, FileContentRecord } from "@nteract/core";
+import type { ContentRef, FileContentRecord, AppState } from "@nteract/core";
+
+import moment from "moment";
 
 import { ThemedLogo } from "../../components/themed-logo";
 import { Nav, NavSection } from "../../components/nav";
+
+import LastSaved from "../../components/last-saved.js";
 
 import { dirname } from "path";
 
@@ -37,7 +41,8 @@ type FileProps = {
   baseDir: string,
   appBase: string,
   displayName: string,
-  mimetype: ?string
+  mimetype: ?string,
+  lastSavedStatement: string
 };
 
 export class File extends React.PureComponent<FileProps, *> {
@@ -76,6 +81,9 @@ export class File extends React.PureComponent<FileProps, *> {
             </a>
             <span>{this.props.displayName}</span>
           </NavSection>
+          <NavSection>
+            <LastSaved contentRef={this.props.contentRef} />
+          </NavSection>
         </Nav>
         {choice}
       </React.Fragment>
@@ -99,6 +107,7 @@ const mapStateToProps = (
     type: content.type,
     mimetype: content.mimetype,
     contentRef: ownProps.contentRef,
+    lastSavedStatement: "recently",
     appBase: ownProps.appBase,
     baseDir: dirname(content.filepath),
     displayName: content.filepath.split("/").pop()
