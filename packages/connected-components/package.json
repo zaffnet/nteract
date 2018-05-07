@@ -30,6 +30,7 @@
     "@nteract/commutable": "^4.0.1",
     "@nteract/display-area": "^4.1.1",
     "@nteract/dropdown-menu": "^0.1.2",
+    "@nteract/logos": "^0.0.1",
     "@nteract/editor": "^7.0.4",
     "@nteract/markdown": "^1.1.0",
     "@nteract/mathjax": "^1.0.0",

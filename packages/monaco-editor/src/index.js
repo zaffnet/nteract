@@ -60,6 +60,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
     this.monaco = monaco.editor.create(this.monacoContainer, {
       value: this.props.value,
       language: this.props.mode,
+      theme: this.props.theme,
       minimap: {
         enabled: false
       },
@@ -76,7 +77,21 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   }
 
   componentDidUpdate(prevProps: MonacoEditorProps): void {
-    if (!this.monaco) return;
+    if (!this.monaco) {
+      return;
+    }
+
+    if (this.monaco.getValue() !== this.props.value) {
+      // FIXME: calling setValue resets cursor position in monaco. It shouldn't!
+      // $FlowFixMe: We should be detecting monaco above
+      this.monaco.setValue(this.props.value);
+    }
+
+    // $FlowFixMe: We should be detecting monaco above
+    this.monaco.updateOptions({
+      language: this.props.mode,
+      theme: this.props.theme
+    });
   }
 
   componentWillReceiveProps(nextProps: MonacoEditorProps) {
