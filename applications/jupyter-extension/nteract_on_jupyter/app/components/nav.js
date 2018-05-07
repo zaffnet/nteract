@@ -4,16 +4,19 @@ import * as React from "react";
 import { areComponentsEqual } from "react-hot-loader";
 
 type NavSectionProps = {
-  children: React.ChildrenArray<React.Element<any>>
+  children: React.ChildrenArray<null | string | number | React.Element<any>>
 };
 
 export class NavSection extends React.Component<NavSectionProps, null> {
   render() {
     return (
       <ul>
-        {React.Children.map(this.props.children, child => (
-          <li className="nav-item">{child}</li>
-        ))}
+        {React.Children.map(this.props.children, child => {
+          if (child === null) {
+            return null;
+          }
+          return <li className="nav-item">{child}</li>;
+        })}
         <style jsx>{`
           ul {
             margin: 0 auto;
