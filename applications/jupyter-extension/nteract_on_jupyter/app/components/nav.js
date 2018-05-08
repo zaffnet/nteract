@@ -42,7 +42,7 @@ type NavProps = {
 export class Nav extends React.Component<NavProps, null> {
   render() {
     return (
-      <nav className="nteract-nav">
+      <header className="nteract-nav">
         <ul>
           {React.Children.map(this.props.children, child => {
             return <li className="top-nav-item">{child}</li>;
@@ -50,7 +50,7 @@ export class Nav extends React.Component<NavProps, null> {
         </ul>
 
         <style jsx>{`
-          nav {
+          header {
             background-color: var(--theme-title-bar-bg, rgb(250, 250, 250));
             padding: var(--nt-spacing-m) var(--nt-spacing-xl);
             box-sizing: border-box;
@@ -67,7 +67,7 @@ export class Nav extends React.Component<NavProps, null> {
             padding: 0px 0px;
             margin: 0 auto;
           }
-          nav > ul {
+          header > ul {
           }
           li {
             display: flex;
@@ -75,7 +75,7 @@ export class Nav extends React.Component<NavProps, null> {
             padding: 0px 0px;
           }
         `}</style>
-      </nav>
+      </header>
     );
   }
 }
