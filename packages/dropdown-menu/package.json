@@ -1,6 +1,6 @@
 {
   "name": "@nteract/dropdown-menu",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Dropdown Menu for nteract apps",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -25,9 +25,9 @@
     "access": "public"
   },
   "peerDependencies": {
-    "react-hot-loader": "^4.1.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-hot-loader": "^4.1.2",
     "styled-jsx": "^2.2.6"
   },
   "author": "Kyle Kelley <rgbkrk@gmail.com>",

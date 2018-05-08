@@ -1,6 +1,6 @@
 {
   "name": "@nteract/monaco-editor",
-  "version": "7.0.4",
+  "version": "1.0.0",
   "description": "A React component for the monaco editor, tailored for nteract",
   "main": "src/index.js",
   "nteractDesktop": "src/index.js",
@@ -26,14 +26,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/display-area": "^4.1.1",
+    "@nteract/display-area": "^4.1.2",
     "@nteract/messaging": "^4.0.0",
-    "@nteract/transforms": "^4.1.1",
+    "@nteract/transforms": "^4.1.2",
     "@nteract/types": "^2.0.0",
     "lodash": "^4.17.4",
-    "rxjs": "^5.5.6",
     "monaco-editor": "^0.12.0",
-    "monaco-editor-webpack-plugin": "^1.1.0"
+    "monaco-editor-webpack-plugin": "^1.1.0",
+    "rxjs": "^5.5.6"
   },
   "peerDependencies": {
     "immutable": "^4.0.0-rc.9",
