@@ -31,7 +31,6 @@ def load_jupyter_server_extension(nbapp):
     # config.assets_dir = os.path.join(app_dir, 'static')
     config.assets_dir = app_dir
 
-    config.page_title = 'nteract'
     config.page_url = '/nteract'
     config.dev_mode = False
 

@@ -56,10 +56,16 @@ class NAppHandler(IPythonHandler):
         if not asset_url.endswith('/'):
             asset_url = asset_url + '/'
 
+        filename = path.split("/")[-1]
+        if filename:
+            page_title = '{filename} - nteract'.format(filename=filename)
+        else:
+            page_title = 'nteract'
+
         config = dict(
             ga_code=config.ga_code,
             asset_url=asset_url,
-            page_title=config.page_title,
+            page_title=page_title,
             mathjax_url=self.mathjax_url,
             mathjax_config=mathjax_config,
             page_config=page_config,
