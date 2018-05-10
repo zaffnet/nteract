@@ -554,13 +554,6 @@ export const semioticSettings = {
     controls: "switch between modes",
     chartGenerator: semioticBarChart
   },
-  grid: {
-    Frame: ResponsiveXYFrame,
-    controls: "switch between modes",
-    chartGenerator: (data, schema, options) => (
-      <VirtualizedGrid data={data} schema={schema} {...options} />
-    )
-  },
   summary: {
     Frame: ResponsiveOrdinalFrame,
     controls: "switch between modes",

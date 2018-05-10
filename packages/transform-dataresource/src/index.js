@@ -495,7 +495,7 @@ class DataResourceTransform extends React.Component<Props, State> {
   };
 
   setGrid = () => {
-    this.updateChart({ view: "grid" });
+    this.setState({ view: "grid" });
   };
 
   setLine = () => {
