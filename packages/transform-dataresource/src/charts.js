@@ -19,6 +19,11 @@ const parentPath = (d, pathArray) => {
   return pathArray;
 };
 
+const fontScale = scaleLinear()
+  .domain([8, 25])
+  .range([14, 8])
+  .clamp(true);
+
 const hierarchicalTooltip = (d, primaryKey, metric) => {
   const pathString = d.parent
     ? parentPath(d.parent, (d.key && [d.key]) || []).join("->")
@@ -191,7 +196,6 @@ const semioticNetwork = (data, schema, options) => {
       stroke: colorHash[d.id],
       strokeOpacity: 0.5
     }),
-    nodeLabels: true,
     nodeSizeAccessor: d => d.degree,
     networkType: {
       type: networkType == "force" ? "motifs" : networkType,
@@ -434,8 +438,12 @@ const semioticSummaryChart = (data, schema, options) => {
       stroke: "white"
     }),
     oPadding: 5,
-    oLabel: true,
-    margin: { top: 25, right: 10, bottom: 50, left: 70 },
+    oLabel: d => (
+      <text textAnchor="end" fontSize={`${fontScale(d.length)}px`}>
+        {d}
+      </text>
+    ),
+    margin: { top: 25, right: 10, bottom: 50, left: 100 },
     axis: { orient: "left", label: rAccessor },
     baseMarkProps: { forceUpdate: true },
     pieceHoverAnnotation: summaryType === "violin",
@@ -459,7 +467,7 @@ const semioticSummaryChart = (data, schema, options) => {
 const semioticScatterplot = (data, schema, options) => {
   const height = options.height - 150 || 500;
 
-  const { chart } = options;
+  const { chart, primaryKey } = options;
 
   const { dim1, dim2, metric1, metric2, metric3 } = chart;
 
@@ -534,6 +542,29 @@ const semioticScatterplot = (data, schema, options) => {
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 20 },
     annotations: annotations,
+    tooltipContent: d => (
+      <div className="tooltip-content">
+        <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
+        {dim1 &&
+          dim1 !== "none" && (
+            <p>
+              {dim1}: {d[dim1]}
+            </p>
+          )}
+        <p>
+          {metric1}: {d[metric1]}
+        </p>
+        <p>
+          {metric2}: {d[metric2]}
+        </p>
+        {metric3 &&
+          metric3 !== "none" && (
+            <p>
+              {metric3}: {d[metric3]}
+            </p>
+          )}
+      </div>
+    ),
     ...additionalSettings
   };
 };
