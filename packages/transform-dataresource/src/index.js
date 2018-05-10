@@ -484,8 +484,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         `}</style>
       </div>
     );
-    console.log("updatedState", updatedState);
-    console.log("this.state", this.state);
+
     this.setState({
       displayChart: {
         ...this.state.displayChart,
