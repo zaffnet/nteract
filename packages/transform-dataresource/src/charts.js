@@ -9,7 +9,7 @@ import {
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
-
+import { VirtualizedGrid } from "./virtualized-grid";
 const parentPath = (d, pathArray) => {
   if (d.parent) {
     pathArray = parentPath(d.parent, [d.key, ...pathArray]);
@@ -553,6 +553,13 @@ export const semioticSettings = {
     Frame: ResponsiveOrdinalFrame,
     controls: "switch between modes",
     chartGenerator: semioticBarChart
+  },
+  grid: {
+    Frame: ResponsiveXYFrame,
+    controls: "switch between modes",
+    chartGenerator: (data, schema, options) => (
+      <VirtualizedGrid data={data} schema={schema} {...options} />
+    )
   },
   summary: {
     Frame: ResponsiveOrdinalFrame,
