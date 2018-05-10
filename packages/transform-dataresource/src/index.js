@@ -102,18 +102,29 @@ const availableLineTypes = [
   }
 ];
 
-const metricDimSelector = (values, selectionFunction, title, required) => (
-  <div style={{ display: "inline-block", margin: "0 10px" }}>
-    <h2>{title}</h2>
-    <select onChange={e => selectionFunction(e.target.value)}>
-      {(required ? values : ["none", ...values]).map(d => (
-        <option key={`selector-option-${d}`} value={d} label={d}>
-          {d}
-        </option>
-      ))}
-    </select>
-  </div>
-);
+const metricDimSelector = (
+  values,
+  selectionFunction,
+  title,
+  required,
+  selectedValue
+) => {
+  return (
+    <div style={{ display: "inline-block", margin: "0 10px" }}>
+      <h2>{title}</h2>
+      <select
+        value={selectedValue}
+        onChange={e => selectionFunction(e.target.value)}
+      >
+        {(required ? values : ["none", ...values]).map(d => (
+          <option key={`selector-option-${d}`} value={d} label={d}>
+            {d}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 
 /*
   contour is an option for scatterplot
@@ -303,68 +314,80 @@ class DataResourceTransform extends React.Component<Props, State> {
             metrics.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, metric1: d } }),
             view === "scatter" ? "X" : "Metric",
-            true
+            true,
+            chart.metric1
           )}
         {view === "scatter" &&
           metricDimSelector(
             metrics.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, metric2: d } }),
             "Y",
-            true
+            true,
+            chart.metric2
           )}
         {(view === "scatter" || view === "bar") &&
           metricDimSelector(
             metrics.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, metric3: d } }),
-            view === "bar" ? "WIDTH" : "SIZE"
+            view === "bar" ? "WIDTH" : "SIZE",
+            false,
+            chart.metric3
           )}
         {(view === "summary" || view === "scatter" || view === "bar") &&
           metricDimSelector(
             dimensions.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, dim1: d } }),
             view === "summary" ? "CATEGORY" : "COLOR",
-            true
+            true,
+            chart.dim1
           )}
         {view === "scatter" &&
           metricDimSelector(
             dimensions.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, dim2: d } }),
-            "LABELS"
+            "LABELS",
+            false,
+            chart.dim2
           )}
         {view === "network" &&
           metricDimSelector(
             dimensions.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, dim1: d } }),
             "SOURCE",
-            true
+            true,
+            chart.dim1
           )}
         {view === "network" &&
           metricDimSelector(
             dimensions.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, dim2: d } }),
             "TARGET",
-            true
+            true,
+            chart.dim2
           )}
         {view === "network" &&
           metricDimSelector(
             ["force", "sankey"],
             d => this.updateChart({ networkType: d }),
             "TYPE",
-            true
+            true,
+            networkType
           )}
         {view === "hierarchy" &&
           metricDimSelector(
             ["dendrogram", "treemap", "partition"],
             d => this.updateChart({ hierarchyType: d }),
             "TYPE",
-            true
+            true,
+            hierarchyType
           )}
         {view === "summary" &&
           metricDimSelector(
             ["violin", "boxplot", "joy", "heatmap", "histogram"],
             d => this.updateChart({ summaryType: d }),
             "TYPE",
-            true
+            true,
+            summaryType
           )}
         {view === "line" && (
           <div>
