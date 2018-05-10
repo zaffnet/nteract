@@ -9,7 +9,7 @@ import {
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
-import { VirtualizedGrid } from "./virtualized-grid";
+
 const parentPath = (d, pathArray) => {
   if (d.parent) {
     pathArray = parentPath(d.parent, [d.key, ...pathArray]);
