@@ -484,8 +484,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         `}</style>
       </div>
     );
-    console.log("updatedState", updatedState);
-    console.log("this.state", this.state);
+
     this.setState({
       displayChart: {
         ...this.state.displayChart,
@@ -496,7 +495,7 @@ class DataResourceTransform extends React.Component<Props, State> {
   };
 
   setGrid = () => {
-    this.updateChart({ view: "grid" });
+    this.setState({ view: "grid" });
   };
 
   setLine = () => {
