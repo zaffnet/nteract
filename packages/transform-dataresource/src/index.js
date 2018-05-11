@@ -9,13 +9,13 @@ import {
 
 import { semioticSettings, colors } from "./charts";
 import {
-  TreeOcticon,
-  NetworkOcticon,
-  BoxplotOcticon,
-  ScatterplotOcticon,
-  LineChartOcticon,
-  BarChartOcticon,
-  HexbinOcticon
+  TreeIcon,
+  NetworkIcon,
+  BoxplotIcon,
+  ScatterplotIcon,
+  LineChartIcon,
+  BarChartIcon,
+  HexbinIcon
 } from "./icons";
 
 type Props = {
@@ -651,25 +651,25 @@ class DataResourceTransform extends React.Component<Props, State> {
               <DatabaseOcticon />
             </IconButton>
             <IconButton onClick={this.setBar} message={"Bar Graph"}>
-              <BarChartOcticon />
+              <BarChartIcon />
             </IconButton>
             <IconButton onClick={this.setSummary} message={"Summary"}>
-              <BoxplotOcticon />
+              <BoxplotIcon />
             </IconButton>
             <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
-              <ScatterplotOcticon />
+              <ScatterplotIcon />
             </IconButton>
             <IconButton onClick={this.setHexbin} message={"Area Plot"}>
-              <HexbinOcticon />
+              <HexbinIcon />
             </IconButton>
             <IconButton onClick={this.setNetwork} message={"Network"}>
-              <NetworkOcticon />
+              <NetworkIcon />
             </IconButton>
             <IconButton onClick={this.setHierarchy} message={"Hierarchy"}>
-              <TreeOcticon />
+              <TreeIcon />
             </IconButton>
             <IconButton onClick={this.setLine} message={"Line Graph"}>
-              <LineChartOcticon />
+              <LineChartIcon />
             </IconButton>
           </div>
         </div>
