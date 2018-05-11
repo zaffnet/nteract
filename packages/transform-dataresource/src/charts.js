@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { nest } from "d3-collection";
-import { scaleLinear } from "d3-scale";
+import { scaleLinear, scaleThreshold } from "d3-scale";
 import {
   XYFrame,
   OrdinalFrame,
@@ -9,6 +9,11 @@ import {
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
+
+const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"];
+const thresholds = scaleThreshold()
+  .domain([0.01, 0.25, 0.5, 0.75, 1])
+  .range(steps);
 
 const parentPath = (d, pathArray) => {
   if (d.parent) {
@@ -464,12 +469,66 @@ const semioticSummaryChart = (data, schema, options) => {
   return summarySettings;
 };
 
-const semioticScatterplot = (data, schema, options) => {
+const semioticHexbin = (data, schema, options) => {
+  return semioticScatterplot(data, schema, options, true);
+};
+
+const semioticScatterplot = (data, schema, options, hexbin) => {
   const height = options.height - 150 || 500;
 
   const { chart, primaryKey } = options;
 
   const { dim1, dim2, metric1, metric2, metric3 } = chart;
+
+  const pointTooltip = d => (
+    <div className="tooltip-content">
+      <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
+      {dim1 &&
+        dim1 !== "none" && (
+          <p>
+            {dim1}: {d[dim1]}
+          </p>
+        )}
+      <p>
+        {metric1}: {d[metric1]}
+      </p>
+      <p>
+        {metric2}: {d[metric2]}
+      </p>
+      {metric3 &&
+        metric3 !== "none" && (
+          <p>
+            {metric3}: {d[metric3]}
+          </p>
+        )}
+    </div>
+  );
+
+  const areaTooltip = d => (
+    <div className="tooltip-content">
+      <h2
+        style={{
+          fontSize: "14px",
+          textTransform: "uppercase",
+          margin: "5px",
+          fontWeight: 900
+        }}
+      >
+        ID, {metric1}, {metric2}
+      </h2>
+      {d.binItems.map(d => (
+        <p
+          style={{
+            fontSize: "12px",
+            textTransform: "uppercase",
+            margin: "5px"
+          }}
+        >
+          {primaryKey.map(p => d[p]).join(", ")}, {d[metric1]}, {d[metric2]}
+        </p>
+      ))}
+    </div>
+  );
 
   let sizeScale = e => 5;
   const colorHash = {};
@@ -500,7 +559,7 @@ const semioticScatterplot = (data, schema, options) => {
       .domain([dataMin, dataMax])
       .range([2, 20]);
   }
-  if (dim1 && dim1 !== "none") {
+  if (!hexbin && dim1 && dim1 !== "none") {
     const uniqueValues = data.reduce(
       (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
       []
@@ -529,7 +588,10 @@ const semioticScatterplot = (data, schema, options) => {
       { orient: "left", ticks: 6, label: metric2 },
       { orient: "bottom", ticks: 6, label: metric1 }
     ],
-    points: data,
+    points: !hexbin && data,
+    areas: hexbin && [{ coordinates: data }],
+    areaType: { type: "hexbin", bins: 10 },
+    areaStyle: d => ({ fill: thresholds(d.percent), stroke: "black" }),
     pointStyle: d => ({
       r: sizeScale(d[metric3]),
       fill: colorHash[d[dim1]] || "black",
@@ -540,31 +602,9 @@ const semioticScatterplot = (data, schema, options) => {
     hoverAnnotation: true,
     responsiveWidth: false,
     size: [height + 200, height + 50],
-    margin: { left: 75, bottom: 50, right: 150, top: 20 },
-    annotations: annotations,
-    tooltipContent: d => (
-      <div className="tooltip-content">
-        <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
-        {dim1 &&
-          dim1 !== "none" && (
-            <p>
-              {dim1}: {d[dim1]}
-            </p>
-          )}
-        <p>
-          {metric1}: {d[metric1]}
-        </p>
-        <p>
-          {metric2}: {d[metric2]}
-        </p>
-        {metric3 &&
-          metric3 !== "none" && (
-            <p>
-              {metric3}: {d[metric3]}
-            </p>
-          )}
-      </div>
-    ),
+    margin: { left: 75, bottom: 50, right: 150, top: 30 },
+    annotations: !hexbin && annotations,
+    tooltipContent: (hexbin && areaTooltip) || pointTooltip,
     ...additionalSettings
   };
 };
@@ -579,6 +619,11 @@ export const semioticSettings = {
     Frame: ResponsiveXYFrame,
     controls: "switch between modes",
     chartGenerator: semioticScatterplot
+  },
+  hexbin: {
+    Frame: ResponsiveXYFrame,
+    controls: "switch between modes",
+    chartGenerator: semioticHexbin
   },
   bar: {
     Frame: ResponsiveOrdinalFrame,
