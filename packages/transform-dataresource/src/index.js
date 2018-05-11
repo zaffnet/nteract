@@ -3,7 +3,6 @@ import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
 import {
   GraphOcticon as BarGraphOcticon,
-  PulseOcticon as LineGraphOcticon,
   DatabaseOcticon,
   Beaker
 } from "@nteract/octicons";
@@ -13,7 +12,10 @@ import {
   TreeOcticon,
   NetworkOcticon,
   BoxplotOcticon,
-  ScatterplotOcticon
+  ScatterplotOcticon,
+  LineChartOcticon,
+  BarChartOcticon,
+  HexbinOcticon
 } from "./icons";
 
 type Props = {
@@ -27,7 +29,7 @@ type Props = {
 type LineType = "line" | "stackedarea" | "bumparea" | "stackedpercent";
 
 type State = {
-  view: "line" | "bar" | "scatter" | "grid" | "network" | "summary",
+  view: "line" | "bar" | "scatter" | "grid" | "network" | "summary" | "hexbin",
   metrics: Array<string>,
   dimensions: Array<string>,
   selectedMetrics: Array<string>,
@@ -299,7 +301,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     });
 
     const display = (
-      <div style={{ width: "calc(100% - 200px)" }}>
+      <div style={{ marginLeft: "50px", width: "calc(100% - 250px)" }}>
         <Frame
           responsiveWidth={true}
           size={[500, height - 200]}
@@ -307,17 +309,18 @@ class DataResourceTransform extends React.Component<Props, State> {
         />
         {(view === "summary" ||
           view === "scatter" ||
+          view === "hexbin" ||
           view === "bar" ||
           view === "network" ||
           view === "hierarchy") &&
           metricDimSelector(
             metrics.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, metric1: d } }),
-            view === "scatter" ? "X" : "Metric",
+            view === "scatter" || view === "hexbin" ? "X" : "Metric",
             true,
             chart.metric1
           )}
-        {view === "scatter" &&
+        {(view === "scatter" || view === "hexbin") &&
           metricDimSelector(
             metrics.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, metric2: d } }),
@@ -533,6 +536,10 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.updateChart({ view: "scatter" });
   };
 
+  setHexbin = () => {
+    this.updateChart({ view: "hexbin" });
+  };
+
   setSummary = () => {
     this.updateChart({ view: "summary" });
   };
@@ -589,9 +596,15 @@ class DataResourceTransform extends React.Component<Props, State> {
     if (view === "grid") {
       display = <DataResourceTransformGrid {...this.props} />;
     } else if (
-      ["line", "scatter", "bar", "network", "summary", "hierarchy"].includes(
-        view
-      )
+      [
+        "line",
+        "scatter",
+        "bar",
+        "network",
+        "summary",
+        "hierarchy",
+        "hexbin"
+      ].includes(view)
     ) {
       const { Frame, chartGenerator } = semioticSettings[view];
 
@@ -638,13 +651,16 @@ class DataResourceTransform extends React.Component<Props, State> {
               <DatabaseOcticon />
             </IconButton>
             <IconButton onClick={this.setBar} message={"Bar Graph"}>
-              <BarGraphOcticon />
+              <BarChartOcticon />
             </IconButton>
             <IconButton onClick={this.setSummary} message={"Summary"}>
               <BoxplotOcticon />
             </IconButton>
             <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
               <ScatterplotOcticon />
+            </IconButton>
+            <IconButton onClick={this.setHexbin} message={"Area Plot"}>
+              <HexbinOcticon />
             </IconButton>
             <IconButton onClick={this.setNetwork} message={"Network"}>
               <NetworkOcticon />
@@ -653,7 +669,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               <TreeOcticon />
             </IconButton>
             <IconButton onClick={this.setLine} message={"Line Graph"}>
-              <LineGraphOcticon />
+              <LineChartOcticon />
             </IconButton>
           </div>
         </div>

@@ -10,7 +10,7 @@ import {
 
 export const BoxplotOcticon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
-    <title>Create Text Cell</title>
+    <title>Summary Diagram</title>
     <path
       fill="lightgray"
       stroke="black"
@@ -21,7 +21,7 @@ export const BoxplotOcticon = (props: any) => (
 
 export const TreeOcticon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
-    <title>Create Text Cell</title>
+    <title>Dendrogram</title>
     <path
       fill="lightgray"
       stroke="black"
@@ -32,7 +32,7 @@ export const TreeOcticon = (props: any) => (
 
 export const NetworkOcticon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
-    <title>Create Text Cell</title>
+    <title>Network</title>
     <path
       fill="lightgray"
       stroke="black"
@@ -43,11 +43,44 @@ export const NetworkOcticon = (props: any) => (
 
 export const ScatterplotOcticon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
-    <title>Create Text Cell</title>
+    <title>Scatterplot</title>
     <path
       fill="lightgray"
       stroke="black"
       d="M 6.2333524,7.1483631 A 2.1883047,2.1883047 0 0 1 4.0450478,9.3366678 2.1883047,2.1883047 0 0 1 1.8567431,7.1483631 2.1883047,2.1883047 0 0 1 4.0450478,4.9600585 2.1883047,2.1883047 0 0 1 6.2333524,7.1483631 Z M 12.201456,4.0316868 A 2.1883047,2.1883047 0 0 1 10.013151,6.2199914 2.1883047,2.1883047 0 0 1 7.8248465,4.0316868 2.1883047,2.1883047 0 0 1 10.013151,1.8433821 2.1883047,2.1883047 0 0 1 12.201456,4.0316868 Z M 14.787634,11.45866 A 2.1883047,2.1883047 0 0 1 12.599329,13.646965 2.1883047,2.1883047 0 0 1 10.411024,11.45866 2.1883047,2.1883047 0 0 1 12.599329,9.2703555 2.1883047,2.1883047 0 0 1 14.787634,11.45866 Z M 0.06631226,-0.01336003 0.06631226,16.100519 16.113879,16.100519"
+    />
+  </SVGWrapper>
+);
+
+export const LineChartOcticon = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
+    <title>Line Chart</title>
+    <path
+      fill="lightgray"
+      stroke="black"
+      d="M 2.012832,5.5149272 4.0022,1.5361912 6.919939,9.4936622 10.235552,6.8411722 15.275284,12.411403 M 0.48765001,-0.05532378 0.48765001,16.058555 16.535217,16.058555"
+    />
+  </SVGWrapper>
+);
+
+export const HexbinOcticon = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
+    <title>Hexbin</title>
+    <path
+      fill="lightgray"
+      stroke="black"
+      d="M 7.6646201,7.248835 10.200286,8.7365914 12.71271,7.2956277 12.71271,4.2993354 10.200286,2.8583717 7.6481891,4.3220885 Z M 2.5260861,7.248835 5.0617524,8.7365914 7.5741798,7.2956277 7.5741798,4.2993354 5.0617524,2.8583717 2.509655,4.3220885 Z M 10.151008,11.430063 12.686686,12.917818 15.199098,11.476854 15.199098,8.4805611 12.686686,7.0395985 10.134577,8.5033165 Z M 5.0124743,11.430063 7.5481406,12.917818 10.060567,11.476854 10.060567,8.4805611 7.5481406,7.0395985 4.9960421,8.5033165 Z M 0.59322509,-0.02976587 0.59322509,16.053058 16.562547,16.008864"
+    />
+  </SVGWrapper>
+);
+
+export const BarChartOcticon = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
+    <title>Bar Chart</title>
+    <path
+      fill="lightgray"
+      stroke="black"
+      d="M 12.279027,8.4511213 16.181209,8.4511213 16.181209,15.992862 12.279027,15.992862 Z M 6.5947919,4.0324659 10.524457,4.0324659 10.524457,15.92641 6.5947919,15.92641 Z M 0.52657735,0.52511126 4.8907923,0.52511126 4.8907923,15.88305 0.52657735,15.88305 Z"
     />
   </SVGWrapper>
 );
