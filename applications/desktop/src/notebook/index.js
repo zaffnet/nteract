@@ -70,7 +70,7 @@ window.store = store;
 
 initNativeHandlers(store);
 initMenuHandlers(store);
-initGlobalHandlers(store);
+initGlobalHandlers(contentRef, store);
 
 export default class App extends React.PureComponent<Object, Object> {
   notificationSystem: NotificationSystem;

@@ -2,7 +2,6 @@
 
 import type { Store } from "redux";
 
-import { dialog } from "electron";
 import { is } from "immutable";
 import { selectors } from "@nteract/core";
 
@@ -23,32 +22,29 @@ export function unload(store: Store<AppState, Action>) {
   return;
 }
 
-function isDirty(state: AppState) {
-  // Desktop should never be in a state that it has loaded a non-notebook
-  // document, nor that contents wouldn't be on the page, so we let those cases
-  // pass through
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    return false;
-  }
-  const model = selectors.model(state, { contentRef });
-  if (!model || model.type !== "notebook") {
-    return false;
-  }
-
-  return selectors.notebook.isDirty(model);
-}
-
-export function beforeUnload(store: Store<AppState, Action>, e: any) {
+export function beforeUnload(
+  contentRef: ContentRef,
+  store: Store<AppState, Action>,
+  e: any
+) {
   const state = store.getState();
+  const model = selectors.model(state, { contentRef });
 
-  if (isDirty(state)) {
+  if (!model || model.type !== "notebook") {
+    // No model on the page, don't block them
+    return;
+  }
+
+  if (selectors.notebook.isDirty(model)) {
     // Will prevent closing "will-prevent-unload"
     e.returnValue = true;
   }
 }
 
-export function initGlobalHandlers(store: Store<AppState, Action>) {
-  window.onbeforeunload = beforeUnload.bind(null, store);
+export function initGlobalHandlers(
+  contentRef: ContentRef,
+  store: Store<AppState, Action>
+) {
+  window.onbeforeunload = beforeUnload.bind(null, contentRef, store);
   window.onunload = unload.bind(null, store);
 }
