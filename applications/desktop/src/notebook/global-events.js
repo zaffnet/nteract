@@ -10,16 +10,21 @@ import type { AppState, KernelRef, ContentRef } from "@nteract/core";
 import { killKernelImmediately } from "./epics/zeromq-kernels";
 
 export function unload(store: Store<AppState, Action>) {
-  const kernel = selectors.currentKernel(store.getState());
-  if (kernel && kernel.type === "zeromq") {
-    // TODO: Do we need to provide a KernelRef here?
-    killKernelImmediately(kernel);
-  } else if (kernel && kernel.type) {
-    // Since desktop doesn't implement websocket backed kernels and this path
-    // would be hidden without a loud error, we're using an alert on exit
-    alert("ERROR: kernel existed yet was not zeromq backed");
-  }
-  return;
+  const state = store.getState();
+
+  state.core.entities.kernels.byRef.forEach((kernel, kernelRef) => {
+    if (kernel.type === "zeromq") {
+      try {
+        killKernelImmediately(kernel);
+      } catch (e) {
+        alert(`Trouble shutting down - ${e.message}`);
+      }
+    } else {
+      alert(
+        "Need to implement a way to shutdown non-zeromq kernels on desktop"
+      );
+    }
+  });
 }
 
 export function beforeUnload(
