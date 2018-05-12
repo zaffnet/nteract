@@ -1,6 +1,7 @@
 /* @flow */
 import { empty } from "rxjs/observable/empty";
 import { of } from "rxjs/observable/of";
+import { from } from "rxjs/observable/from";
 import { interval } from "rxjs/observable/interval";
 
 import {
@@ -22,7 +23,7 @@ import FileSaver from "file-saver";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
-import type { AppState } from "../state";
+import type { AppState, ContentRef } from "../state";
 
 import type { ActionsObservable } from "redux-observable";
 
@@ -144,13 +145,26 @@ export function autoSaveCurrentContentEpic(
   const duration = sample(someArbitraryPrimesAround30k);
 
   return interval(duration).pipe(
+    mergeMap(() => {
+      const state: AppState = store.getState();
+
+      const contentRef$ = from(
+        state.core.entities.contents.byRef
+          .filter(
+            // Don't bother with non-file and non-notebook types for saving
+            // (no dummy or directory)
+            (content, contentRef) =>
+              content.type === "file" || content.type === "notebook"
+          )
+          .keys()
+      );
+
+      return contentRef$;
+    }),
     // TODO: Once we're switched to the coming redux observable 1.0.0 release,
     // we should use the state$ stream to only save when the content has changed
-    mergeMap(() => {
-      const state = store.getState();
-      // Someday we'll want to have autosave in place for each piece of content when hosting multiple types on a page
-      const contentRef = state.core.currentContentRef;
-
+    mergeMap((contentRef: ContentRef) => {
+      const state: AppState = store.getState();
       const content = selectors.content(state, { contentRef });
 
       let isVisible = false;
