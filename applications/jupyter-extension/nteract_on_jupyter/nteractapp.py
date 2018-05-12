@@ -1,5 +1,5 @@
 from notebook.notebookapp import NotebookApp, flags
-from traitlets import Unicode
+from traitlets import Unicode, Bool
 
 from . import EXT_NAME
 from .config import NteractConfig
@@ -10,6 +10,7 @@ webpack_hot = {"address": 'http://localhost:8080/',
 nteract_flags = dict(flags)
 nteract_flags['dev'] = (
     {'NteractConfig': {'asset_url': webpack_hot['address']},
+     'NteractApp': {'dev_mode': True}
     },
     "\n".join([
         "Start nteract in dev mode, serving assets built from your source code.",
@@ -30,12 +31,24 @@ class NteractApp(NotebookApp):
     classes = [*NotebookApp.classes, NteractConfig]
     flags = nteract_flags
 
+    dev_mode = Bool(False, config=True,
+    help="""Whether to start the app in dev mode. Expects resources to be loaded
+    from webpack's hot reloading server at {address}. Run
+    {command}
+    To serve your assets.
+    This is only useful if NteractApp is installed editably e.g., using `pip install -e .`.
+    """.format(**webpack_hot))
+
+
     def init_server_extensions(self):
         super(NteractApp, self).init_server_extensions()
-        msg = 'NteractApp server extension not enabled, manually loading...'
-        if not self.nbserver_extensions.get(EXT_NAME, False):
-            self.log.warn(msg)
-            load_jupyter_server_extension(self)
+        if self.dev_mode:
+            msg = 'NteractApp server extension not enabled, loading in dev mode...'
+            if not self.nbserver_extensions.get(EXT_NAME, False):
+                self.log.warn(msg)
+                load_jupyter_server_extension(self)
+
+
 
 main = launch_new_instance = NteractApp.launch_instance
 
