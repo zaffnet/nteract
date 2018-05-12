@@ -62,14 +62,13 @@ function publishGist(
 export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
   return action$.pipe(
     ofType(actionTypes.PUBLISH_GIST),
-    mergeMap(action => {
+    mergeMap((action: actionTypes.PublishGist) => {
       const state = store.getState();
 
       const filepath = selectors.currentFilepath(state);
       const notificationSystem = selectors.notificationSystem(state);
 
-      // TODO: Switch GitHub publishing actions to content refs
-      const contentRef = selectors.currentContentRef(state);
+      const contentRef = action.payload.contentRef;
       if (!contentRef) {
         return empty();
       }
