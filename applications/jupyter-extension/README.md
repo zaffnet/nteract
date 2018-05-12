@@ -114,7 +114,7 @@ lerna run build --scope nteract-on-jupyter --stream
 If you want the build to go as quickly as possible and don't want optimized javascript, (in the `nteract` repo) you can run:
 
 ```
-lerna run build:impatient --scope nteract-on-jupyter --stream
+lerna run build:asap --scope nteract-on-jupyter --stream
 ```
 
 Then you will want to use the `jupyter nteract` command.

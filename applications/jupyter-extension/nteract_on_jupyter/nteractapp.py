@@ -5,10 +5,19 @@ from . import EXT_NAME
 from .config import NteractConfig
 from .extension import load_jupyter_server_extension
 
+webpack_hot = {"address": 'http://localhost:8080/',
+               "command":"`lerna run hot --scope nteract-on-jupyter --stream`"}
 nteract_flags = dict(flags)
 nteract_flags['dev'] = (
-    {'NteractConfig': {'asset_url':'http://localhost:8080/'}},
-    "Start nteract in dev mode, running off your source code, with hot reloads."
+    {'NteractConfig': {'asset_url': webpack_hot['address']},
+    },
+    "\n".join([
+        "Start nteract in dev mode, serving assets built from your source code.",
+        "This is a hot reloading server that watches for changes to your source,",
+        "rebuilds the js files, and serves the new assets on:",
+        "    {address}",
+        "To access this server run:",
+        "    {command}"]).format(**webpack_hot)
 )
 
 class NteractApp(NotebookApp):
