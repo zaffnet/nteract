@@ -6,6 +6,7 @@ import Menu, { SubMenu, Divider, MenuItem } from "rc-menu";
 import { actions, selectors } from "@nteract/core";
 
 import type {
+  AppState,
   ContentRef,
   KernelRef,
   KernelspecsRef,
@@ -448,17 +449,10 @@ class PureNotebookMenu extends React.Component<Props, State> {
   }
 }
 
-// TODO: this forces the menu to re-render on cell focus. The better option is
-// to alter how the actions work to just target the currently focused cell.
-// That said, we *may* not have a great way of getting around this as we'll need
-// information about the current document to decide which menu items are
-// available...
-const mapStateToProps = state => {
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    throw new Error("There must be a contentRef for this menu");
-  }
-
+const mapStateToProps = (
+  state: AppState,
+  { contentRef }: { contentRef: ContentRef }
+) => {
   return {
     currentKernelRef: selectors.currentKernelRef(state),
     currentContentRef: contentRef,

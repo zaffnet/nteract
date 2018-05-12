@@ -128,7 +128,7 @@ function main(rootEl: Element, dataEl: Node | null) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <App contentRef={contentRef} />
     </Provider>,
     rootEl
   );

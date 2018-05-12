@@ -137,7 +137,7 @@ export default class Notebook extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <NotebookMenu />
+        <NotebookMenu contentRef={this.props.contentRef} />
         <App
           contentRef={this.props.contentRef}
           displayOrder={this.state.displayOrder}

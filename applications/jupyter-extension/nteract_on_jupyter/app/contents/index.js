@@ -39,8 +39,11 @@ type ContentsProps = {
   appBase: string
 };
 
-const mapStateToProps = (state: AppState, ownProps: *): ContentsProps => {
-  const contentRef = selectors.currentContentRef(state);
+const mapStateToProps = (
+  state: AppState,
+  ownProps: { contentRef: ContentRef }
+): ContentsProps => {
+  const contentRef = ownProps.contentRef;
   const host = state.app.host;
   if (host.type !== "jupyter") {
     throw new Error("this component only works with jupyter apps");

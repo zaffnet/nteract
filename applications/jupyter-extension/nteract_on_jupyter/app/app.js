@@ -7,14 +7,15 @@ import NotificationSystem from "react-notification-system";
 
 import { Styles, themes } from "@nteract/presentational-components";
 import { default as Contents } from "./contents";
+import type { ContentRef } from "@nteract/core";
 
-class App extends React.Component<null, null> {
+class App extends React.Component<{ contentRef: ContentRef }, null> {
   notificationSystem: NotificationSystem;
   render() {
     return (
       <React.Fragment>
         <Styles>
-          <Contents />
+          <Contents contentRef={this.props.contentRef} />
         </Styles>
         <NotificationSystem
           ref={notificationSystem => {
