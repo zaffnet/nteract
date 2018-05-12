@@ -1,9 +1,14 @@
+
+from subprocess import Popen
+
 from notebook.notebookapp import NotebookApp, flags
 from traitlets import Unicode, Bool
 
-from . import EXT_NAME
+
+from . import EXT_NAME, PACKAGE_DIR
 from .config import NteractConfig
 from .extension import load_jupyter_server_extension
+from .utils import cmd_in_new_dir
 
 webpack_hot = {"address": 'http://localhost:8080/',
                "command":["lerna", "run", "hot",
@@ -52,6 +57,8 @@ class NteractApp(NotebookApp):
             if not self.nbserver_extensions.get(EXT_NAME, False):
                 self.log.warn(msg)
                 load_jupyter_server_extension(self)
+            with cmd_in_new_dir(PACKAGE_DIR):
+                Popen(webpack_hot["command"])
 
 
 
