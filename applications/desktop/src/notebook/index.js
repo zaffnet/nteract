@@ -68,7 +68,7 @@ const store = configureStore({
 // Register for debugging
 window.store = store;
 
-initNativeHandlers(store);
+initNativeHandlers(contentRef, store);
 initMenuHandlers(store);
 initGlobalHandlers(contentRef, store);
 

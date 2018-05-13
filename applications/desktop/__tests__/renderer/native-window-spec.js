@@ -84,7 +84,9 @@ describe("createTitleFeed", () => {
 
     const state$ = of(state);
 
-    const attributes = await nativeWindow.createTitleFeed(state$).toPromise();
+    const attributes = await nativeWindow
+      .createTitleFeed(currentContentRef, state$)
+      .toPromise();
     expect(attributes).toEqual({
       modified: false,
       fullpath: "titled.ipynb",
