@@ -66,17 +66,6 @@ export const model = (
   return content.model;
 };
 
-export const currentContentRef = (state: AppState) =>
-  state.core.currentContentRef;
-
-export const currentContent: (
-  state: AppState
-) => ?ContentRecord = createSelector(
-  currentContentRef,
-  contentByRef,
-  (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
-);
-
 export const kernelRefByContentRef = (
   state: AppState,
   ownProps: { contentRef: ContentRef }
@@ -168,25 +157,6 @@ export const comms = createSelector((state: AppState) => state.comms, identity);
 // NOTE: These are comm models, not contents models
 export const models = createSelector([comms], comms => comms.get("models"));
 
-export const currentModel: (state: AppState) => ContentModel = createSelector(
-  (state: AppState) => currentContent(state),
-  currentContent => {
-    return currentContent ? currentContent.model : makeEmptyModel();
-  }
-);
-
-export const currentContentType: (
-  state: AppState
-) => "notebook" | "dummy" | "directory" | "file" | null = createSelector(
-  (state: AppState) => currentContent(state),
-  content => (content ? content.type : null)
-);
-
-export const currentLastSaved = createSelector(
-  (state: AppState) => currentContent(state),
-  currentContent => (currentContent ? currentContent.lastSaved : null)
-);
-
 export const filepath = (
   state: *,
   ownProps: { contentRef: ContentRef }
@@ -197,13 +167,6 @@ export const filepath = (
   }
   return c.filepath;
 };
-
-/*export const currentFilepath: (state: *) => string = createSelector(
-  (state: AppState) => currentContent(state),
-  currentContent => {
-    return currentContent ? currentContent.filepath : "";
-  }
-);*/
 
 export const modalType = createSelector(
   (state: AppState) => state.core.entities.modals.modalType,
