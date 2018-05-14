@@ -69,21 +69,20 @@ We recommend running a webpack server for "hot reloading" the javascript and htm
 
 Unfortunately, any changes you make on the Python side will require that you restart the server for them to take effect.
 
-#### 3.1. All-in-one w/ hot reloading (least flexible)
+#### 3.1. All-in-one w/ hot reloading
 
-We can both from a single command from inside the nteract app:
+You can run both with a single command if you run
 
 ```
-lerna run dev --scope nteract-on-jupyter --stream
+jupyter nteract --dev
 ```
 
 This will run two servers, a webpack server for live reloading javascript and html assets and Jupyter server.
 
 Once the assets have been built, you won't need to refresh the page, but you may need to manually refresh the page if it loads before the assets are built.
 
-**N.B.**: Unfortunately, this way of starting the servers will only let you run the Jupyter server in the `nteract` repo. If you want to run notebooks in other directories you'll need to run the commands separately
 
-#### 3.2 Separate commands w/ hot reloading (most flexible)
+#### 3.2 Separate commands w/ hot reloading 
 
 First we need to run the webpack server to live reload javascript and html assets. Anywhere in the nteract repository, run
 
@@ -94,10 +93,10 @@ lerna run hot --scope nteract-on-jupyter --stream
 In another terminal, go to the directory that you want to run notebooks from and run
 
 ```
-jupyter nteract --dev
+jupyter nteract --NteractConfig.asset_url="http://localhost:8080/"
 ```
 
-The ``--dev`` flag tells the Jupyter server where the webpack server will be serving the assets.
+The ``--NteractConfig.asset_url`` flag tells the Jupyter server where the webpack server will be serving the assets.
 
 If you wait until the assets are built, you won't need to manually reload the Jupyter webpage. If you start the server before the assets have been built, you will need to manually refresh the page once before live reloading
 

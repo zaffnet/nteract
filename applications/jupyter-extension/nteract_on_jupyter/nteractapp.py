@@ -1,12 +1,19 @@
+
+from subprocess import Popen
+
 from notebook.notebookapp import NotebookApp, flags
 from traitlets import Unicode, Bool
 
-from . import EXT_NAME
+
+from . import EXT_NAME, PACKAGE_DIR
 from .config import NteractConfig
 from .extension import load_jupyter_server_extension
+from .utils import cmd_in_new_dir
 
 webpack_hot = {"address": 'http://localhost:8080/',
-               "command":"`lerna run hot --scope nteract-on-jupyter --stream`"}
+               "command":["lerna", "run", "hot",
+                          "--scope", "nteract-on-jupyter",
+                          "--stream"]}
 nteract_flags = dict(flags)
 nteract_flags['dev'] = (
     {'NteractConfig': {'asset_url': webpack_hot['address']},
@@ -18,7 +25,9 @@ nteract_flags['dev'] = (
         "rebuilds the js files, and serves the new assets on:",
         "    {address}",
         "To access this server run:",
-        "    {command}"]).format(**webpack_hot)
+        "    `{command}`"]).format(address=webpack_hot["address"],
+                                   command=" ".join(webpack_hot["command"])
+        )
 )
 
 class NteractApp(NotebookApp):
@@ -34,10 +43,11 @@ class NteractApp(NotebookApp):
     dev_mode = Bool(False, config=True,
     help="""Whether to start the app in dev mode. Expects resources to be loaded
     from webpack's hot reloading server at {address}. Run
-    {command}
+    `{command}`
     To serve your assets.
     This is only useful if NteractApp is installed editably e.g., using `pip install -e .`.
-    """.format(**webpack_hot))
+    """.format(address=webpack_hot["address"],
+               command=" ".join(webpack_hot["command"])))
 
 
     def init_server_extensions(self):
@@ -47,6 +57,8 @@ class NteractApp(NotebookApp):
             if not self.nbserver_extensions.get(EXT_NAME, False):
                 self.log.warn(msg)
                 load_jupyter_server_extension(self)
+            with cmd_in_new_dir(PACKAGE_DIR):
+                Popen(webpack_hot["command"])
 
 
 
