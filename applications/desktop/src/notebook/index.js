@@ -56,7 +56,6 @@ const store = configureStore({
     theme: "light"
   }),
   core: makeStateRecord({
-    currentContentRef: contentRef,
     entities: makeEntitiesRecord({
       contents: makeContentsRecord({
         byRef: initialRefs

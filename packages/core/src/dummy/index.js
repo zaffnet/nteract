@@ -102,17 +102,16 @@ export function dummyStore(config: *) {
   const channels = mockShell;
 
   const kernelRef = createKernelRef();
-  const currentContentRef = createContentRef();
+  const contentRef = createContentRef();
 
   return createStore(rootReducer, {
     core: makeStateRecord({
       kernelRef,
-      currentContentRef,
       entities: makeEntitiesRecord({
         contents: makeContentsRecord({
           byRef: Immutable.Map({
             // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
-            [currentContentRef]: makeNotebookContentRecord({
+            [contentRef]: makeNotebookContentRecord({
               model: makeDocumentRecord({
                 notebook: dummyNotebook,
                 savedNotebook:
