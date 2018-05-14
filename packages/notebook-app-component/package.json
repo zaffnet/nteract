@@ -10,7 +10,7 @@
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
-    "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
+    "build:lib": "NODE_ENV=production babel -d lib src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch",
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
@@ -34,6 +34,7 @@
     "date-fns": "^1.29.0",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
+    "react-hot-loader": "^4.1.2",
     "react-redux": "^5.0.7",
     "react-syntax-highlighter": "^7.0.1",
     "redux": "^4.0.0"
