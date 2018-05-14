@@ -50,7 +50,7 @@ describe("setTitleFromAttributes", () => {
 describe("createTitleFeed", () => {
   test("creates an observable that updates title attributes for modified notebook", async function() {
     const kernelRef = stateModule.createKernelRef();
-    const currentContentRef = stateModule.createContentRef();
+    const contentRef = stateModule.createContentRef();
 
     const notebook = new Immutable.Map().setIn(
       ["metadata", "kernelspec", "display_name"],
@@ -59,12 +59,11 @@ describe("createTitleFeed", () => {
     const state = {
       core: stateModule.makeStateRecord({
         kernelRef,
-        currentContentRef,
         entities: stateModule.makeEntitiesRecord({
           contents: stateModule.makeContentsRecord({
             byRef: Immutable.Map({
               // $FlowFixMe: This really is a content ref, Flow can't handle typing it though
-              [currentContentRef]: stateModule.makeNotebookContentRecord({
+              [contentRef]: stateModule.makeNotebookContentRecord({
                 filepath: "titled.ipynb"
               })
             })
@@ -85,7 +84,7 @@ describe("createTitleFeed", () => {
     const state$ = of(state);
 
     const attributes = await nativeWindow
-      .createTitleFeed(currentContentRef, state$)
+      .createTitleFeed(contentRef, state$)
       .toPromise();
     expect(attributes).toEqual({
       modified: false,
