@@ -1,4 +1,6 @@
 /* @flow */
+import { hot } from "react-hot-loader";
+
 import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
 import {
@@ -705,4 +707,4 @@ export class IconButton extends React.Component<IconButtonProps> {
   }
 }
 
-export default DataResourceTransform;
+export default hot(module)(DataResourceTransform);
