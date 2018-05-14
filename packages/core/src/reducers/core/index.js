@@ -22,16 +22,6 @@ const kernelRef = (state = null, action) => {
   }
 };
 
-const currentContentRef = (state = null, action) => {
-  switch (action.type) {
-    case actionTypes.NEW_NOTEBOOK:
-    case actionTypes.FETCH_CONTENT:
-      return action.payload.contentRef;
-    default:
-      return state;
-  }
-};
-
 const currentKernelspecsRef = (state = null, action) => {
   switch (action.type) {
     case actionTypes.FETCH_KERNELSPECS:
@@ -44,7 +34,6 @@ const currentKernelspecsRef = (state = null, action) => {
 const core = combineReducers(
   {
     communication,
-    currentContentRef,
     currentKernelspecsRef,
     entities,
     kernelRef

@@ -93,7 +93,6 @@ function main(rootEl: Element, dataEl: Node | null) {
       theme: "light"
     }),
     core: makeStateRecord({
-      currentContentRef: contentRef,
       entities: makeEntitiesRecord({
         hosts: makeHostsRecord({
           byRef: Immutable.Map().set(hostRef, jupyterHostRecord)

@@ -56,7 +56,6 @@ const store = configureStore({
     theme: "light"
   }),
   core: makeStateRecord({
-    currentContentRef: contentRef,
     entities: makeEntitiesRecord({
       contents: makeContentsRecord({
         byRef: initialRefs
@@ -68,9 +67,9 @@ const store = configureStore({
 // Register for debugging
 window.store = store;
 
-initNativeHandlers(store);
-initMenuHandlers(store);
-initGlobalHandlers(store);
+initNativeHandlers(contentRef, store);
+initMenuHandlers(contentRef, store);
+initGlobalHandlers(contentRef, store);
 
 export default class App extends React.PureComponent<Object, Object> {
   notificationSystem: NotificationSystem;

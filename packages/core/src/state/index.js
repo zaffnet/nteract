@@ -79,7 +79,6 @@ export type ConfigState = Immutable.Map<string, any>;
 
 export type StateRecordProps = {
   kernelRef: ?KernelRef,
-  currentContentRef: ?ContentRef,
   currentKernelspecsRef: ?KernelspecsRef,
   communication: Immutable.RecordOf<CommunicationRecordProps>,
   entities: Immutable.RecordOf<EntitiesRecordProps>
@@ -89,7 +88,6 @@ export const makeStateRecord: Immutable.RecordFactory<
   StateRecordProps
 > = Immutable.Record({
   kernelRef: null,
-  currentContentRef: null,
   currentKernelspecsRef: null,
   communication: makeCommunicationRecord(),
   entities: makeEntitiesRecord()

@@ -1,8 +1,13 @@
 jest.mock("fs");
 import { ActionsObservable } from "redux-observable";
-import { dummyStore, dummyCommutable } from "@nteract/core/dummy";
 
-import { actions } from "@nteract/core";
+import {
+  actions,
+  createContentRef,
+  makeNotebookContentRecord
+} from "@nteract/core";
+
+import * as Immutable from "immutable";
 
 import { saveEpic, saveAsEpic } from "../../../src/notebook/epics/saving";
 
@@ -11,9 +16,32 @@ import { catchError, toArray } from "rxjs/operators";
 
 describe("saveEpic", () => {
   test("saves the file using the notebook in the state tree", async function() {
-    const store = dummyStore();
+    const contentRef = "123";
+    const notificationSystem = { addNotification: jest.fn() };
 
-    const contentRef = store.getState().core.currentContentRef;
+    const store = {
+      dispatch: jest.fn(),
+      getState: () => ({
+        app: Immutable.Map({
+          version: "0.0.0-test",
+          notificationSystem
+        }),
+        core: {
+          entities: {
+            contents: {
+              byRef: Immutable.Map({
+                "123": makeNotebookContentRecord()
+              })
+            },
+            kernels: {
+              byRef: Immutable.Map({
+                k1: {}
+              })
+            }
+          }
+        }
+      })
+    };
 
     const responses = await saveEpic(
       ActionsObservable.of(actions.save({ contentRef })),
@@ -36,11 +64,34 @@ describe("saveEpic", () => {
 
 describe("saveAsEpic", () => {
   test("works when passed actions of type SAVE_AS", async function() {
-    const store = dummyStore();
+    const contentRef = "123";
+
+    const store = {
+      dispatch: jest.fn(),
+      getState: () => ({
+        app: Immutable.Map({
+          version: "0.0.0-test"
+        }),
+        core: {
+          entities: {
+            contents: {
+              byRef: Immutable.Map({
+                "123": makeNotebookContentRecord()
+              })
+            },
+            kernels: {
+              byRef: Immutable.Map({
+                k1: {}
+              })
+            }
+          }
+        }
+      })
+    };
 
     const responses = await saveAsEpic(
       ActionsObservable.of(
-        actions.saveAs({ filepath: "great-filename", contentRef: "567" })
+        actions.saveAs({ filepath: "great-filename", contentRef })
       ),
       store
     )
@@ -48,8 +99,8 @@ describe("saveAsEpic", () => {
       .toPromise();
 
     expect(responses).toEqual([
-      actions.changeFilename({ filepath: "great-filename", contentRef: "567" }),
-      actions.save({ contentRef: "567" })
+      actions.changeFilename({ filepath: "great-filename", contentRef }),
+      actions.save({ contentRef })
     ]);
   });
 });

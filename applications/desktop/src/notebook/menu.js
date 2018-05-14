@@ -9,7 +9,9 @@ import * as fs from "fs";
 import { throttle } from "lodash";
 
 import { actions, selectors, createKernelRef } from "@nteract/core";
-import type { AppState } from "@nteract/core";
+import type { AppState, ContentRef, KernelRef } from "@nteract/core";
+
+import type { Store } from "redux";
 
 export function cwdKernelFallback() {
   // HACK: If we see they're at /, we assume that was the OS launching the Application
@@ -20,15 +22,13 @@ export function cwdKernelFallback() {
   return process.cwd();
 }
 
-export function dispatchSaveAs(store: *, evt: Event, filepath: string) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.saveAs({ filepath, contentRef }));
+export function dispatchSaveAs(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  evt: Event,
+  filepath: string
+) {
+  store.dispatch(actions.saveAs({ filepath, contentRef: ownProps.contentRef }));
 }
 
 const dialog = remote.dialog;
@@ -73,38 +73,42 @@ export function showSaveAsDialog(): Promise<string> {
   });
 }
 
-export function triggerWindowRefresh(store: *, filepath: string) {
+export function triggerWindowRefresh(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  filepath: string
+) {
   if (!filepath) {
     return;
   }
 
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.saveAs({ filepath, contentRef }));
+  store.dispatch(actions.saveAs({ filepath, contentRef: ownProps.contentRef }));
 }
 
-export function dispatchRestartKernel(store: *) {
+export function dispatchRestartKernel(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernelRef(state);
-  const contentRef = selectors.currentContentRef(state);
+  const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
 
-  if (!kernelRef || !contentRef) {
-    console.error("kernelRef or contentRef not set in state for menu");
+  if (!kernelRef) {
+    console.error("kernelRef not set in state for menu");
     return;
   }
 
   store.dispatch(
-    actions.restartKernel({ clearOutputs: false, kernelRef, contentRef })
+    actions.restartKernel({
+      clearOutputs: false,
+      kernelRef,
+      contentRef: ownProps.contentRef
+    })
   );
 }
 
 export function promptUserAboutNewKernel(
-  store: *,
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
   filepath: string
 ): Promise<*> {
   return new Promise(resolve => {
@@ -123,22 +127,23 @@ export function promptUserAboutNewKernel(
       index => {
         if (index === 0) {
           const state = store.getState();
-          const kernel = selectors.currentKernel(state);
+          const oldKernelRef = selectors.kernelRefByContentRef(state, ownProps);
+          if (!oldKernelRef) {
+            console.error("kernel not available for relaunch");
+            return;
+          }
+          const kernel = selectors.kernel(state, { kernelRef: oldKernelRef });
+          if (!kernel) {
+            console.error("kernel not available for relaunch");
+            return;
+          }
+
           const cwd = filepath
             ? path.dirname(path.resolve(filepath))
             : cwdKernelFallback();
 
           // Create a brand new kernel
           const kernelRef = createKernelRef();
-          const contentRef = selectors.currentContentRef(state);
-          if (!contentRef) {
-            console.error("content ref not set in store for menu");
-            return;
-          }
-          if (!kernel) {
-            console.error("kernel not available for relaunch");
-            return;
-          }
 
           store.dispatch(
             actions.launchKernelByName({
@@ -146,7 +151,7 @@ export function promptUserAboutNewKernel(
               cwd,
               selectNextKernel: true,
               kernelRef,
-              contentRef
+              contentRef: ownProps.contentRef
             })
           );
         }
@@ -156,43 +161,44 @@ export function promptUserAboutNewKernel(
   });
 }
 
-export function triggerSaveAs(store: *) {
+export function triggerSaveAs(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   showSaveAsDialog().then(filepath => {
     if (filepath) {
-      triggerWindowRefresh(store, filepath);
-      promptUserAboutNewKernel(store, filepath);
+      triggerWindowRefresh(ownProps, store, filepath);
+      promptUserAboutNewKernel(ownProps, store, filepath);
     }
   });
 }
 
-export function dispatchSave(store: *) {
+export function dispatchSave(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
-  const filepath = selectors.currentFilepath(state);
-  if (!filepath) {
-    triggerSaveAs(store);
-  } else {
-    const contentRef = selectors.currentContentRef(state);
-    if (!contentRef) {
-      console.error("content ref not set in store for menu");
-      return;
-    }
 
-    store.dispatch(actions.save({ contentRef }));
+  const filepath = selectors.filepath(state, ownProps);
+
+  if (!filepath) {
+    triggerSaveAs(ownProps, store);
+  } else {
+    store.dispatch(actions.save(ownProps));
   }
 }
 
-export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
+export function dispatchNewKernel(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  evt: Event,
+  spec: Object
+) {
   const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  const filepath = selectors.currentFilepath(state);
+  const filepath = selectors.filepath(state, ownProps);
   const cwd = filepath
     ? path.dirname(path.resolve(filepath))
     : cwdKernelFallback();
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
 
   // Create a brand new kernel
   const kernelRef = createKernelRef();
@@ -203,28 +209,22 @@ export function dispatchNewKernel(store: *, evt: Event, spec: Object) {
       cwd,
       selectNextKernel: true,
       kernelRef,
-      contentRef
+      contentRef: ownProps.contentRef
     })
   );
 }
 
-export function dispatchPublishGist(store: *, event: Event) {
+export function dispatchPublishGist(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  event: Event
+) {
   const state = store.getState();
   let githubToken = state.app.get("githubToken");
 
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    store.dispatch(
-      actions.coreError(
-        new Error("content ref should be set for github publishing")
-      )
-    );
-    return;
-  }
-
   // The simple case -- we have a token and can publish
   if (githubToken) {
-    store.dispatch(actions.publishGist({ contentRef }));
+    store.dispatch(actions.publishGist(ownProps));
     return;
   }
 
@@ -240,6 +240,7 @@ export function dispatchPublishGist(store: *, event: Event) {
     webPreferences: { zoomFactor: 0.75 }
   });
 
+  // TODO: This needs to be moved to an epic
   win.webContents.on("dom-ready", () => {
     // When we're at our callback code page, keep the page hidden
     if (win.getURL().indexOf("callback?code=") !== -1) {
@@ -261,7 +262,7 @@ export function dispatchPublishGist(store: *, event: Event) {
           });
 
           // We are now authenticated and can finally publish
-          store.dispatch(actions.publishGist({ contentRef }));
+          store.dispatch(actions.publishGist(ownProps));
         } catch (e) {
           store.dispatch(actions.coreError(e));
         } finally {
@@ -275,82 +276,71 @@ export function dispatchPublishGist(store: *, event: Event) {
   win.loadURL("https://oauth.nteract.io/github");
 }
 
-export function dispatchRunAllBelow(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.executeAllCellsBelow({ contentRef }));
+export function dispatchRunAllBelow(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.executeAllCellsBelow(ownProps));
 }
 
-export function dispatchRunAll(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.executeAllCells({ contentRef }));
+export function dispatchRunAll(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.executeAllCells(ownProps));
 }
 
-export function dispatchClearAll(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.clearAllOutputs({ contentRef }));
+export function dispatchClearAll(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.clearAllOutputs(ownProps));
 }
 
-export function dispatchUnhideAll(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
+export function dispatchUnhideAll(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   store.dispatch(
     actions.unhideAll({
       outputHidden: false,
       inputHidden: false,
-      contentRef
+      contentRef: ownProps.contentRef
     })
   );
 }
 
-export function dispatchKillKernel(store: *) {
+export function dispatchKillKernel(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernelRef(state);
+  const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
   if (!kernelRef) {
-    console.error("kernel ref not set in store for menu");
+    store.dispatch(actions.coreError(new Error("kernel not set")));
     return;
   }
 
   store.dispatch(actions.killKernel({ restarting: false, kernelRef }));
 }
 
-export function dispatchInterruptKernel(store: *) {
+export function dispatchInterruptKernel(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
 
   const notificationSystem = selectors.notificationSystem(state);
   if (process.platform === "win32") {
     notificationSystem.addNotification({
       title: "Not supported in Windows",
-      message: "Kernel interruption is currently not supported in Windows.",
+      message: "Kernel interruption is not supported in Windows.",
       level: "error"
     });
   } else {
-    const kernelRef = selectors.currentKernelRef(state);
+    const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
     if (!kernelRef) {
-      console.error("kernel ref not set in store for menu");
+      store.dispatch(actions.coreError(new Error("kernel not set")));
       return;
     }
 
@@ -358,22 +348,23 @@ export function dispatchInterruptKernel(store: *) {
   }
 }
 
-export function dispatchRestartClearAll(store: *) {
+export function dispatchRestartClearAll(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
-  const kernelRef = selectors.currentKernelRef(state);
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
+  const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
   if (!kernelRef) {
-    console.error("kernel ref not set in store for menu");
+    store.dispatch(actions.coreError(new Error("kernel not set")));
     return;
   }
 
   store.dispatch(
-    actions.restartKernel({ clearOutputs: true, kernelRef, contentRef })
+    actions.restartKernel({
+      clearOutputs: true,
+      kernelRef,
+      contentRef: ownProps.contentRef
+    })
   );
 }
 
@@ -389,113 +380,98 @@ export function dispatchZoomReset() {
   webFrame.setZoomLevel(0);
 }
 
-export function dispatchSetTheme(store: *, evt: Event, theme: string) {
+export function dispatchSetTheme(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  evt: Event,
+  theme: string
+) {
   store.dispatch(actions.setTheme(theme));
 }
 
-export function dispatchSetCursorBlink(store: *, evt: Event, value: *) {
+export function dispatchSetCursorBlink(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  evt: Event,
+  value: *
+) {
   store.dispatch(actions.setCursorBlink(value));
 }
 
-export function dispatchCopyCell(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.copyCell({ contentRef }));
+export function dispatchCopyCell(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.copyCell({ contentRef: ownProps.contentRef }));
 }
 
-export function dispatchCutCell(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.cutCell({ contentRef }));
+export function dispatchCutCell(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.cutCell({ contentRef: ownProps.contentRef }));
 }
 
-export function dispatchPasteCell(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
-  store.dispatch(actions.pasteCell({ contentRef }));
+export function dispatchPasteCell(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
+  store.dispatch(actions.pasteCell(ownProps));
 }
 
-export function dispatchCreateCellAfter(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
+export function dispatchCreateCellAfter(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   store.dispatch(
     actions.createCellAfter({
       cellType: "code",
       source: "",
-      contentRef
+      contentRef: ownProps.contentRef
     })
   );
 }
 
-export function dispatchCreateTextCellAfter(store: *) {
-  const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
-
+export function dispatchCreateTextCellAfter(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   store.dispatch(
     actions.createCellAfter({
       cellType: "markdown",
       source: "",
-      contentRef
+      contentRef: ownProps.contentRef
     })
   );
 }
 
-export function dispatchLoad(store: *, event: Event, filepath: string) {
-  const state = store.getState();
+export function dispatchLoad(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
+  event: Event,
+  filepath: string
+) {
+  // We are loading a new document so we will create a kernelRef
   const kernelRef = createKernelRef();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
 
   store.dispatch(
-    actions.fetchContent({ filepath, params: {}, kernelRef, contentRef })
+    actions.fetchContent({
+      filepath,
+      params: {},
+      kernelRef,
+      contentRef: ownProps.contentRef
+    })
   );
 }
 
 export function dispatchNewNotebook(
-  store: *,
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
   event: Event,
   kernelSpec: Object
 ) {
-  const state = store.getState();
+  // It's a brand new notebook so we create a kernelRef for it
   const kernelRef = createKernelRef();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
 
   store.dispatch(
     // for desktop, we _can_ assume this has no path except for living in `cwd`
@@ -506,13 +482,13 @@ export function dispatchNewNotebook(
       kernelSpec,
       cwd: cwdKernelFallback(),
       kernelRef,
-      contentRef
+      contentRef: ownProps.contentRef
     })
   );
 }
 
 /**
- * Print the current notebook to PDF.
+ * Print notebook to PDF.
  * It will expand all cell outputs before printing and restore cells it expanded when complete.
  *
  * @param {object} store - The Redux store
@@ -520,21 +496,16 @@ export function dispatchNewNotebook(
  * @param {any} notificationSystem - reference to global notification system
  */
 export function exportPDF(
-  store: *,
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>,
   basepath: string,
   notificationSystem: *
 ): void {
   const state = store.getState();
-  const contentRef = selectors.currentContentRef(state);
-
-  if (!contentRef) {
-    console.error("content ref not set in store for menu");
-    return;
-  }
 
   const pdfPath = `${basepath}.pdf`;
 
-  const model = selectors.model(state, { contentRef });
+  const model = selectors.model(state, ownProps);
   if (!model || model.type !== "notebook") {
     throw new Error(
       "Massive strangeness in the desktop app if someone is exporting a non-notebook to PDF"
@@ -547,7 +518,12 @@ export function exportPDF(
   //       run through before we print...
   // Expand unexpanded cells
   unexpandedCells.map(cellID =>
-    store.dispatch(actions.toggleOutputExpansion({ id: cellID, contentRef }))
+    store.dispatch(
+      actions.toggleOutputExpansion({
+        id: cellID,
+        contentRef: ownProps.contentRef
+      })
+    )
   );
 
   remote.getCurrentWindow().webContents.printToPDF(
@@ -560,9 +536,14 @@ export function exportPDF(
       // Restore the modified cells to their unexpanded state.
       unexpandedCells.map(cellID =>
         store.dispatch(
-          actions.toggleOutputExpansion({ id: cellID, contentRef })
+          actions.toggleOutputExpansion({
+            id: cellID,
+            contentRef: ownProps.contentRef
+          })
         )
       );
+
+      const notificationSystem = state.app.get("notificationSystem");
 
       fs.writeFile(pdfPath, data, error_fs => {
         notificationSystem.addNotification({
@@ -583,28 +564,33 @@ export function exportPDF(
   );
 }
 
-export function triggerSaveAsPDF(store: *) {
+export function triggerSaveAsPDF(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   showSaveAsDialog()
     .then(filepath => {
       if (filepath) {
-        return Promise.all([triggerWindowRefresh(store, filepath)]).then(() =>
-          storeToPDF(store)
-        );
+        return Promise.all([
+          triggerWindowRefresh(ownProps, store, filepath)
+        ]).then(() => storeToPDF(ownProps, store));
       }
     })
     .catch(e => store.dispatch(actions.coreError(e)));
 }
 
-export function storeToPDF(store: *) {
+export function storeToPDF(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   const state = store.getState();
-  const notebookName = selectors.currentFilepath(state);
-  const basename = path.basename(notebookName, ".ipynb");
+  const notebookName = selectors.filepath(state, ownProps);
   const notificationSystem = state.app.get("notificationSystem");
-  if (basename === "") {
+  if (!notebookName) {
     notificationSystem.addNotification({
       title: "File has not been saved!",
       message: [
-        "Click the button below to save the notebook such that it can be ",
+        "Click the button below to save the notebook so that it can be ",
         "exported as a PDF."
       ],
       dismissible: true,
@@ -613,49 +599,67 @@ export function storeToPDF(store: *) {
       action: {
         label: "Save As",
         callback: function cb() {
-          triggerSaveAsPDF(store);
+          triggerSaveAsPDF(ownProps, store);
         }
       }
     });
   } else {
+    const basename = path.basename(notebookName, ".ipynb");
     const basepath = path.join(path.dirname(notebookName), basename);
-    exportPDF(store, basepath, notificationSystem);
+    exportPDF(ownProps, store, basepath, notificationSystem);
   }
 }
 
-export function dispatchLoadConfig(store: *) {
+export function dispatchLoadConfig(
+  ownProps: { contentRef: ContentRef },
+  store: Store<AppState, *>
+) {
   store.dispatch(actions.loadConfig());
 }
 
-export function initMenuHandlers(store: *) {
-  ipc.on("main:new", dispatchNewNotebook.bind(null, store));
-  ipc.on("menu:new-kernel", dispatchNewKernel.bind(null, store));
-  ipc.on("menu:run-all", dispatchRunAll.bind(null, store));
-  ipc.on("menu:run-all-below", dispatchRunAllBelow.bind(null, store));
-  ipc.on("menu:clear-all", dispatchClearAll.bind(null, store));
-  ipc.on("menu:unhide-all", dispatchUnhideAll.bind(null, store));
-  ipc.on("menu:save", throttle(dispatchSave.bind(null, store), 2000));
-  ipc.on("menu:save-as", dispatchSaveAs.bind(null, store));
-  ipc.on("menu:new-code-cell", dispatchCreateCellAfter.bind(null, store));
-  ipc.on("menu:new-text-cell", dispatchCreateTextCellAfter.bind(null, store));
-  ipc.on("menu:copy-cell", dispatchCopyCell.bind(null, store));
-  ipc.on("menu:cut-cell", dispatchCutCell.bind(null, store));
-  ipc.on("menu:paste-cell", dispatchPasteCell.bind(null, store));
-  ipc.on("menu:kill-kernel", dispatchKillKernel.bind(null, store));
-  ipc.on("menu:interrupt-kernel", dispatchInterruptKernel.bind(null, store));
-  ipc.on("menu:restart-kernel", dispatchRestartKernel.bind(null, store));
+export function initMenuHandlers(
+  contentRef: ContentRef,
+  store: Store<AppState, *>
+) {
+  const opts = {
+    contentRef
+  };
+
+  ipc.on("main:new", dispatchNewNotebook.bind(null, opts, store));
+  ipc.on("menu:new-kernel", dispatchNewKernel.bind(null, opts, store));
+  ipc.on("menu:run-all", dispatchRunAll.bind(null, opts, store));
+  ipc.on("menu:run-all-below", dispatchRunAllBelow.bind(null, opts, store));
+  ipc.on("menu:clear-all", dispatchClearAll.bind(null, opts, store));
+  ipc.on("menu:unhide-all", dispatchUnhideAll.bind(null, opts, store));
+  ipc.on("menu:save", throttle(dispatchSave.bind(null, opts, store), 2000));
+  ipc.on("menu:save-as", dispatchSaveAs.bind(null, opts, store));
+  ipc.on("menu:new-code-cell", dispatchCreateCellAfter.bind(null, opts, store));
+  ipc.on(
+    "menu:new-text-cell",
+    dispatchCreateTextCellAfter.bind(null, opts, store)
+  );
+  ipc.on("menu:copy-cell", dispatchCopyCell.bind(null, opts, store));
+  ipc.on("menu:cut-cell", dispatchCutCell.bind(null, opts, store));
+  ipc.on("menu:paste-cell", dispatchPasteCell.bind(null, opts, store));
+  ipc.on("menu:kill-kernel", dispatchKillKernel.bind(null, opts, store));
+  ipc.on(
+    "menu:interrupt-kernel",
+    dispatchInterruptKernel.bind(null, opts, store)
+  );
+  ipc.on("menu:restart-kernel", dispatchRestartKernel.bind(null, opts, store));
   ipc.on(
     "menu:restart-and-clear-all",
-    dispatchRestartClearAll.bind(null, store)
+    dispatchRestartClearAll.bind(null, opts, store)
   );
+  ipc.on("menu:theme", dispatchSetTheme.bind(null, opts, store));
+  ipc.on("menu:set-blink-rate", dispatchSetCursorBlink.bind(null, opts, store));
+  ipc.on("menu:publish:gist", dispatchPublishGist.bind(null, opts, store));
+  ipc.on("menu:exportPDF", storeToPDF.bind(null, opts, store));
+  ipc.on("main:load", dispatchLoad.bind(null, opts, store));
+  ipc.on("main:load-config", dispatchLoadConfig.bind(null, opts, store));
+
+  /* Global non-content aware actions */
   ipc.on("menu:zoom-in", dispatchZoomIn);
   ipc.on("menu:zoom-out", dispatchZoomOut);
   ipc.on("menu:zoom-reset", dispatchZoomReset);
-  ipc.on("menu:theme", dispatchSetTheme.bind(null, store));
-  ipc.on("menu:set-blink-rate", dispatchSetCursorBlink.bind(null, store));
-  ipc.on("menu:publish:gist", dispatchPublishGist.bind(null, store));
-  ipc.on("menu:exportPDF", storeToPDF.bind(null, store));
-  // OCD: This is more like the registration of main -> renderer thread
-  ipc.on("main:load", dispatchLoad.bind(null, store));
-  ipc.on("main:load-config", dispatchLoadConfig.bind(null, store));
 }

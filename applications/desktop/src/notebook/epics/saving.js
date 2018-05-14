@@ -27,7 +27,16 @@ export function saveEpic(
       const state = store.getState();
       const contentRef = action.payload.contentRef;
 
-      const model = selectors.model(state, { contentRef });
+      const content = selectors.content(state, { contentRef });
+      if (!content) {
+        return of(
+          actions.saveFailed({
+            error: new Error("no notebook loaded to save"),
+            contentRef: action.payload.contentRef
+          })
+        );
+      }
+      const model = content.model;
 
       if (!model || model.type !== "notebook") {
         return of(
@@ -38,7 +47,7 @@ export function saveEpic(
         );
       }
 
-      const filepath = selectors.currentFilepath(state);
+      const filepath = content.filepath;
       // TODO: this default version should probably not be here.
       const appVersion = selectors.appVersion(state) || "0.0.0-beta";
       const notebook = stringifyNotebook(
