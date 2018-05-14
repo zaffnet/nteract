@@ -69,7 +69,7 @@ const store = configureStore({
 window.store = store;
 
 initNativeHandlers(contentRef, store);
-initMenuHandlers(store);
+initMenuHandlers(contentRef, store);
 initGlobalHandlers(contentRef, store);
 
 export default class App extends React.PureComponent<Object, Object> {

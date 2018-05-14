@@ -65,9 +65,6 @@ export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
     mergeMap((action: actionTypes.PublishGist) => {
       const state = store.getState();
 
-      const filepath = selectors.currentFilepath(state);
-      const notificationSystem = selectors.notificationSystem(state);
-
       const contentRef = action.payload.contentRef;
       if (!contentRef) {
         return empty();
@@ -80,6 +77,9 @@ export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
       if (!content || content.type !== "notebook") {
         return empty();
       }
+
+      const filepath = content.filepath;
+      const notificationSystem = selectors.notificationSystem(state);
 
       const model = content.model;
 

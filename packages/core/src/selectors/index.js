@@ -77,6 +77,22 @@ export const currentContent: (
   (contentRef, byRef) => (contentRef ? byRef.get(contentRef) : null)
 );
 
+export const kernelRefByContentRef = (
+  state: AppState,
+  ownProps: { contentRef: ContentRef }
+): ?KernelRef => {
+  const c = content(state, ownProps);
+  // TODO: When kernels can be associated on other content types, we'll
+  //      allow those too. For now, because of how flow works we have to
+  //      check the "type" field rather than try to check if `kernelRef` is
+  //      a property of the model. There might be some way though. 🤔
+  if (c && c.model && c.model.type === "notebook") {
+    return c.model.kernelRef;
+  }
+
+  return null;
+};
+
 export const currentKernelspecsRef = (state: AppState) =>
   state.core.currentKernelspecsRef;
 
@@ -171,12 +187,23 @@ export const currentLastSaved = createSelector(
   currentContent => (currentContent ? currentContent.lastSaved : null)
 );
 
-export const currentFilepath: (state: *) => string = createSelector(
+export const filepath = (
+  state: *,
+  ownProps: { contentRef: ContentRef }
+): ?string => {
+  const c = content(state, ownProps);
+  if (!c) {
+    return null;
+  }
+  return c.filepath;
+};
+
+/*export const currentFilepath: (state: *) => string = createSelector(
   (state: AppState) => currentContent(state),
   currentContent => {
     return currentContent ? currentContent.filepath : "";
   }
-);
+);*/
 
 export const modalType = createSelector(
   (state: AppState) => state.core.entities.modals.modalType,
