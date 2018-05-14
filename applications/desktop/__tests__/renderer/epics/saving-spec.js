@@ -17,12 +17,14 @@ import { catchError, toArray } from "rxjs/operators";
 describe("saveEpic", () => {
   test("saves the file using the notebook in the state tree", async function() {
     const contentRef = "123";
+    const notificationSystem = { addNotification: jest.fn() };
 
     const store = {
       dispatch: jest.fn(),
       getState: () => ({
         app: Immutable.Map({
-          version: "0.0.0-test"
+          version: "0.0.0-test",
+          notificationSystem
         }),
         core: {
           entities: {
