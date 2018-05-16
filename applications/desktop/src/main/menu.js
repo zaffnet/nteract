@@ -490,6 +490,44 @@ export function loadFullMenu(store: * = global.store) {
     ]
   };
 
+  const git = {
+    label: "Git",
+    submenu: [
+      {
+        label: "Initialize Git Repository",
+        // enabled: BrowserWindow.getAllWindows().length > 0,
+        submenu: [
+          {
+            label: "Initialize Git Repository",
+            enabled: BrowserWindow.getAllWindows().length > 0,
+            click: createSender("menu:git:init")
+          },
+          {
+            label: "Copy Git Config",
+            enabled: BrowserWindow.getAllWindows().length > 0,
+            click: createSender("menu:git:copy-config")
+          }
+        ]
+        // click: createSender("menu:git:init")
+      },
+      {
+        label: "Stage Notebook Changes",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        click: createSender("menu:git:add")
+      },
+      {
+        label: "Commit Changes",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        click: createSender("menu:git:commit")
+      },
+      {
+        label: "Remove Notebook",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        click: createSender("menu:git:remove")
+      }
+    ]
+  };
+
   const view = {
     label: "View",
     submenu: [
@@ -644,6 +682,7 @@ export function loadFullMenu(store: * = global.store) {
   template.push(edit);
   template.push(cell);
   template.push(view);
+  template.push(git);
 
   // Application specific functionality should go before window and help
   template.push(languageMenu);
