@@ -10,6 +10,7 @@ import {
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
+import HTMLLegend from "./HTMLLegend";
 
 function createLabelItems(uniqueValues: Array<string>): any[] {
   return uniqueValues.map(d => ({ label: d }));
@@ -34,6 +35,7 @@ function stringOrFnAccessor(d: Object, accessor: string | Function) {
 function sortByOrdinalRange(
   oAccessor: Function | string,
   rAccessor: Function | string,
+  secondarySort: string,
   data: Array<Object>
 ): any[] {
   return data.sort((a, b) => {
@@ -42,16 +44,20 @@ function sortByOrdinalRange(
     const rA = stringOrFnAccessor(a, rAccessor);
     const rB = stringOrFnAccessor(b, rAccessor);
 
-    if (oB === oA) return rB - rA;
-    if (oA < oB) return -1;
-    if (oA > oB) return 1;
+    if (oB !== oA) return rB - rA;
+
+    const sA = stringOrFnAccessor(a, secondarySort);
+    const sB = stringOrFnAccessor(b, secondarySort);
+
+    if (sA < sB) return -1;
+    if (sA > sB) return 1;
     return 1;
   });
 }
 
 const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"];
 const thresholds = scaleThreshold()
-  .domain([0.01, 0.25, 0.5, 0.75, 1])
+  .domain([0.01, 0.2, 0.4, 0.6, 0.8])
   .range(steps);
 
 const parentPath = (d, pathArray) => {
@@ -162,7 +168,7 @@ const semioticLineChart = (
     xAccessor: "x",
     yAccessor: "value",
     showLinePoints: true,
-    margin: { top: 20, right: 20, bottom: 50, left: 50 },
+    margin: { top: 20, right: 200, bottom: 50, left: 50 },
     legend: {
       title: "Legend",
       position: "right",
@@ -348,11 +354,7 @@ const semioticBarChart = (
   schema: Object,
   options: Object
 ) => {
-  const additionalSettings = {};
-  const colorHash = {};
-
   const { selectedMetrics, selectedDimensions, chart } = options;
-
   const { dim1, dim2, metric1, metric3 } = chart;
 
   const oAccessor =
@@ -362,31 +364,33 @@ const semioticBarChart = (
 
   const rAccessor = metric1;
 
+  const additionalSettings = {};
+  const colorHash = { Other: "grey" };
+
+  const sortedData = sortByOrdinalRange(
+    oAccessor,
+    (metric3 !== "none" && metric3) || rAccessor,
+    dim1,
+    data
+  );
+
   if (metric3 && metric3 !== "none") {
     additionalSettings.dynamicColumnWidth = metric3;
   }
 
   if (dim1 && dim1 !== "none") {
-    const uniqueValues = data.reduce(
+    const uniqueValues = sortedData.reduce(
       (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
       []
     );
 
     uniqueValues.forEach((d: string, i: number) => {
-      colorHash[d] = colors[i % colors.length];
+      colorHash[d] = i > 18 ? "grey" : colors[i % colors.length];
     });
 
-    additionalSettings.legend = {
-      title: dim2,
-      position: "right",
-      width: 200,
-      legendGroups: [
-        {
-          styleFn: (d: Object) => ({ fill: colorHash[d.label] }),
-          items: createLabelItems(uniqueValues)
-        }
-      ]
-    };
+    additionalSettings.afterElements = (
+      <HTMLLegend values={uniqueValues} colorHash={colorHash} />
+    );
 
     if (
       selectedDimensions.length > 0 &&
@@ -417,7 +421,7 @@ const semioticBarChart = (
 
   const barSettings = {
     type: "bar",
-    data: sortByOrdinalRange(oAccessor, rAccessor, data),
+    data: sortedData,
     oAccessor,
     rAccessor,
     style: (d: Object) => ({
@@ -425,7 +429,9 @@ const semioticBarChart = (
       stroke: colorHash[d[dim1]] || colors[0]
     }),
     oPadding: 5,
-    oLabel: (d: Object) => <text transform="rotate(90)">{d}</text>,
+    oLabel: (d: Object) => {
+      return <text transform="rotate(90)">{d}</text>;
+    },
     hoverAnnotation: true,
     margin: { top: 10, right: 10, bottom: 100, left: 70 },
     axis: { orient: "left", label: rAccessor },
@@ -598,7 +604,7 @@ const semioticScatterplot = (
   );
 
   let sizeScale = e => 5;
-  const colorHash = {};
+  const colorHash = { Other: "grey" };
   const additionalSettings = {};
 
   let annotations;
@@ -622,27 +628,46 @@ const semioticScatterplot = (
       .domain([dataMin, dataMax])
       .range([2, 20]);
   }
+  const sortedData = sortByOrdinalRange(
+    metric1,
+    (metric3 !== "none" && metric3) || metric2,
+    "none",
+    data
+  );
+
   if (!hexbin && dim1 && dim1 !== "none") {
-    const uniqueValues = data.reduce(
+    const uniqueValues = sortedData.reduce(
       (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
       []
     );
 
     uniqueValues.forEach((d, i) => {
-      colorHash[d] = colors[i % colors.length];
+      colorHash[d] = i > 18 ? "grey" : colors[i % colors.length];
     });
 
-    additionalSettings.legend = {
-      title: dim1,
-      position: "right",
-      width: 200,
-      legendGroups: [
-        {
-          styleFn: (d: Object) => ({ fill: colorHash[d.label] }),
-          items: createLabelItems(uniqueValues)
-        }
-      ]
+    additionalSettings.afterElements = (
+      <HTMLLegend values={uniqueValues} colorHash={colorHash} />
+    );
+  } else if (hexbin) {
+    const hexValues = [
+      "0% - 20%",
+      "20% - 40%",
+      "40% - 60%",
+      "60% - 80%",
+      "80% - 100%"
+    ];
+    const hexHash = {
+      "0% - 20%": "#FBEEEC",
+      "20% - 40%": "#f3c8c2",
+      "40% - 60%": "#e39787",
+      "60% - 80%": "#ce6751",
+      "80% - 100%": "#b3331d"
     };
+
+    //    const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"]
+    additionalSettings.afterElements = (
+      <HTMLLegend values={hexValues} colorHash={hexHash} />
+    );
   }
   return {
     xAccessor: metric1,
@@ -670,6 +695,7 @@ const semioticScatterplot = (
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },
     annotations: !hexbin && annotations,
+    annotationSettings: { layout: { type: "marginalia", orient: "right" } },
     tooltipContent: (hexbin && areaTooltip) || pointTooltip,
     ...additionalSettings
   };
