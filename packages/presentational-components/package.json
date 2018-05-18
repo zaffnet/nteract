@@ -19,7 +19,7 @@
     "react-syntax-highlighter": "^7.0.1"
   },
   "peerDependencies": {
-    "react": "^16.2.0",
+    "react": "^16.3.2",
     "styled-jsx": "^2.2.6"
   },
   "publishConfig": {
