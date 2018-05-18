@@ -303,7 +303,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     });
 
     const display = (
-      <div style={{ marginLeft: "50px", width: "calc(100% - 250px)" }}>
+      <div style={{ marginLeft: "50px", width: "calc(100% - 50px)" }}>
         <Frame
           responsiveWidth={true}
           size={[500, height - 200]}
