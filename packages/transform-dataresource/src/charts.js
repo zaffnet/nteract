@@ -24,6 +24,7 @@ function combineTopAnnotations(
   return [...topQ, ...topSecondQ].map(d => ({
     type: "react-annotation",
     label: d[dim2],
+    id: d[dim2],
     ...d
   }));
 }
