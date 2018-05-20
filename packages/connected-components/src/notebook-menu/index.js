@@ -306,6 +306,15 @@ class PureNotebookMenu extends React.Component<Props, State> {
             >
               Download (.ipynb)
             </MenuItem>
+            <MenuItem>
+              <a
+                href="/nteract/edit"
+                style={{ textDecoration: "none" }}
+                target="_blank"
+              >
+                Open Directory View
+              </a>
+            </MenuItem>
           </SubMenu>
           <SubMenu key={MENUS.EDIT} title="Edit">
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.CUT_CELL)}>
