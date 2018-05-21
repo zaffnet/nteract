@@ -16,7 +16,7 @@ import type {
 import { MENU_ITEM_ACTIONS, MENUS } from "./constants";
 import { MODAL_TYPES } from "../modal-controller";
 import { connect } from "react-redux";
-import { localCss } from "./styles";
+import StyleWrapper from "./styles";
 
 // To allow actions that can take dynamic arguments (like selecting a kernel
 // based on the host's kernelspecs), we have some simple utility functions to
@@ -295,7 +295,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       menuProps.openKeys = openKeys;
     }
     return (
-      <div>
+      <StyleWrapper>
         <Menu {...menuProps}>
           <SubMenu key={MENUS.FILE} title="File">
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SAVE_NOTEBOOK)}>
@@ -444,16 +444,13 @@ class PureNotebookMenu extends React.Component<Props, State> {
             </MenuItem>
           </SubMenu>
         </Menu>
-        <style global jsx>
-          {localCss}
-        </style>
         <style jsx>{`
           position: sticky;
           top: 0;
-          // TODO: this is getting ridiculous...
+          /* TODO: this is getting ridiculous... */
           z-index: 10000;
         `}</style>
-      </div>
+      </StyleWrapper>
     );
   }
 }
