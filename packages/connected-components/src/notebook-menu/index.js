@@ -298,6 +298,18 @@ class PureNotebookMenu extends React.Component<Props, State> {
       <StyleWrapper>
         <Menu {...menuProps}>
           <SubMenu key={MENUS.FILE} title="File">
+            <MenuItem>
+              <a
+                href="/nteract/edit"
+                style={{
+                  textDecoration: "none",
+                  color: "currentColor"
+                }}
+                target="_blank"
+              >
+                Open...
+              </a>
+            </MenuItem>
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.SAVE_NOTEBOOK)}>
               Save
             </MenuItem>
@@ -305,15 +317,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
               key={createActionKey(MENU_ITEM_ACTIONS.DOWNLOAD_NOTEBOOK)}
             >
               Download (.ipynb)
-            </MenuItem>
-            <MenuItem>
-              <a
-                href="/nteract/edit"
-                style={{ textDecoration: "none" }}
-                target="_blank"
-              >
-                Open Directory View
-              </a>
             </MenuItem>
           </SubMenu>
           <SubMenu key={MENUS.EDIT} title="Edit">
