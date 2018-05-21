@@ -63,12 +63,6 @@ class CodeMirrorEditor extends React.Component<
   textarea: ?HTMLTextAreaElement;
   cm: CMI;
   defaultOptions: Object;
-  goLineUpOrEmit: (editor: Object) => void;
-  goLineDownOrEmit: (editor: Object) => void;
-  executeTab: (editor: Object) => void;
-  hint: (editor: Object, cb: Function) => void;
-  tips: (editor: Object) => void;
-  deleteTip: () => void;
   keyupEventsSubscriber: Subscription;
 
   static defaultProps = {
@@ -80,9 +74,10 @@ class CodeMirrorEditor extends React.Component<
 
   constructor(props: CodeMirrorEditorProps): void {
     super(props);
-    this.hint = this.completions.bind(this);
-    this.tips = this.tips.bind(this);
-    this.deleteTip = this.deleteTip.bind(this);
+    (this: any).hint = this.completions.bind(this);
+    (this: any).tips = this.tips.bind(this);
+    (this: any).deleteTip = this.deleteTip.bind(this);
+    // $FlowFixMe: weirdness in the codemirror API
     this.hint.async = true;
     this.state = { isFocused: true, tipElement: null };
 
@@ -94,6 +89,7 @@ class CodeMirrorEditor extends React.Component<
         theme: "composition",
         autofocus: false,
         hintOptions: {
+          // $FlowFixMe: weirdness in the codemirror API
           hint: this.hint,
           completeSingle: false, // In automatic autocomplete mode we don't want override
           extraKeys: {
