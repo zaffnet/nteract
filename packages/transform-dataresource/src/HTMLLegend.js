@@ -1,13 +1,12 @@
 /* @flow */
 import * as React from "react";
 
-export default ({
-  values,
-  colorHash
-}: {
+type HTMLLegendProps = {
   values: Array<string>,
   colorHash: Object
-}) => (
+};
+
+const HTMLLegend = ({ values, colorHash }: HTMLLegendProps) => (
   <div style={{ marginTop: "20px" }}>
     {(values.length > 18
       ? [...values.filter((d, i) => i < 18), "Other"]
@@ -33,3 +32,5 @@ export default ({
     ))}
   </div>
 );
+
+export default HTMLLegend;
