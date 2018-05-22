@@ -21,12 +21,34 @@ function combineTopAnnotations(
   topSecondQ: Array<Object>,
   dim2: string
 ): any[] {
-  return [...topQ, ...topSecondQ].map(d => ({
-    type: "react-annotation",
-    label: d[dim2],
-    id: d[dim2],
-    ...d
-  }));
+  const combinedAnnotations = [];
+  const combinedHash = {};
+  [...topQ, ...topSecondQ].forEach(d => {
+    const hashD = combinedHash[d[dim2]];
+
+    if (hashD) {
+      const newCoordinates = (hashD.coordinates && [
+        ...hashD.coordinates,
+        d
+      ]) || [d, hashD];
+      Object.keys(combinedHash[d[dim2]]).forEach(k => {
+        delete combinedHash[d[dim2]][k];
+      });
+      combinedHash[d[dim2]].id = d[dim2];
+      combinedHash[d[dim2]].label = d[dim2];
+      combinedHash[d[dim2]].type = "react-annotation";
+      combinedHash[d[dim2]].coordinates = newCoordinates;
+    } else {
+      combinedHash[d[dim2]] = {
+        type: "react-annotation",
+        label: d[dim2],
+        id: d[dim2],
+        ...d
+      };
+      combinedAnnotations.push(combinedHash[d[dim2]]);
+    }
+  });
+  return combinedAnnotations;
 }
 
 function stringOrFnAccessor(d: Object, accessor: string | Function) {
@@ -696,7 +718,9 @@ const semioticScatterplot = (
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },
     annotations: !hexbin && annotations,
-    annotationSettings: { layout: { type: "marginalia", orient: "right" } },
+    annotationSettings: {
+      layout: { type: "marginalia", orient: "right", marginOffset: 30 }
+    },
     tooltipContent: (hexbin && areaTooltip) || pointTooltip,
     ...additionalSettings
   };
