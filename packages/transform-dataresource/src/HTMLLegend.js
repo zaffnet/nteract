@@ -3,10 +3,11 @@ import * as React from "react";
 
 type HTMLLegendProps = {
   values: Array<string>,
-  colorHash: Object
+  colorHash: Object,
+  valueHash: Object
 };
 
-const HTMLLegend = ({ values, colorHash }: HTMLLegendProps) => (
+const HTMLLegend = ({ values, colorHash, valueHash }: HTMLLegendProps) => (
   <div style={{ marginTop: "20px" }}>
     {(values.length > 18
       ? [...values.filter((d, i) => i < 18), "Other"]
@@ -28,6 +29,7 @@ const HTMLLegend = ({ values, colorHash }: HTMLLegendProps) => (
           }}
         />
         {v}
+        {(valueHash[v] && valueHash[v] > 1 && `(${valueHash[v]})`) || ""}
       </span>
     ))}
   </div>
