@@ -17,7 +17,8 @@ import {
   ScatterplotIcon,
   LineChartIcon,
   BarChartIcon,
-  HexbinIcon
+  HexbinIcon,
+  ParallelCoordinatesIcon
 } from "./icons";
 
 type Props = {
@@ -698,7 +699,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               onClick={this.setParallel}
               message={"Parallel Coordinates"}
             >
-              <LineChartIcon />
+              <ParallelCoordinatesIcon />
             </IconButton>
             <IconButton onClick={this.setLine} message={"Line Graph"}>
               <LineChartIcon />
