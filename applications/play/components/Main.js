@@ -361,4 +361,7 @@ const mapDispatchToProps = {
   setActiveKernel: actions.setActiveKernel
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);

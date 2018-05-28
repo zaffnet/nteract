@@ -76,7 +76,11 @@ const rendererConfig = {
     mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
     extensions: [".js", ".jsx"]
   },
-  plugins: [new webpack.IgnorePlugin(/\.less$/)]
+  plugins: [
+    // No external CSS should get side-loaded by js
+    // I'm looking at you vega-tooltip
+    new webpack.IgnorePlugin(/\.(css|less)$/)
+  ]
 };
 
 module.exports = {

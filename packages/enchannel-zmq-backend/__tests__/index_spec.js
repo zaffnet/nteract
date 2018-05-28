@@ -145,7 +145,12 @@ describe("createMainChannelFromSockets", () => {
 
     const messages = [{ a: 1 }, { a: 2 }, { b: 3 }];
 
-    const p = channels.pipe(take(messages.length), toArray()).toPromise();
+    const p = channels
+      .pipe(
+        take(messages.length),
+        toArray()
+      )
+      .toPromise();
 
     for (var message of messages) {
       hokeySocket.emit("message", message);
@@ -168,7 +173,12 @@ describe("createMainChannelFromSockets", () => {
 
     const channels = createMainChannelFromSockets(sockets);
 
-    const p = channels.pipe(take(2), toArray()).toPromise();
+    const p = channels
+      .pipe(
+        take(2),
+        toArray()
+      )
+      .toPromise();
 
     shellSocket.emit("message", { yolo: false });
     iopubSocket.emit("message", { yolo: true });
@@ -203,7 +213,12 @@ describe("createMainChannelFromSockets", () => {
       username: "dj"
     });
 
-    const p = channels.pipe(take(2), toArray()).toPromise();
+    const p = channels
+      .pipe(
+        take(2),
+        toArray()
+      )
+      .toPromise();
 
     channels.next({ channel: "shell" });
 

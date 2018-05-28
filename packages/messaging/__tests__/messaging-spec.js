@@ -61,7 +61,10 @@ describe("childOf", () => {
       { parent_header: { msg_id: "300" } },
       { parent_header: { msg_id: "100" } }
     ])
-      .pipe(childOf({ header: { msg_id: "100" } }), count())
+      .pipe(
+        childOf({ header: { msg_id: "100" } }),
+        count()
+      )
       .toPromise()
       .then(val => {
         expect(val).toEqual(3);
@@ -207,7 +210,10 @@ describe("outputs", () => {
     );
 
     return hacking
-      .pipe(outputs(), toArray())
+      .pipe(
+        outputs(),
+        toArray()
+      )
       .toPromise()
       .then(arr => {
         expect(arr).toEqual([
@@ -238,7 +244,10 @@ describe("payloads", () => {
       executeReply({ status: "ok" }),
       message({ msg_type: "fake" }, { payload: [{ should: "not be in it" }] })
     )
-      .pipe(payloads(), toArray())
+      .pipe(
+        payloads(),
+        toArray()
+      )
       .toPromise()
       .then(arr => {
         expect(arr).toEqual([{ c: "d" }, { a: "b" }, { g: "6" }]);
@@ -265,7 +274,10 @@ describe("executionCounts", () => {
       }),
       status("idle")
     )
-      .pipe(executionCounts(), toArray())
+      .pipe(
+        executionCounts(),
+        toArray()
+      )
       .toPromise()
       .then(arr => {
         expect(arr).toEqual([0, 1]);
@@ -283,7 +295,10 @@ describe("kernelStatuses", () => {
       displayData({ data: { "text/plain": "hoo" } }),
       status("idle")
     )
-      .pipe(kernelStatuses(), toArray())
+      .pipe(
+        kernelStatuses(),
+        toArray()
+      )
       .toPromise()
       .then(arr => {
         expect(arr).toEqual(["starting", "idle", "busy", "idle"]);
