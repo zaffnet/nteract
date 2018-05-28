@@ -3,7 +3,7 @@
 const next = require("next");
 const dev = process.env.NODE_ENV !== "production" && !process.env.NOW;
 
-export function createNextApp() {
+function createNextApp() {
   const app = next({ dev, dir: __dirname });
   const handle = app.getRequestHandler();
 
@@ -12,3 +12,7 @@ export function createNextApp() {
     handle
   };
 }
+
+module.exports = {
+  createNextApp
+};
