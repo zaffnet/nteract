@@ -30,7 +30,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=[],
+    install_requires=['notebook'],
     data_files=data_files,
     entry_points={
         'console_scripts': [
