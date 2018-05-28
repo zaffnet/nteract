@@ -32,7 +32,7 @@ jobs:
       # run tests!
       - run:
           command: |
-            npm run test -- --cacheDirectory=~/.jestcache
+            npm run test
           no_output_timeout: 20m
       - run: npm run build:apps
       - run: npm run test:lint
