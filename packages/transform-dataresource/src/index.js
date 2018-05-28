@@ -223,7 +223,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       .filter(d => !props.data.schema.primaryKey.find(p => p === d.name));
 
     this.state = {
-      view: "parallel",
+      view: "grid",
       lineType: "line",
       selectedDimensions: [],
       selectedMetrics: [],
