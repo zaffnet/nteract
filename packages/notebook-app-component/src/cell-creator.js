@@ -196,4 +196,7 @@ const mapDispatchToProps = dispatch => ({
   mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload))
 });
 
-export default connect(null, mapDispatchToProps)(CellCreator);
+export default connect(
+  null,
+  mapDispatchToProps
+)(CellCreator);

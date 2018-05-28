@@ -232,7 +232,10 @@ export function createMainChannelFromSockets(
           refCount()
         );
       })
-    ).pipe(publish(), refCount())
+    ).pipe(
+      publish(),
+      refCount()
+    )
   );
 
   return subject;

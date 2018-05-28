@@ -214,7 +214,11 @@ const activateKernelEpic = (action$, store) =>
         mergeMap(data => {
           const session = uuid();
           const kernel = Object.assign({}, data.response, {
-            channel: kernels.connect(config, data.response.id, session)
+            channel: kernels.connect(
+              config,
+              data.response.id,
+              session
+            )
           });
 
           kernel.channel.next(kernelInfoRequest());

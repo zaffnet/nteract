@@ -496,9 +496,10 @@ const mapDispatchToProps = dispatch => ({
   interruptKernel: payload => dispatch(actions.interruptKernel(payload))
 });
 
-const NotebookMenu = connect(mapStateToProps, mapDispatchToProps)(
-  PureNotebookMenu
-);
+const NotebookMenu = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PureNotebookMenu);
 
 // We export this for testing purposes.
 export { PureNotebookMenu };

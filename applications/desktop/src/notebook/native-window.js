@@ -121,7 +121,10 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
       fullpath,
       kernelStatus
     })
-  ).pipe(distinctUntilChanged(), switchMap(i => of(i)));
+  ).pipe(
+    distinctUntilChanged(),
+    switchMap(i => of(i))
+  );
 }
 
 export function initNativeHandlers(contentRef: ContentRef, store: *) {

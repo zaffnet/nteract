@@ -18,8 +18,7 @@ export function createRouter(options: DiskProviderOptions) {
   const router = express.Router();
   router.get("/*", (req: $Request, res: $Response) => {
     const path = req.params["0"];
-    fs
-      .get(options, path)
+    fs.get(options, path)
       .then(content => {
         res.json(content);
       })
@@ -44,8 +43,7 @@ export function createRouter(options: DiskProviderOptions) {
   });
   router.post("/*", (req: $Request, res: $Response) => {
     const path = req.params["0"];
-    fs
-      .post(options, path, req.body)
+    fs.post(options, path, req.body)
       .then(() => res.status(201).send())
       .catch((err: ErrnoError) => {
         const errorResponse: ErrorResponse = {

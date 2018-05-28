@@ -57,4 +57,7 @@ const mapDispatchToProps = (dispatch: Dispatch<*>, ownProps: Props) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditorView);

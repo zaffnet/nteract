@@ -551,4 +551,7 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
-export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNotebook);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConnectedNotebook);

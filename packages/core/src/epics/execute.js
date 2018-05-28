@@ -80,7 +80,10 @@ export function executeCellStream(
   const executeRequest = message;
 
   // All the streams intended for all frontends
-  const cellMessages = channels.pipe(childOf(executeRequest), share());
+  const cellMessages = channels.pipe(
+    childOf(executeRequest),
+    share()
+  );
 
   // All the payload streams, intended for one user
   const payloadStream = cellMessages.pipe(payloads());
