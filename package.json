@@ -179,7 +179,7 @@
     "react-redux": "^5.0.7",
     "react-syntax-highlighter": "^7.0.1",
     "react-test-renderer": "^16.2.0",
-    "react-virtualized": "9.18.5",
+    "react-virtualized": "9.19.1",
     "redux": "^4.0.0",
     "redux-electron-store": "^0.6.1",
     "redux-immutable": "^4.0.0",
