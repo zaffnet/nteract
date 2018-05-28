@@ -17,7 +17,8 @@ import {
   ScatterplotIcon,
   LineChartIcon,
   BarChartIcon,
-  HexbinIcon
+  HexbinIcon,
+  ParallelCoordinatesIcon
 } from "./icons";
 
 type Props = {
@@ -31,7 +32,15 @@ type Props = {
 type LineType = "line" | "stackedarea" | "bumparea" | "stackedpercent";
 
 type State = {
-  view: "line" | "bar" | "scatter" | "grid" | "network" | "summary" | "hexbin",
+  view:
+    | "line"
+    | "bar"
+    | "scatter"
+    | "grid"
+    | "network"
+    | "summary"
+    | "hexbin"
+    | "parallel",
   metrics: Array<string>,
   dimensions: Array<string>,
   selectedMetrics: Array<string>,
@@ -214,7 +223,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       .filter(d => !props.data.schema.primaryKey.find(p => p === d.name));
 
     this.state = {
-      view: "grid",
+      view: "parallel",
       lineType: "line",
       selectedDimensions: [],
       selectedMetrics: [],
@@ -338,7 +347,10 @@ class DataResourceTransform extends React.Component<Props, State> {
             false,
             chart.metric3
           )}
-        {(view === "summary" || view === "scatter" || view === "bar") &&
+        {(view === "summary" ||
+          view === "scatter" ||
+          view === "bar" ||
+          view === "parallel") &&
           metricDimSelector(
             dimensions.map(d => d.name),
             d => this.updateChart({ chart: { ...chart, dim1: d } }),
@@ -509,6 +521,14 @@ class DataResourceTransform extends React.Component<Props, State> {
             fill: none;
             stroke: gray;
           }
+          :global(.rect) {
+            stroke: green;
+            stroke-width: 5px;
+            stroke-opacity: 0.5;
+          }
+          :global(rect.selection) {
+            opacity: 0.5;
+          }
         `}</style>
       </div>
     );
@@ -528,6 +548,10 @@ class DataResourceTransform extends React.Component<Props, State> {
 
   setLine = () => {
     this.updateChart({ view: "line" });
+  };
+
+  setParallel = () => {
+    this.updateChart({ view: "parallel" });
   };
 
   setBar = () => {
@@ -605,7 +629,8 @@ class DataResourceTransform extends React.Component<Props, State> {
         "network",
         "summary",
         "hierarchy",
-        "hexbin"
+        "hexbin",
+        "parallel"
       ].includes(view)
     ) {
       const { Frame, chartGenerator } = semioticSettings[view];
@@ -669,6 +694,12 @@ class DataResourceTransform extends React.Component<Props, State> {
             </IconButton>
             <IconButton onClick={this.setHierarchy} message={"Hierarchy"}>
               <TreeIcon />
+            </IconButton>
+            <IconButton
+              onClick={this.setParallel}
+              message={"Parallel Coordinates"}
+            >
+              <ParallelCoordinatesIcon />
             </IconButton>
             <IconButton onClick={this.setLine} message={"Line Graph"}>
               <LineChartIcon />

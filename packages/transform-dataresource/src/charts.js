@@ -11,6 +11,7 @@ import {
   ResponsiveNetworkFrame
 } from "semiotic";
 import HTMLLegend from "./HTMLLegend";
+import ParallelCoordinatesController from "./ParallelCoordinatesController";
 
 function createLabelItems(uniqueValues: Array<string>): any[] {
   return uniqueValues.map(d => ({ label: d }));
@@ -412,7 +413,7 @@ const semioticBarChart = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
     );
 
     if (
@@ -669,7 +670,7 @@ const semioticScatterplot = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
     );
   } else if (hexbin) {
     const hexValues = [
@@ -689,7 +690,7 @@ const semioticScatterplot = (
 
     //    const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"]
     additionalSettings.afterElements = (
-      <HTMLLegend values={hexValues} colorHash={hexHash} />
+      <HTMLLegend valueHash={{}} values={hexValues} colorHash={hexHash} />
     );
   }
   return {
@@ -723,6 +724,18 @@ const semioticScatterplot = (
     },
     tooltipContent: (hexbin && areaTooltip) || pointTooltip,
     ...additionalSettings
+  };
+};
+
+const semioticParallelCoordinates = (
+  data: Array<Object>,
+  schema: Object,
+  options: Object
+) => {
+  return {
+    data,
+    schema,
+    options
   };
 };
 
@@ -761,6 +774,11 @@ export const semioticSettings = {
     Frame: ResponsiveNetworkFrame,
     controls: "switch between modes",
     chartGenerator: semioticHierarchicalChart
+  },
+  parallel: {
+    Frame: ParallelCoordinatesController,
+    controls: "switch between modes",
+    chartGenerator: semioticParallelCoordinates
   }
 };
 

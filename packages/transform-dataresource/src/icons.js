@@ -84,3 +84,14 @@ export const BarChartIcon = (props: any) => (
     />
   </SVGWrapper>
 );
+
+export const ParallelCoordinatesIcon = (props: any) => (
+  <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
+    <title>Bar Chart</title>
+    <path
+      fill="lightgray"
+      stroke="black"
+      d="M 2.7232684,11.593098 8.8105743,9.8309837 14.417303,4.2242547 M 12.356336,0.72968704 15.29192,0.72968704 15.29192,8.4261754 12.356336,8.4261754 Z M 6.8447585,6.4156084 10.103282,6.4156084 10.103282,12.352066 6.8447585,12.352066 Z M 0.51572132,6.0114684 3.9294777,6.0114684 3.9294777,16.25395 0.51572132,16.25395 Z"
+    />
+  </SVGWrapper>
+);
