@@ -30,10 +30,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run:
-          command: |
-            npm run test
-          no_output_timeout: 20m
+      - run: npm run test -- --cacheDirectory=~/.jestcache
       - run: npm run build:apps
       - run: npm run test:lint
       - run: npm run test:flow
