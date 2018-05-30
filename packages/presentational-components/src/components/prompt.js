@@ -18,9 +18,32 @@ export function promptText(props: PromptProps): string {
 }
 
 type PromptProps = {
-  counter: number | null,
+  /**
+   * Typically used to show what execution count the user is on. When working at
+   * the `IPython` or `jupyter console` for example, it's the number between the
+   * `[ ]`:
+   *
+   * ```
+   * In [1]: 2 + 2
+   * Out[1]: 4
+   *
+   * In [2]: "woohoo"
+   * Out[2]: 'woohoo'
+   * ```
+   *
+   */
+  counter: ?number,
+  /**
+   * Show that execution is currently happening related to this prompt
+   */
   running: boolean,
+  /**
+   * Show that execution is queued up
+   */
   queued: boolean,
+  /**
+   * Create a prompt without the `[]`. Used with markdown cells.
+   */
   blank: boolean
 };
 
