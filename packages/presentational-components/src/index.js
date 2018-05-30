@@ -272,18 +272,6 @@ export class Input extends React.Component<InputProps> {
           }
 
           .input-container :global(.prompt) {
-            font-family: monospace;
-            font-size: 12px;
-            line-height: 22px;
-
-            width: var(--prompt-width, 50px);
-            padding: 9px 0;
-
-            text-align: center;
-
-            color: var(--theme-cell-prompt-fg, black);
-            background-color: var(--theme-cell-prompt-bg, #fafafa);
-
             flex: 0 0 auto;
           }
 
