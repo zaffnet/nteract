@@ -3,11 +3,12 @@ import * as React from "react";
 
 import Highlighter from "./syntax-highlighter";
 import { Prompt, PromptBuffer } from "./components/prompt.js";
+import { Source } from "./components/source.js";
 
 export * from "./styles";
 
 import * as themes from "./themes";
-export { themes, Prompt, PromptBuffer };
+export { themes, Prompt, PromptBuffer, Source };
 
 export type PagersProps = {
   children: React.Node,
