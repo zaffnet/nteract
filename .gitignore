@@ -47,3 +47,5 @@ packages/*/yarn.lock
 
 # allow generated flow defs to be read like other @nteract packages for our styles
 packages/styles/src/index.js
+
+styleguide
