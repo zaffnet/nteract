@@ -2,11 +2,12 @@
 import * as React from "react";
 
 import Highlighter from "./syntax-highlighter";
+import { Prompt, PromptBuffer } from "./components/prompt.js";
 
 export * from "./styles";
 
 import * as themes from "./themes";
-export { themes };
+export { themes, Prompt, PromptBuffer };
 
 export type PagersProps = {
   children: React.Node,
@@ -203,43 +204,6 @@ export class Outputs extends React.Component<OutputsProps> {
     }
 
     return null;
-  }
-}
-// Totally fake component for consistency with indents of the editor area
-export class PromptBuffer extends React.Component<*> {
-  render() {
-    return <div className="prompt" />;
-  }
-}
-
-export function promptText(props: PromptProps) {
-  if (props.running) {
-    return "[*]";
-  }
-  if (props.queued) {
-    return "[…]";
-  }
-  if (typeof props.counter === "number") {
-    return `[${props.counter}]`;
-  }
-  return "[ ]";
-}
-
-type PromptProps = {
-  counter: number | null,
-  running: boolean,
-  queued: boolean
-};
-
-export class Prompt extends React.Component<PromptProps> {
-  static defaultProps = {
-    counter: null,
-    running: false,
-    queued: false
-  };
-
-  render() {
-    return <div className="prompt">{promptText(this.props)}</div>;
   }
 }
 
