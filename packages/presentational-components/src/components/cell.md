@@ -7,7 +7,7 @@ const { Input, Outputs, Prompt, Source } = require('../');
 <Cell>
   <Input>
     <Prompt counter={1} />
-    <Source language="python">{`import pandas as pd\npd.DataFrame()\n\n# Hover over this cell!`}</Source>
+    <Source language="python">{`import pandas as pd\npd.DataFrame([1,2,3])\n\n# Hover over this cell!`}</Source>
   </Input>
   <Outputs>
     <div>
