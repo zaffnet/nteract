@@ -1,12 +1,13 @@
-This is a CSS behavioral component
+All by itself, this component doesn't do anything. Used with `<Input />`, `<Source />`, and `<Outputs />`, it brings styling to the children
+based on hover and **selected** states.
 
 ```js
 const { Input, Outputs, Prompt, Source } = require('../');
 
 <Cell>
   <Input>
-    <Prompt />
-    <Source>{`import pandas as pd; pd.DataFrame()`}</Source>
+    <Prompt counter={1} />
+    <Source language="python">{`import pandas as pd\npd.DataFrame()\n\n# Hover over this cell!`}</Source>
   </Input>
   <Outputs>
     <div>
@@ -47,4 +48,61 @@ const { Input, Outputs, Prompt, Source } = require('../');
     </div>
   </Outputs>
 </Cell>
+```
+
+A `<Cell />` can be set as selected to **raise** it up.
+
+```js
+const { Input, Outputs, Prompt, Source } = require('../');
+
+<Cell isSelected>
+  <Input>
+    <Prompt counter={2} />
+    <Source language="python">{`print("Hello World")`}</Source>
+  </Input>
+  <Outputs>
+    <pre>Hello World</pre>
+  </Outputs>
+</Cell>
+```
+
+There are three levels to a cell, which can be thought of as raised cards:
+
+1. Flat on the "page"
+2. Slightly raised up while hovering, mid way to fully active
+3. Raised up highest, when active -- the editor should be focused when this is used
+
+
+```js
+const { Input, Outputs, Prompt, Source, Cells } = require('../');
+
+<Cells>
+  <Cell>
+    <Input>
+      <Prompt />
+      <Source language="python">{`# Level 0 - Flat`}</Source>
+    </Input>
+    <Outputs>
+      <pre>Output</pre>
+    </Outputs>
+  </Cell>
+  <Cell _hovered>
+    <Input>
+      <Prompt />
+      <Source language="python">{`# Level 1 - Slight`}</Source>
+    </Input>
+    <Outputs>
+      <pre>Output</pre>
+    </Outputs>
+  </Cell>
+  <Cell isSelected>
+    <Input>
+      <Prompt />
+      <Source language="python">{`# Level 2 - Raised`}</Source>
+    </Input>
+    <Outputs>
+      <pre>Output</pre>
+    </Outputs>
+  </Cell>
+</Cells>
 ```

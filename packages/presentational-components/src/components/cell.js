@@ -2,10 +2,20 @@
 
 import * as React from "react";
 
-export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
+type CellProps = {
+  isSelected: boolean,
+  _hovered: boolean,
+  children?: React.Node
+};
+
+export const Cell = (props: CellProps) => {
   const children = props.children;
   return (
-    <div className={`cell ${props.isSelected ? "focused" : ""}`}>
+    <div
+      className={`cell ${props.isSelected ? "focused" : ""} ${
+        props._hovered ? "overrideHover" : ""
+      }`}
+    >
       <style jsx>{`
         .cell {
           position: relative;
@@ -13,6 +23,7 @@ export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
           transition: all 0.1s ease-in-out;
         }
 
+        .cell.overrideHover,
         .cell:hover {
           box-shadow: var(
             --theme-cell-shadow-hover,
@@ -29,6 +40,7 @@ export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
           );
         }
 
+        .cell.overrideHover :global(.prompt),
         .cell:hover :global(.prompt),
         .cell:active :global(.prompt) {
           background-color: var(--theme-cell-prompt-bg-hover, hsl(0, 0%, 94%));
@@ -38,7 +50,7 @@ export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
         .cell:focus :global(.prompt),
         .cell.focused :global(.prompt) {
           background-color: var(--theme-cell-prompt-bg-focus, hsl(0, 0%, 90%));
-          color: var(--theme-cell-prompt-fg-focus, white);
+          color: var(--theme-cell-prompt-fg-focus, hsl(0, 0%, 51%));
         }
       `}</style>
       {children}
@@ -48,5 +60,6 @@ export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
 
 Cell.defaultProps = {
   isSelected: false,
+  _hovered: false,
   children: null
 };
