@@ -1,7 +1,7 @@
 `<Cells />` is a wrapper component to provide buffers between cells if you're building a notebook app.
 
 ```js
-const { Input, Outputs, Prompt, Source, Cell, Cells } = require('../');
+const { Input, Outputs, Prompt, Source, Cell, Cells } = require("../");
 
 <Cells>
   <Cell>
@@ -17,8 +17,8 @@ const { Input, Outputs, Prompt, Source, Cell, Cells } = require('../');
       <Source language="python">{`df = pd.DataFrame([1,2,3])\ndisplay(df)`}</Source>
     </Input>
     <Outputs>
-    <div>
-      <style scoped>{`
+      <div>
+        <style scoped>{`
           .dataframe tbody tr th:only-of-type {
               vertical-align: middle;
           }
@@ -31,38 +31,37 @@ const { Input, Outputs, Prompt, Source, Cell, Cells } = require('../');
               text-align: right;
           }
       `}</style>
-      <table border="1" className="dataframe">
-      <thead>
-        <tr style={{textAlign: "right"}}>
-          <th></th>
-          <th>0</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>1</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>2</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>3</td>
-        </tr>
-      </tbody>      </table>
-    </div>
+        <table border="1" className="dataframe">
+          <thead>
+            <tr style={{ textAlign: "right" }}>
+              <th />
+              <th>0</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>0</th>
+              <td>1</td>
+            </tr>
+            <tr>
+              <th>1</th>
+              <td>2</td>
+            </tr>
+            <tr>
+              <th>2</th>
+              <td>3</td>
+            </tr>
+          </tbody>{" "}
+        </table>
+      </div>
     </Outputs>
   </Cell>
   <Cell isSelected>
     <Input>
-      <Prompt running/>
+      <Prompt running />
       <Source language="python">{`import time\ntime.sleep(9001)`}</Source>
     </Input>
-    <Outputs>
-    </Outputs>
+    <Outputs />
   </Cell>
-</Cells>
-
+</Cells>;
 ```

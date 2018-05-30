@@ -2,7 +2,7 @@ All by itself, this component doesn't do anything. Used with `<Input />`, `<Sour
 based on hover and **selected** states.
 
 ```js
-const { Input, Outputs, Prompt, Source } = require('../');
+const { Input, Outputs, Prompt, Source } = require("../");
 
 <Cell>
   <Input>
@@ -25,35 +25,36 @@ const { Input, Outputs, Prompt, Source } = require('../');
           }
       `}</style>
       <table border="1" className="dataframe">
-      <thead>
-        <tr style={{textAlign: "right"}}>
-          <th></th>
-          <th>0</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>1</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>2</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>3</td>
-        </tr>
-      </tbody>      </table>
+        <thead>
+          <tr style={{ textAlign: "right" }}>
+            <th />
+            <th>0</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>0</th>
+            <td>1</td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td>2</td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td>3</td>
+          </tr>
+        </tbody>{" "}
+      </table>
     </div>
   </Outputs>
-</Cell>
+</Cell>;
 ```
 
 A `<Cell />` can be set as selected to **raise** it up.
 
 ```js
-const { Input, Outputs, Prompt, Source } = require('../');
+const { Input, Outputs, Prompt, Source } = require("../");
 
 <Cell isSelected>
   <Input>
@@ -63,18 +64,17 @@ const { Input, Outputs, Prompt, Source } = require('../');
   <Outputs>
     <pre>Hello World</pre>
   </Outputs>
-</Cell>
+</Cell>;
 ```
 
 There are three levels to a cell, which can be thought of as raised cards:
 
-1. Flat on the "page"
-2. Slightly raised up while hovering, mid way to fully active
-3. Raised up highest, when active -- the editor should be focused when this is used
-
+1.  Flat on the "page"
+2.  Slightly raised up while hovering, mid way to fully active
+3.  Raised up highest, when active -- the editor should be focused when this is used
 
 ```js
-const { Input, Outputs, Prompt, Source, Cells } = require('../');
+const { Input, Outputs, Prompt, Source, Cells } = require("../");
 
 <Cells>
   <Cell>
@@ -104,5 +104,5 @@ const { Input, Outputs, Prompt, Source, Cells } = require('../');
       <pre>Output</pre>
     </Outputs>
   </Cell>
-</Cells>
+</Cells>;
 ```
