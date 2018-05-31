@@ -3,8 +3,17 @@
 import * as React from "react";
 
 type CellProps = {
+  /**
+   * Indicates if a cell is selected
+   */
   isSelected: boolean,
+  /**
+   * Indicates if hovering over a cell
+   */
   _hovered: boolean,
+  /**
+   * Style children when a cell is selected or hovered over
+   */
   children?: React.Node
 };
 
