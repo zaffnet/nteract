@@ -5,7 +5,7 @@ Syntax highlight source code. Pass a child component to override with your own e
 ```js
 <Source language="python">{`import python
 
-print("Hello from nteract.")`}</ Source>
+print("Hello from nteract.")`}</Source>
 ```
 
 ### Bring your own editor
@@ -68,5 +68,5 @@ class Editor extends React.Component {
   }
 }
 
-<Editor />
+<Editor />;
 ```

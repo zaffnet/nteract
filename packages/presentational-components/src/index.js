@@ -4,11 +4,13 @@ import * as React from "react";
 import Highlighter from "./syntax-highlighter";
 import { Prompt, PromptBuffer } from "./components/prompt.js";
 import { Source } from "./components/source.js";
+import { Cell } from "./components/cell.js";
+import { Cells } from "./components/cells.js";
 
 export * from "./styles";
 
 import * as themes from "./themes";
-export { themes, Prompt, PromptBuffer, Source };
+export { themes, Prompt, PromptBuffer, Source, Cell, Cells };
 
 export type PagersProps = {
   children: React.Node,
@@ -251,75 +253,3 @@ export class Input extends React.Component<InputProps> {
     );
   }
 }
-
-export const Cell = (props: { isSelected: boolean, children?: React.Node }) => {
-  const children = props.children;
-  return (
-    <div className={`cell ${props.isSelected ? "focused" : ""}`}>
-      <style jsx>{`
-        .cell {
-          position: relative;
-          background: var(--theme-cell-bg, white);
-          transition: all 0.1s ease-in-out;
-        }
-
-        .cell:hover {
-          box-shadow: var(--theme-cell-shadow-hover);
-        }
-
-        .cell.focused {
-          box-shadow: var(--theme-cell-shadow-focus);
-        }
-
-        .cell:hover :global(.prompt),
-        .cell:active :global(.prompt) {
-          background-color: var(--theme-cell-prompt-bg-hover);
-          color: var(--theme-cell-prompt-fg-hover);
-        }
-
-        .cell:focus :global(.prompt),
-        .cell.focused :global(.prompt) {
-          background-color: var(--theme-cell-prompt-bg-focus);
-          color: var(--theme-cell-prompt-fg-focus);
-        }
-      `}</style>
-      {children}
-    </div>
-  );
-};
-
-Cell.defaultProps = {
-  isSelected: false,
-  children: null
-};
-
-export const Cells = (props: {
-  children: React.ChildrenArray<any>,
-  selected: string | null
-}) => {
-  return (
-    <div className="cells">
-      <style jsx>{`
-        .cells > :global(*) {
-          margin: 20px;
-        }
-
-        .cells {
-          font-family: "Source Sans Pro", Helvetica Neue, Helvetica, Arial,
-            sans-serif;
-          font-size: 16px;
-          background-color: var(--theme-app-bg);
-          color: var(--theme-app-fg);
-
-          padding-bottom: 10px;
-        }
-      `}</style>
-      {props.children}
-    </div>
-  );
-};
-
-Cells.defaultProps = {
-  children: [],
-  selected: null
-};
