@@ -1,13 +1,15 @@
 All by itself, this component doesn't do anything. Used with `<Input />`, `<Source />`, and `<Outputs />`, it brings styling to the children
 based on hover and **selected** states.
 
+By moving a cursor over the component and hovering, styling can be changed.
+
 ```js
 const { Input, Outputs, Prompt, Source } = require("../");
 
 <Cell>
   <Input>
     <Prompt counter={1} />
-    <Source language="python">{`import pandas as pd\npd.DataFrame([1,2,3])\n\n# Hover over this cell!`}</Source>
+    <Source language="python">{`import pandas as pd\npd.DataFrame([1,2,3])\n\n# Alternate between hovering the cursor over this cell and outside of the cell`}</Source>
   </Input>
   <Outputs>
     <div>
@@ -67,11 +69,12 @@ const { Input, Outputs, Prompt, Source } = require("../");
 </Cell>;
 ```
 
-There are three levels to a cell, which can be thought of as raised cards:
+A cell can be in one of three levels, similar to raised cards:
 
-1.  Flat on the "page"
-2.  Slightly raised up while hovering, mid way to fully active
-3.  Raised up highest, when active -- the editor should be focused when this is used
+1.  *Flat* on the "page"
+2.  *Slight* rise, mid way to fully active, while hovering (`_hovered` prop is `true`)
+3.  *Raised* up highest, when fully active (i.e. `isSelected` prop is `true`) --
+    the editor should be focused when this level is used
 
 ```js
 const { Input, Outputs, Prompt, Source, Cells } = require("../");
