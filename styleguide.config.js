@@ -3,7 +3,12 @@ const path = require("path");
 
 module.exports = {
   title: "nteract components",
-  components: "packages/presentational-components/src/components/*.js",
+  sections: [
+    {
+      name: "Presentational Components",
+      components: "packages/presentational-components/src/components/*.js"
+    }
+  ],
   // For overriding the components styleguidist uses
   styleguideComponents: {
     LogoRenderer: path.join(
