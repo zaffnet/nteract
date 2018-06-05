@@ -70,8 +70,6 @@ export default class NotebookRender extends React.PureComponent<Props, State> {
   }
 
   render(): ?React$Element<any> {
-    // TODO: Rely on setState to convert notebook from plain JS to commutable format
-
     const notebook = this.state.notebook;
 
     // Propagated from the hide_(all)_input nbextension
