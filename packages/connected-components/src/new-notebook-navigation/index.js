@@ -83,8 +83,8 @@ export const NewNotebook = (
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
-          height: 220px;
-          width: 150px;
+          height: 150px;
+          width: 100px;
         }
 
         .new-notebook:hover {
@@ -95,7 +95,7 @@ export const NewNotebook = (
           box-shadow: var(--theme-primary-shadow-focus);
         }
         .logo {
-          width: 3em;
+          width: 2em;
           box-sizing: border-box;
           margin: 0 auto;
         }
@@ -112,7 +112,7 @@ export const NewNotebook = (
         .text-box {
           padding: 8px 6px 8px 6px;
           font-size: 0.8em;
-          width: 150px;
+          width: 100px;
           box-sizing: border-box;
           background-color: var(--theme-primary-bg);
           border-top: 1px solid var(--theme-app-border);
