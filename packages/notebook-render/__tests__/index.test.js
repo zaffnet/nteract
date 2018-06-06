@@ -12,7 +12,10 @@ import { dummyCommutable, dummyJSON } from "../../core/src/dummy";
 jest.mock("uuid", () => {
   let uuid = 1;
   return {
-    v4: jest.fn(() => uuid++)
+    v4: jest.fn(function() {
+      console.log(uuid);
+      return uuid++;
+    })
   };
 });
 

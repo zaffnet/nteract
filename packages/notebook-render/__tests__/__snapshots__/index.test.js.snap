@@ -8,10 +8,10 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
     <Cell
       _hovered={false}
       isSelected={false}
-      key="ee97457d-33bf-4ab9-b0f3-bd34c542b92b"
+      key="3"
     >
       <div
-        className="jsx-2513275823 content-margin"
+        className="jsx-2299737332 content-margin"
       >
         <ReactMarkdown
           astPlugins={Array []}
@@ -41,14 +41,14 @@ exports[`Notebook accepts an Immutable.List of cells 1`] = `
         />
       </div>
       <JSXStyle
-        css=".content-margin.jsx-2513275823{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"
-        styleId="2513275823"
+        css=".content-margin.jsx-2299737332{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"
+        styleId="2299737332"
       />
     </Cell>
     <Cell
       _hovered={false}
       isSelected={false}
-      key="9693966c-cce8-49a6-aaf6-a26ffc82c63f"
+      key="4"
     >
       <Input
         hidden={false}
@@ -260,10 +260,10 @@ exports[`Notebook accepts an Object of cells 1`] = `
     <Cell
       _hovered={false}
       isSelected={false}
-      key="37db2937-2dbd-4f69-b3fb-57e45224b990"
+      key="14"
     >
       <div
-        className="jsx-2513275823 content-margin"
+        className="jsx-2299737332 content-margin"
       >
         <ReactMarkdown
           astPlugins={Array []}
@@ -293,14 +293,14 @@ exports[`Notebook accepts an Object of cells 1`] = `
         />
       </div>
       <JSXStyle
-        css=".content-margin.jsx-2513275823{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"
-        styleId="2513275823"
+        css=".content-margin.jsx-2299737332{padding-left:calc(var(--prompt-width,50px) + 10px);padding-top:10px;padding-bottom:10px;padding-right:10px;}"
+        styleId="2299737332"
       />
     </Cell>
     <Cell
       _hovered={false}
       isSelected={false}
-      key="a62aedab-cc5c-41c8-b99e-61e99da63923"
+      key="15"
     >
       <Input
         hidden={false}
