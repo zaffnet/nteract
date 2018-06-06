@@ -214,7 +214,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
           <style jsx>{`
             ul {
               list-style-type: none;
-              padding: 0;
+              padding: 0px 0px 20px 0px;
               margin: 0;
             }
           `}</style>
