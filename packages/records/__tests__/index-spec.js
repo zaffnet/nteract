@@ -1,4 +1,5 @@
 // @flow
+import * as Immutable from "immutable";
 import * as nteractRecords from "@nteract/records";
 
 describe("stream output", () => {
@@ -59,17 +60,12 @@ describe("display_data output", () => {
     ).toEqual(
       nteractRecords.makeDisplayDataOutputRecord({
         outputType: "display_data",
-        data: {
-          infinityStones: [
-            "mind\n",
-            "time\n",
-            "space\n",
-            "reality\n",
-            "power\n",
-            "soul"
-          ]
-        },
-        metadata: { "application/json": { expanded: true } }
+        data: Immutable.Map({
+          infinityStones: "mind\ntime\nspace\nreality\npower\nsoul"
+        }),
+        metadata: Immutable.Map({
+          "application/json": Immutable.Map({ expanded: true })
+        })
       })
     );
   });
@@ -102,14 +98,7 @@ describe("execute_result output", () => {
         output_type: "execute_result",
         execute_result: 7,
         data: {
-          infinityStones: [
-            "mind\n",
-            "time\n",
-            "space\n",
-            "reality\n",
-            "power\n",
-            "soul"
-          ]
+          planets: ["xandar\n", "nidavellir\n", "terra"]
         },
         metadata: { "application/json": { expanded: true } }
       })
@@ -117,17 +106,12 @@ describe("execute_result output", () => {
       nteractRecords.makeExecuteResultOutputRecord({
         outputType: "execute_result",
         execute_result: 7,
-        data: {
-          infinityStones: [
-            "mind\n",
-            "time\n",
-            "space\n",
-            "reality\n",
-            "power\n",
-            "soul"
-          ]
-        },
-        metadata: { "application/json": { expanded: true } }
+        data: Immutable.Map({
+          planets: "xandar\nnidavellir\nterra"
+        }),
+        metadata: Immutable.Map({
+          "application/json": Immutable.Map({ expanded: true })
+        })
       })
     );
   });
@@ -148,6 +132,48 @@ describe("execute_result output", () => {
         outputType: "execute_result",
         data: { anotherDay: "anotherDoug" },
         metadata: { "application/json": { expanded: false } }
+      })
+    );
+  });
+});
+
+describe("error output", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.outputFromNbformat({
+        output_type: "error",
+        ename: "Thor",
+        evalue: "Pirate Angel",
+        traceback: ["sweet", "rabbit"]
+      })
+    ).toEqual(
+      nteractRecords.makeErrorOutputRecord({
+        output_type: "error",
+        ename: "Thor",
+        evalue: "Pirate Angel",
+        traceback: Immutable.List(["sweet", "rabbit"])
+      })
+    );
+  });
+
+  test("can be converted from jupyter messages", () => {
+    expect(
+      nteractRecords.errorRecordFromMessage({
+        header: {
+          msg_type: "error"
+        },
+        content: {
+          ename: "cats",
+          evalue: "good",
+          traceback: Immutable.List(["squirrel"])
+        }
+      })
+    ).toEqual(
+      nteractRecords.makeErrorOutputRecord({
+        outputType: "error",
+        ename: "cats",
+        evalue: "good",
+        traceback: Immutable.List(["squirrel"])
       })
     );
   });

@@ -2,7 +2,6 @@
 
 import * as Immutable from "immutable";
 import * as common from "../common";
-
 /**
  * Let this declare the way for well typed records for outputs
  *
@@ -24,14 +23,14 @@ export const DISPLAYDATA = "display_data";
 type DisplayDataOutput = {
   outputType: DisplayDataType,
   data: common.MimeBundle,
-  metadata: JSONObject
+  metadata: mixed
 };
 
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
   data: common.MimeBundle,
-  metadata: JSONObject
+  metadata: mixed
 };
 
 type DisplayDataMessage = {
@@ -40,7 +39,7 @@ type DisplayDataMessage = {
   },
   content: {
     data: common.MimeBundle,
-    metadata: JSONObject
+    metadata: mixed
   }
 };
 
@@ -70,10 +69,9 @@ export function displayDataRecordFromNbformat(
       {},
       {
         outputType: s.output_type,
-        data: s.data,
-        metadata: s.metadata
+        data: common.createImmutableMimeBundle(s.data),
+        metadata: Immutable.fromJS(s.metadata)
       }
-      //common.sanitize(s)
     )
   );
 }

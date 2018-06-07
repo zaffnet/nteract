@@ -26,7 +26,7 @@ type ExecuteResultOutput = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
-  metadata: JSONObject
+  metadata: mixed
 };
 
 // On disk
@@ -34,7 +34,7 @@ export type NbformatExecuteResultOutput = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
   data: common.MimeBundle,
-  metadata: JSONObject
+  metadata: mixed
 };
 
 type ExecuteResultMessage = {
@@ -44,7 +44,7 @@ type ExecuteResultMessage = {
   content: {
     execution_count: number,
     data: common.MimeBundle,
-    metadata: JSONObject
+    metadata: mixed
   }
 };
 
@@ -76,8 +76,8 @@ export function executeResultRecordFromNbformat(
       {
         outputType: s.output_type,
         executionCount: s.execution_count,
-        data: s.data,
-        metadata: s.metadata
+        data: common.createImmutableMimeBundle(s.data),
+        metadata: Immutable.fromJS(s.metadata)
       }
     )
   );
