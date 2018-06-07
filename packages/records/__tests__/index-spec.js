@@ -38,3 +38,50 @@ describe("stream output", () => {
     );
   });
 });
+
+describe("display_data output", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.outputFromNbformat({
+        output_type: "display_data",
+        data: {
+          infinityStones: [
+            "mind\n",
+            "time\n",
+            "space\n",
+            "reality\n",
+            "power\n",
+            "soul"
+          ]
+        },
+        metadata: { "application/json": { expanded: true } }
+      })
+    ).toEqual(
+      nteractRecords.makeDisplayDataOutputRecord({
+        outputType: "display_data",
+        data: { infinityStones: "mind\ntime\nspace\nreality\npower\nsoul" },
+        metadata: { "application/json": { expanded: true } }
+      })
+    );
+  });
+
+  test("can be converted from jupyter messages", () => {
+    expect(
+      nteractRecords.displayDataRecordFromMessage({
+        header: {
+          msg_type: "display_data"
+        },
+        content: {
+          data: { anotherDay: "anotherDoug" },
+          metadata: { "application/json": { expanded: true } }
+        }
+      })
+    ).toEqual(
+      nteractRecords.makeDisplayDataOutputRecord({
+        outputType: "display_data",
+        data: { anotherDay: "anotherDoug" },
+        metadata: { "application/json": { expanded: true } }
+      })
+    );
+  });
+});
