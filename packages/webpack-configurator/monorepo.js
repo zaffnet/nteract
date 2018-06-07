@@ -10,12 +10,12 @@
 const lernaModules = [
   {
     name: "ansi-to-react",
-    version: "2.0.6",
+    version: "3.0.0",
     private: false
   },
   {
     name: "@nteract/commutable",
-    version: "4.0.1",
+    version: "4.0.2",
     private: false
   },
   {
@@ -24,28 +24,33 @@ const lernaModules = [
     private: false
   },
   {
+    name: "@nteract/connected-components",
+    version: "1.0.1",
+    private: false
+  },
+  {
     name: "@nteract/core",
-    version: "5.0.1",
+    version: "6.0.0",
     private: false
   },
   {
     name: "@nteract/display-area",
-    version: "4.1.1",
+    version: "4.1.2",
     private: false
   },
   {
     name: "@nteract/dropdown-menu",
-    version: "0.1.2",
+    version: "0.2.0",
     private: false
   },
   {
     name: "@nteract/editor",
-    version: "7.0.4",
+    version: "7.0.5",
     private: false
   },
   {
     name: "enchannel-zmq-backend",
-    version: "6.0.10",
+    version: "6.0.11",
     private: false
   },
   {
@@ -54,13 +59,23 @@ const lernaModules = [
     private: false
   },
   {
+    name: "@mybinder/host-cache",
+    version: "0.0.0",
+    private: false
+  },
+  {
+    name: "@nteract/logos",
+    version: "0.0.2",
+    private: false
+  },
+  {
     name: "@nteract/markdown",
-    version: "1.1.0",
+    version: "2.0.0",
     private: false
   },
   {
     name: "@nteract/mathjax",
-    version: "1.0.0",
+    version: "2.0.0",
     private: false
   },
   {
@@ -69,13 +84,18 @@ const lernaModules = [
     private: false
   },
   {
-    name: "@nteract/notebook-app-component",
+    name: "@nteract/monaco-editor",
     version: "1.0.0",
     private: false
   },
   {
+    name: "@nteract/notebook-app-component",
+    version: "1.0.1",
+    private: false
+  },
+  {
     name: "@nteract/notebook-preview",
-    version: "7.1.1",
+    version: "7.1.2",
     private: false
   },
   {
@@ -85,32 +105,37 @@ const lernaModules = [
   },
   {
     name: "@nteract/presentational-components",
-    version: "0.0.1",
+    version: "0.0.2",
     private: false
   },
   {
     name: "rx-binder",
-    version: "2.0.0",
+    version: "2.0.1",
     private: false
   },
   {
     name: "rx-jupyter",
-    version: "3.0.1",
+    version: "3.1.0",
+    private: false
+  },
+  {
+    name: "@nteract/styleguide-components",
+    version: "0.0.1",
     private: false
   },
   {
     name: "@nteract/styles",
-    version: "1.0.1",
+    version: "1.1.0",
     private: false
   },
   {
     name: "@nteract/timeago",
-    version: "3.4.9",
+    version: "3.4.10",
     private: false
   },
   {
     name: "@nteract/transform-dataresource",
-    version: "3.0.2",
+    version: "4.0.0",
     private: false
   },
   {
@@ -125,27 +150,27 @@ const lernaModules = [
   },
   {
     name: "@nteract/transform-plotly",
-    version: "3.1.6",
+    version: "3.1.7",
     private: false
   },
   {
     name: "@nteract/transform-vdom",
-    version: "2.1.0",
+    version: "2.1.1",
     private: false
   },
   {
     name: "@nteract/transform-vega",
-    version: "3.1.0",
+    version: "3.1.1",
     private: false
   },
   {
     name: "@nteract/transforms-full",
-    version: "5.1.1",
+    version: "5.1.2",
     private: false
   },
   {
     name: "@nteract/transforms",
-    version: "4.1.1",
+    version: "4.1.2",
     private: false
   },
   {
@@ -155,47 +180,47 @@ const lernaModules = [
   },
   {
     name: "@nteract/vega-embed2",
-    version: "1.0.1",
+    version: "2.0.0",
     private: false
   },
   {
     name: "@nteract/webpack-configurator",
-    version: "1.0.2",
+    version: "1.1.0",
     private: false
   },
   {
     name: "@nteract/commuter",
-    version: "5.2.0",
+    version: "5.3.0",
     private: false
   },
   {
     name: "nteract",
-    version: "0.8.6",
+    version: "0.8.7",
     private: true
   },
   {
     name: "@nteract/nbextension",
-    version: "0.4.5",
+    version: "0.4.6",
     private: true
   },
   {
     name: "@nteract/notebook-on-next",
-    version: "2.0.9",
+    version: "2.0.10",
     private: false
   },
   {
     name: "@nteract/play",
-    version: "1.4.9",
+    version: "1.5.0",
     private: false
   },
   {
     name: "@nteract/showcase",
-    version: "0.1.20",
+    version: "0.1.21",
     private: false
   },
   {
     name: "nteract-on-jupyter",
-    version: "1.6.1",
+    version: "1.7.0",
     private: false
   },
   {
