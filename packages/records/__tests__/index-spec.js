@@ -59,7 +59,16 @@ describe("display_data output", () => {
     ).toEqual(
       nteractRecords.makeDisplayDataOutputRecord({
         outputType: "display_data",
-        data: { infinityStones: "mind\ntime\nspace\nreality\npower\nsoul" },
+        data: {
+          infinityStones: [
+            "mind\n",
+            "time\n",
+            "space\n",
+            "reality\n",
+            "power\n",
+            "soul"
+          ]
+        },
         metadata: { "application/json": { expanded: true } }
       })
     );
@@ -81,6 +90,64 @@ describe("display_data output", () => {
         outputType: "display_data",
         data: { anotherDay: "anotherDoug" },
         metadata: { "application/json": { expanded: true } }
+      })
+    );
+  });
+});
+
+describe("execute_result output", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.outputFromNbformat({
+        output_type: "execute_result",
+        execute_result: 7,
+        data: {
+          infinityStones: [
+            "mind\n",
+            "time\n",
+            "space\n",
+            "reality\n",
+            "power\n",
+            "soul"
+          ]
+        },
+        metadata: { "application/json": { expanded: true } }
+      })
+    ).toEqual(
+      nteractRecords.makeExecuteResultOutputRecord({
+        outputType: "execute_result",
+        execute_result: 7,
+        data: {
+          infinityStones: [
+            "mind\n",
+            "time\n",
+            "space\n",
+            "reality\n",
+            "power\n",
+            "soul"
+          ]
+        },
+        metadata: { "application/json": { expanded: true } }
+      })
+    );
+  });
+
+  test("can be converted from jupyter messages", () => {
+    expect(
+      nteractRecords.executeResultRecordFromMessage({
+        header: {
+          msg_type: "execute_result"
+        },
+        content: {
+          data: { anotherDay: "anotherDoug" },
+          metadata: { "application/json": { expanded: false } }
+        }
+      })
+    ).toEqual(
+      nteractRecords.makeExecuteResultOutputRecord({
+        outputType: "execute_result",
+        data: { anotherDay: "anotherDoug" },
+        metadata: { "application/json": { expanded: false } }
       })
     );
   });
