@@ -70,9 +70,10 @@ export function displayDataRecordFromNbformat(
       {},
       {
         outputType: s.output_type,
-        data: common.createImmutableMimeBundle(s.data)
-      },
-      common.sanitize(s)
+        data: s.data,
+        metadata: s.metadata
+      }
+      //common.sanitize(s)
     )
   );
 }
