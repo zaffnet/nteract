@@ -1,6 +1,9 @@
 // @flow
 
 const Immutable = require("immutable");
+import { Map as ImmutableMap } from "immutable";
+export type ImmutableMimeBundle = ImmutableMap<string, any>;
+
 // Straight from nbformat
 export type MultilineString = string | Array<string>;
 
@@ -84,9 +87,9 @@ export function createImmutableMimeBundle(
   );
 }
 
-export function sanitize(o: ExecuteResult | DisplayData) {
-  if (o.metadata) {
-    return { metadata: Immutable.fromJS(o.metadata) };
-  }
-  return {};
-}
+// export function sanitize(o: ExecuteResult | DisplayData) {
+//   if (o.metadata) {
+//     return { metadata: Immutable.fromJS(o.metadata) };
+//   }
+//   return {};
+// }
