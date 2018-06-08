@@ -5,7 +5,7 @@ nteract capabilities.
 
 ## Installation and usage
 
-Install nteract's monorepo as described in the README.md in the root directory
+Install nteract's monorepo as described in the `README.md` in the root directory
 of the repo.
 
 Run:
@@ -27,6 +27,7 @@ These are the currently available pages within showcase:
 
 - index.js
 - notebook-preview.js
+- notebook-render.js
 - transforms.js
 
 To add an additional page, place the page in the `pages` directory and update
