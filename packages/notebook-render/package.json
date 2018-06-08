@@ -1,7 +1,7 @@
 {
   "name": "@nteract/notebook-render",
-  "version": "7.1.2",
-  "description": "View a notebook using a React Component",
+  "version": "1.0.0",
+  "description": "Render a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
   "scripts": {

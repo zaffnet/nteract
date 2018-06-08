@@ -8,7 +8,7 @@ import NotebookPreview from "./../src";
 
 import { dummyCommutable, dummyJSON } from "../../core/src/dummy";
 
-// In order to get reproducable snapshots we nee to mock the uuid package
+// In order to get reproducable snapshots we need to mock the uuid package
 jest.mock("uuid", () => {
   let uuid = 1;
   return {

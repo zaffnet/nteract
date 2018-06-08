@@ -22,5 +22,5 @@ const reactComponent = React.createElement(
   null
 );
 
-html = ReactDOMServer.renderToStaticMarkup(reactComponent);
+const html = ReactDOMServer.renderToStaticMarkup(reactComponent);
 ```
