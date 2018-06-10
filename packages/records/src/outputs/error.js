@@ -87,6 +87,6 @@ export function errorRecordFromMessage(msg: ErrorMessage): ErrorOutputRecord {
     outputType: ERROR,
     ename: msg.content.ename,
     evalue: msg.content.evalue,
-    traceback: msg.content.traceback
+    traceback: Immutable.List(msg.content.traceback)
   });
 }

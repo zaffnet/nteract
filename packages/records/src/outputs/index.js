@@ -1,5 +1,7 @@
 // @flow
 
+import type { JupyterMessage } from "@nteract/messaging";
+
 import * as stream from "./stream";
 import * as displayData from "./display-data";
 import * as executeResult from "./execute-result";
@@ -38,5 +40,25 @@ export function outputFromNbformat(output: NbformatOutput): OutputRecord {
     default:
       // $FlowAllowFeatureDetection: At runtime, allow fallback
       return unrecognized.unrecognizedRecordFromNbformat(output);
+  }
+}
+
+/**
+ * Turn any output that was in JupyterMessage into a record
+ */
+export function outputFromMessage(msg: JupyterMessage<*, *>): OutputRecord {
+  const msg_type = msg.header.msg_type;
+  switch (msg_type) {
+    case stream.STREAM:
+      return stream.streamRecordFromMessage(msg);
+    case displayData.DISPLAYDATA:
+      return displayData.displayDataRecordFromMessage(msg);
+    case executeResult.EXECUTERESULT:
+      return executeResult.executeResultRecordFromMessage(msg);
+    case error.ERROR:
+      return error.errorRecordFromMessage(msg);
+    default:
+      // $FlowAllowFeatureDetection: At runtime, allow fallback
+      return null;
   }
 }

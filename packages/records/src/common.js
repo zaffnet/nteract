@@ -86,10 +86,3 @@ export function createImmutableMimeBundle(
     Immutable.Map()
   );
 }
-
-// export function sanitize(o: ExecuteResult | DisplayData) {
-//   if (o.metadata) {
-//     return { metadata: Immutable.fromJS(o.metadata) };
-//   }
-//   return {};
-// }
