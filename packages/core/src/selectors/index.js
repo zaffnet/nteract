@@ -182,3 +182,11 @@ export const notificationSystem = createSelector(
   (state: AppState) => state.app.get("notificationSystem"),
   identity
 );
+
+export const communicationByRef = (state: AppState) =>
+  state.core.communication.contents.byRef;
+
+export const communication = (
+  state: AppState,
+  { contentRef }: { contentRef: ContentRef }
+) => communicationByRef(state).get(contentRef);
