@@ -7,7 +7,48 @@ export type ImmutableMimeBundle = ImmutableMap<string, any>;
 // Straight from nbformat
 export type MultilineString = string | Array<string>;
 
-export type MimeBundle = { [key: string]: string | Array<string> | Object };
+export type OnDiskMimebundle = {
+  [key: string]: string | Array<string> | Object
+};
+
+// Enumerating over all the possible
+export type MimeBundle = {
+  "text/plain"?: string,
+  "text/html"?: string,
+  "text/latex"?: string,
+  "text/markdown"?: string,
+
+  "application/javascript"?: string,
+
+  "image/png"?: string,
+  "image/jpeg"?: string,
+  "image/gif"?: string,
+  "image/svg+xml"?: string,
+
+  // The JSON mimetype has some corner cases because of the protocol / format assuming the values
+  // in a mimebundle are either:
+  //
+  //   * A string, which would be deserialized
+  //   * An array, which would have to be assumed to be a multiline string
+  //
+  "application/json"?: Object,
+
+  // TODO: These can all be more fully typed
+  "application/vdom.v1+json"?: Object,
+  "application/vnd.dataresource+json"?: Object,
+
+  "text/vnd.plotly.v1+html"?: string,
+  "application/vnd.plotly.v1+json"?: Object,
+  "application/geo+json"?: Object,
+
+  "application/x-nteract-model-debug+json"?: Object,
+
+  "application/vnd.vega.v2+json"?: Object,
+  "application/vnd.vega.v3+json"?: Object,
+  "application/vnd.vegalite.v1+json"?: Object,
+  "application/vnd.vegalite.v2+json"?: Object,
+  [key: string]: string | Array<string> | Object // all others
+};
 
 /**
  * Turn nbformat multiline strings (arrays of strings for simplifying diffs) into strings
