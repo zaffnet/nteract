@@ -1,10 +1,11 @@
 import React from "react";
+import ReactDOMServer from "react-dom/server";
 import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 
-import NotebookPreview from "./../src";
+import NotebookRender from "./../src";
 
 import { dummyCommutable, dummyJSON } from "../../core/src/dummy";
 
@@ -16,10 +17,10 @@ jest.mock("uuid", () => {
   };
 });
 
-describe("Notebook", () => {
+describe("Test NotebokRender snapshots", () => {
   it("accepts an Immutable.List of cells", () => {
     const component = shallow(
-      <NotebookPreview
+      <NotebookRender
         notebook={dummyCommutable}
         theme="light"
         tip
@@ -32,7 +33,7 @@ describe("Notebook", () => {
 
   it("accepts an Object of cells", () => {
     const component = shallow(
-      <NotebookPreview
+      <NotebookRender
         notebook={dummyJSON}
         theme="light"
         tip
@@ -41,5 +42,22 @@ describe("Notebook", () => {
       />
     );
     expect(toJson(component)).toMatchSnapshot();
+  });
+});
+
+describe("Render server-side with renderToStaticMarkup", () => {
+  it("html fragment shouldn't be empty", () => {
+    const component = shallow(
+      <NotebookRender
+        notebook={dummyJSON}
+        theme="light"
+        tip
+        displayOrder={displayOrder}
+        transforms={transforms}
+      />
+    );
+    const html = ReactDOMServer.renderToStaticMarkup(component);
+
+    expect(html.length).toBeGreaterThan(0);
   });
 });
