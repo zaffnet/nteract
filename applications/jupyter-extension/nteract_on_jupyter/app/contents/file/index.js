@@ -6,6 +6,8 @@ import * as Immutable from "immutable";
 import { selectors, actions } from "@nteract/core";
 import type { ContentRef, FileContentRecord, AppState } from "@nteract/core";
 
+import { LoadingIcon, SavingingIcon, ErrorIcon } from "@nteract/octicons";
+
 import moment from "moment";
 
 import { ThemedLogo } from "../../components/themed-logo";
@@ -42,13 +44,25 @@ type FileProps = {
   appBase: string,
   displayName: string,
   mimetype: ?string,
-  lastSavedStatement: string
+  lastSavedStatement: string,
+  saving: boolean,
+  loading: boolean,
+  error: ?Object
 };
 
 export class File extends React.PureComponent<FileProps, *> {
   render() {
     // Determine the file handler
     let choice = null;
+    const icon = this.props.saving ? (
+      <SavingingIcon />
+    ) : this.props.error ? (
+      <ErrorIcon />
+    ) : this.props.loading ? (
+      <LoadingIcon />
+    ) : (
+      ""
+    );
 
     // notebooks don't report a mimetype so we'll use the content.type
     if (this.props.type === "notebook") {
@@ -82,6 +96,7 @@ export class File extends React.PureComponent<FileProps, *> {
             <span>{this.props.displayName}</span>
           </NavSection>
           <NavSection>
+            <span className="icon">{icon}</span>
             <LastSaved contentRef={this.props.contentRef} />
           </NavSection>
         </Nav>
@@ -103,6 +118,11 @@ const mapStateToProps = (
     );
   }
 
+  const comms = selectors.communication(state, ownProps);
+  if (!comms) {
+    throw new Error("CommunicationByRef information not found");
+  }
+
   return {
     type: content.type,
     mimetype: content.mimetype,
@@ -110,7 +130,10 @@ const mapStateToProps = (
     lastSavedStatement: "recently",
     appBase: ownProps.appBase,
     baseDir: dirname(content.filepath),
-    displayName: content.filepath.split("/").pop()
+    displayName: content.filepath.split("/").pop(),
+    saving: comms.saving,
+    loading: comms.loading,
+    error: comms.error
   };
 };
 
