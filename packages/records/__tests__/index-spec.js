@@ -151,7 +151,7 @@ describe("error output", () => {
         output_type: "error",
         ename: "Thor",
         evalue: "Pirate Angel",
-        traceback: Immutable.List(["sweet", "rabbit"])
+        traceback: ["sweet", "rabbit"]
       })
     );
   });
@@ -165,7 +165,7 @@ describe("error output", () => {
         content: {
           ename: "cats",
           evalue: "good",
-          traceback: Immutable.List(["squirrel"])
+          traceback: ["squirrel"]
         }
       })
     ).toEqual(
@@ -173,7 +173,7 @@ describe("error output", () => {
         outputType: "error",
         ename: "cats",
         evalue: "good",
-        traceback: Immutable.List(["squirrel"])
+        traceback: ["squirrel"]
       })
     );
   });

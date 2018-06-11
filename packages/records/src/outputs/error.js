@@ -25,7 +25,7 @@ type ErrorOutput = {
   outputType: ErrorType,
   ename: string,
   evalue: string,
-  traceback: Immutable.List<string>
+  traceback: Iterable<string>
 };
 
 // On disk
@@ -33,7 +33,7 @@ export type NbformatErrorOutput = {
   output_type: ErrorType,
   ename: string,
   evalue: string,
-  traceback: Immutable.List<string>
+  traceback: Iterable<string>
 };
 
 type ErrorMessage = {
@@ -43,7 +43,7 @@ type ErrorMessage = {
   content: {
     ename: string,
     evalue: string,
-    traceback: Immutable.List<string>
+    traceback: Iterable<string>
   }
 };
 
@@ -57,7 +57,7 @@ const errorOutputRecordMaker: Immutable.RecordFactory<
   outputType: ERROR,
   ename: "",
   evalue: "",
-  traceback: Immutable.List()
+  traceback: []
 });
 
 export function makeErrorOutputRecord(
@@ -76,7 +76,7 @@ export function errorRecordFromNbformat(
         outputType: s.output_type,
         ename: s.ename,
         evalue: s.evalue,
-        traceback: Immutable.List(s.traceback)
+        traceback: s.traceback
       }
     )
   );
@@ -87,6 +87,6 @@ export function errorRecordFromMessage(msg: ErrorMessage): ErrorOutputRecord {
     outputType: ERROR,
     ename: msg.content.ename,
     evalue: msg.content.evalue,
-    traceback: Immutable.List(msg.content.traceback)
+    traceback: msg.content.traceback
   });
 }
