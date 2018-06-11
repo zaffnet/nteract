@@ -62,7 +62,8 @@
     "prettify": "prettier --write '**/*.{js,json}' '!**/{dist,lib,.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
     "pack": "lerna run pack --scope nteract --stream",
     "dist": "lerna run dist --scope nteract --stream",
-    "dist:all": "lerna run dist:all --scope nteract --stream"
+    "dist:all": "lerna run dist:all --scope nteract --stream",
+    "clean": "lerna clean --yes && rm -rf node_modules"
   },
   "jest": {
     "setupFiles": [
