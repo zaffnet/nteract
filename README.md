@@ -155,7 +155,7 @@ rebuild those using [the instructions for building specific packages](#building-
 
 > I upgraded my developer installation and things are broken!
 
-* Try `git clean -xdf && npm i`
+- Try `npm run clean && npm i`
 
 > I want to debug redux actions and state changes.
 
