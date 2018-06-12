@@ -3,9 +3,6 @@
 import { formBinderURL, binder } from "rx-binder";
 import { kernels, apiVersion } from "rx-jupyter";
 
-import * as rxJupyter from "rx-jupyter";
-import * as operators from "rxjs/operators";
-
 import { tap, map, catchError, filter } from "rxjs/operators";
 import { of } from "rxjs/observable/of";
 

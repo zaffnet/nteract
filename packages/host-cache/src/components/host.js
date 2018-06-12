@@ -16,8 +16,10 @@ type HostProps = {
 
 import type { ServerConfig } from "../host-storage";
 
-class HostAcquirer extends React.Component<HostProps, ServerConfig> {
+class Host extends React.Component<HostProps, ServerConfig> {
   lhs: LocalHostStorage;
+
+  static Consumer = Consumer;
 
   static defaultProps = {
     repo: "nteract/vdom",
@@ -59,10 +61,5 @@ class HostAcquirer extends React.Component<HostProps, ServerConfig> {
     return <Provider value={this.state}>{this.props.children}</Provider>;
   }
 }
-
-const Host = {
-  Provider: HostAcquirer,
-  Consumer
-};
 
 export default Host;
