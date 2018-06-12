@@ -231,6 +231,7 @@ export function loadFullMenu(store: * = global.store) {
         dialog.showOpenDialog(opts, fname => {
           if (fname) {
             launch(fname[0]);
+            app.addRecentDocument(fname[0]);
           }
         });
       },
@@ -389,6 +390,19 @@ export function loadFullMenu(store: * = global.store) {
         label: "Exit",
         accelerator: "Alt+F4",
         role: "close"
+      }
+    );
+  }
+  else if (process.platform === "darwin") {
+    file.submenu.splice(2, 0, {
+        label: 'Open Recent',
+        role: 'recentDocuments',
+        submenu: [
+          {
+            label: 'Clear Recent',
+            role: 'clearRecentDocuments'
+          }
+        ]
       }
     );
   }
@@ -613,6 +627,20 @@ export function loadFullMenu(store: * = global.store) {
         label: "Exit",
         accelerator: "Alt+F4",
         role: "close"
+      }
+    );
+  }
+  else if (process.platform === "darwin") {
+    fileWithNew.submenu.splice(2, 0,
+      {
+        label: 'Open Recent',
+        role: 'recentDocuments',
+        submenu: [
+          {
+            label: 'Clear Recent',
+            role: 'clearRecentDocuments'
+          }
+        ]
       }
     );
   }
