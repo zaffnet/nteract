@@ -20,6 +20,12 @@ const Highlighter = (props: HighlighterProps) => {
   let language = props.language;
   if (language === "ipython") {
     language = "python";
+  } else if (language === "text/x-scala") {
+    // Adjust for the scala codemirror type
+    language = "scala";
+  } else if (language.startsWith("text/x-")) {
+    // Strip off the language from the mimetype
+    language = language.slice("text/x-".length);
   }
 
   return (
