@@ -1,5 +1,5 @@
 ```jsx static
-import { Source } from "@nteract/presentational-components"
+import { Source } from "@nteract/presentational-components";
 ```
 
 Syntax highlight source code. Pass a child component to override with your own editor or syntax highlighting implementation.
@@ -10,6 +10,34 @@ Syntax highlight source code. Pass a child component to override with your own e
 <Source language="python">{`import python
 
 print("Hello from nteract.")`}</Source>
+```
+
+Supports highlighting Scala too, whether specified as `text/x-scala` (codemirror mimetype) or `scala`:
+
+```js
+<Source language="text/x-scala">{`import org.apache.hadoop.fs.Pathorg.apa
+import com.netflix.iceberg.hadoop.HadoopTables
+import com.netflix.iceberg.spark.SparkSchemaUtil
+
+val path = "hdfs:/tmp/tables/job_metrics_tmp"
+
+{ // use a block to avoid values (conf, etc.) getting caught in closures
+
+    // remove the temp table if it already exists
+    val conf = spark.sparkContext.hadoopConfiguration
+    val fs = new Path(path).getFileSystem(conf)
+    fs.delete(new Path(path), true /* recursive */ )
+
+    // create the temp table using Spark utils to create a schema and partition spec
+    val tables = new HadoopTables(conf)
+    val schema = SparkSchemaUtil.schemaForTable(spark, "default.job_metrics")
+    val spec = SparkSchemaUtil.specForTable(spark, "default.job_metrics")
+
+    tables.create(schema, spec, path)
+
+    // show the schema
+    tables.load(path).schema
+}`}</Source>
 ```
 
 ### Bring your own editor
