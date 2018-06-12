@@ -94,9 +94,6 @@
     },
     "files": [
       "lib/*.js",
-      "lib/*.css",
-      "lib/*.woff",
-      "lib/*.woff2",
       "static"
     ],
     "extraResources": [
