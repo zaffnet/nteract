@@ -10,7 +10,7 @@ export { Consumer };
 type HostProps = {
   children?: React.Node,
   repo: string,
-  ref?: string,
+  gitRef?: string,
   binderURL?: string
 };
 
@@ -23,14 +23,14 @@ class Host extends React.Component<HostProps, ServerConfig> {
 
   static defaultProps = {
     repo: "nteract/vdom",
-    ref: "master",
+    gitRef: "master",
     binderURL: "https://mybinder.org"
   };
 
   allocate = () => {
     const binderOpts = {
       repo: this.props.repo,
-      ref: this.props.ref,
+      gitRef: this.props.gitRef,
       binderURL: this.props.binderURL
     };
 
@@ -46,7 +46,6 @@ class Host extends React.Component<HostProps, ServerConfig> {
 
   componentDidMount() {
     this.lhs = new LocalHostStorage();
-
     this.allocate();
   }
 
