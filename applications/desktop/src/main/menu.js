@@ -392,19 +392,17 @@ export function loadFullMenu(store: * = global.store) {
         role: "close"
       }
     );
-  }
-  else if (process.platform === "darwin") {
+  } else if (process.platform === "darwin") {
     file.submenu.splice(2, 0, {
-        label: 'Open Recent',
-        role: 'recentDocuments',
-        submenu: [
-          {
-            label: 'Clear Recent',
-            role: 'clearRecentDocuments'
-          }
-        ]
-      }
-    );
+      label: "Open Recent",
+      role: "recentdocuments",
+      submenu: [
+        {
+          label: "Clear Recent",
+          role: "clearrecentdocuments"
+        }
+      ]
+    });
   }
 
   const edit = {
@@ -629,20 +627,17 @@ export function loadFullMenu(store: * = global.store) {
         role: "close"
       }
     );
-  }
-  else if (process.platform === "darwin") {
-    fileWithNew.submenu.splice(2, 0,
-      {
-        label: 'Open Recent',
-        role: 'recentDocuments',
-        submenu: [
-          {
-            label: 'Clear Recent',
-            role: 'clearRecentDocuments'
-          }
-        ]
-      }
-    );
+  } else if (process.platform === "darwin") {
+    fileWithNew.submenu.splice(2, 0, {
+      label: "Open Recent",
+      role: "recentdocuments",
+      submenu: [
+        {
+          label: "Clear Recent",
+          role: "clearrecentdocuments"
+        }
+      ]
+    });
   }
 
   template.push(fileWithNew);
