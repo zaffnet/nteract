@@ -197,6 +197,11 @@ const lernaModules = [
     name: "nteract-on-jupyter",
     version: "1.6.1",
     private: false
+  },
+  {
+    name: "@nteract/iron-icons",
+    version: "0.1.0",
+    private: false
   }
 ];
 
