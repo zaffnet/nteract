@@ -4,6 +4,7 @@ The `<Kernel />` component is a provider and consumer pair for getting access to
 var _ = require("lodash");
 var { first, map } = require("rxjs/operators");
 
+var transforms = require("../../../transforms");
 var messaging = require("../../../messaging");
 
 class FakeBook extends React.Component {
@@ -11,7 +12,26 @@ class FakeBook extends React.Component {
     super(props);
 
     this.state = {
-      source: "import random\nprint('hello', random.random())",
+      source: `print("Super DATA ANALYSIS MEGA DOME")
+
+library(ggplot2)
+
+cars <- data.frame(mtcars)
+
+# create factors with value labels
+cars$gear <- factor(cars$gear,levels=c(3,4,5),
+  	labels=c("3gears","4gears","5gears"))
+cars$am <- factor(cars$am,levels=c(0,1),
+  	labels=c("Automatic","Manual"))
+cars$cyl <- factor(cars$cyl,levels=c(4,6,8),
+   labels=c("4cyl","6cyl","8cyl"))
+
+
+# Kernel density plots for mpg# Kerne
+# grouped by number of gears (indicated by color)
+qplot(mpg, data=cars, geom="density", fill=gear, alpha=I(.5),
+  main="Distribution of Gas Milage", xlab="Miles Per Gallon",
+  ylab="Density")`,
       messageCollections: {}
     };
   }
@@ -69,8 +89,8 @@ class FakeBook extends React.Component {
           style={{
             border: "none",
             width: "100%",
-            height: "200px",
-            fontSize: "1em",
+            height: "320px",
+            fontSize: ".9em",
             fontFamily: `SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace`
           }}
           onChange={event => {
@@ -95,17 +115,25 @@ class FakeBook extends React.Component {
         >
           Clear Outputs
         </button>
-        <p>Outputs</p>
         {_.map(this.state.messageCollections, (collection, parent_id) => {
           return _.map(collection, msg => {
             switch (msg.msg_type) {
               case "execute_result":
               case "display_data":
-                return (
-                  <pre key={msg.header.msg_id}>
-                    {msg.content.data["text/plain"]}
-                  </pre>
-                );
+                if (msg.content.data) {
+                  const mimetype = transforms.richestMimetype(msg.content.data);
+                  if (!mimetype) {
+                    return null;
+                  }
+                  const Transform = transforms.transforms[mimetype];
+
+                  return (
+                    <Transform
+                      key={msg.header.msg_id}
+                      data={msg.content.data[mimetype]}
+                    />
+                  );
+                }
               case "stream":
                 return <pre key={msg.header.msg_id}>{msg.content.text}</pre>;
               default:
@@ -118,7 +146,7 @@ class FakeBook extends React.Component {
   }
 }
 
-<Kernel>
+<Kernel repo="binder-examples/r" kernelName="ir">
   <Kernel.Consumer>
     {kernel =>
       kernel ? <FakeBook kernel={kernel} /> : <pre>Allocating Kernel</pre>
