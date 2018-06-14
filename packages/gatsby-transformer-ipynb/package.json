@@ -12,13 +12,12 @@
   "main": "./gatsby-node.js",
   "scripts": {
     "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm run build:flow",
+    "prepublishOnly": "npm run build",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rm -f gastby-node.js on-node-create.js",
-    "build:flow": "flow-copy-source -v -i '**/__tests__/**' src ./",
     "build:lib": "babel -d ./ src --ignore '**/__tests__/**'",
     "build:lib:watch": "npm run build:lib -- --watch",
-    "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
+    "build:watch": "npm run build:clean && npm run build:lib:watch"
   },
   "repository": "https://github.com/nteract/nteract/tree/master/packages/gatsby-transformer-ipynb",
   "publishConfig": {
