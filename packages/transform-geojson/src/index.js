@@ -89,17 +89,18 @@ export class GeoJSONTransform extends React.Component<Props> {
   getTileLayer = (): ?TileLayer => {
     if (!this.el) return;
     const theme = getTheme(this.props.theme, this.el);
-    // const urlTemplate = (metadata && metadata.url_template) ||
+    // const urlTemplate = (this.props.metadata && this.props.metadata.url_template) ||
     //   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     const urlTemplate =
-      this.props.metadata.url_template ||
+      (this.props.metadata && this.props.metadata.url_template) ||
       "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWlja3QiLCJhIjoiLXJIRS1NbyJ9.EfVT76g4A5dyuApW_zuIFQ";
-    // const layerOptions = (metadata && metadata.layer_options) || {
+    // const layerOptions = (this.props.metadata && this.props.metadata.layer_options) || {
     //   attribution: 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
     //   minZoom: 0,
     //   maxZoom: 18
     // };
-    const layerOptions = this.props.metadata.layer_options || {
+    const layerOptions = (this.props.metadata &&
+      this.props.metadata.layer_options) || {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: `mapbox.${theme}`
