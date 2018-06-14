@@ -78,8 +78,10 @@ export default class Notebook extends React.Component<Props, State> {
   }
 
   registerTransform(transform: { MIMETYPE: string }) {
-    this.setState({
-      transforms: { ...this.state.transforms, [transform.MIMETYPE]: transform }
+    this.setState((prevState, props) => {
+      return {
+        transforms: { ...prevState.transforms, [transform.MIMETYPE]: transform }
+      };
     });
   }
 
@@ -111,14 +113,16 @@ export default class Notebook extends React.Component<Props, State> {
 
     import(/* webpackChunkName: "vega-transform" */ "@nteract/transform-vega").then(
       module => {
-        this.setState({
-          transforms: {
-            ...this.state.transforms,
-            [module.VegaLite1.MIMETYPE]: module.VegaLite1,
-            [module.VegaLite1.MIMETYPE]: module.VegaLite2,
-            [module.VegaLite1.MIMETYPE]: module.Vega2,
-            [module.VegaLite1.MIMETYPE]: module.Vega3
-          }
+        this.setState((prevState, props) => {
+          return {
+            transforms: {
+              ...prevState.transforms,
+              [module.VegaLite1.MIMETYPE]: module.VegaLite1,
+              [module.VegaLite2.MIMETYPE]: module.VegaLite2,
+              [module.Vega2.MIMETYPE]: module.Vega2,
+              [module.Vega3.MIMETYPE]: module.Vega3
+            }
+          };
         });
       }
     );
