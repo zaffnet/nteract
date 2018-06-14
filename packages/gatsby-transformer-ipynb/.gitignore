@@ -1,0 +1,13 @@
+# Project dependencies
+.cache
+node_modules
+yarn-error.log
+
+# Builds
+/gatsby-node.js
+/on-node-create.js
+public
+.DS_Store
+
+# override ignore rule
+!.index.js
