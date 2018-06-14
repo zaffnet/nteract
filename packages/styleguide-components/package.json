@@ -1,11 +1,8 @@
 {
   "name": "@nteract/styleguide-components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "components for our styleguidist build",
-  "scripts": {
-  },
-  "dependencies": {
-  },
+  "scripts": {},
   "publishConfig": {
     "access": "public"
   },

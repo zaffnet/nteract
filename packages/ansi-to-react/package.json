@@ -1,6 +1,6 @@
 {
   "name": "ansi-to-react",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "ANSI to React Elements",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
