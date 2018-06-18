@@ -132,6 +132,7 @@ print('hey')
       </Outputs>
     </Cell>
   </Cells>
+  <style />
   <style>
     :root {
           
@@ -384,6 +385,7 @@ print('hey')
       </Outputs>
     </Cell>
   </Cells>
+  <style />
   <style>
     :root {
           
