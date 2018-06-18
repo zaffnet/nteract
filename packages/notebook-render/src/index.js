@@ -142,6 +142,7 @@ export default class NotebookRender extends React.PureComponent<Props, State> {
                   <Cell key={cellID}>
                     <div className="content-margin">
                       <ReactMarkdown
+                        escapeHtml={false}
                         source={source}
                         plugins={remarkPlugins}
                         renderers={remarkRenderers}
