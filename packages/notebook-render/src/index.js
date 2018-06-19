@@ -8,6 +8,7 @@ import remark2rehype from "remark-rehype";
 import katex from "rehype-katex";
 import stringify from "rehype-stringify";
 import { InlineMath, BlockMath } from "react-katex";
+import flush from "styled-jsx/server";
 
 import { Display } from "@nteract/display-area";
 import {
@@ -142,6 +143,7 @@ export default class NotebookRender extends React.PureComponent<Props, State> {
                   <Cell key={cellID}>
                     <div className="content-margin">
                       <ReactMarkdown
+                        escapeHtml={false}
                         source={source}
                         plugins={remarkPlugins}
                         renderers={remarkRenderers}
@@ -188,6 +190,7 @@ export default class NotebookRender extends React.PureComponent<Props, State> {
             }
           })}
         </Cells>
+        <style>{/* render styled jsx styles */ flush()}</style>
         <style>{`:root {
           ${themes[this.props.theme]}
             --theme-cell-shadow-hover: none;

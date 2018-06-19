@@ -15,7 +15,7 @@ exports[`Test NotebokRender snapshots accepts an Immutable.List of cells 1`] = `
       >
         <ReactMarkdown
           astPlugins={Array []}
-          escapeHtml={true}
+          escapeHtml={false}
           plugins={
             Array [
               [Function],
@@ -132,6 +132,7 @@ print('hey')
       </Outputs>
     </Cell>
   </Cells>
+  <style />
   <style>
     :root {
           
@@ -267,7 +268,7 @@ exports[`Test NotebokRender snapshots accepts an Object of cells 1`] = `
       >
         <ReactMarkdown
           astPlugins={Array []}
-          escapeHtml={true}
+          escapeHtml={false}
           plugins={
             Array [
               [Function],
@@ -384,6 +385,7 @@ print('hey')
       </Outputs>
     </Cell>
   </Cells>
+  <style />
   <style>
     :root {
           
