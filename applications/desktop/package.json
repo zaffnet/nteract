@@ -140,7 +140,7 @@
     "kernelspecs": "^2.0.0",
     "lodash": "^4.17.4",
     "react-dnd": "^4.0.0",
-    "react-dnd-html5-backend": "^4.0.0",
+    "react-dnd-html5-backend": "^5.0.0",
     "react-notification-system": "^0.2.16",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
