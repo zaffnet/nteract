@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms-full",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "Transforms from nteract",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -38,6 +38,6 @@
     "@nteract/transform-model-debug": "^3.1.1",
     "@nteract/transform-plotly": "^3.1.8",
     "@nteract/transform-vega": "^3.1.2",
-    "@nteract/transforms": "^4.2.0"
+    "@nteract/transforms": "^4.3.0"
   }
 }
