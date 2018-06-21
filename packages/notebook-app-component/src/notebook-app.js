@@ -29,7 +29,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import { connect } from "react-redux";
 
 import MathJax from "@nteract/mathjax";
-import { Display, RichestMime } from "@nteract/display-area";
+import { RichestMime, Output } from "@nteract/display-area";
 import {
   displayOrder as defaultDisplayOrder,
   transforms as defaultTransforms
@@ -216,16 +216,16 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
               hidden={this.props.outputHidden}
               expanded={this.props.outputExpanded}
             >
-              <Display
-                className="outputs-display"
-                outputs={this.props.outputs.toJS()}
-                displayOrder={this.props.displayOrder}
-                transforms={this.props.transforms}
-                theme={this.props.theme}
-                expanded={this.props.outputExpanded}
-                isHidden={this.props.outputHidden}
-                models={this.props.models.toJS()}
-              />
+              {this.props.outputs.map((output, index) => (
+                <Output
+                  key={index}
+                  output={output}
+                  displayOrder={this.props.displayOrder}
+                  transforms={this.props.transforms}
+                  theme={this.props.theme}
+                  models={this.props.models}
+                />
+              ))}
             </Outputs>
           </React.Fragment>
         );

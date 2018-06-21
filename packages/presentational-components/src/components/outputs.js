@@ -3,12 +3,14 @@ import * as React from "react";
 
 export type OutputsProps = {
   children: React.Node,
+  expanded: boolean,
   hidden: boolean
 };
 
 export class Outputs extends React.Component<OutputsProps> {
   static defaultProps = {
     children: null,
+    expanded: false,
     hidden: false
   };
 
@@ -19,7 +21,7 @@ export class Outputs extends React.Component<OutputsProps> {
 
     if (this.props.children) {
       return (
-        <div className="outputs">
+        <div className={`outputs${this.props.expanded ? " expanded" : ""}`}>
           {this.props.children}
           <style jsx>{`
             .outputs {
@@ -27,6 +29,12 @@ export class Outputs extends React.Component<OutputsProps> {
               word-wrap: break-word;
               overflow-y: auto;
               outline: none;
+              /* When expanded, this is overtaken to 100% */
+              max-height: 600px;
+            }
+
+            .expanded {
+              max-height: 100%;
             }
 
             .outputs :global(a) {

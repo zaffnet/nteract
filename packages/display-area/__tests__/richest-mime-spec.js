@@ -21,7 +21,6 @@ describe("RichestMime", () => {
       />
     );
 
-    expect(rm.instance().shouldComponentUpdate()).toBeTruthy();
     expect(toJson(rm)).toMatchSnapshot();
   });
   it("does not render unknown mimetypes", () => {

@@ -4,7 +4,6 @@ import React from "react";
 import { richestMimetype, transforms, displayOrder } from "@nteract/transforms";
 
 type Props = {
-  expanded: boolean,
   displayOrder: Array<string>,
   transforms: Object,
   bundle: Object,
@@ -62,26 +61,11 @@ export default class RichestMime extends React.Component<Props, State> {
   static defaultProps = {
     transforms,
     displayOrder,
-    expanded: false,
     theme: "light",
     metadata: {},
     bundle: {},
     models: {}
   };
-
-  shouldComponentUpdate(nextProps: Props): boolean {
-    // eslint-disable-line class-methods-use-this
-    if (
-      nextProps &&
-      nextProps.theme &&
-      this.props &&
-      nextProps.theme !== this.props.theme
-    ) {
-      return true;
-    }
-    // return false;
-    return true;
-  }
 
   render(): ?React$Element<any> | null {
     if (this.state.error) {
@@ -109,7 +93,6 @@ export default class RichestMime extends React.Component<Props, State> {
     const metadata = this.props.metadata[mimetype];
     return (
       <Transform
-        expanded={this.props.expanded}
         data={data}
         metadata={metadata}
         theme={this.props.theme}
