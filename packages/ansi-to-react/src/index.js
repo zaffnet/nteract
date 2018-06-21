@@ -35,7 +35,7 @@ function ansiJSONtoStyleBundle(ansiBundle) {
   };
 }
 
-function ansiToInlineStyle(text) {
+export function ansiToInlineStyle(text: string) {
   return ansiToJSON(text).map(ansiJSONtoStyleBundle);
 }
 
@@ -79,7 +79,7 @@ function inlineBundleToReact(bundle, key) {
 }
 
 type Props = {
-  children: React.Node,
+  children: string,
   className?: string,
   linkify?: boolean
 };

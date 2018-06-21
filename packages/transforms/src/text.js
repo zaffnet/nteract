@@ -1,7 +1,7 @@
 /* @flow */
 import React from "react";
 
-import Ansi from "ansi-to-react";
+import { ansiToInlineStyle } from "ansi-to-react";
 
 type Props = {
   data: string
@@ -10,7 +10,21 @@ type Props = {
 export default class TextDisplay extends React.PureComponent<Props> {
   static MIMETYPE = "text/plain";
 
+  shouldComponentUpdate(nextProps: Props) {
+    // Calculate shouldComponentUpdate because we don't use metadata or models
+    // on the plaintext transform
+    return nextProps.data !== this.props.data;
+  }
+
   render(): ?React$Element<any> {
-    return <Ansi>{this.props.data}</Ansi>;
+    return (
+      <pre>
+        {ansiToInlineStyle(this.props.data).map((bundle, key) => (
+          <span style={bundle.style} key={key}>
+            {bundle.content}
+          </span>
+        ))}
+      </pre>
+    );
   }
 }
