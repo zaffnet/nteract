@@ -1,3 +1,9 @@
+## nteract v0.9.1 - Bewildered Bethe
+
+* Fixed AppImage build for Linux
+* Corrected rendering of subsequent `text/plain` `display_data` and `execute_result` outputs
+* Improved performance during app usage by using Immutable objects for outputs again, making sure to allow Hydrogen's non-immutable version
+
 ## nteract v0.9.0 - Bespectacled Bessemer
 
 🤓🔩
