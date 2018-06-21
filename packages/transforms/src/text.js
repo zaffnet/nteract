@@ -7,7 +7,7 @@ type Props = {
   data: string
 };
 
-export default class TextDisplay extends React.PureComponent<Props> {
+export default class TextDisplay extends React.Component<Props, null> {
   static MIMETYPE = "text/plain";
 
   shouldComponentUpdate(nextProps: Props) {
