@@ -37,7 +37,13 @@ function createServer() {
     const renderSuffixes = new Set(["ipynb", "html", "json", "md", "rmd"]);
     const renderAccepts = new Set(["text/html", "application/xhtml+xml"]);
     const viewHandler = (req: $Request, res: $Response) => {
-      const suffix = (suffixRegex.exec(req.path)[1] || "").toLowerCase();
+      const presuffix = suffixRegex.exec(req.path);
+
+      if (!presuffix) {
+        return null;
+      }
+
+      const suffix = (presuffix[1] || "").toLowerCase();
       const accepts = (req.headers.accept || "").split(",");
 
       if (
