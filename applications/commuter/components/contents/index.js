@@ -51,7 +51,13 @@ class File extends React.Component<*> {
 
   render() {
     const name = this.props.entry.name;
-    const suffix = (suffixRegex.exec(name)[1] || "").toLowerCase();
+    const presuffix = suffixRegex.exec(name);
+
+    if (!presuffix) {
+      return null;
+    }
+
+    const suffix = (presuffix[1] || "").toLowerCase();
 
     switch (suffix) {
       case "html":
