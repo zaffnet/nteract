@@ -1,5 +1,5 @@
 import uuid from "uuid/v4";
-import { Subject } from "rxjs/Subject";
+import { Subject } from "rxjs";
 
 const EventEmitter = require("events");
 

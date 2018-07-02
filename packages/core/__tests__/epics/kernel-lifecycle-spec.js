@@ -6,7 +6,8 @@ import { actions, actionTypes, state as stateModule } from "@nteract/core";
 
 import { createMessage } from "@nteract/messaging";
 
-import { Subject } from "rxjs/Subject";
+import { Subject, of } from "rxjs";
+import { toArray } from "rxjs/operators";
 
 import { TestScheduler } from "rxjs/testing/TestScheduler";
 
@@ -15,9 +16,6 @@ import {
   restartKernelEpic,
   watchExecutionStateEpic
 } from "../../src/epics/kernel-lifecycle";
-
-import { of } from "rxjs/observable/of";
-import { toArray } from "rxjs/operators";
 
 describe("acquireKernelInfo", () => {
   test("sends a kernel_info_request and processes kernel_info_reply", async function(done) {

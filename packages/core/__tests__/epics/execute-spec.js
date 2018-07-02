@@ -14,8 +14,7 @@ import {
 
 const Immutable = require("immutable");
 
-import { Subject } from "rxjs/Subject";
-import { from } from "rxjs/observable/from";
+import { Subject, from } from "rxjs";
 import { toArray, share, catchError } from "rxjs/operators";
 
 describe("executeCell", () => {

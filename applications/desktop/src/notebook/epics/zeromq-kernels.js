@@ -2,10 +2,7 @@
 
 import type { ChildProcess } from "child_process";
 
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
-import { empty } from "rxjs/observable/empty";
-import { merge } from "rxjs/observable/merge";
+import { Observable, of, merge, empty } from "rxjs";
 
 import { sample } from "lodash";
 

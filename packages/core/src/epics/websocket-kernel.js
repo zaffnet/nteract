@@ -10,8 +10,7 @@ import {
   concatMap,
   filter
 } from "rxjs/operators";
-import { of } from "rxjs/observable/of";
-import { empty } from "rxjs/observable/empty";
+import { of, empty } from "rxjs";
 import { extractNewKernel } from "./kernel-lifecycle";
 
 import { kernels, sessions } from "rx-jupyter";

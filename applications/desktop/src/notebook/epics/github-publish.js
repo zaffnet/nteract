@@ -7,14 +7,12 @@ const path = require("path");
 
 import type { ActionsObservable } from "redux-observable";
 
-import { of } from "rxjs/observable/of";
-
-import { empty } from "rxjs/observable/empty";
+import { of, empty } from "rxjs";
 
 import { mergeMap, catchError } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
-import { ajax } from "rxjs/observable/dom/ajax";
+import { ajax } from "rxjs/ajax";
 
 type GithubFiles = {
   [string]: {

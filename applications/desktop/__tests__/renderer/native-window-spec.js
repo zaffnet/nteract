@@ -1,7 +1,7 @@
 import Immutable from "immutable";
 import { remote } from "electron";
 
-import { of } from "rxjs/observable/of";
+import { of } from "rxjs";
 
 import * as nativeWindow from "../../src/notebook/native-window";
 import { state as stateModule } from "@nteract/core";
