@@ -21,10 +21,7 @@ import { contents } from "rx-jupyter";
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import type { Notebook } from "@nteract/commutable";
 
-export function fetchContentEpic(
-  action$: ActionsObservable<*>,
-  store: Store<*, *>
-) {
+export function fetchContentEpic(action$: ActionsObservable<*>, state$: any) {
   return action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
     switchMap((action: actionTypes.FetchContent) => {
@@ -36,7 +33,7 @@ export function fetchContentEpic(
         });
       }
 
-      const state = store.getState();
+      const state = state$.value;
 
       const host = selectors.currentHost(state);
       if (host.type !== "jupyter") {
@@ -128,14 +125,14 @@ const someArbitraryPrimesAround30k = [
 
 export function autoSaveCurrentContentEpic(
   action$: ActionsObservable<Action>,
-  store: Store<AppState, *>
+  state$: any
 ) {
   // Pick an autosave duration that won't have the exact same cycle as another open tab
   const duration = sample(someArbitraryPrimesAround30k);
 
   return interval(duration).pipe(
     mergeMap(() => {
-      const state: AppState = store.getState();
+      const state = state$.value;
 
       const contentRef$ = from(
         state.core.entities.contents.byRef
@@ -152,7 +149,7 @@ export function autoSaveCurrentContentEpic(
     // TODO: Once we're switched to the coming redux observable 1.0.0 release,
     // we should use the state$ stream to only save when the content has changed
     mergeMap((contentRef: ContentRef) => {
-      const state: AppState = store.getState();
+      const state = state$.value;
       const content = selectors.content(state, { contentRef });
 
       let isVisible = false;
@@ -192,7 +189,7 @@ export function autoSaveCurrentContentEpic(
 
 export function saveContentEpic(
   action$: ActionsObservable<Action>,
-  store: Store<*, *>
+  state$: any
 ) {
   return action$.pipe(
     ofType(actionTypes.SAVE, actionTypes.DOWNLOAD_CONTENT),
@@ -200,7 +197,7 @@ export function saveContentEpic(
       (
         action: actionTypes.Save | actionTypes.DownloadContent
       ): ActionsObservable<Action> => {
-        const state = store.getState();
+        const state = state$.value;
 
         const host = selectors.currentHost(state);
         if (host.type !== "jupyter") {

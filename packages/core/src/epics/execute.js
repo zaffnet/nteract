@@ -119,12 +119,12 @@ export function executeCellStream(
 
 export function createExecuteCellStream(
   action$: ActionsObservable<*>,
-  store: any,
+  state: any,
   message: ExecuteRequest,
   id: string,
   contentRef: ContentRef
 ) {
-  const kernel = selectors.currentKernel(store.getState());
+  const kernel = selectors.currentKernel(state);
 
   const channels = kernel ? kernel.channels : null;
 
@@ -171,13 +171,14 @@ export function createExecuteCellStream(
   );
 }
 
-export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
+export function executeAllCellsEpic(action$: ActionsObservable<*>, state$: *) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
     concatMap((action: ExecuteAllCells | ExecuteAllCellsBelow) => {
+      const state = state$.value;
       const contentRef = action.payload.contentRef;
 
-      const model = selectors.model(store.getState(), { contentRef });
+      const model = selectors.model(state, { contentRef });
       // If it's not a notebook, we shouldn't be here
       if (!model || model.type !== "notebook") {
         return empty();
@@ -203,14 +204,14 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
  * the execute cell epic processes execute requests for all cells, creating
  * inner observable streams of the running execution responses
  */
-export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
+export function executeCellEpic(action$: ActionsObservable<*>, state$: any) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_CELL, actionTypes.EXECUTE_FOCUSED_CELL),
     mergeMap((action: ExecuteCell | ExecuteFocusedCell) => {
       if (action.type === actionTypes.EXECUTE_FOCUSED_CELL) {
         const contentRef = action.payload.contentRef;
-
-        const model = selectors.model(store.getState(), { contentRef });
+        const state = state$.value;
+        const model = selectors.model(state, { contentRef });
         // If it's not a notebook, we shouldn't be here
         if (!model || model.type !== "notebook") {
           return empty();
@@ -242,7 +243,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         switchMap((action: ExecuteCell) => {
           const { id } = action.payload;
 
-          const state = store.getState();
+          const state = state$.value;
 
           const contentRef = action.payload.contentRef;
           const model = selectors.model(state, { contentRef });
@@ -268,7 +269,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 
           return createExecuteCellStream(
             action$,
-            store,
+            state,
             message,
             id,
             action.payload.contentRef

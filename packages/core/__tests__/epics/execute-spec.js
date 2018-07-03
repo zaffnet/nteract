@@ -42,11 +42,8 @@ describe("createExecuteCellStream", () => {
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
     const channels = mockShell;
-    const store = {
-      getState() {
-        return this.state;
-      },
-      state: {
+    const state$ = {
+      value: {
         core: stateModule.makeStateRecord({
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
@@ -66,7 +63,12 @@ describe("createExecuteCellStream", () => {
       }
     };
     const action$ = ActionsObservable.of(actions.sendExecuteRequest({}));
-    const observable = createExecuteCellStream(action$, store, "source", "id");
+    const observable = createExecuteCellStream(
+      action$,
+      state$.value,
+      "source",
+      "id"
+    );
     observable.pipe(toArray()).subscribe(
       actions => {
         const errors = actions.map(({ payload: { error } }) =>
@@ -84,11 +86,8 @@ describe("createExecuteCellStream", () => {
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
 
     const channels = mockShell;
-    const store = {
-      getState() {
-        return this.state;
-      },
-      state: {
+    const state$ = {
+      value: {
         core: stateModule.makeStateRecord({
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
@@ -110,7 +109,12 @@ describe("createExecuteCellStream", () => {
     const action$ = ActionsObservable.from([]);
     const message = createExecuteRequest("source");
 
-    const observable = createExecuteCellStream(action$, store, message, "id");
+    const observable = createExecuteCellStream(
+      action$,
+      state$.value,
+      message,
+      "id"
+    );
     const actionBuffer = [];
     observable.subscribe(x => actionBuffer.push(x), err => done.fail(err));
     expect(actionBuffer).toEqual([
@@ -121,11 +125,8 @@ describe("createExecuteCellStream", () => {
 });
 
 describe("executeCellEpic", () => {
-  const store = {
-    getState() {
-      return this.state;
-    },
-    state: {
+  const state$ = {
+    value: {
       app: {
         kernel: {
           channels: "errorInExecuteCellObservable",
@@ -141,7 +142,7 @@ describe("executeCellEpic", () => {
     const badAction$ = ActionsObservable.of(actions.executeCell({})).pipe(
       share()
     );
-    const responseActions = executeCellEpic(badAction$, store).pipe(
+    const responseActions = executeCellEpic(badAction$, state$).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs an id");
       })
@@ -159,7 +160,7 @@ describe("executeCellEpic", () => {
     const badAction$ = ActionsObservable.of(
       actions.executeCell({ id: "id" })
     ).pipe(share());
-    const responseActions = executeCellEpic(badAction$, store).pipe(
+    const responseActions = executeCellEpic(badAction$, state$).pipe(
       catchError(error => {
         expect(error.message).toEqual("execute cell needs source string");
       })
@@ -174,11 +175,8 @@ describe("executeCellEpic", () => {
     );
   });
   test("Informs about disconnected kernels, allows reconnection", async function() {
-    const store = {
-      getState() {
-        return this.state;
-      },
-      state: {
+    const state$ = {
+      value: {
         core: stateModule.makeStateRecord({
           kernelRef: "fake",
           entities: stateModule.makeEntitiesRecord({
@@ -202,9 +200,8 @@ describe("executeCellEpic", () => {
         }
       }
     };
-
     const action$ = ActionsObservable.of(actions.executeCell({ id: "first" }));
-    const responses = await executeCellEpic(action$, store)
+    const responses = await executeCellEpic(action$, state$)
       .pipe(toArray())
       .toPromise();
     expect(responses).toEqual([]);
