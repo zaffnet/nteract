@@ -205,7 +205,7 @@
     "unified": "^7.0.0",
     "unist-builder": "^1.0.2",
     "url-join": "^4.0.0",
-    "url-search-params": "^0.10.0",
+    "url-search-params": "^1.0.0",
     "util": "^0.10.3",
     "uuid": "^3.1.0",
     "webfontloader": "^1.6.28",
