@@ -12,7 +12,7 @@ mkdir -p nteract.iconset
 # convert -density 200 -resize 32x32     <(cat nteract-desktop-face.svg) nteract.iconset/icon_16x16@2x.png
 # convert -density 200 -resize 32x32     <(cat nteract-desktop-face.svg) nteract.iconset/icon_32x32.png
 # convert -density 200 -resize 64x64     <(cat nteract-desktop-face.svg) nteract.iconset/icon_32x32@2x.png
-# 
+#
 # convert -density 200 -resize 128x128   <(cat nteract-desktop.svg)      nteract.iconset/icon_128x128.png
 # convert -density 200 -resize 256x256   <(cat nteract-desktop.svg)      nteract.iconset/icon_128x128@2x.png
 # convert -density 200 -resize 256x256   <(cat nteract-desktop.svg)      nteract.iconset/icon_256x256.png
