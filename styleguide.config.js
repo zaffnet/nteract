@@ -12,6 +12,10 @@ module.exports = {
     {
       name: "Binder Components",
       components: "packages/host-cache/src/components/*.js"
+    },
+    {
+      name: "Directory Listing",
+      components: "packages/directory-listing/src/components/*.js"
     }
   ],
   // For overriding the components styleguidist uses
