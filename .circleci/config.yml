@@ -37,16 +37,16 @@ jobs:
       - run:
           name: Build Commuter
           command: npx lerna run build --scope @nteract/commuter
-          no_output_timeout: 60m
-      - run:
-          name: Build Jupyter Extension
-          command: npx lerna run build --scope nteract-on-jupyter
-          no_output_timeout: 60m
+          no_output_timeout: 20m
       - run:
           name: Build Play
           command: npx lerna run build --scope @nteract/play
-          no_output_timeout: 60m
+          no_output_timeout: 20m
+      - run:
+          name: Build Jupyter Extension
+          command: npx lerna run build:asap --scope nteract-on-jupyter
+          no_output_timeout: 30m
       - run:
           name: Build Desktop
           command: npx lerna run dist --scope nteract
-          no_output_timeout: 60m
+          no_output_timeout: 30m
