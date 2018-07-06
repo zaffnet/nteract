@@ -114,6 +114,7 @@
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.15.2",
     "bodybuilder": "^2.2.1",
+    "cpy-cli": "^2.0.0",
     "codemirror": "5.39.0",
     "concurrently": "^3.5.1",
     "cross-env": "^5.2.0",
@@ -221,9 +222,5 @@
   },
   "engines": {
     "node": ">=8.9.0"
-  },
-  "dependencies": {
-    "cpy-cli": "^2.0.0",
-    "electron-prebuilt": "^1.4.13"
   }
 }
