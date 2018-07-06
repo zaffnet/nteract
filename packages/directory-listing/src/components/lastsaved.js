@@ -3,7 +3,9 @@ import * as React from "react";
 
 import TimeAgo from "@nteract/timeago";
 
-export type LastSavedProps = { last_modified: Date };
+type LastSavedProps = {
+  last_modified: Date
+};
 
 export class LastSaved extends React.Component<LastSavedProps, null> {
   static defaultProps = {

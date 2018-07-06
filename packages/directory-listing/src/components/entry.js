@@ -7,9 +7,15 @@ import { Icon } from "./icon";
 import { Name } from "./name";
 import { LastSaved } from "./lastsaved";
 
-type EntryProps = { children: React.Node };
+type EntryProps = {
+  children: React.Node
+};
 
 export class Entry extends React.Component<EntryProps, null> {
+  static defaultProps = {
+    children: null
+  };
+
   render() {
     return (
       <tr className="directory-entry">
