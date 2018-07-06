@@ -8,6 +8,7 @@ yarn-error.log
 /on-node-create.js
 public
 .DS_Store
+__tests__
 
 # override ignore rule
 !.index.js

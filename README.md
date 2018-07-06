@@ -14,10 +14,10 @@
 writing code, exploring data, and authoring text to share insights about the
 data.
 
-**Edit code, write prose, and visualize.** 
+**Edit code, write prose, and visualize.**
 
 * Share documents understood across the Jupyter ecosystem, [all in the comfort of a desktop app.](https://medium.com/nteract/nteract-revolutionizing-the-notebook-experience-d106ca5d2c38)
-* [Explore new ways of working with compute and playing with data](https://play.nteract.io). 
+* [Explore new ways of working with compute and playing with data](https://play.nteract.io).
 
 We support [Jupyter kernels](https://github.com/jupyter/jupyter/wiki/Jupyter-kernels)
 locally on your system and on remote JupyterHubs via Binder.
@@ -26,7 +26,7 @@ locally on your system and on remote JupyterHubs via Binder.
 
 ### Installing the nteract desktop application
 
-If you're here to install the nteract desktop app, visit 
+If you're here to install the nteract desktop app, visit
 [nteract.io](https://nteract.io) to download a binary and install or visit the
 [releases page](https://github.com/nteract/nteract/releases/latest).
 
@@ -67,7 +67,7 @@ and the `applications` has the desktop app, the play app, and a few more.
 
 *Why have a monorepo?* The monorepo contains many components and packages that
 can be mixed and remixed to create new applications. The monorepo keeps these
-elements together so they are easy to discover and use. Another benefit 
+elements together so they are easy to discover and use. Another benefit
 is that the monorepo makes it easy to iterate on applications that share
 common components. For example, if we update a component, such as the Jupyter
 message handling, and happen to introduce an issue when making a change to the
@@ -95,6 +95,22 @@ When changes are made, they can then be pulled from the master branch:
 
 6. `git pull upstream master`
 7. npm install
+
+#### Windows Caveats
+
+When building nteract on a Windows machine, you'll need to have vcbuild
+installed for node-gyp to be able to build the ZMQ bindings required by the
+Jupyter spec. If you do not have it installed, you may do so by running the
+following from a Windows PowerShell launched as an Adminstrator:
+
+```
+npm install -g --production windows-build-tools
+```
+
+Additionally, you'll need to install GTK 2 for node-canvas. Follow [step 2 of
+this instruction
+set](https://github.com/Automattic/node-canvas/wiki/Installation---Windows#2-installing-gtk-2)
+to do this.
 
 #### Building a specific package
 
