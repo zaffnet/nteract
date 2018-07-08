@@ -8,8 +8,6 @@ based on hover and **selected** states.
 By moving a cursor over the component and hovering, styling can be changed.
 
 ```js
-const { Input, Outputs, Prompt, Source } = require("../");
-
 <Cell>
   <Input>
     <Prompt counter={1} />
@@ -54,14 +52,12 @@ const { Input, Outputs, Prompt, Source } = require("../");
       </table>
     </div>
   </Outputs>
-</Cell>;
+</Cell>
 ```
 
 A `<Cell />` can be set as selected to **raise** it up.
 
 ```js
-const { Input, Outputs, Prompt, Source } = require("../");
-
 <Cell isSelected>
   <Input>
     <Prompt counter={2} />
@@ -70,7 +66,7 @@ const { Input, Outputs, Prompt, Source } = require("../");
   <Outputs>
     <pre>Hello World</pre>
   </Outputs>
-</Cell>;
+</Cell>
 ```
 
 A cell can be in one of three levels, similar to raised cards:
@@ -81,8 +77,6 @@ A cell can be in one of three levels, similar to raised cards:
     the editor should be focused when this level is used
 
 ```js
-const { Input, Outputs, Prompt, Source, Cells } = require("../");
-
 <Cells>
   <Cell>
     <Input>
@@ -111,5 +105,5 @@ const { Input, Outputs, Prompt, Source, Cells } = require("../");
       <pre>Output</pre>
     </Outputs>
   </Cell>
-</Cells>;
+</Cells>
 ```
