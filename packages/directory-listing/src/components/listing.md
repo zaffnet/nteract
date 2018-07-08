@@ -4,7 +4,6 @@ import { Entry, Listing, Icon, Name, LastSaved } from "@nteract/directory-listin
 This component is used to create a directory listing. It is meant to be the parent to the Entry component. It will render a styled table of directory entries. 
 
 ```jsx
-const { Entry, Listing, Icon, Name, LastSaved } = require("../");
 const nb = (
     <a href={"#listing"}>{"GANS-for-days.ipynb"}</a>
     );
