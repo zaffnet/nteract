@@ -6,6 +6,7 @@ exports[`Entry accepts props and renders entries in directory 1`] = `
 >
   <Icon
     className="directory-entry-field"
+    color="#0366d6"
     fileType="directory"
     key=".0"
   />
@@ -18,6 +19,7 @@ exports[`Entry accepts props and renders entries in directory 1`] = `
   <LastSaved
     className="directory-entry-field"
     key=".2"
+    lastModified={null}
     last_modified="Fri Jun 22 2018 00:15:55 GMT-0400 (Eastern Daylight Time)"
   />
   <JSXStyle

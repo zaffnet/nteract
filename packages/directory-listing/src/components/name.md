@@ -1,13 +1,11 @@
 ```jsx static
-import { Name } from "@nteract/directory-listing"
+import { Name } from "@nteract/directory-listing";
 ```
-Display a name and link to file
-```jsx
-const link = (
-                <a href={"#name"}>
-                  {"Example-Notebook.ipynb"}
-                </a>
-              );
-    <Name>{link}</Name>
 
+Use to show a stylized name of the file or directory in a listing.
+
+```jsx
+<Name>
+  <a href="#name">Example-Notebook.ipynb</a>
+</Name>
 ```
