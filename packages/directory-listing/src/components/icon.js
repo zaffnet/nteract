@@ -4,12 +4,14 @@ import * as React from "react";
 import { Book, FileText, FileDirectory } from "@nteract/octicons";
 
 type IconProps = {
+  color: string,
   fileType: "unknown" | "notebook" | "directory" | "file" | "dummy"
 };
 
 export class Icon extends React.Component<IconProps, null> {
   static defaultProps = {
-    fileType: "file"
+    fileType: "file",
+    color: "#0366d6"
   };
 
   render() {
@@ -29,7 +31,7 @@ export class Icon extends React.Component<IconProps, null> {
     }
 
     return (
-      <td className="icon">
+      <td className="icon" style={{ color: this.props.color }}>
         {icon}
         <style jsx>{`
           :global(.icon) {

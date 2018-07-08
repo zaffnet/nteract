@@ -8,7 +8,7 @@ import {
 } from "@nteract/directory-listing";
 ```
 
-This component is used to create a directory listing. It is meant to be the parent to the Entry component. It will render a styled table of directory entries.
+Show any listing of directories and files in a tabular layout for users. Works best with `<Entry>` for each item in a content listing.
 
 ```jsx
 <Listing>
@@ -32,6 +32,13 @@ This component is used to create a directory listing. It is meant to be the pare
     <Icon fileType="file" />
     <Name>
       <a href="#listing">component.js</a>
+    </Name>
+    <LastSaved lastModified={new Date("2018-05-27T16:21:25.354Z")} />
+  </Entry>
+  <Entry>
+    <Icon fileType="file" color="gray" />
+    <Name>
+      <i style={{ color: "gray" }}>no-permission-file.md</i>
     </Name>
     <LastSaved lastModified={new Date("2018-05-27T16:21:25.354Z")} />
   </Entry>

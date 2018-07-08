@@ -2,7 +2,7 @@
 import { Name } from "@nteract/directory-listing";
 ```
 
-Display a name and link to file
+Use to show a stylized name of the file or directory in a listing.
 
 ```jsx
 <Name>
