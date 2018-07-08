@@ -7,7 +7,6 @@ This component is used to create individual entries in a directory. It is not me
 
 Display an Icon, Name, and time since last saved of an entry in a directory.
 ```jsx
-const { Entry, Icon, Name, LastSaved } = require("../");
 const link = (
                 <a href={"http://nteract.io"}>
                   {"Example-Notebook.ipynb"}
