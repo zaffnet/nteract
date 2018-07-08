@@ -4,18 +4,18 @@ import * as React from "react";
 import TimeAgo from "@nteract/timeago";
 
 type LastSavedProps = {
-  last_modified: Date
+  lastModified: Date
 };
 
 export class LastSaved extends React.Component<LastSavedProps, null> {
   static defaultProps = {
-    last_modified: null
+    lastModified: null
   };
 
   render() {
     return (
       <td className="timeago">
-        <TimeAgo date={this.props.last_modified} />
+        <TimeAgo date={this.props.lastModified} />
         <style jsx>{`
           .timeago {
             text-align: right;

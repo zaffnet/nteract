@@ -102,7 +102,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
                 <Entry key={index}>
                   <Icon fileType={entry.type} />
                   <Name>{link}</Name>
-                  <LastSaved last_modified={entry.last_modified} />
+                  <LastSaved lastModified={entry.last_modified} />
                 </Entry>
               );
             })}
