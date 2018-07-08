@@ -6,8 +6,6 @@ import { Cells } from "@nteract/presentational-components"
 `<Cells />` is a wrapper component to provide buffers between cells if you're building a notebook app.
 
 ```js
-const { Input, Outputs, Prompt, Source, Cell, Cells } = require("../");
-
 <Cells>
   <Cell>
     <Input>
@@ -68,5 +66,5 @@ const { Input, Outputs, Prompt, Source, Cell, Cells } = require("../");
     </Input>
     <Outputs />
   </Cell>
-</Cells>;
+</Cells>
 ```
