@@ -34,6 +34,15 @@ jobs:
       - run: npm run test -- --cacheDirectory=~/.jestcache
       - run: npm run test:flow
       - run: npm run test:conformance
+
+      - run:
+          name: Build Docs
+          command: npm run docs:build
+
+      - store_artifacts:
+          path: styleguide
+          destination: styleguide
+
       - run:
           name: Build Commuter
           command: npx lerna run build --scope @nteract/commuter
