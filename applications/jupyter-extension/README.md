@@ -12,11 +12,7 @@ pip install nteract_on_jupyter
 
 ## Usage
 
-Run
-
-and you're running nteract on jupyter!
-
-You can run `jupyter nteract` just like you would run `jupyter notebook`.
+Run `jupyter nteract` and you're running nteract on jupyter!
 
 ## Development
 
