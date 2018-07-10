@@ -66,6 +66,7 @@ class CodeMirrorEditor extends React.Component<
   keyupEventsSubscriber: Subscription;
 
   static defaultProps = {
+    theme: "light",
     completion: false,
     tip: false,
     kernelStatus: "not connected",
