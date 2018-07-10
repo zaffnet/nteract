@@ -36,10 +36,10 @@ export type CodeMirrorEditorProps = {
   editorFocused: boolean,
   completion: boolean,
   tip?: boolean,
-  focusAbove: () => void,
-  focusBelow: () => void,
+  focusAbove?: () => void,
+  focusBelow?: () => void,
   theme: string,
-  channels: ?any,
+  channels?: ?any,
   // TODO: We only check if this is idle, so the completion provider should only
   //       care about this when kernelStatus === idle _and_ we're the active cell
   //       could instead call it `canTriggerCompletion` and reduce our current re-renders
@@ -66,10 +66,14 @@ class CodeMirrorEditor extends React.Component<
   keyupEventsSubscriber: Subscription;
 
   static defaultProps = {
+    completion: false,
     tip: false,
     kernelStatus: "not connected",
     onChange: null,
-    onFocusChange: null
+    onFocusChange: null,
+    options: {},
+    editorFocused: false,
+    channels: null
   };
 
   constructor(props: CodeMirrorEditorProps): void {
