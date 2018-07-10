@@ -62,7 +62,7 @@ export type Position = {
 };
 
 export type Options = {
-  cursorBlinkRate: number,
-  mode: string,
-  preserveScrollPosition: boolean
+  cursorBlinkRate?: number,
+  mode?: string,
+  preserveScrollPosition?: boolean
 };
