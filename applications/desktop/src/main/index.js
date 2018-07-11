@@ -261,7 +261,6 @@ fullAppReady$.subscribe(() => {
         Menu.setApplicationMenu(menu);
         const trayImage = join(__dirname, "..", "static", "nteractlogo.png");
         tray = new Tray(trayImage);
-        tray.setToolTip("nteract Quick Launch");
         const trayMenu = loadTrayMenu();
         tray.setContextMenu(trayMenu);
       } else {
