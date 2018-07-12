@@ -259,7 +259,9 @@ fullAppReady$.subscribe(() => {
         store.dispatch(setKernelSpecs(kernelSpecs));
         const menu = loadFullMenu();
         Menu.setApplicationMenu(menu);
-        const trayImage = join(__dirname, "..", "static", "nteractlogo.png");
+        const logo =
+          process.platform === "win32" ? "logoWhite" : "logoTemplate";
+        const trayImage = join(__dirname, "..", "static", `${logo}.png`);
         tray = new Tray(trayImage);
         const trayMenu = loadTrayMenu();
         tray.setContextMenu(trayMenu);
