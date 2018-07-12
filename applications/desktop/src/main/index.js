@@ -1,5 +1,12 @@
 // @flow
-import { Menu, dialog, app, ipcMain as ipc, BrowserWindow } from "electron";
+import {
+  Menu,
+  dialog,
+  app,
+  ipcMain as ipc,
+  BrowserWindow,
+  Tray
+} from "electron";
 import { resolve, join } from "path";
 import { existsSync } from "fs";
 
@@ -25,7 +32,7 @@ import {
 import { launch, launchNewNotebook } from "./launch";
 import { initAutoUpdater } from "./auto-updater.js";
 
-import { loadFullMenu } from "./menu";
+import { loadFullMenu, loadTrayMenu } from "./menu";
 
 import prepareEnv from "./prepare-env";
 import initializeKernelSpecs from "./kernel-specs";
@@ -244,7 +251,7 @@ openFile$
 
 // All open file events after app is ready
 openFile$.pipe(skipUntil(fullAppReady$)).subscribe(openFileFromEvent);
-
+let tray = null;
 fullAppReady$.subscribe(() => {
   kernelSpecsPromise
     .then(kernelSpecs => {
@@ -252,6 +259,12 @@ fullAppReady$.subscribe(() => {
         store.dispatch(setKernelSpecs(kernelSpecs));
         const menu = loadFullMenu();
         Menu.setApplicationMenu(menu);
+        const logo =
+          process.platform === "win32" ? "logoWhite" : "logoTemplate";
+        const trayImage = join(__dirname, "..", "static", `${logo}.png`);
+        tray = new Tray(trayImage);
+        const trayMenu = loadTrayMenu();
+        tray.setContextMenu(trayMenu);
       } else {
         dialog.showMessageBox(
           {

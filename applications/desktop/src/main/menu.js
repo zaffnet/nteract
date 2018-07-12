@@ -653,3 +653,128 @@ export function loadFullMenu(store: * = global.store) {
   const menu = Menu.buildFromTemplate(template);
   return menu;
 }
+
+export function loadTrayMenu(store: * = global.store) {
+  // NOTE for those looking for selectors -- this state is not the same as the
+  //      "core" state -- it's a main process side model in the electron app
+  const state = store.getState();
+  const kernelSpecs = state.get("kernelSpecs") ? state.get("kernelSpecs") : {};
+
+  function generateSubMenu(kernel) {
+    return {
+      label: kernel.spec.display_name,
+      click: createSender("menu:new-kernel", kernel)
+    };
+  }
+
+  const kernelMenuItems = sortBy(kernelSpecs, "spec.display_name").map(
+    generateSubMenu
+  );
+
+  const newNotebookItems = sortBy(kernelSpecs, "spec.display_name").map(
+    kernel => ({
+      label: kernel.spec.display_name,
+      click: () => launchNewNotebook(kernel)
+    })
+  );
+
+  const fileSubMenus = {
+    new: {
+      label: "&New",
+      accelerator: "CmdOrCtrl+N"
+    },
+    open: {
+      label: "&Open",
+      click: () => {
+        const opts = {
+          title: "Open a notebook",
+          filters: [{ name: "Notebooks", extensions: ["ipynb"] }],
+          properties: ["openFile"],
+          defaultPath: undefined
+        };
+        if (process.cwd() === "/") {
+          opts.defaultPath = app.getPath("home");
+        }
+
+        dialog.showOpenDialog(opts, fname => {
+          if (fname) {
+            launch(fname[0]);
+            app.addRecentDocument(fname[0]);
+          }
+        });
+      },
+      accelerator: "CmdOrCtrl+O"
+    }
+  };
+
+  const file = {
+    label: "&File",
+    submenu: [fileSubMenus.new, fileSubMenus.open]
+  };
+
+  if (process.platform === "win32") {
+    file.submenu.push(
+      {
+        type: "separator"
+      },
+      {
+        label: "Exit",
+        accelerator: "Alt+F4",
+        role: "close"
+      }
+    );
+  } else if (process.platform === "darwin") {
+    file.submenu.splice(2, 0, {
+      label: "Open Recent",
+      role: "recentdocuments",
+      submenu: [
+        {
+          label: "Clear Recent",
+          role: "clearrecentdocuments"
+        }
+      ]
+    });
+  }
+
+  const template = [];
+
+  const fileWithNew = {
+    label: "&Launch Notebook...",
+    submenu: [
+      {
+        label: "&New",
+        submenu: newNotebookItems
+      },
+      fileSubMenus.open
+    ]
+  };
+
+  if (process.platform === "win32") {
+    fileWithNew.submenu.push(
+      {
+        type: "separator"
+      },
+      {
+        label: "Exit",
+        accelerator: "Alt+F4",
+        role: "close"
+      }
+    );
+  } else if (process.platform === "darwin") {
+    fileWithNew.submenu.splice(2, 0, {
+      label: "Open Recent",
+      role: "recentdocuments",
+      submenu: [
+        {
+          label: "Clear Recent",
+          role: "clearrecentdocuments"
+        }
+      ]
+    });
+  }
+
+  template.push(fileWithNew);
+
+  const menu = Menu.buildFromTemplate(template);
+  return menu;
+}
