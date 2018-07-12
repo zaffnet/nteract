@@ -678,102 +678,37 @@ export function loadTrayMenu(store: * = global.store) {
     })
   );
 
-  const fileSubMenus = {
-    new: {
-      label: "&New",
-      accelerator: "CmdOrCtrl+N"
-    },
-    open: {
-      label: "&Open",
-      click: () => {
-        const opts = {
-          title: "Open a notebook",
-          filters: [{ name: "Notebooks", extensions: ["ipynb"] }],
-          properties: ["openFile"],
-          defaultPath: undefined
-        };
-        if (process.cwd() === "/") {
-          opts.defaultPath = app.getPath("home");
-        }
+  const open = {
+    label: "&Open",
+    click: () => {
+      const opts = {
+        title: "Open a notebook",
+        filters: [{ name: "Notebooks", extensions: ["ipynb"] }],
+        properties: ["openFile"],
+        defaultPath: undefined
+      };
+      if (process.cwd() === "/") {
+        opts.defaultPath = app.getPath("home");
+      }
 
-        dialog.showOpenDialog(opts, fname => {
-          if (fname) {
-            launch(fname[0]);
-            app.addRecentDocument(fname[0]);
-          }
-        });
-      },
-      accelerator: "CmdOrCtrl+O"
+      dialog.showOpenDialog(opts, fname => {
+        if (fname) {
+          launch(fname[0]);
+          app.addRecentDocument(fname[0]);
+        }
+      });
     }
   };
-
-  const file = {
-    label: "&File",
-    submenu: [fileSubMenus.new, fileSubMenus.open]
-  };
-
-  if (process.platform === "win32") {
-    file.submenu.push(
-      {
-        type: "separator"
-      },
-      {
-        label: "Exit",
-        accelerator: "Alt+F4",
-        role: "close"
-      }
-    );
-  } else if (process.platform === "darwin") {
-    file.submenu.splice(2, 0, {
-      label: "Open Recent",
-      role: "recentdocuments",
-      submenu: [
-        {
-          label: "Clear Recent",
-          role: "clearrecentdocuments"
-        }
-      ]
-    });
-  }
 
   const template = [];
 
   const fileWithNew = {
-    label: "&Launch Notebook...",
-    submenu: [
-      {
-        label: "&New",
-        submenu: newNotebookItems
-      },
-      fileSubMenus.open
-    ]
+    label: "&New",
+    submenu: newNotebookItems
   };
 
-  if (process.platform === "win32") {
-    fileWithNew.submenu.push(
-      {
-        type: "separator"
-      },
-      {
-        label: "Exit",
-        accelerator: "Alt+F4",
-        role: "close"
-      }
-    );
-  } else if (process.platform === "darwin") {
-    fileWithNew.submenu.splice(2, 0, {
-      label: "Open Recent",
-      role: "recentdocuments",
-      submenu: [
-        {
-          label: "Clear Recent",
-          role: "clearrecentdocuments"
-        }
-      ]
-    });
-  }
-
   template.push(fileWithNew);
+  template.push(open);
 
   const menu = Menu.buildFromTemplate(template);
   return menu;
