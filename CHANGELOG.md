@@ -1,3 +1,10 @@
+## nteract v0.10.0 - Basic Bhabha
+
+* _Really_ fixed AppImage build for Linux
+* Unified directory listing component for commuter and jupyter extension
+* Brand new `@mybinder` components and libraries for caching Binder hosts
+* Tray icon for launching notebooks!
+
 ## nteract v0.9.1 - Bewildered Bethe
 
 * Fixed AppImage build for Linux
