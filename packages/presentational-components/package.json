@@ -1,6 +1,6 @@
 {
   "name": "@nteract/presentational-components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "pure presentational components for nteract",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -15,7 +15,7 @@
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
   "dependencies": {
-    "@nteract/styles": "^1.1.0",
+    "@nteract/styles": "^1.1.1",
     "react-syntax-highlighter": "^8.0.0"
   },
   "peerDependencies": {
