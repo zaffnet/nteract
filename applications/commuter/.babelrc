@@ -11,6 +11,7 @@
     "next/babel"
   ],
   "plugins": [
+    "react-hot-loader/babel",
     "transform-class-properties",
     "transform-flow-strip-types",
     "transform-object-rest-spread"
