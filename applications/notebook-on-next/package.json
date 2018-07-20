@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-on-next",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "description": "A notebook on next.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/notebook-on-next",
   "scripts": {
@@ -16,7 +16,7 @@
   "dependencies": {
     "@nteract/commutable": "^4.0.2",
     "@nteract/core": "^6.1.1",
-    "@nteract/notebook-app-component": "^1.2.1",
+    "@nteract/notebook-app-component": "^1.2.2",
     "@nteract/presentational-components": "^0.2.1",
     "@nteract/types": "^2.0.0",
     "@nteract/webpack-configurator": "^1.1.2",
