@@ -215,7 +215,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     //DEFAULT FROM PROPS
 
     const dimensions = props.data.schema.fields.filter(
-      d => d.type === "string"
+      d => d.type === "string" || d.type === "boolean"
     );
 
     const metrics = props.data.schema.fields
@@ -677,9 +677,11 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton onClick={this.setGrid} message={"Data Table"}>
               <DatabaseOcticon />
             </IconButton>
-            <IconButton onClick={this.setBar} message={"Bar Graph"}>
-              <BarChartIcon />
-            </IconButton>
+            {dimensions.length > 0 && (
+              <IconButton onClick={this.setBar} message={"Bar Graph"}>
+                <BarChartIcon />
+              </IconButton>
+            )}
             <IconButton onClick={this.setSummary} message={"Summary"}>
               <BoxplotIcon />
             </IconButton>
@@ -689,18 +691,24 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton onClick={this.setHexbin} message={"Area Plot"}>
               <HexbinIcon />
             </IconButton>
-            <IconButton onClick={this.setNetwork} message={"Network"}>
-              <NetworkIcon />
-            </IconButton>
-            <IconButton onClick={this.setHierarchy} message={"Hierarchy"}>
-              <TreeIcon />
-            </IconButton>
-            <IconButton
-              onClick={this.setParallel}
-              message={"Parallel Coordinates"}
-            >
-              <ParallelCoordinatesIcon />
-            </IconButton>
+            {dimensions.length > 1 && (
+              <IconButton onClick={this.setNetwork} message={"Network"}>
+                <NetworkIcon />
+              </IconButton>
+            )}
+            {dimensions.length > 0 && (
+              <IconButton onClick={this.setHierarchy} message={"Hierarchy"}>
+                <TreeIcon />
+              </IconButton>
+            )}
+            {dimensions.length > 0 && (
+              <IconButton
+                onClick={this.setParallel}
+                message={"Parallel Coordinates"}
+              >
+                <ParallelCoordinatesIcon />
+              </IconButton>
+            )}
             <IconButton onClick={this.setLine} message={"Line Graph"}>
               <LineChartIcon />
             </IconButton>
