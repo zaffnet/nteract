@@ -21,6 +21,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "babel-runtime": "^6.26.0"
+  },
   "author": "Andrew Seier <andseier@gmail.com>",
   "license": "BSD-3-Clause"
 }

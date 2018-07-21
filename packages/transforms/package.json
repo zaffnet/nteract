@@ -29,6 +29,7 @@
     "access": "public"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "@nteract/markdown": "^2.0.1",
     "@nteract/mathjax": "^2.0.0",
     "@nteract/transform-vdom": "^2.1.2",

@@ -19,6 +19,7 @@
     "access": "public"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "@nteract/commutable": "^4.0.2",
     "@nteract/display-area": "^4.3.0",
     "@nteract/markdown": "^2.0.1",

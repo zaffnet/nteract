@@ -18,7 +18,6 @@
     "@nteract/core": "^6.1.1",
     "@nteract/notebook-app-component": "^1.2.2",
     "@nteract/presentational-components": "^0.2.1",
-    "@nteract/types": "^2.0.0",
     "@nteract/webpack-configurator": "^1.1.2",
     "isomorphic-fetch": "^2.2.1",
     "next": "^5.1.0",
