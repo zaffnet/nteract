@@ -12,6 +12,7 @@ import {
 } from "semiotic";
 import HTMLLegend from "./HTMLLegend";
 import ParallelCoordinatesController from "./ParallelCoordinatesController";
+import numeral from "numeral";
 
 function createLabelItems(uniqueValues: Array<string>): any[] {
   return uniqueValues.map(d => ({ label: d }));
@@ -187,7 +188,14 @@ const semioticLineChart = (
         fillOpacity: 0.75
       };
     },
-    axes: [{ orient: "left" }, { orient: "bottom", ticks: 10 }],
+    axes: [
+      { orient: "left", tickFormat: d => numeral(d).format("0.[0]a") },
+      {
+        orient: "bottom",
+        ticks: 10,
+        tickFormat: d => numeral(d).format("0.[0]a")
+      }
+    ],
     hoverAnnotation: true,
     xAccessor: "x",
     yAccessor: "value",
@@ -465,7 +473,11 @@ const semioticBarChart = (
     },
     hoverAnnotation: true,
     margin: { top: 10, right: 10, bottom: 100, left: 70 },
-    axis: { orient: "left", label: rAccessor },
+    axis: {
+      orient: "left",
+      label: rAccessor,
+      tickFormat: d => numeral(d).format("0.[0]a")
+    },
     tooltipContent: (d: Object) => {
       return (
         <div className="tooltip-content">
@@ -550,7 +562,11 @@ const semioticSummaryChart = (
       </text>
     ),
     margin: { top: 25, right: 10, bottom: 50, left: 100 },
-    axis: { orient: "left", label: rAccessor },
+    axis: {
+      orient: "left",
+      label: rAccessor,
+      tickFormat: d => numeral(d).format("0.[0]a")
+    },
     baseMarkProps: { forceUpdate: true },
     pieceHoverAnnotation: summaryType === "violin",
     tooltipContent: (d: Object) => (
@@ -715,8 +731,18 @@ const semioticScatterplot = (
     xAccessor: metric1,
     yAccessor: metric2,
     axes: [
-      { orient: "left", ticks: 6, label: metric2 },
-      { orient: "bottom", ticks: 6, label: metric1 }
+      {
+        orient: "left",
+        ticks: 6,
+        label: metric2,
+        tickFormat: d => numeral(d).format("0.[0]a")
+      },
+      {
+        orient: "bottom",
+        ticks: 6,
+        label: metric1,
+        tickFormat: d => numeral(d).format("0.[0]a")
+      }
     ],
     points: !hexbin && data,
     areas: hexbin && [{ coordinates: data }],
