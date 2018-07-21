@@ -4,18 +4,13 @@ import * as React from "react";
 import { nest } from "d3-collection";
 import { scaleLinear, scaleThreshold } from "d3-scale";
 import {
-  XYFrame,
-  OrdinalFrame,
   ResponsiveOrdinalFrame,
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
 import HTMLLegend from "./HTMLLegend";
 import ParallelCoordinatesController from "./ParallelCoordinatesController";
-
-function createLabelItems(uniqueValues: Array<string>): any[] {
-  return uniqueValues.map(d => ({ label: d }));
-}
+import { numeralFormatting } from "./utilities";
 
 function combineTopAnnotations(
   topQ: Array<Object>,
@@ -187,7 +182,14 @@ const semioticLineChart = (
         fillOpacity: 0.75
       };
     },
-    axes: [{ orient: "left" }, { orient: "bottom", ticks: 10 }],
+    axes: [
+      { orient: "left", tickFormat: numeralFormatting },
+      {
+        orient: "bottom",
+        ticks: 10,
+        tickFormat: numeralFormatting
+      }
+    ],
     hoverAnnotation: true,
     xAccessor: "x",
     yAccessor: "value",
@@ -465,7 +467,11 @@ const semioticBarChart = (
     },
     hoverAnnotation: true,
     margin: { top: 10, right: 10, bottom: 100, left: 70 },
-    axis: { orient: "left", label: rAccessor },
+    axis: {
+      orient: "left",
+      label: rAccessor,
+      tickFormat: numeralFormatting
+    },
     tooltipContent: (d: Object) => {
       return (
         <div className="tooltip-content">
@@ -550,7 +556,11 @@ const semioticSummaryChart = (
       </text>
     ),
     margin: { top: 25, right: 10, bottom: 50, left: 100 },
-    axis: { orient: "left", label: rAccessor },
+    axis: {
+      orient: "left",
+      label: rAccessor,
+      tickFormat: numeralFormatting
+    },
     baseMarkProps: { forceUpdate: true },
     pieceHoverAnnotation: summaryType === "violin",
     tooltipContent: (d: Object) => (
@@ -715,8 +725,18 @@ const semioticScatterplot = (
     xAccessor: metric1,
     yAccessor: metric2,
     axes: [
-      { orient: "left", ticks: 6, label: metric2 },
-      { orient: "bottom", ticks: 6, label: metric1 }
+      {
+        orient: "left",
+        ticks: 6,
+        label: metric2,
+        tickFormat: numeralFormatting
+      },
+      {
+        orient: "bottom",
+        ticks: 6,
+        label: metric1,
+        tickFormat: numeralFormatting
+      }
     ],
     points: !hexbin && data,
     areas: hexbin && [{ coordinates: data }],
