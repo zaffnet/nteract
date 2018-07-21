@@ -406,7 +406,12 @@ const semioticBarChart = (
 
   if (dim1 && dim1 !== "none") {
     const uniqueValues = sortedData.reduce(
-      (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
+      (p, c) =>
+        (!p.find(d => d === c[dim1].toString()) && [
+          ...p,
+          c[dim1].toString()
+        ]) ||
+        p,
       []
     );
 
@@ -483,6 +488,7 @@ const semioticBarChart = (
         </div>
       );
     },
+    baseMarkProps: { forceUpdate: true },
     ...additionalSettings
   };
 
@@ -507,7 +513,12 @@ const semioticSummaryChart = (
 
   if (dim1 && dim1 !== "none") {
     const uniqueValues = data.reduce(
-      (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
+      (p, c) =>
+        (!p.find(d => d === c[dim1].toString()) && [
+          ...p,
+          c[dim1].toString()
+        ]) ||
+        p,
       []
     );
 
@@ -534,7 +545,7 @@ const semioticSummaryChart = (
     }),
     oPadding: 5,
     oLabel: (d: Object) => (
-      <text textAnchor="end" fontSize={`${fontScale(d.length)}px`}>
+      <text textAnchor="end" fontSize={`${(d && fontScale(d.length)) || 12}px`}>
         {d}
       </text>
     ),
@@ -663,7 +674,12 @@ const semioticScatterplot = (
 
   if (!hexbin && dim1 && dim1 !== "none") {
     const uniqueValues = sortedData.reduce(
-      (p, c) => (!p.find(d => d === c[dim1]) && [...p, c[dim1]]) || p,
+      (p, c) =>
+        (!p.find(d => d === c[dim1].toString()) && [
+          ...p,
+          c[dim1].toString()
+        ]) ||
+        p,
       []
     );
 
