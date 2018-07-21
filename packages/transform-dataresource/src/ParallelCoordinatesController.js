@@ -5,7 +5,7 @@ import { scaleLinear } from "d3-scale";
 import { ResponsiveOrdinalFrame, Axis } from "semiotic";
 import { colors } from "./charts";
 import HTMLLegend from "./HTMLLegend";
-import numeral from "numeral";
+import { numeralFormatting } from "./utilities";
 
 type State = {
   filterMode: boolean,
@@ -265,11 +265,9 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
                         strokeWidth={2}
                         textAnchor="end"
                       >
-                        {numeral(d).format("0.[0]a")}
+                        {numeralFormatting(d)}
                       </text>
-                      <text textAnchor="end">
-                        {numeral(d).format("0.[0]a")}
-                      </text>
+                      <text textAnchor="end">{numeralFormatting(d)}</text>
                     </g>
                   )}
                 />

@@ -4,19 +4,13 @@ import * as React from "react";
 import { nest } from "d3-collection";
 import { scaleLinear, scaleThreshold } from "d3-scale";
 import {
-  XYFrame,
-  OrdinalFrame,
   ResponsiveOrdinalFrame,
   ResponsiveXYFrame,
   ResponsiveNetworkFrame
 } from "semiotic";
 import HTMLLegend from "./HTMLLegend";
 import ParallelCoordinatesController from "./ParallelCoordinatesController";
-import numeral from "numeral";
-
-function createLabelItems(uniqueValues: Array<string>): any[] {
-  return uniqueValues.map(d => ({ label: d }));
-}
+import { numeralFormatting } from "./utilities";
 
 function combineTopAnnotations(
   topQ: Array<Object>,
@@ -189,11 +183,11 @@ const semioticLineChart = (
       };
     },
     axes: [
-      { orient: "left", tickFormat: d => numeral(d).format("0.[0]a") },
+      { orient: "left", tickFormat: numeralFormatting },
       {
         orient: "bottom",
         ticks: 10,
-        tickFormat: d => numeral(d).format("0.[0]a")
+        tickFormat: numeralFormatting
       }
     ],
     hoverAnnotation: true,
@@ -476,7 +470,7 @@ const semioticBarChart = (
     axis: {
       orient: "left",
       label: rAccessor,
-      tickFormat: d => numeral(d).format("0.[0]a")
+      tickFormat: numeralFormatting
     },
     tooltipContent: (d: Object) => {
       return (
@@ -565,7 +559,7 @@ const semioticSummaryChart = (
     axis: {
       orient: "left",
       label: rAccessor,
-      tickFormat: d => numeral(d).format("0.[0]a")
+      tickFormat: numeralFormatting
     },
     baseMarkProps: { forceUpdate: true },
     pieceHoverAnnotation: summaryType === "violin",
@@ -735,13 +729,13 @@ const semioticScatterplot = (
         orient: "left",
         ticks: 6,
         label: metric2,
-        tickFormat: d => numeral(d).format("0.[0]a")
+        tickFormat: numeralFormatting
       },
       {
         orient: "bottom",
         ticks: 6,
         label: metric1,
-        tickFormat: d => numeral(d).format("0.[0]a")
+        tickFormat: numeralFormatting
       }
     ],
     points: !hexbin && data,
