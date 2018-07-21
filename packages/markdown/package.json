@@ -27,7 +27,8 @@
   "dependencies": {
     "@nteract/mathjax": "^2.0.0",
     "prop-types": "^15.6.1",
-    "react-markdown": "^3.1.4"
+    "react-markdown": "^3.1.4",
+    "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
     "remark-parse": "^5.0.0",

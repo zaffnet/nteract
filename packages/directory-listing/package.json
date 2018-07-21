@@ -18,6 +18,7 @@
     "react": "^16.3.2"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "@nteract/octicons": "^0.3.0",
     "@nteract/timeago": "^3.5.0",
     "react-hot-loader": "^4.1.2"

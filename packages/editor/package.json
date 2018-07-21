@@ -25,6 +25,7 @@
     "access": "public"
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "@nteract/display-area": "^4.3.0",
     "@nteract/messaging": "^4.0.1",
     "@nteract/transforms": "^4.3.0",
