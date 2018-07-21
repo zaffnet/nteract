@@ -230,6 +230,7 @@ const semioticNetwork = (
 ) => {
   const { networkType = "force", chart } = options;
   const { dim1: sourceDimension, dim2: targetDimension, metric1 } = chart;
+
   if (
     !sourceDimension ||
     sourceDimension === "none" ||
@@ -240,6 +241,7 @@ const semioticNetwork = (
   }
   const edgeHash = {};
   const networkData = [];
+
   data.forEach(d => {
     if (!edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`]) {
       edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`] = {
@@ -255,11 +257,6 @@ const semioticNetwork = (
     edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`].weight += 1;
   });
 
-  const valueMin = Math.min(...networkData.map(d => d.value));
-  const valueMax = Math.max(...networkData.map(d => d.value));
-  const nodeScale = scaleLinear()
-    .domain([valueMin, valueMax])
-    .range([2, 20]);
   const colorHash = {};
   data.forEach(d => {
     if (!colorHash[d[sourceDimension]])
@@ -269,6 +266,11 @@ const semioticNetwork = (
       colorHash[d[targetDimension]] =
         colors[Object.keys(colorHash).length % colors.length];
   });
+
+  networkData.forEach(d => {
+    d.weight = Math.min(10, d.weight);
+  });
+
   return {
     edges: networkData,
     edgeType: "halfarrow",
@@ -284,7 +286,7 @@ const semioticNetwork = (
     }),
     nodeSizeAccessor: (d: Object) => d.degree,
     networkType: {
-      type: networkType == "force" ? "motifs" : networkType,
+      type: networkType,
       iterations: 1000
     },
     hoverAnnotation: true,
