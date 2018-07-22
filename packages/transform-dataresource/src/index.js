@@ -3,13 +3,12 @@ import { hot } from "react-hot-loader";
 
 import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
-import {
-  GraphOcticon as BarGraphOcticon,
-  DatabaseOcticon,
-  Beaker
-} from "@nteract/octicons";
+import PalettePicker from "./PalettePicker";
+import { DatabaseOcticon, Beaker } from "@nteract/octicons";
 
-import { semioticSettings, colors } from "./charts";
+import { colors } from "./settings";
+import { semioticSettings } from "./charts";
+
 import {
   TreeIcon,
   NetworkIcon,
@@ -41,6 +40,7 @@ type State = {
     | "summary"
     | "hexbin"
     | "parallel",
+  colors: Array<string>,
   metrics: Array<string>,
   dimensions: Array<string>,
   selectedMetrics: Array<string>,
@@ -240,6 +240,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       yValue: "none",
       dimensions,
       metrics,
+      colors,
       ui: {},
       chart: {
         metric1: (metrics[0] && metrics[0].name) || "none",
@@ -276,7 +277,8 @@ class DataResourceTransform extends React.Component<Props, State> {
       pieceType,
       summaryType,
       networkType,
-      hierarchyType
+      hierarchyType,
+      colors
     } = { ...this.state, ...updatedState };
 
     const { data, height = 500 } = this.props;
@@ -310,6 +312,8 @@ class DataResourceTransform extends React.Component<Props, State> {
       hierarchyType,
       primaryKey
     });
+
+    console.log("new colors", colors);
 
     const display = (
       <div style={{ marginLeft: "50px", width: "calc(100% - 50px)" }}>
@@ -481,6 +485,15 @@ class DataResourceTransform extends React.Component<Props, State> {
             ))}
           </div>
         )}
+        {view !== "grid" && (
+          <PalettePicker
+            colors={colors}
+            updateColor={newColorArray => {
+              console.log("hurhg", newColorArray);
+              this.setColor(newColorArray);
+            }}
+          />
+        )}
         <style jsx>{`
           :global(.tooltip-content) {
             color: black;
@@ -576,6 +589,10 @@ class DataResourceTransform extends React.Component<Props, State> {
 
   setHierarchy = () => {
     this.updateChart({ view: "hierarchy" });
+  };
+
+  setColor = newColorArray => {
+    this.updateChart({ colors: newColorArray });
   };
 
   setLineType = (e: LineType) => {

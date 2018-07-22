@@ -143,7 +143,7 @@ const semioticLineChart = (
 ) => {
   let lineData;
 
-  const { selectedMetrics, lineType, metrics, primaryKey } = options;
+  const { selectedMetrics, lineType, metrics, primaryKey, colors } = options;
 
   lineData = metrics
     .map((d, i) => {
@@ -230,7 +230,7 @@ const semioticNetwork = (
   schema: Object,
   options: Object
 ) => {
-  const { networkType = "force", chart } = options;
+  const { networkType = "force", chart, colors } = options;
   const { dim1: sourceDimension, dim2: targetDimension, metric1 } = chart;
 
   if (
@@ -314,7 +314,8 @@ const semioticHierarchicalChart = (
     hierarchyType = "dendrogram",
     chart,
     selectedDimensions,
-    primaryKey
+    primaryKey,
+    colors
   } = options;
   const { metric1 } = chart;
 
@@ -382,7 +383,7 @@ const semioticBarChart = (
   schema: Object,
   options: Object
 ) => {
-  const { selectedMetrics, selectedDimensions, chart } = options;
+  const { selectedMetrics, selectedDimensions, chart, colors } = options;
   const { dim1, dim2, metric1, metric3 } = chart;
 
   const oAccessor =
@@ -509,7 +510,7 @@ const semioticSummaryChart = (
   const additionalSettings = {};
   const colorHash = {};
 
-  const { chart, summaryType, primaryKey } = options;
+  const { chart, summaryType, primaryKey, colors } = options;
 
   const { dim1, metric1 } = chart;
 
@@ -596,7 +597,7 @@ const semioticScatterplot = (
 ) => {
   const height = options.height - 150 || 500;
 
-  const { chart, primaryKey } = options;
+  const { chart, primaryKey, colors } = options;
 
   const { dim1, dim2, metric1, metric2, metric3 } = chart;
 
@@ -819,25 +820,3 @@ export const semioticSettings = {
     chartGenerator: semioticParallelCoordinates
   }
 };
-
-export const colors = [
-  "#DA752E",
-  "#E5C209",
-  "#1441A0",
-  "#B86117",
-  "#4D430C",
-  "#1DB390",
-  "#B3331D",
-  "#088EB2",
-  "#417505",
-  "#E479A8",
-  "#F9F39E",
-  "#5782DC",
-  "#EBA97B",
-  "#A2AB60",
-  "#B291CF",
-  "#8DD2C2",
-  "#E6A19F",
-  "#3DC7E0",
-  "#98CE5B"
-];

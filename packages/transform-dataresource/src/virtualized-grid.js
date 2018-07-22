@@ -108,7 +108,11 @@ export default class VirtualizedGrid extends React.Component<Props, State> {
           theme: this.props.theme
         })}
       >
-        {(value !== undefined && value.toString && value.toString()) || value}
+        {(value !== undefined &&
+          value !== null &&
+          value.toString &&
+          value.toString()) ||
+          value}
       </div>
     );
   };
