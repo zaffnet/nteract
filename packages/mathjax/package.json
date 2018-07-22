@@ -1,6 +1,6 @@
 {
   "name": "@nteract/mathjax",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "React components for MathJax",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -24,7 +24,7 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "babel-runtime": "^6.26.0"
+    "babel-runtime": "^6.26.0",
+    "prop-types": "^15.6.1"
   }
 }
