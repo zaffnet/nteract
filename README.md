@@ -11,7 +11,7 @@
 ## Basics
 
 **nteract** is first and foremost a dynamic tool to give you flexibility when
-writing code, exploring data, and authoring text to share insights about the
+writing code, [exploring data](https://github.com/nteract/nteract/tree/master/packages/transform-dataresource), and authoring text to share insights about the
 data.
 
 **Edit code, write prose, and visualize.**
