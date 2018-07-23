@@ -111,6 +111,13 @@ class PalettePicker extends React.Component<Props, State> {
                   margin: "10px",
                   display: "inline-block"
                 }}
+                role="button"
+                tabindex="0"
+                onKeyPress={(e: Object) => {
+                  if (e.keyCode === 13) {
+                    this.handleChange(d, i);
+                  }
+                }}
                 onClick={() => this.handleChange(d, i)}
               />
             ))}
