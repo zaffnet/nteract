@@ -3,7 +3,6 @@ import { hot } from "react-hot-loader";
 
 import * as React from "react";
 import VirtualizedGrid from "./virtualized-grid";
-import PalettePicker from "./PalettePicker";
 import { DatabaseOcticon, Beaker } from "@nteract/octicons";
 
 import { colors } from "./settings";
@@ -247,8 +246,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         metric2: (metrics[1] && metrics[1].name) || "none",
         metric3: "none",
         dim1: (dimensions[0] && dimensions[0].name) || "none",
-        dim2: (dimensions[1] && dimensions[1].name) || "none",
-        dim3: (dimensions[2] && dimensions[2].name) || "none"
+        dim2: (dimensions[1] && dimensions[1].name) || "none"
       },
       displayChart: {}
     };
@@ -310,10 +308,9 @@ class DataResourceTransform extends React.Component<Props, State> {
       summaryType,
       networkType,
       hierarchyType,
-      primaryKey
+      primaryKey,
+      setColor: this.setColor
     });
-
-    console.log("new colors", colors);
 
     const display = (
       <div style={{ marginLeft: "50px", width: "calc(100% - 50px)" }}>
@@ -485,15 +482,6 @@ class DataResourceTransform extends React.Component<Props, State> {
             ))}
           </div>
         )}
-        {view !== "grid" && (
-          <PalettePicker
-            colors={colors}
-            updateColor={newColorArray => {
-              console.log("hurhg", newColorArray);
-              this.setColor(newColorArray);
-            }}
-          />
-        )}
         <style jsx>{`
           :global(.tooltip-content) {
             color: black;
@@ -503,7 +491,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             background: white;
             border: 1px solid black;
             position: relative;
-            transform: translate(calc(-50% + 7px), calc(0% + 20px));
+            transform: translate(calc(-50% + 7px), calc(0% + 9px));
           }
           :global(.tooltip-content:before) {
             border-left: inherit;

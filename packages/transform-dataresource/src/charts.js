@@ -383,7 +383,13 @@ const semioticBarChart = (
   schema: Object,
   options: Object
 ) => {
-  const { selectedMetrics, selectedDimensions, chart, colors } = options;
+  const {
+    selectedMetrics,
+    selectedDimensions,
+    chart,
+    colors,
+    setColor
+  } = options;
   const { dim1, dim2, metric1, metric3 } = chart;
 
   const oAccessor =
@@ -423,7 +429,13 @@ const semioticBarChart = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
     );
 
     if (
@@ -510,7 +522,7 @@ const semioticSummaryChart = (
   const additionalSettings = {};
   const colorHash = {};
 
-  const { chart, summaryType, primaryKey, colors } = options;
+  const { chart, summaryType, primaryKey, colors, setColor } = options;
 
   const { dim1, metric1 } = chart;
 
@@ -532,6 +544,16 @@ const semioticSummaryChart = (
     uniqueValues.forEach((d, i) => {
       colorHash[d] = colors[i % colors.length];
     });
+
+    additionalSettings.afterElements = (
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
+    );
   }
 
   const summarySettings = {
@@ -597,7 +619,7 @@ const semioticScatterplot = (
 ) => {
   const height = options.height - 150 || 500;
 
-  const { chart, primaryKey, colors } = options;
+  const { chart, primaryKey, colors, setColor } = options;
 
   const { dim1, dim2, metric1, metric2, metric3 } = chart;
 
@@ -699,7 +721,13 @@ const semioticScatterplot = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
     );
   } else if (hexbin) {
     const hexValues = [
@@ -719,7 +747,12 @@ const semioticScatterplot = (
 
     //    const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"]
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={hexValues} colorHash={hexHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={hexValues}
+        colorHash={hexHash}
+        colors={colors}
+      />
     );
   }
   return {
