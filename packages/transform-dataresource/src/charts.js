@@ -57,21 +57,39 @@ function sortByOrdinalRange(
   secondarySort: string,
   data: Array<Object>
 ): any[] {
-  return data.sort((a, b) => {
-    const oA = stringOrFnAccessor(a, oAccessor);
-    const oB = stringOrFnAccessor(b, oAccessor);
-    const rA = stringOrFnAccessor(a, rAccessor);
-    const rB = stringOrFnAccessor(b, rAccessor);
-
-    if (oB !== oA) return rB - rA;
-
-    const sA = stringOrFnAccessor(a, secondarySort);
-    const sB = stringOrFnAccessor(b, secondarySort);
-
-    if (sA < sB) return -1;
-    if (sA > sB) return 1;
-    return 1;
+  const subsortData = {};
+  let subsortArrays = [];
+  data.forEach(d => {
+    const oD = stringOrFnAccessor(d, oAccessor);
+    if (!subsortData[oD]) {
+      subsortData[oD] = { array: [], value: 0, label: oD };
+      subsortArrays.push(subsortData[oD]);
+    }
+    subsortData[oD].array.push(d);
+    subsortData[oD].value += stringOrFnAccessor(d, rAccessor);
   });
+
+  subsortArrays = subsortArrays.sort((a, b) => {
+    if (b.value === a.value) {
+      if (a.label < b.label) return -1;
+      if (a.label > b.label) return 1;
+      return 1;
+    }
+
+    return b.value - a.value;
+  });
+
+  if (secondarySort !== "none") {
+    subsortArrays.forEach(a => {
+      a.array = a.array.sort(
+        (a, b) =>
+          stringOrFnAccessor(b, secondarySort) -
+          stringOrFnAccessor(a, secondarySort)
+      );
+    });
+  }
+
+  return subsortArrays.reduce((p, c) => [...p, ...c.array], []);
 }
 
 const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"];
@@ -143,7 +161,7 @@ const semioticLineChart = (
 ) => {
   let lineData;
 
-  const { selectedMetrics, lineType, metrics, primaryKey } = options;
+  const { selectedMetrics, lineType, metrics, primaryKey, colors } = options;
 
   lineData = metrics
     .map((d, i) => {
@@ -230,7 +248,7 @@ const semioticNetwork = (
   schema: Object,
   options: Object
 ) => {
-  const { networkType = "force", chart } = options;
+  const { networkType = "force", chart, colors } = options;
   const { dim1: sourceDimension, dim2: targetDimension, metric1 } = chart;
 
   if (
@@ -314,7 +332,8 @@ const semioticHierarchicalChart = (
     hierarchyType = "dendrogram",
     chart,
     selectedDimensions,
-    primaryKey
+    primaryKey,
+    colors
   } = options;
   const { metric1 } = chart;
 
@@ -382,7 +401,13 @@ const semioticBarChart = (
   schema: Object,
   options: Object
 ) => {
-  const { selectedMetrics, selectedDimensions, chart } = options;
+  const {
+    selectedMetrics,
+    selectedDimensions,
+    chart,
+    colors,
+    setColor
+  } = options;
   const { dim1, dim2, metric1, metric3 } = chart;
 
   const oAccessor =
@@ -422,7 +447,13 @@ const semioticBarChart = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
     );
 
     if (
@@ -509,7 +540,7 @@ const semioticSummaryChart = (
   const additionalSettings = {};
   const colorHash = {};
 
-  const { chart, summaryType, primaryKey } = options;
+  const { chart, summaryType, primaryKey, colors, setColor } = options;
 
   const { dim1, metric1 } = chart;
 
@@ -531,6 +562,16 @@ const semioticSummaryChart = (
     uniqueValues.forEach((d, i) => {
       colorHash[d] = colors[i % colors.length];
     });
+
+    additionalSettings.afterElements = (
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
+    );
   }
 
   const summarySettings = {
@@ -596,7 +637,7 @@ const semioticScatterplot = (
 ) => {
   const height = options.height - 150 || 500;
 
-  const { chart, primaryKey } = options;
+  const { chart, primaryKey, colors, setColor } = options;
 
   const { dim1, dim2, metric1, metric2, metric3 } = chart;
 
@@ -698,7 +739,13 @@ const semioticScatterplot = (
     });
 
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={uniqueValues} colorHash={colorHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={uniqueValues}
+        colorHash={colorHash}
+        setColor={setColor}
+        colors={colors}
+      />
     );
   } else if (hexbin) {
     const hexValues = [
@@ -718,7 +765,12 @@ const semioticScatterplot = (
 
     //    const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"]
     additionalSettings.afterElements = (
-      <HTMLLegend valueHash={{}} values={hexValues} colorHash={hexHash} />
+      <HTMLLegend
+        valueHash={{}}
+        values={hexValues}
+        colorHash={hexHash}
+        colors={colors}
+      />
     );
   }
   return {
@@ -819,25 +871,3 @@ export const semioticSettings = {
     chartGenerator: semioticParallelCoordinates
   }
 };
-
-export const colors = [
-  "#DA752E",
-  "#E5C209",
-  "#1441A0",
-  "#B86117",
-  "#4D430C",
-  "#1DB390",
-  "#B3331D",
-  "#088EB2",
-  "#417505",
-  "#E479A8",
-  "#F9F39E",
-  "#5782DC",
-  "#EBA97B",
-  "#A2AB60",
-  "#B291CF",
-  "#8DD2C2",
-  "#E6A19F",
-  "#3DC7E0",
-  "#98CE5B"
-];

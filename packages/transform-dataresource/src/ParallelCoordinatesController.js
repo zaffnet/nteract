@@ -3,7 +3,6 @@
 import * as React from "react";
 import { scaleLinear } from "d3-scale";
 import { ResponsiveOrdinalFrame, Axis } from "semiotic";
-import { colors } from "./charts";
 import HTMLLegend from "./HTMLLegend";
 import { numeralFormatting } from "./utilities";
 
@@ -108,7 +107,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
   render(): ?React$Element<any> {
     const { options, data, schema } = this.props;
 
-    const { primaryKey, metrics, chart } = options;
+    const { primaryKey, metrics, chart, colors } = options;
     const { dim1 } = chart;
 
     const { columnExtent } = this.state;
@@ -240,6 +239,11 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           tooltipContent={d => (
             <div className="tooltip-content">
               <h3>{primaryKey.map(key => d[key]).join(", ")}</h3>
+              {d[dim1] && (
+                <h3 style={{ color: colorHash[d[dim1]] }}>
+                  {dim1}: {d[dim1]}
+                </h3>
+              )}
               <h3 style={{ fontSize: "14px" }}>
                 {d.metric}: {d.rawvalue}
               </h3>
