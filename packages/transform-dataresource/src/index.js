@@ -40,8 +40,8 @@ type State = {
     | "hexbin"
     | "parallel",
   colors: Array<string>,
-  metrics: Array<string>,
-  dimensions: Array<string>,
+  metrics: Array<Object>,
+  dimensions: Array<Object>,
   selectedMetrics: Array<string>,
   selectedDimensions: Array<string>,
   networkType: "force" | "sankey",
@@ -57,7 +57,8 @@ type State = {
   summaryType: "violin" | "joy" | "histogram" | "heatmap" | "boxplot",
   lineType: LineType,
   chart: Object,
-  displayChart: Object
+  displayChart: Object,
+  primaryKey: Array<string>
 };
 
 const generateChartKey = ({
@@ -213,13 +214,15 @@ class DataResourceTransform extends React.Component<Props, State> {
     super(props);
     //DEFAULT FROM PROPS
 
-    const dimensions = props.data.schema.fields.filter(
+    const { fields = [], primaryKey = [] } = props.data.schema;
+
+    const dimensions = fields.filter(
       d => d.type === "string" || d.type === "boolean"
     );
 
-    const metrics = props.data.schema.fields
+    const metrics = fields
       .filter(d => d.type === "integer" || d.type === "number")
-      .filter(d => !props.data.schema.primaryKey.find(p => p === d.name));
+      .filter(d => !primaryKey.find(p => p === d.name));
 
     this.state = {
       view: "grid",
@@ -248,7 +251,8 @@ class DataResourceTransform extends React.Component<Props, State> {
         dim1: (dimensions[0] && dimensions[0].name) || "none",
         dim2: (dimensions[1] && dimensions[1].name) || "none"
       },
-      displayChart: {}
+      displayChart: {},
+      primaryKey: []
     };
   }
 
@@ -276,11 +280,11 @@ class DataResourceTransform extends React.Component<Props, State> {
       summaryType,
       networkType,
       hierarchyType,
-      colors
+      colors,
+      primaryKey
     } = { ...this.state, ...updatedState };
 
     const { data, height = 500 } = this.props;
-    const { primaryKey } = data.schema;
 
     const { Frame, chartGenerator } = semioticSettings[view];
 
@@ -616,11 +620,11 @@ class DataResourceTransform extends React.Component<Props, State> {
       pieceType,
       summaryType,
       networkType,
-      hierarchyType
+      hierarchyType,
+      primaryKey
     } = this.state;
 
     const { data, height } = this.props;
-    const { primaryKey } = data.schema;
 
     let display = null;
 
