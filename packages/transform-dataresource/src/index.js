@@ -58,7 +58,8 @@ type State = {
   lineType: LineType,
   chart: Object,
   displayChart: Object,
-  primaryKey: Array<string>
+  primaryKey: Array<string>,
+  data: Array<Object>
 };
 
 const generateChartKey = ({
@@ -217,11 +218,25 @@ class DataResourceTransform extends React.Component<Props, State> {
     const { fields = [], primaryKey = [] } = props.data.schema;
 
     const dimensions = fields.filter(
-      d => d.type === "string" || d.type === "boolean"
+      d => d.type === "string" || d.type === "boolean" || d.type === "datetime"
     );
 
+    //Should datetime data types be transformed into js dates before getting to this resource?
+    const data = props.data.data.map(d => {
+      const mappedD = { ...d };
+      fields.forEach(p => {
+        if (p.type === "datetime") {
+          mappedD[p.name] = new Date(mappedD[p.name]);
+        }
+      });
+      return mappedD;
+    });
+
     const metrics = fields
-      .filter(d => d.type === "integer" || d.type === "number")
+      .filter(
+        d =>
+          d.type === "integer" || d.type === "number" || d.type === "datetime"
+      )
       .filter(d => !primaryKey.find(p => p === d.name));
 
     this.state = {
@@ -249,10 +264,12 @@ class DataResourceTransform extends React.Component<Props, State> {
         metric2: (metrics[1] && metrics[1].name) || "none",
         metric3: "none",
         dim1: (dimensions[0] && dimensions[0].name) || "none",
-        dim2: (dimensions[1] && dimensions[1].name) || "none"
+        dim2: (dimensions[1] && dimensions[1].name) || "none",
+        timeseriesSort: "array-order"
       },
       displayChart: {},
-      primaryKey: []
+      primaryKey: [],
+      data
     };
   }
 
@@ -281,7 +298,8 @@ class DataResourceTransform extends React.Component<Props, State> {
       networkType,
       hierarchyType,
       colors,
-      primaryKey
+      primaryKey,
+      data: stateData
     } = { ...this.state, ...updatedState };
 
     const { data, height = 500 } = this.props;
@@ -300,7 +318,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       chart
     });
 
-    const frameSettings = chartGenerator(data.data, data.schema, {
+    const frameSettings = chartGenerator(stateData, data.schema, {
       metrics,
       chart,
       colors,
@@ -411,12 +429,21 @@ class DataResourceTransform extends React.Component<Props, State> {
             true,
             summaryType
           )}
+        {view === "line" &&
+          metricDimSelector(
+            ["array-order", ...metrics.map(d => d.name)],
+            d => this.updateChart({ chart: { ...chart, timeseriesSort: d } }),
+            "Sort by",
+            true,
+            chart.timeseriesSort
+          )}
         {view === "line" && (
-          <div>
+          <div style={{ display: "inline-block" }}>
+            <h2>Chart Type</h2>
             {availableLineTypes.map(d => (
               <button
                 style={{
-                  marginLeft: "20px",
+                  marginLeft: "0px",
                   color: lineType === d.type ? "lightgray" : "black"
                 }}
                 onClick={() => this.setLineType(d.type)}
@@ -467,13 +494,13 @@ class DataResourceTransform extends React.Component<Props, State> {
           </div>
         )}
         {view === "line" && (
-          <div>
-            <h1>Metrics</h1>
+          <div style={{ display: "inline-block" }}>
+            <h2>Metrics</h2>
             {metrics.map(d => (
               <button
                 key={`metrics-select-${d.name}`}
                 style={{
-                  marginLeft: "20px",
+                  marginLeft: "0px",
                   color:
                     selectedMetrics.indexOf(d.name) !== -1
                       ? "black"
@@ -621,7 +648,8 @@ class DataResourceTransform extends React.Component<Props, State> {
       summaryType,
       networkType,
       hierarchyType,
-      primaryKey
+      primaryKey,
+      data: stateData
     } = this.state;
 
     const { data, height } = this.props;

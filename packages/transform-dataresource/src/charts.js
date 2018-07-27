@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import { nest } from "d3-collection";
-import { scaleLinear, scaleThreshold } from "d3-scale";
+import { scaleLinear, scaleTime, scaleThreshold } from "d3-scale";
 import {
   ResponsiveOrdinalFrame,
   ResponsiveXYFrame,
@@ -11,6 +11,7 @@ import {
 import HTMLLegend from "./HTMLLegend";
 import ParallelCoordinatesController from "./ParallelCoordinatesController";
 import { numeralFormatting } from "./utilities";
+import { curveMonotone } from "d3-shape";
 
 function combineTopAnnotations(
   topQ: Array<Object>,
@@ -161,17 +162,43 @@ const semioticLineChart = (
 ) => {
   let lineData;
 
-  const { selectedMetrics, lineType, metrics, primaryKey, colors } = options;
+  const {
+    chart,
+    selectedMetrics,
+    lineType,
+    metrics,
+    dimensions,
+    primaryKey,
+    colors
+  } = options;
+
+  const { timeseriesSort } = chart;
+
+  const sortType =
+    timeseriesSort === "array-order"
+      ? "integer"
+      : schema.fields.find(p => p.name === timeseriesSort).type;
+
+  const formatting =
+    sortType === "datetime"
+      ? d => d.toLocaleString().split(",")[0]
+      : numeralFormatting;
+
+  const xScale = sortType === "datetime" ? scaleTime() : scaleLinear();
 
   lineData = metrics
     .map((d, i) => {
+      const metricData =
+        timeseriesSort === "array-order"
+          ? data
+          : data.sort((a, b) => a[timeseriesSort] - b[timeseriesSort]);
       return {
         color: colors[i % colors.length],
         label: d.name,
         type: d.type,
-        coordinates: data.map((p, q) => ({
+        coordinates: metricData.map((p, q) => ({
           value: p[d.name],
-          x: q,
+          x: timeseriesSort === "array-order" ? q : p[timeseriesSort],
           label: d.name,
           color: colors[i % colors.length],
           originalData: p
@@ -184,13 +211,14 @@ const semioticLineChart = (
     );
 
   return {
-    lineType: lineType,
+    lineType: { type: lineType, interpolator: curveMonotone },
     lines: lineData,
+    xScaleType: xScale,
     renderKey: (d: Object, i: number) => {
       return d.coordinates ? `line-${d.label}` : `linepoint=${d.label}-${i}`;
     },
     lineStyle: (d: Object) => ({
-      fill: d.color,
+      fill: lineType === "line" ? "none" : d.color,
       stroke: d.color,
       fillOpacity: 0.75
     }),
@@ -204,15 +232,29 @@ const semioticLineChart = (
       { orient: "left", tickFormat: numeralFormatting },
       {
         orient: "bottom",
-        ticks: 10,
-        tickFormat: numeralFormatting
+        ticks: 5,
+        tickFormat: (d: any) => {
+          const label = formatting(d);
+          const rotation = label.length > 4 ? "45" : "0";
+          const textAnchor = label.length > 4 ? "start" : "middle";
+          return (
+            <text transform={`rotate(${rotation})`} textAnchor={textAnchor}>
+              {label}
+            </text>
+          );
+        }
       }
     ],
     hoverAnnotation: true,
     xAccessor: "x",
     yAccessor: "value",
-    showLinePoints: true,
-    margin: { top: 20, right: 200, bottom: 50, left: 50 },
+    showLinePoints: lineType === "line",
+    margin: {
+      top: 20,
+      right: 200,
+      bottom: sortType === "datetime" ? 80 : 40,
+      left: 50
+    },
     legend: {
       title: "Legend",
       position: "right",
@@ -230,12 +272,12 @@ const semioticLineChart = (
         <div className="tooltip-content">
           <p>{d.parentLine && d.parentLine.label}</p>
           <p>
-            {d.label}: {d.value}
+            {d.label}:{" "}
+            {(d.value.toLocaleString && d.value.toLocaleString()) || d.value}
           </p>
+          <p>{formatting(d.x)}</p>
           {primaryKey.map((k, ki) => (
-            <p key={`key-${ki}`}>
-              {k}: {d.originalData[k]}
-            </p>
+            <p key={`key-${ki}`}>{d.originalData[k]}</p>
           ))}
         </div>
       );
