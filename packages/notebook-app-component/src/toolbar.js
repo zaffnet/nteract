@@ -35,6 +35,7 @@ export type PureToolbarProps = {|
   toggleCellOutputVisibility: ?() => void,
   toggleOutputExpansion: ?() => void,
   changeCellType: ?() => void,
+  sourceHidden: boolean,
   contentRef: ContentRef
 |};
 
@@ -44,7 +45,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
   };
 
   render(): React$Element<any> {
-    const { type, executeCell, removeCell } = this.props;
+    const { type, executeCell, removeCell, sourceHidden } = this.props;
 
     return (
       <div className="cell-toolbar-mask">
@@ -190,7 +191,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
           }
 
           .cell-toolbar-mask {
-            display: none;
+            display: ${sourceHidden ? "block" : "none"};
             position: absolute;
             top: 0px;
             right: 0px;

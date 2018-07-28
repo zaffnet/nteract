@@ -19,6 +19,7 @@ type CellProps = {
 
 export const Cell = (props: CellProps) => {
   const children = props.children;
+
   return (
     <div
       className={`cell ${props.isSelected ? "focused" : ""} ${
