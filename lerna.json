@@ -1,10 +1,6 @@
 {
   "lerna": "2.8.0",
-  "packages": [
-    "packages/*",
-    "applications/*",
-    "applications/jupyter-extension/nteract_on_jupyter"
-  ],
   "version": "independent",
-  "npmClient": "npm"
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }
