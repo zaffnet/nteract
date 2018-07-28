@@ -50,9 +50,14 @@ export default ({
   dimensions,
   updateChart,
   selectedDimensions,
+  selectedMetrics,
   hierarchyType,
   summaryType,
-  networkType
+  networkType,
+  setLineType,
+  updateMetrics,
+  updateDimensions,
+  lineType
 }) => {
   return (
     <React.Fragment>
@@ -161,7 +166,7 @@ export default ({
                 marginLeft: "0px",
                 color: lineType === d.type ? "lightgray" : "black"
               }}
-              onClick={() => this.setLineType(d.type)}
+              onClick={() => setLineType(d.type)}
             >
               {d.label}
             </button>
@@ -201,7 +206,7 @@ export default ({
                     ? "black"
                     : "lightgray"
               }}
-              onClick={() => this.updateDimensions(d.name)}
+              onClick={() => updateDimensions(d.name)}
             >
               {d.name}
             </button>
@@ -219,7 +224,7 @@ export default ({
                 color:
                   selectedMetrics.indexOf(d.name) !== -1 ? "black" : "lightgray"
               }}
-              onClick={() => this.updateMetrics(d.name)}
+              onClick={() => updateMetrics(d.name)}
             >
               {d.name}
             </button>

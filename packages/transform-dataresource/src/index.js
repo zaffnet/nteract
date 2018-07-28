@@ -288,10 +288,15 @@ class DataResourceTransform extends React.Component<Props, State> {
             metrics,
             dimensions,
             selectedDimensions,
+            selectedMetrics,
             hierarchyType,
             summaryType,
             networkType,
-            updateChart: this.updateChart
+            updateChart: this.updateChart,
+            updateDimensions: this.updateDimensions,
+            setLineType: this.setLineType,
+            updateMetrics: this.updateMetrics,
+            lineType
           }}
         />
         <style jsx>{`
@@ -354,41 +359,12 @@ class DataResourceTransform extends React.Component<Props, State> {
       ...updatedState
     });
   };
+  setView = view => {
+    this.updateChart({ view });
+  };
 
   setGrid = () => {
     this.setState({ view: "grid" });
-  };
-
-  setLine = () => {
-    this.updateChart({ view: "line" });
-  };
-
-  setParallel = () => {
-    this.updateChart({ view: "parallel" });
-  };
-
-  setBar = () => {
-    this.updateChart({ view: "bar" });
-  };
-
-  setScatter = () => {
-    this.updateChart({ view: "scatter" });
-  };
-
-  setHexbin = () => {
-    this.updateChart({ view: "hexbin" });
-  };
-
-  setSummary = () => {
-    this.updateChart({ view: "summary" });
-  };
-
-  setNetwork = () => {
-    this.updateChart({ view: "network" });
-  };
-
-  setHierarchy = () => {
-    this.updateChart({ view: "hierarchy" });
   };
 
   setColor = newColorArray => {
@@ -489,38 +465,59 @@ class DataResourceTransform extends React.Component<Props, State> {
               <DatabaseOcticon />
             </IconButton>
             {dimensions.length > 0 && (
-              <IconButton onClick={this.setBar} message={"Bar Graph"}>
+              <IconButton
+                onClick={() => this.setView("bar")}
+                message={"Bar Graph"}
+              >
                 <BarChartIcon />
               </IconButton>
             )}
-            <IconButton onClick={this.setSummary} message={"Summary"}>
+            <IconButton
+              onClick={() => this.setView("summary")}
+              message={"Summary"}
+            >
               <BoxplotIcon />
             </IconButton>
-            <IconButton onClick={this.setScatter} message={"Scatter Plot"}>
+            <IconButton
+              onClick={() => this.setView("scatter")}
+              message={"Scatter Plot"}
+            >
               <ScatterplotIcon />
             </IconButton>
-            <IconButton onClick={this.setHexbin} message={"Area Plot"}>
+            <IconButton
+              onClick={() => this.setView("hexbin")}
+              message={"Area Plot"}
+            >
               <HexbinIcon />
             </IconButton>
             {dimensions.length > 1 && (
-              <IconButton onClick={this.setNetwork} message={"Network"}>
+              <IconButton
+                onClick={() => this.setView("network")}
+                message={"Network"}
+              >
                 <NetworkIcon />
               </IconButton>
             )}
             {dimensions.length > 0 && (
-              <IconButton onClick={this.setHierarchy} message={"Hierarchy"}>
+              <IconButton
+                onClick={() => this.setView("hierarchy")}
+                message={"Hierarchy"}
+              >
                 <TreeIcon />
               </IconButton>
             )}
             {dimensions.length > 0 && (
               <IconButton
-                onClick={this.setParallel}
+                onClick={() => this.setView("parallel")}
                 message={"Parallel Coordinates"}
               >
                 <ParallelCoordinatesIcon />
               </IconButton>
             )}
-            <IconButton onClick={this.setLine} message={"Line Graph"}>
+            <IconButton
+              onClick={() => this.setView("line")}
+              message={"Line Graph"}
+            >
               <LineChartIcon />
             </IconButton>
           </div>
