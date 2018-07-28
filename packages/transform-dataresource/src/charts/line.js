@@ -122,12 +122,17 @@ export const semioticLineChart = (
         <div className="tooltip-content">
           <p>{d.parentLine && d.parentLine.label}</p>
           <p>
-            {d.label}:{" "}
             {(d.value.toLocaleString && d.value.toLocaleString()) || d.value}
           </p>
-          <p>{formatting(d.x)}</p>
+          <p>
+            {timeseriesSort}: {formatting(d.x)}
+          </p>
           {primaryKey.map((k, ki) => (
-            <p key={`key-${ki}`}>{d.originalData[k]}</p>
+            <p key={`key-${ki}`}>
+              {k}:{" "}
+              {(d.originalData[k].toString && d.originalData[k].toString()) ||
+                d.originalData[k]}
+            </p>
           ))}
         </div>
       );
