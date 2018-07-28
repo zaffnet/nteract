@@ -66,6 +66,7 @@
     "clean": "lerna clean --yes && rimraf node_modules"
   },
   "jest": {
+    "testURL": "http://localhost",
     "setupFiles": [
       "raf/polyfill",
       "./scripts/test-shim",
