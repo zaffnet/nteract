@@ -182,6 +182,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     this.state = {
       view: "grid",
       lineType: "line",
+      areaType: "hexbin",
       selectedDimensions: [],
       selectedMetrics: [],
       pieceType: "bar",
@@ -205,6 +206,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         metric3: "none",
         dim1: (dimensions[0] && dimensions[0].name) || "none",
         dim2: (dimensions[1] && dimensions[1].name) || "none",
+        dim3: "none",
         timeseriesSort: "array-order"
       },
       displayChart: {},
@@ -231,6 +233,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       metrics,
       chart,
       lineType,
+      areaType,
       selectedDimensions,
       selectedMetrics,
       pieceType,
@@ -249,6 +252,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     const chartKey = generateChartKey({
       view,
       lineType,
+      areaType,
       selectedDimensions,
       selectedMetrics,
       pieceType,
@@ -260,10 +264,12 @@ class DataResourceTransform extends React.Component<Props, State> {
 
     const frameSettings = chartGenerator(stateData, data.schema, {
       metrics,
+      dimensions,
       chart,
       colors,
       height,
       lineType,
+      areaType,
       selectedDimensions,
       selectedMetrics,
       pieceType,
@@ -296,7 +302,9 @@ class DataResourceTransform extends React.Component<Props, State> {
             updateDimensions: this.updateDimensions,
             setLineType: this.setLineType,
             updateMetrics: this.updateMetrics,
-            lineType
+            lineType,
+            setAreaType: this.setAreaType,
+            areaType
           }}
         />
         <style jsx>{`
@@ -373,6 +381,10 @@ class DataResourceTransform extends React.Component<Props, State> {
 
   setLineType = (e: LineType) => {
     this.updateChart({ lineType: e });
+  };
+
+  setAreaType = (e: LineType) => {
+    this.updateChart({ areaType: e });
   };
 
   updateDimensions = (e: string) => {
