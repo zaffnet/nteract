@@ -51,30 +51,30 @@ export const semioticHexbin = (
   schema: Object,
   options: Object
 ) => {
-  return semioticScatterplot(data, schema, options, true);
+  return semioticScatterplot(data, schema, options, options.areaType);
 };
 
 export const semioticScatterplot = (
   data: Array<Object>,
   schema: Object,
   options: Object,
-  hexbin: boolean = false
+  type: string = "scatterplot"
 ) => {
   const height = options.height - 150 || 500;
 
-  const { chart, primaryKey, colors, setColor } = options;
+  const { chart, primaryKey, colors, setColor, dimensions } = options;
 
-  const { dim1, dim2, metric1, metric2, metric3 } = chart;
+  const { dim1, dim2, dim3, metric1, metric2, metric3 } = chart;
 
   const pointTooltip = (d: Object) => (
     <div className="tooltip-content">
       <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
-      {dim1 &&
-        dim1 !== "none" && (
-          <p>
-            {dim1}: {d[dim1]}
-          </p>
-        )}
+      {dimensions.map(dim => (
+        <p key={`tooltip-dim-${dim.name}`}>
+          {dim.name}:{" "}
+          {(d[dim.name].toString && d[dim.name].toString()) || d[dim.name]}
+        </p>
+      ))}
       <p>
         {metric1}: {d[metric1]}
       </p>
@@ -90,31 +90,40 @@ export const semioticScatterplot = (
     </div>
   );
 
-  const areaTooltip = (d: Object) => (
-    <div className="tooltip-content">
-      <h2
-        style={{
-          fontSize: "14px",
-          textTransform: "uppercase",
-          margin: "5px",
-          fontWeight: 900
-        }}
-      >
-        ID, {metric1}, {metric2}
-      </h2>
-      {d.binItems.map(d => (
-        <p
+  const areaTooltip = (d: Object) => {
+    if (d.binItems.length === 0) return null;
+    return (
+      <div className="tooltip-content">
+        <h2
           style={{
-            fontSize: "12px",
+            fontSize: "14px",
             textTransform: "uppercase",
-            margin: "5px"
+            margin: "5px",
+            fontWeight: 900
           }}
         >
-          {primaryKey.map(p => d[p]).join(", ")}, {d[metric1]}, {d[metric2]}
-        </p>
-      ))}
-    </div>
-  );
+          ID, {metric1}, {metric2}
+        </h2>
+        {d.binItems.map(d => (
+          <p
+            style={{
+              fontSize: "12px",
+              textTransform: "uppercase",
+              margin: "5px"
+            }}
+          >
+            {dimensions
+              .map(
+                dim =>
+                  (d[dim.name].toString && d[dim.name].toString()) ||
+                  d[dim.name]
+              )
+              .join(",")}, {d[metric1]}, {d[metric2]}
+          </p>
+        ))}
+      </div>
+    );
+  };
 
   let sizeScale = e => 5;
   const colorHash = { Other: "grey" };
@@ -148,7 +157,11 @@ export const semioticScatterplot = (
     data
   );
 
-  if (!hexbin && dim1 && dim1 !== "none") {
+  if (
+    (type === "scatterplot" || type === "contour") &&
+    dim1 &&
+    dim1 !== "none"
+  ) {
     const uniqueValues = sortedData.reduce(
       (p, c) =>
         (!p.find(d => d === c[dim1].toString()) && [
@@ -172,7 +185,7 @@ export const semioticScatterplot = (
         colors={colors}
       />
     );
-  } else if (hexbin) {
+  } else if (type !== "scatterplot" && type !== "contour") {
     const hexValues = [
       "0% - 20%",
       "20% - 40%",
@@ -198,6 +211,31 @@ export const semioticScatterplot = (
       />
     );
   }
+
+  let areas;
+
+  if (
+    type === "heatmap" ||
+    type === "hexbin" ||
+    (type === "contour" && dim3 === "none")
+  ) {
+    areas = [{ coordinates: data }];
+  } else if (type === "contour") {
+    const multiclassHash = {};
+    areas = [];
+    data.forEach(d => {
+      if (!multiclassHash[d[dim1]]) {
+        multiclassHash[d[dim1]] = {
+          label: d[dim1],
+          color: colorHash[d[dim1]],
+          coordinates: []
+        };
+        areas.push(multiclassHash[d[dim1]]);
+      }
+      multiclassHash[d[dim1]].coordinates.push(d);
+    });
+  }
+
   return {
     xAccessor: metric1,
     yAccessor: metric2,
@@ -206,38 +244,47 @@ export const semioticScatterplot = (
         orient: "left",
         ticks: 6,
         label: metric2,
-        tickFormat: numeralFormatting
+        tickFormat: numeralFormatting,
+        footer: type === "heatmap"
       },
       {
         orient: "bottom",
         ticks: 6,
         label: metric1,
-        tickFormat: numeralFormatting
+        tickFormat: numeralFormatting,
+        footer: type === "heatmap"
       }
     ],
-    points: !hexbin && data,
-    areas: hexbin && [{ coordinates: data }],
-    areaType: { type: "hexbin", bins: 10 },
+    points: (type === "scatterplot" || type === "contour") && data,
+    areas: areas,
+    areaType: { type, bins: 10, thresholds: dim3 === "none" ? 6 : 3 },
     areaStyle: (d: Object) => ({
-      fill: thresholds(d.percent),
-      stroke: "black"
+      fill: type === "contour" ? "none" : thresholds(d.percent),
+      stroke:
+        type !== "contour"
+          ? "black"
+          : dim3 === "none" ? "#BBB" : d.parentArea.color,
+      strokeWidth: type === "contour" ? 2 : 1
     }),
     pointStyle: (d: Object) => ({
-      r: sizeScale(d[metric3]),
+      r: type === "contour" ? 3 : sizeScale(d[metric3]),
       fill: colorHash[d[dim1]] || "black",
       fillOpacity: 0.75,
-      stroke: "black",
+      stroke: type === "contour" ? "white" : "black",
+      strokeWidth: type === "contour" ? 0.5 : 1,
       strokeOpacity: 0.9
     }),
     hoverAnnotation: true,
     responsiveWidth: false,
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },
-    annotations: !hexbin && annotations,
+    annotations: (type === "scatterplot" && annotations) || undefined,
     annotationSettings: {
       layout: { type: "marginalia", orient: "right", marginOffset: 30 }
     },
-    tooltipContent: (hexbin && areaTooltip) || pointTooltip,
+    tooltipContent:
+      ((type === "hexbin" || type === "heatmap") && areaTooltip) ||
+      pointTooltip,
     ...additionalSettings
   };
 };

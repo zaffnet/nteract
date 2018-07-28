@@ -43,6 +43,21 @@ const availableLineTypes = [
   }
 ];
 
+const availableAreaTypes = [
+  {
+    type: "hexbin",
+    label: "Hexbin"
+  },
+  {
+    type: "heatmap",
+    label: "Heatmap"
+  },
+  {
+    type: "contour",
+    label: "Contour Plot"
+  }
+];
+
 export default ({
   view,
   chart,
@@ -57,7 +72,9 @@ export default ({
   setLineType,
   updateMetrics,
   updateDimensions,
-  lineType
+  lineType,
+  areaType,
+  setAreaType
 }) => {
   return (
     <React.Fragment>
@@ -92,6 +109,7 @@ export default ({
         )}
       {(view === "summary" ||
         view === "scatter" ||
+        (view === "hexbin" && areaType === "contour") ||
         view === "bar" ||
         view === "parallel") &&
         metricDimSelector(
@@ -108,6 +126,14 @@ export default ({
           "LABELS",
           false,
           chart.dim2
+        )}
+      {areaType === "contour" &&
+        metricDimSelector(
+          ["by color"],
+          d => updateChart({ chart: { ...chart, dim3: d } }),
+          "Multiclass",
+          false,
+          chart.dim3
         )}
       {view === "network" &&
         metricDimSelector(
@@ -167,6 +193,22 @@ export default ({
                 color: lineType === d.type ? "lightgray" : "black"
               }}
               onClick={() => setLineType(d.type)}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {view === "hexbin" && (
+        <div style={{ display: "inline-block" }}>
+          <h2>Chart Type</h2>
+          {availableAreaTypes.map(d => (
+            <button
+              style={{
+                marginLeft: "0px",
+                color: lineType === d.type ? "lightgray" : "black"
+              }}
+              onClick={() => setAreaType(d.type)}
             >
               {d.label}
             </button>
