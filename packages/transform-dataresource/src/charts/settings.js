@@ -6,14 +6,14 @@ import {
   ResponsiveNetworkFrame
 } from "semiotic";
 
-import ParallelCoordinatesController from "./ParallelCoordinatesController";
+import ParallelCoordinatesController from "../ParallelCoordinatesController";
 
-import { semioticLineChart } from "./charts/line";
-import { semioticNetwork } from "./charts/network";
-import { semioticHierarchicalChart } from "./charts/hierarchical";
-import { semioticBarChart } from "./charts/bar";
-import { semioticScatterplot, semioticHexbin } from "./charts/xyplot";
-import { semioticSummaryChart } from "./charts/summary";
+import { semioticLineChart } from "./line";
+import { semioticNetwork } from "./network";
+import { semioticHierarchicalChart } from "./hierarchical";
+import { semioticBarChart } from "./bar";
+import { semioticScatterplot, semioticHexbin } from "./xyplot";
+import { semioticSummaryChart } from "./summary";
 
 const semioticParallelCoordinates = (
   data: Array<Object>,
