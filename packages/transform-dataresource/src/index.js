@@ -208,7 +208,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         timeseriesSort: "array-order"
       },
       displayChart: {},
-      primaryKey: [],
+      primaryKey,
       data
     };
   }
