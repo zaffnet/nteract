@@ -1,6 +1,5 @@
 // @flow
 
-import * as Immutable from "immutable";
 import produce from "immer";
 import * as common from "../common";
 
