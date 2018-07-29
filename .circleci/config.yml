@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8@sha256:b8285fd5715f2ca56335565eb0d52f8215bb2f2fdb9450e2102af3b94b74b755
+      - image: circleci/node:10
 
     working_directory: ~/nteract
 
@@ -14,22 +14,22 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - yarn-packages-{{ checksum "yarn.lock" }}
-          # fallback to using the latest cache if no exact match is found
-          - yarn-packages-
+    #   - restore_cache:
+    #       keys:
+    #       - yarn-packages-{{ checksum "yarn.lock" }}
+    #       # fallback to using the latest cache if no exact match is found
+    #       - yarn-packages-
 
-      - run: yarn --verbose --ignore-engines
+      - run: yarn --verbose
 
-      - save_cache:
-          paths:
-            - ~/.cache/yarn
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+    #   - save_cache:
+    #       paths:
+    #         - ~/.cache/yarn
+    #       key: yarn-packages-{{ checksum "yarn.lock" }}
 
       # run tests!
       - run: yarn run test:lint
-      - run: yarn run test --verbose
+      - run: yarn run test
       - run: yarn run test:flow
       - run: yarn run test:conformance
 
