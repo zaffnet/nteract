@@ -15,7 +15,8 @@
     "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
   },
   "dependencies": {
-    "babel-runtime": "^6.26.0"
+    "babel-runtime": "^6.26.0",
+    "immer": "^1.5.0"
   },
   "devDependencies": {
     "immutable": "^4.0.0-rc.9"
