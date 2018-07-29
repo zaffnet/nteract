@@ -14,22 +14,21 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-    #   - restore_cache:
-    #       keys:
-    #       - yarn-packages-{{ checksum "yarn.lock" }}
-    #       # fallback to using the latest cache if no exact match is found
-    #       - yarn-packages-
+      - restore_cache:
+          keys:
+          - yarn-packages-{{ checksum "yarn.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - yarn-packages-
 
       - run: yarn --verbose
 
-    #   - save_cache:
-    #       paths:
-    #         - ~/.cache/yarn
-    #       key: yarn-packages-{{ checksum "yarn.lock" }}
+      - save_cache:
+          paths:
+            - ~/.cache/yarn
+          key: yarn-packages-{{ checksum "yarn.lock" }}
 
       # run tests!
       - run: yarn run test:lint
-      - run: yarn run build:packages
       - run: yarn run test
       - run: yarn run test:flow
       - run: yarn run test:conformance
