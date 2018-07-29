@@ -1,8 +1,6 @@
 // @flow
 
-const Immutable = require("immutable");
-import { Map as ImmutableMap } from "immutable";
-export type ImmutableMimeBundle = ImmutableMap<string, any>;
+import produce from "immer";
 
 // Straight from nbformat
 export type MultilineString = string | Array<string>;
@@ -97,15 +95,16 @@ export function cleanMimeData(
 
 export function cleanMimeAtKey(
   mimeBundle: MimeBundle,
-  previous: ImmutableMimeBundle,
+  previous: MimeBundle,
   key: string
-): ImmutableMimeBundle {
-  return previous.set(key, cleanMimeData(key, mimeBundle[key]));
+): MimeBundle {
+  return produce(previous, draft => {
+    draft[key] = cleanMimeData(key, mimeBundle[key]);
+  });
+  // return previous.set(key, cleanMimeData(key, mimeBundle[key]));
 }
 
-export function createImmutableMimeBundle(
-  mimeBundle: MimeBundle
-): ImmutableMimeBundle {
+export function createImmutableMimeBundle(mimeBundle: MimeBundle): MimeBundle {
   // Map over all the mimetypes, turning them into our in-memory format
   //
   // {
@@ -124,6 +123,6 @@ export function createImmutableMimeBundle(
   //
   return Object.keys(mimeBundle).reduce(
     cleanMimeAtKey.bind(null, mimeBundle),
-    Immutable.Map()
+    {}
   );
 }

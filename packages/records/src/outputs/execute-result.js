@@ -1,6 +1,6 @@
 // @flow
 
-import * as Immutable from "immutable";
+import produce from "immer";
 import * as common from "../common";
 
 /**
@@ -17,7 +17,7 @@ import * as common from "../common";
  */
 
 export type ExecuteResultType = "execute_result";
-export type ExecutionCount = number | null;
+export type ExecutionCount = ?number;
 
 export const EXECUTERESULT = "execute_result";
 
@@ -26,7 +26,7 @@ type ExecuteResultOutput = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
-  metadata: mixed
+  metadata: Object
 };
 
 // On disk
@@ -34,7 +34,7 @@ export type NbformatExecuteResultOutput = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
   data: common.MimeBundle,
-  metadata: mixed
+  metadata: Object
 };
 
 type ExecuteResultMessage = {
@@ -44,43 +44,35 @@ type ExecuteResultMessage = {
   content: {
     execution_count: number,
     data: common.MimeBundle,
-    metadata: mixed
+    metadata: Object
   }
 };
 
-export type ExecuteResultOutputRecord = Immutable.RecordOf<ExecuteResultOutput>;
-
-// NOTE: No export, as the values here should get overridden by an exact version
-//       passed into makeExecuteResultOutputRecord
-const executeResultOutputRecordMaker: Immutable.RecordFactory<
-  ExecuteResultOutput
-> = Immutable.Record({
-  outputType: EXECUTERESULT,
-  executionCount: null,
-  data: {},
-  metadata: {}
-});
+export type ExecuteResultOutputRecord = ExecuteResultOutput;
 
 export function makeExecuteResultOutputRecord(
   executeResultOutput: ExecuteResultOutput
 ): ExecuteResultOutputRecord {
-  return executeResultOutputRecordMaker(executeResultOutput);
+  const defaultExecuteResultOutput = {
+    outputType: EXECUTERESULT,
+    executionCount: undefined,
+    data: {},
+    metadata: {}
+  };
+  return produce(defaultExecuteResultOutput, draft => {
+    return Object.assign(draft, executeResultOutput);
+  });
 }
 
 export function executeResultRecordFromNbformat(
   s: NbformatExecuteResultOutput
 ): ExecuteResultOutputRecord {
-  return makeExecuteResultOutputRecord(
-    Object.assign(
-      {},
-      {
-        outputType: s.output_type,
-        executionCount: s.execution_count,
-        data: common.createImmutableMimeBundle(s.data),
-        metadata: Immutable.fromJS(s.metadata)
-      }
-    )
-  );
+  return makeExecuteResultOutputRecord({
+    outputType: s.output_type,
+    executionCount: s.execution_count,
+    data: common.createImmutableMimeBundle(s.data),
+    metadata: s.metadata
+  });
 }
 
 export function executeResultRecordFromMessage(

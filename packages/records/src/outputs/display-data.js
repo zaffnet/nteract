@@ -1,6 +1,6 @@
 // @flow
 
-import * as Immutable from "immutable";
+import produce from "immer";
 import * as common from "../common";
 /**
  * Let this declare the way for well typed records for outputs
@@ -23,14 +23,14 @@ export const DISPLAYDATA = "display_data";
 type DisplayDataOutput = {
   outputType: DisplayDataType,
   data: common.MimeBundle,
-  metadata: mixed
+  metadata: Object
 };
 
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
   data: common.MimeBundle,
-  metadata: mixed
+  metadata: Object
 };
 
 type DisplayDataMessage = {
@@ -39,41 +39,37 @@ type DisplayDataMessage = {
   },
   content: {
     data: common.MimeBundle,
-    metadata: mixed
+    metadata: Object
   }
 };
 
-export type DisplayDataOutputRecord = Immutable.RecordOf<DisplayDataOutput>;
+export type DisplayDataOutputRecord = Object;
 
 // NOTE: No export, as the values here should get overridden by an exact version
 //       passed into makeDisplayDataOutputRecord
-const displayDataOutputRecordMaker: Immutable.RecordFactory<
-  DisplayDataOutput
-> = Immutable.Record({
-  outputType: DISPLAYDATA,
-  data: {},
-  metadata: {}
-});
 
 export function makeDisplayDataOutputRecord(
   displayDataOutput: DisplayDataOutput
 ): DisplayDataOutputRecord {
-  return displayDataOutputRecordMaker(displayDataOutput);
+  const defaultDisplayDataRecord = {
+    outputType: DISPLAYDATA,
+    data: {},
+    metadata: {}
+  };
+
+  return produce(defaultDisplayDataRecord, draft => {
+    return Object.assign(draft, displayDataOutput);
+  });
 }
 
 export function displayDataRecordFromNbformat(
   s: NbformatDisplayDataOutput
 ): DisplayDataOutputRecord {
-  return makeDisplayDataOutputRecord(
-    Object.assign(
-      {},
-      {
-        outputType: s.output_type,
-        data: common.createImmutableMimeBundle(s.data),
-        metadata: Immutable.fromJS(s.metadata)
-      }
-    )
-  );
+  return makeDisplayDataOutputRecord({
+    outputType: s.output_type,
+    data: common.createImmutableMimeBundle(s.data),
+    metadata: s.metadata
+  });
 }
 
 export function displayDataRecordFromMessage(
