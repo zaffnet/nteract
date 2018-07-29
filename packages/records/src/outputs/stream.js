@@ -1,6 +1,6 @@
 // @flow
 
-import * as Immutable from "immutable";
+import produce from "immer";
 import * as common from "../common";
 
 /**
@@ -53,19 +53,18 @@ export type StreamOutputRecord = Immutable.RecordOf<StreamOutput>;
 
 // NOTE: No export, as the values here should get overridden by an exact version
 //       passed into makeStreamOutputRecord
-const streamOutputRecordMaker: Immutable.RecordFactory<
-  StreamOutput
-> = Immutable.Record({
-  outputType: STREAM,
-  name: STDOUT,
-  text: ""
-});
 
-export function makeStreamOutputRecord(
-  streamOutput: StreamOutput
-): StreamOutputRecord {
-  return streamOutputRecordMaker(streamOutput);
-}
+export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
+  const defaultStreamOutput = {
+    outputType: STREAM,
+    name: STDOUT,
+    text: ""
+  };
+  // do I need produce here? Or just freeze?
+  return produce(defaultStreamOutput, draft =>
+    Object.assign(draft, streamOutput)
+  );
+};
 
 export function streamRecordFromNbformat(
   s: NbformatStreamOutput
