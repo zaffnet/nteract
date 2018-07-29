@@ -23,3 +23,9 @@ node_modules/
 dist/
 .*static/*
 .*test/*
+
+[strict]
+sketchy-null
+untyped-type-import
+unsafe-getters-setters
+unclear-type

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -28,20 +28,13 @@ import {
 } from "@nteract/octicons";
 
 export class PureCellCreator extends React.Component<Props, null> {
-  constructor(props: Props) {
-    super(props);
-
-    (this: any).createMarkdownCell = this.createMarkdownCell.bind(this);
-    (this: any).createCodeCell = this.createCodeCell.bind(this);
-  }
-
-  createMarkdownCell() {
+  createMarkdownCell = () => {
     this.props.createCell("markdown");
-  }
+  };
 
-  createCodeCell() {
+  createCodeCell = () => {
     this.props.createCell("code");
-  }
+  };
 
   render() {
     return (
@@ -143,13 +136,7 @@ export class PureCellCreator extends React.Component<Props, null> {
 }
 
 class CellCreator extends React.Component<ConnectedProps> {
-  constructor(): void {
-    super();
-    (this: any).createCell = this.createCell.bind(this);
-    (this: any).mergeCell = this.mergeCell.bind(this);
-  }
-
-  createCell(type: "code" | "markdown"): void {
+  createCell = (type: "code" | "markdown"): void => {
     const {
       above,
       createCellAfter,
@@ -159,7 +146,7 @@ class CellCreator extends React.Component<ConnectedProps> {
       contentRef
     } = this.props;
 
-    if (!id) {
+    if (id == null || id.length === 0) {
       createCellAppend({ cellType: type, contentRef });
       return;
     }
@@ -167,16 +154,16 @@ class CellCreator extends React.Component<ConnectedProps> {
     above
       ? createCellBefore({ cellType: type, id, contentRef })
       : createCellAfter({ cellType: type, id, source: "", contentRef });
-  }
+  };
 
-  mergeCell(): void {
+  mergeCell = (): void => {
     const { mergeCellAfter, id, contentRef } = this.props;
 
     // We can't merge cells if we don't have a cell ID
-    if (id) {
+    if (id != null && id.length != 0) {
       mergeCellAfter({ id, contentRef });
     }
-  }
+  };
 
   render() {
     return (

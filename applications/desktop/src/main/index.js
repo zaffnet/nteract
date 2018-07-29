@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import {
   Menu,
   dialog,
@@ -39,6 +39,18 @@ import initializeKernelSpecs from "./kernel-specs";
 import { setKernelSpecs } from "./actions";
 
 import configureStore from "./store";
+
+declare type KernelSpecs = {
+  [key: string]: {
+    name: string,
+    spec: {
+      argv: Array<string>,
+      display_name: string,
+      language: string,
+      env: { [key: string]: string }
+    }
+  }
+};
 const store = configureStore();
 // HACK: The main process store should not be stored in a global.
 global.store = store;
@@ -219,7 +231,7 @@ openFile$
     // based on if arguments went through argv or through open-file events
     if (notebooks.length <= 0 && buffer.length <= 0) {
       log.info("launching an empty notebook by default");
-      kernelSpecsPromise.then((specs: { [string]: Object }) => {
+      kernelSpecsPromise.then((specs: KernelSpecs) => {
         let kernel: string;
 
         if (argv.kernel in specs) {
