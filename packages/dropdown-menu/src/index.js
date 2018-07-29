@@ -56,6 +56,7 @@ export class DropdownMenu extends React.Component<
         })}
         <style jsx>{`
           .dropdown {
+            z-index: 420
             display: inline-block;
           }
         `}</style>
