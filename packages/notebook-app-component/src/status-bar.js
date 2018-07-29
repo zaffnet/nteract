@@ -37,7 +37,12 @@ export class StatusBar extends React.Component<Props> {
 
     return (
       <div className="status-bar">
-        <span className="pull-right">
+        <span className="pad-left">
+          <p>
+            {name} | {this.props.kernelStatus}
+          </p>
+        </span>
+        <span className="pad-right">
           {this.props.lastSaved ? (
             <p>
               {" "}
@@ -52,13 +57,12 @@ export class StatusBar extends React.Component<Props> {
             </p>
           )}
         </span>
-        <span className="pull-left">
-          <p>
-            {name} | {this.props.kernelStatus}
-          </p>
-        </span>
         <style jsx>{`
           .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            align-content: flex-start;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -69,13 +73,11 @@ export class StatusBar extends React.Component<Props> {
             z-index: 99;
           }
 
-          .pull-right {
-            float: right;
+          .pad-right {
             padding-right: 10px;
           }
 
-          .pull-left {
-            display: block;
+          .pad-left {
             padding-left: 10px;
           }
         `}</style>
