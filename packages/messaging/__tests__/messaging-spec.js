@@ -11,7 +11,7 @@ import {
   payloads,
   executionCounts,
   kernelStatuses
-} from "../";
+} from "../src";
 
 import {
   executeInput,

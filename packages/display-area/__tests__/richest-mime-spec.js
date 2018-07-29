@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import { RichestMime } from "../";
+import { RichestMime } from "../src";
 
 describe("RichestMime", () => {
   it("renders a mimebundle", () => {

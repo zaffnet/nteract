@@ -20,8 +20,7 @@
   },
   "homepage": "https://github.com/nteract/nteract",
   "scripts": {
-    "postinstall": "npm run lerna",
-    "lerna": "lerna bootstrap --hoist --loglevel verbose --nohoist='{electron-builder,electron-updater,lodash,ijavascript,zeromq,nteract-assets,mathjax-electron,jmp,vega,vega-embed,vega-lite,util}'",
+    "postinstall": "lerna run build --parallel --scope @nteract/styles --scope rx-jupyter",
     "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
     "app:showcase": "lerna run dev --scope @nteract/showcase --stream",
@@ -68,14 +67,16 @@
     "clean": "lerna clean --yes && rimraf node_modules"
   },
   "jest": {
+    "testURL": "http://localhost",
     "setupFiles": [
       "raf/polyfill",
       "./scripts/test-shim",
       "./scripts/test-setup"
     ],
     "moduleNameMapper": {
-      "^@nteract/(?!styles|core/dummy)(.*)$": "<rootDir>/packages/$1/src",
+      "^@nteract/styles$": "<rootDir>/packages/styles/lib",
       "^@nteract/core/dummy$": "<rootDir>/packages/core/src/dummy",
+      "^@nteract/(.*)$": "<rootDir>/packages/$1/src",
       "^(ansi-to-react|enchannel-zmq-backend|fs-observable|rx-binder|rx-jupyter)$": "<rootDir>/packages/$1/src",
       "\\.css$": "<rootDir>/scripts/noop-module.js"
     },
@@ -168,7 +169,7 @@
     "next": "^5.1.0",
     "next-redux-wrapper": "^1.3.5",
     "next-routes": "^1.2.0",
-    "node-fetch": "^2.0.0",
+    "node-fetch": "2.1.2",
     "nprogress": "^0.2.0",
     "object-path": "^0.11.4",
     "prettier": "^1.11.0",
@@ -223,5 +224,18 @@
   },
   "engines": {
     "node": ">=8.9.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "applications/*",
+      "applications/jupyter-extension/nteract_on_jupyter"
+    ],
+    "nohoist": [
+      "**/nteract/**"
+    ]
+  },
+  "resolutions": {
+    "node-fetch": "2.1.2"
   }
 }

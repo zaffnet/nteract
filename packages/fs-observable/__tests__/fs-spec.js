@@ -2,7 +2,7 @@ import {
   unlinkObservable,
   createSymlinkObservable,
   readdirObservable
-} from "./..";
+} from "../src";
 
 import { toArray } from "rxjs/operators";
 

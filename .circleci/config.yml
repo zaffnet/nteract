@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8@sha256:b8285fd5715f2ca56335565eb0d52f8215bb2f2fdb9450e2102af3b94b74b755
+      - image: circleci/node:10
 
     working_directory: ~/nteract
 
@@ -16,28 +16,27 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - yarn-packages-{{ checksum "yarn.lock" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - yarn-packages-
 
-      - run: npm install
+      - run: yarn --verbose
 
       - save_cache:
           paths:
-            - ~/.npm
-            - ./node_modules
-            - ~/.jestcache
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ~/.cache/yarn
+          key: yarn-packages-{{ checksum "yarn.lock" }}
 
       # run tests!
-      - run: npm run test:lint
-      - run: npm run test -- --cacheDirectory=~/.jestcache
-      - run: npm run test:flow
-      - run: npm run test:conformance
+      - run: yarn run test:lint
+      - run: yarn run build:packages
+      - run: yarn run test
+      - run: yarn run test:flow
+      - run: yarn run test:conformance
 
       - run:
           name: Build Docs
-          command: npm run docs:build
+          command: yarn run docs:build
 
       - store_artifacts:
           path: styleguide
