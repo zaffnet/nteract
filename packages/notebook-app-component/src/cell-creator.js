@@ -146,7 +146,7 @@ class CellCreator extends React.Component<ConnectedProps> {
       contentRef
     } = this.props;
 
-    if (id == null || id.length === 0) {
+    if (id == null || typeof id != "string") {
       createCellAppend({ cellType: type, contentRef });
       return;
     }
@@ -160,7 +160,7 @@ class CellCreator extends React.Component<ConnectedProps> {
     const { mergeCellAfter, id, contentRef } = this.props;
 
     // We can't merge cells if we don't have a cell ID
-    if (id != null && id.length != 0) {
+    if (id != null && typeof id == "string") {
       mergeCellAfter({ id, contentRef });
     }
   };

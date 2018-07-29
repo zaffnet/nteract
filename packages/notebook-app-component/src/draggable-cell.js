@@ -47,9 +47,9 @@ const cellDragPreviewImage = [
 ].join("");
 
 type Props = {|
-  connectDragPreview: (img: Image) => void,
-  connectDragSource: (el: ?React$Element<*>) => void,
-  connectDropTarget: (el: ?React$Element<*>) => void,
+  connectDragPreview: ConnectDragPreview,
+  connectDragSource: ConnectDragSource,
+  connectDropTarget: ConnectDropTarget,
   focusCell: (payload: *) => *,
   id: string,
   isDragging: boolean,
