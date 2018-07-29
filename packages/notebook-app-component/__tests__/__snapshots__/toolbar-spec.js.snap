@@ -94,7 +94,7 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
       </button>
       <DropdownMenu>
         <div
-          className="jsx-2673522894 dropdown"
+          className="jsx-851349928 dropdown"
         >
           <DropdownTrigger
             key=".0"
@@ -152,8 +152,8 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
             </div>
           </DropdownTrigger>
           <JSXStyle
-            css=".dropdown.jsx-2673522894{display:inline-block;}"
-            styleId="2673522894"
+            css=".dropdown.jsx-851349928{z-index:420 display:inline-block;}"
+            styleId="851349928"
           />
         </div>
       </DropdownMenu>
@@ -260,7 +260,7 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
       </button>
       <DropdownMenu>
         <div
-          className="jsx-2673522894 dropdown"
+          className="jsx-851349928 dropdown"
         >
           <DropdownTrigger
             key=".0"
@@ -419,8 +419,8 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
             </div>
           </DropdownContent>
           <JSXStyle
-            css=".dropdown.jsx-2673522894{display:inline-block;}"
-            styleId="2673522894"
+            css=".dropdown.jsx-851349928{z-index:420 display:inline-block;}"
+            styleId="851349928"
           />
         </div>
       </DropdownMenu>
