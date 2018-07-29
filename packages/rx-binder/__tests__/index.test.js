@@ -1,5 +1,5 @@
 // @flow
-const { binder, formBinderURL } = require("..");
+const { binder, formBinderURL } = require("../src");
 
 import { toArray } from "rxjs/operators";
 

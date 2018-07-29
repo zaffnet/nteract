@@ -4,7 +4,7 @@ import { shallow, mount } from "enzyme";
 import Immutable from "immutable";
 
 import { displayOrder, transforms } from "@nteract/transforms";
-import { Display } from "../";
+import { Display } from "../src";
 import { DEFAULT_SCROLL_HEIGHT } from "../src/display";
 
 describe("Display", () => {
