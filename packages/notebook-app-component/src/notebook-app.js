@@ -162,9 +162,9 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
       tags,
       selectCell,
       unfocusEditor,
-      contentRef
+      contentRef,
+      sourceHidden
     } = this.props;
-
     const running = cellStatus === "busy";
     const queued = cellStatus === "queued";
     let element = null;
@@ -288,6 +288,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
           ) : null}
           <Toolbar
             type={cellType}
+            sourceHidden={sourceHidden}
             id={id}
             source={this.props.source}
             contentRef={contentRef}
@@ -295,9 +296,9 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
           {element}
           <style jsx>{`
             /*
-           * Show the cell-toolbar-mask if hovering on cell,
-           * or cell was the last clicked (has .focused class).
-           */
+             * Show the cell-toolbar-mask if hovering on cell,
+             * cell was the last clicked (has .focused class).
+            */
             :global(.cell:hover .cell-toolbar-mask),
             :global(.cell.focused .cell-toolbar-mask) {
               display: block;
