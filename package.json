@@ -74,8 +74,9 @@
       "./scripts/test-setup"
     ],
     "moduleNameMapper": {
-      "^@nteract/(?!styles|core/dummy)(.*)$": "<rootDir>/packages/$1/src",
+      "^@nteract/styles$": "<rootDir>/packages/styles/lib",
       "^@nteract/core/dummy$": "<rootDir>/packages/core/src/dummy",
+      "^@nteract/(.*)$": "<rootDir>/packages/$1/src",
       "^(ansi-to-react|enchannel-zmq-backend|fs-observable|rx-binder|rx-jupyter)$": "<rootDir>/packages/$1/src",
       "\\.css$": "<rootDir>/scripts/noop-module.js"
     },
