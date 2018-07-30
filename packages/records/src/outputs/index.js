@@ -58,6 +58,6 @@ export function outputFromMessage(msg: JupyterMessage<*, *>): OutputRecord {
     case error.ERROR:
       return error.errorRecordFromMessage(msg);
     default:
-      return null;
+      return {};
   }
 }
