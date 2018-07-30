@@ -207,3 +207,29 @@ describe("code cell", () => {
     );
   });
 });
+
+describe("markdown cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "markdown",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    ).toEqual(
+      nteractRecords.makeMarkdownCellRecord({
+        cellType: "markdown",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    );
+  });
+});
