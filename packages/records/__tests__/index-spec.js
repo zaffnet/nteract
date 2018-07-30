@@ -1,5 +1,4 @@
 // @flow
-import * as Immutable from "immutable";
 import * as nteractRecords from "@nteract/records";
 
 describe("stream output", () => {
@@ -60,12 +59,12 @@ describe("display_data output", () => {
     ).toEqual(
       nteractRecords.makeDisplayDataOutputRecord({
         outputType: "display_data",
-        data: Immutable.Map({
+        data: {
           infinityStones: "mind\ntime\nspace\nreality\npower\nsoul"
-        }),
-        metadata: Immutable.Map({
-          "application/json": Immutable.Map({ expanded: true })
-        })
+        },
+        metadata: {
+          "application/json": { expanded: true }
+        }
       })
     );
   });
@@ -96,7 +95,7 @@ describe("execute_result output", () => {
     expect(
       nteractRecords.outputFromNbformat({
         output_type: "execute_result",
-        execute_result: 7,
+        execution_count: 7,
         data: {
           planets: ["xandar\n", "nidavellir\n", "terra"]
         },
@@ -105,13 +104,13 @@ describe("execute_result output", () => {
     ).toEqual(
       nteractRecords.makeExecuteResultOutputRecord({
         outputType: "execute_result",
-        execute_result: 7,
-        data: Immutable.Map({
+        executionCount: 7,
+        data: {
           planets: "xandar\nnidavellir\nterra"
-        }),
-        metadata: Immutable.Map({
-          "application/json": Immutable.Map({ expanded: true })
-        })
+        },
+        metadata: {
+          "application/json": { expanded: true }
+        }
       })
     );
   });

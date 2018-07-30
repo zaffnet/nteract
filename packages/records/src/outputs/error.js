@@ -1,6 +1,6 @@
 // @flow
 
-import * as Immutable from "immutable";
+import produce from "immer";
 import * as common from "../common";
 
 /**
@@ -47,23 +47,24 @@ type ErrorMessage = {
   }
 };
 
-export type ErrorOutputRecord = Immutable.RecordOf<ErrorOutput>;
+export type ErrorOutputRecord = Object;
 
 // NOTE: No export, as the values here should get overridden by an exact version
 //       passed into makeErrorOutputRecord
-const errorOutputRecordMaker: Immutable.RecordFactory<
-  ErrorOutput
-> = Immutable.Record({
-  outputType: ERROR,
-  ename: "",
-  evalue: "",
-  traceback: []
-});
 
 export function makeErrorOutputRecord(
   errorOutput: ErrorOutput
 ): ErrorOutputRecord {
-  return errorOutputRecordMaker(errorOutput);
+  const defaultErrorOutput = {
+    outputType: ERROR,
+    ename: "",
+    evalue: "",
+    traceback: []
+  };
+
+  return produce(defaultErrorOutput, draft => {
+    return Object.assign(draft, defaultErrorOutput);
+  });
 }
 
 export function errorRecordFromNbformat(

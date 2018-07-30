@@ -17,11 +17,10 @@ import * as common from "../common";
  */
 
 export type StreamName = "stdout" | "stderr";
-
-export const STDOUT = "stdout";
-export const STDERR = "stderr";
-
 export type StreamType = "stream";
+
+export const STDOUT: StreamName = "stdout";
+export const STDERR: StreamName = "stderr";
 
 export const STREAM = "stream";
 
@@ -49,7 +48,7 @@ type StreamMessage = {
   }
 };
 
-export type StreamOutputRecord = Immutable.RecordOf<StreamOutput>;
+export type StreamOutputRecord = Object;
 
 // NOTE: No export, as the values here should get overridden by an exact version
 //       passed into makeStreamOutputRecord
@@ -60,7 +59,6 @@ export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
     name: STDOUT,
     text: ""
   };
-  // do I need produce here? Or just freeze?
   return produce(defaultStreamOutput, draft =>
     Object.assign(draft, streamOutput)
   );
