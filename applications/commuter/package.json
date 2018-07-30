@@ -1,6 +1,6 @@
 {
   "name": "@nteract/commuter",
-  "version": "5.6.1",
+  "version": "5.6.2",
   "description": "share, publish, and discover notebooks",
   "main": "lib/index.js",
   "scripts": {
@@ -34,11 +34,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/directory-listing": "^0.2.0",
+    "@nteract/directory-listing": "^0.3.0",
     "@nteract/markdown": "^2.1.0",
-    "@nteract/notebook-preview": "^7.4.0",
+    "@nteract/notebook-preview": "^7.4.1",
     "@nteract/octicons": "^0.4.0",
-    "@nteract/presentational-components": "^0.3.0",
+    "@nteract/presentational-components": "^0.3.1",
     "@nteract/timeago": "^3.6.0",
     "@nteract/transform-vega": "^3.2.0",
     "@nteract/transforms": "^4.4.0",
