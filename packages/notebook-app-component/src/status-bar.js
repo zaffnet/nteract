@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import React from "react";
 
 import { connect } from "react-redux";
@@ -27,7 +27,7 @@ export class StatusBar extends React.Component<Props> {
     return false;
   }
 
-  render(): ?React$Element<any> {
+  render(): ?React$Element<*> {
     const name = this.props.kernelSpecDisplayName || "Loading...";
 
     return (

@@ -1,9 +1,18 @@
-// @flow
+// @flow strict
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
 /* eslint jsx-a11y/click-events-have-key-events: 0 */
 
 import * as React from "react";
-import { DragSource, DropTarget } from "react-dnd";
+import {
+  DragSource,
+  DropTarget,
+  DragTargetMonitor,
+  DragSourceMonitor,
+  ConnectDragSource,
+  ConnectDragTarget,
+  ConnectDragPreview,
+  ConnectDropTarget
+} from "react-dnd";
 
 import type { ContentRef } from "@nteract/core";
 
@@ -38,14 +47,14 @@ const cellDragPreviewImage = [
 ].join("");
 
 type Props = {|
-  connectDragPreview: (img: Image) => void,
-  connectDragSource: (el: ?React$Element<any>) => void,
-  connectDropTarget: (el: ?React$Element<any>) => void,
+  connectDragPreview: ConnectDragPreview,
+  connectDragSource: ConnectDragSource,
+  connectDropTarget: ConnectDropTarget,
   focusCell: (payload: *) => *,
   id: string,
   isDragging: boolean,
   isOver: boolean,
-  moveCell: (payload: *) => Object,
+  moveCell: (payload: *) => void,
   children: React.Node,
   contentRef: ContentRef
 |};
@@ -62,7 +71,11 @@ const cellSource = {
   }
 };
 
-function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
+function isDragUpper(
+  props: Props,
+  monitor: DragSourceMonitor,
+  el: HTMLElement
+): boolean {
   const hoverBoundingRect = el.getBoundingClientRect();
   const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
@@ -73,7 +86,11 @@ function isDragUpper(props: Props, monitor: Object, el: HTMLElement): boolean {
 }
 
 const cellTarget = {
-  drop(props: Props, monitor: Object | void, component: any): void {
+  drop(
+    props: Props,
+    monitor: DragSourceMonitor,
+    component: React.ElementRef<*>
+  ): void {
     if (monitor) {
       const hoverUpperHalf = isDragUpper(props, monitor, component.el);
       // DropTargetSpec monitor definition could be undefined. we'll need a check for monitor in order to pass validation.
@@ -86,7 +103,11 @@ const cellTarget = {
     }
   },
 
-  hover(props: Props, monitor: Object | void, component: any): void {
+  hover(
+    props: Props,
+    monitor: DragSourceMonitor,
+    component: React.ElementRef<*>
+  ): void {
     if (monitor) {
       component.setState({
         hoverUpperHalf: isDragUpper(props, monitor, component.el)
@@ -95,7 +116,14 @@ const cellTarget = {
   }
 };
 
-function collectSource(connect: Object, monitor: Object): Object {
+function collectSource(
+  connect: ConnectDragSource,
+  monitor: DragSourceMonitor
+): {
+  connectDragSource: ConnectDragSource,
+  isDragging: boolean,
+  connectDragPreview: ConnectDragPreview
+} {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
@@ -103,7 +131,13 @@ function collectSource(connect: Object, monitor: Object): Object {
   };
 }
 
-function collectTarget(connect: Object, monitor: Object): Object {
+function collectTarget(
+  connect: ConnectDragTarget,
+  monitor: DragTargetMonitor
+): {
+  connectDropTarget: ConnectDropTarget,
+  isOver: boolean
+} {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver()
@@ -132,7 +166,7 @@ class DraggableCellView extends React.Component<Props, State> {
     focusCell({ id, contentRef });
   };
 
-  render(): ?React$Element<any> {
+  render(): ?React$Element<*> {
     return this.props.connectDropTarget(
       <div
         style={{
@@ -178,8 +212,8 @@ class DraggableCellView extends React.Component<Props, State> {
   }
 }
 
-type Source = DragSource<any, Props, State, DraggableCellView>;
-type Target = DropTarget<any, Props, State, DraggableCellView>;
+type Source = DragSource<*, Props, State, DraggableCellView>;
+type Target = DropTarget<*, Props, State, DraggableCellView>;
 
 const source: Source = new DragSource("CELL", cellSource, collectSource);
 const target: Target = new DropTarget("CELL", cellTarget, collectTarget);
