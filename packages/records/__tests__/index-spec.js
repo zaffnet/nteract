@@ -233,3 +233,29 @@ describe("markdown cell", () => {
     );
   });
 });
+
+describe("raw cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "raw",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    ).toEqual(
+      nteractRecords.makeRawCellRecord({
+        cellType: "raw",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    );
+  });
+});
