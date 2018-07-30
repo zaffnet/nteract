@@ -188,7 +188,7 @@ describe("code cell", () => {
           outputHidden: false,
           inputHidden: false
         },
-        executionCount: 2,
+        execution_count: 2,
         source: [],
         outputs: []
       })
