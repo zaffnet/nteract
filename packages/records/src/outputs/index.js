@@ -13,12 +13,12 @@ export * from "./display-data";
 export * from "./execute-result";
 export * from "./error";
 
-type NbformatOutput =
+export type NbformatOutput =
   | stream.NbformatStreamOutput
   | displayData.NbformatDisplayDataOutput
   | executeResult.NbformatExecuteResultOutput
   | error.NbformatErrorOutput;
-type OutputRecord =
+export type OutputRecord =
   | stream.StreamOutputRecord
   | displayData.DisplayDataOutputRecord
   | executeResult.ExecuteResultOutputRecord

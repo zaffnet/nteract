@@ -177,3 +177,85 @@ describe("error output", () => {
     );
   });
 });
+
+describe("code cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "code",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        execution_count: 2,
+        source: [],
+        outputs: []
+      })
+    ).toEqual(
+      nteractRecords.makeCodeCellRecord({
+        cellType: "code",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        executionCount: 2,
+        source: [],
+        outputs: []
+      })
+    );
+  });
+});
+
+describe("markdown cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "markdown",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    ).toEqual(
+      nteractRecords.makeMarkdownCellRecord({
+        cellType: "markdown",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    );
+  });
+});
+
+describe("raw cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "raw",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    ).toEqual(
+      nteractRecords.makeRawCellRecord({
+        cellType: "raw",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        source: []
+      })
+    );
+  });
+});
