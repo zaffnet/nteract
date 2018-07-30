@@ -15,9 +15,8 @@ from .utils import cmd_in_new_dir
 webpack_port = 8357
 
 webpack_hot = {"address": f'http://localhost:{webpack_port}/',
-               "command": ["lerna", "run", "hot",
-                           "--scope", "nteract-on-jupyter",
-                           "--stream", "--", "--", "--port", str(webpack_port)]}
+               "command": ["yarn", "workspace", "nteract-on-jupyter",
+                           "run", "hot", "--port", str(webpack_port)]}
 nteract_flags = dict(flags)
 nteract_flags['dev'] = (
     {'NteractConfig': {'asset_url': webpack_hot['address']},
