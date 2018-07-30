@@ -177,3 +177,33 @@ describe("error output", () => {
     );
   });
 });
+
+describe("code cell", () => {
+  test("can be converted from nbformat", () => {
+    expect(
+      nteractRecords.cellFromNbformat({
+        cell_type: "code",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        executionCount: 2,
+        source: [],
+        outputs: []
+      })
+    ).toEqual(
+      nteractRecords.makeCodeCellRecord({
+        cellType: "code",
+        metadata: {
+          collapsed: false,
+          outputHidden: false,
+          inputHidden: false
+        },
+        executionCount: 2,
+        source: [],
+        outputs: []
+      })
+    );
+  });
+});
