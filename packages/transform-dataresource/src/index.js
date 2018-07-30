@@ -20,6 +20,8 @@ import {
   ParallelCoordinatesIcon
 } from "./icons";
 
+import { chartHelpText } from "./docs/chart-docs";
+
 type Props = {
   data: Object,
   metadata: Object,
@@ -39,7 +41,8 @@ type State = {
     | "network"
     | "summary"
     | "hexbin"
-    | "parallel",
+    | "parallel"
+    | "hierarchy",
   colors: Array<string>,
   metrics: Array<Object>,
   dimensions: Array<Object>,
@@ -473,11 +476,16 @@ class DataResourceTransform extends React.Component<Props, State> {
               flexFlow: "column nowrap"
             }}
           >
-            <IconButton onClick={this.setGrid} message={"Data Table"}>
+            <IconButton
+              title={chartHelpText.grid}
+              onClick={this.setGrid}
+              message={"Data Table"}
+            >
               <DatabaseOcticon />
             </IconButton>
             {dimensions.length > 0 && (
               <IconButton
+                title={chartHelpText.bar}
                 onClick={() => this.setView("bar")}
                 message={"Bar Graph"}
               >
@@ -485,18 +493,21 @@ class DataResourceTransform extends React.Component<Props, State> {
               </IconButton>
             )}
             <IconButton
+              title={chartHelpText.summary}
               onClick={() => this.setView("summary")}
               message={"Summary"}
             >
               <BoxplotIcon />
             </IconButton>
             <IconButton
+              title={chartHelpText.scatter}
               onClick={() => this.setView("scatter")}
               message={"Scatter Plot"}
             >
               <ScatterplotIcon />
             </IconButton>
             <IconButton
+              title={chartHelpText.hexbin}
               onClick={() => this.setView("hexbin")}
               message={"Area Plot"}
             >
@@ -504,6 +515,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             </IconButton>
             {dimensions.length > 1 && (
               <IconButton
+                title={chartHelpText.network}
                 onClick={() => this.setView("network")}
                 message={"Network"}
               >
@@ -512,6 +524,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             )}
             {dimensions.length > 0 && (
               <IconButton
+                title={chartHelpText.hierarchy}
                 onClick={() => this.setView("hierarchy")}
                 message={"Hierarchy"}
               >
@@ -520,6 +533,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             )}
             {dimensions.length > 0 && (
               <IconButton
+                title={chartHelpText.parallel}
                 onClick={() => this.setView("parallel")}
                 message={"Parallel Coordinates"}
               >
@@ -527,6 +541,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               </IconButton>
             )}
             <IconButton
+              title={chartHelpText.line}
               onClick={() => this.setView("line")}
               message={"Line Graph"}
             >
@@ -549,12 +564,12 @@ type IconButtonProps = {
 
 export class IconButton extends React.Component<IconButtonProps> {
   render() {
-    const { message, onClick, children } = this.props;
+    const { message, onClick, children, title = messsage } = this.props;
     return (
       <button
         onClick={onClick}
         key={message}
-        title={message}
+        title={title}
         style={{
           width: "32px",
           height: "32px"
