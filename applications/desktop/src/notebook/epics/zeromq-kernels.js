@@ -338,10 +338,6 @@ export function killKernelImmediately(kernel: LocalKernelRecord): void {
   if (kernel.spawn) {
     killSpawn(kernel.spawn);
   }
-
-  if (kernel.connectionFile) {
-    fs.unlinkSync(kernel.connectionFile);
-  }
 }
 
 export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
@@ -389,23 +385,6 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
             killSpawn(kernel.spawn);
           }
 
-          // Delete the connection file
-          const del$ = kernel.connectionFile
-            ? unlinkObservable(kernel.connectionFile).pipe(
-                map(() =>
-                  actions.deleteConnectionFileSuccessful({ kernelRef })
-                ),
-                catchError(err =>
-                  of(
-                    actions.deleteConnectionFileFailed({
-                      error: err,
-                      kernelRef
-                    })
-                  )
-                )
-              )
-            : empty();
-
           return merge(
             // Pass on our intermediate action
             of(action),
@@ -415,9 +394,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
                 kernelStatus: "shutting down",
                 kernelRef
               })
-            ),
-            // and our connection file deletion
-            del$
+            )
           );
         }),
         catchError(err =>
