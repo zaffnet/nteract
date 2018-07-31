@@ -1,6 +1,7 @@
 // @flow
 
-// Unrecognized output from a future minor-revision to the notebook format.
+// Someday in the future, the notebook format or the message spec might get a new output type. We need to make sure that our
+// frontends are able to have a known fallback when an output type isn't known.
 
 import * as Immutable from "immutable";
 
