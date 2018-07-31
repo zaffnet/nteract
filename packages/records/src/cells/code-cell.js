@@ -3,7 +3,7 @@ import produce from "immer";
 import { outputFromNbformat } from "../outputs";
 
 import type { MultilineString } from "../common";
-import type { OutputRecord, NbformatOutput, ExecutionCount } from "../outputs";
+import type { OutputType, NbformatOutput, ExecutionCount } from "../outputs";
 
 export type CodeCellType = "code";
 export const CODECELL = "code";
@@ -14,7 +14,7 @@ type CodeCell = {|
   metadata: JSONObject,
   executionCount: ExecutionCount,
   source: string,
-  outputs: Array<OutputRecord>
+  outputs: Array<OutputType>
 |};
 
 // On disk

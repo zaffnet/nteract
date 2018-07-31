@@ -21,7 +21,7 @@ export type ErrorType = "error" | "pyerr";
 export const ERROR = "error";
 
 // In-memory version
-type ErrorOutput = {
+export type ErrorOutput = {
   outputType: ErrorType,
   ename: string,
   evalue: string,
@@ -47,14 +47,7 @@ type ErrorMessage = {
   }
 };
 
-export type ErrorOutputRecord = Object;
-
-// NOTE: No export, as the values here should get overridden by an exact version
-//       passed into makeErrorOutputRecord
-
-export function makeErrorOutputRecord(
-  errorOutput: ErrorOutput
-): ErrorOutputRecord {
+export function makeErrorOutputRecord(errorOutput: ErrorOutput): ErrorOutput {
   const defaultErrorOutput = {
     outputType: ERROR,
     ename: "",
@@ -67,9 +60,7 @@ export function makeErrorOutputRecord(
   });
 }
 
-export function errorRecordFromNbformat(
-  s: NbformatErrorOutput
-): ErrorOutputRecord {
+export function errorRecordFromNbformat(s: NbformatErrorOutput): ErrorOutput {
   return makeErrorOutputRecord(
     Object.assign(
       {},
@@ -83,7 +74,7 @@ export function errorRecordFromNbformat(
   );
 }
 
-export function errorRecordFromMessage(msg: ErrorMessage): ErrorOutputRecord {
+export function errorRecordFromMessage(msg: ErrorMessage): ErrorOutput {
   return makeErrorOutputRecord({
     outputType: ERROR,
     ename: msg.content.ename,

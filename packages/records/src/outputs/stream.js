@@ -25,7 +25,7 @@ export const STDERR: StreamName = "stderr";
 export const STREAM = "stream";
 
 // In-memory version
-type StreamOutput = {
+export type StreamOutput = {
   outputType: StreamType,
   name: StreamName,
   text: string
@@ -48,11 +48,6 @@ type StreamMessage = {
   }
 };
 
-export type StreamOutputRecord = Object;
-
-// NOTE: No export, as the values here should get overridden by an exact version
-//       passed into makeStreamOutputRecord
-
 export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
   const defaultStreamOutput = {
     outputType: STREAM,
@@ -66,7 +61,7 @@ export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
 
 export function streamRecordFromNbformat(
   s: NbformatStreamOutput
-): StreamOutputRecord {
+): StreamOutput {
   return makeStreamOutputRecord({
     outputType: s.output_type,
     name: s.name,
@@ -74,9 +69,7 @@ export function streamRecordFromNbformat(
   });
 }
 
-export function streamRecordFromMessage(
-  msg: StreamMessage
-): StreamOutputRecord {
+export function streamRecordFromMessage(msg: StreamMessage): StreamOutput {
   return makeStreamOutputRecord({
     outputType: STREAM,
     name: msg.content.name,

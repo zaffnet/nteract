@@ -18,46 +18,46 @@ export type NbformatOutput =
   | displayData.NbformatDisplayDataOutput
   | executeResult.NbformatExecuteResultOutput
   | error.NbformatErrorOutput;
-export type OutputRecord =
-  | stream.StreamOutputRecord
-  | displayData.DisplayDataOutputRecord
-  | executeResult.ExecuteResultOutputRecord
-  | error.ErrorOutputRecord;
+export type OutputType =
+  | stream.StreamOutput
+  | displayData.DisplayDataOutput
+  | executeResult.ExecuteResultOutput
+  | error.ErrorOutput;
 
 /**
  * Turn any output that was in nbformat into a record
  */
-export function outputFromNbformat(output: NbformatOutput): OutputRecord {
+export function outputFromNbformat(output: NbformatOutput): OutputType {
   switch (output.output_type) {
     case stream.STREAM:
       return stream.streamRecordFromNbformat(output);
     case displayData.DISPLAYDATA:
       return displayData.displayDataRecordFromNbformat(output);
-    case executeResult.EXECUTERESULT:
+    case executeResult.EXECUTE_RESULT:
       return executeResult.executeResultRecordFromNbformat(output);
     case error.ERROR:
       return error.errorRecordFromNbformat(output);
     default:
-      // $FlowAllowFeatureDetection: At runtime, allow fallback
-      return unrecognized.unrecognizedRecordFromNbformat(output);
+      // TODO: Properly type unrecognized output messages
+      return unrecognized.unrecognizedRecordFromNbformat();
   }
 }
 
 /**
  * Turn any output that was in JupyterMessage into a record
  */
-export function outputFromMessage(msg: JupyterMessage<*, *>): OutputRecord {
+export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
   const msg_type = msg.header.msg_type;
   switch (msg_type) {
     case stream.STREAM:
       return stream.streamRecordFromMessage(msg);
     case displayData.DISPLAYDATA:
       return displayData.displayDataRecordFromMessage(msg);
-    case executeResult.EXECUTERESULT:
+    case executeResult.EXECUTE_RESULT:
       return executeResult.executeResultRecordFromMessage(msg);
     case error.ERROR:
       return error.errorRecordFromMessage(msg);
     default:
-      return {};
+      return unrecognized.makeUnrecognizedOutputRecord();
   }
 }
