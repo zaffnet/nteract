@@ -6,12 +6,13 @@ import { transforms, displayOrder } from "@nteract/transforms";
 import { demultiline } from "@nteract/records";
 
 import RichestMime from "./richest-mime";
+import { ErrorOutputComponent, StreamOutputComponent } from "./outputs";
 
-import type { NbformatOutput } from "@nteract/records";
+import type { OutputType } from "@nteract/records";
 
 type Props = {
   displayOrder: Array<string>,
-  output: NbformatOutput,
+  output: OutputType,
   transforms: Object,
   theme: string,
   models: Object
@@ -40,12 +41,12 @@ export default class Output extends React.Component<Props, null> {
   }
 
   render() {
-    let output: NbformatOutput = this.props.output;
+    let output: OutputType = this.props.output;
     let models = this.props.models;
 
     // TODO: Incorporate the new output record types into both commutable and the react components that use them
 
-    switch (output.output_type) {
+    switch (output.outputType) {
       case "execute_result":
       // We can defer to display data here, the cell number will be handled
       // separately. For reference, it is output.execution_count
@@ -68,26 +69,10 @@ export default class Output extends React.Component<Props, null> {
         );
       }
       case "stream": {
-        let text = demultiline(output.text);
-        const name = output.name;
-        switch (name) {
-          case "stdout":
-          case "stderr":
-            return <Ansi className={classPrefix + name}>{text}</Ansi>;
-          default:
-            return null;
-        }
+        <StreamOutputComponent output={output} />;
       }
       case "error": {
-        const traceback = demultiline(output.traceback);
-        if (!traceback) {
-          return (
-            <Ansi className={classPrefix + "traceback"}>{`${output.ename}: ${
-              output.evalue
-            }`}</Ansi>
-          );
-        }
-        return <Ansi className={classPrefix + "traceback"}>{traceback}</Ansi>;
+        <ErrorOutputComponent output={output} />;
       }
       default:
         return null;
