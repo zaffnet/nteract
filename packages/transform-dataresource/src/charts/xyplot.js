@@ -65,6 +65,10 @@ export const semioticScatterplot = (
   const { chart, primaryKey, colors, setColor, dimensions } = options;
 
   const { dim1, dim2, dim3, metric1, metric2, metric3 } = chart;
+  const filteredData: Array<Object> = data.filter(
+    (d: Object) =>
+      d[metric1] && d[metric2] && (!metric3 || metric3 === "none" || d[metric3])
+  );
 
   const pointTooltip = (d: Object) => (
     <div className="tooltip-content">
@@ -132,10 +136,10 @@ export const semioticScatterplot = (
   let annotations;
 
   if (dim2 && dim2 !== "none") {
-    const topQ = [...data]
+    const topQ = [...filteredData]
       .sort((a, b) => b[metric1] - a[metric1])
       .filter((d, i) => i < 3);
-    const topSecondQ = [...data]
+    const topSecondQ = [...filteredData]
       .sort((a, b) => b[metric2] - a[metric2])
       .filter(d => topQ.indexOf(d) === -1)
       .filter((d, i) => i < 3);
@@ -144,8 +148,8 @@ export const semioticScatterplot = (
   }
 
   if (metric3 && metric3 !== "none") {
-    const dataMin = Math.min(...data.map(d => d[metric3]));
-    const dataMax = Math.max(...data.map(d => d[metric3]));
+    const dataMin = Math.min(...filteredData.map(d => d[metric3]));
+    const dataMax = Math.max(...filteredData.map(d => d[metric3]));
     sizeScale = scaleLinear()
       .domain([dataMin, dataMax])
       .range([2, 20]);
@@ -219,11 +223,11 @@ export const semioticScatterplot = (
     type === "hexbin" ||
     (type === "contour" && dim3 === "none")
   ) {
-    areas = [{ coordinates: data }];
+    areas = [{ coordinates: filteredData }];
   } else if (type === "contour") {
     const multiclassHash = {};
     areas = [];
-    data.forEach(d => {
+    filteredData.forEach(d => {
       if (!multiclassHash[d[dim1]]) {
         multiclassHash[d[dim1]] = {
           label: d[dim1],
@@ -263,7 +267,9 @@ export const semioticScatterplot = (
       stroke:
         type !== "contour"
           ? "black"
-          : dim3 === "none" ? "#BBB" : d.parentArea.color,
+          : dim3 === "none"
+            ? "#BBB"
+            : d.parentArea.color,
       strokeWidth: type === "contour" ? 2 : 1
     }),
     pointStyle: (d: Object) => ({
