@@ -25,7 +25,7 @@ type ErrorOutput = {
   outputType: ErrorType,
   ename: string,
   evalue: string,
-  traceback: Iterable<string>
+  traceback: Array<string>
 };
 
 // On disk
@@ -43,7 +43,7 @@ type ErrorMessage = {
   content: {
     ename: string,
     evalue: string,
-    traceback: Iterable<string>
+    traceback: Array<string>
   }
 };
 
