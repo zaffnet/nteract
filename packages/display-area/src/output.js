@@ -6,7 +6,11 @@ import { transforms, displayOrder } from "@nteract/transforms";
 import { demultiline } from "@nteract/records";
 
 import RichestMime from "./richest-mime";
-import { ErrorOutputComponent, StreamOutputComponent } from "./outputs";
+import {
+  ErrorOutputComponent,
+  StreamOutputComponent,
+  ExecuteResultOutputComponent
+} from "./outputs";
 
 import type { OutputType } from "@nteract/records";
 
@@ -57,16 +61,14 @@ export default class Output extends React.Component<Props, null> {
       case "display_data": {
         const bundle = output.data;
         const metadata = output.metadata;
-        return (
-          <RichestMime
-            bundle={bundle}
-            metadata={metadata}
-            displayOrder={this.props.displayOrder}
-            transforms={this.props.transforms}
-            theme={this.props.theme}
-            models={models}
-          />
-        );
+        <ExecuteResultOutputComponent
+          data={bundle}
+          metadata={metadata}
+          displayOrder={this.props.displayOrder}
+          transforms={this.props.transforms}
+          theme={this.props.theme}
+          models={models}
+        />;
       }
       case "stream": {
         <StreamOutputComponent output={output} />;
