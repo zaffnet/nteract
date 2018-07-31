@@ -559,12 +559,14 @@ class DataResourceTransform extends React.Component<Props, State> {
 type IconButtonProps = {
   message: string,
   onClick: () => void,
-  children?: React.Node
+  children?: React.Node,
+  title: string
 };
 
 export class IconButton extends React.Component<IconButtonProps> {
   render() {
-    const { message, onClick, children, title = messsage } = this.props;
+    const { message, onClick, children, title = message } = this.props;
+
     return (
       <button
         onClick={onClick}
