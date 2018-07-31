@@ -1,14 +1,20 @@
 import * as React from "react";
 
+import { controlHelpText } from "./docs/chart-docs";
+
 const metricDimSelector = (
   values,
   selectionFunction,
   title,
   required,
-  selectedValue
+  selectedValue,
+  contextTooltip = "Help me help you help yourself"
 ) => {
   return (
-    <div style={{ display: "inline-block", margin: "0 10px" }}>
+    <div
+      title={contextTooltip}
+      style={{ display: "inline-block", margin: "0 10px" }}
+    >
       <h2>{title}</h2>
       <select
         value={selectedValue}
@@ -89,7 +95,8 @@ export default ({
           d => updateChart({ chart: { ...chart, metric1: d } }),
           view === "scatter" || view === "hexbin" ? "X" : "Metric",
           true,
-          chart.metric1
+          chart.metric1,
+          controlHelpText.metric1[view] || controlHelpText.metric1.default
         )}
       {(view === "scatter" || view === "hexbin") &&
         metricDimSelector(
@@ -97,7 +104,8 @@ export default ({
           d => updateChart({ chart: { ...chart, metric2: d } }),
           "Y",
           true,
-          chart.metric2
+          chart.metric2,
+          controlHelpText.metric2[view] || controlHelpText.metric2.default
         )}
       {(view === "scatter" || view === "bar") &&
         metricDimSelector(
@@ -105,7 +113,8 @@ export default ({
           d => updateChart({ chart: { ...chart, metric3: d } }),
           view === "bar" ? "WIDTH" : "SIZE",
           false,
-          chart.metric3
+          chart.metric3,
+          controlHelpText.metric3[view] || controlHelpText.metric3.default
         )}
       {(view === "summary" ||
         view === "scatter" ||
@@ -117,7 +126,8 @@ export default ({
           d => updateChart({ chart: { ...chart, dim1: d } }),
           view === "summary" ? "CATEGORY" : "COLOR",
           true,
-          chart.dim1
+          chart.dim1,
+          controlHelpText.dim1[view] || controlHelpText.dim1.default
         )}
       {view === "scatter" &&
         metricDimSelector(
@@ -125,7 +135,8 @@ export default ({
           d => updateChart({ chart: { ...chart, dim2: d } }),
           "LABELS",
           false,
-          chart.dim2
+          chart.dim2,
+          controlHelpText.dim2[view] || controlHelpText.dim2.default
         )}
       {areaType === "contour" &&
         metricDimSelector(
@@ -133,7 +144,8 @@ export default ({
           d => updateChart({ chart: { ...chart, dim3: d } }),
           "Multiclass",
           false,
-          chart.dim3
+          chart.dim3,
+          controlHelpText.dim3[view] || controlHelpText.dim3.default
         )}
       {view === "network" &&
         metricDimSelector(
@@ -141,7 +153,8 @@ export default ({
           d => updateChart({ chart: { ...chart, dim1: d } }),
           "SOURCE",
           true,
-          chart.dim1
+          chart.dim1,
+          controlHelpText.dim1[view] || controlHelpText.dim1.default
         )}
       {view === "network" &&
         metricDimSelector(
@@ -149,7 +162,8 @@ export default ({
           d => updateChart({ chart: { ...chart, dim2: d } }),
           "TARGET",
           true,
-          chart.dim2
+          chart.dim2,
+          controlHelpText.dim2[view] || controlHelpText.dim2.default
         )}
       {view === "network" &&
         metricDimSelector(
@@ -157,7 +171,8 @@ export default ({
           d => updateChart({ networkType: d }),
           "TYPE",
           true,
-          networkType
+          networkType,
+          controlHelpText.networkType
         )}
       {view === "hierarchy" &&
         metricDimSelector(
@@ -165,7 +180,8 @@ export default ({
           d => updateChart({ hierarchyType: d }),
           "TYPE",
           true,
-          hierarchyType
+          hierarchyType,
+          controlHelpText.hierarchyType
         )}
       {view === "summary" &&
         metricDimSelector(
@@ -173,7 +189,8 @@ export default ({
           d => updateChart({ summaryType: d }),
           "TYPE",
           true,
-          summaryType
+          summaryType,
+          controlHelpText.summaryType
         )}
       {view === "line" &&
         metricDimSelector(
@@ -181,10 +198,14 @@ export default ({
           d => updateChart({ chart: { ...chart, timeseriesSort: d } }),
           "Sort by",
           true,
-          chart.timeseriesSort
+          chart.timeseriesSort,
+          controlHelpText.timeseriesSort
         )}
       {view === "line" && (
-        <div style={{ display: "inline-block" }}>
+        <div
+          title={controlHelpText.lineType}
+          style={{ display: "inline-block" }}
+        >
           <h2>Chart Type</h2>
           {availableLineTypes.map(d => (
             <button
@@ -200,7 +221,10 @@ export default ({
         </div>
       )}
       {view === "hexbin" && (
-        <div style={{ display: "inline-block" }}>
+        <div
+          title={controlHelpText.areaType}
+          style={{ display: "inline-block" }}
+        >
           <h2>Chart Type</h2>
           {availableAreaTypes.map(d => (
             <button
@@ -217,6 +241,7 @@ export default ({
       )}
       {view === "hierarchy" && (
         <div
+          title={controlHelpText.nestingDimensions}
           style={{
             display: "inline-block",
             width: "30%",
@@ -231,6 +256,7 @@ export default ({
       )}
       {(view === "bar" || view === "hierarchy") && (
         <div
+          title={controlHelpText.barDimensions}
           style={{
             display: "inline-block",
             width: "30%",
@@ -256,7 +282,10 @@ export default ({
         </div>
       )}
       {view === "line" && (
-        <div style={{ display: "inline-block" }}>
+        <div
+          title={controlHelpText.lineDimensions}
+          style={{ display: "inline-block" }}
+        >
           <h2>Metrics</h2>
           {metrics.map(d => (
             <button
