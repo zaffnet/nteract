@@ -31,6 +31,9 @@ import type { CellStructure } from "./structures";
 const Immutable = require("immutable");
 const appendCell = require("./structures").appendCell;
 
+import { outputFromNbformat } from "@nteract/records";
+import type { NbformatOutput } from "@nteract/records";
+
 export type ExecutionCount = number | null;
 
 //
@@ -281,7 +284,7 @@ function createImmutableCodeCell(cell: CodeCell): ImmutableCodeCell {
     cell_type: cell.cell_type,
     source: demultiline(cell.source),
     // $FlowFixMe: Immutable
-    outputs: new Immutable.List(cell.outputs.map(createImmutableOutput)),
+    outputs: new Immutable.List(cell.outputs.map(outputFromNbformat)),
     execution_count: cell.execution_count,
     metadata: createImmutableMetadata(cell.metadata)
   });
@@ -425,7 +428,7 @@ function codeCellToJS(immCell: ImmutableCell): CodeCell {
   return {
     cell_type: "code",
     source: remultiline(cell.source),
-    outputs: cell.outputs.map(outputToJS).toArray(),
+    outputs: cell.outputs.toArray(),
     execution_count: cell.execution_count,
     metadata: metadataToJS(immCell.get("metadata", Immutable.Map()))
   };

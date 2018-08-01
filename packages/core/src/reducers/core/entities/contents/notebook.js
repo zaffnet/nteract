@@ -19,6 +19,9 @@ import type {
   MimeBundle
 } from "@nteract/commutable";
 
+import { outputFromNbformat } from "@nteract/records";
+import type { NbformatOutput } from "@nteract/records";
+
 import {
   emptyCodeCell,
   emptyMarkdownCell,
@@ -51,8 +54,8 @@ type KeyPaths = Immutable.List<KeyPath>;
  * @return {Immutable.List<Object>} updated-outputs - Outputs + Output
  */
 export function reduceOutputs(
-  outputs: ImmutableOutputs = Immutable.List(),
-  output: Output
+  outputs: ImmutableOutputs,
+  output: NbformatOutput
 ) {
   const last = outputs.last();
 
@@ -62,10 +65,10 @@ export function reduceOutputs(
     (outputs.size > 0 && last.get("output_type") !== "stream")
   ) {
     // If it's not a stream type, we just fold in the output
-    return outputs.push(createImmutableOutput(output));
+    return outputs.push(outputFromNbformat(output));
   }
 
-  const streamOutput: StreamOutput = output;
+  const streamOutput: NbformatOutput = output;
 
   function appendText(text: string): string {
     if (typeof streamOutput.text === "string") {
@@ -94,7 +97,7 @@ export function reduceOutputs(
     }
   }
 
-  return outputs.push(createImmutableOutput(streamOutput));
+  return outputs.push(outputFromNbformat(streamOutput));
 }
 
 export function cleanCellTransient(state: NotebookModel, id: string) {
@@ -176,7 +179,7 @@ function clearAllOutputs(
     .map(cell => {
       if (cell.get("cell_type") === "code") {
         return cell.merge({
-          outputs: new Immutable.List(),
+          outputs: [],
           execution_count: null
         });
       }

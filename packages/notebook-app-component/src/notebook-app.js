@@ -16,6 +16,13 @@ import {
   themes
 } from "@nteract/presentational-components";
 
+import {
+  ErrorOutputComponent,
+  StreamOutputComponent,
+  ExecuteResultOutputComponent,
+  DisplayDataComponent
+} from "@nteract/display-area";
+
 import DraggableCell from "./draggable-cell";
 import CellCreator from "./cell-creator";
 import StatusBar from "./status-bar";
@@ -216,16 +223,32 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
               hidden={this.props.outputHidden}
               expanded={this.props.outputExpanded}
             >
-              {this.props.outputs.map((output, index) => (
-                <Output
-                  key={index}
-                  output={output}
-                  displayOrder={this.props.displayOrder}
-                  transforms={this.props.transforms}
-                  theme={this.props.theme}
-                  models={this.props.models}
-                />
-              ))}
+              {this.props.outputs.map((output, index) => {
+                switch (output.outputType) {
+                  case "execute_result":
+                  case "display_data": {
+                    return (
+                      <DisplayDataComponent
+                        key={index}
+                        output={output}
+                        displayOrder={this.props.displayOrder}
+                        transforms={this.props.transforms}
+                        theme={this.props.theme}
+                        models={this.props.models}
+                      />
+                    );
+                  }
+                  case "stream": {
+                    return (
+                      <StreamOutputComponent output={output} key={index} />
+                    );
+                  }
+
+                  case "error": {
+                    return <ErrorOutputComponent output={output} key={index} />;
+                  }
+                }
+              })}
             </Outputs>
           </React.Fragment>
         );
