@@ -6,10 +6,11 @@ export default css`
     justify-content: left;
   }
   .control-wrapper {
-    margin-right: 20px;
+    margin-right: 30px;
   }
   h2 {
     text-transform: capitalize;
+    margin-bottom: 10px;
   }
   select {
     height: 30px;
