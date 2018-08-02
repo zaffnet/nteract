@@ -19,7 +19,7 @@ As we've expanded our scope to include web applications that assist people with 
 nteract originally started out with many many repos for each individual module and component we wanted to build. This proved to be extremely painstaking for both us and collaborators when we wanted to publish and upgrade any given dependency that other packages were relying on. Fast forward to now, we now keep both packages and applications managed in a [Monorepo](./monorepo).
 
 `packages/` includes all libraries and components (that aren't app specific)
-`applications/` includes the desktop app, the jupyter extension, play, and commuter (a way to show off components)
+`applications/` includes the desktop app, the jupyter extension, play, and commuter
 
 ## Frontend Architecture
 
