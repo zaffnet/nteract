@@ -57,4 +57,8 @@ export default css`
     font-size: 14px;
     color: #555;
   }
+  button:hover {
+    border-color: #888;
+    color: #222;
+  }
 `;

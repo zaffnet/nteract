@@ -220,14 +220,16 @@ export default ({
         {view === "hexbin" && (
           <div className="control-wrapper" title={controlHelpText.areaType}>
             <h2>Chart Type</h2>
-            {availableAreaTypes.map(d => (
-              <button
-                className={`button-text ${lineType === d.type && "selected"}`}
-                onClick={() => setAreaType(d.type)}
-              >
-                {d.label}
-              </button>
-            ))}
+            <div className="button-group">
+              {availableAreaTypes.map(d => (
+                <button
+                  className={`button-text ${areaType === d.type && "selected"}`}
+                  onClick={() => setAreaType(d.type)}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {view === "hierarchy" && (

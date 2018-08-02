@@ -71,6 +71,7 @@ class PalettePicker extends React.Component<Props, State> {
       return (
         <div style={{ display: "inline-block" }}>
           <button onClick={this.openClose}>Adjust Palette</button>
+          <style jsx>{paletteStyle}</style>
         </div>
       );
     }
