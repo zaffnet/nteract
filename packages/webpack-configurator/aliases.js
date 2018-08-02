@@ -21,7 +21,6 @@ const ignored = new Set([
 
   // These are all next.js apps and will rely on this package
   "@nteract/play",
-  "@nteract/showcase",
 
   // The jupyter extension will rely on this package
   "nteract-on-jupyter",
