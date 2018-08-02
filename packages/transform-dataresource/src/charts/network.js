@@ -7,7 +7,7 @@ export const semioticNetwork = (
   options: Object
 ) => {
   const { networkType = "force", chart, colors } = options;
-  const { dim1: sourceDimension, dim2: targetDimension, metric1 } = chart;
+  const { dim1: sourceDimension, dim2: targetDimension, dim3, metric1 } = chart;
 
   if (
     !sourceDimension ||
@@ -19,12 +19,24 @@ export const semioticNetwork = (
   }
   const edgeHash = {};
   const networkData = [];
+  const nodeHash = {};
+  const nodes = [];
 
   data.forEach(d => {
+    const nodeIDs = [d[sourceDimension], d[targetDimension]];
+    nodeIDs.forEach(nodeID => {
+      if (!nodeHash[nodeID]) {
+        nodeHash[nodeID] = { id: nodeID };
+        nodes.push(nodeHash[nodeID]);
+      }
+    });
+    Object.keys(d).forEach(key => {
+      nodeHash[d[sourceDimension]][key] = d[key];
+    });
     if (!edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`]) {
       edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`] = {
-        source: d[sourceDimension],
-        target: d[targetDimension],
+        source: nodeHash[d[sourceDimension]],
+        target: nodeHash[d[targetDimension]],
         value: 0,
         weight: 0
       };
@@ -36,12 +48,9 @@ export const semioticNetwork = (
   });
 
   const colorHash = {};
-  data.forEach(d => {
-    if (!colorHash[d[sourceDimension]])
-      colorHash[d[sourceDimension]] =
-        colors[Object.keys(colorHash).length % colors.length];
-    if (!colorHash[d[targetDimension]])
-      colorHash[d[targetDimension]] =
+  nodes.forEach(node => {
+    if (!colorHash[node[dim3]])
+      colorHash[node.id] =
         colors[Object.keys(colorHash).length % colors.length];
   });
 
@@ -49,17 +58,20 @@ export const semioticNetwork = (
     d.weight = Math.min(10, d.weight);
   });
 
+  console.log("nodes", nodes);
+
   return {
     edges: networkData,
+    nodes: nodes,
     edgeType: "halfarrow",
     edgeStyle: (d: Object) => ({
-      fill: colorHash[d.source.id],
-      stroke: colorHash[d.source.id],
+      fill: (dim3 !== "none" && colorHash[d.source[dim3]]) || "gray",
+      stroke: (dim3 !== "none" && colorHash[d.source[dim3]]) || "gray",
       strokeOpacity: 0.5
     }),
     nodeStyle: (d: Object) => ({
-      fill: colorHash[d.id],
-      stroke: colorHash[d.id],
+      fill: (dim3 !== "none" && colorHash[d[dim3]]) || "gray",
+      stroke: (dim3 !== "none" && colorHash[d[dim3]]) || "gray",
       strokeOpacity: 0.5
     }),
     nodeSizeAccessor: (d: Object) => d.degree,

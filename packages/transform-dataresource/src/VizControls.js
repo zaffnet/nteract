@@ -98,12 +98,30 @@ export default ({
           chart.metric1,
           controlHelpText.metric1[view] || controlHelpText.metric1.default
         )}
-      {(view === "scatter" || view === "hexbin") &&
+      {view === "network" &&
+        metricDimSelector(
+          dimensions.map(d => d.name),
+          d => updateChart({ chart: { ...chart, dim1: d } }),
+          "SOURCE",
+          true,
+          chart.dim1,
+          controlHelpText.dim1[view] || controlHelpText.dim1.default
+        )}
+      {view === "network" &&
+        metricDimSelector(
+          dimensions.map(d => d.name),
+          d => updateChart({ chart: { ...chart, dim2: d } }),
+          "TARGET",
+          true,
+          chart.dim2,
+          controlHelpText.dim2[view] || controlHelpText.dim2.default
+        )}
+      {(view === "scatter" || view === "hexbin" || view === "network") &&
         metricDimSelector(
           metrics.map(d => d.name),
           d => updateChart({ chart: { ...chart, metric2: d } }),
-          "Y",
-          true,
+          view === "network" ? "EDGE COLOR" : "Y",
+          view === "network" ? false : true,
           chart.metric2,
           controlHelpText.metric2[view] || controlHelpText.metric2.default
         )}
@@ -142,28 +160,19 @@ export default ({
         metricDimSelector(
           ["by color"],
           d => updateChart({ chart: { ...chart, dim3: d } }),
-          "Multiclass",
+          view === "network" ? "COLOR" : "Multiclass",
           false,
           chart.dim3,
           controlHelpText.dim3[view] || controlHelpText.dim3.default
         )}
       {view === "network" &&
         metricDimSelector(
-          dimensions.map(d => d.name),
-          d => updateChart({ chart: { ...chart, dim1: d } }),
-          "SOURCE",
-          true,
-          chart.dim1,
-          controlHelpText.dim1[view] || controlHelpText.dim1.default
-        )}
-      {view === "network" &&
-        metricDimSelector(
-          dimensions.map(d => d.name),
-          d => updateChart({ chart: { ...chart, dim2: d } }),
-          "TARGET",
-          true,
-          chart.dim2,
-          controlHelpText.dim2[view] || controlHelpText.dim2.default
+          ["id", ...dimensions.map(d => d.name)],
+          d => updateChart({ chart: { ...chart, dim3: d } }),
+          "COLOR",
+          false,
+          chart.dim3,
+          controlHelpText.dim3[view] || controlHelpText.dim3.default
         )}
       {view === "network" &&
         metricDimSelector(
