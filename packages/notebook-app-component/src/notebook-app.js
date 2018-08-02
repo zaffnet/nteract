@@ -245,6 +245,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                   }
 
                   case "error": {
+                    console.log(output);
                     return <ErrorOutputComponent output={output} key={index} />;
                   }
                 }

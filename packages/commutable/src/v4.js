@@ -284,7 +284,8 @@ function createImmutableCodeCell(cell: CodeCell): ImmutableCodeCell {
     cell_type: cell.cell_type,
     source: demultiline(cell.source),
     // $FlowFixMe: Immutable
-    outputs: new Immutable.List(cell.outputs.map(outputFromNbformat)),
+    outputs: [cell.outputs.map(outputFromNbformat)],
+    // outputs: new Immutable.List(cell.outputs.map(createImmutableOutput)),
     execution_count: cell.execution_count,
     metadata: createImmutableMetadata(cell.metadata)
   });
@@ -421,14 +422,27 @@ type IntermediateCodeCell = {|
   outputs: Immutable.List<ImmutableOutput>
 |};
 
+const inMemToDisk = (oldProp, newProp, { [oldProp]: old, ...others }) => {
+  return {
+    [newProp]: old,
+    ...others
+  };
+};
+
 function codeCellToJS(immCell: ImmutableCell): CodeCell {
   // $FlowFixMe: With Immutable we can not properly type this
+  // terrible hack  ¯\_(ツ)_/¯
   const cell: IntermediateCodeCell = immCell.toObject();
-
+  const outputsFormatted = cell.outputs
+    .toArray()
+    .map(x => inMemToDisk("executionCount", "execution_count", x));
+  const outsagain = outputsFormatted.map(x =>
+    inMemToDisk("outputType", "output_type", x)
+  );
   return {
     cell_type: "code",
     source: remultiline(cell.source),
-    outputs: cell.outputs.toArray(),
+    outputs: outsagain,
     execution_count: cell.execution_count,
     metadata: metadataToJS(immCell.get("metadata", Immutable.Map()))
   };
