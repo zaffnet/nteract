@@ -214,11 +214,6 @@ const lernaModules = [
     private: false
   },
   {
-    name: "@nteract/showcase",
-    version: "0.1.21",
-    private: false
-  },
-  {
     name: "nteract-on-jupyter",
     version: "1.7.0",
     private: false

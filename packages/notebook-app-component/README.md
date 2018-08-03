@@ -14,7 +14,3 @@ import NotebookPreview from "@nteract/notebook-preview";
   notebook={myNotebook}
 />
 ```
-
-## See It in Action
-
-A demo of `notebook-preview` can be found in the [showcase](../showcase/pages/notebook-preview.js).
