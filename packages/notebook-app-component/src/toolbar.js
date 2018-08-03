@@ -61,15 +61,6 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
               </span>
             </button>
           )}
-          <button
-            onClick={removeCell}
-            title="delete cell"
-            className="deleteButton"
-          >
-            <span className="octicon">
-              <TrashOcticon />
-            </span>
-          </button>
           <DropdownMenu>
             <DropdownTrigger>
               <button title="show additional actions">
@@ -149,6 +140,16 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
               </DropdownContent>
             )}
           </DropdownMenu>
+          <span> | </span>
+          <button
+            onClick={removeCell}
+            title="delete cell"
+            className="deleteButton"
+          >
+            <span className="octicon">
+              <TrashOcticon />
+            </span>
+          </button>
         </div>
 
         <style jsx>{`
