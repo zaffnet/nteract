@@ -3,9 +3,7 @@
 export * from "./outputs";
 export * from "./cells";
 export * from "./common";
-import * as common from "./common";
 import * as outputs from "./outputs";
-import * as cells from "./cells";
 
 import type { Notebook as v4Notebook } from "./structures";
 
@@ -41,8 +39,6 @@ export type {
   ImmutableOutputs,
   ImmutableMimeBundle
 };
-
-const v4 = require("./v4");
 
 const {
   emptyNotebook,
