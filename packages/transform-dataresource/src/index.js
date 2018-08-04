@@ -207,6 +207,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         metric1: (metrics[0] && metrics[0].name) || "none",
         metric2: (metrics[1] && metrics[1].name) || "none",
         metric3: "none",
+        edgeMetric: "none",
         dim1: (dimensions[0] && dimensions[0].name) || "none",
         dim2: (dimensions[1] && dimensions[1].name) || "none",
         dim3: "none",

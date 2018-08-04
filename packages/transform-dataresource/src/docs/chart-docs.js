@@ -42,6 +42,9 @@ export const controlHelpText = {
   dim3: {
     default: "Split contours into separate groups based on this dimension"
   },
+  edgeMetric: {
+    default: "Color edges by this metric"
+  },
   networkType:
     "Represent network as a force-directed network (good for social networks) or as a sankey diagram (good for flow networks)",
   hierarchyType:

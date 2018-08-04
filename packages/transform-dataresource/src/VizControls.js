@@ -116,14 +116,26 @@ export default ({
           chart.dim2,
           controlHelpText.dim2[view] || controlHelpText.dim2.default
         )}
-      {(view === "scatter" || view === "hexbin" || view === "network") &&
+      {(view === "scatter" || view === "hexbin") &&
         metricDimSelector(
           metrics.map(d => d.name),
           d => updateChart({ chart: { ...chart, metric2: d } }),
-          view === "network" ? "EDGE COLOR" : "Y",
-          view === "network" ? false : true,
+          "Y",
+          true,
           chart.metric2,
           controlHelpText.metric2[view] || controlHelpText.metric2.default
+        )}
+      {view === "network" &&
+        metricDimSelector(
+          ["value", "weight", ...metrics.map(d => d.name)].reduce(
+            (p, c) => (p.indexOf(c) === -1 ? [...p, c] : p),
+            []
+          ),
+          d => updateChart({ chart: { ...chart, edgeMetric: d } }),
+          "EDGE COLOR",
+          false,
+          chart.edgeMetric,
+          controlHelpText.edgeMetric[view] || controlHelpText.edgeMetric.default
         )}
       {(view === "scatter" || view === "bar") &&
         metricDimSelector(
@@ -160,16 +172,7 @@ export default ({
         metricDimSelector(
           ["by color"],
           d => updateChart({ chart: { ...chart, dim3: d } }),
-          view === "network" ? "COLOR" : "Multiclass",
-          false,
-          chart.dim3,
-          controlHelpText.dim3[view] || controlHelpText.dim3.default
-        )}
-      {view === "network" &&
-        metricDimSelector(
-          ["id", ...dimensions.map(d => d.name)],
-          d => updateChart({ chart: { ...chart, dim3: d } }),
-          "COLOR",
+          "Multiclass",
           false,
           chart.dim3,
           controlHelpText.dim3[view] || controlHelpText.dim3.default

@@ -1,5 +1,7 @@
 /* @flow */
 import * as React from "react";
+import { scaleLinear } from "d3-scale";
+import HTMLLegend from "../HTMLLegend";
 
 export const semioticNetwork = (
   data: Array<Object>,
@@ -7,7 +9,13 @@ export const semioticNetwork = (
   options: Object
 ) => {
   const { networkType = "force", chart, colors } = options;
-  const { dim1: sourceDimension, dim2: targetDimension, dim3, metric1 } = chart;
+  const {
+    dim1: sourceDimension,
+    dim2: targetDimension,
+    dim3,
+    metric1,
+    edgeMetric
+  } = chart;
 
   if (
     !sourceDimension ||
@@ -35,6 +43,7 @@ export const semioticNetwork = (
     });
     if (!edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`]) {
       edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`] = {
+        ...d,
         source: nodeHash[d[sourceDimension]],
         target: nodeHash[d[targetDimension]],
         value: 0,
@@ -47,31 +56,41 @@ export const semioticNetwork = (
     edgeHash[`${d[sourceDimension]}-${d[targetDimension]}`].weight += 1;
   });
 
-  const colorHash = {};
-  nodes.forEach(node => {
-    if (!colorHash[node[dim3]])
-      colorHash[node.id] =
-        colors[Object.keys(colorHash).length % colors.length];
-  });
-
   networkData.forEach(d => {
     d.weight = Math.min(10, d.weight);
   });
 
-  console.log("nodes", nodes);
+  let edgeColorScale;
+
+  if (edgeMetric !== "none") {
+    const edgeColorArray = networkData.map(d => d[edgeMetric]);
+    const edgeDomain = [
+      Math.min(...edgeColorArray),
+      Math.max(...edgeColorArray)
+    ];
+    edgeColorScale = scaleLinear()
+      .domain(edgeDomain)
+      .range(["#BBB", "darkred"]);
+  }
 
   return {
     edges: networkData,
     nodes: nodes,
     edgeType: "halfarrow",
     edgeStyle: (d: Object) => ({
-      fill: (dim3 !== "none" && colorHash[d.source[dim3]]) || "gray",
-      stroke: (dim3 !== "none" && colorHash[d.source[dim3]]) || "gray",
+      fill:
+        (edgeColorScale && edgeColorScale(d[edgeMetric])) ||
+        (dim3 !== "none" && colorHash[d.source[dim3]]) ||
+        "gray",
+      stroke:
+        (edgeColorScale && edgeColorScale(d[edgeMetric])) ||
+        (dim3 !== "none" && colorHash[d.source[dim3]]) ||
+        "gray",
       strokeOpacity: 0.5
     }),
     nodeStyle: (d: Object) => ({
-      fill: (dim3 !== "none" && colorHash[d[dim3]]) || "gray",
-      stroke: (dim3 !== "none" && colorHash[d[dim3]]) || "gray",
+      fill: "#BBB",
+      stroke: "black",
       strokeOpacity: 0.5
     }),
     nodeSizeAccessor: (d: Object) => d.degree,
