@@ -2,6 +2,7 @@
 import * as React from "react";
 import { join } from "path";
 import { BlockPicker, ChromePicker } from "react-color";
+import paletteStyle from "./css/palette-picker";
 
 type Props = {
   colors: Array<string>,
@@ -70,6 +71,7 @@ class PalettePicker extends React.Component<Props, State> {
       return (
         <div style={{ display: "inline-block" }}>
           <button onClick={this.openClose}>Adjust Palette</button>
+          <style jsx>{paletteStyle}</style>
         </div>
       );
     }
@@ -77,40 +79,28 @@ class PalettePicker extends React.Component<Props, State> {
     const { colors } = this.props;
 
     return (
-      <div
-        style={{
-          borderRadius: "5px",
-          border: "solid black 1px",
-          margin: "10px",
-          padding: "10px",
-          textAlign: "center"
-        }}
-      >
-        <div style={{ height: 0, textAlign: "right" }}>
-          <button onClick={this.openClose}>close</button>
-        </div>
+      <div className="wrapper">
         <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "stretch"
+          className="close"
+          role="button"
+          tabindex="0"
+          onClick={this.openClose}
+          onKeyPress={(e: Object) => {
+            if (e.keyCode === 13) {
+              this.openClose();
+            }
           }}
         >
-          <div style={{ flex: "2 0px" }}>
+          ×
+        </div>
+        <div className="grid-wrapper">
+          <div>
             <h3>Select Color</h3>
             {colors.map((d, i) => (
               <div
                 key={`color-${i}`}
-                style={{
-                  cursor: "pointer",
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "5px",
-                  background: d,
-                  margin: "10px",
-                  display: "inline-block"
-                }}
+                className="box"
+                style={{ background: d }}
                 role="button"
                 tabindex="0"
                 onKeyPress={(e: Object) => {
@@ -122,26 +112,25 @@ class PalettePicker extends React.Component<Props, State> {
               />
             ))}
           </div>
-          <div style={{ flex: "1 0px", height: "100%" }}>
+          <div>
             <h3>Adjust Color</h3>
-            <div style={{ margin: "auto", width: "225px" }}>
+            <div style={{ width: "225px" }}>
               <ChromePicker
                 color={this.state.selectedColor}
                 onChangeComplete={this.pickerChange}
               />
             </div>
           </div>
-          <div style={{ flex: "1 0px" }}>
+          <div>
             <h3>Paste New Colors</h3>
             <textarea
-              style={{ height: "184px", width: "100%", minWidth: "200px" }}
               value={this.state.colors}
               onChange={this.updateTextArea}
             />
             <button onClick={this.colorsFromTextarea}>Update Colors</button>
           </div>
         </div>
-        <div style={{ margin: "20px 0 10px" }}>
+        <div style={{ marginTop: "30px" }}>
           <a
             href={`http://projects.susielu.com/viz-palette?colors=[${colors
               .map(d => `"${d}"`)
@@ -150,6 +139,7 @@ class PalettePicker extends React.Component<Props, State> {
             Evaluate This Palette with VIZ PALETTE
           </a>
         </div>
+        <style jsx>{paletteStyle}</style>
       </div>
     );
   }
