@@ -80,7 +80,17 @@ class PalettePicker extends React.Component<Props, State> {
 
     return (
       <div className="wrapper">
-        <div className="close" role="button" onClick={this.openClose}>
+        <div
+          className="close"
+          role="button"
+          tabindex="0"
+          onClick={this.openClose}
+          onKeyPress={(e: Object) => {
+            if (e.keyCode === 13) {
+              this.openClose();
+            }
+          }}
+        >
           ×
         </div>
         <div className="grid-wrapper">
