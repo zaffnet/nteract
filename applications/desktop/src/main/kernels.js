@@ -1,4 +1,4 @@
-// @flow strict
+/* @flow strict */
 import { empty } from "rxjs/observable/empty";
 import {
   mapTo,

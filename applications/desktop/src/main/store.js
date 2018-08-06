@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import { createStore, applyMiddleware, compose } from "redux";
 import { electronEnhancer } from "redux-electron-store";
 

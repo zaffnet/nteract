@@ -1,4 +1,4 @@
-// @flow strict
+/* @flow strict */
 import { ipcMain as ipc } from "electron";
 import { join } from "path";
 

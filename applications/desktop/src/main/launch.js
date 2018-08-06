@@ -1,4 +1,4 @@
-// @flow strict
+/* @flow strict */
 import * as path from "path";
 
 import { Menu, shell, BrowserWindow, dialog, ipcMain as ipc } from "electron";

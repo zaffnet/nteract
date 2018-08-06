@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 import { remote } from "electron";
 import { is } from "immutable";
 

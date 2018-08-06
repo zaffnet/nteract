@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import { createStore, applyMiddleware, combineReducers } from "redux";
 
 import middlewares from "./middlewares";

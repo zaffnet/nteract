@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 /* eslint-disable no-unused-vars, no-use-before-define */
 import { ipcRenderer as ipc, webFrame, shell, remote } from "electron";
 
@@ -35,7 +35,7 @@ const dialog = remote.dialog;
 
 type SaveDialogOptions = {
   title: string,
-  filters: Array<Object>,
+  filters: Array<{ name: string, extensions: Array<string> }>,
   defaultPath?: string
 };
 
@@ -192,7 +192,7 @@ export function dispatchNewKernel(
   ownProps: { contentRef: ContentRef },
   store: Store<AppState, *>,
   evt: Event,
-  spec: Object
+  kernelSpec: KernelSpec
 ) {
   const state = store.getState();
   const filepath = selectors.filepath(state, ownProps);
@@ -205,7 +205,7 @@ export function dispatchNewKernel(
 
   store.dispatch(
     actions.launchKernel({
-      kernelSpec: spec,
+      kernelSpec,
       cwd,
       selectNextKernel: true,
       kernelRef,
@@ -468,7 +468,7 @@ export function dispatchNewNotebook(
   ownProps: { contentRef: ContentRef },
   store: Store<AppState, *>,
   event: Event,
-  kernelSpec: Object
+  kernelSpec: KernelSpec
 ) {
   // It's a brand new notebook so we create a kernelRef for it
   const kernelRef = createKernelRef();

@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import { unlinkObservable } from "fs-observable";
 
 import type { ChildProcess } from "child_process";

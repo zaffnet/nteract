@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import { ofType } from "redux-observable";
 
 import type { ActionsObservable } from "redux-observable";
@@ -17,10 +17,7 @@ import { tap, mergeMap, catchError, map } from "rxjs/operators";
  *
  * @param  {ActionObservable}  action$ The SAVE action with the filename and notebook
  */
-export function saveEpic(
-  action$: ActionsObservable<*>,
-  store: Store<any, any>
-) {
+export function saveEpic(action$: ActionsObservable<*>, store: Store<*, *>) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
     mergeMap((action: actionTypes.Save) => {
