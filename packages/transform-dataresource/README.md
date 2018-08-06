@@ -30,10 +30,19 @@ jupyter serverextension enable nteract_on_jupyter
 ```
 
 ### 3. Build JS assests and run a Jupyter server with hot reloading
+First we need to run the webpack server to live reload javascript and html assets. Anywhere in the nteract repository, run
 ```bash
-jupyter nteract --dev
+npx lerna run hot --scope nteract-on-jupyter --stream
 ```
-This will run two servers, a webpack server for live reloading javascript and html assets and a Jupyter server.
+
+In another terminal, go to the directory that you want to run notebooks from and run
+
+```bash
+jupyter nteract --NteractConfig.asset_url="http://localhost:8080/"
+```
+
+The --NteractConfig.asset_url flag tells the Jupyter server where the webpack server will be serving the assets.
+
 
 Once the assets have been built, you won't need to refresh the page, but you may need to manually refresh the page if it loads before the assets are built.
 

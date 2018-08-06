@@ -92,8 +92,17 @@ export const semioticBarChart = (
     }
   }
 
+  //replace with incoming cardinality when df.describe metadata is implemented
+  const cardinality =
+    (selectedDimensions.length > 0 &&
+      !(selectedDimensions.length === 1 && dim1 === selectedDimensions[0]) &&
+      sortedData
+        .map(d => d[dim1])
+        .reduce((p, c) => (p.indexOf(c) === -1 ? [...p, c] : p), []).length) ||
+    0;
+
   const barSettings = {
-    type: "bar",
+    type: cardinality > 4 ? "clusterbar" : "bar",
     data: sortedData,
     oAccessor,
     rAccessor,

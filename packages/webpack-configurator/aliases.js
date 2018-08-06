@@ -1,6 +1,7 @@
 // @flow
 const { lernaModules } = require("./monorepo");
 
+// Write out all the monorepo packages that are not libraries -- typically applications or metapackages
 const ignored = new Set([
   // we don't reuse the desktop app as a library
   "nteract",
@@ -8,25 +9,20 @@ const ignored = new Set([
   // commuter is a next app -- if people need modules from it, they should be
   // made into new packages
   "@nteract/commuter",
-  // Deprecated frontend package (it's part of commuter itself now)
-  "@nteract/commuter-frontend",
 
-  // TODO: Is there a possible way to make this get built by webpack?
-  "@nteract/styles",
-
-  // self, obviously we should skip ourselves
+  // It's this package, the one you're currently looking at! We must skip it.
   "@nteract/webpack-configurator",
 
-  // "@nteract/commuter",
-
-  // These are all next.js apps and will rely on this package
+  // Play is a next.js app
   "@nteract/play",
-  "@nteract/showcase",
 
   // The jupyter extension will rely on this package
   "nteract-on-jupyter",
   // The nbextension is the metapackage (python bits) and isn't used by anything
-  "@nteract/nbextension"
+  "@nteract/nbextension",
+
+  // TODO: Build @nteract/styles using webpack or some other means
+  "@nteract/styles"
 ]);
 
 const aliases = lernaModules

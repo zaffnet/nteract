@@ -27,10 +27,14 @@ export class Outputs extends React.Component<OutputsProps> {
             .outputs {
               padding: 10px 10px 10px calc(var(--prompt-width, 50px) + 10px);
               word-wrap: break-word;
-              overflow-y: auto;
+              overflow-y: hidden;
               outline: none;
               /* When expanded, this is overtaken to 100% */
               max-height: 600px;
+              text-overflow: ellipsis;
+            }
+            :global(.focused > .outputs) {
+              overflow-y: auto;
             }
 
             .expanded {
