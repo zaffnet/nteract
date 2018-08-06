@@ -14,20 +14,20 @@ In order to build a signed copy with working auto-update, you will need to join 
 
 ## Release Process
 
-1. Make sure the release is working by running `npm run dist` and testing the built app inside the `./applications/desktop/dist/` folder. You can build for all platforms using `npm run dist:all`.
+1.  Make sure the release is working by running `yarn dist` and testing the built app inside the `./applications/desktop/dist/` folder. You can build for all platforms using `yarn dist:all`.
 
-1. Double check that publish will really work by running `npm run verifyBeforePublish` first
+1.  Double check that publish will really work by running `yarn verifyBeforePublish` first
 
-1. Run `lerna publish` to publish everything, which also runs the verification steps. You will have to pick versions for everything.
+1.  Run `npx lerna publish` to publish everything, which also runs the verification steps. You will have to pick versions for everything.
 
-1. Run the following to ship the built desktop app
+1.  Run the following to ship the built desktop app
 
 ```
-lerna run ship --scope nteract --stream
+yarn ship:desktop
 ```
 
-1. From GitHub go to [nteract's releases](https://github.com/nteract/nteract/releases), verify everything works and edit the release notes. The name should follow our [naming guidelines](https://github.com/nteract/naming), namely that we use the last name of the next scientist in the list with an adjective in front.
-   Example:
+1.  From GitHub go to [nteract's releases](https://github.com/nteract/nteract/releases), verify everything works and edit the release notes. The name should follow our [naming guidelines](https://github.com/nteract/naming), namely that we use the last name of the next scientist in the list with an adjective in front.
+    Example:
 
 ```bash
 Last release: Avowed Avogadro
@@ -54,4 +54,4 @@ babbly
 babby
 ```
 
-5. Once you're ready click "Publish release". On Mac and Windows the update will be automatically downloaded and installed.
+5.  Once you're ready click "Publish release". On Mac and Windows the update will be automatically downloaded and installed.
