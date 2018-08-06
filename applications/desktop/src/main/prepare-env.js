@@ -1,4 +1,4 @@
-// @flow strict
+/* @flow strict */
 import shellEnv from "shell-env";
 
 import { fromPromise } from "rxjs/observable/fromPromise";

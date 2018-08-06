@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 import { catchError, startWith } from "rxjs/operators";
 import { saveEpic, saveAsEpic } from "./saving";
 
@@ -33,7 +33,7 @@ export function retryAndEmitError(err: Error, source: ActionsObservable<*>) {
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<*, *, *>) => (...args: any) =>
+export const wrapEpic = (epic: Epic<*, *, *>) => (...args: *) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics: Array<Epic<*, *, *>> = [

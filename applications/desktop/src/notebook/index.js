@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
@@ -73,7 +73,7 @@ initNativeHandlers(contentRef, store);
 initMenuHandlers(contentRef, store);
 initGlobalHandlers(contentRef, store);
 
-export default class App extends React.PureComponent<Object, Object> {
+export default class App extends React.PureComponent<{}, null> {
   notificationSystem: NotificationSystem;
 
   componentDidMount(): void {

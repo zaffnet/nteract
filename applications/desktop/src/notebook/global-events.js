@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 
 import type { Store } from "redux";
 
@@ -30,7 +30,7 @@ export function unload(store: Store<AppState, Action>) {
 export function beforeUnload(
   contentRef: ContentRef,
   store: Store<AppState, Action>,
-  e: any
+  e: *
 ) {
   const state = store.getState();
   const model = selectors.model(state, { contentRef });

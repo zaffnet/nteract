@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 import { middlewares as coreMiddlewares } from "@nteract/core";
 
 import { createEpicMiddleware, combineEpics } from "redux-observable";

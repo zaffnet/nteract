@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 const WebFont = require("webfontloader");
 const path = require("path");

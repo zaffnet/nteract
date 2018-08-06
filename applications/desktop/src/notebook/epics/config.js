@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 import { remote } from "electron";
 
 import { selectors, actions, actionTypes } from "@nteract/core";
@@ -39,7 +39,7 @@ export const saveConfigOnChangeEpic = (action$: ActionsObservable<*>) =>
 /**
  * An epic that saves the configuration.
  */
-export const saveConfigEpic = (action$: ActionsObservable<*>, store: any) =>
+export const saveConfigEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
     ofType(actionTypes.SAVE_CONFIG),
     mergeMap(() =>

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { shell } from "electron";
 
 import { selectors, actions, actionTypes } from "@nteract/core";
@@ -32,9 +32,10 @@ function publishGist(
   token: string,
   id: ?string
 ) {
-  const url = id
-    ? `https://api.github.com/gists/${id}`
-    : "https://api.github.com/gists";
+  const url =
+    id != null
+      ? `https://api.github.com/gists/${id}`
+      : "https://api.github.com/gists";
 
   const opts = {
     url,
@@ -48,7 +49,7 @@ function publishGist(
       // We can only update authenticated gists so we _must_ send the token
       Authorization: `token ${token}`
     },
-    method: id ? "PATCH" : "POST",
+    method: id != null ? "PATCH" : "POST",
     body: model
   };
 
@@ -59,7 +60,7 @@ function publishGist(
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$: ActionsObservable<*>, store: any) => {
+export const publishEpic = (action$: ActionsObservable<*>, store: *) => {
   return action$.pipe(
     ofType(actionTypes.PUBLISH_GIST),
     mergeMap((action: actionTypes.PublishGist) => {
