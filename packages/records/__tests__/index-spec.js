@@ -45,7 +45,7 @@ describe("display_data output", () => {
       nteractRecords.outputFromNbformat({
         output_type: "display_data",
         data: {
-          infinityStones: [
+          "text/plain": [
             "mind\n",
             "time\n",
             "space\n",
@@ -60,7 +60,7 @@ describe("display_data output", () => {
       nteractRecords.makeDisplayDataOutputRecord({
         outputType: "display_data",
         data: {
-          infinityStones: "mind\ntime\nspace\nreality\npower\nsoul"
+          "text/plain": "mind\ntime\nspace\nreality\npower\nsoul"
         },
         metadata: {
           "application/json": { expanded: true }
@@ -76,14 +76,14 @@ describe("display_data output", () => {
           msg_type: "display_data"
         },
         content: {
-          data: { anotherDay: "anotherDoug" },
+          data: { "text/plain": "another\nDoug" },
           metadata: { "application/json": { expanded: true } }
         }
       })
     ).toEqual(
       nteractRecords.makeDisplayDataOutputRecord({
         outputType: "display_data",
-        data: { anotherDay: "anotherDoug" },
+        data: { "text/plain": "another\nDoug" },
         metadata: { "application/json": { expanded: true } }
       })
     );
@@ -97,7 +97,7 @@ describe("execute_result output", () => {
         output_type: "execute_result",
         execution_count: 7,
         data: {
-          planets: ["xandar\n", "nidavellir\n", "terra"]
+          "text/plain": ["xandar\n", "nidavellir\n", "terra"]
         },
         metadata: { "application/json": { expanded: true } }
       })
@@ -106,7 +106,7 @@ describe("execute_result output", () => {
         outputType: "execute_result",
         executionCount: 7,
         data: {
-          planets: "xandar\nnidavellir\nterra"
+          "text/plain": "xandar\nnidavellir\nterra"
         },
         metadata: {
           "application/json": { expanded: true }
