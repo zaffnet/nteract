@@ -104,32 +104,6 @@ const MetadataWarning = ({ metadata }) => {
           "Source Sans Pro, Helvetica Neue, Helvetica, Arial, sans-serif"
       }}
     >
-      <div
-        style={{
-          backgroundColor: "#cec",
-          color: "#111",
-          padding: "10px",
-          paddingLeft: "20px"
-        }}
-      >
-        This interactive data explorer is in the works.{" "}
-        <a
-          href="https://github.com/nteract/nteract/issues/new"
-          style={{
-            color: "#333"
-          }}
-        >
-          Help us improve it!
-        </a>
-        <Beaker
-          style={{
-            color: "#111",
-            verticalAlign: "center",
-            textAlign: "center",
-            paddingLeft: "10px"
-          }}
-        />
-      </div>
       {warning ? (
         <div
           style={{
