@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/nteract/nteract",
   "scripts": {
-    "postinstall": "lerna run build --parallel --scope @nteract/styles",
     "app:desktop": "lerna run start --scope nteract --stream",
     "app:play": "lerna run dev --scope @nteract/play --stream",
     "app:commuter": "lerna run dev --scope @nteract/commuter --stream",
