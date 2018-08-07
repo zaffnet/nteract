@@ -83,7 +83,7 @@ export const semioticSummaryChart = (
     pieceHoverAnnotation: summaryType === "violin",
     tooltipContent: (d: Object) => (
       <div className="tooltip-content">
-        <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
+        <h3>{primaryKey.map(p => d[p]).join(", ")}</h3>
         <p>
           {dim1}: {d[dim1]}
         </p>

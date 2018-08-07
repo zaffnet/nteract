@@ -71,7 +71,7 @@ export const semioticNetwork = (
     tooltipContent: (d: Object) => {
       return (
         <div className="tooltip-content">
-          <h2>{d.id}</h2>
+          <h3>{d.id}</h3>
           <p>Links: {d.degree}</p>
           {d.value && <p>Value: {d.value}</p>}
         </div>

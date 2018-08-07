@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { controlHelpText } from "./docs/chart-docs";
 import chartUIStyle from "./css/viz-controls";
+import buttonGroupStyle from "./css/button-group";
 
 const metricDimSelector = (
   values,
@@ -11,19 +12,27 @@ const metricDimSelector = (
   selectedValue,
   contextTooltip = "Help me help you help yourself"
 ) => {
-  return (
-    <div className="control-wrapper" title={contextTooltip}>
-      <h2>{title}</h2>
+  const metricsList = required ? values : ["none", ...values];
+  let displayMetrics;
+  if (metricsList.length > 1)
+    displayMetrics = (
       <select
         value={selectedValue}
         onChange={e => selectionFunction(e.target.value)}
       >
-        {(required ? values : ["none", ...values]).map(d => (
+        {metricsList.map(d => (
           <option key={`selector-option-${d}`} value={d} label={d}>
             {d}
           </option>
         ))}
       </select>
+    );
+  else displayMetrics = <p style={{ margin: 0 }}>{metricsList[0]}</p>;
+
+  return (
+    <div className="control-wrapper" title={contextTooltip}>
+      <h2>{title}</h2>
+      {displayMetrics}
       <style jsx>{chartUIStyle}</style>
     </div>
   );
@@ -133,7 +142,7 @@ export default ({
           metricDimSelector(
             dimensions.map(d => d.name),
             d => updateChart({ chart: { ...chart, dim2: d } }),
-            "LABELS",
+            "Labels",
             false,
             chart.dim2,
             controlHelpText.dim2[view] || controlHelpText.dim2.default
@@ -281,6 +290,7 @@ export default ({
         )}
       </div>
       <style jsx>{chartUIStyle}</style>
+      <style jsx>{buttonGroupStyle}</style>
     </React.Fragment>
   );
 };
