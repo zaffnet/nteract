@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 // NOTE: We _must_ load hot _before_ React, even though we don't use it in this file
 import { hot } from "react-hot-loader";
 

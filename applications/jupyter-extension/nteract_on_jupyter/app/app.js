@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 import { hot } from "react-hot-loader";
 
 import * as React from "react";
@@ -23,34 +23,36 @@ class App extends React.Component<{ contentRef: ContentRef }, null> {
           }}
         />
         <style jsx global>{`
-        :root {${themes.light}}
-        body {
-          font-family: "Source Sans Pro";
-          font-size: 16px;
-          background-color: var(--theme-app-bg);
-          color: var(--theme-app-fg);
-          margin: 0;
-        }
-
-        #app {
-          padding-top: 20px;
-        }
-
-        @keyframes fadeOut {
-          from {
-            opacity: 1;
+          :root {
+            ${themes.light};
           }
-          to {
-            opacity: 0;
+          body {
+            font-family: "Source Sans Pro";
+            font-size: 16px;
+            background-color: var(--theme-app-bg);
+            color: var(--theme-app-fg);
+            margin: 0;
           }
-        }
 
-        div#loading {
-          animation-name: fadeOut;
-          animation-duration: 0.25s;
-          animation-fill-mode: forwards;
-        }
-      `}</style>
+          #app {
+            padding-top: 20px;
+          }
+
+          @keyframes fadeOut {
+            from {
+              opacity: 1;
+            }
+            to {
+              opacity: 0;
+            }
+          }
+
+          div#loading {
+            animation-name: fadeOut;
+            animation-duration: 0.25s;
+            animation-fill-mode: forwards;
+          }
+        `}</style>
       </React.Fragment>
     );
   }

@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 /**
  * A simple contentRef aware component that renders a little lastSaved
@@ -50,7 +50,7 @@ class LastSaved extends React.Component<LastSavedProps, null> {
   }
 
   render() {
-    if (!this.props.date) {
+    if (this.props.date == null) {
       return null;
     }
 

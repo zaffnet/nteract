@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 // NOTE: We can safely install and use react-hot-loader as a regular dependency
 // instead of a dev dependency as it automatically ensures it is not executed

@@ -15,7 +15,7 @@ export type EmptyModelRecord = Immutable.RecordOf<EmptyModelRecordProps>;
 
 export type DummyContentRecordProps = {
   type: "dummy",
-  assumedType: "unknown" | "directory" | "notebook" | "file",
+  assumedType: NotebookTypes,
   mimetype: ?string,
   lastSaved: null,
   filepath: string,

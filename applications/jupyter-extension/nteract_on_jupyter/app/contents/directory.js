@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 import * as React from "react";
 import * as Immutable from "immutable";
@@ -36,23 +36,23 @@ type DirectoryProps = {
   content: DirectoryContentRecord,
   host: JupyterHostRecord,
   appVersion: string,
-  contents: any
+  contents: Array<{
+    path: string,
+    type: "unknown" | "directory" | "notebook" | "file",
+    name: string,
+    last_modified: ?Date
+  }>
 };
 
 export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
-  constructor(props: DirectoryProps) {
-    super(props);
-    (this: any).openNotebook = this.openNotebook.bind(this);
-  }
-
-  openNotebook(ks: KernelspecRecord | KernelspecProps) {
+  openNotebook = (ks: KernelspecRecord | KernelspecProps) => {
     openNotebook(this.props.host, ks, {
       appVersion: this.props.appVersion,
       // Since we're looking at a directory, the base dir is the directory we are in
       baseDir: this.props.content.filepath,
       appPath: this.props.host.basePath
     });
-  }
+  };
 
   render() {
     const atRoot = this.props.content.filepath === "/";
@@ -102,6 +102,7 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
                 <Entry key={index}>
                   <Icon fileType={entry.type} />
                   <Name>{link}</Name>
+                  {/* $FlowFixMe */}
                   <LastSaved lastModified={entry.last_modified} />
                 </Entry>
               );

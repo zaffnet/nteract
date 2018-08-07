@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 import * as React from "react";
 import * as Immutable from "immutable";
@@ -47,7 +47,7 @@ type FileProps = {
   lastSavedStatement: string,
   saving: boolean,
   loading: boolean,
-  error: ?Object
+  error: ?{}
 };
 
 export class File extends React.PureComponent<FileProps, *> {
@@ -69,7 +69,10 @@ export class File extends React.PureComponent<FileProps, *> {
       choice = <Notebook contentRef={this.props.contentRef} />;
     } else if (this.props.type === "dummy") {
       choice = null;
-    } else if (!this.props.mimetype || !TextFile.handles(this.props.mimetype)) {
+    } else if (
+      this.props.mimetype == null ||
+      !TextFile.handles(this.props.mimetype)
+    ) {
       // TODO: Redirect to /files/ endpoint for them to download the file or view
       //       as is
       choice = (
@@ -107,7 +110,7 @@ export class File extends React.PureComponent<FileProps, *> {
 }
 
 const mapStateToProps = (
-  state: Object,
+  state: AppState,
   ownProps: { contentRef: ContentRef, appBase: string }
 ): FileProps => {
   const content = selectors.content(state, ownProps);

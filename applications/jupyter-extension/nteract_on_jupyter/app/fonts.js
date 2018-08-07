@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 // TODO: There is the potential to have a Flash-of-Unstyled-Content since this is
 //       now async
