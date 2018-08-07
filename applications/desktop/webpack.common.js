@@ -1,6 +1,8 @@
 const webpack = require("webpack");
 const path = require("path");
 
+const configurator = require("@nteract/webpack-configurator");
+
 const nodeModules = {
   jmp: "commonjs jmp",
   canvas: "commonjs canvas",
@@ -23,11 +25,18 @@ const mainConfig = {
     __filename: false
   },
   module: {
-    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: configurator.exclude,
+        loader: "babel-loader"
+      }
+    ]
   },
   resolve: {
     mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
-    extensions: [".js", ".jsx"]
+    extensions: [".js", ".jsx"],
+    alias: configurator.mergeDefaultAliases()
   },
   plugins: [new webpack.IgnorePlugin(/\.(css|less)$/)]
 };
@@ -58,11 +67,18 @@ const rendererConfig = {
   },
   externals: nodeModules,
   module: {
-    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: configurator.exclude,
+        loader: "babel-loader"
+      }
+    ]
   },
   resolve: {
-    mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
-    extensions: [".js", ".jsx"]
+    mainFields: ["nteractDesktop", "module", "main"],
+    extensions: [".js", ".jsx"],
+    alias: configurator.mergeDefaultAliases()
   },
   plugins: [
     // No external CSS should get side-loaded by js
