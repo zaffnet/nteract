@@ -521,7 +521,8 @@ type IconButtonProps = {
   message: string,
   onClick: () => void,
   children?: React.Node,
-  title: string
+  title: string,
+  selected: boolean
 };
 
 export class IconButton extends React.Component<IconButtonProps> {
@@ -534,7 +535,7 @@ export class IconButton extends React.Component<IconButtonProps> {
       title = message
     } = this.props;
 
-    let style = {
+    let style: Object = {
       width: "32px",
       height: "32px",
       cursor: "pointer"

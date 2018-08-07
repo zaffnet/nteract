@@ -195,13 +195,13 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
       <div>
         <div className="button-group">
           <button
-            className={`button-text ${filterMode && "selected"}`}
+            className={`button-text ${filterMode ? "selected" : ""}`}
             onClick={() => this.setState({ filterMode: true })}
           >
             Filter
           </button>
           <button
-            className={`button-text ${!filterMode && "selected"}`}
+            className={`button-text ${filterMode ? "" : "selected"}`}
             onClick={() => this.setState({ filterMode: false })}
           >
             Explore
