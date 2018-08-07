@@ -1,10 +1,11 @@
-// @flow
+/* @flow strict */
 import * as React from "react";
 
 import type { AppState, ContentRef, FileContentRecord } from "@nteract/core";
 import { selectors, actions } from "@nteract/core";
 
 import { connect } from "react-redux";
+import type { MonacoEditorProps } from "../../../../../../node_modules/@nteract/monaco-editor";
 
 type MappedStateProps = {
   mimetype: string,
@@ -20,10 +21,10 @@ type MappedDispatchProps = {
 type TextFileProps = MappedStateProps & MappedDispatchProps;
 
 type TextFileState = {
-  Editor: React.ComponentType<any>
+  Editor: React.ComponentType<MonacoEditorProps>
 };
 
-class EditorPlaceholder extends React.Component<any, null> {
+class EditorPlaceholder extends React.Component<MonacoEditorProps, null> {
   render() {
     // TODO: Show a little blocky placeholder
     return null;

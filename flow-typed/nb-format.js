@@ -13,3 +13,5 @@ declare type KernelSpec = {
 declare type KernelSpecs = {
   [key: string]: KernelSpec
 };
+
+declare type NotebookTypes = "unknown" | "directory" | "notebook" | "file";

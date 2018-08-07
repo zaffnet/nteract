@@ -1,4 +1,4 @@
-// @flow
+/* @flow strict */
 
 import * as React from "react";
 
@@ -59,7 +59,7 @@ class NotebookPlaceholder extends React.Component<Props, null> {
 type State = {
   transforms: typeof defaultTransforms,
   displayOrder: typeof defaultDisplayOrder,
-  App: React.ComponentType<any>
+  App: React.ComponentType<Props>
 };
 
 type Props = {

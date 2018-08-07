@@ -1,10 +1,10 @@
-// @flow
+/* @flow strict */
 import * as React from "react";
 
 import { areComponentsEqual } from "react-hot-loader";
 
 type NavSectionProps = {
-  children: React.ChildrenArray<null | string | number | React.Element<any>>
+  children: React.Node
 };
 
 export class NavSection extends React.Component<NavSectionProps, null> {
@@ -36,7 +36,7 @@ export class NavSection extends React.Component<NavSectionProps, null> {
 }
 
 type NavProps = {
-  children: React.ChildrenArray<React.Element<any>>
+  children: React.ChildrenArray<React.Element<*>>
 };
 
 export class Nav extends React.Component<NavProps, null> {
