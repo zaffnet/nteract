@@ -440,6 +440,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               <IconButton
                 title={chartHelpText.bar}
                 onClick={() => this.setView("bar")}
+                selected={view === "bar"}
                 message={"Bar Graph"}
               >
                 <BarChartIcon />
@@ -448,6 +449,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton
               title={chartHelpText.summary}
               onClick={() => this.setView("summary")}
+              selected={view === "summary"}
               message={"Summary"}
             >
               <BoxplotIcon />
@@ -455,6 +457,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton
               title={chartHelpText.scatter}
               onClick={() => this.setView("scatter")}
+              selected={view === "scatter"}
               message={"Scatter Plot"}
             >
               <ScatterplotIcon />
@@ -462,6 +465,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton
               title={chartHelpText.hexbin}
               onClick={() => this.setView("hexbin")}
+              selected={view === "hexbin"}
               message={"Area Plot"}
             >
               <HexbinIcon />
@@ -470,6 +474,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               <IconButton
                 title={chartHelpText.network}
                 onClick={() => this.setView("network")}
+                selected={view === "network"}
                 message={"Network"}
               >
                 <NetworkIcon />
@@ -479,6 +484,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               <IconButton
                 title={chartHelpText.hierarchy}
                 onClick={() => this.setView("hierarchy")}
+                selected={view === "hierarchy"}
                 message={"Hierarchy"}
               >
                 <TreeIcon />
@@ -488,6 +494,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               <IconButton
                 title={chartHelpText.parallel}
                 onClick={() => this.setView("parallel")}
+                selected={view === "parallel"}
                 message={"Parallel Coordinates"}
               >
                 <ParallelCoordinatesIcon />
@@ -496,6 +503,7 @@ class DataResourceTransform extends React.Component<Props, State> {
             <IconButton
               title={chartHelpText.line}
               onClick={() => this.setView("line")}
+              selected={view === "line"}
               message={"Line Graph"}
             >
               <LineChartIcon />
@@ -518,18 +526,26 @@ type IconButtonProps = {
 
 export class IconButton extends React.Component<IconButtonProps> {
   render() {
-    const { message, onClick, children, title = message } = this.props;
+    const {
+      message,
+      onClick,
+      children,
+      selected,
+      title = message
+    } = this.props;
+
+    let style = {
+      width: "32px",
+      height: "32px",
+      cursor: "pointer"
+    };
+    if (selected) {
+      style.border = "1px outset #666";
+      style.backgroundColor = "#aaa";
+    }
 
     return (
-      <button
-        onClick={onClick}
-        key={message}
-        title={title}
-        style={{
-          width: "32px",
-          height: "32px"
-        }}
-      >
+      <button onClick={onClick} key={message} title={title} style={style}>
         {children}
       </button>
     );

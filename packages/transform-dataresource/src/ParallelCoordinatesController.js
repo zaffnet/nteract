@@ -244,9 +244,9 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
                   {dim1}: {d[dim1]}
                 </h3>
               )}
-              <h3 style={{ fontSize: "14px" }}>
+              <p style={{ fontSize: "14px" }}>
                 {d.metric}: {d.rawvalue}
-              </h3>
+              </p>
             </div>
           )}
           canvasPieces={true}
