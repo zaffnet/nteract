@@ -29,7 +29,7 @@ export type DisplayDataOutput = {
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
-  data: common.MimeBundle,
+  data: common.OnDiskMimebundle,
   metadata: Object
 };
 

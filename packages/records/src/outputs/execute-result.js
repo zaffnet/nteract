@@ -33,7 +33,7 @@ export type ExecuteResultOutput = {
 export type NbformatExecuteResultOutput = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
-  data: common.MimeBundle,
+  data: common.OnDiskMimebundle,
   metadata: Object
 };
 

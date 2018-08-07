@@ -6,6 +6,32 @@ import produce from "immer";
 export type MultilineString = string | Array<string>;
 
 export type OnDiskMimebundle = {
+  "text/plain"?: MultilineString,
+  "text/html"?: MultilineString,
+  "text/latex"?: MultilineString,
+  "text/markdown"?: MultilineString,
+
+  "application/javascript"?: MultilineString,
+
+  "image/png"?: MultilineString,
+  "image/jpeg"?: MultilineString,
+  "image/gif"?: MultilineString,
+  "image/svg+xml"?: MultilineString,
+  "text/vnd.plotly.v1+html"?: MultilineString,
+  "application/vdom.v1+json"?: Object,
+  "application/vnd.dataresource+json"?: Object,
+
+  "text/vnd.plotly.v1+html"?: MultilineString,
+  "application/vnd.plotly.v1+json"?: Object,
+  "application/geo+json"?: Object,
+
+  "application/x-nteract-model-debug+json"?: Object,
+
+  "application/vnd.vega.v2+json"?: Object,
+  "application/vnd.vega.v3+json"?: Object,
+  "application/vnd.vegalite.v1+json"?: Object,
+  "application/vnd.vegalite.v2+json"?: Object,
+
   [key: string]: string | Array<string> | Object
 };
 
@@ -74,37 +100,39 @@ function isJSONKey(key) {
   return /^application\/(.*\+)?json$/.test(key);
 }
 
-export function cleanMimeData(
-  key: string,
-  data: string | Array<string> | Object
-) {
-  // See https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L368
-  if (isJSONKey(key)) {
-    // Data stays as is for JSON types
-    return data;
-  }
+// export function cleanMimeData(
+//   key: string,
+//   data: string | Array<string> | Object
+// ) {
+//   // See https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L368
+//   if (isJSONKey(key)) {
+//     // Data stays as is for JSON types
+//     return data;
+//   }
 
-  if (typeof data === "string" || Array.isArray(data)) {
-    return demultiline(data);
-  }
+//   if (typeof data === "string" || Array.isArray(data)) {
+//     return demultiline(data);
+//   }
 
-  throw new TypeError(
-    `Data for ${key} is expected to be a string or an Array of strings`
-  );
-}
+//   throw new TypeError(
+//     `Data for ${key} is expected to be a string or an Array of strings`
+//   );
+// }
 
-export function cleanMimeAtKey(
-  mimeBundle: MimeBundle,
-  previous: MimeBundle,
-  key: string
+// export function cleanMimeAtKey(
+//   mimeBundle: OnDiskMimebundle,
+//   previous: OnDiskMimebundle,
+//   key: string
+// ): MimeBundle {
+//   return produce(previous, draft => {
+//     draft[key] = cleanMimeData(key, mimeBundle[key]);
+//   });
+//   // return previous.set(key, cleanMimeData(key, mimeBundle[key]));
+// }
+
+export function createImmutableMimeBundle(
+  mimeBundle: OnDiskMimebundle
 ): MimeBundle {
-  return produce(previous, draft => {
-    draft[key] = cleanMimeData(key, mimeBundle[key]);
-  });
-  // return previous.set(key, cleanMimeData(key, mimeBundle[key]));
-}
-
-export function createImmutableMimeBundle(mimeBundle: MimeBundle): MimeBundle {
   // Map over all the mimetypes, turning them into our in-memory format
   //
   // {
@@ -120,9 +148,19 @@ export function createImmutableMimeBundle(mimeBundle: MimeBundle): MimeBundle {
   //   "text/html": "<p>\nHey\n</p>",
   //   "text/plain": "Hey"
   // }
-  //
-  return Object.keys(mimeBundle).reduce(
-    cleanMimeAtKey.bind(null, mimeBundle),
-    {}
+
+  return produce(
+    (mimeBundle: OnDiskMimebundle),
+    (draftBundle: OnDiskMimebundle): MimeBundle => {
+      for (const key in draftBundle) {
+        if (
+          !isJSONKey(key) &&
+          (typeof draftBundle[key] === "string" ||
+            Array.isArray(draftBundle[key]))
+        ) {
+          draftBundle[key] = demultiline(draftBundle[key]);
+        }
+      }
+    }
   );
 }
