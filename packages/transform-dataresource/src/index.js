@@ -433,6 +433,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               title={chartHelpText.grid}
               onClick={this.setGrid}
               message={"Data Table"}
+              selected={false}
             >
               <DatabaseOcticon />
             </IconButton>
