@@ -7,7 +7,8 @@ export default css`
     z-index: 999999;
     min-width: 120px;
     background: white;
-    border: 1px solid black;
+    border: 1px solid #888;
+    border-radius: 5px;
     position: relative;
     transform: translate(calc(-50% + 7px), calc(0% + 9px));
   }
@@ -25,13 +26,20 @@ export default css`
     position: absolute;
     z-index: 99;
   }
+  :global(.tooltip-content h3) {
+    margin: 0 0 10px;
+  }
+  :global(.tooltip-content p) {
+    font-size: 14px;
+  }
 
   :global(.tick > path) {
     stroke: lightgray;
   }
 
   :global(.axis-labels) {
-    fill: lightgray;
+    fill: #aaa;
+    font-size: 14px;
   }
   :global(.axis-baseline) {
     stroke-opacity: 0.25;

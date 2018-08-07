@@ -5,6 +5,7 @@ import { scaleLinear } from "d3-scale";
 import { ResponsiveOrdinalFrame, Axis } from "semiotic";
 import HTMLLegend from "./HTMLLegend";
 import { numeralFormatting } from "./utilities";
+import buttonGroupStyle from "./css/button-group";
 
 type State = {
   filterMode: boolean,
@@ -110,7 +111,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
     const { primaryKey, metrics, chart, colors } = options;
     const { dim1 } = chart;
 
-    const { columnExtent } = this.state;
+    const { columnExtent, filterMode } = this.state;
 
     const hiddenHash = new Map();
 
@@ -172,7 +173,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
         );
     }
 
-    if (!this.state.filterMode)
+    if (!filterMode)
       additionalSettings.annotations = metrics
         .map(d => ({
           label: "",
@@ -192,11 +193,20 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
 
     return (
       <div>
-        <button
-          onClick={() => this.setState({ filterMode: !this.state.filterMode })}
-        >
-          {(this.state.filterMode && "Explore") || "Filter"}
-        </button>
+        <div className="button-group">
+          <button
+            className={`button-text ${filterMode ? "selected" : ""}`}
+            onClick={() => this.setState({ filterMode: true })}
+          >
+            Filter
+          </button>
+          <button
+            className={`button-text ${filterMode ? "" : "selected"}`}
+            onClick={() => this.setState({ filterMode: false })}
+          >
+            Explore
+          </button>
+        </div>
         <ResponsiveOrdinalFrame
           data={this.state.data}
           oAccessor="metric"
@@ -229,13 +239,13 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           oPadding={40}
           pixelColumnWidth={80}
           interaction={
-            this.state.filterMode && {
+            filterMode && {
               columnsBrush: true,
               during: this.brushing,
               extent: this.state.columnExtent
             }
           }
-          pieceHoverAnnotation={!this.state.filterMode}
+          pieceHoverAnnotation={!filterMode}
           tooltipContent={d => (
             <div className="tooltip-content">
               <h3>{primaryKey.map(key => d[key]).join(", ")}</h3>
@@ -244,9 +254,9 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
                   {dim1}: {d[dim1]}
                 </h3>
               )}
-              <h3 style={{ fontSize: "14px" }}>
+              <p>
                 {d.metric}: {d.rawvalue}
-              </h3>
+              </p>
             </div>
           )}
           canvasPieces={true}
@@ -280,6 +290,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           )}
           {...additionalSettings}
         />
+        <style jsx>{buttonGroupStyle}</style>
       </div>
     );
   }

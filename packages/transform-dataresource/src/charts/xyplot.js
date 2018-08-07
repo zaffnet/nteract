@@ -72,7 +72,7 @@ export const semioticScatterplot = (
 
   const pointTooltip = (d: Object) => (
     <div className="tooltip-content">
-      <h2>{primaryKey.map(p => d[p]).join(", ")}</h2>
+      <h3>{primaryKey.map(p => d[p]).join(", ")}</h3>
       {dimensions.map(dim => (
         <p key={`tooltip-dim-${dim.name}`}>
           {dim.name}:{" "}
@@ -98,7 +98,7 @@ export const semioticScatterplot = (
     if (d.binItems.length === 0) return null;
     return (
       <div className="tooltip-content">
-        <h2
+        <h3
           style={{
             fontSize: "14px",
             textTransform: "uppercase",
@@ -107,7 +107,7 @@ export const semioticScatterplot = (
           }}
         >
           ID, {metric1}, {metric2}
-        </h2>
+        </h3>
         {d.binItems.map(d => (
           <p
             style={{
@@ -122,7 +122,8 @@ export const semioticScatterplot = (
                   (d[dim.name].toString && d[dim.name].toString()) ||
                   d[dim.name]
               )
-              .join(",")}, {d[metric1]}, {d[metric2]}
+              .join(",")}
+            , {d[metric1]}, {d[metric2]}
           </p>
         ))}
       </div>

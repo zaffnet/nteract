@@ -121,9 +121,7 @@ export const semioticLineChart = (
       return (
         <div className="tooltip-content">
           <p>{d.parentLine && d.parentLine.label}</p>
-          <p>
-            {(d.value.toLocaleString && d.value.toLocaleString()) || d.value}
-          </p>
+          <p>{(d.value && d.value.toLocaleString()) || d.value}</p>
           <p>
             {timeseriesSort}: {formatting(d.x)}
           </p>
