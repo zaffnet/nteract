@@ -140,7 +140,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
               </DropdownContent>
             )}
           </DropdownMenu>
-          <span> | </span>
+          <span className="boundary" />
           <button
             onClick={removeCell}
             title="delete cell"
@@ -181,7 +181,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
             background: none;
           }
 
-          .cell-toolbar button span {
+          .cell-toolbar span {
             font-size: 15px;
             line-height: 1;
             color: var(--theme-cell-toolbar-fg);
@@ -207,6 +207,14 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
 
           .octicon {
             transition: color 0.5s;
+          }
+
+          .cell-toolbar span.boundary {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 1px 10px 3px 10px;
+            border-left: 2.5px solid rgba(16, 22, 26, 0.1);
+            height: 11px;
           }
         `}</style>
       </div>
