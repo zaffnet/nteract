@@ -1,10 +1,10 @@
-// @flow
+/* @flow strict */
 import * as React from "react";
 
 import TimeAgo from "@nteract/timeago";
 
 type LastSavedProps = {
-  lastModified: Date
+  lastModified: ?Date
 };
 
 export class LastSaved extends React.Component<LastSavedProps, null> {
@@ -15,7 +15,9 @@ export class LastSaved extends React.Component<LastSavedProps, null> {
   render() {
     return (
       <td className="timeago">
-        <TimeAgo date={this.props.lastModified} />
+        {this.props.lastModified != null && (
+          <TimeAgo date={this.props.lastModified} />
+        )}
         <style jsx>{`
           .timeago {
             text-align: right;

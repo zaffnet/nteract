@@ -38,7 +38,7 @@ type DirectoryProps = {
   appVersion: string,
   contents: Array<{
     path: string,
-    type: "unknown" | "directory" | "notebook" | "file",
+    type: NotebookTypes,
     name: string,
     last_modified: ?Date
   }>
@@ -102,7 +102,6 @@ export class DirectoryApp extends React.PureComponent<DirectoryProps, null> {
                 <Entry key={index}>
                   <Icon fileType={entry.type} />
                   <Name>{link}</Name>
-                  {/* $FlowFixMe */}
                   <LastSaved lastModified={entry.last_modified} />
                 </Entry>
               );
