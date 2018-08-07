@@ -4,7 +4,7 @@ import * as React from "react";
 import { areComponentsEqual } from "react-hot-loader";
 
 type NavSectionProps = {
-  children: React.ChildrenArray<null | string | number | React.Element<*>>
+  children: React.Node
 };
 
 export class NavSection extends React.Component<NavSectionProps, null> {
