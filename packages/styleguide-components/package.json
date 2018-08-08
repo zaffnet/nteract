@@ -1,6 +1,6 @@
 {
   "name": "@nteract/styleguide-components",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "components for our styleguidist build",
   "scripts": {},
   "publishConfig": {
