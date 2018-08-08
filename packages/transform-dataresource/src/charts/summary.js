@@ -4,6 +4,8 @@ import HTMLLegend from "../HTMLLegend";
 import { numeralFormatting } from "../utilities";
 import { scaleLinear } from "d3-scale";
 
+import TooltipContent from "../tooltip-content";
+
 const fontScale = scaleLinear()
   .domain([8, 25])
   .range([14, 8])
@@ -82,7 +84,7 @@ export const semioticSummaryChart = (
     baseMarkProps: { forceUpdate: true },
     pieceHoverAnnotation: summaryType === "violin",
     tooltipContent: (d: Object) => (
-      <div className="tooltip-content">
+      <TooltipContent>
         <h3>{primaryKey.map(p => d[p]).join(", ")}</h3>
         <p>
           {dim1}: {d[dim1]}
@@ -90,7 +92,7 @@ export const semioticSummaryChart = (
         <p>
           {rAccessor}: {d[rAccessor]}
         </p>
-      </div>
+      </TooltipContent>
     ),
     ...additionalSettings
   };

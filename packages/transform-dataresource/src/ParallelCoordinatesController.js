@@ -7,6 +7,8 @@ import HTMLLegend from "./HTMLLegend";
 import { numeralFormatting } from "./utilities";
 import buttonGroupStyle from "./css/button-group";
 
+import TooltipContent from "./tooltip-content";
+
 type State = {
   filterMode: boolean,
   data: Array<Object>,
@@ -247,7 +249,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           }
           pieceHoverAnnotation={!filterMode}
           tooltipContent={d => (
-            <div className="tooltip-content">
+            <TooltipContent>
               <h3>{primaryKey.map(key => d[key]).join(", ")}</h3>
               {d[dim1] && (
                 <h3 style={{ color: colorHash[d[dim1]] }}>
@@ -257,7 +259,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
               <p>
                 {d.metric}: {d.rawvalue}
               </p>
-            </div>
+            </TooltipContent>
           )}
           canvasPieces={true}
           canvasConnectors={true}
