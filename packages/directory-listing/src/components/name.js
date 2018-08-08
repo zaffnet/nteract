@@ -22,11 +22,11 @@ export class Name extends React.Component<NameProps, null> {
             padding: 8px;
           }
 
-          :global(a) {
+          .name :global(a) {
             text-decoration: none;
           }
 
-          :global(a:hover) {
+          .name :global(a:hover) {
             text-decoration: underline;
             outline-width: 0;
           }
