@@ -2,6 +2,7 @@
 import * as React from "react";
 import { nest } from "d3-collection";
 import { scaleLinear } from "d3-scale";
+import TooltipContent from "../tooltip-content";
 
 const parentPath = (d, pathArray) => {
   if (d.parent) {
@@ -27,7 +28,9 @@ const hierarchicalTooltip = (d, primaryKey, metric) => {
   } else {
     content.push(
       <p key="leaf-label">
-        {pathString}->{primaryKey.map(p => d[p]).join(", ")}
+        {pathString}
+        ->
+        {primaryKey.map(p => d[p]).join(", ")}
       </p>
     );
     content.push(
@@ -120,9 +123,9 @@ export const semioticHierarchicalChart = (
     hoverAnnotation: true,
     tooltipContent: (d: Object) => {
       return (
-        <div className="tooltip-content">
+        <TooltipContent>
           {hierarchicalTooltip(d, primaryKey, metric1)}
-        </div>
+        </TooltipContent>
       );
     }
   };

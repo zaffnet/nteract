@@ -1,6 +1,8 @@
 /* @flow */
 import * as React from "react";
 
+import TooltipContent from "../tooltip-content";
+
 import { curveMonotone } from "d3-shape";
 import { scaleLinear, scaleTime } from "d3-scale";
 import { numeralFormatting } from "../utilities";
@@ -119,7 +121,7 @@ export const semioticLineChart = (
     },
     tooltipContent: (d: Object) => {
       return (
-        <div className="tooltip-content">
+        <TooltipContent>
           <p>{d.parentLine && d.parentLine.label}</p>
           <p>{(d.value && d.value.toLocaleString()) || d.value}</p>
           <p>
@@ -132,7 +134,7 @@ export const semioticLineChart = (
                 d.originalData[k]}
             </p>
           ))}
-        </div>
+        </TooltipContent>
       );
     }
   };

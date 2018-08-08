@@ -1,6 +1,8 @@
 /* @flow */
 import * as React from "react";
 
+import TooltipContent from "../tooltip-content";
+
 import { sortByOrdinalRange } from "./shared";
 import HTMLLegend from "../HTMLLegend";
 import { numeralFormatting } from "../utilities";
@@ -72,7 +74,7 @@ export const semioticBarChart = (
       additionalSettings.pieceHoverAnnotation = true;
       additionalSettings.tooltipContent = d => {
         return (
-          <div className="tooltip-content">
+          <TooltipContent>
             {dim1 && dim1 !== "none" && <p>{d[dim1]}</p>}
             <p>
               {typeof oAccessor === "function" ? oAccessor(d) : d[oAccessor]}
@@ -86,7 +88,7 @@ export const semioticBarChart = (
                   {metric3}: {d[metric3]}
                 </p>
               )}
-          </div>
+          </TooltipContent>
         );
       };
     }
@@ -123,7 +125,7 @@ export const semioticBarChart = (
     },
     tooltipContent: (d: Object) => {
       return (
-        <div className="tooltip-content">
+        <TooltipContent>
           <p>
             {typeof oAccessor === "function"
               ? oAccessor(d.pieces[0])
@@ -140,7 +142,7 @@ export const semioticBarChart = (
                 {d.pieces.map(p => p[metric3]).reduce((p, c) => p + c, 0)}
               </p>
             )}
-        </div>
+        </TooltipContent>
       );
     },
     baseMarkProps: { forceUpdate: true },

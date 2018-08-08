@@ -1,6 +1,8 @@
 /* @flow */
 import * as React from "react";
 
+import TooltipContent from "../tooltip-content";
+
 export const semioticNetwork = (
   data: Array<Object>,
   schema: Object,
@@ -70,11 +72,11 @@ export const semioticNetwork = (
     hoverAnnotation: true,
     tooltipContent: (d: Object) => {
       return (
-        <div className="tooltip-content">
+        <TooltipContent>
           <h3>{d.id}</h3>
           <p>Links: {d.degree}</p>
           {d.value && <p>Value: {d.value}</p>}
-        </div>
+        </TooltipContent>
       );
     },
     margin: { left: 100, right: 100, top: 10, bottom: 10 }

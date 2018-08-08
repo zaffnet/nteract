@@ -6,6 +6,8 @@ import { scaleLinear, scaleThreshold } from "d3-scale";
 import { numeralFormatting } from "../utilities";
 import HTMLLegend from "../HTMLLegend";
 
+import TooltipContent from "../tooltip-content";
+
 const steps = ["none", "#FBEEEC", "#f3c8c2", "#e39787", "#ce6751", "#b3331d"];
 const thresholds = scaleThreshold()
   .domain([0.01, 0.2, 0.4, 0.6, 0.8])
@@ -71,7 +73,7 @@ export const semioticScatterplot = (
   );
 
   const pointTooltip = (d: Object) => (
-    <div className="tooltip-content">
+    <TooltipContent>
       <h3>{primaryKey.map(p => d[p]).join(", ")}</h3>
       {dimensions.map(dim => (
         <p key={`tooltip-dim-${dim.name}`}>
@@ -91,13 +93,13 @@ export const semioticScatterplot = (
             {metric3}: {d[metric3]}
           </p>
         )}
-    </div>
+    </TooltipContent>
   );
 
   const areaTooltip = (d: Object) => {
     if (d.binItems.length === 0) return null;
     return (
-      <div className="tooltip-content">
+      <TooltipContent>
         <h3
           style={{
             fontSize: "14px",
@@ -126,7 +128,7 @@ export const semioticScatterplot = (
             , {d[metric1]}, {d[metric2]}
           </p>
         ))}
-      </div>
+      </TooltipContent>
     );
   };
 
