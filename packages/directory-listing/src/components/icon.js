@@ -34,7 +34,7 @@ export class Icon extends React.Component<IconProps, null> {
       <td className="icon" style={{ color: this.props.color }}>
         {icon}
         <style jsx>{`
-          :global(.icon) {
+          .icon {
             padding-right: 2px;
             padding-left: 10px;
             width: 17px;
