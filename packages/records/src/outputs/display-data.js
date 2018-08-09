@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import produce from "immer";
 import * as common from "../common";
@@ -23,14 +23,14 @@ export const DISPLAYDATA = "display_data";
 export type DisplayDataOutput = {
   outputType: DisplayDataType,
   data: common.MimeBundle,
-  metadata: Object
+  metadata: {}
 };
 
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
   data: common.OnDiskMimebundle,
-  metadata: Object
+  metadata: {}
 };
 
 type DisplayDataMessage = {
@@ -39,40 +39,44 @@ type DisplayDataMessage = {
   },
   content: {
     data: common.MimeBundle,
-    metadata: Object
+    metadata: {}
   }
 };
 
-export function makeDisplayDataOutputRecord(
+export function displayData(
   displayDataOutput: DisplayDataOutput
 ): DisplayDataOutput {
-  const defaultDisplayDataRecord = {
+  const defaultDisplayData = {
     outputType: DISPLAYDATA,
     data: {},
     metadata: {}
   };
 
-  return produce(defaultDisplayDataRecord, draft => {
+  return produce(defaultDisplayData, draft => {
     return Object.assign(draft, displayDataOutput);
   });
 }
 
-export function displayDataRecordFromNbformat(
+displayData.type = "display_data";
+
+displayData.fromNbformat = function fromNbformat(
   s: NbformatDisplayDataOutput
 ): DisplayDataOutput {
-  return makeDisplayDataOutputRecord({
+  return displayData({
     outputType: s.output_type,
     data: common.createImmutableMimeBundle(s.data),
     metadata: s.metadata
   });
-}
+};
 
-export function displayDataRecordFromMessage(
+displayData.fromJupyterMessage = function displayDataRecordFromMessage(
   msg: DisplayDataMessage
 ): DisplayDataOutput {
-  return makeDisplayDataOutputRecord({
+  return displayData({
     outputType: DISPLAYDATA,
+    // The data field in a display data output type on the message spec is the same as we need
+    // We could do additional checking here though
     data: msg.content.data,
     metadata: msg.content.metadata
   });
-}
+};

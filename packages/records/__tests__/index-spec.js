@@ -1,5 +1,6 @@
 // @flow
 import * as nteractRecords from "@nteract/records";
+import { displayData } from "@nteract/records";
 
 describe("stream output", () => {
   test("can be converted from nbformat", () => {
@@ -42,7 +43,7 @@ describe("stream output", () => {
 describe("display_data output", () => {
   test("can be converted from nbformat", () => {
     expect(
-      nteractRecords.outputFromNbformat({
+      displayData.fromNbformat({
         output_type: "display_data",
         data: {
           "text/plain": [
@@ -57,7 +58,7 @@ describe("display_data output", () => {
         metadata: { "application/json": { expanded: true } }
       })
     ).toEqual(
-      nteractRecords.makeDisplayDataOutputRecord({
+      displayData({
         outputType: "display_data",
         data: {
           "text/plain": "mind\ntime\nspace\nreality\npower\nsoul"
@@ -71,7 +72,7 @@ describe("display_data output", () => {
 
   test("can be converted from jupyter messages", () => {
     expect(
-      nteractRecords.displayDataRecordFromMessage({
+      displayData.fromJupyterMessage({
         header: {
           msg_type: "display_data"
         },
@@ -81,7 +82,7 @@ describe("display_data output", () => {
         }
       })
     ).toEqual(
-      nteractRecords.makeDisplayDataOutputRecord({
+      displayData({
         outputType: "display_data",
         data: { "text/plain": "another\nDoug" },
         metadata: { "application/json": { expanded: true } }

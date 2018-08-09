@@ -1,12 +1,20 @@
-// @flow
+// @flow strict
 
 import type { JupyterMessage } from "@nteract/messaging";
 
 import * as stream from "./stream";
-import * as displayData from "./display-data";
+import * as dd from "./display-data";
+
+import type {
+  NbformatDisplayDataOutput,
+  DisplayDataOutput
+} from "./display-data";
+
 import * as executeResult from "./execute-result";
 import * as error from "./error";
 import * as unrecognized from "./unrecognized";
+
+import { displayData } from "./display-data";
 
 export * from "./stream";
 export * from "./display-data";
@@ -15,12 +23,12 @@ export * from "./error";
 
 export type NbformatOutput =
   | stream.NbformatStreamOutput
-  | displayData.NbformatDisplayDataOutput
+  | NbformatDisplayDataOutput
   | executeResult.NbformatExecuteResultOutput
   | error.NbformatErrorOutput;
 export type OutputType =
   | stream.StreamOutput
-  | displayData.DisplayDataOutput
+  | DisplayDataOutput
   | executeResult.ExecuteResultOutput
   | error.ErrorOutput;
 
@@ -31,8 +39,8 @@ export function outputFromNbformat(output: NbformatOutput): OutputType {
   switch (output.output_type) {
     case stream.STREAM:
       return stream.streamRecordFromNbformat(output);
-    case displayData.DISPLAYDATA:
-      return displayData.displayDataRecordFromNbformat(output);
+    case displayData.type:
+      return displayData.fromNbformat(output);
     case executeResult.EXECUTE_RESULT:
       return executeResult.executeResultRecordFromNbformat(output);
     case error.ERROR:
@@ -51,7 +59,7 @@ export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
   switch (msg_type) {
     case stream.STREAM:
       return stream.streamRecordFromMessage(msg);
-    case displayData.DISPLAYDATA:
+    case displayData.type:
       return displayData.displayDataRecordFromMessage(msg);
     case executeResult.EXECUTE_RESULT:
       return executeResult.executeResultRecordFromMessage(msg);
