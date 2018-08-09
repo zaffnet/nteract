@@ -16,13 +16,13 @@ import * as common from "../common";
  *
  */
 
-export type ExecuteResultType = "execute_result";
+type ExecuteResultType = "execute_result";
 export type ExecutionCount = ?number;
 
-export const EXECUTERESULT = "execute_result";
+export const EXECUTE_RESULT = "execute_result";
 
 // In-memory version
-type ExecuteResultOutput = {
+export type ExecuteResultOutput = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
@@ -33,7 +33,7 @@ type ExecuteResultOutput = {
 export type NbformatExecuteResultOutput = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
-  data: common.MimeBundle,
+  data: common.OnDiskMimebundle,
   metadata: Object
 };
 
@@ -48,13 +48,11 @@ type ExecuteResultMessage = {
   }
 };
 
-export type ExecuteResultOutputRecord = ExecuteResultOutput;
-
 export function makeExecuteResultOutputRecord(
   executeResultOutput: ExecuteResultOutput
-): ExecuteResultOutputRecord {
+): ExecuteResultOutput {
   const defaultExecuteResultOutput = {
-    outputType: EXECUTERESULT,
+    outputType: EXECUTE_RESULT,
     executionCount: undefined,
     data: {},
     metadata: {}
@@ -66,7 +64,7 @@ export function makeExecuteResultOutputRecord(
 
 export function executeResultRecordFromNbformat(
   s: NbformatExecuteResultOutput
-): ExecuteResultOutputRecord {
+): ExecuteResultOutput {
   return makeExecuteResultOutputRecord({
     outputType: s.output_type,
     executionCount: s.execution_count,
@@ -77,9 +75,9 @@ export function executeResultRecordFromNbformat(
 
 export function executeResultRecordFromMessage(
   msg: ExecuteResultMessage
-): ExecuteResultOutputRecord {
+): ExecuteResultOutput {
   return makeExecuteResultOutputRecord({
-    outputType: EXECUTERESULT,
+    outputType: EXECUTE_RESULT,
     executionCount: msg.content.execution_count,
     data: msg.content.data,
     metadata: msg.content.metadata
