@@ -1,3 +1,19 @@
+## nteract v0.11.3 - Birdy Birdseye
+
+* More help text for Data Explorer
+* Palette chooser
+* Less bugs in data explorer! Click More Things™!
+
+## nteract v0.11.2 - Binary Binet
+
+📊 Data Explorer now has contour plots and heatmaps!
+
+Datetime is now supported in the data explorer.
+
+![contour plots](https://user-images.githubusercontent.com/495634/43361395-7dfacf2c-9282-11e8-8ebd-2fbb75419cf1.gif)
+
+![time series plots](https://user-images.githubusercontent.com/495634/43349170-dba33d88-91b2-11e8-9e4d-42d02e19369c.png)
+
 ## nteract v0.10.0 - Basic Bhabha
 
 * _Really_ fixed AppImage build for Linux
