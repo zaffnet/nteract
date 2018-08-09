@@ -100,36 +100,6 @@ function isJSONKey(key) {
   return /^application\/(.*\+)?json$/.test(key);
 }
 
-// export function cleanMimeData(
-//   key: string,
-//   data: string | Array<string> | Object
-// ) {
-//   // See https://github.com/jupyter/nbformat/blob/62d6eb8803616d198eaa2024604d1fe923f2a7b3/nbformat/v4/nbformat.v4.schema.json#L368
-//   if (isJSONKey(key)) {
-//     // Data stays as is for JSON types
-//     return data;
-//   }
-
-//   if (typeof data === "string" || Array.isArray(data)) {
-//     return demultiline(data);
-//   }
-
-//   throw new TypeError(
-//     `Data for ${key} is expected to be a string or an Array of strings`
-//   );
-// }
-
-// export function cleanMimeAtKey(
-//   mimeBundle: OnDiskMimebundle,
-//   previous: OnDiskMimebundle,
-//   key: string
-// ): MimeBundle {
-//   return produce(previous, draft => {
-//     draft[key] = cleanMimeData(key, mimeBundle[key]);
-//   });
-//   // return previous.set(key, cleanMimeData(key, mimeBundle[key]));
-// }
-
 export function createImmutableMimeBundle(
   mimeBundle: OnDiskMimebundle
 ): MimeBundle {
