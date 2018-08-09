@@ -1,7 +1,5 @@
 // @flow
 
-import produce from "immer";
-
 // Straight from nbformat
 export type MultilineString = string | Array<string>;
 
@@ -85,7 +83,8 @@ export function demultiline(s: string | Array<string>): string {
 }
 
 /**
- * Split string into a list of strings delimited by newlines, useful for on-disk git comparisons
+ * Split string into a list of strings delimited by newlines, useful for on-disk git comparisons,
+ * and is the expectation for jupyter notebooks on disk
  */
 export function remultiline(s: string | Array<string>): Array<string> {
   if (Array.isArray(s)) {
@@ -119,18 +118,24 @@ export function createImmutableMimeBundle(
   //   "text/plain": "Hey"
   // }
 
-  return produce(
-    (mimeBundle: OnDiskMimebundle),
-    (draftBundle: OnDiskMimebundle): MimeBundle => {
-      for (const key in draftBundle) {
-        if (
-          !isJSONKey(key) &&
-          (typeof draftBundle[key] === "string" ||
-            Array.isArray(draftBundle[key]))
-        ) {
-          draftBundle[key] = demultiline(draftBundle[key]);
-        }
-      }
+  // Since we have to convert from one type to another that has conflicting types, we need to hand convert it in a way that
+  // flow is able to verify correctly. The way we do that is create a new object that we declare with the type we want,
+  // set the keys and values we need, then seal the object with Object.freeze
+  const bundle: MimeBundle = {};
+
+  for (const key in mimeBundle) {
+    if (
+      !isJSONKey(key) &&
+      (typeof mimeBundle[key] === "string" || Array.isArray(mimeBundle[key]))
+    ) {
+      // Because it's a string, we can't mutate it anyways (and don't have to Object.freeze it)
+      bundle[key] = demultiline(mimeBundle[key]);
+    } else {
+      // we now know it's an Object of some kind
+      // TODO: DeepFreeze the mimebundle object for @nteract/records
+      bundle[key] = Object.freeze(mimeBundle[key]);
     }
-  );
+  }
+
+  return Object.freeze(bundle);
 }
