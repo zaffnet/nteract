@@ -44,7 +44,7 @@ type DisplayDataMessage = {
 };
 
 export function displayData(
-  displayDataOutput: DisplayDataOutput
+  displayDataOutput?: DisplayDataOutput
 ): DisplayDataOutput {
   const defaultDisplayData = {
     outputType: DISPLAYDATA,

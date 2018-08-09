@@ -89,6 +89,14 @@ describe("display_data output", () => {
       })
     );
   });
+
+  test("has default values", () => {
+    expect(displayData()).toEqual({
+      outputType: "display_data",
+      data: {},
+      metadata: {}
+    });
+  });
 });
 
 describe("execute_result output", () => {
