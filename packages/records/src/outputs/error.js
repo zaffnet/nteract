@@ -1,6 +1,5 @@
 // @flow strict
 
-import produce from "immer";
 import * as common from "../common";
 
 /**

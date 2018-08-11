@@ -5,7 +5,8 @@
 
 // In-memory version
 export type UnrecognizedOutput = {
-  outputType: "unrecognized"
+  outputType: "unrecognized",
+  raw: any
 };
 
 // On disk

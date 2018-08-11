@@ -49,7 +49,7 @@ export function outputFromNbformat(output: NbformatOutput): OutputType {
 }
 
 /**
- * Turn any output that was in JupyterMessage into a record
+ * Turn any output from a JupyterMessage into a record
  */
 export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
   const msg_type = msg.header.msg_type;
