@@ -4,21 +4,28 @@
 // frontends are able to have a known fallback when an output type isn't known.
 
 // In-memory version
-export type UnrecognizedOutput = any;
+export type UnrecognizedOutput = {
+  outputType: "unrecognized"
+};
 
 // On disk
 export type NbformatUnrecognizedOutput = {
   output_type: string // Technically, not one of "execute_result", "display_data", "stream", or "error"
 };
 
-export function makeUnrecognizedOutputRecord(): UnrecognizedOutput {
-  const defaultUnrecognizedOutput = {
-    outputType: "unrecognized"
-  };
+const UNRECOGNIZED = "unrecognized";
 
-  return defaultUnrecognizedOutput;
+export function unrecognized(raw: any) {
+  return Object.freeze({
+    outputType: "unrecognized",
+    raw
+  });
 }
 
-export function unrecognizedRecordFromNbformat(): UnrecognizedOutput {
-  return makeUnrecognizedOutputRecord();
-}
+unrecognized.fromNbformat = function fromNbformat(a: any) {
+  return unrecognized(a);
+};
+
+unrecognized.fromJupyterMessage = function fromJupyterMessage(a: any) {
+  return unrecognized(a);
+};

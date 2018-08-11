@@ -3,7 +3,9 @@ import produce from "immer";
 import { outputFromNbformat } from "../outputs";
 
 import type { MultilineString } from "../common";
-import type { OutputType, NbformatOutput, ExecutionCount } from "../outputs";
+import type { OutputType, NbformatOutput } from "../outputs";
+
+import type { ExecutionCount } from "../outputs/execute-result";
 
 export type CodeCellType = "code";
 export const CODECELL = "code";

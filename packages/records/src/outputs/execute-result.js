@@ -48,11 +48,13 @@ type ExecuteResultMessage = {
   }
 };
 
-export function executeResult(executeResultOutput?: {
-  executionCount?: ExecutionCount,
-  data?: common.MimeBundle,
-  metadata?: {}
-}): ExecuteResult {
+export function executeResult(
+  executeResultOutput?: $ReadOnly<{
+    executionCount?: ExecutionCount,
+    data?: common.MimeBundle,
+    metadata?: {}
+  }>
+): ExecuteResult {
   const defaultExecuteResult = {
     outputType: EXECUTE_RESULT,
     executionCount: undefined,

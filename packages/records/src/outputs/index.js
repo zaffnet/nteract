@@ -9,26 +9,26 @@ import type {
 import type { NbformatStreamOutput, StreamOutput } from "./stream";
 import type { NbformatErrorOutput, ErrorOutput } from "./error";
 import type { NbformatExecuteResult, ExecuteResult } from "./execute-result";
+import type { UnrecognizedOutput } from "./unrecognized";
 
-import * as unrecognized from "./unrecognized";
-
+import { unrecognized } from "./unrecognized";
 import { displayData } from "./display-data";
 import { streamOutput } from "./stream";
 import { errorOutput } from "./error";
 import { executeResult } from "./execute-result";
-
-export * from "./execute-result";
 
 export type NbformatOutput =
   | NbformatStreamOutput
   | NbformatDisplayDataOutput
   | NbformatExecuteResult
   | NbformatErrorOutput;
+
 export type OutputType =
   | StreamOutput
   | DisplayDataOutput
   | ExecuteResult
-  | ErrorOutput;
+  | ErrorOutput
+  | UnrecognizedOutput;
 
 /**
  * Turn any output that was in nbformat into a record
@@ -44,8 +44,7 @@ export function outputFromNbformat(output: NbformatOutput): OutputType {
     case errorOutput.type:
       return errorOutput.fromNbformat(output);
     default:
-      // TODO: Properly type unrecognized output messages
-      return unrecognized.unrecognizedRecordFromNbformat();
+      return unrecognized.fromNbformat(output);
   }
 }
 
@@ -64,6 +63,6 @@ export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
     case errorOutput.type:
       return errorOutput.fromJupyterMessage(msg);
     default:
-      return unrecognized.makeUnrecognizedOutputRecord();
+      return unrecognized.fromJupyterMessage(msg);
   }
 }
