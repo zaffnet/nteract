@@ -3,6 +3,7 @@ import * as nteractRecords from "@nteract/records";
 
 import { streamOutput } from "@nteract/records/src/outputs/stream";
 import { displayData } from "@nteract/records/src/outputs/display-data";
+import { errorOutput } from "@nteract/records/src/outputs/error";
 
 describe("stream output", () => {
   test("can be converted from nbformat", () => {
@@ -157,8 +158,7 @@ describe("error output", () => {
         traceback: ["sweet", "rabbit"]
       })
     ).toEqual(
-      nteractRecords.makeErrorOutputRecord({
-        output_type: "error",
+      errorOutput({
         ename: "Thor",
         evalue: "Pirate Angel",
         traceback: ["sweet", "rabbit"]
@@ -168,7 +168,7 @@ describe("error output", () => {
 
   test("can be converted from jupyter messages", () => {
     expect(
-      nteractRecords.errorRecordFromMessage({
+      errorOutput.fromJupyterMessage({
         header: {
           msg_type: "error"
         },
@@ -179,8 +179,7 @@ describe("error output", () => {
         }
       })
     ).toEqual(
-      nteractRecords.makeErrorOutputRecord({
-        outputType: "error",
+      errorOutput({
         ename: "cats",
         evalue: "good",
         traceback: ["squirrel"]

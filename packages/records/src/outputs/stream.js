@@ -48,11 +48,12 @@ type StreamMessage = {
   }
 };
 
-export function streamOutput(s: {
-  outputType?: StreamType,
-  name?: StreamName,
-  text?: string
-}): StreamOutput {
+export function streamOutput(
+  s: $ReadOnly<{
+    name?: StreamName,
+    text?: string
+  }>
+): StreamOutput {
   return Object.freeze(
     Object.assign({}, { outputType: STREAM, name: STDOUT, text: "" }, s)
   );
@@ -64,7 +65,6 @@ streamOutput.fromNbformat = function fromNbformat(
   s: NbformatStreamOutput
 ): StreamOutput {
   return streamOutput({
-    outputType: STREAM,
     name: s.name,
     text: common.demultiline(s.text)
   });
@@ -74,7 +74,6 @@ streamOutput.fromJupyterMessage = function fromJupyterMessage(
   msg: StreamMessage
 ): StreamOutput {
   return streamOutput({
-    outputType: STREAM,
     name: msg.content.name,
     text: msg.content.text
   });
