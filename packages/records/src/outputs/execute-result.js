@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import produce from "immer";
 import * as common from "../common";
@@ -26,7 +26,7 @@ export type ExecuteResultOutput = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
-  metadata: Object
+  metadata: {}
 };
 
 // On disk
@@ -34,7 +34,7 @@ export type NbformatExecuteResultOutput = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
   data: common.OnDiskMimebundle,
-  metadata: Object
+  metadata: {}
 };
 
 type ExecuteResultMessage = {
@@ -44,7 +44,7 @@ type ExecuteResultMessage = {
   content: {
     execution_count: number,
     data: common.MimeBundle,
-    metadata: Object
+    metadata: {}
   }
 };
 
