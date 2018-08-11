@@ -1,6 +1,5 @@
-// @flow
+// @flow strict
 
-import produce from "immer";
 import * as common from "../common";
 
 /**
@@ -10,9 +9,9 @@ import * as common from "../common";
  *
  *   - Declare the in-memory type
  *   - Declare the nbformat type (exactly matching nbformat.v4.schema.json)
- *   - Create a "record maker", which we _don't_ export, followed by the real `makeXRecord` function that enforces set values
- *   - Write a way to go from nbformat to these records
- *   - Write a way to go from message spec to these records
+ *   - Declare the message type (matching http://jupyter-client.readthedocs.io/en/stable/messaging.html)
+ *   - Write a way to go from nbformat to our in-memory version
+ *   - Write a way to go from message spec to our in-memory version
  *
  */
 
@@ -48,31 +47,33 @@ type StreamMessage = {
   }
 };
 
-export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
-  const defaultStreamOutput = {
-    outputType: STREAM,
-    name: STDOUT,
-    text: ""
-  };
-  return produce(defaultStreamOutput, draft =>
-    Object.assign(draft, streamOutput)
+export function streamOutput(
+  s: $ReadOnly<{
+    name?: StreamName,
+    text?: string
+  }>
+): StreamOutput {
+  return Object.freeze(
+    Object.assign({}, { outputType: STREAM, name: STDOUT, text: "" }, s)
   );
-};
+}
 
-export function streamRecordFromNbformat(
+streamOutput.type = STREAM;
+
+streamOutput.fromNbformat = function fromNbformat(
   s: NbformatStreamOutput
 ): StreamOutput {
-  return makeStreamOutputRecord({
-    outputType: s.output_type,
+  return streamOutput({
     name: s.name,
     text: common.demultiline(s.text)
   });
-}
+};
 
-export function streamRecordFromMessage(msg: StreamMessage): StreamOutput {
-  return makeStreamOutputRecord({
-    outputType: STREAM,
+streamOutput.fromJupyterMessage = function fromJupyterMessage(
+  msg: StreamMessage
+): StreamOutput {
+  return streamOutput({
     name: msg.content.name,
     text: msg.content.text
   });
-}
+};

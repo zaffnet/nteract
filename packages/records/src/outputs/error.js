@@ -1,6 +1,5 @@
-// @flow
+// @flow strict
 
-import produce from "immer";
 import * as common from "../common";
 
 /**
@@ -10,13 +9,13 @@ import * as common from "../common";
  *
  *   - Declare the in-memory type
  *   - Declare the nbformat type (exactly matching nbformat.v4.schema.json)
- *   - Create a "record maker", which we _don't_ export, followed by the real `makeXRecord` function that enforces set values
- *   - Write a way to go from nbformat to these records
- *   - Write a way to go from message spec to these records
+ *   - Declare the message type (matching http://jupyter-client.readthedocs.io/en/stable/messaging.html)
+ *   - Write a way to go from nbformat to our in-memory version
+ *   - Write a way to go from message spec to our in-memory version
  *
  */
 
-export type ErrorType = "error" | "pyerr";
+export type ErrorType = "error";
 
 export const ERROR = "error";
 
@@ -30,7 +29,7 @@ export type ErrorOutput = {
 
 // On disk
 export type NbformatErrorOutput = {
-  output_type: ErrorType,
+  output_type: "error" | "pyerr",
   ename: string,
   evalue: string,
   traceback: Array<string>
@@ -38,7 +37,7 @@ export type NbformatErrorOutput = {
 
 type ErrorMessage = {
   header: {
-    msg_type: ErrorType
+    msg_type: "error" | "pyerr"
   },
   content: {
     ename: string,
@@ -47,38 +46,34 @@ type ErrorMessage = {
   }
 };
 
-export function makeErrorOutputRecord(errorOutput: ErrorOutput): ErrorOutput {
-  const defaultErrorOutput = {
+export function errorOutput(
+  eOut: $ReadOnly<{
+    ename?: string,
+    evalue?: string,
+    traceback?: Array<string>
+  }>
+): ErrorOutput {
+  return Object.freeze({
     outputType: ERROR,
-    ename: "",
-    evalue: "",
-    traceback: []
-  };
-
-  return produce(defaultErrorOutput, draft => {
-    return Object.assign(draft, defaultErrorOutput);
+    ename: eOut.ename || "",
+    evalue: eOut.evalue || "",
+    // Freeze a copy of the traceback array
+    traceback: Array.isArray(eOut.traceback)
+      ? Object.freeze(eOut.traceback.slice())
+      : []
   });
 }
 
-export function errorRecordFromNbformat(s: NbformatErrorOutput): ErrorOutput {
-  return makeErrorOutputRecord(
-    Object.assign(
-      {},
-      {
-        outputType: s.output_type,
-        ename: s.ename,
-        evalue: s.evalue,
-        traceback: s.traceback
-      }
-    )
-  );
-}
+errorOutput.type = ERROR;
 
-export function errorRecordFromMessage(msg: ErrorMessage): ErrorOutput {
-  return makeErrorOutputRecord({
-    outputType: ERROR,
-    ename: msg.content.ename,
-    evalue: msg.content.evalue,
-    traceback: msg.content.traceback
-  });
-}
+errorOutput.fromNbformat = function fromNbformat(
+  s: NbformatErrorOutput
+): ErrorOutput {
+  return errorOutput(s);
+};
+
+errorOutput.fromJupyterMessage = function fromJupyterMessage(
+  msg: ErrorMessage
+): ErrorOutput {
+  return errorOutput(msg.content);
+};

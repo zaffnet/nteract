@@ -1,7 +1,8 @@
-// @flow
+// @flow strict
 
 import produce from "immer";
 import * as common from "../common";
+
 /**
  * Let this declare the way for well typed records for outputs
  *
@@ -9,28 +10,29 @@ import * as common from "../common";
  *
  *   - Declare the in-memory type
  *   - Declare the nbformat type (exactly matching nbformat.v4.schema.json)
- *   - Create a "record maker", which we _don't_ export, followed by the real `makeXRecord` function that enforces set values
- *   - Write a way to go from nbformat to these records
- *   - Write a way to go from message spec to these records
+ *   - Declare the message type (matching http://jupyter-client.readthedocs.io/en/stable/messaging.html)
+ *   - Write a way to go from nbformat to our in-memory version
+ *   - Write a way to go from message spec to our in-memory version
  *
  */
 
 type DisplayDataType = "display_data";
 
 export const DISPLAYDATA = "display_data";
+export const outputType = DISPLAYDATA;
 
 // In-memory version
 export type DisplayDataOutput = {
   outputType: DisplayDataType,
   data: common.MimeBundle,
-  metadata: Object
+  metadata: {}
 };
 
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
   data: common.OnDiskMimebundle,
-  metadata: Object
+  metadata: {}
 };
 
 type DisplayDataMessage = {
@@ -39,40 +41,45 @@ type DisplayDataMessage = {
   },
   content: {
     data: common.MimeBundle,
-    metadata: Object
+    metadata: {}
   }
 };
 
-export function makeDisplayDataOutputRecord(
-  displayDataOutput: DisplayDataOutput
-): DisplayDataOutput {
-  const defaultDisplayDataRecord = {
+export function displayData(displayDataOutput?: {
+  data?: common.MimeBundle,
+  metadata?: {}
+}): DisplayDataOutput {
+  const defaultDisplayData = {
     outputType: DISPLAYDATA,
     data: {},
     metadata: {}
   };
 
-  return produce(defaultDisplayDataRecord, draft => {
+  return produce(defaultDisplayData, draft => {
     return Object.assign(draft, displayDataOutput);
   });
 }
 
-export function displayDataRecordFromNbformat(
+displayData.type = "display_data";
+
+displayData.fromNbformat = function fromNbformat(
   s: NbformatDisplayDataOutput
 ): DisplayDataOutput {
-  return makeDisplayDataOutputRecord({
+  return displayData({
     outputType: s.output_type,
     data: common.createImmutableMimeBundle(s.data),
     metadata: s.metadata
   });
-}
+};
 
-export function displayDataRecordFromMessage(
+displayData.fromJupyterMessage = function displayDataRecordFromMessage(
   msg: DisplayDataMessage
 ): DisplayDataOutput {
-  return makeDisplayDataOutputRecord({
+  return displayData({
     outputType: DISPLAYDATA,
+    // The data field in a display data output type on the message spec is the same as we need
+    // We could do additional checking here though
     data: msg.content.data,
     metadata: msg.content.metadata
   });
-}
+};

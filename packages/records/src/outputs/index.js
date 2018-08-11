@@ -1,63 +1,68 @@
-// @flow
+// @flow strict
 
 import type { JupyterMessage } from "@nteract/messaging";
 
-import * as stream from "./stream";
-import * as displayData from "./display-data";
-import * as executeResult from "./execute-result";
-import * as error from "./error";
-import * as unrecognized from "./unrecognized";
+import type {
+  NbformatDisplayDataOutput,
+  DisplayDataOutput
+} from "./display-data";
+import type { NbformatStreamOutput, StreamOutput } from "./stream";
+import type { NbformatErrorOutput, ErrorOutput } from "./error";
+import type { NbformatExecuteResult, ExecuteResult } from "./execute-result";
+import type { UnrecognizedOutput } from "./unrecognized";
 
-export * from "./stream";
-export * from "./display-data";
-export * from "./execute-result";
-export * from "./error";
+import { unrecognized } from "./unrecognized";
+import { displayData } from "./display-data";
+import { streamOutput } from "./stream";
+import { errorOutput } from "./error";
+import { executeResult } from "./execute-result";
 
 export type NbformatOutput =
-  | stream.NbformatStreamOutput
-  | displayData.NbformatDisplayDataOutput
-  | executeResult.NbformatExecuteResultOutput
-  | error.NbformatErrorOutput;
+  | NbformatStreamOutput
+  | NbformatDisplayDataOutput
+  | NbformatExecuteResult
+  | NbformatErrorOutput;
+
 export type OutputType =
-  | stream.StreamOutput
-  | displayData.DisplayDataOutput
-  | executeResult.ExecuteResultOutput
-  | error.ErrorOutput;
+  | StreamOutput
+  | DisplayDataOutput
+  | ExecuteResult
+  | ErrorOutput
+  | UnrecognizedOutput;
 
 /**
  * Turn any output that was in nbformat into a record
  */
 export function outputFromNbformat(output: NbformatOutput): OutputType {
   switch (output.output_type) {
-    case stream.STREAM:
-      return stream.streamRecordFromNbformat(output);
-    case displayData.DISPLAYDATA:
-      return displayData.displayDataRecordFromNbformat(output);
-    case executeResult.EXECUTE_RESULT:
-      return executeResult.executeResultRecordFromNbformat(output);
-    case error.ERROR:
-      return error.errorRecordFromNbformat(output);
+    case streamOutput.type:
+      return streamOutput.fromNbformat(output);
+    case displayData.type:
+      return displayData.fromNbformat(output);
+    case executeResult.type:
+      return executeResult.fromNbformat(output);
+    case errorOutput.type:
+      return errorOutput.fromNbformat(output);
     default:
-      // TODO: Properly type unrecognized output messages
-      return unrecognized.unrecognizedRecordFromNbformat();
+      return unrecognized.fromNbformat(output);
   }
 }
 
 /**
- * Turn any output that was in JupyterMessage into a record
+ * Turn any output from a JupyterMessage into a record
  */
 export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
   const msg_type = msg.header.msg_type;
   switch (msg_type) {
-    case stream.STREAM:
-      return stream.streamRecordFromMessage(msg);
-    case displayData.DISPLAYDATA:
-      return displayData.displayDataRecordFromMessage(msg);
-    case executeResult.EXECUTE_RESULT:
-      return executeResult.executeResultRecordFromMessage(msg);
-    case error.ERROR:
-      return error.errorRecordFromMessage(msg);
+    case streamOutput.type:
+      return streamOutput.fromJupyterMessage(msg);
+    case displayData.type:
+      return displayData.fromJupyterMessage(msg);
+    case executeResult.type:
+      return executeResult.fromJupyterMessage(msg);
+    case errorOutput.type:
+      return errorOutput.fromJupyterMessage(msg);
     default:
-      return unrecognized.makeUnrecognizedOutputRecord();
+      return unrecognized.fromJupyterMessage(msg);
   }
 }
