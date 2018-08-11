@@ -48,31 +48,34 @@ type StreamMessage = {
   }
 };
 
-export const makeStreamOutputRecord: Function = (streamOutput: Object) => {
-  const defaultStreamOutput = {
-    outputType: STREAM,
-    name: STDOUT,
-    text: ""
-  };
-  return produce(defaultStreamOutput, draft =>
-    Object.assign(draft, streamOutput)
+export function streamOutput(s: {
+  outputType?: StreamType,
+  name?: StreamName,
+  text?: string
+}): StreamOutput {
+  return Object.freeze(
+    Object.assign({}, { outputType: STREAM, name: STDOUT, text: "" }, s)
   );
-};
+}
 
-export function streamRecordFromNbformat(
+streamOutput.type = STREAM;
+
+streamOutput.fromNbformat = function fromNbformat(
   s: NbformatStreamOutput
 ): StreamOutput {
-  return makeStreamOutputRecord({
-    outputType: s.output_type,
+  return streamOutput({
+    outputType: STREAM,
     name: s.name,
     text: common.demultiline(s.text)
   });
-}
+};
 
-export function streamRecordFromMessage(msg: StreamMessage): StreamOutput {
-  return makeStreamOutputRecord({
+streamOutput.fromJupyterMessage = function fromJupyterMessage(
+  msg: StreamMessage
+): StreamOutput {
+  return streamOutput({
     outputType: STREAM,
     name: msg.content.name,
     text: msg.content.text
   });
-}
+};

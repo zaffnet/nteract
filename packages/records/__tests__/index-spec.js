@@ -1,17 +1,19 @@
 // @flow
 import * as nteractRecords from "@nteract/records";
-import { displayData } from "@nteract/records";
+
+import { streamOutput } from "@nteract/records/src/outputs/stream";
+import { displayData } from "@nteract/records/src/outputs/display-data";
 
 describe("stream output", () => {
   test("can be converted from nbformat", () => {
     expect(
-      nteractRecords.outputFromNbformat({
+      streamOutput.fromNbformat({
         output_type: "stream",
         name: "stdout",
         text: ["sup\n", "yall"]
       })
     ).toEqual(
-      nteractRecords.makeStreamOutputRecord({
+      streamOutput({
         outputType: "stream",
         name: "stdout",
         text: "sup\nyall"
@@ -21,7 +23,7 @@ describe("stream output", () => {
 
   test("can be converted from jupyter messages", () => {
     expect(
-      nteractRecords.streamRecordFromMessage({
+      streamOutput.fromJupyterMessage({
         header: {
           msg_type: "stream"
         },
@@ -31,7 +33,7 @@ describe("stream output", () => {
         }
       })
     ).toEqual(
-      nteractRecords.makeStreamOutputRecord({
+      streamOutput({
         outputType: "stream",
         name: "stdout",
         text: "it is love we must hold on to\nnever easy but we try"

@@ -2,32 +2,30 @@
 
 import type { JupyterMessage } from "@nteract/messaging";
 
-import * as stream from "./stream";
-import * as dd from "./display-data";
-
 import type {
   NbformatDisplayDataOutput,
   DisplayDataOutput
 } from "./display-data";
+
+import type { NbformatStreamOutput, StreamOutput } from "./stream";
 
 import * as executeResult from "./execute-result";
 import * as error from "./error";
 import * as unrecognized from "./unrecognized";
 
 import { displayData } from "./display-data";
+import { streamOutput } from "./stream";
 
-export * from "./stream";
-export * from "./display-data";
 export * from "./execute-result";
 export * from "./error";
 
 export type NbformatOutput =
-  | stream.NbformatStreamOutput
+  | NbformatStreamOutput
   | NbformatDisplayDataOutput
   | executeResult.NbformatExecuteResultOutput
   | error.NbformatErrorOutput;
 export type OutputType =
-  | stream.StreamOutput
+  | StreamOutput
   | DisplayDataOutput
   | executeResult.ExecuteResultOutput
   | error.ErrorOutput;
@@ -37,8 +35,8 @@ export type OutputType =
  */
 export function outputFromNbformat(output: NbformatOutput): OutputType {
   switch (output.output_type) {
-    case stream.STREAM:
-      return stream.streamRecordFromNbformat(output);
+    case streamOutput.type:
+      return streamOutput.fromNbformat(output);
     case displayData.type:
       return displayData.fromNbformat(output);
     case executeResult.EXECUTE_RESULT:
@@ -57,8 +55,8 @@ export function outputFromNbformat(output: NbformatOutput): OutputType {
 export function outputFromMessage(msg: JupyterMessage<*, *>): OutputType {
   const msg_type = msg.header.msg_type;
   switch (msg_type) {
-    case stream.STREAM:
-      return stream.streamRecordFromMessage(msg);
+    case streamOutput.type:
+      return streamOutput.streamRecordFromMessage(msg);
     case displayData.type:
       return displayData.displayDataRecordFromMessage(msg);
     case executeResult.EXECUTE_RESULT:
