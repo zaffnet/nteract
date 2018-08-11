@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { deepFreeze } from "./freeze";
 
 // Straight from nbformat
@@ -17,21 +17,21 @@ export type OnDiskMimebundle = {
   "image/gif"?: MultilineString,
   "image/svg+xml"?: MultilineString,
   "text/vnd.plotly.v1+html"?: MultilineString,
-  "application/vdom.v1+json"?: Object,
-  "application/vnd.dataresource+json"?: Object,
+  "application/vdom.v1+json"?: {},
+  "application/vnd.dataresource+json"?: {},
 
   "text/vnd.plotly.v1+html"?: MultilineString,
-  "application/vnd.plotly.v1+json"?: Object,
-  "application/geo+json"?: Object,
+  "application/vnd.plotly.v1+json"?: {},
+  "application/geo+json"?: {},
 
-  "application/x-nteract-model-debug+json"?: Object,
+  "application/x-nteract-model-debug+json"?: {},
 
-  "application/vnd.vega.v2+json"?: Object,
-  "application/vnd.vega.v3+json"?: Object,
-  "application/vnd.vegalite.v1+json"?: Object,
-  "application/vnd.vegalite.v2+json"?: Object,
+  "application/vnd.vega.v2+json"?: {},
+  "application/vnd.vega.v3+json"?: {},
+  "application/vnd.vegalite.v1+json"?: {},
+  "application/vnd.vegalite.v2+json"?: {},
 
-  [key: string]: string | Array<string> | Object
+  [key: string]: string | Array<string> | {}
 };
 
 // Enumerating over all the possible
@@ -54,22 +54,22 @@ export type MimeBundle = {
   //   * A string, which would be deserialized
   //   * An array, which would have to be assumed to be a multiline string
   //
-  "application/json"?: Object,
+  "application/json"?: {},
 
-  "application/vdom.v1+json"?: Object,
-  "application/vnd.dataresource+json"?: Object,
+  "application/vdom.v1+json"?: {},
+  "application/vnd.dataresource+json"?: {},
 
   "text/vnd.plotly.v1+html"?: string,
-  "application/vnd.plotly.v1+json"?: Object,
-  "application/geo+json"?: Object,
+  "application/vnd.plotly.v1+json"?: {},
+  "application/geo+json"?: {},
 
-  "application/x-nteract-model-debug+json"?: Object,
+  "application/x-nteract-model-debug+json"?: {},
 
-  "application/vnd.vega.v2+json"?: Object,
-  "application/vnd.vega.v3+json"?: Object,
-  "application/vnd.vegalite.v1+json"?: Object,
-  "application/vnd.vegalite.v2+json"?: Object,
-  [key: string]: string | Array<string> | Object // all others
+  "application/vnd.vega.v2+json"?: {},
+  "application/vnd.vega.v3+json"?: {},
+  "application/vnd.vegalite.v1+json"?: {},
+  "application/vnd.vegalite.v2+json"?: {},
+  [key: string]: string | Array<string> | {} // all others
 };
 
 /**

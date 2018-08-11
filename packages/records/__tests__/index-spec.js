@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import * as nteractRecords from "@nteract/records";
 
 import { streamOutput } from "@nteract/records/src/outputs/stream";
