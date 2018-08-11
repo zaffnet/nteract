@@ -30,6 +30,9 @@ type ExecuteResultProps = {
    * Grab bag of random things
    */
   metadata: {},
+  /**
+   * React elements that accept mimebundle data
+   */
   children: React.Node
 };
 
@@ -41,6 +44,7 @@ export class ExecuteResult extends React.Component<ExecuteResultProps, null> {
   };
 
   render() {
+    // We must pick only one child to render
     let chosenOne = null;
 
     const data = this.props.data;

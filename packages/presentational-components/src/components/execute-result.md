@@ -56,7 +56,7 @@ HTML.defaultProps = {
 <ExecuteResult
   data={{
     "text/plain": "plain was richer",
-    "text/html": "<b>HTML was richer</b>"
+    "text/html": "<b>HTML is so rich</b>"
   }}
 >
   <HTML />
@@ -77,4 +77,40 @@ Without any valid choices, it renders nothing!
 
 ```jsx
 <ExecuteResult />
+```
+
+Since these are _just_ React elements as children, we can pass custom props that will pass through on render:
+
+```
+/* Custom transforms */
+const Special = props => props.big ? <h1>Big {props.data}</h1> : <p>Small {props.data}</p>
+Special.defaultProps = {
+  big: false,
+  mimetype: "text/special"
+}
+
+const Plain = props => <pre>{props.data}</pre>;
+Plain.defaultProps = {
+  mimetype: "text/plain"
+};
+
+
+<div>
+  <ExecuteResult
+    data={{
+      "text/special": "Happy Day"
+    }}
+  >
+    <Special big />
+    <Plain />
+  </ExecuteResult>
+  <ExecuteResult
+    data={{
+      "text/special": "Happy Day"
+    }}
+  >
+    <Special />
+    <Plain />
+  </ExecuteResult>
+</div>
 ```
