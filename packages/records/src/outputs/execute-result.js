@@ -22,7 +22,7 @@ export type ExecutionCount = ?number;
 export const EXECUTE_RESULT = "execute_result";
 
 // In-memory version
-export type ExecuteResultOutput = {
+export type ExecuteResult = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
@@ -30,7 +30,7 @@ export type ExecuteResultOutput = {
 };
 
 // On disk
-export type NbformatExecuteResultOutput = {
+export type NbformatExecuteResult = {
   output_type: ExecuteResultType,
   execution_count: ExecutionCount,
   data: common.OnDiskMimebundle,
@@ -48,38 +48,40 @@ type ExecuteResultMessage = {
   }
 };
 
-export function makeExecuteResultOutputRecord(
-  executeResultOutput: ExecuteResultOutput
-): ExecuteResultOutput {
-  const defaultExecuteResultOutput = {
+export function executeResult(executeResultOutput?: {
+  executionCount?: ExecutionCount,
+  data?: common.MimeBundle,
+  metadata?: {}
+}): ExecuteResult {
+  const defaultExecuteResult = {
     outputType: EXECUTE_RESULT,
     executionCount: undefined,
     data: {},
     metadata: {}
   };
-  return produce(defaultExecuteResultOutput, draft => {
+  return produce(defaultExecuteResult, draft => {
     return Object.assign(draft, executeResultOutput);
   });
 }
 
-export function executeResultRecordFromNbformat(
-  s: NbformatExecuteResultOutput
-): ExecuteResultOutput {
-  return makeExecuteResultOutputRecord({
-    outputType: s.output_type,
+executeResult.type = EXECUTE_RESULT;
+
+executeResult.fromNbformat = function fromNbformat(
+  s: NbformatExecuteResult
+): ExecuteResult {
+  return executeResult({
     executionCount: s.execution_count,
     data: common.createImmutableMimeBundle(s.data),
     metadata: s.metadata
   });
-}
+};
 
-export function executeResultRecordFromMessage(
+executeResult.fromJupyterMessage = function fromJupyterMessage(
   msg: ExecuteResultMessage
-): ExecuteResultOutput {
-  return makeExecuteResultOutputRecord({
-    outputType: EXECUTE_RESULT,
+): ExecuteResult {
+  return executeResult({
     executionCount: msg.content.execution_count,
     data: msg.content.data,
     metadata: msg.content.metadata
   });
-}
+};

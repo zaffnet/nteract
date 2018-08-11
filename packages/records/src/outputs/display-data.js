@@ -45,9 +45,10 @@ type DisplayDataMessage = {
   }
 };
 
-export function displayData(
-  displayDataOutput?: DisplayDataOutput
-): DisplayDataOutput {
+export function displayData(displayDataOutput?: {
+  data?: common.MimeBundle,
+  metadata?: {}
+}): DisplayDataOutput {
   const defaultDisplayData = {
     outputType: DISPLAYDATA,
     data: {},

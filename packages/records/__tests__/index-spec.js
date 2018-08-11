@@ -1,6 +1,7 @@
 // @flow strict
 import * as nteractRecords from "@nteract/records";
 
+import { executeResult } from "@nteract/records/src/outputs/execute-result";
 import { streamOutput } from "@nteract/records/src/outputs/stream";
 import { displayData } from "@nteract/records/src/outputs/display-data";
 import { errorOutput } from "@nteract/records/src/outputs/error";
@@ -114,8 +115,7 @@ describe("execute_result output", () => {
         metadata: { "application/json": { expanded: true } }
       })
     ).toEqual(
-      nteractRecords.makeExecuteResultOutputRecord({
-        outputType: "execute_result",
+      executeResult({
         executionCount: 7,
         data: {
           "text/plain": "xandar\nnidavellir\nterra"
@@ -129,7 +129,7 @@ describe("execute_result output", () => {
 
   test("can be converted from jupyter messages", () => {
     expect(
-      nteractRecords.executeResultRecordFromMessage({
+      executeResult.fromJupyterMessage({
         header: {
           msg_type: "execute_result"
         },
@@ -139,8 +139,7 @@ describe("execute_result output", () => {
         }
       })
     ).toEqual(
-      nteractRecords.makeExecuteResultOutputRecord({
-        outputType: "execute_result",
+      executeResult({
         data: { anotherDay: "anotherDoug" },
         metadata: { "application/json": { expanded: false } }
       })
