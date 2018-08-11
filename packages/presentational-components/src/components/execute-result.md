@@ -1,5 +1,5 @@
 Execute Result
 
 ```jsx
-<ExecuteResult />
+<ExecuteResult data={{ "text/plain": "test data" }} />
 ```
