@@ -1,4 +1,5 @@
 // @flow
+import { deepFreeze } from "./freeze";
 
 // Straight from nbformat
 export type MultilineString = string | Array<string>;
@@ -55,7 +56,6 @@ export type MimeBundle = {
   //
   "application/json"?: Object,
 
-  // TODO: These can all be more fully typed
   "application/vdom.v1+json"?: Object,
   "application/vnd.dataresource+json"?: Object,
 
@@ -132,8 +132,7 @@ export function createImmutableMimeBundle(
       bundle[key] = demultiline(mimeBundle[key]);
     } else {
       // we now know it's an Object of some kind
-      // TODO: DeepFreeze the mimebundle object for @nteract/records
-      bundle[key] = Object.freeze(mimeBundle[key]);
+      bundle[key] = deepFreeze(mimeBundle[key]);
     }
   }
 
