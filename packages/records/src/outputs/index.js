@@ -8,7 +8,10 @@ import type {
 } from "./display-data";
 import type { NbformatStreamOutput, StreamOutput } from "./stream";
 import type { NbformatErrorOutput, ErrorOutput } from "./error";
-import type { NbformatExecuteResult, ExecuteResult } from "./execute-result";
+import type {
+  NbformatExecuteResult,
+  ExecuteResultOutput
+} from "./execute-result";
 import type { UnrecognizedOutput } from "./unrecognized";
 
 import { unrecognized } from "./unrecognized";
@@ -26,9 +29,16 @@ export type NbformatOutput =
 export type OutputType =
   | StreamOutput
   | DisplayDataOutput
-  | ExecuteResult
+  | ExecuteResultOutput
   | ErrorOutput
   | UnrecognizedOutput;
+
+export type {
+  StreamOutput,
+  ErrorOutput,
+  ExecuteResultOutput,
+  DisplayDataOutput
+};
 
 /**
  * Turn any output that was in nbformat into a record
