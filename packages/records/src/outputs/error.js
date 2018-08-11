@@ -10,9 +10,9 @@ import * as common from "../common";
  *
  *   - Declare the in-memory type
  *   - Declare the nbformat type (exactly matching nbformat.v4.schema.json)
- *   - Create a "record maker", which we _don't_ export, followed by the real `makeXRecord` function that enforces set values
- *   - Write a way to go from nbformat to these records
- *   - Write a way to go from message spec to these records
+ *   - Declare the message type (matching http://jupyter-client.readthedocs.io/en/stable/messaging.html)
+ *   - Write a way to go from nbformat to our in-memory version
+ *   - Write a way to go from message spec to our in-memory version
  *
  */
 
