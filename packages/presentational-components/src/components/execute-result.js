@@ -29,7 +29,8 @@ type ExecuteResultProps = {
   /**
    * Grab bag of random things
    */
-  metadata: {}
+  metadata: {},
+  children: React.Node
 };
 
 export class ExecuteResult extends React.Component<ExecuteResultProps, null> {
@@ -40,6 +41,30 @@ export class ExecuteResult extends React.Component<ExecuteResultProps, null> {
   };
 
   render() {
-    return <pre>{JSON.stringify(this.props.data, null, 2)}</pre>;
+    let chosenOne = null;
+
+    const data = this.props.data;
+
+    React.Children.forEach(this.props.children, child => {
+      if (chosenOne) {
+        // Already have a selection
+        return;
+      }
+      if (child.props && child.props.mimetype && child.props.mimetype in data) {
+        chosenOne = child;
+        return;
+      }
+    });
+
+    if (chosenOne === null) {
+      return null;
+    }
+
+    const mimetype = chosenOne.props.mimetype;
+
+    return React.cloneElement(chosenOne, {
+      data: this.props.data[mimetype],
+      metadata: this.props.metadata[mimetype]
+    });
   }
 }
