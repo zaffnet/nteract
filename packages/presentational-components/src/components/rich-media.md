@@ -1,25 +1,33 @@
-Execute Result
-
-The execute result component, like `DisplayData`, takes in the mimebundle that the `execute_result` message has as part of its payload. The payload looks like this:
+Jupyter kernels are able to emit rich media like images, json, text, html, and many other media types. They're the core of what makes notebooks and consoles so expressive. They're sent over the jupyter messaging protocol and stored in the notebook just like this:
 
 ```json
 {
   "text/plain": "SparkContext ⚡️",
-  "text/html": "<b>SparkContext ⚡️</b>"
+  "text/html": "<b>SparkContext ⚡️</b>",
+  "application/json": {
+    "spark": "awesome ⚡️",
+    "version": 2
+  }
 }
 ```
 
-The standard practice in Jupyter apps is to pick the "richest" of these. This Component lets
-you declare which are the richest in the order they appear as children:
+There are several different jupyter message types that include these objects:
+
+- [`execute_result`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#id6)
+- [`display_data`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#display-data) and [`update_display_data`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#update-display-data)
+- [`inspect_reply`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#introspection)
+- [`payload`'s `page`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#payloads-deprecated)
+
+This object structure is called a "mimebundle", so dubbed because it's a bundle of [MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) and associated data. The standard practice in Jupyter apps is to pick the "richest" of these for rendering. The `<RichMedia />` component accepts the `data` from a kernel as a prop and all the renderers / transforms as `children`. The order of the children states their richness from highest to lowest.
 
 ```jsx static
-<ExecuteResult data={{ "text/plain": "test data" }}>
+<RichMedia data={{ "text/plain": "test data" }}>
   <HTML />
   <Plain />
-</ExecuteResult>
+</RichMedia>
 ```
 
-The following block uses the `<Plain />` output since `text/plain` is the only available.
+The following block uses the `<Plain />` output since `text/plain` is the only key in the `data` object.
 
 ```jsx
 /* Custom transforms */
@@ -33,10 +41,10 @@ HTML.defaultProps = {
   mimetype: "text/html"
 };
 
-<ExecuteResult data={{ "text/plain": "SparkContext ⚡️" }}>
+<RichMedia data={{ "text/plain": "SparkContext ⚡️" }}>
   <HTML />
   <Plain />
-</ExecuteResult>;
+</RichMedia>;
 ```
 
 Whereas this output has a richer HTML output:
@@ -53,7 +61,7 @@ HTML.defaultProps = {
   mimetype: "text/html"
 };
 
-<ExecuteResult
+<RichMedia
   data={{
     "text/plain": "plain was richer",
     "text/html": "<b>HTML is so rich</b>"
@@ -61,13 +69,13 @@ HTML.defaultProps = {
 >
   <HTML />
   <Plain />
-</ExecuteResult>;
+</RichMedia>;
 ```
 
 Without any valid choices, it renders nothing!
 
 ```jsx
-<ExecuteResult
+<RichMedia
   data={{
     "text/plain": "plain was richer",
     "text/html": "<b>HTML was richer</b>"
@@ -76,12 +84,12 @@ Without any valid choices, it renders nothing!
 ```
 
 ```jsx
-<ExecuteResult />
+<RichMedia />
 ```
 
 ### Passing Props
 
-Since these are _just_ React elements as children, we can pass custom props that will pass through on render:
+Since the children are React elements, we can pass custom props that will get rendered with the data:
 
 ```
 /* Custom transforms */
@@ -98,22 +106,22 @@ Plain.defaultProps = {
 
 
 <div>
-  <ExecuteResult
+  <RichMedia
     data={{
       "text/special": "Happy Day"
     }}
   >
     <Special big />
     <Plain />
-  </ExecuteResult>
-  <ExecuteResult
+  </RichMedia>
+  <RichMedia
     data={{
       "text/special": "Happy Day"
     }}
   >
     <Special />
     <Plain />
-  </ExecuteResult>
+  </RichMedia>
 </div>
 ```
 
@@ -164,7 +172,7 @@ class Output extends React.Component {
             onChange={e => this.setState({ color: e.target.value })}
           />
         </div>
-        <ExecuteResult
+        <RichMedia
           data={{
             "text/plain": "1,2,3\n4,5,6\n",
             "text/html":
@@ -175,7 +183,7 @@ class Output extends React.Component {
           <FancyTable color={this.state.color} />
           <HTML />
           <Plain />
-        </ExecuteResult>
+        </RichMedia>
       </div>
     );
   }

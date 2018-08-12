@@ -4,41 +4,23 @@ import * as React from "react";
 
 import type { MimeBundle } from "@nteract/records";
 
-type ExecuteResultProps = {
-  /**
-   * The n-th result of execution
-   *
-   * Typically used to show what execution count the user is on. When working at
-   * the `IPython` or `jupyter console` for example, it's the number between the
-   * `[ ]` on the Out:
-   *
-   * ```
-   * In [1]: 2 + 2
-   * Out[1]: 4
-   *
-   * In [2]: "should be the 2"
-   * Out[2]: 'should be the 2'
-   * ```
-   *
-   */
-  executionCount: ?number,
+type RichMediaProps = {
   /**
    * Big ol' [payload of mimetype -> data](http://jupyter-client.readthedocs.io/en/stable/messaging.html#id6)
    */
   data: MimeBundle,
   /**
-   * Grab bag of random things
+   * mimetype -> settings for that mimetype
    */
   metadata: {},
   /**
-   * React elements that accept mimebundle data
+   * React elements that accept mimebundle data, will get passed data[mimetype]
    */
   children: React.Node
 };
 
-export class ExecuteResult extends React.Component<ExecuteResultProps, null> {
+export class RichMedia extends React.Component<RichMediaProps, null> {
   static defaultProps = {
-    executionCount: null,
     data: {},
     metadata: {}
   };
@@ -60,6 +42,7 @@ export class ExecuteResult extends React.Component<ExecuteResultProps, null> {
       }
     });
 
+    // If we didn't find a match, render nothing
     if (chosenOne === null) {
       return null;
     }
