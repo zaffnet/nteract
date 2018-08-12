@@ -79,6 +79,74 @@ Without any valid choices, it renders nothing!
 <ExecuteResult />
 ```
 
+## Richer examples
+
+```jsx
+/* Custom transforms */
+// Totally not the Data Explorer, it'll do though
+const FancyTable = props => (
+  <table style={{ border: `3px solid ${props.color}` }}>
+    {props.data.map(row => (
+      <tr>
+        {row.map(datum => (
+          <td>{datum}</td>
+        ))}
+      </tr>
+    ))}
+  </table>
+);
+
+FancyTable.defaultProps = {
+  mimetype: "fancy/table"
+};
+
+const Plain = props => <pre>{props.data}</pre>;
+Plain.defaultProps = {
+  mimetype: "text/plain"
+};
+
+const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
+HTML.defaultProps = {
+  mimetype: "text/html"
+};
+
+class Output extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { color: "#e66465" };
+  }
+
+  render() {
+    return (
+      <div>
+        <div>
+          <label>Pick a color for the fancy table </label>
+          <input
+            type="color"
+            value={this.state.color}
+            onChange={e => this.setState({ color: e.target.value })}
+          />
+        </div>
+        <ExecuteResult
+          data={{
+            "text/plain": "1,2,3\n4,5,6\n",
+            "text/html":
+              "<table><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></table>",
+            "fancy/table": [[1, 2, 3], [4, 5, 6]]
+          }}
+        >
+          <FancyTable color={this.state.color} />
+          <HTML />
+          <Plain />
+        </ExecuteResult>
+      </div>
+    );
+  }
+}
+
+<Output />;
+```
+
 Since these are _just_ React elements as children, we can pass custom props that will pass through on render:
 
 ```
