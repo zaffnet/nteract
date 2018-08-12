@@ -33,7 +33,7 @@ HTML.defaultProps = {
   mimetype: "text/html"
 };
 
-<ExecuteResult data={{ "text/plain": "test data" }}>
+<ExecuteResult data={{ "text/plain": "SparkContext ⚡️" }}>
   <HTML />
   <Plain />
 </ExecuteResult>;
