@@ -1,4 +1,6 @@
-Jupyter kernels are able to emit rich media like images, json, text, html, and many other media types. They're the core of what makes notebooks and consoles so expressive. They're sent over the jupyter messaging protocol and stored in the notebook just like this:
+### Media Bundles
+
+Jupyter kernels are able to emit rich [media](https://www.iana.org/assignments/media-types/media-types.xhtml) like images, json, text, html, and many others. They're the core of what makes notebooks and consoles _so expressive_. They're sent over the jupyter messaging protocol and stored in the notebook just like this:
 
 ```json
 {
@@ -11,6 +13,39 @@ Jupyter kernels are able to emit rich media like images, json, text, html, and m
 }
 ```
 
+This object structure is called a **media bundle** (formerly known as a mimebundle), so dubbed because it's a bundle of [media types types](https://www.iana.org/assignments/media-types/media-types.xhtml) and associated data. Jupyter frontends pick the _richest_ media type amongst these for rendering for the user, by selecting via a **display order**.
+
+As an example, if the display order is:
+
+```json
+["text/html", "application/json", "text/plain"]
+```
+
+Then the frontend will prefer HTML instead of JSON and JSON over plaintext. To render any one of these, we write a React Element that takes at least the prop `data`:
+
+```jsx static
+const Plain = props => <pre>{props.data}</pre>;
+
+Plain.defaulProps = {
+  mediaType: "text/plain"
+};
+```
+
+They can also accept `metadata` if there is additional configuration allowed. Take for example images which allow setting the size via `metadata`:
+
+```jsx static
+const ImageMedia = props => (
+  <img
+    alt=""
+    src={`data:${props.mediatype};base64,${props.data}`}
+    {...props.metadata.size}
+  />
+);
+ImageMedia.defaultProps = {
+  mediaType: "image/png"
+};
+```
+
 There are several different jupyter message types that include these objects:
 
 - [`execute_result`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#id6)
@@ -18,16 +53,18 @@ There are several different jupyter message types that include these objects:
 - [`inspect_reply`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#introspection)
 - [`payload`'s `page`](http://jupyter-client.readthedocs.io/en/stable/messaging.html#payloads-deprecated)
 
-This object structure is called a "mimebundle", so dubbed because it's a bundle of [MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) and associated data. The standard practice in Jupyter apps is to pick the "richest" of these for rendering. The `<RichMedia />` component accepts the `data` from a kernel as a prop and all the renderers / transforms as `children`. The order of the children states their richness from highest to lowest.
+### Displaying Rich Media with `<RichMedia />`
+
+The `<RichMedia />` component accepts the whole media bundle from a kernel via the `data` prop and all the elements for rendering media types as `children`. The order of the children states their richness from highest to lowest.
 
 ```jsx static
-<RichMedia data={{ "text/plain": "test data" }}>
+<RichMedia data={{ "text/plain": "SparkContext ⚡️" }}>
   <HTML />
   <Plain />
 </RichMedia>
 ```
 
-The following block uses the `<Plain />` output since `text/plain` is the only key in the `data` object.
+The `<RichMedia />` component will pass the appropriate data from the media bundle to the element that accepts the media type. In this case, `<Plain />` is picked as the richest since `text/plain` is the only available. `"SparkContext ⚡️"` is passed as `<Plain data="SparkContext ⚡️" />` to render the richest media.
 
 ```jsx
 /* Custom transforms */
@@ -81,10 +118,6 @@ Without any valid choices, it renders nothing!
     "text/html": "<b>HTML was richer</b>"
   }}
 />
-```
-
-```jsx
-<RichMedia />
 ```
 
 ### Passing Props
