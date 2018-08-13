@@ -2,8 +2,6 @@
 
 import * as React from "react";
 
-import type { MediaBundle } from "@nteract/records";
-
 type RichMediaProps = {
   /**
    * Object of media type → data
@@ -20,7 +18,9 @@ type RichMediaProps = {
    * for more detail.
    *
    */
-  data: MediaBundle,
+  data: {
+    [key: string]: string | Array<string> | {}
+  },
   /**
    * custom settings, typically keyed by media type
    */
