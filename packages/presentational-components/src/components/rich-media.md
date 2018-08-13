@@ -70,12 +70,12 @@ The `<RichMedia />` component will pass the appropriate data from the media bund
 /* Custom transforms */
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
-  mimetype: "text/plain"
+  mediaType: "text/plain"
 };
 
 const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
 HTML.defaultProps = {
-  mimetype: "text/html"
+  mediaType: "text/html"
 };
 
 <RichMedia data={{ "text/plain": "SparkContext ⚡️" }}>
@@ -90,12 +90,12 @@ Whereas this output has a richer HTML output:
 /* Custom transforms */
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
-  mimetype: "text/plain"
+  mediaType: "text/plain"
 };
 
 const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
 HTML.defaultProps = {
-  mimetype: "text/html"
+  mediaType: "text/html"
 };
 
 <RichMedia
@@ -129,12 +129,12 @@ Since the children are React elements, we can pass custom props that will get re
 const Special = props => props.big ? <h1>Big {props.data}</h1> : <p>Small {props.data}</p>
 Special.defaultProps = {
   big: false,
-  mimetype: "text/special"
+  mediaType: "text/special"
 }
 
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
-  mimetype: "text/plain"
+  mediaType: "text/plain"
 };
 
 
@@ -163,12 +163,12 @@ Which means that you can customize outputs as props!
 ```jsx
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
-  mimetype: "text/plain"
+  mediaType: "text/plain"
 };
 
 const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
 HTML.defaultProps = {
-  mimetype: "text/html"
+  mediaType: "text/html"
 };
 
 // Pretend this is the data explorer :)
@@ -185,7 +185,7 @@ const FancyTable = props => (
 );
 
 FancyTable.defaultProps = {
-  mimetype: "fancy/table"
+  mediaType: "fancy/table"
 };
 
 class Output extends React.Component {

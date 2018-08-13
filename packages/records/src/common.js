@@ -35,7 +35,7 @@ export type OnDiskMimebundle = {
 };
 
 // Enumerating over all the possible
-export type MimeBundle = {
+export type MediaBundle = {
   "text/plain"?: string,
   "text/html"?: string,
   "text/latex"?: string,
@@ -71,6 +71,8 @@ export type MimeBundle = {
   "application/vnd.vegalite.v2+json"?: {},
   [key: string]: string | Array<string> | {} // all others
 };
+
+export type MimeBundle = MediaBundle;
 
 /**
  * Turn nbformat multiline strings (arrays of strings for simplifying diffs) into strings

@@ -2,15 +2,27 @@
 
 import * as React from "react";
 
-import type { MimeBundle } from "@nteract/records";
+import type { MediaBundle } from "@nteract/records";
 
 type RichMediaProps = {
   /**
-   * Big ol' [payload of mimetype -> data](http://jupyter-client.readthedocs.io/en/stable/messaging.html#id6)
+   * Object of media type → data
+   *
+   * E.g.
+   *
+   * ```js
+   * {
+   *   "text/plain": "raw text",
+   * }
+   * ```
+   *
+   * See [Jupyter message spec](http://jupyter-client.readthedocs.io/en/stable/messaging.html#display-data)
+   * for more detail.
+   *
    */
-  data: MimeBundle,
+  data: MediaBundle,
   /**
-   * mimetype -> settings for that mimetype
+   * custom settings, typically keyed by media type
    */
   metadata: {},
   /**
@@ -31,12 +43,17 @@ export class RichMedia extends React.Component<RichMediaProps, null> {
 
     const data = this.props.data;
 
+    // Find the first child element that matches something in this.props.data
     React.Children.forEach(this.props.children, child => {
       if (chosenOne) {
         // Already have a selection
         return;
       }
-      if (child.props && child.props.mimetype && child.props.mimetype in data) {
+      if (
+        child.props &&
+        child.props.mediaType &&
+        child.props.mediaType in data
+      ) {
         chosenOne = child;
         return;
       }
@@ -47,11 +64,11 @@ export class RichMedia extends React.Component<RichMediaProps, null> {
       return null;
     }
 
-    const mimetype = chosenOne.props.mimetype;
+    const mediaType = chosenOne.props.mediaType;
 
     return React.cloneElement(chosenOne, {
-      data: this.props.data[mimetype],
-      metadata: this.props.metadata[mimetype]
+      data: this.props.data[mediaType],
+      metadata: this.props.metadata[mediaType]
     });
   }
 }
