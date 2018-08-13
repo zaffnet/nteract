@@ -1,6 +1,6 @@
 {
   "name": "@nteract/play",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "a playground for execution",
   "main": "index.js",
   "repository": "https://github.com/nteract/nteract/tree/master/applications/play",
@@ -19,7 +19,7 @@
     "@nteract/display-area": "^4.4.2",
     "@nteract/editor": "^7.3.1",
     "@nteract/messaging": "^4.1.2",
-    "@nteract/presentational-components": "^0.3.3",
+    "@nteract/presentational-components": "^0.4.0",
     "@nteract/webpack-configurator": "^1.2.2",
     "deepmerge": "^2.0.1",
     "lodash": "^4.17.4",
