@@ -17,6 +17,15 @@ export type OnDiskMimebundle = {
   "image/gif"?: MultilineString,
   "image/svg+xml"?: MultilineString,
   "text/vnd.plotly.v1+html"?: MultilineString,
+
+  // The JSON mimetype has some corner cases because of the protocol / format assuming the values
+  // in a mimebundle are either:
+  //
+  //   * A string, which would be deserialized
+  //   * An array, which would have to be assumed to be a multiline string
+  //
+  "application/json"?: string | Array<string> | {},
+
   "application/vdom.v1+json"?: {},
   "application/vnd.dataresource+json"?: {},
 
@@ -34,8 +43,8 @@ export type OnDiskMimebundle = {
   [key: string]: string | Array<string> | {}
 };
 
-// Enumerating over all the possible
-export type MimeBundle = {
+// Enumerating over all the media types we currently accept
+export type MediaBundle = {
   "text/plain"?: string,
   "text/html"?: string,
   "text/latex"?: string,
@@ -48,12 +57,6 @@ export type MimeBundle = {
   "image/gif"?: string,
   "image/svg+xml"?: string,
 
-  // The JSON mimetype has some corner cases because of the protocol / format assuming the values
-  // in a mimebundle are either:
-  //
-  //   * A string, which would be deserialized
-  //   * An array, which would have to be assumed to be a multiline string
-  //
   "application/json"?: {},
 
   "application/vdom.v1+json"?: {},
@@ -71,6 +74,8 @@ export type MimeBundle = {
   "application/vnd.vegalite.v2+json"?: {},
   [key: string]: string | Array<string> | {} // all others
 };
+
+export type MimeBundle = MediaBundle;
 
 /**
  * Turn nbformat multiline strings (arrays of strings for simplifying diffs) into strings

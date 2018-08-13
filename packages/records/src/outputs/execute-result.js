@@ -22,7 +22,7 @@ export type ExecutionCount = ?number;
 export const EXECUTE_RESULT = "execute_result";
 
 // In-memory version
-export type ExecuteResult = {
+export type ExecuteResultOutput = {
   outputType: ExecuteResultType,
   executionCount: ExecutionCount,
   data: common.MimeBundle,
@@ -54,7 +54,7 @@ export function executeResult(
     data?: common.MimeBundle,
     metadata?: {}
   }>
-): ExecuteResult {
+): ExecuteResultOutput {
   const defaultExecuteResult = {
     outputType: EXECUTE_RESULT,
     executionCount: undefined,
@@ -70,7 +70,7 @@ executeResult.type = EXECUTE_RESULT;
 
 executeResult.fromNbformat = function fromNbformat(
   s: NbformatExecuteResult
-): ExecuteResult {
+): ExecuteResultOutput {
   return executeResult({
     executionCount: s.execution_count,
     data: common.createImmutableMimeBundle(s.data),
@@ -80,7 +80,7 @@ executeResult.fromNbformat = function fromNbformat(
 
 executeResult.fromJupyterMessage = function fromJupyterMessage(
   msg: ExecuteResultMessage
-): ExecuteResult {
+): ExecuteResultOutput {
   return executeResult({
     executionCount: msg.content.execution_count,
     data: msg.content.data,
