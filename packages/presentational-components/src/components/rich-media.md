@@ -13,7 +13,7 @@ Jupyter kernels are able to emit rich [media](https://www.iana.org/assignments/m
 }
 ```
 
-This object structure is called a **media bundle** (formerly known as a mimebundle), so dubbed because it's a bundle of [media types types](https://www.iana.org/assignments/media-types/media-types.xhtml) and associated data. Jupyter frontends pick the _richest_ media type amongst these for rendering for the user, by selecting via a **display order**.
+This object structure is called a **media bundle** (formerly known as a mimebundle), so dubbed because it's a bundle of [media types](https://www.iana.org/assignments/media-types/media-types.xhtml) and associated data. Jupyter frontends pick the _richest_ media type amongst these for rendering for the user, by selecting via a **display order**.
 
 As an example, if the display order is:
 
