@@ -1,3 +1,30 @@
+```jsx
+/**
+ * First we'll create some simple components that take data and a mediaType for rendering
+ */
+const Plain = props => <pre>{props.data}</pre>;
+Plain.defaultProps = {
+  mediaType: "text/plain"
+};
+
+const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
+HTML.defaultProps = {
+  mediaType: "text/html"
+};
+
+<RichMedia
+  data={{
+    "text/plain": "plain is sooooo basic",
+    "text/html": "<p>I pick the <b>richest</b> to <i>render</i>!</p>"
+  }}
+>
+  <HTML />
+  <Plain />
+</RichMedia>;
+```
+
+For further information on the `<RichMedia />` component, keep reading! 👓 📚
+
 ### Media Bundles
 
 Jupyter kernels are able to emit rich [media](https://www.iana.org/assignments/media-types/media-types.xhtml) like images, json, text, html, and many others. They're the core of what makes notebooks and consoles _so expressive_. They're sent over the jupyter messaging protocol and stored in the notebook just like this:
@@ -67,7 +94,6 @@ The `<RichMedia />` component accepts the whole media bundle from a kernel via t
 The `<RichMedia />` component will pass the appropriate data from the media bundle to the element that accepts the media type. In this case, `<Plain />` is picked as the richest since `text/plain` is the only available. `"SparkContext ⚡️"` is passed as `<Plain data="SparkContext ⚡️" />` to render the richest media.
 
 ```jsx
-/* Custom transforms */
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
   mediaType: "text/plain"
@@ -87,7 +113,6 @@ HTML.defaultProps = {
 Whereas this output has a richer HTML output:
 
 ```jsx
-/* Custom transforms */
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
   mediaType: "text/plain"
@@ -125,7 +150,6 @@ Without any valid choices, it renders nothing!
 Since the children are React elements, we can pass custom props that will get rendered with the data:
 
 ```
-/* Custom transforms */
 const Special = props => props.big ? <h1>Big {props.data}</h1> : <p>Small {props.data}</p>
 Special.defaultProps = {
   big: false,
