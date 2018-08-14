@@ -43,11 +43,9 @@ describe("appendOutput", () => {
       outputType: "stream"
     });
 
-    expect(JSON.stringify(newOutputs)).toBe(
-      JSON.stringify([
-        { name: "stdout", text: "hello world", outputType: "stream" }
-      ])
-    );
+    expect(newOutputs).toEqual([
+      { name: "stdout", text: "hello world", outputType: "stream" }
+    ]);
   });
 
   test("merges streams of text", () => {
@@ -59,14 +57,9 @@ describe("appendOutput", () => {
       outputType: "stream"
     });
 
-    expect(
-      Object.is(
-        JSON.stringify(outputs),
-        JSON.stringify([
-          { name: "stdout", text: "hello", outputType: "stream" }
-        ])
-      )
-    ).toBe(true);
+    expect(outputs).toEqual([
+      { name: "stdout", text: "hello", outputType: "stream" }
+    ]);
   });
 
   test("keeps respective streams together", () => {
@@ -80,12 +73,10 @@ describe("appendOutput", () => {
       outputType: "stream"
     });
 
-    expect(JSON.stringify(newOutputs)).toBe(
-      JSON.stringify([
-        { name: "stdout", text: "hello world", outputType: "stream" },
-        { name: "stderr", text: "errors are", outputType: "stream" }
-      ])
-    );
+    expect(newOutputs).toEqual([
+      { name: "stdout", text: "hello world", outputType: "stream" },
+      { name: "stderr", text: "errors are", outputType: "stream" }
+    ]);
 
     const evenNewerOutputs = appendOutput(newOutputs, {
       name: "stderr",
@@ -93,16 +84,14 @@ describe("appendOutput", () => {
       outputType: "stream"
     });
 
-    expect(JSON.stringify(evenNewerOutputs)).toBe(
-      JSON.stringify([
-        { name: "stdout", text: "hello world", outputType: "stream" },
-        {
-          name: "stderr",
+    expect(evenNewerOutputs).toEqual([
+      { name: "stdout", text: "hello world", outputType: "stream" },
+      {
+        name: "stderr",
 
-          text: "errors are informative",
-          outputType: "stream"
-        }
-      ])
-    );
+        text: "errors are informative",
+        outputType: "stream"
+      }
+    ]);
   });
 });
