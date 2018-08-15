@@ -1,4 +1,7 @@
-import { appendOutput } from "../src/reducers/outputs.js";
+import produce from "immer";
+import { mutate } from "../src/outputs/mutate-outputs.js";
+
+const appendOutput = produce(mutate.appendOutput);
 
 describe("appendOutput", () => {
   test("puts new outputs at the end by default", () => {

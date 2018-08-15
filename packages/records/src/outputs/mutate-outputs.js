@@ -3,6 +3,7 @@ import { escapeCarriageReturnSafe } from "escape-carriage";
 
 import type { OutputType, StreamOutput } from "../outputs";
 
+export function mutate() {}
 /**
  * An output can be a stream of data that does not arrive at a single time. This
  * function handles the different types of outputs and accumulates the data
@@ -12,7 +13,7 @@ import type { OutputType, StreamOutput } from "../outputs";
  * @param {Object} output - Outputted to be reduced into list of outputs
  * @return {Array<Object>} updated-outputs - Outputs + Output
  */
-export function appendOutput(
+mutate.appendOutput = function appendOutput(
   outputs: Array<OutputType>,
   output: OutputType
 ): Array<OutputType> {
@@ -63,7 +64,7 @@ export function appendOutput(
 
   outputs.push(streamOutput);
   return outputs;
-}
+};
 
 function appendText(text: string, streamText: string): string {
   if (typeof streamText === "string") {
