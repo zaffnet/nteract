@@ -32,13 +32,6 @@ export function appendOutput(
 
   const streamOutput: StreamOutput = output;
 
-  function appendText(text: string): string {
-    if (typeof streamOutput.text === "string") {
-      return escapeCarriageReturnSafe(text + streamOutput.text);
-    }
-    return text;
-  }
-
   if (
     last &&
     outputs.length > 0 &&
@@ -50,7 +43,7 @@ export function appendOutput(
         const draftLength = draftOutputs.length - 1;
         if (draftOutputs[draftLength].outputType === "stream") {
           Object.assign(draftOutputs[draftLength], {
-            text: appendText(draftOutputs[draftLength].text)
+            text: appendText(draftOutputs[draftLength].text, streamOutput.text)
           });
         }
       });
@@ -65,7 +58,7 @@ export function appendOutput(
         const draftLength = draftOutputs.length - 2;
         if (draftOutputs[draftLength].outputType === "stream") {
           Object.assign(draftOutputs[draftLength], {
-            text: appendText(draftOutputs[draftLength].text)
+            text: appendText(draftOutputs[draftLength].text, streamOutput.text)
           });
         }
       });
@@ -74,4 +67,11 @@ export function appendOutput(
   return produce(outputs, draftOutputs => {
     draftOutputs.push(streamOutput);
   });
+}
+
+function appendText(text: string, streamText: string): string {
+  if (typeof streamText === "string") {
+    return escapeCarriageReturnSafe(text + streamText);
+  }
+  return text;
 }
