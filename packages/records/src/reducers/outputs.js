@@ -37,9 +37,10 @@ export function appendOutput(
     last.outputType === "stream"
   ) {
     if (last.name === streamOutput.name) {
-      if (outputs[outputs.length - 1].outputType === "stream") {
-        Object.assign(outputs[outputs.length - 1], {
-          text: appendText(outputs[outputs.length - 1].text, streamOutput.text)
+      const outputsLength = outputs.length - 1;
+      if (outputs[outputsLength].outputType === "stream") {
+        Object.assign(outputs[outputsLength], {
+          text: appendText(outputs[outputsLength].text, streamOutput.text)
         });
         return outputs;
       }
@@ -50,9 +51,10 @@ export function appendOutput(
       nextToLast.outputType === "stream" &&
       nextToLast["name"] === streamOutput.name
     ) {
-      if (outputs[outputs.length - 2].outputType === "stream") {
-        Object.assign(outputs[outputs.length - 2], {
-          text: appendText(outputs[outputs.length - 2].text, streamOutput.text)
+      const outputsLength = outputs.length - 2;
+      if (outputs[outputsLength].outputType === "stream") {
+        Object.assign(outputs[outputsLength], {
+          text: appendText(outputs[outputsLength].text, streamOutput.text)
         });
         return outputs;
       }
