@@ -17,22 +17,20 @@ describe("appendOutput", () => {
       metadata: {}
     });
 
-    expect(JSON.stringify(newOutputs)).toEqual(
-      JSON.stringify([
-        { outputType: "stream", name: "stdout", text: "Woo" },
-        {
-          outputType: "error",
-          ename: "well",
-          evalue: "actually",
-          traceback: []
-        },
-        {
-          outputType: "displayData",
-          data: {},
-          metadata: {}
-        }
-      ])
-    );
+    expect(newOutputs).toEqual([
+      { outputType: "stream", name: "stdout", text: "Woo" },
+      {
+        outputType: "error",
+        ename: "well",
+        evalue: "actually",
+        traceback: []
+      },
+      {
+        outputType: "displayData",
+        data: {},
+        metadata: {}
+      }
+    ]);
   });
 
   test("handles the case of a single stream output", () => {
