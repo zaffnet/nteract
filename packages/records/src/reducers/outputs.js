@@ -1,5 +1,4 @@
 // @flow strict
-import produce from "immer";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 
 import type { OutputType, StreamOutput } from "../outputs";
@@ -25,9 +24,8 @@ export function appendOutput(
     (outputs.length > 0 && last["outputType"] !== "stream")
   ) {
     // If it's not a stream type, we just fold in the output
-    return produce(outputs, draftOutputs => {
-      draftOutputs.push(output);
-    });
+    outputs.push(output);
+    return outputs;
   }
 
   const streamOutput: StreamOutput = output;
@@ -39,14 +37,12 @@ export function appendOutput(
     last.outputType === "stream"
   ) {
     if (last.name === streamOutput.name) {
-      return produce(outputs, draftOutputs => {
-        const draftLength = draftOutputs.length - 1;
-        if (draftOutputs[draftLength].outputType === "stream") {
-          Object.assign(draftOutputs[draftLength], {
-            text: appendText(draftOutputs[draftLength].text, streamOutput.text)
-          });
-        }
-      });
+      if (outputs[outputs.length - 1].outputType === "stream") {
+        Object.assign(outputs[outputs.length - 1], {
+          text: appendText(outputs[outputs.length - 1].text, streamOutput.text)
+        });
+        return outputs;
+      }
     }
     const nextToLast = outputs[outputs.length - 2];
     if (
@@ -54,19 +50,17 @@ export function appendOutput(
       nextToLast.outputType === "stream" &&
       nextToLast["name"] === streamOutput.name
     ) {
-      return produce(outputs, draftOutputs => {
-        const draftLength = draftOutputs.length - 2;
-        if (draftOutputs[draftLength].outputType === "stream") {
-          Object.assign(draftOutputs[draftLength], {
-            text: appendText(draftOutputs[draftLength].text, streamOutput.text)
-          });
-        }
-      });
+      if (outputs[outputs.length - 2].outputType === "stream") {
+        Object.assign(outputs[outputs.length - 2], {
+          text: appendText(outputs[outputs.length - 2].text, streamOutput.text)
+        });
+        return outputs;
+      }
     }
   }
-  return produce(outputs, draftOutputs => {
-    draftOutputs.push(streamOutput);
-  });
+
+  outputs.push(streamOutput);
+  return outputs;
 }
 
 function appendText(text: string, streamText: string): string {
