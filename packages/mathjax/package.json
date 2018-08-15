@@ -1,6 +1,6 @@
 {
   "name": "@nteract/mathjax",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "React components for MathJax",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
