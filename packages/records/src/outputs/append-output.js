@@ -1,5 +1,6 @@
 // @flow strict
 import { escapeCarriageReturnSafe } from "escape-carriage";
+import produce from "immer";
 
 import type { OutputType, StreamOutput } from "../outputs";
 
@@ -72,3 +73,7 @@ function appendText(text: string, streamText: string): string {
   }
   return text;
 }
+
+const appendOutput = produce(mutate.appendOutput);
+
+export default appendOutput;

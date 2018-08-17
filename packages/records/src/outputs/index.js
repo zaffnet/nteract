@@ -1,5 +1,4 @@
 // @flow strict
-
 import type { JupyterMessage } from "@nteract/messaging";
 
 import type {
@@ -19,6 +18,8 @@ import { displayData } from "./display-data";
 import { streamOutput } from "./stream";
 import { errorOutput } from "./error";
 import { executeResult } from "./execute-result";
+
+export * from "./append-output";
 
 export type NbformatOutput =
   | NbformatStreamOutput
