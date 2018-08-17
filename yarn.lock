@@ -4258,7 +4258,7 @@ es6-weak-map@^2.0.1:
 
 escape-carriage@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/escape-carriage/-/escape-carriage-1.2.0.tgz#35ce51a7960efcb5ae8bb59b83f566a98c946dfd"
+  resolved "https://registry.yarnpkg.com/escape-carriage/-/escape-carriage-1.2.0.tgz#35ce51a7960efcb5ae8bb59b83f566a98c946dfd"
 
 escape-html@~1.0.3:
   version "1.0.3"
