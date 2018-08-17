@@ -26,8 +26,6 @@ and convenience.
 
 Try **commuter** today and take your notebooks wherever you need them.
 
-[Demo](https://commuter-now-otvkncbefl.now.sh/view/)
-
 ## Installation
 
 ```
