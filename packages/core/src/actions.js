@@ -287,16 +287,6 @@ export function createCellAppend(payload: {
   };
 }
 
-export function mergeCellAfter(payload: {
-  id?: string,
-  contentRef: ContentRef
-}): actionTypes.MergeCellAfter {
-  return {
-    type: actionTypes.MERGE_CELL_AFTER,
-    payload
-  };
-}
-
 export function toggleParameterCell(payload: {
   id: CellID,
   contentRef: ContentRef

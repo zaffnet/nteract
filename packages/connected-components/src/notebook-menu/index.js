@@ -38,7 +38,6 @@ type Props = {
   unhideAll: ?(*) => void,
   cutCell: ?(payload: *) => void,
   copyCell: ?(payload: *) => void,
-  mergeCellAfter: ?(payload: *) => void,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?(payload: *) => void,
   createCellAfter: ?(payload: *) => void,
@@ -76,7 +75,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
     unhideAll: null,
     cutCell: null,
     copyCell: null,
-    mergeCellAfter: null,
     pasteCell: null,
     createCellAfter: null,
     setCellTypeCode: null,
@@ -106,7 +104,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
       executeAllCellsBelow,
       clearAllOutputs,
       unhideAll,
-      mergeCellAfter,
       openAboutModal,
       pasteCell,
       setTheme,
@@ -144,11 +141,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
       case MENU_ITEM_ACTIONS.PASTE_CELL:
         if (pasteCell) {
           pasteCell({ contentRef: currentContentRef });
-        }
-        break;
-      case MENU_ITEM_ACTIONS.MERGE_CELL_AFTER:
-        if (mergeCellAfter) {
-          mergeCellAfter({ contentRef: currentContentRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
@@ -329,9 +321,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.PASTE_CELL)}>
               Paste Cell Below
             </MenuItem>
-            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.MERGE_CELL_AFTER)}>
-              Merge With Cell Below
-            </MenuItem>
             <Divider />
             <SubMenu key={MENUS.EDIT_SET_CELL_TYPE} title="Cell Type">
               <MenuItem
@@ -482,7 +471,6 @@ const mapDispatchToProps = dispatch => ({
   cutCell: (payload: *) => dispatch(actions.cutCell(payload)),
   copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
   pasteCell: (payload: *) => dispatch(actions.pasteCell(payload)),
-  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload)),
   createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
   changeCellType: (payload: *) => dispatch(actions.changeCellType(payload)),
   setTheme: theme => dispatch(actions.setTheme(theme)),

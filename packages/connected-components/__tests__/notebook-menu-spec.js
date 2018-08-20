@@ -40,7 +40,6 @@ describe("PureNotebookMenu ", () => {
         copyCell: jest.fn(),
         pasteCell: jest.fn(),
         createCellAfter: jest.fn(),
-        mergeCellAfter: jest.fn(),
         changeCellType: jest.fn(),
         setTheme: jest.fn(),
         saveNotebook: jest.fn(),
@@ -140,16 +139,6 @@ describe("PureNotebookMenu ", () => {
       pasteCellItem.simulate("click");
       expect(props.pasteCell).toHaveBeenCalledTimes(1);
       expect(props.pasteCell).toHaveBeenCalledWith({
-        contentRef: props.currentContentRef
-      });
-
-      const mergeCellAfterItem = wrapper
-        .find({ eventKey: MENU_ITEM_ACTIONS.MERGE_CELL_AFTER })
-        .first();
-      expect(props.mergeCellAfter).not.toHaveBeenCalled();
-      mergeCellAfterItem.simulate("click");
-      expect(props.mergeCellAfter).toHaveBeenCalledTimes(1);
-      expect(props.mergeCellAfter).toHaveBeenCalledWith({
         contentRef: props.currentContentRef
       });
 

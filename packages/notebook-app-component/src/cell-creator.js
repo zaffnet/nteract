@@ -7,8 +7,7 @@ import type { ContentRef } from "@nteract/core";
 
 type Props = {
   above: boolean,
-  createCell: (type: "code" | "markdown") => void,
-  mergeCell: () => void
+  createCell: (type: "code" | "markdown") => void
 };
 
 type ConnectedProps = {
@@ -16,16 +15,11 @@ type ConnectedProps = {
   createCellAppend: (payload: *) => void,
   createCellBefore: (payload: *) => void,
   createCellAfter: (payload: *) => void,
-  mergeCellAfter: (payload: *) => void,
   id?: string,
   contentRef: ContentRef
 };
 
-import {
-  CodeOcticon,
-  MarkdownOcticon,
-  DownArrowOcticon
-} from "@nteract/octicons";
+import { CodeOcticon, MarkdownOcticon } from "@nteract/octicons";
 
 export class PureCellCreator extends React.Component<Props, null> {
   createMarkdownCell = () => {
@@ -59,17 +53,6 @@ export class PureCellCreator extends React.Component<Props, null> {
                 <CodeOcticon />
               </span>
             </button>
-            {this.props.above ? null : (
-              <button
-                onClick={this.props.mergeCell}
-                title="merge cells"
-                className="merge-cell"
-              >
-                <span className="octicon">
-                  <DownArrowOcticon />
-                </span>
-              </button>
-            )}
           </div>
         </div>
         <style jsx>{`
@@ -156,22 +139,9 @@ class CellCreator extends React.Component<ConnectedProps> {
       : createCellAfter({ cellType: type, id, source: "", contentRef });
   };
 
-  mergeCell = (): void => {
-    const { mergeCellAfter, id, contentRef } = this.props;
-
-    // We can't merge cells if we don't have a cell ID
-    if (id != null && typeof id == "string") {
-      mergeCellAfter({ id, contentRef });
-    }
-  };
-
   render() {
     return (
-      <PureCellCreator
-        above={this.props.above}
-        createCell={this.createCell}
-        mergeCell={this.mergeCell}
-      />
+      <PureCellCreator above={this.props.above} createCell={this.createCell} />
     );
   }
 }
@@ -179,8 +149,7 @@ class CellCreator extends React.Component<ConnectedProps> {
 const mapDispatchToProps = dispatch => ({
   createCellAppend: (payload: *) => dispatch(actions.createCellAppend(payload)),
   createCellBefore: (payload: *) => dispatch(actions.createCellBefore(payload)),
-  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
-  mergeCellAfter: (payload: *) => dispatch(actions.mergeCellAfter(payload))
+  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload))
 });
 
 export default connect(
