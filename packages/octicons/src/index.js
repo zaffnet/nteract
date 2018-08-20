@@ -55,6 +55,13 @@ export const CodeOcticon = (props: any) => (
   </SVGWrapper>
 );
 
+export const DownArrowOcticon = (props: any) => (
+  <SVGWrapper width={10} height={16} viewBox="0 0 10 16" outerProps={props}>
+    <title>Merge Cells</title>
+    <path fillRule="evenodd" d="M5 3L0 9h3v4h4V9h3z" />
+  </SVGWrapper>
+);
+
 export const PinOcticon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>
     <title>Pin Cell to Top</title>
