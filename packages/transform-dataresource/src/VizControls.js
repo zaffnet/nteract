@@ -218,6 +218,7 @@ export default ({
             <h2>Chart Type</h2>
             {availableLineTypes.map(d => (
               <button
+                key={d.lineType}
                 className={`button-text ${lineType === d.type && "selected"}`}
                 onClick={() => setLineType(d.type)}
               >

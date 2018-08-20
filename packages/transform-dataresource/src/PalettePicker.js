@@ -83,7 +83,7 @@ class PalettePicker extends React.Component<Props, State> {
         <div
           className="close"
           role="button"
-          tabindex="0"
+          tabIndex="0"
           onClick={this.openClose}
           onKeyPress={(e: Object) => {
             if (e.keyCode === 13) {
@@ -102,7 +102,7 @@ class PalettePicker extends React.Component<Props, State> {
                 className="box"
                 style={{ background: d }}
                 role="button"
-                tabindex="0"
+                tabIndex="0"
                 onKeyPress={(e: Object) => {
                   if (e.keyCode === 13) {
                     this.handleChange(d, i);
