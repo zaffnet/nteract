@@ -321,9 +321,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
             <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.PASTE_CELL)}>
               Paste Cell Below
             </MenuItem>
-            <MenuItem key={createActionKey(MENU_ITEM_ACTIONS.MERGE_CELL_AFTER)}>
-              Merge With Cell Below
-            </MenuItem>
             <Divider />
             <SubMenu key={MENUS.EDIT_SET_CELL_TYPE} title="Cell Type">
               <MenuItem

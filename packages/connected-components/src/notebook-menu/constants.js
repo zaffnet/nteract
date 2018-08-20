@@ -20,7 +20,6 @@ export const MENU_ITEM_ACTIONS = {
   COPY_CELL: "copy-cell",
   CUT_CELL: "cut-cell",
   PASTE_CELL: "paste-cell",
-  MERGE_CELL_AFTER: "merge-cell-after",
   SET_THEME_DARK: "set-theme-dark",
   SET_THEME_LIGHT: "set-theme-light",
   OPEN_ABOUT: "open-about",
