@@ -197,15 +197,6 @@ export type CreateCellAppend = {
   }
 };
 
-export const MERGE_CELL_AFTER = "MERGE_CELL_AFTER";
-export type MergeCellAfter = {
-  type: "MERGE_CELL_AFTER",
-  payload: {
-    id?: CellID,
-    contentRef: ContentRef
-  }
-};
-
 export const APPEND_OUTPUT = "APPEND_OUTPUT";
 export type AppendOutput = {
   type: "APPEND_OUTPUT",

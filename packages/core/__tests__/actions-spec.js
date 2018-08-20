@@ -342,15 +342,6 @@ describe("createCellAppend", () => {
   });
 });
 
-describe("mergeCellAfter", () => {
-  test("creates a MERGE_CELL_AFTER action", () => {
-    expect(actions.mergeCellAfter({ id: "0121" })).toEqual({
-      type: actionTypes.MERGE_CELL_AFTER,
-      payload: { id: "0121" }
-    });
-  });
-});
-
 describe("setNotificationSystem", () => {
   test("creates a SET_NOTIFICATION_SYSTEM action", () => {
     expect(actions.setNotificationSystem(null)).toEqual({

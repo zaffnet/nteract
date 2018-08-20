@@ -459,45 +459,6 @@ function createCellBefore(
   });
 }
 
-function mergeCellAfter(
-  state: NotebookModel,
-  action: actionTypes.MergeCellAfter
-) {
-  const id = action.payload.id ? action.payload.id : state.cellFocused;
-  if (!id) {
-    return state;
-  }
-
-  const cellOrder: ImmutableCellOrder = state.getIn(
-    ["notebook", "cellOrder"],
-    Immutable.List()
-  );
-  const index = cellOrder.indexOf(id);
-  // do nothing if this is the last cell
-  if (cellOrder.size === index + 1) {
-    return state;
-  }
-  const cellMap: ImmutableCellMap = state.getIn(
-    ["notebook", "cellMap"],
-    Immutable.Map()
-  );
-
-  const nextId = cellOrder.get(index + 1);
-
-  if (!nextId) {
-    return state;
-  }
-
-  const firstSource: string = cellMap.getIn([id, "source"], "");
-  const secondSource: string = cellMap.getIn([nextId, "source"], "");
-
-  const source = firstSource.concat("\n", "\n", secondSource);
-
-  return state.update("notebook", (notebook: ImmutableNotebook) =>
-    removeCell(notebook.setIn(["cellMap", id, "source"], source), nextId)
-  );
-}
-
 function createCellAppend(
   state: NotebookModel,
   action: actionTypes.CreateCellAppend
@@ -795,7 +756,6 @@ type DocumentAction =
   | actionTypes.CreateCellAfter
   | actionTypes.CreateCellBefore
   | actionTypes.CreateCellAppend
-  | actionTypes.MergeCellAfter
   | actionTypes.ToggleCellOutputVisibility
   | actionTypes.ToggleCellInputVisibility
   | actionTypes.UpdateCellStatus
@@ -861,8 +821,6 @@ export function notebook(
       return createCellAfter(state, action);
     case actionTypes.CREATE_CELL_BEFORE:
       return createCellBefore(state, action);
-    case actionTypes.MERGE_CELL_AFTER:
-      return mergeCellAfter(state, action);
     case actionTypes.CREATE_CELL_APPEND:
       return createCellAppend(state, action);
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:

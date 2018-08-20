@@ -11,17 +11,9 @@ import CellCreator, { PureCellCreator } from "../src/cell-creator";
 
 describe("CellCreatorView", () => {
   const createCell = jest.fn();
-  const mergeCell = jest.fn();
 
   const setup = id =>
-    shallow(
-      <PureCellCreator
-        createCell={createCell}
-        mergeCell={mergeCell}
-        above={false}
-        id={id}
-      />
-    );
+    shallow(<PureCellCreator createCell={createCell} above={false} id={id} />);
 
   test("can be constructed", () => {
     const component = setup("test");
@@ -49,11 +41,6 @@ describe("CellCreatorView", () => {
     const component = setup(null);
     component.find(".add-code-cell").simulate("click");
     expect(createCell).toHaveBeenCalledWith("code");
-  });
-  test("clicking merge cell button invokes mergeCell", () => {
-    const component = setup(null);
-    component.find(".merge-cell").simulate("click");
-    expect(mergeCell).toHaveBeenCalled();
   });
 });
 
@@ -167,30 +154,6 @@ describe("CellCreatorProvider", () => {
       const createCell = wrapper
         .findWhere(n => n.prop("createCell") !== undefined)
         .prop("createCell");
-      createCell("code");
-    });
-  });
-  test("mergeCell merges two cells into one", () => {
-    const store = dummyStore();
-
-    const setup = (above, id) =>
-      mount(
-        <Provider store={store}>
-          <CellCreator above={above} id={id} />
-        </Provider>
-      );
-
-    return new Promise(resolve => {
-      const dispatch = action => {
-        expect(action.payload.id).toBe("test");
-        expect(action.type).toBe(actionTypes.MERGE_CELL_AFTER);
-        resolve();
-      };
-      store.dispatch = dispatch;
-      const wrapper = setup(false, "test");
-      const createCell = wrapper
-        .findWhere(n => n.prop("mergeCell") !== undefined)
-        .prop("mergeCell");
       createCell("code");
     });
   });
