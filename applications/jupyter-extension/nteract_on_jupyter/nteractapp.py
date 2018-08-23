@@ -14,7 +14,7 @@ from .utils import cmd_in_new_dir
 
 webpack_port = 8357
 
-webpack_hot = {"address": f'http://localhost:{webpack_port}/',
+webpack_hot = {"address": 'http://localhost:{webpack_port}/'.format(webpack_port=webpack_port),
                "command": ["yarn", "workspace", "nteract-on-jupyter",
                            "run", "hot", "--port", str(webpack_port)]}
 nteract_flags = dict(flags)
@@ -74,7 +74,7 @@ class NteractApp(NotebookApp):
                     pass
                 else:
                     raise Exception(
-                        f"Webpack dev server exited - return code {exit_code}")
+                        "Webpack dev server exited - return code {exit_code}".format(exit_code=exit_code))
 
                 # Now wait for webpack to have the initial bundle mostly ready
                 time.sleep(5)
