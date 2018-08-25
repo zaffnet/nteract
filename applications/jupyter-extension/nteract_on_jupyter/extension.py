@@ -17,7 +17,7 @@ from .handlers import add_handlers
 
 
 def load_jupyter_server_extension(nbapp):
-    """Load the JupyterLab server extension.
+    """Load the server extension.
     """
     here = PACKAGE_DIR
     nbapp.log.info('nteract extension loaded from %s' % here)
