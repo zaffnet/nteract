@@ -1,4 +1,5 @@
 // @flow
+import * as Cookies from "js-cookie";
 
 export function normalizeBaseURL(url: string): string {
   return url.replace(/\/+$/, "");
@@ -11,7 +12,9 @@ export function createAJAXSettings(
 ): Object {
   const baseURL = normalizeBaseURL(serverConfig.endpoint || serverConfig.url);
   const url = `${baseURL}${uri}`;
+  const xsrfToken = Cookies.get("_xsrf");
   const headers = {
+    "X-XSRFToken": xsrfToken,
     Authorization: `token ${serverConfig.token ? serverConfig.token : ""}`
   };
   // Merge in our typical settings for responseType, allow setting additional options
