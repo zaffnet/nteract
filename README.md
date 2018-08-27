@@ -120,7 +120,7 @@ npm install -g --production windows-build-tools
 
 Additionally, you'll need to install GTK 2 for node-canvas. Follow [step 2 of
 this instruction
-set](https://github.com/Automattic/node-canvas/wiki/Installation---Windows#2-installing-gtk-2)
+set](https://github.com/Automattic/node-canvas/wiki/Installation%3A-Windows#2-installing-gtk-2)
 to do this.
 
 #### Building a specific package
@@ -176,7 +176,7 @@ Then open `127.0.0.1:3000` in your browser. You'll be able to make changes to
 `play` and see the changes update live.
 
 If you make changes to any `packages/` while hacking on `play`, you'll want to
-rebuild those using [the instructions for building specific packages](#building-specific-packages).
+rebuild those using [the instructions for building specific packages](#building-a-specific-package).
 
 ### Troubleshooting
 
