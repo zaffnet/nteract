@@ -130,9 +130,9 @@
   version "1.1.0"
   resolved "https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@nteract/examples@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@nteract/examples/-/examples-2.0.0.tgz#d1f0c5bdcdcee69378c7efc790ebcf05d713b72a"
+"@nteract/examples@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@nteract/examples/-/examples-3.0.0.tgz#08686a5305d528ff3625e048b48f6655b7c91c81"
 
 "@nteract/plotly@^1.0.0":
   version "1.0.0"
