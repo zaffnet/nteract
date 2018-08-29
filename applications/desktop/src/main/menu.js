@@ -12,21 +12,14 @@ import { sortBy } from "lodash";
 import { launch, launchNewNotebook } from "./launch";
 import { installShellCommand } from "./cli";
 
+import { manifest } from "@nteract/examples";
+
 // Overwrite the type for `process` to match Electron's process
 // https://electronjs.org/docs/api/process
 declare var ElectronProcess: typeof process & {
   resourcesPath: string
 };
 declare var process: ElectronProcess;
-
-function getExampleNotebooksDir() {
-  if (process.env.NODE_ENV === "development") {
-    return path.resolve(path.join(__dirname, "..", "example-notebooks"));
-  }
-  return path.join(process.resourcesPath, "example-notebooks");
-}
-
-const exampleNotebooksDirectory = getExampleNotebooksDir();
 
 function send(focusedWindow, eventName, obj) {
   if (!focusedWindow) {
@@ -210,6 +203,35 @@ export function loadFullMenu(store: * = global.store) {
     })
   );
 
+  // Plan: iterate over the manifest, creating example notebooks for multiple categories
+
+  const openExampleNotebooks = {
+    label: "&Open Example Notebook",
+    // From the @nteract/examples manifest...
+    submenu: manifest.map(collection => {
+      return {
+        // create a submenu for each language
+        label: `&${collection.language}`,
+        submenu: collection.files.map(fileInfo => {
+          return {
+            click: launch.bind(
+              null,
+              path.join(
+                // Compute the path based on this file
+                __dirname,
+                "..",
+                "node_modules",
+                "@nteract/examples",
+                fileInfo.path
+              )
+            ),
+            label: `&${fileInfo.metadata.title}`
+          };
+        })
+      };
+    })
+  };
+
   const fileSubMenus = {
     new: {
       label: "&New",
@@ -237,88 +259,7 @@ export function loadFullMenu(store: * = global.store) {
       },
       accelerator: "CmdOrCtrl+O"
     },
-    openExampleNotebooks: {
-      label: "&Open Example Notebook",
-      submenu: [
-        {
-          label: "&Intro",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "intro.ipynb")
-          )
-        },
-        {
-          label: "&Plotly",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "plotly.ipynb")
-          )
-        },
-        {
-          label: "&Plotly (R)",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "plotlyr.ipynb")
-          )
-        },
-        {
-          label: "&Vegalite (Python)",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "altair.ipynb")
-          )
-        },
-        {
-          label: "&Vegalite (R)",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "vegalite-for-r.ipynb")
-          )
-        },
-        {
-          label: "&Geojson",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "geojson.ipynb")
-          )
-        },
-        {
-          label: "&Pandas to GeoJSON",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "pandas-to-geojson.ipynb")
-          )
-        },
-        {
-          label: "&Named display updates",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "display-updates.ipynb")
-          )
-        },
-        {
-          label: "VDOMmable updates with emojis",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "vdom.ipynb")
-          )
-        },
-        {
-          label: "&Analyze nteract download metrics",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "download-stats.ipynb")
-          )
-        },
-        {
-          label: "&Exploring Custom Revival with JSON.parse",
-          click: launch.bind(
-            null,
-            path.join(exampleNotebooksDirectory, "immutable-revival.ipynb")
-          )
-        }
-      ]
-    },
+    openExampleNotebooks,
     save: {
       label: "&Save",
       enabled: BrowserWindow.getAllWindows().length > 0,
