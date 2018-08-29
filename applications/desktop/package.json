@@ -97,8 +97,7 @@
       "static"
     ],
     "extraResources": [
-      "bin",
-      "example-notebooks"
+      "bin"
     ],
     "npmSkipBuildFromSource": true
   },

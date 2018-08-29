@@ -49,7 +49,6 @@
     "test": "jest",
     "test:unit": "npm run test",
     "test:coverage": "npm run test -- --coverage",
-    "test:conformance": "node scripts/conformance.js",
     "test:lint": "npm run lint",
     "test:flow": "npm run flow",
     "flow": "flow",
