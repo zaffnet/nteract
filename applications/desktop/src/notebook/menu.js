@@ -181,7 +181,7 @@ export function dispatchSave(
 
   const filepath = selectors.filepath(state, ownProps);
 
-  if (!filepath) {
+  if (filepath == null) {
     triggerSaveAs(ownProps, store);
   } else {
     store.dispatch(actions.save(ownProps));
@@ -196,9 +196,10 @@ export function dispatchNewKernel(
 ) {
   const state = store.getState();
   const filepath = selectors.filepath(state, ownProps);
-  const cwd = filepath
-    ? path.dirname(path.resolve(filepath))
-    : cwdKernelFallback();
+  const cwd =
+    filepath != null
+      ? path.dirname(path.resolve(filepath))
+      : cwdKernelFallback();
 
   // Create a brand new kernel
   const kernelRef = createKernelRef();
@@ -223,7 +224,7 @@ export function dispatchPublishGist(
   let githubToken = state.app.get("githubToken");
 
   // The simple case -- we have a token and can publish
-  if (githubToken) {
+  if (githubToken != null) {
     store.dispatch(actions.publishGist(ownProps));
     return;
   }
@@ -586,7 +587,7 @@ export function storeToPDF(
   const state = store.getState();
   const notebookName = selectors.filepath(state, ownProps);
   const notificationSystem = state.app.get("notificationSystem");
-  if (!notebookName) {
+  if (notebookName == null) {
     notificationSystem.addNotification({
       title: "File has not been saved!",
       message: [

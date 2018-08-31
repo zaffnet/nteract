@@ -90,7 +90,7 @@ export const publishEpic = (action$: ActionsObservable<*>, store: *) => {
       // Allow falling back on the GITHUB_TOKEN environment variable
       const githubToken = state.app.get("githubToken");
 
-      if (!githubToken) {
+      if (githubToken == null) {
         return of(
           actions.coreError(
             new Error("need a github token in order to publish")

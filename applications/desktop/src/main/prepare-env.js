@@ -14,7 +14,10 @@ const env$ = fromPromise(shellEnv()).pipe(
   first(),
   tap(env => {
     // no need to change the env if started from the terminal on Mac
-    if (process.platform !== "darwin" || !process.env.TERM) {
+    if (
+      process.platform !== "darwin" ||
+      (process.env != null && process.env.TERM == null)
+    ) {
       Object.assign(process.env, env);
     }
   }),

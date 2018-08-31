@@ -81,16 +81,17 @@ const mapStateToProps = (
 
   const lastSaved = content && content.lastSaved ? content.lastSaved : null;
 
-  const kernelStatus = kernel && kernel.status ? kernel.status : NOT_CONNECTED;
+  const kernelStatus =
+    kernel != null && kernel.status != null ? kernel.status : NOT_CONNECTED;
 
   // TODO: We need kernels associated to the kernelspec they came from
   //       so we can pluck off the display_name and provide it here
   let kernelSpecDisplayName = " ";
   if (kernelStatus === NOT_CONNECTED) {
     kernelSpecDisplayName = "no kernel";
-  } else if (kernel && kernel.kernelSpecName) {
+  } else if (kernel != null && kernel.kernelSpecName != null) {
     kernelSpecDisplayName = kernel.kernelSpecName;
-  } else if (content && content.type === "notebook") {
+  } else if (content != null && content.type === "notebook") {
     kernelSpecDisplayName =
       selectors.notebook.displayName(content.model) || " ";
   }
