@@ -198,13 +198,17 @@ HTML.defaultProps = {
 // Pretend this is the data explorer :)
 const FancyTable = props => (
   <table style={{ border: `2px solid ${props.color}` }}>
-    {props.data.map(row => (
-      <tr>
-        {row.map(datum => (
-          <td style={{ border: `1px dashed ${props.color}` }}>{datum}</td>
-        ))}
-      </tr>
-    ))}
+    <tbody>
+      {props.data.map((row, idx) => (
+        <tr key={idx}>
+          {row.map((datum, idx) => (
+            <td key={idx} style={{ border: `1px dashed ${props.color}` }}>
+              {datum}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
   </table>
 );
 
@@ -233,7 +237,7 @@ class Output extends React.Component {
           data={{
             "text/plain": "1,2,3\n4,5,6\n",
             "text/html":
-              "<table><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></table>",
+              "<table><tbody><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></tbody></table>",
             "fancy/table": [[1, 2, 3], [4, 5, 6]]
           }}
         >
