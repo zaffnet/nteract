@@ -1,5 +1,5 @@
 ```jsx static
-import { Cell } from "@nteract/presentational-components"
+import { Cell } from "@nteract/presentational-components";
 ```
 
 All by itself, this component doesn't do anything. Used with `<Input />`, `<Source />`, and `<Outputs />`, it brings styling to the children
@@ -48,7 +48,7 @@ By moving a cursor over the component and hovering, styling can be changed.
             <th>2</th>
             <td>3</td>
           </tr>
-        </tbody>{" "}
+        </tbody>
       </table>
     </div>
   </Outputs>
@@ -71,9 +71,9 @@ A `<Cell />` can be set as selected to **raise** it up.
 
 A cell can be in one of three levels, similar to raised cards:
 
-1.  *Flat* on the "page"
-2.  *Slight* rise, mid way to fully active, while hovering (`_hovered` prop is `true`)
-3.  *Raised* up highest, when fully active (i.e. `isSelected` prop is `true`) --
+1.  _Flat_ on the "page"
+2.  _Slight_ rise, mid way to fully active, while hovering (`_hovered` prop is `true`)
+3.  _Raised_ up highest, when fully active (i.e. `isSelected` prop is `true`) --
     the editor should be focused when this level is used
 
 ```js
