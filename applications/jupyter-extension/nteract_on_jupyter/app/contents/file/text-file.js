@@ -95,7 +95,7 @@ function mapStateToTextFileProps(
 
   return {
     theme: selectors.currentTheme(state),
-    mimetype: content.mimetype || "text/plain",
+    mimetype: content.mimetype != null ? content.mimetype : "text/plain",
     text: text,
     contentRef: ownProps.contentRef
   };
