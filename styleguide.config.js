@@ -25,6 +25,10 @@ module.exports = {
     {
       name: "Directory Listing",
       components: "packages/directory-listing/src/components/*.js"
+    },
+    {
+      name: "Maths",
+      content: "packages/mathjax/examples.md"
     }
   ],
   // For overriding the components styleguidist uses
@@ -35,6 +39,9 @@ module.exports = {
       "styleguide-components",
       "logo.js"
     )
+  },
+  compilerConfig: {
+    transforms: { templateString: false }
   },
   webpackConfig: {
     node: {
