@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 /* global MathJax */
 
 import * as React from "react";
@@ -6,9 +6,19 @@ import PropTypes from "prop-types";
 import loadScript from "./load-script";
 
 // MathJax expected to be a global and may be undefined
-declare var MathJax: ?Object;
+declare var MathJax: ?{
+  Hub: {
+    Config: (options: *) => void,
+    Register: {
+      StartupHook: (str: string, cb: () => void) => void,
+      MessageHook: (string, cb: (msg: string) => void) => void
+    },
+    processSectionDelay: number
+  }
+};
 
-export type Props = {
+declare type onLoad = () => void;
+type Props = {
   src: ?string,
   children: React.Node,
   didFinishTypeset: ?() => void,
@@ -17,20 +27,24 @@ export type Props = {
   //
   //  loader={(onLoad) => loadMathJax(document, onLoad)}
   //
-  loader: ?(cb: Function) => void,
+  onLoad: ?onLoad,
+  loader: ?(cb: onLoad) => void,
   input: "ascii" | "tex",
   delay: number,
-  options: Object,
+  options: ?*,
   loading: React.Node,
   noGate: boolean,
-  onError: (err: Error) => void,
-  onLoad: ?Function
+  onError: (err: Error) => void
+};
+
+type State = {
+  loaded: boolean
 };
 
 /**
  * Context for loading MathJax
  */
-class Context extends React.Component<Props, *> {
+class Context extends React.Component<Props, State> {
   static defaultProps = {
     src:
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
@@ -50,7 +64,6 @@ class Context extends React.Component<Props, *> {
   constructor(props: Props) {
     super(props);
     this.state = { loaded: false };
-    (this: any).onLoad = this.onLoad.bind(this);
   }
 
   getChildContext() {
@@ -67,7 +80,7 @@ class Context extends React.Component<Props, *> {
   componentDidMount() {
     const src = this.props.src;
 
-    if (!src) {
+    if (src == null) {
       return this.onLoad();
     }
 
@@ -78,7 +91,7 @@ class Context extends React.Component<Props, *> {
     }
   }
 
-  onLoad() {
+  onLoad = () => {
     if (!MathJax || !MathJax.Hub) {
       this.props.onError(
         new Error("MathJax not really loaded even though onLoad called")
@@ -106,7 +119,7 @@ class Context extends React.Component<Props, *> {
 
     MathJax.Hub.Register.MessageHook("Math Processing Error", message => {
       if (this.props.onError) {
-        this.props.onError(message);
+        this.props.onError(new Error(message));
       }
     });
 
@@ -117,16 +130,14 @@ class Context extends React.Component<Props, *> {
     this.setState({
       loaded: true
     });
-  }
+  };
 
   render() {
     if (!this.state.loaded && !this.props.noGate) {
       return this.props.loading;
     }
 
-    const children = this.props.children;
-
-    return React.Children.only(children);
+    return this.props.children;
   }
 }
 
