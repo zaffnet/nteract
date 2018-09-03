@@ -8,7 +8,7 @@ import loadScript from "./load-script";
 // MathJax expected to be a global and may be undefined
 declare var MathJax: ?Object;
 
-export type Props = {
+type Props = {
   src: ?string,
   children: React.Node,
   didFinishTypeset: ?() => void,
@@ -27,10 +27,14 @@ export type Props = {
   onLoad: ?Function
 };
 
+type State = {
+  loaded: boolean
+};
+
 /**
  * Context for loading MathJax
  */
-class Context extends React.Component<Props, *> {
+class Context extends React.Component<Props, State> {
   static defaultProps = {
     src:
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
@@ -124,9 +128,7 @@ class Context extends React.Component<Props, *> {
       return this.props.loading;
     }
 
-    const children = this.props.children;
-
-    return React.Children.only(children);
+    return this.props.children;
   }
 }
 
