@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import Node from "./node";
 import Context from "./context";

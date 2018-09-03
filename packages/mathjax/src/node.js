@@ -121,7 +121,7 @@ class Node extends React.Component<Props, *> {
       this.nodeRef.current.appendChild(this.script);
     }
 
-    // It _should_ be defined at this point, we'll let Flow handle well here
+    // It _should_ be defined at this point, we'll just return at this point now
     if (!this.script) {
       return;
     }

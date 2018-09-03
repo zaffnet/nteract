@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 /* global MathJax */
 
 import * as React from "react";
@@ -35,6 +35,8 @@ type State = {
  * Context for loading MathJax
  */
 class Context extends React.Component<Props, State> {
+  onLoad: () => void;
+
   static defaultProps = {
     src:
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
@@ -54,7 +56,7 @@ class Context extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { loaded: false };
-    (this: any).onLoad = this.onLoad.bind(this);
+    this.onLoad = this.onLoad.bind(this);
   }
 
   getChildContext() {
@@ -71,7 +73,7 @@ class Context extends React.Component<Props, State> {
   componentDidMount() {
     const src = this.props.src;
 
-    if (!src) {
+    if (src == null) {
       return this.onLoad();
     }
 
