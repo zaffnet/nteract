@@ -1,19 +1,11 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": ["last 2 versions", "safari >= 7"]
-        }
-      }
-    ],
-    "next/babel"
+    "@babel/preset-flow",
+    "@babel/preset-env",
+    ["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]
   ],
   "plugins": [
-    "react-hot-loader/babel",
-    "transform-class-properties",
-    "transform-flow-strip-types",
-    "transform-object-rest-spread"
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread"
   ]
 }
