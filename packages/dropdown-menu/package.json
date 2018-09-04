@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "babel-runtime": "^6.26.0",
+    "@babel/runtime": "^7.0.0",
     "react-hot-loader": "^4.1.2",
     "styled-jsx": "^2.2.6"
   },
