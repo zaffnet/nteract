@@ -90,7 +90,7 @@ To get started developing, [set up the nteract monorepo](#set-the-monorepo-up-in
 
 #### Set the monorepo up in dev mode
 
-Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-node).
+Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site).
 
 1. Fork this repo
 2. Clone your fork or this repo `git clone https://github.com/nteract/nteract`
@@ -139,7 +139,7 @@ $(npm bin)/lerna run build --scope packageName
 #### Quick and dirty (manual)
 
 ```
-npm run app:desktop
+yarn app:desktop
 ```
 
 As you make changes, you will have to close the entire app (CMD-q on macOS or
@@ -151,13 +151,13 @@ changes.
 In separate terminals run:
 
 ```
-npm run build:desktop:watch
+yarn build:desktop:watch
 ```
 
 and
 
 ```
-npm run spawn
+yarn spawn
 ```
 
 This progressive webpack build will keep rebuilding as you modify the source
@@ -169,7 +169,7 @@ the notebook app.
 Run:
 
 ```
-npm run app:play
+yarn app:play
 ```
 
 Then open `127.0.0.1:3000` in your browser. You'll be able to make changes to
@@ -182,7 +182,7 @@ rebuild those using [the instructions for building specific packages](#building-
 
 > I upgraded my developer installation and things are broken!
 
-- Try `npm run clean && npm i`
+- Try `yarn clean && yarn`
 
 > I want to debug redux actions and state changes.
 
