@@ -1,4 +1,7 @@
 {
-  "presets": [["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]],
+  "presets": [
+    "@babel/preset-flow",
+    ["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]
+  ],
   "plugins": ["@babel/plugin-transform-flow-strip-types"]
 }
