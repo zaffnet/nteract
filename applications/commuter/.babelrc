@@ -1,12 +1,4 @@
 {
-  "presets": [
-    "@babel/preset-flow",
-    "@babel/preset-env",
-    ["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]
-  ],
-  "plugins": [
-    "@babel/plugin-transform-flow-strip-types",
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread"
-  ]
+  "presets": [["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]],
+  "plugins": ["@babel/plugin-transform-flow-strip-types"]
 }
