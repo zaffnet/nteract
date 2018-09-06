@@ -78,11 +78,13 @@ function nextWebpack(
     return rule;
   });
 
-  config.module.rules.push({
-    test: /\.js$/,
-    exclude: exclude,
-    use: [options.defaultLoaders.babel]
-  });
+  if (options && options.defaultLoaders) {
+    config.module.rules.push({
+      test: /\.js$/,
+      exclude: exclude,
+      use: [options.defaultLoaders.babel]
+    });
+  }
 
   config.resolve = Object.assign({}, config.resolve, {
     mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
