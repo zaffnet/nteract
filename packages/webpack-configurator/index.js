@@ -34,7 +34,15 @@ function mergeDefaultAliases(originalAlias /*: ?Aliases */) /*: Aliases */ {
 /*::
 type NextWebPackOptions = {
   dev: boolean,
-  isServer: boolean
+  isServer: boolean,
+  defaultLoaders: {
+  // the babel-loader configuration for Next.js.
+    babel: Object,
+    // the hot-self-accept-loader configuration.
+    // This loader should only be used for advanced use cases.
+    // For example @zeit/next-typescript adds it for top-level typescript pages.
+    hotSelfAccept: Object
+}
 }
 
 // Semi-hokey webpack type just to have some localized semi-sanity
@@ -73,7 +81,7 @@ function nextWebpack(
   config.module.rules.push({
     test: /\.js$/,
     exclude: exclude,
-    loader: "babel-loader"
+    use: [options.defaultLoaders.babel]
   });
 
   config.resolve = Object.assign({}, config.resolve, {
