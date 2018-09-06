@@ -11,7 +11,7 @@
     "prepublishOnly": "npm run build && npm run build:flow",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "node buildStyles.js && npm run build:copy-files && babel -d lib src --ignore '**/__tests__/**' && babel -d lib build",
+    "build:lib": "node buildStyles.js && npm run build:copy-files && babel -d lib src --ignore '**/__tests__/**' && babel -d lib build  --config-file ../../babel.config.js",
     "build:copy-files": "mkdirp ./lib && mkdirp ./build && cpy ./src/*.json ./lib/ && cpy ./build/* ./lib/",
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
     "build:lib:watch": "npm run build:lib -- --watch",

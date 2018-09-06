@@ -1,9 +1,8 @@
 // @flow
 import * as React from "react";
 import Main from "../components/Main";
-import { createStore } from "../redux";
-import withRedux from "next-redux-wrapper";
 import { actions } from "../redux";
+import { connect } from "react-redux";
 
 function detectPlatform(req) {
   if (req && req.headers) {
@@ -41,5 +40,4 @@ class Page extends React.Component<*, *> {
   }
 }
 
-const nextReduxWrapperConfig = { createStore };
-export default withRedux(nextReduxWrapperConfig)(Page);
+export default connect()(Page);

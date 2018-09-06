@@ -18,9 +18,9 @@
     "react": "^16.3.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "@nteract/octicons": "^0.4.1",
     "@nteract/timeago": "^3.6.1",
-    "babel-runtime": "^6.26.0",
     "react-hot-loader": "^4.1.2"
   },
   "peerDependencies": {
