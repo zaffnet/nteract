@@ -1,7 +1,0 @@
-{
-  "presets": [["next/babel", { "styled-jsx": { "optimizeForSpeed": false } }]],
-  "plugins": [
-    "@babel/plugin-transform-flow-strip-types",
-    "react-hot-loader/babel"
-  ]
-}
