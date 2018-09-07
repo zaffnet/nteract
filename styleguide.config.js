@@ -41,6 +41,7 @@ module.exports = {
     )
   },
   compilerConfig: {
+    objectAssign: "Object.assign",
     transforms: { templateString: false }
   },
   webpackConfig: {
