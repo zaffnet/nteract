@@ -152,7 +152,7 @@
     "jest": "^23.0.1",
     "jquery": "^3.2.1",
     "json-loader": "^0.5.7",
-    "jsonfile": "^4.0.0",
+    "jsonfile": "^5.0.0",
     "jsonschema": "^1.2.2",
     "jupyter-paths": "^2.0.0",
     "kernelspecs": "^2.0.0",
