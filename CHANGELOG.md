@@ -5,6 +5,7 @@
 * Migrate examples to 🆕 [examples](https://github.com/nteract/examples) repo
 * nteract on jupyter now respects `_xsrf` token
 * `<RichMedia />` component
+* nteract on jupyter now supports Python < 3.6
 
 ## nteract v0.11.6 - Birken Birkeland
 
