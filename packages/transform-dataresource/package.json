@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-dataresource",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "description": "Transform for data resource JSON",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -30,8 +30,8 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "@nteract/octicons": "^0.4.1",
-    "@nteract/transform-plotly": "^3.2.1",
+    "@nteract/octicons": "^0.4.2",
+    "@nteract/transform-plotly": "^3.2.2",
     "d3-time-format": "^2.0.5",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",

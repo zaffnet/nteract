@@ -1,6 +1,6 @@
 {
   "name": "@nteract/directory-listing",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "a directory listing component that can be used across nteract ecosystem (and beyond?)",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "@nteract/octicons": "^0.4.1",
-    "@nteract/timeago": "^3.6.1",
+    "@nteract/octicons": "^0.4.2",
+    "@nteract/timeago": "^3.6.2",
     "react-hot-loader": "^4.1.2"
   },
   "peerDependencies": {

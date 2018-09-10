@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-render",
-  "version": "1.2.5",
+  "version": "2.0.0",
   "description": "Render a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -19,10 +19,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@nteract/commutable": "^4.1.1",
-    "@nteract/display-area": "^4.4.3",
-    "@nteract/presentational-components": "^0.4.1",
-    "@nteract/transforms": "^4.4.2",
+    "@nteract/commutable": "^4.1.2",
+    "@nteract/display-area": "^4.4.4",
+    "@nteract/presentational-components": "^0.4.2",
+    "@nteract/transforms": "^4.4.3",
     "babel-runtime": "^6.26.0",
     "katex": "^0.10.0-alpha",
     "react-katex": "^2.0.2",
