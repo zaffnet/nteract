@@ -1,3 +1,18 @@
+## nteract v0.11.7 - Blacksmith Blackwell
+
+* No more pesky kernel shutdown error when no kernel available
+* Upgrade to babel 7 and next.js 7
+* Migrate examples to 🆕 [examples](https://github.com/nteract/examples) repo
+* nteract on jupyter now respects `_xsrf` token
+* `<RichMedia />` component
+* nteract on jupyter now supports Python < 3.6
+
+## nteract v0.11.6 - Birken Birkeland
+
+Main change: LaTeX is back to working and not breaking your entire app 🔣🔥😱😅
+
+See https://github.com/nteract/nteract/pull/3228 for details.
+
 ## nteract v0.11.3 - Birdy Birdseye
 
 * More help text for Data Explorer
