@@ -13,16 +13,19 @@ export function unload(store: Store<AppState, Action>) {
   const state = store.getState();
 
   state.core.entities.kernels.byRef.forEach((kernel, kernelRef) => {
+    // Skip if kernel unknown
+    if (!kernel || !kernel.type) {
+      return;
+    }
+
     if (kernel.type === "zeromq") {
       try {
         killKernelImmediately(kernel);
       } catch (e) {
         alert(`Trouble shutting down - ${e.message}`);
       }
-    } else {
-      alert(
-        "Need to implement a way to shutdown non-zeromq kernels on desktop"
-      );
+    } else if (kernel.type === "websocket") {
+      alert("Need to implement a way to shutdown websocket kernels on desktop");
     }
   });
 }
