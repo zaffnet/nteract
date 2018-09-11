@@ -1,6 +1,6 @@
 {
   "name": "@nteract/presentational-components",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "pure presentational components for nteract",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
