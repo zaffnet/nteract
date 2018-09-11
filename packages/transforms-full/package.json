@@ -33,6 +33,7 @@
     "react": "^16.3.2"
   },
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/transform-dataresource": "^4.3.3",
     "@nteract/transform-geojson": "^3.2.2",
     "@nteract/transform-model-debug": "^3.2.2",

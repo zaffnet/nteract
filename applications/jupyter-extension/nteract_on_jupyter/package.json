@@ -18,6 +18,7 @@
   "author": "Kyle Kelley <rgbkrk@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/commutable": "^4.1.2",
     "@nteract/connected-components": "^2.0.0",
     "@nteract/core": "^7.0.0",

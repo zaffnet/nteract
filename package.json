@@ -105,6 +105,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.0.0",
+    "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/plotly": "^1.0.0",
     "anser": "^1.4.1",
     "aws-sdk": "^2.108.0",
