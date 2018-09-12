@@ -1,7 +1,6 @@
-import css from "styled-jsx/css";
+//import css from "styled-jsx/css";
 
-/*
-export default css`
+export default `
   .ReactTable {
     position: relative;
     display: -webkit-box;
@@ -424,7 +423,8 @@ export default css`
     user-select: none;
   }
 `;
-*/
+
+/*
 
 export default css`
   :global(.ReactTable) {
@@ -838,3 +838,4 @@ export default css`
     user-select: none;
   }
 `;
+*/
