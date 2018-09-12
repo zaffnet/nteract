@@ -2,7 +2,7 @@
 import { hot } from "react-hot-loader";
 
 import * as React from "react";
-import { DatabaseOcticon, Beaker } from "@nteract/octicons";
+import { DatabaseOcticon } from "@nteract/octicons";
 
 import { colors } from "./settings";
 import { semioticSettings } from "./charts/settings";

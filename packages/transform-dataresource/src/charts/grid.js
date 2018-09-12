@@ -17,7 +17,7 @@ export const DataResourceTransformGrid = ({
 
   console.log("tableColumns");
   return (
-    <div>
+    <div className="put-table-here">
       <ReactTable data={data} columns={tableColumns} />
       <style jsx>{ReactTableStyles}</style>
     </div>
