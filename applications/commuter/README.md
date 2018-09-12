@@ -80,8 +80,8 @@ COMMUTER_BUCKET=sweet-notebooks commuter
 
 1. `git clone git@github.com:nteract/nteract.git`
 1. `cd nteract`
-1. `npm i`
-1. `npm run app:commuter`
+1. `yarn`
+1. `yarn app:commuter`
 1. open `http://localhost:4000`
 
 ## Tests
