@@ -2173,6 +2173,10 @@ binary-extensions@^1.0.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.11.0.tgz#46aa1751fb6a2f93ee5e689bb1087d4b14c6c205"
 
+bintrees@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/bintrees/-/bintrees-1.0.2.tgz#49f896d6e858a4a499df85c38fb399b9aff840f8"
+
 bl@^1.0.0:
   version "1.2.2"
   resolved "https://registry.npmjs.org/bl/-/bl-1.2.2.tgz#a160911717103c07410cef63ef51b397c025af9c"
@@ -2786,7 +2790,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.x, classnames@^2.2.3, classnames@^2.2.6:
+classnames@2.x, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
@@ -3699,6 +3703,10 @@ d3-interpolate@1, d3-interpolate@^1.1.5, d3-interpolate@^1.2.0:
 d3-path@1, d3-path@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/d3-path/-/d3-path-1.0.5.tgz#241eb1849bd9e9e8021c0d0a799f8a0e8e441764"
+
+d3-polygon@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/d3-polygon/-/d3-polygon-1.0.5.tgz#9a645a0a64ff6cbf9efda96ee0b4a6909184c363"
 
 d3-quadtree@1:
   version "1.0.3"
@@ -7964,6 +7972,13 @@ markdown-to-jsx@^6.6.8:
     prop-types "^15.5.10"
     unquote "^1.1.0"
 
+martinez-polygon-clipping@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/martinez-polygon-clipping/-/martinez-polygon-clipping-0.1.5.tgz#81ce3eb2867cd9188a20b90acf26f23fb4e8ee42"
+  dependencies:
+    bintrees "^1.0.1"
+    tinyqueue "^1.1.0"
+
 match-at@^0.1.1:
   version "0.1.1"
   resolved "https://registry.npmjs.org/match-at/-/match-at-0.1.1.tgz#25d040d291777704d5e6556bbb79230ec2de0540"
@@ -9501,6 +9516,12 @@ pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
 
+polygon-offset@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/polygon-offset/-/polygon-offset-0.3.1.tgz#69a6565f0b27fa76b5270d5c079b0ba2c8f0bba3"
+  dependencies:
+    martinez-polygon-clipping "^0.1.5"
+
 portfinder@^1.0.13:
   version "1.0.15"
   resolved "https://registry.npmjs.org/portfinder/-/portfinder-1.0.15.tgz#28990f8a1d2794a5709010b25d9f6d90fcc2fa14"
@@ -10061,7 +10082,7 @@ quote-stream@^1.0.1, quote-stream@~1.0.2:
     minimist "^1.1.3"
     through2 "^2.0.0"
 
-raf@3.4.0, raf@^3.4.0:
+raf@^3.4.0:
   version "3.4.0"
   resolved "https://registry.npmjs.org/raf/-/raf-3.4.0.tgz#a28876881b4bc2ca9117d4138163ddb80f781575"
   dependencies:
@@ -10471,6 +10492,12 @@ react-syntax-highlighter@^8.0.0:
     lowlight "~1.9.1"
     prismjs "^1.8.4"
     refractor "^2.4.1"
+
+react-table@^6.8.6:
+  version "6.8.6"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.8.6.tgz#a0ad8b4839319052d5befc012603fb161e52ede3"
+  dependencies:
+    classnames "^2.2.5"
 
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.2.0:
   version "16.4.2"
@@ -11273,9 +11300,9 @@ selfsigned@^1.9.1:
   dependencies:
     node-forge "0.7.5"
 
-semiotic-mark@0.2.12:
-  version "0.2.12"
-  resolved "https://registry.npmjs.org/semiotic-mark/-/semiotic-mark-0.2.12.tgz#24dbc12ac5d6088c4864126a40d533fe1922797a"
+semiotic-mark@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/semiotic-mark/-/semiotic-mark-0.3.0.tgz#bd658e82031793fcb99cb238fe1ef9fdecc07d8d"
   dependencies:
     d3-interpolate "^1.1.5"
     d3-scale "^1.0.3"
@@ -11285,9 +11312,9 @@ semiotic-mark@0.2.12:
     prop-types "^15.6.0"
     roughjs-es5 "0.1.0"
 
-semiotic@^1.13.2:
-  version "1.13.4"
-  resolved "https://registry.npmjs.org/semiotic/-/semiotic-1.13.4.tgz#f9922ee8d3325f4f58e358db6e4a50821ce2e39e"
+semiotic@^1.14.4:
+  version "1.14.4"
+  resolved "https://registry.yarnpkg.com/semiotic/-/semiotic-1.14.4.tgz#5b8004bd5c8e7d0bfac0c022e06bf145e7869d47"
   dependencies:
     "@mapbox/polylabel" "1"
     d3-array "^1.2.0"
@@ -11301,6 +11328,7 @@ semiotic@^1.13.2:
     d3-hexbin "^0.2.2"
     d3-hierarchy "^1.1.3"
     d3-interpolate "^1.1.5"
+    d3-polygon "^1.0.5"
     d3-sankey-circular "0.25.0"
     d3-scale "^1.0.3"
     d3-selection "^1.1.0"
@@ -11310,14 +11338,13 @@ semiotic@^1.13.2:
     labella "1.1.4"
     memoize-one "4.0.0"
     object-assign "4.1.1"
+    polygon-offset "0.3.1"
     promise "8.0.1"
     prop-types "15.6.0"
-    raf "3.4.0"
     react-annotation "1.3.1"
     roughjs-es5 "0.1.0"
-    semiotic-mark "0.2.12"
+    semiotic-mark "0.3.0"
     svg-path-bounding-box "1.0.4"
-    whatwg-fetch "2.0.3"
 
 semver-compare@^1.0.0:
   version "1.0.0"
@@ -13610,10 +13637,6 @@ whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
   resolved "https://registry.npmjs.org/whatwg-encoding/-/whatwg-encoding-1.0.3.tgz#57c235bc8657e914d24e1a397d3c82daee0a6ba3"
   dependencies:
     iconv-lite "0.4.19"
-
-whatwg-fetch@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 
 whatwg-fetch@>=0.10.0:
   version "2.0.4"
