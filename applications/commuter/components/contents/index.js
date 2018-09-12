@@ -3,7 +3,7 @@ import * as React from "react";
 
 import NotebookPreview from "@nteract/notebook-preview";
 import Markdown from "@nteract/markdown";
-import { Styles } from "@nteract/presentational-components";
+import { Styles, Source } from "@nteract/presentational-components";
 
 import DirectoryListing from "./directory-listing";
 
@@ -70,6 +70,13 @@ class File extends React.Component<*> {
       case "markdown":
       case "rmd":
         return <Markdown source={this.props.entry.content} />;
+      case "js":
+        return (
+          <Source language="javascript">{this.props.entry.content}</Source>
+        );
+      case "py":
+      case "pyx":
+        return <Source language="python">{this.props.entry.content}</Source>;
       case "gif":
       case "jpeg":
       case "jpg":
@@ -81,6 +88,11 @@ class File extends React.Component<*> {
           />
         );
       default:
+        if (this.props.entry.format === "text") {
+          return (
+            <Source language="text/plain">{this.props.entry.content}</Source>
+          );
+        }
         return <a href={`/files/${this.props.pathname}`}>Download raw file</a>;
     }
   }
