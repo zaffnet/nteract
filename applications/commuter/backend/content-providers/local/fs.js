@@ -219,7 +219,23 @@ function getFile(
         if (err) {
           reject(err);
         }
-        resolve(Object.assign({}, file, { content: data.toString() }));
+        let str = data.toString("utf-8");
+        let format = file.format;
+        for (let i = 0; i < str.length; ++i) {
+          if (str.charCodeAt(i) === 65533) {
+            // 65533 is the magic number for unknown character
+            // We will not send the content, as the interface
+            // currently doesn't render it.  But this is a bad
+            // contract.
+            //
+            // We denote the format as null rather than some strange format since we need to
+            // stay spec compliant with jupyter
+            format = null;
+            str = "";
+            break;
+          }
+        }
+        resolve(Object.assign({}, file, { content: str, format: format }));
       }
     );
   });
