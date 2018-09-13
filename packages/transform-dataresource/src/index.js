@@ -2,7 +2,7 @@
 import { hot } from "react-hot-loader";
 
 import * as React from "react";
-import { DatabaseOcticon, Beaker } from "@nteract/octicons";
+import { DatabaseOcticon } from "@nteract/octicons";
 
 import { colors } from "./settings";
 import { semioticSettings } from "./charts/settings";
@@ -259,7 +259,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     });
 
     const display = (
-      <div style={{ marginLeft: "50px", width: "calc(100% - 50px)" }}>
+      <div style={{ marginLeft: "50px", width: "calc(100vw - 200px)" }}>
         <Frame
           responsiveWidth={true}
           size={[500, height - 200]}
@@ -400,7 +400,10 @@ class DataResourceTransform extends React.Component<Props, State> {
           <div
             style={{
               display: "flex",
-              flexFlow: "column nowrap"
+              flexFlow: "column nowrap",
+              zIndex: 1,
+              padding: "5px",
+              background: "white"
             }}
           >
             <IconButton
