@@ -243,6 +243,9 @@ export const semioticScatterplot = (
     });
   }
 
+  const renderInCanvas =
+    (type === "scatterplot" || type === "contour") && data.length > 10;
+
   return {
     xAccessor: metric1,
     yAccessor: metric2,
@@ -263,6 +266,7 @@ export const semioticScatterplot = (
       }
     ],
     points: (type === "scatterplot" || type === "contour") && data,
+    canvasPoints: renderInCanvas,
     areas: areas,
     areaType: { type, bins: 10, thresholds: dim3 === "none" ? 6 : 3 },
     areaStyle: (d: Object) => ({
@@ -276,14 +280,14 @@ export const semioticScatterplot = (
       strokeWidth: type === "contour" ? 2 : 1
     }),
     pointStyle: (d: Object) => ({
-      r: type === "contour" ? 3 : sizeScale(d[metric3]),
+      r: renderInCanvas ? 2 : type === "contour" ? 3 : sizeScale(d[metric3]),
       fill: colorHash[d[dim1]] || "black",
       fillOpacity: 0.75,
-      stroke: type === "contour" ? "white" : "black",
+      stroke: renderInCanvas ? "none" : type === "contour" ? "white" : "black",
       strokeWidth: type === "contour" ? 0.5 : 1,
       strokeOpacity: 0.9
     }),
-    hoverAnnotation: true,
+    hoverAnnotation: !renderInCanvas,
     responsiveWidth: false,
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },
