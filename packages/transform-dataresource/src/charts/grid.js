@@ -24,9 +24,7 @@ export const DataResourceTransformGrid = ({
         }}
         className="-striped -highlight"
       />
-      <style global jsx>
-        {ReactTableStyles}
-      </style>
+      <style jsx>{ReactTableStyles}</style>
     </div>
   );
 };
