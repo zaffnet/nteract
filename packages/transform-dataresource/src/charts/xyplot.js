@@ -244,7 +244,7 @@ export const semioticScatterplot = (
   }
 
   const renderInCanvas =
-    (type === "scatterplot" || type === "contour") && data.length > 10;
+    (type === "scatterplot" || type === "contour") && data.length > 999;
 
   return {
     xAccessor: metric1,
