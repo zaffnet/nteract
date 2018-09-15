@@ -16,7 +16,7 @@ export const DataResourceTransformGrid = ({
 
   return (
     <div style={{ width: "calc(100vw - 150px)" }}>
-      <ReactTable
+      <ReactTableFixedColumns
         data={data}
         columns={tableColumns}
         style={{
