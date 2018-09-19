@@ -55,8 +55,6 @@ export class Output extends React.Component<Props, State> {
     }
 
     // Render the output component that handles this output type
-    return React.cloneElement(chosenOne, {
-      output: this.props.output
-    });
+    return React.cloneElement(chosenOne, this.props.output);
   }
 }

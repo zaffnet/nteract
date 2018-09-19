@@ -5,19 +5,18 @@ import Ansi from "ansi-to-react";
 
 import type { StreamOutput } from "@nteract/records";
 
-type Props = {
-  output: StreamOutput,
-  outputType: "stream"
-};
+type Props = StreamOutput;
 
 const StreamText = (props: Props) => {
-  const { text, name } = props.output;
+  const { text, name } = props;
 
   return <Ansi className={`"nteract-display-area-${name}`}>{text}</Ansi>;
 };
 
 StreamText.defaultProps = {
-  outputType: "stream"
+  outputType: "stream",
+  text: "",
+  name: "stdout"
 };
 
 export default StreamText;

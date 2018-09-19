@@ -2,19 +2,7 @@ The `<Output />` element is a glorified Switch statement for picking what to ren
 
 ```jsx
 // Until we create <Stream />
-const StreamText = props => (
-  <pre
-    style={{
-      backgroundColor: props.output.name === "stderr" ? "#f9e0db" : "#e0f9db"
-    }}
-  >
-    {props.output.text}
-  </pre>
-);
-
-StreamText.defaultProps = {
-  outputType: "stream"
-};
+const StreamText = require("./stream-text").default;
 
 const output = Object.freeze({
   outputType: "stream",
@@ -30,19 +18,7 @@ const output = Object.freeze({
 ```jsx
 const { RichMedia } = require("./rich-media");
 
-const StreamText = props => (
-  <pre
-    style={{
-      backgroundColor: props.output.name === "stderr" ? "#f9e0db" : "#e0f9db"
-    }}
-  >
-    {props.output.text}
-  </pre>
-);
-
-StreamText.defaultProps = {
-  outputType: "stream"
-};
+const StreamText = require("./stream-text").default;
 
 // Some "rich" handlers for Media
 const Plain = props => <marquee>{props.data}</marquee>;
@@ -56,7 +32,7 @@ HTML.defaultProps = {
 };
 
 const DisplayData = props => (
-  <RichMedia data={props.output.data} metadata={props.output.metadata}>
+  <RichMedia data={props.data} metadata={props.metadata}>
     {props.children}
   </RichMedia>
 );
