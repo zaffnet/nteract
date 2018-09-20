@@ -16,6 +16,22 @@ const output = Object.freeze({
 ```
 
 ```jsx
+const { JupyterError } = require("./jupyter-error");
+
+const output = Object.freeze({
+  outputType: "error",
+  ename: "NameError",
+  evalue: "Yikes!",
+  traceback: ["Yikes, never heard of that one!"]
+});
+
+<Output output={output}>
+  <JupyterError />
+</Output>;
+
+```
+
+```jsx
 const { RichMedia } = require("./rich-media");
 
 const StreamText = require("./stream-text").default;
