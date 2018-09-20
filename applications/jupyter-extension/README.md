@@ -34,7 +34,7 @@ npm install -g lerna
 
 For more details see the instructions in the [base README](../../README.md#set-the-monorepo-up-in-dev-mode)
 
-### 2. Install/enable `nteract_on_jupyter` (Python 3.6 or greater)
+### 2. Install/enable `nteract_on_jupyter` (Supporting Python 3.X)
 
 Install the python package locally from the `nteract/applications/jupyter-extension/` directory (you should see a `setup.py` here).
 
