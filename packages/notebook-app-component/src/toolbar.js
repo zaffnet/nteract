@@ -140,6 +140,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
               </DropdownContent>
             )}
           </DropdownMenu>
+          <span className="spacer" />
           <button
             onClick={removeCell}
             title="delete cell"
@@ -206,6 +207,13 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
 
           .octicon {
             transition: color 0.5s;
+          }
+
+          .cell-toolbar span.spacer {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 1px 5px 3px 5px;
+            height: 11px;
           }
         `}</style>
       </div>
