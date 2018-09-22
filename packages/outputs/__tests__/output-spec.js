@@ -1,7 +1,7 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import { Output, StreamText, JupyterError } from "../src";
+import { Output, StreamText, KernelOutputError } from "../src";
 
 describe("Output", () => {
   it("handles stream data", () => {
@@ -26,10 +26,10 @@ describe("Output", () => {
 
     const component = shallow(
       <Output output={output}>
-        <JupyterError />
+        <KernelOutputError />
       </Output>
     );
-    expect(component.type()).toEqual(JupyterError);
+    expect(component.type()).toEqual(KernelOutputError);
 
     const outputNoTraceback = {
       outputType: "error",
@@ -38,10 +38,10 @@ describe("Output", () => {
     };
 
     const component2 = shallow(
-      <Output output={output}>
-        <JupyterError />
+      <Output output={outputNoTraceback}>
+        <KernelOutputError />
       </Output>
     );
-    expect(component2.type()).toEqual(JupyterError);
+    expect(component2.type()).toEqual(KernelOutputError);
   });
 });
