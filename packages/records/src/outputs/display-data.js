@@ -24,8 +24,15 @@ export const outputType = DISPLAYDATA;
 // In-memory version
 export type DisplayDataOutput = {
   outputType: DisplayDataType,
-  data: common.MimeBundle,
+  data: common.MediaBundle,
   metadata: {}
+};
+
+export type DisplayDataProps = {
+  outputType: DisplayDataType,
+  data: common.MediaBundle,
+  metadata: {},
+  children: React.Node
 };
 
 // On disk

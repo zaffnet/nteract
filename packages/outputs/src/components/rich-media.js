@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import type { MediaBundle } from "@nteract/records";
+
 /** Error handling types */
 type ReactErrorInfo = {
   componentStack: string
@@ -10,10 +12,6 @@ type ReactErrorInfo = {
 type Caught = {
   error: Error,
   info: ReactErrorInfo
-};
-
-type MediaBundle = {
-  [key: string]: string | Array<string> | {}
 };
 
 type RichMediaProps = {

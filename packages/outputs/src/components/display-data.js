@@ -3,8 +3,8 @@ import * as React from "react";
 
 import { RichMedia } from "./rich-media";
 
-import type { DisplayDataOutput } from "@nteract/records";
-type Props = DisplayDataOutput;
+import type { DisplayDataProps } from "@nteract/records";
+type Props = DisplayDataProps;
 
 export const DisplayData = (props: Props) => {
   const { data, metadata, children } = props;
