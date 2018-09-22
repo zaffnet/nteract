@@ -16,7 +16,7 @@ const output = Object.freeze({
 ```
 
 ```jsx
-const { JupyterError } = require("./jupyter-error");
+const { KernelOutputError } = require("./kernel-output-error");
 
 const output = Object.freeze({
   outputType: "error",
@@ -26,7 +26,7 @@ const output = Object.freeze({
 });
 
 <Output output={output}>
-  <JupyterError />
+  <KernelOutputError />
 </Output>;
 
 ```
