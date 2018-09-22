@@ -5,17 +5,17 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
   type="code"
 >
   <div
-    className="jsx-4158988748 cell-toolbar-mask"
+    className="jsx-3494371011 cell-toolbar-mask"
   >
     <div
-      className="jsx-4158988748 cell-toolbar"
+      className="jsx-3494371011 cell-toolbar"
     >
       <button
-        className="jsx-4158988748 executeButton"
+        className="jsx-3494371011 executeButton"
         title="execute cell"
       >
         <span
-          className="jsx-4158988748 octicon"
+          className="jsx-3494371011 octicon"
         >
           <TriangleRightOcticon>
             <SVGWrapper
@@ -64,11 +64,11 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
               onClick={[Function]}
             >
               <button
-                className="jsx-4158988748"
+                className="jsx-3494371011"
                 title="show additional actions"
               >
                 <span
-                  className="jsx-4158988748 octicon toggle-menu"
+                  className="jsx-3494371011 octicon toggle-menu"
                 >
                   <ChevronDownOcticon>
                     <SVGWrapper
@@ -117,14 +117,14 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
         </div>
       </DropdownMenu>
       <span
-        className="jsx-4158988748 boundary"
+        className="jsx-3494371011 spacer"
       />
       <button
-        className="jsx-4158988748 deleteButton"
+        className="jsx-3494371011 deleteButton"
         title="delete cell"
       >
         <span
-          className="jsx-4158988748 octicon"
+          className="jsx-3494371011 octicon"
         >
           <TrashOcticon>
             <SVGWrapper
@@ -162,13 +162,13 @@ exports[`Toolbar View should be able to render a toolbar 1`] = `
       </button>
     </div>
     <JSXStyle
-      css=".cell-toolbar.__jsx-style-dynamic-selector>div.__jsx-style-dynamic-selector{display:inline-block;}.cell-toolbar.__jsx-style-dynamic-selector{background-color:var(--theme-cell-toolbar-bg);opacity:0.4;-webkit-transition:opacity 0.4s;transition:opacity 0.4s;}.cell-toolbar.__jsx-style-dynamic-selector:hover{opacity:1;}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector{display:inline-block;width:22px;height:20px;padding:0px 4px;text-align:center;border:none;outline:none;background:none;}.cell-toolbar.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector{font-size:15px;line-height:1;color:var(--theme-cell-toolbar-fg);}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector:hover{color:var(--theme-cell-toolbar-fg-hover);}.cell-toolbar-mask.__jsx-style-dynamic-selector{z-index:9999;display:none;position:absolute;top:0px;right:0px;height:34px;padding:0px 0px 0px 50px;}.octicon.__jsx-style-dynamic-selector{-webkit-transition:color 0.5s;transition:color 0.5s;}.cell-toolbar.__jsx-style-dynamic-selector span.boundary.__jsx-style-dynamic-selector{display:inline-block;vertical-align:middle;margin:1px 10px 3px 10px;border-left:2.5px solid rgba(16,22,26,0.1);height:11px;}"
+      css=".cell-toolbar.__jsx-style-dynamic-selector>div.__jsx-style-dynamic-selector{display:inline-block;}.cell-toolbar.__jsx-style-dynamic-selector{background-color:var(--theme-cell-toolbar-bg);opacity:0.4;-webkit-transition:opacity 0.4s;transition:opacity 0.4s;}.cell-toolbar.__jsx-style-dynamic-selector:hover{opacity:1;}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector{display:inline-block;width:22px;height:20px;padding:0px 4px;text-align:center;border:none;outline:none;background:none;}.cell-toolbar.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector{font-size:15px;line-height:1;color:var(--theme-cell-toolbar-fg);}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector:hover{color:var(--theme-cell-toolbar-fg-hover);}.cell-toolbar-mask.__jsx-style-dynamic-selector{z-index:9999;display:none;position:absolute;top:0px;right:0px;height:34px;padding:0px 0px 0px 50px;}.octicon.__jsx-style-dynamic-selector{-webkit-transition:color 0.5s;transition:color 0.5s;}.cell-toolbar.__jsx-style-dynamic-selector span.spacer.__jsx-style-dynamic-selector{display:inline-block;vertical-align:middle;margin:1px 5px 3px 5px;height:11px;}"
       dynamic={
         Array [
           "none",
         ]
       }
-      styleId="2414219362"
+      styleId="3732053222"
     />
   </div>
 </PureToolbar>
@@ -179,17 +179,17 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
   type="code"
 >
   <div
-    className="jsx-4158988748 cell-toolbar-mask"
+    className="jsx-3494371011 cell-toolbar-mask"
   >
     <div
-      className="jsx-4158988748 cell-toolbar"
+      className="jsx-3494371011 cell-toolbar"
     >
       <button
-        className="jsx-4158988748 executeButton"
+        className="jsx-3494371011 executeButton"
         title="execute cell"
       >
         <span
-          className="jsx-4158988748 octicon"
+          className="jsx-3494371011 octicon"
         >
           <TriangleRightOcticon>
             <SVGWrapper
@@ -238,11 +238,11 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
               onClick={[Function]}
             >
               <button
-                className="jsx-4158988748"
+                className="jsx-3494371011"
                 title="show additional actions"
               >
                 <span
-                  className="jsx-4158988748 octicon toggle-menu"
+                  className="jsx-3494371011 octicon toggle-menu"
                 >
                   <ChevronDownOcticon>
                     <SVGWrapper
@@ -296,84 +296,84 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
               >
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748 clearOutput"
+                  className="jsx-3494371011 clearOutput"
                   key=".0"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Clear Cell Output
                   </a>
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748 inputVisibility"
+                  className="jsx-3494371011 inputVisibility"
                   key=".1"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Toggle Input Visibility
                   </a>
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748 outputVisibility"
+                  className="jsx-3494371011 outputVisibility"
                   key=".2"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Toggle Output Visibility
                   </a>
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748 outputExpanded"
+                  className="jsx-3494371011 outputExpanded"
                   key=".3"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Toggle Expanded Output
                   </a>
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748"
+                  className="jsx-3494371011"
                   key=".4"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Toggle Parameter Cell
                   </a>
                 </li>
                 <li
                   aria-selected="false"
-                  className="jsx-4158988748 changeType"
+                  className="jsx-3494371011 changeType"
                   key=".5"
                   onClick={[Function]}
                   role="option"
                   tabIndex="0"
                 >
                   <a
-                    className="jsx-4158988748"
+                    className="jsx-3494371011"
                   >
                     Convert to Markdown Cell
                   </a>
@@ -392,14 +392,14 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
         </div>
       </DropdownMenu>
       <span
-        className="jsx-4158988748 boundary"
+        className="jsx-3494371011 spacer"
       />
       <button
-        className="jsx-4158988748 deleteButton"
+        className="jsx-3494371011 deleteButton"
         title="delete cell"
       >
         <span
-          className="jsx-4158988748 octicon"
+          className="jsx-3494371011 octicon"
         >
           <TrashOcticon>
             <SVGWrapper
@@ -437,13 +437,13 @@ exports[`Toolbar View should be able to render a toolbar 2`] = `
       </button>
     </div>
     <JSXStyle
-      css=".cell-toolbar.__jsx-style-dynamic-selector>div.__jsx-style-dynamic-selector{display:inline-block;}.cell-toolbar.__jsx-style-dynamic-selector{background-color:var(--theme-cell-toolbar-bg);opacity:0.4;-webkit-transition:opacity 0.4s;transition:opacity 0.4s;}.cell-toolbar.__jsx-style-dynamic-selector:hover{opacity:1;}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector{display:inline-block;width:22px;height:20px;padding:0px 4px;text-align:center;border:none;outline:none;background:none;}.cell-toolbar.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector{font-size:15px;line-height:1;color:var(--theme-cell-toolbar-fg);}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector:hover{color:var(--theme-cell-toolbar-fg-hover);}.cell-toolbar-mask.__jsx-style-dynamic-selector{z-index:9999;display:none;position:absolute;top:0px;right:0px;height:34px;padding:0px 0px 0px 50px;}.octicon.__jsx-style-dynamic-selector{-webkit-transition:color 0.5s;transition:color 0.5s;}.cell-toolbar.__jsx-style-dynamic-selector span.boundary.__jsx-style-dynamic-selector{display:inline-block;vertical-align:middle;margin:1px 10px 3px 10px;border-left:2.5px solid rgba(16,22,26,0.1);height:11px;}"
+      css=".cell-toolbar.__jsx-style-dynamic-selector>div.__jsx-style-dynamic-selector{display:inline-block;}.cell-toolbar.__jsx-style-dynamic-selector{background-color:var(--theme-cell-toolbar-bg);opacity:0.4;-webkit-transition:opacity 0.4s;transition:opacity 0.4s;}.cell-toolbar.__jsx-style-dynamic-selector:hover{opacity:1;}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector{display:inline-block;width:22px;height:20px;padding:0px 4px;text-align:center;border:none;outline:none;background:none;}.cell-toolbar.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector{font-size:15px;line-height:1;color:var(--theme-cell-toolbar-fg);}.cell-toolbar.__jsx-style-dynamic-selector button.__jsx-style-dynamic-selector span.__jsx-style-dynamic-selector:hover{color:var(--theme-cell-toolbar-fg-hover);}.cell-toolbar-mask.__jsx-style-dynamic-selector{z-index:9999;display:none;position:absolute;top:0px;right:0px;height:34px;padding:0px 0px 0px 50px;}.octicon.__jsx-style-dynamic-selector{-webkit-transition:color 0.5s;transition:color 0.5s;}.cell-toolbar.__jsx-style-dynamic-selector span.spacer.__jsx-style-dynamic-selector{display:inline-block;vertical-align:middle;margin:1px 5px 3px 5px;height:11px;}"
       dynamic={
         Array [
           "none",
         ]
       }
-      styleId="2414219362"
+      styleId="3732053222"
     />
   </div>
 </PureToolbar>
