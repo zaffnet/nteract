@@ -9,16 +9,10 @@ export const JupyterError = (props: Props) => {
   const { ename, evalue, traceback } = props;
 
   if (!Array.isArray(traceback) || !traceback.length) {
-    return (
-      <Ansi className="nteract-display-area-traceback">{`${ename}: ${evalue}`}</Ansi>
-    );
+    return <Ansi>{`${ename}: ${evalue}`}</Ansi>;
   }
 
-  return (
-    <Ansi className="nteract-display-area-traceback">
-      {traceback.join("\n")}
-    </Ansi>
-  );
+  return <Ansi>{traceback.join("\n")}</Ansi>;
 };
 
 JupyterError.defaultProps = {
