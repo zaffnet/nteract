@@ -1,7 +1,7 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import { Output, StreamText, KernelOutputError } from "../src";
+import { Output, StreamText, KernelOutputError, DisplayData } from "../src";
 
 describe("Output", () => {
   it("handles stream data", () => {
@@ -43,5 +43,26 @@ describe("Output", () => {
       </Output>
     );
     expect(component2.type()).toEqual(KernelOutputError);
+  });
+  it("handles display_data messages", () => {
+    const output = {
+      outputType: "display_data",
+      data: { "text/plain": "Cheese is the best food." }
+    };
+
+    const Plain = props => <pre>{props.data}</pre>;
+    Plain.defaultProps = {
+      mediaType: "text/plain"
+    };
+
+    const component = shallow(
+      <Output output={output}>
+        <DisplayData>
+          <Plain />
+        </DisplayData>
+      </Output>
+    );
+
+    expect(component.type()).toEqual(DisplayData);
   });
 });

@@ -33,6 +33,7 @@ const output = Object.freeze({
 
 ```jsx
 const { RichMedia } = require("./rich-media");
+const { DisplayData } = require("./display-data");
 
 const StreamText = require("./stream-text").default;
 
@@ -45,16 +46,6 @@ Plain.defaultProps = {
 const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
 HTML.defaultProps = {
   mediaType: "text/html"
-};
-
-const DisplayData = props => (
-  <RichMedia data={props.data} metadata={props.metadata}>
-    {props.children}
-  </RichMedia>
-);
-
-DisplayData.defaultProps = {
-  outputType: "display_data"
 };
 
 const outputs = [
