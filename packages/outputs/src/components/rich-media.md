@@ -1,4 +1,6 @@
 ```jsx
+const Media = require('./media')
+
 /**
  * First we'll create some simple components that take data and a mediaType for rendering
  */
@@ -7,18 +9,13 @@ Plain.defaultProps = {
   mediaType: "text/plain"
 };
 
-const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
-HTML.defaultProps = {
-  mediaType: "text/html"
-};
-
 <RichMedia
   data={{
     "text/plain": "plain is sooooo basic",
     "text/html": "<p>I pick the <b>richest</b> to <i>render</i>!</p>"
   }}
 >
-  <HTML />
+  <Media.HTML />
   <Plain />
 </RichMedia>;
 ```
@@ -85,8 +82,10 @@ There are several different jupyter message types that include these objects:
 The `<RichMedia />` component accepts the whole media bundle from a kernel via the `data` prop and all the elements for rendering media types as `children`. The order of the children states their richness from highest to lowest.
 
 ```jsx static
+const Media = require('./media')
+
 <RichMedia data={{ "text/plain": "SparkContext ⚡️" }}>
-  <HTML />
+  <Media.HTML />
   <Plain />
 </RichMedia>
 ```
@@ -94,18 +93,15 @@ The `<RichMedia />` component accepts the whole media bundle from a kernel via t
 The `<RichMedia />` component will pass the appropriate data from the media bundle to the element that accepts the media type. In this case, `<Plain />` is picked as the richest since `text/plain` is the only available. `"SparkContext ⚡️"` is passed as `<Plain data="SparkContext ⚡️" />` to render the richest media.
 
 ```jsx
+const Media = require('./media')
+
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
   mediaType: "text/plain"
 };
 
-const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
-HTML.defaultProps = {
-  mediaType: "text/html"
-};
-
 <RichMedia data={{ "text/plain": "SparkContext ⚡️" }}>
-  <HTML />
+  <Media.HTML />
   <Plain />
 </RichMedia>;
 ```
@@ -113,14 +109,11 @@ HTML.defaultProps = {
 Whereas this output has a richer HTML output:
 
 ```jsx
+const Media = require('./media')
+
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
   mediaType: "text/plain"
-};
-
-const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
-HTML.defaultProps = {
-  mediaType: "text/html"
 };
 
 <RichMedia
@@ -129,7 +122,7 @@ HTML.defaultProps = {
     "text/html": "<b>HTML is so rich</b>"
   }}
 >
-  <HTML />
+  <Media.HTML />
   <Plain />
 </RichMedia>;
 ```
@@ -185,14 +178,11 @@ Plain.defaultProps = {
 Which means that you can customize outputs as props!
 
 ```jsx
+const Media = require('./media')
+
 const Plain = props => <pre>{props.data}</pre>;
 Plain.defaultProps = {
   mediaType: "text/plain"
-};
-
-const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
-HTML.defaultProps = {
-  mediaType: "text/html"
 };
 
 // Pretend this is the data explorer :)
@@ -242,7 +232,7 @@ class Output extends React.Component {
           }}
         >
           <FancyTable color={this.state.color} />
-          <HTML />
+          <Media.HTML />
           <Plain />
         </RichMedia>
       </div>
