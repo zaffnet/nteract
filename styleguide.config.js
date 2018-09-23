@@ -41,8 +41,12 @@ module.exports = {
     )
   },
   compilerConfig: {
+    // Allow us to use {...props}
     objectAssign: "Object.assign",
-    transforms: { templateString: false }
+    transforms: {
+      // whether template strings get transpiled (we don't want it to, so that we can use the native functionality)
+      templateString: false
+    }
   },
   webpackConfig: {
     node: {
