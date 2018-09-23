@@ -7,5 +7,7 @@ Plain.defaultProps = {
   mediaType: "text/plain"
 };
 
-<DisplayData data={ { "text/plain": "Cheese is the best food." } } ><Plain/></DisplayData>
+<DisplayData data={{ "text/plain": "Jackfruit is the best food." }}>
+  <Plain />
+</DisplayData>;
 ```

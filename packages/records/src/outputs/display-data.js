@@ -28,13 +28,6 @@ export type DisplayDataOutput = {
   metadata: {}
 };
 
-export type DisplayDataProps = {
-  outputType: DisplayDataType,
-  data: common.MediaBundle,
-  metadata: {},
-  children: React.Node
-};
-
 // On disk
 export type NbformatDisplayDataOutput = {
   output_type: DisplayDataType,
