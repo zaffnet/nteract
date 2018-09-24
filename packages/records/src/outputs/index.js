@@ -3,8 +3,7 @@ import type { JupyterMessage } from "@nteract/messaging";
 
 import type {
   NbformatDisplayDataOutput,
-  DisplayDataOutput,
-  DisplayDataProps
+  DisplayDataOutput
 } from "./display-data";
 import type { NbformatStreamOutput, StreamOutput } from "./stream";
 import type { NbformatErrorOutput, ErrorOutput } from "./error";
@@ -39,8 +38,7 @@ export type {
   StreamOutput,
   ErrorOutput,
   ExecuteResultOutput,
-  DisplayDataOutput,
-  DisplayDataProps
+  DisplayDataOutput
 };
 
 /**
