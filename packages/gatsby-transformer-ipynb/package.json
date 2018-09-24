@@ -15,7 +15,7 @@
     "prepublishOnly": "npm run build",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf gastby-node.js && rimraf on-node-create.js",
-    "build:lib": "babel -d lib src --ignore '**/__tests__/**' --config-file ../../babel.config.js",
+    "build:lib": "babel -d ./ src --ignore '**/__tests__/**' --config-file ../../babel.config.js",
     "build:lib:watch": "npm run build:lib -- --watch",
     "build:watch": "npm run build:clean && npm run build:lib:watch"
   },
