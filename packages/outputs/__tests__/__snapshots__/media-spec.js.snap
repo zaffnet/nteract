@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HTML renders direct HTML 1`] = `
+<HTML
+  data="<b>cats are best</b>"
+  mediaType="text/html"
+>
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<b>cats are best</b>",
+      }
+    }
+  />
+</HTML>
+`;
+
+exports[`HTML updates the underlying HTML when data changes 1`] = `
+<HTML
+  data="<b>squirrels are pretty great, too</b>"
+  mediaType="text/html"
+>
+  <div
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<b>squirrels are pretty great, too</b>",
+      }
+    }
+  />
+</HTML>
+`;
