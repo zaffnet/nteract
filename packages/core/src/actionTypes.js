@@ -690,10 +690,11 @@ export type SetGithubTokenAction = {
 };
 
 export const RESTART_KERNEL = "RESTART_KERNEL";
+export type RestartKernelOutputHandling = "None" | "Clear All" | "Run All";
 export type RestartKernel = {
   type: "RESTART_KERNEL",
   payload: {
-    clearOutputs: boolean,
+    outputHandling: RestartKernelOutputHandling,
     kernelRef: KernelRef,
     contentRef: ContentRef
   }

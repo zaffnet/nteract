@@ -8,7 +8,12 @@ import * as fs from "fs";
 
 import { throttle } from "lodash";
 
-import { actions, selectors, createKernelRef } from "@nteract/core";
+import {
+  actions,
+  actionTypes,
+  selectors,
+  createKernelRef
+} from "@nteract/core";
 import type { AppState, ContentRef, KernelRef } from "@nteract/core";
 
 import type { Store } from "redux";
@@ -87,19 +92,20 @@ export function triggerWindowRefresh(
 
 export function dispatchRestartKernel(
   ownProps: { contentRef: ContentRef },
-  store: Store<AppState, *>
+  store: Store<AppState, *>,
+  outputHandling: actionTypes.RestartKernelOutputHandling
 ) {
   const state = store.getState();
   const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
 
   if (!kernelRef) {
-    console.error("kernelRef not set in state for menu");
+    store.dispatch(actions.coreError(new Error("kernel not set")));
     return;
   }
 
   store.dispatch(
     actions.restartKernel({
-      clearOutputs: false,
+      outputHandling: outputHandling,
       kernelRef,
       contentRef: ownProps.contentRef
     })
@@ -347,26 +353,6 @@ export function dispatchInterruptKernel(
 
     store.dispatch(actions.interruptKernel({ kernelRef }));
   }
-}
-
-export function dispatchRestartClearAll(
-  ownProps: { contentRef: ContentRef },
-  store: Store<AppState, *>
-) {
-  const state = store.getState();
-  const kernelRef = selectors.kernelRefByContentRef(state, ownProps);
-  if (!kernelRef) {
-    store.dispatch(actions.coreError(new Error("kernel not set")));
-    return;
-  }
-
-  store.dispatch(
-    actions.restartKernel({
-      clearOutputs: true,
-      kernelRef,
-      contentRef: ownProps.contentRef
-    })
-  );
 }
 
 export function dispatchZoomIn() {
@@ -647,10 +633,17 @@ export function initMenuHandlers(
     "menu:interrupt-kernel",
     dispatchInterruptKernel.bind(null, opts, store)
   );
-  ipc.on("menu:restart-kernel", dispatchRestartKernel.bind(null, opts, store));
+  ipc.on(
+    "menu:restart-kernel",
+    dispatchRestartKernel.bind(null, opts, store, "None")
+  );
   ipc.on(
     "menu:restart-and-clear-all",
-    dispatchRestartClearAll.bind(null, opts, store)
+    dispatchRestartKernel.bind(null, opts, store, "Clear All")
+  );
+  ipc.on(
+    "menu:restart-and-run-all",
+    dispatchRestartKernel.bind(null, opts, store, "Run All")
   );
   ipc.on("menu:theme", dispatchSetTheme.bind(null, opts, store));
   ipc.on("menu:set-blink-rate", dispatchSetCursorBlink.bind(null, opts, store));

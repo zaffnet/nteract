@@ -51,6 +51,7 @@ type Props = {
   }) => void,
   restartKernel: ?(payload: *) => void,
   restartKernelAndClearOutputs: ?(payload: *) => void,
+  restartKernelAndRunAllOutputs: ?(payload: *) => void,
   killKernel: ?(payload: *) => void,
   interruptKernel: ?(payload: *) => void,
   currentContentRef: ContentRef,
@@ -110,6 +111,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       changeCellType,
       restartKernel,
       restartKernelAndClearOutputs,
+      restartKernelAndRunAllOutputs,
       killKernel,
       interruptKernel,
       currentContentRef,
@@ -229,17 +231,25 @@ class PureNotebookMenu extends React.Component<Props, State> {
           });
         }
         break;
-      case MENU_ITEM_ACTIONS.KILL_KERNEL:
-        if (killKernel) {
-          killKernel({ kernelRef: currentKernelRef });
-        }
-        break;
       case MENU_ITEM_ACTIONS.RESTART_AND_CLEAR_OUTPUTS:
         if (restartKernelAndClearOutputs) {
           restartKernelAndClearOutputs({
             kernelRef: currentKernelRef,
             contentRef: currentContentRef
           });
+        }
+        break;
+      case MENU_ITEM_ACTIONS.RESTART_AND_RUN_ALL_OUTPUTS:
+        if (restartKernelAndRunAllOutputs) {
+          restartKernelAndRunAllOutputs({
+            kernelRef: currentKernelRef,
+            contentRef: currentContentRef
+          });
+        }
+        break;
+      case MENU_ITEM_ACTIONS.KILL_KERNEL:
+        if (killKernel) {
+          killKernel({ kernelRef: currentKernelRef });
         }
         break;
       case MENU_ITEM_ACTIONS.CHANGE_KERNEL:
@@ -400,6 +410,13 @@ class PureNotebookMenu extends React.Component<Props, State> {
             >
               Restart and Clear All Cells
             </MenuItem>
+            <MenuItem
+              key={createActionKey(
+                MENU_ITEM_ACTIONS.RESTART_AND_RUN_ALL_OUTPUTS
+              )}
+            >
+              Restart and Run All Cells
+            </MenuItem>
             <Divider />
             <SubMenu
               key={MENUS.RUNTIME_CHANGE_KERNEL}
@@ -479,7 +496,11 @@ const mapDispatchToProps = dispatch => ({
   changeKernelByName: payload => dispatch(actions.changeKernelByName(payload)),
   restartKernel: payload => dispatch(actions.restartKernel(payload)),
   restartKernelAndClearOutputs: payload =>
-    dispatch(actions.restartKernel({ ...payload, clearOutputs: true })),
+    dispatch(
+      actions.restartKernel({ ...payload, outputHandling: "Clear All" })
+    ),
+  restartKernelAndRunAllOutputs: payload =>
+    dispatch(actions.restartKernel({ ...payload, outputHandling: "Run All" })),
   killKernel: payload => dispatch(actions.killKernel(payload)),
   interruptKernel: payload => dispatch(actions.interruptKernel(payload))
 });

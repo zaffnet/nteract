@@ -518,14 +518,19 @@ export function loadFullMenu(store: * = global.store) {
         click: createSender("menu:interrupt-kernel")
       },
       {
-        label: "Restart",
+        label: "&Restart",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:restart-kernel")
       },
       {
-        label: "Restart and Clear All Cells",
+        label: "Restart and &Clear All Cells",
         enabled: BrowserWindow.getAllWindows().length > 0,
         click: createSender("menu:restart-and-clear-all")
+      },
+      {
+        label: "Restart and Run &All Cells",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        click: createSender("menu:restart-and-run-all")
       },
       {
         type: "separator"

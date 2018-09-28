@@ -1,13 +1,18 @@
+import * as Immutable from "immutable";
+
 import { ActionsObservable } from "redux-observable";
 
-import { actionTypes } from "@nteract/core";
+import { actions, actionTypes, state as stateModule } from "@nteract/core";
 
 import { createMessage } from "@nteract/messaging";
 
 import { Subject } from "rxjs/Subject";
 
+import { TestScheduler } from "rxjs/testing/TestScheduler";
+
 import {
   acquireKernelInfo,
+  restartKernelEpic,
   watchExecutionStateEpic
 } from "../../src/epics/kernel-lifecycle";
 
@@ -169,5 +174,173 @@ describe("watchExecutionStateEpic", () => {
       err => done.fail(err), // It should not error in the stream
       () => done()
     );
+  });
+});
+
+describe("restartKernelEpic", () => {
+  test("work for outputHandling None", () => {
+    const contentRef = "contentRef";
+    const kernelName = "kernelName";
+    const newKernelRef = "newKernelRef";
+
+    const store = {
+      getState() {
+        return this.state;
+      },
+      state: {
+        core: stateModule.makeStateRecord({
+          kernelRef: "oldKernelRef",
+          entities: stateModule.makeEntitiesRecord({
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                oldKernelRef: stateModule.makeRemoteKernelRecord({
+                  status: "not connected"
+                })
+              })
+            })
+          })
+        }),
+        app: stateModule.makeAppRecord({
+          notificationSystem: { addNotification: () => {} }
+        })
+      }
+    };
+
+    const testScheduler = new TestScheduler((actual, expected) =>
+      expect(actual).toEqual(expected)
+    );
+
+    const inputActions = {
+      a: actions.restartKernel({
+        outputHandling: "None",
+        kernelRef: "oldKernelRef",
+        contentRef: contentRef
+      }),
+      b: actions.launchKernelSuccessful({
+        kernel: "",
+        kernelRef: newKernelRef,
+        contentRef: contentRef,
+        selectNextKernel: true
+      })
+    };
+
+    const outputActions = {
+      c: actions.killKernel({
+        restarting: true,
+        kernelRef: "oldKernelRef"
+      }),
+      d: actions.launchKernelByName({
+        kernelSpecName: null,
+        cwd: ".",
+        kernelRef: newKernelRef,
+        selectNextKernel: true,
+        contentRef: contentRef
+      }),
+      e: actions.restartKernelSuccessful({
+        kernelRef: newKernelRef,
+        contentRef: contentRef
+      })
+    };
+
+    const inputMarbles = "a   b|";
+    const outputMarbles = "(cd)e|";
+
+    const inputAction$ = new ActionsObservable(
+      testScheduler.createHotObservable(inputMarbles, inputActions)
+    );
+    const outputAction$ = restartKernelEpic(
+      inputAction$,
+      store,
+      () => newKernelRef
+    );
+
+    testScheduler
+      .expectObservable(outputAction$)
+      .toBe(outputMarbles, outputActions);
+    testScheduler.flush();
+  });
+  test("work for outputHandling Restart and Run All", () => {
+    const contentRef = "contentRef";
+    const kernelName = "kernelName";
+    const newKernelRef = "newKernelRef";
+
+    const store = {
+      getState() {
+        return this.state;
+      },
+      state: {
+        core: stateModule.makeStateRecord({
+          kernelRef: "oldKernelRef",
+          entities: stateModule.makeEntitiesRecord({
+            kernels: stateModule.makeKernelsRecord({
+              byRef: Immutable.Map({
+                oldKernelRef: stateModule.makeRemoteKernelRecord({
+                  status: "not connected"
+                })
+              })
+            })
+          })
+        }),
+        app: stateModule.makeAppRecord({
+          notificationSystem: { addNotification: () => {} }
+        })
+      }
+    };
+
+    const testScheduler = new TestScheduler((actual, expected) =>
+      expect(actual).toEqual(expected)
+    );
+
+    const inputActions = {
+      a: actions.restartKernel({
+        outputHandling: "Run All",
+        kernelRef: "oldKernelRef",
+        contentRef: contentRef
+      }),
+      b: actions.launchKernelSuccessful({
+        kernel: "",
+        kernelRef: newKernelRef,
+        contentRef: contentRef,
+        selectNextKernel: true
+      })
+    };
+
+    const outputActions = {
+      c: actions.killKernel({
+        restarting: true,
+        kernelRef: "oldKernelRef"
+      }),
+      d: actions.launchKernelByName({
+        kernelSpecName: null,
+        cwd: ".",
+        kernelRef: newKernelRef,
+        selectNextKernel: true,
+        contentRef: contentRef
+      }),
+      e: actions.restartKernelSuccessful({
+        kernelRef: newKernelRef,
+        contentRef: contentRef
+      }),
+      f: actions.executeAllCells({
+        contentRef: contentRef
+      })
+    };
+
+    const inputMarbles = "a   b   |";
+    const outputMarbles = "(cd)(ef)|";
+
+    const inputAction$ = new ActionsObservable(
+      testScheduler.createHotObservable(inputMarbles, inputActions)
+    );
+    const outputAction$ = restartKernelEpic(
+      inputAction$,
+      store,
+      () => newKernelRef
+    );
+
+    testScheduler
+      .expectObservable(outputAction$)
+      .toBe(outputMarbles, outputActions);
+    testScheduler.flush();
   });
 });

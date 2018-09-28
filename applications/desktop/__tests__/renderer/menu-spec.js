@@ -176,52 +176,8 @@ describe("dispatchZoomReset", () => {
   });
 });
 
-describe("dispatchRestartClearAll", () => {
-  test("dispatches RESTART_KERNEL with clearOutputs set to true", () => {
-    const store = {
-      dispatch: jest.fn(),
-      getState: () => ({
-        core: {
-          entities: {
-            contents: {
-              byRef: Immutable.Map({
-                "123": {
-                  filepath: "yep.ipynb",
-                  model: {
-                    type: "notebook",
-                    kernelRef: "k1"
-                  }
-                }
-              })
-            },
-            kernels: {
-              byRef: Immutable.Map({
-                k1: {}
-              })
-            }
-          }
-        }
-      })
-    };
-    const props = {
-      contentRef: "123"
-    };
-
-    menu.dispatchRestartClearAll(props, store);
-
-    expect(store.dispatch).toHaveBeenCalledWith({
-      type: actionTypes.RESTART_KERNEL,
-      payload: {
-        clearOutputs: true,
-        kernelRef: "k1",
-        contentRef: "123"
-      }
-    });
-  });
-});
-
 describe("dispatchRestartKernel", () => {
-  test("dispatches restart kernel with clearOutputs set to false", () => {
+  test("dispatches restart kernel with supplied outputHandling", () => {
     const store = {
       dispatch: jest.fn(),
       getState: () => ({
@@ -251,12 +207,12 @@ describe("dispatchRestartKernel", () => {
       contentRef: "123"
     };
 
-    menu.dispatchRestartKernel(props, store);
+    menu.dispatchRestartKernel(props, store, "Clear All");
 
     expect(store.dispatch).toHaveBeenCalledWith({
       type: actionTypes.RESTART_KERNEL,
       payload: {
-        clearOutputs: false,
+        outputHandling: "Clear All",
         kernelRef: "k1",
         contentRef: "123"
       }
@@ -623,6 +579,7 @@ describe("initMenuHandlers", () => {
       "menu:interrupt-kernel",
       "menu:restart-kernel",
       "menu:restart-and-clear-all",
+      "menu:restart-and-run-all",
       "menu:publish:gist",
       "menu:zoom-in",
       "menu:zoom-out",
