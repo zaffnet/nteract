@@ -7,24 +7,22 @@ const types = {
   tex: "tex"
 };
 
-import MathJaxContext, {
-  type MathJaxObject,
-  type MathJaxContextValue
-} from "./context";
-
-import Provider from "./provider";
-
 type Props = {
   inline: boolean,
   children: string,
   onRender: ?Function
 };
 
-class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
+class Node extends React.Component<Props, *> {
   script: ?HTMLScriptElement;
   nodeRef: React.ElementRef<*>;
 
-  constructor(props: Props & MathJaxContextValue) {
+  static defaultProps = {
+    inline: false,
+    onRender: null
+  };
+
+  constructor(props: Props) {
     super(props);
 
     this.nodeRef = React.createRef();
@@ -42,11 +40,21 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
   /**
    * Update the jax, force update if the display mode changed
    */
-  componentDidUpdate(prevProps: Props & MathJaxContextValue) {
+  componentDidUpdate(prevProps: Props) {
     const forceUpdate =
       prevProps.inline !== this.props.inline ||
       prevProps.children !== this.props.children;
     this.typeset(forceUpdate);
+  }
+
+  /**
+   * Prevent update when the source has not changed
+   */
+  shouldComponentUpdate(nextProps: Props, nextState: *, nextContext: *) {
+    return (
+      nextProps.children !== this.props.children ||
+      nextProps.inline !== this.props.inline
+    );
   }
 
   /**
@@ -60,11 +68,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
    * Clear the jax
    */
   clear() {
-    const MathJax = this.props.MathJax;
-
-    if (!MathJax) {
-      return;
-    }
+    const MathJax = this.context.MathJax;
 
     if (!this.script) {
       return;
@@ -82,11 +86,11 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
    * @param { Boolean } forceUpdate
    */
   typeset(forceUpdate: boolean = false) {
-    const { MathJax } = this.props;
+    const { MathJax } = this.context;
 
-    if (!MathJax || !MathJax.Hub) {
+    if (!MathJax) {
       throw Error(
-        "Could not find MathJax while attempting typeset! It's likely the MathJax script hasn't been loaded or MathJax.Context is not in the hierarchy."
+        "Could not find MathJax while attempting typeset! It's likely the MathJax script hasn't been loaded or MathJax.Context is not in the hierarchy"
       );
     }
 
@@ -98,9 +102,6 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
 
     if (forceUpdate || !this.script) {
       this.setScriptText(text);
-      if (!this.script) {
-        return;
-      }
     }
 
     MathJax.Hub.Queue(MathJax.Hub.Reprocess(this.script, this.props.onRender));
@@ -112,7 +113,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
    */
   setScriptText(text: *) {
     const inline = this.props.inline;
-    const type = types[this.props.input];
+    const type = types[this.context.input];
     if (!this.script) {
       this.script = document.createElement("script");
       this.script.type = `math/${type}; ${inline ? "" : "mode=display"}`;
@@ -138,44 +139,8 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
   }
 }
 
-class MathJaxNode extends React.PureComponent<Props, null> {
-  static defaultProps = {
-    inline: false,
-    onRender: null
-  };
-
-  render() {
-    return (
-      <MathJaxContext.Consumer>
-        {({ MathJax, input, hasProviderAbove }: MathJaxContextValue) => {
-          // If there is no <Provider /> in the above tree, create our own
-          if (!hasProviderAbove) {
-            return (
-              <Provider>
-                <MathJaxNode {...this.props} />
-              </Provider>
-            );
-          }
-
-          if (!MathJax) {
-            return null;
-          }
-
-          return (
-            <MathJaxNode_
-              inline={this.props.inline}
-              onRender={this.props.onRender}
-              input={input}
-              MathJax={MathJax}
-              hasProviderAbove={hasProviderAbove}
-            >
-              {this.props.children}
-            </MathJaxNode_>
-          );
-        }}
-      </MathJaxContext.Consumer>
-    );
-  }
-}
-
-export default MathJaxNode;
+Node.contextTypes = {
+  MathJax: PropTypes.object,
+  input: PropTypes.string
+};
+export default Node;

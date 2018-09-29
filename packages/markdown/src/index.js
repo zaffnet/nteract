@@ -14,7 +14,10 @@ const inlineMath = (props: { value: string }) => (
   <MathJax.Node inline>{props.value}</MathJax.Node>
 );
 
-const MarkdownRender = (props: ReactMarkdown.ReactMarkdownProps) => {
+const MarkdownRender = (
+  props: ReactMarkdown.ReactMarkdownProps,
+  context: { MathJaxContext?: boolean }
+) => {
   const newProps = {
     // https://github.com/rexxars/react-markdown#options
     ...props,
@@ -27,7 +30,23 @@ const MarkdownRender = (props: ReactMarkdown.ReactMarkdownProps) => {
     }
   };
 
+  // Render a Context if one was not passed as a parent
+  if (!context.MathJaxContext) {
+    return (
+      <MathJax.Context input="tex">
+        <ReactMarkdown {...newProps} />
+      </MathJax.Context>
+    );
+  }
+
   return <ReactMarkdown {...newProps} />;
+};
+
+MarkdownRender.contextTypes = {
+  // Opt in to updates to the MathJax object even though
+  // Not explicitly used
+  MathJax: PropTypes.object,
+  MathJaxContext: PropTypes.bool
 };
 
 export default MarkdownRender;

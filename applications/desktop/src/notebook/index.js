@@ -87,15 +87,14 @@ export default class App extends React.PureComponent<{}, null> {
       <Provider store={store}>
         <React.Fragment>
           <Styles>
-            {/* TODO: Provide MathJax here with mathjax-electron */}
-            <MathJax.Provider input="tex">
+            <MathJax.Context input="tex">
               <NotebookApp
                 // The desktop app always keeps the same contentRef in a browser window
                 contentRef={contentRef}
                 transforms={transforms}
                 displayOrder={displayOrder}
               />
-            </MathJax.Provider>
+            </MathJax.Context>
 
             <NotificationSystem
               ref={notificationSystem => {
