@@ -87,7 +87,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
     const cellMap = notebook.get("cellMap");
 
     return (
-      <MathJax.Context>
+      <MathJax.Provider>
         <div className="notebook-preview">
           <Cells>
             {cellOrder.map(cellID => {
@@ -197,7 +197,7 @@ export class NotebookPreview extends React.PureComponent<Props, State> {
           }
         `}</style>
         </div>
-      </MathJax.Context>
+      </MathJax.Provider>
     );
   }
 }
