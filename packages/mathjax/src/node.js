@@ -86,7 +86,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
 
     if (!MathJax || !MathJax.Hub) {
       throw Error(
-        "Could not find MathJax while attempting typeset! It's likely the MathJax script hasn't been loaded or MathJax.Context is not in the hierarchy"
+        "Could not find MathJax while attempting typeset! It's likely the MathJax script hasn't been loaded or MathJax.Context is not in the hierarchy."
       );
     }
 
@@ -98,10 +98,9 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
 
     if (forceUpdate || !this.script) {
       this.setScriptText(text);
-    }
-    // As an invariant of above, this shouldn't occur
-    if (!this.script) {
-      return;
+      if (!this.script) {
+        return;
+      }
     }
 
     MathJax.Hub.Queue(MathJax.Hub.Reprocess(this.script, this.props.onRender));
@@ -149,7 +148,7 @@ class MathJaxNode extends React.PureComponent<Props, null> {
     return (
       <MathJaxContext.Consumer>
         {({ MathJax, input, hasProviderAbove }: MathJaxContextValue) => {
-          // If no provider in the above tree, create our own
+          // If there is no <Provider /> in the above tree, create our own
           if (!hasProviderAbove) {
             return (
               <Provider>
