@@ -2,6 +2,7 @@
 
 import Node from "./node";
 import Context from "./context";
+import Provider from "./provider";
 
-export { Node, Context };
-export default { Node, Context };
+export { Node, Provider, Context };
+export default { Node, Provider, Context };
