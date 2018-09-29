@@ -17,12 +17,15 @@ export type MathJaxObject = {
 
 export type MathJaxContextValue = {
   MathJax: ?MathJaxObject,
-  input: "tex" | "ascii"
+  input: "tex" | "ascii",
+  // Allow detecting if there's a <Provider> above a <Consumer>
+  hasProviderAbove: ?boolean
 };
 
 const MathJaxContext: React.Context<MathJaxContextValue> = React.createContext({
   MathJax: null,
-  input: "tex"
+  input: "tex",
+  hasProviderAbove: null
 });
 
 export default MathJaxContext;

@@ -4,7 +4,10 @@
 import * as React from "react";
 import loadScript from "./load-script";
 
-import MathJaxContext, { type MathJaxObject } from "./context.js";
+import MathJaxContext, {
+  type MathJaxObject,
+  type MathJaxContextValue
+} from "./context.js";
 
 // MathJax expected to be a global and may be undefined
 declare var MathJax: ?MathJaxObject;
@@ -29,10 +32,7 @@ type Props = {
   onError: (err: Error) => void
 };
 
-type State = {
-  MathJax: ?MathJaxObject,
-  input: "ascii" | "tex"
-};
+type State = MathJaxContextValue;
 
 /**
  * MathJax Provider
@@ -60,7 +60,8 @@ class Provider extends React.Component<Props, State> {
     this.state = {
       MathJax: undefined,
       // TODO: Ensure state gets updated when the input prop changes
-      input: this.props.input
+      input: this.props.input,
+      hasProviderAbove: true
     };
   }
 

@@ -13,3 +13,11 @@ const tex = String.raw`f(x) = \int_{-\infty}^\infty
   </p>
 </MathJax.Provider>;
 ```
+
+What happens if you use a consumer and have no provider???
+
+```jsx
+var MathJax = require(".");
+
+<MathJax.Node>a = b</MathJax.Node>;
+```

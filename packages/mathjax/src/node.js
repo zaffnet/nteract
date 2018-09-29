@@ -12,6 +12,8 @@ import MathJaxContext, {
   type MathJaxContextValue
 } from "./context";
 
+import Provider from "./provider";
+
 type Props = {
   inline: boolean,
   children: string,
@@ -21,11 +23,6 @@ type Props = {
 class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
   script: ?HTMLScriptElement;
   nodeRef: React.ElementRef<*>;
-
-  static defaultProps = {
-    inline: false,
-    onRender: null
-  };
 
   constructor(props: Props & MathJaxContextValue) {
     super(props);
@@ -143,16 +140,38 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
 }
 
 class MathJaxNode extends React.PureComponent<Props, null> {
+  static defaultProps = {
+    inline: false,
+    onRender: null
+  };
+
   render() {
     return (
       <MathJaxContext.Consumer>
-        {({ MathJax, input }: MathJaxContextValue) => {
+        {({ MathJax, input, hasProviderAbove }: MathJaxContextValue) => {
+          // If no provider in the above tree, create our own
+          if (!hasProviderAbove) {
+            return (
+              <Provider>
+                <MathJaxNode {...this.props} />
+              </Provider>
+            );
+          }
+
           if (!MathJax) {
             return null;
           }
 
           return (
-            <MathJaxNode_ {...this.props} input={input} MathJax={MathJax} />
+            <MathJaxNode_
+              inline={this.props.inline}
+              onRender={this.props.onRender}
+              input={input}
+              MathJax={MathJax}
+              hasProviderAbove={hasProviderAbove}
+            >
+              {this.props.children}
+            </MathJaxNode_>
           );
         }}
       </MathJaxContext.Consumer>
