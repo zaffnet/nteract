@@ -1,6 +1,6 @@
 {
   "name": "@nteract/gatsby-transformer-ipynb",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Gatsby transformer plugin for jupyter notebooks",
   "keywords": [
     "gatsby",

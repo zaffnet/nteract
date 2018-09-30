@@ -1,6 +1,6 @@
 {
   "name": "@nteract/outputs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "components for rendering outputs",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -19,7 +19,7 @@
     "ansi-to-react": "^3.3.3"
   },
   "devDependencies": {
-    "@nteract/records": "^0.2.2"
+    "@nteract/records": "^0.3.0"
   },
   "publishConfig": {
     "access": "public"
