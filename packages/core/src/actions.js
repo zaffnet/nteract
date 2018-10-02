@@ -972,7 +972,7 @@ export function shutdownReplyTimedOut(payload: {
 }
 
 export function restartKernel(payload: {
-  clearOutputs: boolean,
+  outputHandling: actionTypes.RestartKernelOutputHandling,
   kernelRef: KernelRef,
   contentRef: ContentRef
 }): actionTypes.RestartKernel {

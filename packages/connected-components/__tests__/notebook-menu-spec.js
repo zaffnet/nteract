@@ -47,6 +47,7 @@ describe("PureNotebookMenu ", () => {
         interruptKernel: jest.fn(),
         restartKernel: jest.fn(),
         restartKernelAndClearOutputs: jest.fn(),
+        restartKernelAndRunAllOutputs: jest.fn(),
         killKernel: jest.fn(),
         downloadNotebook: jest.fn(),
 
@@ -253,6 +254,17 @@ describe("PureNotebookMenu ", () => {
       restartKernelAndClearOutputsItem.simulate("click");
       expect(props.restartKernelAndClearOutputs).toHaveBeenCalledTimes(1);
       expect(props.restartKernelAndClearOutputs).toHaveBeenCalledWith({
+        contentRef: props.currentContentRef,
+        kernelRef: props.currentKernelRef
+      });
+
+      const restartKernelAndRunAllOutputsItem = wrapper
+        .find({ eventKey: MENU_ITEM_ACTIONS.RESTART_AND_RUN_ALL_OUTPUTS })
+        .first();
+      expect(props.restartKernelAndRunAllOutputs).not.toHaveBeenCalled();
+      restartKernelAndRunAllOutputsItem.simulate("click");
+      expect(props.restartKernelAndRunAllOutputs).toHaveBeenCalledTimes(1);
+      expect(props.restartKernelAndRunAllOutputs).toHaveBeenCalledWith({
         contentRef: props.currentContentRef,
         kernelRef: props.currentKernelRef
       });

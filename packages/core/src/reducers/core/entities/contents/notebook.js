@@ -164,7 +164,7 @@ function clearAllOutputs(
   // handle it
   if (
     action.type === actionTypes.RESTART_KERNEL &&
-    !action.payload.clearOutputs
+    action.payload.outputHandling !== "Clear All"
   ) {
     return state;
   }

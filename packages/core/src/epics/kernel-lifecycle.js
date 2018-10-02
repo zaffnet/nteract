@@ -23,7 +23,9 @@ import {
   catchError,
   first,
   pluck,
-  switchMap
+  switchMap,
+  take,
+  timeout
 } from "rxjs/operators";
 
 import { ActionsObservable, ofType } from "redux-observable";
@@ -198,7 +200,11 @@ export const launchKernelWhenNotebookSetEpic = (
     })
   );
 
-export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
+export const restartKernelEpic = (
+  action$: ActionsObservable<*>,
+  store: *,
+  kernelRefGenerator: () => KernelRef = createKernelRef
+) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
     concatMap((action: actionTypes.RestartKernel) => {
@@ -223,30 +229,68 @@ export const restartKernelEpic = (action$: ActionsObservable<*>, store: *) =>
         return empty();
       }
 
+      const newKernelRef = kernelRefGenerator();
+      const initiatingContentRef = action.payload.contentRef;
+
       // TODO: Incorporate this into each of the launchKernelByName
       //       actions...
       //       This only mirrors the old behavior of restart kernel (for now)
       notificationSystem.addNotification({
-        title: "Kernel Restarted",
+        title: "Kernel Restarting...",
         message: `Kernel ${oldKernel.kernelSpecName ||
-          "unknown"} has been restarted.`,
+          "unknown"} is restarting.`,
         dismissible: true,
         position: "tr",
         level: "success"
       });
 
-      return of(
-        actions.killKernel({
-          restarting: true,
-          kernelRef: oldKernelRef
+      const kill = actions.killKernel({
+        restarting: true,
+        kernelRef: oldKernelRef
+      });
+
+      const relaunch = actions.launchKernelByName({
+        kernelSpecName: oldKernel.kernelSpecName,
+        cwd: oldKernel.cwd,
+        kernelRef: newKernelRef,
+        selectNextKernel: true,
+        contentRef: initiatingContentRef
+      });
+
+      const awaitKernelReady = action$.pipe(
+        ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
+        filter(
+          (action: actionTypes.NewKernelAction) =>
+            action.payload.kernelRef === newKernelRef
+        ),
+        take(1),
+        timeout(60000), // If kernel doesn't come up within this interval we will abort follow-on actions.
+        concatMap(_ => {
+          const restartSuccess = actions.restartKernelSuccessful({
+            kernelRef: newKernelRef,
+            contentRef: initiatingContentRef
+          });
+
+          if (action.payload.outputHandling === "Run All") {
+            return of(
+              restartSuccess,
+              actions.executeAllCells({ contentRef: initiatingContentRef })
+            );
+          } else {
+            return of(restartSuccess);
+          }
         }),
-        actions.launchKernelByName({
-          kernelSpecName: oldKernel.kernelSpecName,
-          cwd: oldKernel.cwd,
-          kernelRef: createKernelRef(),
-          selectNextKernel: true,
-          contentRef: action.payload.contentRef
+        catchError(error => {
+          return of(
+            actions.restartKernelFailed({
+              error: error,
+              kernelRef: newKernelRef,
+              contentRef: initiatingContentRef
+            })
+          );
         })
       );
+
+      return merge(of(kill, relaunch), awaitKernelReady);
     })
   );

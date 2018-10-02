@@ -10,6 +10,7 @@ export const MENU_ITEM_ACTIONS = {
   EXECUTE_ALL_CELLS_BELOW: "execute-all-cells-below",
   RESTART_KERNEL: "restart-kernel",
   RESTART_AND_CLEAR_OUTPUTS: "restart-kernel-and-clear-outputs",
+  RESTART_AND_RUN_ALL_OUTPUTS: "restart-kernel-and-run-all-outputs",
   CLEAR_ALL_OUTPUTS: "clear-all-outputs",
   CHANGE_KERNEL: "change-kernel",
   UNHIDE_ALL: "unhide-all",
