@@ -21,9 +21,6 @@
     "immer": "^1.5.0",
     "lodash": "^4.17.4"
   },
-  "devDependencies": {
-    "immutable": "^4.0.0-rc.9"
-  },
   "peerDependencies": {
     "immutable": "^4.0.0-rc.9"
   },

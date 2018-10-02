@@ -27,9 +27,5 @@
     "jmp": "^2.0.0",
     "rxjs": "^5.5.6",
     "uuid": "^3.1.0"
-  },
-  "devDependencies": {
-    "@nteract/messaging": "^4.1.4",
-    "spawnteract": "^5.0.0"
   }
 }
