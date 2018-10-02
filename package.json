@@ -53,7 +53,6 @@
     "test:flow": "npm run flow",
     "flow": "flow",
     "diagnostics": "scripts/kernelspecs-diagnostics.js",
-    "precommit": "lint-staged",
     "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
     "publish": "lerna run publish",
@@ -146,7 +145,7 @@
     "flow-bin": "^0.81.0",
     "flow-copy-source": "^2.0.0",
     "fs-extra": "^7.0.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0",
     "ignore-styles": "^5.0.1",
     "immutable": "^4.0.0-rc.9",
     "isomorphic-fetch": "^2.2.1",
@@ -237,5 +236,10 @@
   },
   "resolutions": {
     "node-fetch": "2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
