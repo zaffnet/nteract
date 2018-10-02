@@ -164,6 +164,15 @@ This progressive webpack build will keep rebuilding as you modify the source
 code. When you open a new notebook, you'll get the fresh, up-to-date copy of
 the notebook app.
 
+#### Logging
+
+`console.log` statements in the main Electron process are piped to stdout.
+`console.log` statements in the Electron renderer process go to the
+regular Dev Tools console (accessible from the View menu). Set
+ELECTRON_ENABLE_LOGGING=1 to pipe renderer `console.log` to the launching
+terminal as well. This is useful for debugging crashes and notebook closing
+behaviors.
+
 ### Hacking on `play`
 
 Run:

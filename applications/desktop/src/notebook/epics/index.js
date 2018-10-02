@@ -28,6 +28,8 @@ import {
   saveConfigOnChangeEpic
 } from "./config";
 
+import { closeNotebookEpic } from "./close-notebook";
+
 export function retryAndEmitError(err: Error, source: ActionsObservable<*>) {
   console.error(err);
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
@@ -58,7 +60,8 @@ const epics: Array<Epic<*, *, *, *>> = [
   killKernelEpic,
   loadConfigEpic,
   saveConfigEpic,
-  saveConfigOnChangeEpic
+  saveConfigOnChangeEpic,
+  closeNotebookEpic
 ].map(wrapEpic);
 
 export default epics;

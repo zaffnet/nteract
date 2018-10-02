@@ -1,12 +1,5 @@
 /* @flow strict */
-import {
-  dialog,
-  app,
-  shell,
-  Menu,
-  ipcMain as ipc,
-  BrowserWindow
-} from "electron";
+import { dialog, app, shell, Menu, BrowserWindow } from "electron";
 import * as path from "path";
 import { sortBy } from "lodash";
 import { launch, launchNewNotebook } from "./launch";

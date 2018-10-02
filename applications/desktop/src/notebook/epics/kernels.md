@@ -130,9 +130,7 @@ Right now we use kernelspecs in two places:
 * Launching kernels in the notebook window (renderer process)
 
 For native kernels, we could be shutting them down in the main thread instead of
-the browser windows which would make cleanup more consistent. We're stuck with
-a synchronous response on window close - kernels have to close immediately and
-they may not actually be able to.
+the browser windows which would make cleanup more consistent.
 
 We could be pushing the connection config across the inter process boundary for
 `native-jupyter`, `default-python`, and `conda` when the user selects them from

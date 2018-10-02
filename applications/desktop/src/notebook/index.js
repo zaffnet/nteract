@@ -3,6 +3,7 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
 import { Provider } from "react-redux";
+import type { Store } from "redux";
 
 // Load the nteract fonts
 require("./fonts");
@@ -27,7 +28,7 @@ import {
   makeEntitiesRecord
 } from "@nteract/core";
 
-import type { ContentRef, ContentRecord } from "@nteract/core";
+import type { AppState, ContentRef, ContentRecord } from "@nteract/core";
 
 import NotebookApp from "@nteract/notebook-app-component";
 
@@ -36,6 +37,7 @@ import { displayOrder, transforms } from "@nteract/transforms-full";
 import { initMenuHandlers } from "./menu";
 import { initNativeHandlers } from "./native-window";
 import { initGlobalHandlers } from "./global-events";
+import { makeDesktopNotebookRecord } from "./state.js";
 
 import * as Immutable from "immutable";
 
@@ -61,7 +63,8 @@ const store = configureStore({
         byRef: initialRefs
       })
     })
-  })
+  }),
+  desktopNotebook: makeDesktopNotebookRecord()
 });
 
 // Register for debugging

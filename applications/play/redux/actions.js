@@ -156,6 +156,8 @@ export const killKernel = (payload: {
   type: actionTypes.KILL_KERNEL,
   payload
 });
+
+// NB: This appears unused. In core there's KILL_KERNEL_SUCCESSFUL, but it deals in KernelRefs rather than serverId/kernelName.
 export const killKernelFulfilled = (payload: {
   serverId: string,
   kernelName: string
