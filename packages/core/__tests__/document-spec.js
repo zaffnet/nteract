@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable max-len */
 
-import { v4 as uuid } from "uuid";
+import uuid from "uuid/v4";
 
 import * as actionTypes from "../src/actionTypes";
 import * as actions from "../src/actions";

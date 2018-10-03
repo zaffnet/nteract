@@ -30,8 +30,6 @@ import {
 
 import { ActionsObservable, ofType } from "redux-observable";
 
-import * as uuid from "uuid";
-
 import * as selectors from "../selectors";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";

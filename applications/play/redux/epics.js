@@ -18,7 +18,7 @@ import {
 } from "rxjs/operators";
 import { binder } from "rx-binder";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
-import { v4 as uuid } from "uuid";
+import uuid from "uuid/v4";
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 import objectPath from "object-path";
 

@@ -14,6 +14,7 @@ import { RichestMime } from "@nteract/display-area";
 
 import { debounce, merge } from "lodash";
 
+// $FlowFixMe
 import * as monaco from "monaco-editor";
 
 function normalizeLineEndings(str) {

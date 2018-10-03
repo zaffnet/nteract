@@ -85,6 +85,7 @@ function createServer() {
     const server = http.createServer(app);
 
     return new Promise(accept => {
+      // $FlowFixMe
       server.listen(config.port, () => accept(server));
     });
   });

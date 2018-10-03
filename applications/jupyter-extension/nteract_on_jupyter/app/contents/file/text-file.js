@@ -115,6 +115,7 @@ const mapDispatchToTextFileProps = (
   }
 });
 
+// $FlowFixMe: react-redux
 const ConnectedTextFile = connect(
   mapStateToTextFileProps,
   mapDispatchToTextFileProps

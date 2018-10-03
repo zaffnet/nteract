@@ -93,9 +93,7 @@ function buildDummyNotebook(config) {
 export function dummyStore(config: *) {
   const dummyNotebook = buildDummyNotebook(config);
 
-  // $FlowFixMe: Faking out channels
   const frontendToShell = new Subject();
-  // $FlowFixMe: Faking out channels
   const shellToFrontend = new Subject();
   const mockShell = Subject.create(frontendToShell, shellToFrontend);
   const mockIOPub = new Subject();
@@ -104,6 +102,7 @@ export function dummyStore(config: *) {
   const kernelRef = createKernelRef();
   const contentRef = createContentRef();
 
+  // $FlowFixMe
   return createStore(rootReducer, {
     core: makeStateRecord({
       kernelRef,

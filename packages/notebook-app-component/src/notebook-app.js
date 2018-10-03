@@ -310,6 +310,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
   }
 }
 
+// $FlowFixMe: react-redux typings
 export const ConnectedCell = connect(
   mapStateToCellProps,
   mapDispatchToCellProps
@@ -409,7 +410,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<*>): NotebookDispatchProps => ({
+const mapDispatchToProps = (dispatch): NotebookDispatchProps => ({
   moveCell: (payload: *) => dispatch(actions.moveCell(payload)),
   focusCell: (payload: *) => dispatch(actions.focusCell(payload)),
   executeFocusedCell: (payload: *) =>
@@ -552,6 +553,7 @@ export class NotebookApp extends React.PureComponent<NotebookProps> {
 }
 
 export const ConnectedNotebook = dragDropContext(HTML5Backend)(NotebookApp);
+// $FlowFixMe: react-redux typings
 export default connect(
   mapStateToProps,
   mapDispatchToProps

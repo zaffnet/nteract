@@ -24,7 +24,7 @@ var { first, take, toArray, takeUntil, tap } = require("rxjs/operators");
 
 var { executeRequest, ofMessageType } = require("@nteract/messaging");
 
-const uuid = require("uuid");
+const uuid = require("uuid/v4");
 
 async function main() {
   var identity = uuid();

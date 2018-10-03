@@ -17,13 +17,12 @@ class ModalController extends React.Component<*, *> {
   };
   render() {
     const Modal = this.getModal();
+    // $FlowFixMe
     return Modal ? <Modal /> : null;
   }
 }
 
-import type { MapStateToProps } from "react-redux";
-
-const mapStateToProps: MapStateToProps<*, *, *> = (state: *) => ({
+const mapStateToProps = (state: Object) => ({
   modalType: selectors.modalType(state)
 });
 

@@ -33,8 +33,6 @@ import { launchSpec } from "spawnteract";
 
 import { ActionsObservable, ofType } from "redux-observable";
 
-import * as uuid from "uuid";
-
 import { ipcRenderer as ipc } from "electron";
 
 import { createMainChannel } from "enchannel-zmq-backend";
@@ -364,6 +362,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
       // Try to make a shutdown request
       // If we don't get a response within X time, force a shutdown
       // Either way do the same cleanup
+      // $FlowFixMe: revisite when upgrading to rxjs@6
       const shutDownHandling = kernel.channels.pipe(
         childOf(request),
         ofMessageType("shutdown_reply"),

@@ -1,5 +1,5 @@
 // @flow
-import uuid from "uuid";
+import uuid from "uuid/v4";
 
 // TODO: this is a little odd that we have code inside a `/types` directory. The
 // reason is to allow strict typing for these ref functions.
@@ -13,7 +13,7 @@ export opaque type KernelRef: string = string;
 export opaque type KernelspecsRef: string = string;
 export opaque type ContentRef: string = string;
 
-export const createHostRef = (): HostRef => uuid.v4();
-export const createKernelRef = (): KernelRef => uuid.v4();
-export const createKernelspecsRef = (): KernelspecsRef => uuid.v4();
-export const createContentRef = (): ContentRef => uuid.v4();
+export const createHostRef = (): HostRef => uuid();
+export const createKernelRef = (): KernelRef => uuid();
+export const createKernelspecsRef = (): KernelspecsRef => uuid();
+export const createContentRef = (): ContentRef => uuid();

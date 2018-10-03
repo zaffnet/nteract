@@ -1,7 +1,5 @@
 // @flow
 
-import * as uuid from "uuid";
-
 import * as actionTypes from "../../../../actionTypes";
 
 import * as Immutable from "immutable";

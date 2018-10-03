@@ -1,6 +1,6 @@
 // @flow
 
-import * as uuid from "uuid";
+import uuid from "uuid/v4";
 
 function whichChannel(messageType?: string) {
   switch (messageType) {
@@ -56,7 +56,7 @@ export function message<MT: string>(
 
   return {
     header: {
-      msg_id: uuid.v4(),
+      msg_id: uuid(),
       date: new Date().toISOString(),
       version: "5.2",
 
@@ -64,7 +64,7 @@ export function message<MT: string>(
       // We supply them as a fallback here
       username: header.username || "nteract",
       msg_type: header.msg_type,
-      session: header.session || uuid.v4()
+      session: header.session || uuid()
     },
     metadata: {},
     parent_header: {},
@@ -76,7 +76,7 @@ export function message<MT: string>(
 
 function createHeader<MT: string>(msg_type: MT): JupyterMessageHeader<MT> {
   return {
-    msg_id: uuid.v4(),
+    msg_id: uuid(),
     date: new Date().toISOString(),
     version: "5.2",
     msg_type: msg_type,
@@ -84,7 +84,7 @@ function createHeader<MT: string>(msg_type: MT): JupyterMessageHeader<MT> {
     // These fields get overriden by enchannel implementations, we supply them
     // as a fallback here
     username: "nteract",
-    session: uuid.v4()
+    session: uuid()
   };
 }
 

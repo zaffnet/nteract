@@ -33,10 +33,10 @@ export function retryAndEmitError(err: Error, source: ActionsObservable<*>) {
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<*, *, *>) => (...args: *) =>
+export const wrapEpic = (epic: Epic<*, *, *, *>) => (...args: *) =>
   epic(...args).pipe(catchError(retryAndEmitError));
 
-const epics: Array<Epic<*, *, *>> = [
+const epics: Array<Epic<*, *, *, *>> = [
   coreEpics.restartKernelEpic,
   coreEpics.acquireKernelInfoEpic,
   coreEpics.watchExecutionStateEpic,

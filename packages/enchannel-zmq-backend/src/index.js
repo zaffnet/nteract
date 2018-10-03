@@ -19,7 +19,7 @@ export const ZMQType = {
   }
 };
 
-import { v4 as uuid } from "uuid";
+import uuid from "uuid/v4";
 
 export type CHANNEL_NAME = "iopub" | "stdin" | "shell" | "control";
 
