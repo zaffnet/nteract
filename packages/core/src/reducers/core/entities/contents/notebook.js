@@ -1,7 +1,7 @@
 // @flow
 
 import { makeDocumentRecord } from "../../../../state/entities/contents";
-import * as uuid from "uuid";
+import uuid from "uuid/v4";
 
 import * as actionTypes from "../../../../actionTypes";
 
@@ -315,7 +315,7 @@ function focusNextCell(
       return state;
     }
 
-    const cellID: string = uuid.v4();
+    const cellID: string = uuid();
     const cell = curCellType === "code" ? emptyCodeCell : emptyMarkdownCell;
 
     const notebook: ImmutableNotebook = state.get("notebook");
@@ -430,7 +430,7 @@ function createCellAfter(
 
   const { cellType, source } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
-  const cellID = uuid.v4();
+  const cellID = uuid();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
     const index = notebook.get("cellOrder", Immutable.List()).indexOf(id) + 1;
     return insertCellAt(notebook, cell.set("source", source), cellID, index);
@@ -448,7 +448,7 @@ function createCellBefore(
 
   const { cellType } = action.payload;
   const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
-  const cellID = uuid.v4();
+  const cellID = uuid();
   return state.update("notebook", (notebook: ImmutableNotebook) => {
     const cellOrder: ImmutableCellOrder = notebook.get(
       "cellOrder",
@@ -472,7 +472,7 @@ function createCellAppend(
   const cell: ImmutableCell =
     cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
   const index = cellOrder.count();
-  const cellID = uuid.v4();
+  const cellID = uuid();
   return state.set("notebook", insertCellAt(notebook, cell, cellID, index));
 }
 
@@ -686,7 +686,7 @@ function pasteCell(state: NotebookModel, action: actionTypes.PasteCell) {
 
   // Create a new cell with `id` that will come after the currently focused cell
   // using the contents of the originally copied cell
-  const id = uuid.v4();
+  const id = uuid();
 
   return state.update("notebook", (notebook: ImmutableNotebook) =>
     insertCellAfter(notebook, copiedCell, id, pasteAfter)

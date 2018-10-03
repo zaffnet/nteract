@@ -12,7 +12,7 @@ import type {
   ExecutionCount
 } from "./types";
 
-const uuidv4 = require("uuid").v4;
+import uuid from "uuid/v4";
 const Immutable = require("immutable");
 
 // We're hardset to nbformat v4.4 for what we use in-memory
@@ -59,14 +59,12 @@ const defaultMarkdownCell = Object.freeze({
 export function createCodeCell(
   cell: CodeCell = defaultCodeCell
 ): ImmutableCodeCell {
-  // $FlowFixMe: Immutable
   return Immutable.Map(cell);
 }
 
 export function createMarkdownCell(
   cell: MarkdownCell = defaultMarkdownCell
 ): ImmutableMarkdownCell {
-  // $FlowFixMe: Immutable
   return Immutable.Map(cell);
 }
 
@@ -84,7 +82,6 @@ export const defaultNotebook = Object.freeze({
 export function createNotebook(
   notebook: Notebook = defaultNotebook
 ): ImmutableNotebook {
-  // $FlowFixMe: Immutable
   return Immutable.Map(notebook);
 }
 
@@ -99,7 +96,7 @@ export type CellStructure = {
 export function appendCell(
   cellStructure: CellStructure,
   immutableCell: ImmutableCell,
-  id: string = uuidv4()
+  id: string = uuid()
 ) {
   return {
     cellOrder: cellStructure.cellOrder.push(id),

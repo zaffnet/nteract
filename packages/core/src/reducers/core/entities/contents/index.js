@@ -1,7 +1,6 @@
 /* @flow */
 import * as Immutable from "immutable";
 import * as actionTypes from "../../../../actionTypes";
-import * as uuid from "uuid";
 
 import {
   makeFileContentRecord,

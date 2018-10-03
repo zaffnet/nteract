@@ -1,4 +1,4 @@
-import uuidv4 from "uuid/v4";
+import uuid from "uuid/v4";
 import { Subject } from "rxjs/Subject";
 
 const EventEmitter = require("events");
@@ -22,7 +22,7 @@ describe("createSocket", () => {
       transport: "tcp",
       iopub_port: 9009
     };
-    const identity = uuidv4();
+    const identity = uuid();
 
     const socket = await createSocket("iopub", identity, config);
     expect(socket).not.toBeNull();

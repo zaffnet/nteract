@@ -17,7 +17,7 @@ import { empty } from "rxjs/observable/empty";
 import { extractNewKernel } from "./kernel-lifecycle";
 
 import { kernels, shutdown, sessions } from "rx-jupyter";
-import { v4 as uuid } from "uuid";
+import uuid from "uuid/v4";
 
 import * as actions from "../actions";
 import * as selectors from "../selectors";

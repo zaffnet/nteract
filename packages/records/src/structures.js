@@ -13,7 +13,7 @@ import type {
   ExecutionCount
 } from "./types";
 
-const uuidv4 = require("uuid").v4;
+import uuid from "uuid/v4";
 
 // We're hardset to nbformat v4.4 for what we use in-memory
 export type Notebook = {|
@@ -94,7 +94,7 @@ export type CellStructure = {
 export function appendCell(
   cellStructure: CellStructure,
   immutableCell: NbformatCell,
-  id: string = uuidv4()
+  id: string = uuid()
 ) {
   cellStructure.cellMap[id] = immutableCell;
   return {
