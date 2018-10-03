@@ -9,7 +9,7 @@ import { createMessage } from "@nteract/messaging";
 import { Subject, of } from "rxjs";
 import { toArray } from "rxjs/operators";
 
-import { TestScheduler } from "rxjs/testing/TestScheduler";
+import { TestScheduler } from "rxjs/testing";
 
 import {
   acquireKernelInfo,

@@ -4,9 +4,7 @@ import * as actions from "./actions";
 
 import { combineEpics, ofType } from "redux-observable";
 
-import { of } from "rxjs/observable/of";
-import { from } from "rxjs/observable/from";
-import { merge } from "rxjs/observable/merge";
+import { from, of, merge } from "rxjs";
 
 import { filter, catchError, mergeMap, switchMap } from "rxjs/operators";
 import { binder } from "rx-binder";

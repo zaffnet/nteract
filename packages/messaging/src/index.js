@@ -29,7 +29,7 @@ export const childOf = (parentMessage: JupyterMessage<*, *>) => (
   source: rxjs$Observable<JupyterMessage<*, *>>
 ) => {
   const parentMessageID = parentMessage.header.msg_id;
-  return new Observable(subscriber =>
+  return Observable.create(subscriber =>
     source.subscribe(
       msg => {
         // strictly speaking, in order for the message to be a child of the parent
@@ -70,7 +70,7 @@ export const ofMessageType = (
   return (
     source: rxjs$Observable<JupyterMessage<*, *>>
   ): rxjs$Observable<JupyterMessage<*, *>> =>
-    new Observable(subscriber =>
+    Observable.create(subscriber =>
       source.subscribe(
         msg => {
           if (!msg.header || !msg.header.msg_type) {

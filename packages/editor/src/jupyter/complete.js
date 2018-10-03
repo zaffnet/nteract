@@ -105,7 +105,6 @@ export function codeCompleteObservable(
   editor: CMI,
   message: Object
 ) {
-  // $FlowFixMe: revisite after rxjs@6
   const completion$ = channels.pipe(
     childOf(message),
     ofMessageType("complete_reply"),

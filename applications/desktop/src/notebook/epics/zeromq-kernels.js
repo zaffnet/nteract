@@ -339,7 +339,6 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
       // Try to make a shutdown request
       // If we don't get a response within X time, force a shutdown
       // Either way do the same cleanup
-      // $FlowFixMe: revisite when upgrading to rxjs@6
       const shutDownHandling = kernel.channels.pipe(
         childOf(request),
         ofMessageType("shutdown_reply"),
