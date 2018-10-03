@@ -38,7 +38,7 @@ function mapStateToProps(state: AppState, ownProps: Props) {
   };
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<*>, ownProps: Props) => {
+const mapDispatchToProps = (dispatch, ownProps: Props) => {
   const { cellFocused, id, contentRef } = ownProps;
 
   return {
@@ -57,6 +57,7 @@ const mapDispatchToProps = (dispatch: Dispatch<*>, ownProps: Props) => {
   };
 };
 
+// $FlowFixMe: react-redux typings
 export default connect(
   mapStateToProps,
   mapDispatchToProps

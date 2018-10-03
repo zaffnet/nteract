@@ -40,6 +40,9 @@ type rxjs$OperatorFunctionLast<T, R: rxjs$Observable<*>> = (
 ) => R;
 
 declare class rxjs$Observable<+T> {
+  constructor(
+    subscriber?: (observer: rxjs$Observer<T>) => rxjs$TeardownLogic
+  ): void;
   static bindCallback(
     callbackFunc: (callback: (_: void) => any) => any,
     selector?: void,

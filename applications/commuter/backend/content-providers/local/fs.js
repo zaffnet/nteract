@@ -33,12 +33,14 @@ function createContentResponse(
     ext: string,
     name: string
   },
+  // $FlowFixMe: fs-extra
   stat: fs.Stats
 ): JupyterApi$Content {
   const name = cleanBaseDir(parsedFilePath.base);
   const filePath = cleanBaseDir(
     path.join(parsedFilePath.dir, parsedFilePath.base)
   );
+  // $FlowFixMe: fs-extra
   const writable = Boolean(fs.constants.W_OK & stat.mode);
   const created: Date = stat.birthtime;
   const last_modified = stat.mtime;
@@ -196,6 +198,7 @@ function getDirectory(
         );
 
         Promise.all(contentPromises)
+          // $FlowFixMe
           .then(contents =>
             contents.filter(x => !(x === null || x === undefined))
           )
@@ -213,6 +216,7 @@ function getFile(
 ): Promise<JupyterApi$FileContent> {
   return new Promise((resolve, reject) => {
     // TODO: Should we support a streaming interface or nah
+    // $FlowFixMe: fs-extra
     fs.readFile(
       path.join(options.local.baseDirectory, file.path),
       (err, data) => {
@@ -247,6 +251,7 @@ function getNotebook(
 ): Promise<JupyterApi$NotebookContent> {
   return new Promise((resolve, reject) => {
     // TODO: Should we support a streaming interface or nah
+    // $FlowFixMe: fs-extra
     fs.readFile(
       path.join(options.local.baseDirectory, notebook.path),
       (err, data) => {

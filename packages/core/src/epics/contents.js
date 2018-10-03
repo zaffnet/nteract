@@ -26,6 +26,7 @@ import * as selectors from "../selectors";
 import type { AppState, ContentRef } from "../state";
 
 import type { ActionsObservable } from "redux-observable";
+import type { Store } from "redux";
 
 import { contents } from "rx-jupyter";
 

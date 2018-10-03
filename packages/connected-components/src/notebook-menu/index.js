@@ -505,6 +505,7 @@ const mapDispatchToProps = dispatch => ({
   interruptKernel: payload => dispatch(actions.interruptKernel(payload))
 });
 
+// $FlowFixMe: react-redux
 const NotebookMenu = connect(
   mapStateToProps,
   mapDispatchToProps

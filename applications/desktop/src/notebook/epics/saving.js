@@ -12,6 +12,8 @@ import { toJS, stringifyNotebook } from "@nteract/commutable";
 import { of } from "rxjs/observable/of";
 import { tap, mergeMap, catchError, map } from "rxjs/operators";
 
+import type { Store } from "redux";
+
 /**
  * Cleans up the notebook document and saves the file.
  *
