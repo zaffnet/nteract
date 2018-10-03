@@ -6520,11 +6520,6 @@ git-semver-tags@^2.0.0:
     meow "^4.0.0"
     semver "^5.5.0"
 
-gitbook-plugin-github@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/gitbook-plugin-github/-/gitbook-plugin-github-2.0.0.tgz#5166e763cfcc402d432880b7a6c85c1c54b56a8d"
-  integrity sha1-UWbnY8/MQC1DKIC3pshcHFS1ao0=
-
 gitconfiglocal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/gitconfiglocal/-/gitconfiglocal-1.0.0.tgz#41d045f3851a5ea88f03f24ca1c6178114464b9b"
@@ -12373,12 +12368,10 @@ redux-logger@^3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
-redux-observable@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/redux-observable/-/redux-observable-0.19.0.tgz#6c1b8b58bc6ef7284c47aaad26963e02b1b425fb"
-  integrity sha512-OdYdKKQ+sgnoAE2SA3KW4Qolb5iVlTUch53qc61+WAiN2c3uPfBxFNGkxAl5fXpEAh75d1RlAfJNa+CPBkMZQA==
-  dependencies:
-    gitbook-plugin-github "^2.0.0"
+redux-observable@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/redux-observable/-/redux-observable-1.0.0.tgz#780ff2455493eedcef806616fe286b454fd15d91"
+  integrity sha512-6bXnpqWTBeLaLQjXHyN1giXq4nLxCmv+SUkdmiwBgvmVxvDbdmydvL1Z7DGo0WItyzI/kqXQKiucUuTxnrPRkA==
 
 redux@^4.0.0:
   version "4.0.1"
@@ -12885,7 +12878,7 @@ rxjs@^5.1.1, rxjs@^5.5.6:
   dependencies:
     symbol-observable "1.0.1"
 
-rxjs@^6.1.0:
+rxjs@^6.0.0, rxjs@^6.1.0:
   version "6.3.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.3.3.tgz#3c6a7fa420e844a81390fb1158a9ec614f4bad55"
   integrity sha512-JTWmoY9tWCs7zvIk/CvRjhjGaOd+OVBM987mxFo+OW66cGpdKjZcpmc74ES1sB//7Kl/PAe8+wEakuhG4pcgOw==
