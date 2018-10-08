@@ -63,8 +63,10 @@ class Provider extends React.Component<Props, State> {
     if (src == null) {
       return this.onLoad();
     }
-
-    loadScript(src, this.onLoad);
+    if (typeof MathJax === "undefined" || !MathJax || !MathJax.Hub) {
+      return loadScript(src, this.onLoad);
+    }
+    this.onLoad();
   }
 
   onLoad = () => {
