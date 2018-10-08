@@ -27,7 +27,6 @@
     "@nteract/dropdown-menu": "^0.5.5",
     "@nteract/editor": "^7.3.5",
     "@nteract/markdown": "^2.1.4",
-    "@nteract/mathjax": "^2.1.4",
     "@nteract/messaging": "^4.1.4",
     "@nteract/octicons": "^0.4.3",
     "@nteract/presentational-components": "^0.4.3",
