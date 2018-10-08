@@ -68,7 +68,7 @@ class Provider extends React.Component<Props, State> {
   }
 
   onLoad = () => {
-    if (!MathJax || !MathJax.Hub) {
+    if (typeof MathJax === "undefined" || !MathJax || !MathJax.Hub) {
       this.props.onError(
         new Error("MathJax not really loaded even though onLoad called")
       );
@@ -80,7 +80,7 @@ class Provider extends React.Component<Props, State> {
     MathJax.Hub.Config(options);
 
     MathJax.Hub.Register.StartupHook("End", () => {
-      if (!MathJax) {
+      if (typeof MathJax === "undefined" || !MathJax) {
         this.props.onError(
           new Error("MathJax became undefined in the middle of processing")
         );
