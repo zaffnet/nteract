@@ -12,18 +12,11 @@ import MathJaxContext, {
 // MathJax expected to be a global and may be undefined
 declare var MathJax: ?MathJaxObject;
 
-declare type onLoad = () => void;
 type Props = {
   src: ?string,
   children: React.Node,
   didFinishTypeset: ?() => void,
-  // Provide a way to override how we load MathJax and callback to the onLoad
-  // For Hydrogen, for instance we can set
-  //
-  //  loader={(onLoad) => loadMathJax(document, onLoad)}
-  //
-  onLoad: ?onLoad,
-  loader: ?(cb: onLoad) => void,
+  onLoad: ?() => void,
   input: "ascii" | "tex",
   delay: number,
   options: ?*,
@@ -43,7 +36,6 @@ class Provider extends React.Component<Props, State> {
       "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     input: "tex",
     didFinishTypeset: null,
-    loader: null,
     delay: 0,
     options: {},
     loading: null,
@@ -72,11 +64,7 @@ class Provider extends React.Component<Props, State> {
       return this.onLoad();
     }
 
-    if (!this.props.loader) {
-      loadScript(src, this.onLoad);
-    } else {
-      this.props.loader(this.onLoad);
-    }
+    loadScript(src, this.onLoad);
   }
 
   onLoad = () => {
