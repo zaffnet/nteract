@@ -14,8 +14,8 @@ A new notebook can be created by accessing the menu,
 
 ```
   File
-    -->  New
-          -->  <Language Kernel> (e.g. Python 3, R, Julia etc.)
+    ⮑  New
+         ⮑  <Language Kernel> (e.g. Python 3, R, Julia etc.)
 ```
 
 ### Opening a Notebook
@@ -26,7 +26,7 @@ There are several ways to open a notebook in nteract:
 
 ```
   File
-    -->  Open
+    ⮑  Open
 ```
 
 _Keyboard shortcut ⌘O on macOS and Ctrl-O on Windows/Linux_
@@ -100,3 +100,8 @@ A cell can be run from the keyboard by pressing _Shift ⏎_ or by selecting the 
 ### Moving a Cell
 
 A cell can be moved anywhere in the notebook by clicking and dragging to desired position.
+
+## Autocompletion
+
+* Autocomplete Suggestions: _Ctrl_ + _Space_
+* Documentation/Tips Expansion: _Ctrl_ + _._(on Windows/Linux) or _⌘_ + _._ (on MacOS)
