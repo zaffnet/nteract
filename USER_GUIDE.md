@@ -29,7 +29,7 @@ There are several ways to open a notebook in nteract:
     ⮑  Open
 ```
 
-_Keyboard shortcut ⌘O on macOS and Ctrl-O on Windows/Linux_
+Keyboard shortcut `⌘ O` on macOS and `Ctrl O` on Windows/Linux
 
 * Double-click a notebook file :tada: **_Note: currently this works only in macOS_**
 
@@ -39,56 +39,56 @@ _Keyboard shortcut ⌘O on macOS and Ctrl-O on Windows/Linux_
 
 A notebook can be saved in the following ways:
 
-```
-  File
-    ⮑  Save
-```
+* _Save_:
+    ```
+      File
+        ⮑  Save
+    ```
 
-_Keyboard shortcut: ⌘S on macOS and Ctrl-S on Windows/Linux_
+    Keyboard shortcut: `⌘ S` on macOS and `Ctrl S` on Windows/Linux
 
-```
-  File
-    ⮑  Save As
-```
+* _Save As_:
+  ```
+    File
+      ⮑  Save As
+  ```
 
-_Keyboard shortcut: ⇧⌘S on macOS and Shift-Ctrl-S on Windows/Linux_
+  Keyboard shortcut: `Shift ⌘ S` on macOS and `Shift Ctrl S` on Windows/Linux
 
 ## Notebook Cells
 
 ### Adding a Cell
 
-#### Code Cells
+* Code Cells:
+    A code cell can be created by accessing the menu,
 
-A code cell can be created by accessing the menu,
+    ```
+      Edit
+        ⮑  New Code Cell
+    ```
 
-```
-  Edit
-    ⮑  New Code Cell
-```
+    Keyboard shortcut: `Shift ⌘ N` on macOS or `Shift Ctrl N` on Windows/Linux
 
-_Keyboard shortcut: Shift ⌘N on macOS or Shift Ctrl-N on Windows/Linux_
+    A code cell can also be created by clicking <> on the cell hover menu.
 
-A code cell can also be created by clicking <> on the cell hover menu.
+* Text Cells
+    A text cell can be created by accessing the menu,
 
-#### Text Cells
+    ```
+      Edit
+        ⮑  New Text Cell
+    ```
 
-A text cell can be created by accessing the menu,
+    Keyboard shortcut: `Shift ⌘ M` on macOS or `Shift Ctrl M` on Windows/Linux
 
-```
-  Edit
-    ⮑  New Text Cell
-```
+    A text cell can also be created by clicking **M** on the cell hover menu.
 
-_Keyboard shortcut: Shift ⌘M on macOS or Shift Ctrl-M on Windows/Linux_
-
-A text cell can also be created by clicking **M** on the cell hover menu.
-
-Text cells support the [commonmark spec](http://commonmark.org/) along with
-inline mathematics, block mathematics, and tables.
+    Text cells support the [commonmark spec](http://commonmark.org/) along with
+    inline mathematics, block mathematics, and tables.
 
 ### Running a Cell
 
-A cell can be run from the keyboard by pressing _Shift ⏎_ or by selecting the ▶︎ button from the cell toolbar.
+A cell can be run from the keyboard by pressing `Shift ⏎` or by selecting the ▶︎ button from the cell toolbar.
 
 **_N.B. To run all cells at once, access the menu:_**
 
@@ -101,7 +101,13 @@ A cell can be run from the keyboard by pressing _Shift ⏎_ or by selecting the 
 
 A cell can be moved anywhere in the notebook by clicking and dragging to desired position.
 
+### Other Cell Shortcuts
+
+* Copy Cell: `Shift ⌘ C` on macOS or `Shift Ctrl C` on Windows/Linux
+* Paste Cell: `Shift ⌘ V` on macOS or `Shift Ctrl V` on Windows/Linux
+* Cut Cell: `Shift ⌘ X` on macOS or `Shift Ctrl X` on Windows/Linux
+
 ## Autocompletion
 
-* Autocomplete Suggestions: _Ctrl_ + _Space_
-* Documentation/Tips Expansion: _Ctrl_ + _._(on Windows/Linux) or _⌘_ + _._ (on MacOS)
+* Autocomplete Suggestions: `Ctrl Space`
+* Documentation/Tips Expansion: `Ctrl Period(.)` (on Windows/Linux) or `⌘ Period(.)` (on MacOS)
