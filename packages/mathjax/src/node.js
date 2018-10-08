@@ -98,10 +98,9 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
 
     if (forceUpdate || !this.script) {
       this.setScriptText(text);
-      if (!this.script) {
-        return;
-      }
     }
+
+    if (!this.script) return;
 
     MathJax.Hub.Queue(MathJax.Hub.Reprocess(this.script, this.props.onRender));
   }
