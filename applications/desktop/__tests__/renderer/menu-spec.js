@@ -5,7 +5,27 @@ import { selectors, actions, actionTypes } from "@nteract/core";
 
 import * as Immutable from "immutable";
 
-describe("dispatchCreateCellAfter", () => {
+describe("dispatchCreateCellAbove", () => {
+  test("dispatches a CREATE_CELL_BEFORE with code action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchCreateCellAbove(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.createCellBefore({
+        cellType: "code",
+        source: "",
+        contentRef: props.contentRef
+      })
+    );
+  });
+});
+
+describe("dispatchCreateCellBelow", () => {
   test("dispatches a CREATE_CELL_AFTER with code action", () => {
     const store = {
       dispatch: jest.fn()
@@ -14,7 +34,7 @@ describe("dispatchCreateCellAfter", () => {
       contentRef: "123"
     };
 
-    menu.dispatchCreateCellAfter(props, store);
+    menu.dispatchCreateCellBelow(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
       actions.createCellAfter({
         cellType: "code",
@@ -25,7 +45,7 @@ describe("dispatchCreateCellAfter", () => {
   });
 });
 
-describe("dispatchCreateTextCellAfter", () => {
+describe("dispatchCreateTextCellBelow", () => {
   test("dispatches a CREATE_CELL_AFTER with markdown action", () => {
     const store = {
       dispatch: jest.fn()
@@ -34,12 +54,68 @@ describe("dispatchCreateTextCellAfter", () => {
       contentRef: "123"
     };
 
-    menu.dispatchCreateTextCellAfter(props, store);
+    menu.dispatchCreateTextCellBelow(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
       actions.createCellAfter({
         cellType: "markdown",
         source: "",
         contentRef: "123"
+      })
+    );
+  });
+});
+
+describe("dispatchDeleteCell", () => {
+  test("dispatches a REMOVE_CELL on currently active cell", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchDeleteCell(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.removeCell({
+        contentRef: props.contentRef
+      })
+    );
+  });
+});
+
+describe("dispatchChangeCellToCode", () => {
+  test("dispatches a CHANGE_CELL_TYPE with code action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchChangeCellToCode(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.changeCellType({
+        to: "code",
+        contentRef: props.contentRef
+      })
+    );
+  });
+});
+
+describe("dispatchChangeCellToText", () => {
+  test("dispatches a CHANGE_CELL_TYPE with code action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchChangeCellToText(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.changeCellType({
+        to: "markdown",
+        contentRef: props.contentRef
       })
     );
   });
