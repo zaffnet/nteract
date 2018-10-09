@@ -30,7 +30,7 @@ jobs:
       # run tests!
       - run: yarn run test:lint
       - run: yarn run build:packages
-      - run: yarn run test
+      - run: yarn run test --maxWorkers 1
       - run: yarn run test:flow
 
       - run:
