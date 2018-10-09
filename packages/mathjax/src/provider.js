@@ -51,10 +51,16 @@ class Provider extends React.Component<Props, State> {
 
     this.state = {
       MathJax: undefined,
-      // TODO: Ensure state gets updated when the input prop changes
       input: this.props.input,
       hasProviderAbove: true
     };
+  }
+
+  static getDerivedStateFromProps(props: Props, state: State) {
+    if (state.input !== props.input) {
+      return { ...state, input: props.input };
+    }
+    return null;
   }
 
   componentDidMount() {
