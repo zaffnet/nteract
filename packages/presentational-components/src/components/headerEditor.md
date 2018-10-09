@@ -10,7 +10,7 @@ HeaderEditor component for editing your header
 <HeaderEditor
   editable={false}
   headerData={{
-    authors: ["Elijah Meeks", "Kyle Kelly"],
+    authors: ["Elijah Meeks", "Kyle Kelley"],
     description: "A cool notebook for kids and animals!",
     title: "Notebook with Header",
     tags: ["amazing", "kids", "animals"]

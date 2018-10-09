@@ -1,6 +1,12 @@
 // @flow
 import * as React from "react";
 
+import blueprintCSS from "../vendor/blueprint.css.js";
+
+import { H1, Intent, Tag } from "@blueprintjs/core";
+
+// https://github.com/jupyter/nbformat/blob/master/nbformat/v4/nbformat.v4.schema.json#L67
+
 export type HeaderDataProps = {
   authors: Array<string>,
   title: string,
@@ -24,32 +30,27 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
   render() {
     // Otherwise assume they have their own editor component
     return (
-      <div style={{ background: "#EEE", padding: "10px" }}>
-        <h1 style={{ fontSize: "24px", fontWeight: 900 }}>
-          {this.props.headerData.title}
-        </h1>
-        <p>
-          By{" "}
-          <span style={{ fontStyle: "italic" }}>
-            {this.props.headerData.authors.join(", ")}
-          </span>
-        </p>
-        <p>
-          {this.props.headerData.tags.map(t => (
-            <span
-              style={{
-                background: "#f2f8fa",
-                color: "#4078c0",
-                padding: "5px",
-                margin: "0 5px 0 0",
-                borderRadius: "2px"
-              }}
-            >
-              {t}
+      <div>
+        <div style={{ background: "#EEE", padding: "10px" }}>
+          <H1 style={{ fontSize: "24px", fontWeight: 900 }}>
+            {this.props.headerData.title}
+          </H1>
+          <p>
+            By{" "}
+            <span style={{ fontStyle: "italic" }}>
+              {this.props.headerData.authors.join(", ")}
             </span>
-          ))}
-        </p>
-        <p style={{ fontSize: "14px" }}>{this.props.headerData.description}</p>
+          </p>
+          <p>
+            {this.props.headerData.tags.map(t => (
+              <Tag key={t}>{t}</Tag>
+            ))}
+          </p>
+          <p style={{ fontSize: "14px" }}>
+            {this.props.headerData.description}
+          </p>
+        </div>
+        <style jsx>{blueprintCSS}</style>
       </div>
     );
   }

@@ -13,7 +13,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const mkdirp = util.promisify(require("mkdirp"));
 
-async function loadCSS(filename): Promise<string> {
+async function loadCSS(filename) /*: Promise<string> */ {
   const rawCSS = await readFile(filename);
 
   // $FlowFixMe Don't actually fix, flow is hoping for a string literal, for which we will not have here
@@ -21,7 +21,9 @@ async function loadCSS(filename): Promise<string> {
 
   const cssInJS = await new Promise((resolve, reject) => {
     loader.call(
+      // Abusing styled-jsx's webpack API just to get the CSS we need
       {
+        query: "?type=global",
         addDependency: () => {},
         callback: (err, data) => {
           if (err) {
@@ -45,7 +47,7 @@ type Manifest = Array<{
 }>;
  */
 
-async function processManifest(manifest: Manifest) {
+async function processManifest(manifest /*: Manifest*/) {
   for (var entry of manifest) {
     console.log(`Processing CSS of ${entry.cssIn}`);
     const result = await loadCSS(entry.cssIn);
@@ -58,11 +60,7 @@ async function processManifest(manifest: Manifest) {
 var manifest = [
   {
     cssIn: require.resolve("@blueprintjs/core/lib/css/blueprint.css"),
-    jsOut: path.join(__dirname, "..", "src/vendor/blueprint.js")
-  },
-  {
-    cssIn: require.resolve("@blueprintjs/icons/lib/css/blueprint-icons.css"),
-    jsOut: path.join(__dirname, "..", "src/vendor/blueprint-icons.js")
+    jsOut: path.join(__dirname, "..", "src/vendor/blueprint.css.js")
   }
 ];
 
