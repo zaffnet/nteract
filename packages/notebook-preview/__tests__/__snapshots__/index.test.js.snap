@@ -1,11 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Notebook accepts an Immutable.List of cells 1`] = `
-<Context
+<Provider
   delay={0}
   didFinishTypeset={null}
   input="tex"
-  loader={null}
   loading={null}
   noGate={false}
   onError={[Function]}
@@ -245,15 +244,14 @@ print('hey')
         
     </style>
   </div>
-</Context>
+</Provider>
 `;
 
 exports[`Notebook accepts an Object of cells 1`] = `
-<Context
+<Provider
   delay={0}
   didFinishTypeset={null}
   input="tex"
-  loader={null}
   loading={null}
   noGate={false}
   onError={[Function]}
@@ -493,5 +491,5 @@ print('hey')
         
     </style>
   </div>
-</Context>
+</Provider>
 `;
