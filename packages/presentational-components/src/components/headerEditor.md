@@ -21,3 +21,11 @@ HeaderEditor component for editing your header
 Can also be editable:
 
 INSERT EDITABLE VERSION HERE
+
+### Defaults
+
+Renders a default view that states intent for users
+
+```
+<HeaderEditor />
+```

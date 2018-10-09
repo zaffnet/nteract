@@ -3,7 +3,7 @@ import * as React from "react";
 
 import blueprintCSS from "../vendor/blueprint.css.js";
 
-import { H1, Intent, Tag } from "@blueprintjs/core";
+import { H1, Intent, Tag, EditableText } from "@blueprintjs/core";
 
 // https://github.com/jupyter/nbformat/blob/master/nbformat/v4/nbformat.v4.schema.json#L67
 
@@ -24,26 +24,45 @@ export type HeaderEditorProps = {
 export class HeaderEditor extends React.Component<HeaderEditorProps> {
   static defaultProps = {
     editable: false,
-    theme: "light"
+    theme: "light",
+    headerData: {
+      authors: [],
+      title: "",
+      description: "",
+      tags: []
+    }
   };
 
   render() {
     // Otherwise assume they have their own editor component
     return (
-      <div>
+      // NOTE: with styled-jsx we have to use React.Fragment, not <> for the time being
+      <React.Fragment>
         <div style={{ background: "#EEE", padding: "10px" }}>
-          <H1 style={{ fontSize: "24px", fontWeight: 900 }}>
-            {this.props.headerData.title}
+          <H1>
+            <EditableText
+              value={this.props.headerData.title}
+              placeholder="Edit title..."
+            />
           </H1>
-          <p>
-            By{" "}
-            <span style={{ fontStyle: "italic" }}>
-              {this.props.headerData.authors.join(", ")}
-            </span>
-          </p>
+          {this.props.headerData.authors.length <= 0 ? null : (
+            <p>
+              By{" "}
+              <span style={{ fontStyle: "italic" }}>
+                {this.props.headerData.authors.join(", ")}
+              </span>{" "}
+            </p>
+          )}
           <p>
             {this.props.headerData.tags.map(t => (
-              <Tag key={t}>{t}</Tag>
+              <Tag
+                key={t}
+                onRemove={() => {
+                  console.log("removing tag ", t);
+                }}
+              >
+                {t}
+              </Tag>
             ))}
           </p>
           <p style={{ fontSize: "14px" }}>
@@ -51,7 +70,7 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
           </p>
         </div>
         <style jsx>{blueprintCSS}</style>
-      </div>
+      </React.Fragment>
     );
   }
 }
