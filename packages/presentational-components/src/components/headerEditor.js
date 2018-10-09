@@ -35,39 +35,76 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
 
   render() {
     // Otherwise assume they have their own editor component
+    const { editable, headerData } = this.props;
     return (
       // NOTE: with styled-jsx we have to use React.Fragment, not <> for the time being
       <React.Fragment>
         <div style={{ background: "#EEE", padding: "10px" }}>
           <H1>
             <EditableText
-              value={this.props.headerData.title}
+              value={headerData.title}
               placeholder="Edit title..."
+              disabled={!editable}
             />
           </H1>
-          {this.props.headerData.authors.length <= 0 ? null : (
+          {headerData.authors.length <= 0 ? null : (
             <p>
               By{" "}
-              <span style={{ fontStyle: "italic" }}>
-                {this.props.headerData.authors.join(", ")}
-              </span>{" "}
+              {headerData.authors.map(t => (
+                <Tag
+                  key={t}
+                  large={true}
+                  minimal={true}
+                  style={{
+                    marginRight: "5px",
+                    fontStyle: "italic",
+                    background: "#E5E5E5"
+                  }}
+                  onRemove={
+                    editable
+                      ? () => {
+                          console.log("removing tag ", t);
+                        }
+                      : null
+                  }
+                >
+                  {t}
+                </Tag>
+              ))}
             </p>
           )}
-          <p>
-            {this.props.headerData.tags.map(t => (
-              <Tag
-                key={t}
-                onRemove={() => {
-                  console.log("removing tag ", t);
-                }}
-              >
-                {t}
-              </Tag>
-            ))}
-          </p>
-          <p style={{ fontSize: "14px" }}>
-            {this.props.headerData.description}
-          </p>
+          {headerData.tags.map(t => (
+            <Tag
+              key={t}
+              style={{
+                marginRight: "5px",
+                color: "#0366d6",
+                background: "#f1f8ff"
+              }}
+              onRemove={
+                editable
+                  ? () => {
+                      console.log("removing tag ", t);
+                    }
+                  : null
+              }
+            >
+              {t}
+            </Tag>
+          ))}
+          <div style={{ marginTop: "10px" }}>
+            <EditableText
+              maxLength={20}
+              maxLines={12}
+              minLines={3}
+              multiline={true}
+              placeholder="Edit description..."
+              selectAllOnFocus={false}
+              value={headerData.description}
+              onChange={() => {}}
+              disabled={!editable}
+            />
+          </div>
         </div>
         <style jsx>{blueprintCSS}</style>
       </React.Fragment>
