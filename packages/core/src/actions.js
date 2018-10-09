@@ -245,7 +245,7 @@ export function moveCell(payload: {
 }
 
 export function removeCell(payload: {
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): actionTypes.RemoveCell {
   return {
