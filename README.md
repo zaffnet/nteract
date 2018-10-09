@@ -44,6 +44,10 @@ Now, run `jupyter nteract` and you're running nteract on jupyter!
 
 We're still hard at work on the playground. Here's a sneak peek to explore: https://play.nteract.io
 
+### User Guide
+
+For the user guide, please check [USER_GUIDE.md](https://github.com/nteract/nteract/blob/master/USER_GUIDE.md)
+
 ---
 
 ## Contributors
@@ -101,7 +105,7 @@ To keep up-to-date with changes to the root nteract/nteract branch:
 
 5. Set the root as a remote: `git remote add upstream https://github.com/nteract/nteract.git`
 
-When changes are made, they can then be pulled from the master branch:
+When changes are made to the root nteract/nteract, they can then be pulled from the root and merged to your master branch:
 
 6. `git pull upstream master`
 7. `yarn clean`
