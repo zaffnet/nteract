@@ -35,7 +35,10 @@ class Editor extends React.Component {
       <HeaderEditor
         editable={true}
         headerData={this.state}
-        onChange={header => this.setState(header)}
+        onChange={header => {
+          console.log("header", header);
+          this.setState(header);
+        }}
       />
     );
   }

@@ -35,7 +35,7 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
 
   render() {
     // Otherwise assume they have their own editor component
-    const { editable, headerData } = this.props;
+    const { editable, headerData, onChange = () => {} } = this.props;
     return (
       // NOTE: with styled-jsx we have to use React.Fragment, not <> for the time being
       <React.Fragment>
@@ -45,6 +45,12 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
               value={headerData.title}
               placeholder="Edit title..."
               disabled={!editable}
+              onChange={newText => {
+                onChange({
+                  ...headerData,
+                  title: newText
+                });
+              }}
             />
           </H1>
           {headerData.authors.length <= 0 ? null : (
@@ -63,7 +69,10 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
                   onRemove={
                     editable
                       ? () => {
-                          console.log("removing tag ", t);
+                          onChange({
+                            ...headerData,
+                            authors: headerData.authors.filter(p => p !== t)
+                          });
                         }
                       : null
                   }
@@ -84,7 +93,10 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
               onRemove={
                 editable
                   ? () => {
-                      console.log("removing tag ", t);
+                      onChange({
+                        ...headerData,
+                        tags: headerData.tags.filter(p => p !== t)
+                      });
                     }
                   : null
               }
@@ -94,15 +106,20 @@ export class HeaderEditor extends React.Component<HeaderEditorProps> {
           ))}
           <div style={{ marginTop: "10px" }}>
             <EditableText
-              maxLength={20}
+              maxLength={280}
               maxLines={12}
               minLines={3}
               multiline={true}
               placeholder="Edit description..."
               selectAllOnFocus={false}
               value={headerData.description}
-              onChange={() => {}}
               disabled={!editable}
+              onChange={newText => {
+                onChange({
+                  ...headerData,
+                  description: newText
+                });
+              }}
             />
           </div>
         </div>
