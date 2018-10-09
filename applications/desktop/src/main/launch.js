@@ -1,7 +1,7 @@
 /* @flow strict */
 import * as path from "path";
 
-import { Menu, shell, BrowserWindow, dialog, ipcMain as ipc } from "electron";
+import { Menu, shell, BrowserWindow, dialog } from "electron";
 
 import { loadFullMenu } from "./menu";
 
@@ -44,18 +44,6 @@ export function launch(filename: ?string) {
   });
   const index = path.join(__dirname, "..", "static", "index.html");
   win.loadURL(`file://${index}`);
-
-  win.webContents.on("will-prevent-unload", e => {
-    const response = dialog.showMessageBox({
-      type: "question",
-      buttons: ["Yes", "No"],
-      title: "Confirm",
-      message: "Unsaved data will be lost. Are you sure you want to quit?"
-    });
-    if (response == 0) {
-      e.preventDefault();
-    }
-  });
 
   win.webContents.on("did-finish-load", () => {
     const menu = loadFullMenu();

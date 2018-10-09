@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as globalEvents from "../../src/notebook/global-events";
 import * as Immutable from "immutable";
 
@@ -10,7 +12,20 @@ import {
   makeDocumentRecord
 } from "@nteract/core";
 
-const createStore = (contentRef, content) => ({
+import {
+  makeDesktopNotebookRecord,
+  DESKTOP_NOTEBOOK_CLOSING_NOT_STARTED,
+  DESKTOP_NOTEBOOK_CLOSING_STARTED,
+  DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
+} from "../../src/notebook/state.js";
+
+import * as actions from "../../src/notebook/actions.js";
+
+const createStore = (
+  contentRef,
+  content,
+  closingState: DesktopNotebookClosingState
+) => ({
   getState: () => ({
     core: makeStateRecord({
       entities: makeEntitiesRecord({
@@ -21,12 +36,16 @@ const createStore = (contentRef, content) => ({
           })
         })
       })
-    })
+    }),
+    desktopNotebook: makeDesktopNotebookRecord().set(
+      "closingState",
+      closingState
+    )
   })
 });
 
 describe("beforeUnload", () => {
-  test("should set event.returnValue if notebook is modified to prevent unload", () => {
+  test("if we are not yet closing the notebook, should initiate closeNotebook and cancel close event", done => {
     const contentRef = createContentRef();
     const store = createStore(
       contentRef,
@@ -35,38 +54,58 @@ describe("beforeUnload", () => {
           notebook: "not same",
           savedNotebook: "different"
         })
-      })
+      }),
+      DESKTOP_NOTEBOOK_CLOSING_NOT_STARTED
     );
+
+    store.dispatch = action => {
+      expect(action).toEqual(actions.closeNotebook({ contentRef: contentRef }));
+      done();
+    };
 
     const event = {};
 
-    globalEvents.beforeUnload(contentRef, store, event);
-
-    expect(event.returnValue).toBeDefined();
+    const result = globalEvents.beforeUnload(contentRef, store, event);
+    expect(result).toBe(false);
   });
 
-  test("should should not set event.returnValue if notebook is saved", () => {
+  test("if we are in the process of closing the notebook, should continue to cancel close event", () => {
     const contentRef = createContentRef();
     const store = createStore(
       contentRef,
       makeNotebookContentRecord({
         model: makeDocumentRecord({
-          notebook: "same",
-          savedNotebook: "same"
+          notebook: "not same",
+          savedNotebook: "different"
         })
-      })
+      }),
+      DESKTOP_NOTEBOOK_CLOSING_STARTED
     );
-
     const event = {};
+    const result = globalEvents.beforeUnload(contentRef, store, event);
+    expect(result).toBe(false);
+  });
 
-    globalEvents.beforeUnload(contentRef, store, event);
-
-    expect(event.returnValue).toBeUndefined();
+  test("if we have completed closing the notebook, should not cancel close event", () => {
+    const contentRef = createContentRef();
+    const store = createStore(
+      contentRef,
+      makeNotebookContentRecord({
+        model: makeDocumentRecord({
+          notebook: "not same",
+          savedNotebook: "different"
+        })
+      }),
+      DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
+    );
+    const event = {};
+    const result = globalEvents.beforeUnload(contentRef, store, event);
+    expect(result).toBeUndefined();
   });
 });
 
 describe("initGlobalHandlers", () => {
-  test("adds an unload poperty to the window object", () => {
+  test("adds an unload property to the window object", () => {
     const contentRef = createContentRef();
     const store = createStore(contentRef);
 

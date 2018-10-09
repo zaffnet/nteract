@@ -36,7 +36,11 @@ import { loadFullMenu, loadTrayMenu } from "./menu";
 
 import prepareEnv from "./prepare-env";
 import initializeKernelSpecs from "./kernel-specs";
-import { setKernelSpecs } from "./actions";
+import { setKernelSpecs, setQuittingState } from "./actions";
+import {
+  QUITTING_STATE_NOT_STARTED,
+  QUITTING_STATE_QUITTING
+} from "./reducers.js";
 
 import configureStore from "./store";
 
@@ -93,6 +97,11 @@ ipc.on("new-kernel", (event, k) => {
 
 ipc.on("open-notebook", (event, filename) => {
   launch(resolve(filename));
+});
+
+ipc.on("show-message-box", (event, arg) => {
+  const response = dialog.showMessageBox(arg);
+  event.sender.send("show-message-box-response", response);
 });
 
 app.on("ready", initAutoUpdater);
@@ -187,16 +196,43 @@ electronReady$
   .pipe(takeUntil(appAndKernelSpecsReady))
   .subscribe(createSplashSubscriber());
 
-function closeAppOnNonDarwin() {
-  // On macOS, we want to keep the app and menu bar active
-  if (process.platform !== "darwin") {
+app.on("before-quit", e => {
+  // When notebook windows are open we need to orchestrate shutdown manually.
+  const windows = BrowserWindow.getAllWindows();
+  if (
+    windows.length > 0 &&
+    store.getState().get("quittingState") === QUITTING_STATE_NOT_STARTED
+  ) {
+    e.preventDefault();
+    store.dispatch(setQuittingState(QUITTING_STATE_QUITTING));
+
+    // Trigger each windows' closeNotebookEpic. If and when all windows are closed,
+    // the window-all-closed event will fire and we will complete the quit action.
+    windows.forEach(win => win.close());
+  }
+});
+
+const windowAllClosed = fromEvent(app, "window-all-closed");
+windowAllClosed.pipe(skipUntil(appAndKernelSpecsReady)).subscribe(() => {
+  // On macOS:
+  // - If user manually closed the last window, we want to keep the app and
+  //   menu bar active.
+  // - If the window was closed programmatically as part of a quit, and not
+  //   canceled during notebook shutdown, then we proceed w/ the quit.
+  // All other platforms:
+  // - Quit when last window closed.
+  if (
+    process.platform !== "darwin" ||
+    store.getState().get("quittingState") === QUITTING_STATE_QUITTING
+  ) {
     app.quit();
   }
-}
-const windowAllClosed = fromEvent(app, "window-all-closed");
-windowAllClosed
-  .pipe(skipUntil(appAndKernelSpecsReady))
-  .subscribe(closeAppOnNonDarwin);
+});
+
+ipc.on("close-notebook-canceled", (event, k) => {
+  // User canceled, so interpret that as cancelling any in-flight app-wide quit
+  store.dispatch(setQuittingState(QUITTING_STATE_NOT_STARTED));
+});
 
 const openFile$ = fromEvent(app, "open-file", (event, filename) => ({
   event,

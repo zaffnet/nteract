@@ -252,6 +252,7 @@ export const interruptKernelEpic = (action$: *, store: *) =>
     })
   );
 
+// NB: This epic kills the *current* kernel. ZMQ killKernelEpic kills a *specified* kernel.
 export const killKernelEpic = (action$: *, store: *) =>
   // TODO: Use the sessions API for this
   action$.pipe(

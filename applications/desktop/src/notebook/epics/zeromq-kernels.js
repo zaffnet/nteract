@@ -330,30 +330,24 @@ function killSpawn(spawn: *): void {
   spawn.kill("SIGKILL");
 }
 
-export function killKernelImmediately(kernel: LocalKernelRecord): void {
-  kernel.channels.complete();
-
-  if (kernel.spawn) {
-    killSpawn(kernel.spawn);
-  }
-}
-
+// This might be better named shutdownKernel because it first attempts a graceful
+// shutdown by sending a shutdown msg to the kernel, and only if the kernel
+// doesn't respond promptly does it SIGKILL the kernel.
 export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),
-    // This epic can only kill direct zeromq connected kernels
-    filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
     concatMap((action: actionTypes.KillKernelAction) => {
       const state = store.getState();
       const kernelRef = action.payload.kernelRef;
       const kernel = selectors.kernel(state, { kernelRef });
+
       if (!kernel) {
         console.warn("tried to kill a kernel that doesn't exist");
         return empty();
       }
 
+      // Ignore the action if the specified kernel is not ZMQ.
       if (kernel.type !== "zeromq") {
-        console.warn("tried to kill a non-zeromq kernel");
         return empty();
       }
 
@@ -385,8 +379,14 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
           }
 
           return merge(
-            // Pass on our intermediate action
+            // Pass on our intermediate action (whether or not kernel ACK'd shutdown request promptly)
             of(action),
+            // Indicate overall success (channels cleaned up)
+            of(
+              actions.killKernelSuccessful({
+                kernelRef: kernelRef
+              })
+            ),
             // Inform about the state
             of(
               actions.setExecutionState({

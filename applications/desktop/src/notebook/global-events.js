@@ -7,32 +7,21 @@ import { selectors } from "@nteract/core";
 
 import type { AppState, KernelRef, ContentRef } from "@nteract/core";
 
-import { killKernelImmediately } from "./epics/zeromq-kernels";
+import { ipcMain as ipc } from "electron";
 
-export function unload(store: Store<AppState, Action>) {
-  const state = store.getState();
+import * as actions from "./actions";
 
-  state.core.entities.kernels.byRef.forEach((kernel, kernelRef) => {
-    // Skip if kernel unknown
-    if (!kernel || !kernel.type) {
-      return;
-    }
+import type { DesktopNotebookAppState } from "./state.js";
+import {
+  DESKTOP_NOTEBOOK_CLOSING_NOT_STARTED,
+  DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
+} from "./state.js";
 
-    if (kernel.type === "zeromq") {
-      try {
-        killKernelImmediately(kernel);
-      } catch (e) {
-        alert(`Trouble shutting down - ${e.message}`);
-      }
-    } else if (kernel.type === "websocket") {
-      alert("Need to implement a way to shutdown websocket kernels on desktop");
-    }
-  });
-}
+const urljoin = require("url-join");
 
 export function beforeUnload(
   contentRef: ContentRef,
-  store: Store<AppState, Action>,
+  store: Store<DesktopNotebookAppState, Action>,
   e: *
 ) {
   const state = store.getState();
@@ -43,16 +32,24 @@ export function beforeUnload(
     return;
   }
 
-  if (selectors.notebook.isDirty(model)) {
-    // Will prevent closing "will-prevent-unload"
-    e.returnValue = true;
+  const closingState = state.desktopNotebook.closingState;
+  if (closingState === DESKTOP_NOTEBOOK_CLOSING_NOT_STARTED) {
+    // Dispatch asynchronously since returning ASAP is imperative for canceling close/unload.
+    // See https://github.com/electron/electron/issues/12668
+    setTimeout(
+      () => store.dispatch(actions.closeNotebook({ contentRef: contentRef })),
+      0
+    );
+  }
+
+  if (closingState !== DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE) {
+    return false;
   }
 }
 
 export function initGlobalHandlers(
   contentRef: ContentRef,
-  store: Store<AppState, Action>
+  store: Store<DesktopNotebookAppState, Action>
 ) {
   window.onbeforeunload = beforeUnload.bind(null, contentRef, store);
-  window.onunload = unload.bind(null, store);
 }

@@ -49,3 +49,5 @@ packages/*/yarn.lock
 packages/styles/src/index.js
 
 styleguide
+
+.idea/
