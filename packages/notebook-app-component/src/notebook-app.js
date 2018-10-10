@@ -28,7 +28,6 @@ import { DragDropContext as dragDropContext } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { connect } from "react-redux";
 
-import MathJax from "@nteract/mathjax";
 import { RichestMime, Output } from "@nteract/display-area";
 import {
   displayOrder as defaultDisplayOrder,

@@ -1,4 +1,5 @@
 /* @flow strict */
+import * as path from "path";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
@@ -70,6 +71,15 @@ const store = configureStore({
 // Register for debugging
 window.store = store;
 
+const mathJaxPath = path.join(
+  "..",
+  "node_modules",
+  "mathjax-electron",
+  "resources",
+  "MathJax",
+  "MathJax.js?config=electron"
+);
+
 initNativeHandlers(contentRef, store);
 initMenuHandlers(contentRef, store);
 initGlobalHandlers(contentRef, store);
@@ -88,14 +98,14 @@ export default class App extends React.PureComponent<{}, null> {
       <Provider store={store}>
         <React.Fragment>
           <Styles>
-            <MathJax.Context input="tex">
+            <MathJax.Provider src={mathJaxPath} input="tex">
               <NotebookApp
                 // The desktop app always keeps the same contentRef in a browser window
                 contentRef={contentRef}
                 transforms={transforms}
                 displayOrder={displayOrder}
               />
-            </MathJax.Context>
+            </MathJax.Provider>
 
             <NotificationSystem
               ref={notificationSystem => {
