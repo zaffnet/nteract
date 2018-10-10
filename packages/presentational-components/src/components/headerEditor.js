@@ -37,7 +37,7 @@ export type HeaderDataProps = {
 export type HeaderEditorProps = {
   headerData: HeaderDataProps,
   editable: boolean,
-  onChange?: Function,
+  onChange: HeaderDataProps => void,
   theme: "light" | "dark"
 };
 
@@ -64,12 +64,13 @@ export class HeaderEditor extends React.Component<
       title: "",
       description: "",
       tags: []
-    }
+    },
+    onChange: () => {}
   };
 
   render() {
     // Otherwise assume they have their own editor component
-    const { editable, headerData, onChange = () => {} } = this.props;
+    const { editable, headerData, onChange } = this.props;
     return (
       // NOTE: with styled-jsx we have to use React.Fragment, not <> for the time being
       <React.Fragment>
