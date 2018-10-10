@@ -18,7 +18,6 @@ describe("dispatchCreateCellAbove", () => {
     expect(store.dispatch).toHaveBeenCalledWith(
       actions.createCellBefore({
         cellType: "code",
-        source: "",
         contentRef: props.contentRef
       })
     );
@@ -647,7 +646,9 @@ describe("initMenuHandlers", () => {
       "menu:unhide-all",
       "menu:save",
       "menu:save-as",
-      "menu:new-code-cell",
+      "menu:new-text-cell-below",
+      "menu:new-code-cell-above",
+      "menu:new-code-cell-below",
       "menu:copy-cell",
       "menu:cut-cell",
       "menu:paste-cell",
