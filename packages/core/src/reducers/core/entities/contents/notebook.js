@@ -410,7 +410,10 @@ function removeCellFromState(
   state: NotebookModel,
   action: actionTypes.RemoveCell
 ) {
-  const { id } = action.payload;
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
   return cleanCellTransient(
     state.update("notebook", (notebook: ImmutableNotebook) =>
       removeCell(notebook, id)

@@ -64,10 +64,9 @@ A notebook can be saved in the following ways:
 
     ```
       Edit
-        ⮑  New Code Cell
+        ⮑  Insert Code Cell Above
+        ⮑  Insert Code Cell Below
     ```
-
-    Keyboard shortcut: `Shift ⌘ N` on macOS or `Shift Ctrl N` on Windows/Linux
 
     A code cell can also be created by clicking <> on the cell hover menu.
 
@@ -78,8 +77,6 @@ A notebook can be saved in the following ways:
       Edit
         ⮑  New Text Cell
     ```
-
-    Keyboard shortcut: `Shift ⌘ M` on macOS or `Shift Ctrl M` on Windows/Linux
 
     A text cell can also be created by clicking **M** on the cell hover menu.
 
@@ -101,13 +98,20 @@ A cell can be run from the keyboard by pressing `Shift ⏎` or by selecting the 
 
 A cell can be moved anywhere in the notebook by clicking and dragging to desired position.
 
-### Other Cell Shortcuts
+### Cell Shortcuts
 
-* Copy Cell: `Shift ⌘ C` on macOS or `Shift Ctrl C` on Windows/Linux
-* Paste Cell: `Shift ⌘ V` on macOS or `Shift Ctrl V` on Windows/Linux
-* Cut Cell: `Shift ⌘ X` on macOS or `Shift Ctrl X` on Windows/Linux
+Command | macOS | Windows/Linux
+---|---|---
+Insert Cell Above | `Shift ⌘ A` | `Shift Ctrl A`
+Insert Cell Below | `Shift ⌘ B` | `Shift Ctrl B`
+Delete Cell | `Shift ⌘ D` | `Shift Ctrl D`
+Change Cell Type to Markdown | `Shift ⌘ M` | `Shift Ctrl M`
+Change Cell Type to Code | `Shift ⌘ Y` | `Shift Ctrl Y`
+Copy Cell | `Shift ⌘ C` | `Shift Ctrl C`
+Paste Cell | `Shift ⌘ V` | `Shift Ctrl V`
+Cut Cell | `Shift ⌘ X` | `Shift Ctrl X`
 
-## Autocompletion
+## General Shortcuts
 
 * Autocomplete Suggestions: `Ctrl Space`
 * Documentation/Tips Expansion: `Ctrl Period(.)` (on Windows/Linux) or `⌘ Period(.)` (on MacOS)

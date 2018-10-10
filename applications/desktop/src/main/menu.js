@@ -366,16 +366,24 @@ export function loadFullMenu(store: * = global.store) {
         type: "separator"
       },
       {
-        label: "New Code Cell",
+        label: "Insert Code Cell Above",
         enabled: BrowserWindow.getAllWindows().length > 0,
-        accelerator: "CmdOrCtrl+Shift+N",
-        click: createSender("menu:new-code-cell")
+        accelerator: "CmdOrCtrl+Shift+A",
+        click: createSender("menu:new-code-cell-above")
       },
       {
-        label: "New Text Cell",
+        label: "Insert Code Cell Below",
         enabled: BrowserWindow.getAllWindows().length > 0,
-        accelerator: "CmdOrCtrl+Shift+M",
-        click: createSender("menu:new-text-cell")
+        accelerator: "CmdOrCtrl+Shift+B",
+        click: createSender("menu:new-code-cell-below")
+      },
+      {
+        label: "Insert Text Cell Below",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        click: createSender("menu:new-text-cell-below")
+      },
+      {
+        type: "separator"
       },
       {
         label: "Copy Cell",
@@ -394,6 +402,12 @@ export function loadFullMenu(store: * = global.store) {
         enabled: BrowserWindow.getAllWindows().length > 0,
         accelerator: "CmdOrCtrl+Shift+V",
         click: createSender("menu:paste-cell")
+      },
+      {
+        label: "Delete Cell",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        accelerator: "CmdOrCtrl+Shift+D",
+        click: createSender("menu:delete-cell")
       }
     ]
   };
@@ -401,6 +415,21 @@ export function loadFullMenu(store: * = global.store) {
   const cell = {
     label: "Cell",
     submenu: [
+      {
+        label: "Change Cell Type to Code",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        accelerator: "CmdOrCtrl+Shift+Y",
+        click: createSender("menu:change-cell-to-code")
+      },
+      {
+        label: "Change Cell Type to Text",
+        enabled: BrowserWindow.getAllWindows().length > 0,
+        accelerator: "CmdOrCtrl+Shift+M",
+        click: createSender("menu:change-cell-to-text")
+      },
+      {
+        type: "separator"
+      },
       {
         label: "Run All",
         enabled: BrowserWindow.getAllWindows().length > 0,

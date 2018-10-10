@@ -408,7 +408,26 @@ export function dispatchPasteCell(
   store.dispatch(actions.pasteCell(ownProps));
 }
 
-export function dispatchCreateCellAfter(
+export function dispatchDeleteCell(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  store.dispatch(actions.removeCell({ contentRef: ownProps.contentRef }));
+}
+
+export function dispatchCreateCellAbove(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  store.dispatch(
+    actions.createCellBefore({
+      cellType: "code",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchCreateCellBelow(
   ownProps: { contentRef: ContentRef },
   store: Store<DesktopNotebookAppState, *>
 ) {
@@ -421,7 +440,7 @@ export function dispatchCreateCellAfter(
   );
 }
 
-export function dispatchCreateTextCellAfter(
+export function dispatchCreateTextCellBelow(
   ownProps: { contentRef: ContentRef },
   store: Store<DesktopNotebookAppState, *>
 ) {
@@ -429,6 +448,30 @@ export function dispatchCreateTextCellAfter(
     actions.createCellAfter({
       cellType: "markdown",
       source: "",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchChangeCellToCode(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  store.dispatch(
+    actions.changeCellType({
+      to: "code",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchChangeCellToText(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  store.dispatch(
+    actions.changeCellType({
+      to: "markdown",
       contentRef: ownProps.contentRef
     })
   );
@@ -622,14 +665,30 @@ export function initMenuHandlers(
   ipc.on("menu:unhide-all", dispatchUnhideAll.bind(null, opts, store));
   ipc.on("menu:save", throttle(dispatchSave.bind(null, opts, store), 2000));
   ipc.on("menu:save-as", dispatchSaveAs.bind(null, opts, store));
-  ipc.on("menu:new-code-cell", dispatchCreateCellAfter.bind(null, opts, store));
   ipc.on(
-    "menu:new-text-cell",
-    dispatchCreateTextCellAfter.bind(null, opts, store)
+    "menu:new-text-cell-below",
+    dispatchCreateTextCellBelow.bind(null, opts, store)
+  );
+  ipc.on(
+    "menu:new-code-cell-above",
+    dispatchCreateCellAbove.bind(null, opts, store)
+  );
+  ipc.on(
+    "menu:new-code-cell-below",
+    dispatchCreateCellBelow.bind(null, opts, store)
   );
   ipc.on("menu:copy-cell", dispatchCopyCell.bind(null, opts, store));
   ipc.on("menu:cut-cell", dispatchCutCell.bind(null, opts, store));
   ipc.on("menu:paste-cell", dispatchPasteCell.bind(null, opts, store));
+  ipc.on("menu:delete-cell", dispatchDeleteCell.bind(null, opts, store));
+  ipc.on(
+    "menu:change-cell-to-code",
+    dispatchChangeCellToCode.bind(null, opts, store)
+  );
+  ipc.on(
+    "menu:change-cell-to-text",
+    dispatchChangeCellToText.bind(null, opts, store)
+  );
   ipc.on("menu:kill-kernel", dispatchKillKernel.bind(null, opts, store));
   ipc.on(
     "menu:interrupt-kernel",

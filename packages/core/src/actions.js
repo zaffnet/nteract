@@ -245,7 +245,7 @@ export function moveCell(payload: {
 }
 
 export function removeCell(payload: {
-  id: string,
+  id?: string,
   contentRef: ContentRef
 }): actionTypes.RemoveCell {
   return {
@@ -583,7 +583,7 @@ export function pasteCell(payload: {
 }
 
 export function changeCellType(payload: {
-  id: CellID,
+  id?: CellID,
   to: CellType,
   contentRef: ContentRef
 }): actionTypes.ChangeCellType {
