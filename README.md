@@ -94,7 +94,7 @@ To get started developing, [set up the nteract monorepo](#set-the-monorepo-up-in
 
 #### Set the monorepo up in dev mode
 
-Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site).
+Requires [Node.js](https://docs.npmjs.com/getting-started/installing-node) and [yarn](https://yarnpkg.com/lang/en/docs/install/).
 
 1. Fork this repo
 2. Clone your fork or this repo `git clone https://github.com/nteract/nteract`
