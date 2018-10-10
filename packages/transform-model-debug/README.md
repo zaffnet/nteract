@@ -8,5 +8,5 @@ in `@nteract/transforms-full`.
 ## Installation
 
 ```
-npm install @nteract/transform-model-debug
+yarn install @nteract/transform-model-debug
 ```

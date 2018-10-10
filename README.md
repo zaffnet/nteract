@@ -110,6 +110,7 @@ When changes are made to the root nteract/nteract, they can then be pulled from 
 6. `git pull upstream master`
 7. `yarn clean`
 8. `yarn install`
+7. yarn install
 
 #### Windows Caveats
 
@@ -135,7 +136,7 @@ specific package, use this command, replacing `packageName` with the package you
 want to hack on:
 
 ```
-$(npm bin)/lerna run build --scope packageName
+$(yarn bin)/lerna run build --scope packageName
 ```
 
 ### Hacking on the Desktop application
@@ -147,7 +148,7 @@ yarn app:desktop
 ```
 
 As you make changes, you will have to close the entire app (CMD-q on macOS or
-CNTL-c at the terminal) and then run `npm run app:desktop` again to see the
+CNTL-c at the terminal) and then run `yarn run app:desktop` again to see the
 changes.
 
 #### Progressive Webpack build (automatic)
@@ -200,7 +201,7 @@ rebuild those using [the instructions for building specific packages](#building-
 > I want to debug redux actions and state changes.
 
 * Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by
-  spawning the application with `npm run spawn:debug`.
+  spawning the application with `yarn run spawn:debug`.
 
 > I keep getting a pop-up asking: *Do you want the application "nteract Helper.app" to accept
   incoming network connections?* while developing or using a custom build of

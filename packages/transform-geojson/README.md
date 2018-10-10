@@ -6,5 +6,5 @@ in `@nteract/transforms-full`.
 ## Installation
 
 ```
-npm install @nteract/transform-geojson
+yarn install @nteract/transform-geojson
 ```

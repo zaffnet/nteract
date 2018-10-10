@@ -29,7 +29,7 @@ Try **commuter** today and take your notebooks wherever you need them.
 ## Installation
 
 ```
-npm install @nteract/commuter -g
+yarn install @nteract/commuter -g
 ```
 
 ## Usage
@@ -86,9 +86,9 @@ COMMUTER_BUCKET=sweet-notebooks commuter
 
 ## Tests
 
-1. `npm t`
+1. `yarn test`
 
 ## Deployment
 
-1. Install commuter cli `npm install @nteract/commuter`
+1. Install commuter cli `yarn install @nteract/commuter`
 1. `exec commuter` - the service is typically wrapped inside [daemontools](https://cr.yp.to/daemontools.html)

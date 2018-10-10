@@ -15,7 +15,7 @@ release of the display area (:soon:).
 ## Installation
 
 ```
-npm install @nteract/transforms-full
+yarn install @nteract/transforms-full
 ```
 
 Note: React is a peer dependencies you'll have to install yourself.

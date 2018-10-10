@@ -4,7 +4,7 @@ Render Jupyter notebook outputs in a trim little React component.
 ## Installation
 
 ```
-npm install @nteract/display-area
+yarn install @nteract/display-area
 ```
 
 ## Usage

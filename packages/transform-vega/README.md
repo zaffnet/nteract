@@ -6,5 +6,5 @@ in `@nteract/transforms-full`.
 ## Installation
 
 ```
-npm install @nteract/transform-vega
+yarn install @nteract/transform-vega
 ```

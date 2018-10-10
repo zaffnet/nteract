@@ -46,7 +46,7 @@ That's it. Functions for four channels; *simplicity in action*.
 
 Prerequisite: [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node)
 
-`npm install enchannel-zmq-backend`
+`yarn install enchannel-zmq-backend`
 
 ## Usage
 
@@ -252,7 +252,7 @@ Then, fork and clone this repo:
 ```bash
 git clone https://github.com/nteract/enchannel-zmq-backend.git
 cd enchannel-zmq-backend
-npm install
+yarn install
 ```
 
 Develop! We welcome new and first time contributors.

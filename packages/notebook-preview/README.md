@@ -3,7 +3,7 @@ Preview Jupyter notebooks in a small React component.
 
 ## Installation
 ```
-npm install --save @nteract/notebook-preview
+yarn install --save @nteract/notebook-preview
 ```
 
 ## Usage

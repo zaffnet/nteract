@@ -3,7 +3,7 @@
 Convert ANSI Escape Codes to pretty text output for React.
 
 ```
-npm install --save ansi-to-react
+yarn install --save ansi-to-react
 ```
 
 ## Usage

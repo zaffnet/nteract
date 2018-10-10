@@ -6,7 +6,7 @@ Elements.
 ## Installation
 
 ```
-npm install --save @nteract/transform-vdom
+yarn install --save @nteract/transform-vdom
 ```
 
 Note: This transform is included in `@nteract/transforms` so if you're using that
