@@ -455,7 +455,7 @@ export function dispatchCreateTextCellBelow(
 
 export function dispatchChangeCellToCode(
   ownProps: { contentRef: ContentRef },
-  store: Store<AppState, *>
+  store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
     actions.changeCellType({
@@ -467,7 +467,7 @@ export function dispatchChangeCellToCode(
 
 export function dispatchChangeCellToText(
   ownProps: { contentRef: ContentRef },
-  store: Store<AppState, *>
+  store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
     actions.changeCellType({

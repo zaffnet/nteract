@@ -583,7 +583,7 @@ export function pasteCell(payload: {
 }
 
 export function changeCellType(payload: {
-  id: CellID,
+  id?: CellID,
   to: CellType,
   contentRef: ContentRef
 }): actionTypes.ChangeCellType {

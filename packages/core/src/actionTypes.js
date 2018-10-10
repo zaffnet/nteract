@@ -162,7 +162,7 @@ export const REMOVE_CELL = "REMOVE_CELL";
 export type RemoveCell = {
   type: "REMOVE_CELL",
   payload: {
-    id: CellID,
+    id?: CellID,
     contentRef: ContentRef
   }
 };
@@ -535,7 +535,7 @@ export const CHANGE_CELL_TYPE = "CHANGE_CELL_TYPE";
 export type ChangeCellType = {
   type: "CHANGE_CELL_TYPE",
   payload: {
-    id: CellID,
+    id?: CellID,
     to: CellType,
     contentRef: ContentRef
   }
