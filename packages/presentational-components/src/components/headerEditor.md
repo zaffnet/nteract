@@ -7,18 +7,6 @@ HeaderEditor component for editing your header
 ### Editable Fixed Header
 
 ```js
-<HeaderEditor
-  editable={true}
-  headerData={{
-    authors: ["Elijah Meeks", "Kyle Kelley"],
-    description: "A cool notebook for kids and animals!",
-    title: "Notebook with Header",
-    tags: ["amazing", "kids", "animals"]
-  }}
-/>
-```
-
-```js
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +35,7 @@ class Editor extends React.Component {
 <Editor />;
 ```
 
-### Basic Fixed Header
+### Uneditable with editable={false}
 
 ```js
 <HeaderEditor
