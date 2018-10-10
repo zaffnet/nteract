@@ -35,7 +35,7 @@ To install `rx-jupyter` for development, do the following:
 ```
 git clone https://github.com/nteract/nteract.git
 cd nteract
-yarn install
+yarn
 # Note that rx-jupyter is in packages/rx-jupyter
 ```
 ## Testing

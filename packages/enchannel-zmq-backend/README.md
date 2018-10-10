@@ -252,7 +252,7 @@ Then, fork and clone this repo:
 ```bash
 git clone https://github.com/nteract/enchannel-zmq-backend.git
 cd enchannel-zmq-backend
-yarn install
+yarn
 ```
 
 Develop! We welcome new and first time contributors.
