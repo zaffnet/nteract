@@ -1,7 +1,7 @@
 import * as React from "react";
 import { mount } from "enzyme";
 
-import { DisplayData, RichMedia } from "../src";
+import { DisplayData } from "../src";
 
 describe("DisplayData", () => {
   it("handles display_data messages", () => {

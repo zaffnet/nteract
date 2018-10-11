@@ -2,26 +2,9 @@
 /* eslint camelcase: 0 */ // <-- Per Jupyter message spec
 
 import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
-import { merge } from "rxjs/observable/merge";
-import { _throw } from "rxjs/observable/throw";
 
-import {
-  pluck,
-  first,
-  groupBy,
-  filter,
-  scan,
-  map,
-  mapTo,
-  switchMap,
-  mergeAll,
-  mergeMap,
-  takeUntil,
-  catchError,
-  tap
-} from "rxjs/operators";
+import { pluck, filter, map, mergeMap } from "rxjs/operators";
 
 import { message, executeRequest } from "./messages";
 

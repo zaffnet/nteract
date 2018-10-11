@@ -41,7 +41,7 @@ if ("𝐚".length === 1) {
   // don't keep shifting offsets to compensate for surrogate pairs
   char_idx_to_js_idx = js_idx_to_char_idx = function(
     idx: number,
-    text: string
+    text: string // eslint-disable-line no-unused-vars
   ) {
     return idx;
   };

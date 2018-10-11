@@ -15,7 +15,7 @@ class ModelDebug extends React.Component<Props> {
   }
 
   render(): ?React$Element<any> {
-    const { models, data, modelID } = this.props;
+    const { models, data, modelID } = this.props; // eslint-disable-line no-unused-vars
     // TODO: Provide model IDs on transient field
     // For now, if modelID is not provided (or model does not exist),
     // show all the models

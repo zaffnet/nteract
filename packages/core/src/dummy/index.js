@@ -13,7 +13,7 @@ import {
 } from "@nteract/commutable";
 
 /* Our createStore */
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { combineReducers, createStore } from "redux";
 import { comms, config, core } from "../reducers";
 
 export { dummyCommutable, dummy, dummyJSON } from "./dummy-nb";
@@ -33,7 +33,7 @@ import {
 } from "../state";
 
 const rootReducer = combineReducers({
-  app: (state = makeAppRecord(), action) => state,
+  app: (state = makeAppRecord()) => state,
   comms,
   config,
   core
@@ -96,7 +96,6 @@ export function dummyStore(config: *) {
   const frontendToShell = new Subject();
   const shellToFrontend = new Subject();
   const mockShell = Subject.create(frontendToShell, shellToFrontend);
-  const mockIOPub = new Subject();
   const channels = mockShell;
 
   const kernelRef = createKernelRef();

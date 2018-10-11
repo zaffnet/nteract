@@ -1,7 +1,6 @@
 import React from "react";
 
-import { shallow, mount } from "enzyme";
-import Immutable from "immutable";
+import { shallow } from "enzyme";
 
 import { displayOrder, transforms } from "@nteract/transforms";
 import { Display } from "../src";

@@ -2,7 +2,6 @@
 import * as Immutable from "immutable";
 import { ActionsObservable } from "redux-observable";
 import { Subject } from "rxjs/Subject";
-import { emptyNotebook } from "@nteract/commutable";
 import { actions, state as stateModule, epics as coreEpics } from "../../src";
 import { toArray } from "rxjs/operators";
 

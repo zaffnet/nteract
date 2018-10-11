@@ -1,10 +1,4 @@
-import {
-  unlinkObservable,
-  createSymlinkObservable,
-  readdirObservable
-} from "../src";
-
-import { toArray } from "rxjs/operators";
+import { unlinkObservable, readdirObservable } from "../src";
 
 jest.mock("fs");
 const fs = require("fs");
@@ -69,7 +63,7 @@ describe("readdirObservable", () => {
     });
 
     try {
-      const listing = await readdirObservable("/invalid").toPromise();
+      await readdirObservable("/invalid").toPromise();
       done.fail();
     } catch (error) {
       expect(error).toEqual(new Error("you can't look there"));

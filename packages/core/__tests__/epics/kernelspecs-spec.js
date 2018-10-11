@@ -1,6 +1,5 @@
 // @flow
 import { ActionsObservable } from "redux-observable";
-import { Subject } from "rxjs/Subject";
 import { fetchKernelspecs } from "../../src/actions";
 import { fetchKernelspecsEpic } from "../../src/epics/kernelspecs";
 import { toArray } from "rxjs/operators";

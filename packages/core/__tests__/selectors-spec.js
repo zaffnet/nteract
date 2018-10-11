@@ -5,8 +5,6 @@ import * as stateModule from "../src/state";
 
 describe("codeMirrorMode", () => {
   test("determines the right mode from the notebook metadata", () => {
-    // TODO: better way to get dummy state?
-    const notebookContentRef = stateModule.createContentRef();
     const mode = selectors.notebook.codeMirrorMode(
       stateModule.makeDocumentRecord({
         notebook: dummyCommutable

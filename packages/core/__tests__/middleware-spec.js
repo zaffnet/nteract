@@ -1,7 +1,7 @@
 import { errorMiddleware } from "../src/middlewares";
 
 const fakeConsole = {
-  error: msg => {}
+  error: () => {}
 };
 
 describe("The error middleware", () => {
@@ -25,10 +25,6 @@ describe("The error middleware", () => {
     };
     const next = action => store.dispatch(action);
     const action = { type: "ERROR", payload: "This is a payload" };
-
-    const fakeConsole = {
-      error: msg => {}
-    };
 
     const notification = store.getState().app.notificationSystem
       .addNotification;

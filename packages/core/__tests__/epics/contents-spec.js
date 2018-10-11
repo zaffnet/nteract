@@ -2,9 +2,8 @@
 jest.mock("file-saver");
 
 import FileSaver from "file-saver";
-import React from "react";
 import { downloadString } from "../../src/epics/contents";
-import { bigDummyJSON, bigDummyCommutable } from "../../src/dummy/dummy-nb";
+import { bigDummyJSON } from "../../src/dummy/dummy-nb";
 
 import { stringifyNotebook } from "@nteract/commutable";
 

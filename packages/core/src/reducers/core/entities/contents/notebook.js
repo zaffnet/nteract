@@ -12,11 +12,9 @@ import type {
   ImmutableCellMap,
   ImmutableNotebook,
   CellID,
-  CellType,
   ImmutableCellOrder,
   ImmutableOutput,
-  ImmutableOutputs,
-  MimeBundle
+  ImmutableOutputs
 } from "@nteract/commutable";
 
 import {
@@ -27,8 +25,7 @@ import {
   removeCell,
   emptyNotebook,
   createImmutableOutput,
-  createImmutableMimeBundle,
-  fromJS
+  createImmutableMimeBundle
 } from "@nteract/commutable";
 
 import { has } from "lodash";
@@ -112,10 +109,7 @@ export function cleanCellTransient(state: NotebookModel, id: string) {
     .setIn(["transient", "cellMap", id], new Immutable.Map());
 }
 
-function setNotebookCheckpoint(
-  state: NotebookModel,
-  action: actionTypes.SaveFulfilled
-) {
+function setNotebookCheckpoint(state: NotebookModel) {
   // Use the current version of the notebook document
   return state.set("savedNotebook", state.get("notebook"));
 }
@@ -678,7 +672,7 @@ function cutCell(state: NotebookModel, action: actionTypes.CutCell) {
     );
 }
 
-function pasteCell(state: NotebookModel, action: actionTypes.PasteCell) {
+function pasteCell(state: NotebookModel) {
   const copiedCell: ImmutableCell | null = state.get("copied");
 
   const pasteAfter = state.cellFocused;
@@ -792,7 +786,7 @@ export function notebook(
     case actionTypes.SEND_EXECUTE_REQUEST:
       return sendExecuteRequest(state, action);
     case actionTypes.SAVE_FULFILLED:
-      return setNotebookCheckpoint(state, action);
+      return setNotebookCheckpoint(state);
     case actionTypes.FOCUS_CELL:
       return focusCell(state, action);
     case actionTypes.CLEAR_OUTPUTS:
@@ -847,7 +841,7 @@ export function notebook(
     case actionTypes.CUT_CELL:
       return cutCell(state, action);
     case actionTypes.PASTE_CELL:
-      return pasteCell(state, action);
+      return pasteCell(state);
     case actionTypes.CHANGE_CELL_TYPE:
       return changeCellType(state, action);
     case actionTypes.TOGGLE_OUTPUT_EXPANSION:

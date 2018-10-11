@@ -100,7 +100,7 @@ export const semioticHierarchicalChart = (
 
   return {
     edges: rootNode,
-    edgeStyle: (d: Object) => ({ fill: "lightgray", stroke: "gray" }),
+    edgeStyle: () => ({ fill: "lightgray", stroke: "gray" }),
     nodeStyle: (d: Object) => {
       return {
         fill: hierarchicalColor(colorHash, d),

@@ -1,26 +1,11 @@
 // @flow
 /* eslint-disable class-methods-use-this */
 import * as React from "react";
-import ReactDOM from "react-dom";
 
-import { of } from "rxjs/observable/of";
-import { fromEvent } from "rxjs/observable/fromEvent";
-import type { Subscription } from "rxjs/Subscription";
-import { switchMap } from "rxjs/operators";
-
-import { Map as ImmutableMap } from "immutable";
-
-import { RichestMime } from "@nteract/display-area";
-
-import { debounce, merge } from "lodash";
+import { debounce } from "lodash";
 
 // $FlowFixMe
 import * as monaco from "monaco-editor";
-
-function normalizeLineEndings(str) {
-  if (!str) return str;
-  return str.replace(/\r\n|\r/g, "\n");
-}
 
 export type MonacoEditorProps = {
   theme: string,
@@ -35,7 +20,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   monacoContainer: ?HTMLElement;
 
   static defaultProps = {
-    onChange: (value: string) => {},
+    onChange: () => {},
     editorFocused: false,
     mode: "text/plain"
   };
@@ -51,7 +36,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
     );
   }
 
-  onDidChangeModelContent(e: any): void {
+  onDidChangeModelContent(): void {
     if (this.monaco && this.props.onChange) {
       this.props.onChange(this.monaco.getValue());
     }
@@ -77,7 +62,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
     );
   }
 
-  componentDidUpdate(prevProps: MonacoEditorProps): void {
+  componentDidUpdate(): void {
     if (!this.monaco) {
       return;
     }

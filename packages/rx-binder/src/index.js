@@ -37,7 +37,8 @@ export function formBinderURL({
 const eventSourceFallback =
   typeof window !== "undefined" && window.EventSource
     ? window.EventSource
-    : function(url: string) {
+    : // eslint-disable-next-line no-unused-vars
+      function(url: string) {
         throw new Error(
           "Event Source not supported on this platform -- please polyfill"
         );

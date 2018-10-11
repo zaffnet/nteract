@@ -148,8 +148,6 @@ const byRef = (state = Immutable.Map(), action) => {
       );
     }
     case actionTypes.SAVE_FULFILLED:
-      let model = state.getIn([action.payload.contentRef, "model"]);
-
       return state
         .updateIn([action.payload.contentRef, "model"], model => {
           // Notebook ends up needing this because we store a last saved version of the notebook

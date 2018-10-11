@@ -1,11 +1,10 @@
 // @flow strict
-/* global MathJax */
 
 import * as React from "react";
 import loadScript from "./load-script";
 
 import MathJaxContext, {
-  type MathJaxObject,
+  type MathJaxObject, // eslint-disable-line no-unused-vars
   type MathJaxContextValue
 } from "./context.js";
 

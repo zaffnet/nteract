@@ -4,16 +4,7 @@ import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { interval } from "rxjs/observable/interval";
 
-import {
-  startWith,
-  tap,
-  filter,
-  map,
-  mergeMap,
-  mapTo,
-  switchMap,
-  catchError
-} from "rxjs/operators";
+import { tap, map, mergeMap, switchMap, catchError } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
 import { sample } from "lodash";
@@ -30,7 +21,7 @@ import type { Store } from "redux";
 
 import { contents } from "rx-jupyter";
 
-import { fromJS, toJS, stringifyNotebook } from "@nteract/commutable";
+import { toJS, stringifyNotebook } from "@nteract/commutable";
 import type { Notebook } from "@nteract/commutable";
 
 export function fetchContentEpic(
@@ -154,8 +145,7 @@ export function autoSaveCurrentContentEpic(
           .filter(
             // Don't bother with non-file and non-notebook types for saving
             // (no dummy or directory)
-            (content, contentRef) =>
-              content.type === "file" || content.type === "notebook"
+            content => content.type === "file" || content.type === "notebook"
           )
           .keys()
       );

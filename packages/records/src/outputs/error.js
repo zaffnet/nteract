@@ -1,7 +1,5 @@
 // @flow strict
 
-import * as common from "../common";
-
 /**
  * Let this declare the way for well typed records for outputs
  *

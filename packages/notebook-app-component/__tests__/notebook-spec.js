@@ -1,12 +1,8 @@
 /* eslint-disable max-len */
 import React from "react";
 import Immutable from "immutable";
-import { Provider } from "react-redux";
-import { shallow, mount } from "enzyme";
+import { shallow } from "enzyme";
 
-import renderer from "react-test-renderer";
-
-import { displayOrder, transforms } from "@nteract/transforms";
 import { NotebookApp } from "../src/notebook-app";
 
 import { dummyStore, dummyCommutable } from "@nteract/core/dummy";

@@ -1,8 +1,6 @@
 /* @flow */
 import * as React from "react";
-import * as Immutable from "immutable";
 import ReactMarkdown from "react-markdown";
-import remark from "remark";
 import math from "remark-math";
 import remark2rehype from "remark-rehype";
 import katex from "rehype-katex";
@@ -28,7 +26,6 @@ import {
   Cell,
   Input,
   Prompt,
-  PromptBuffer,
   Source,
   Outputs,
   Cells

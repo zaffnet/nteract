@@ -11,13 +11,10 @@ import {
   filter
 } from "rxjs/operators";
 import { of } from "rxjs/observable/of";
-import { from } from "rxjs/observable/from";
-import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
 import { extractNewKernel } from "./kernel-lifecycle";
 
-import { kernels, shutdown, sessions } from "rx-jupyter";
-import uuid from "uuid/v4";
+import { kernels, sessions } from "rx-jupyter";
 
 import * as actions from "../actions";
 import * as selectors from "../selectors";
@@ -27,7 +24,7 @@ import { createKernelRef } from "../state/refs";
 
 import type { RemoteKernelProps } from "../state/entities/kernels";
 
-import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
+import { kernelInfoRequest } from "@nteract/messaging";
 
 export const launchWebSocketKernelEpic = (action$: *, store: *) =>
   action$.pipe(

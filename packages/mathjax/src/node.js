@@ -1,16 +1,12 @@
 // @flow
 import * as React from "react";
-import PropTypes from "prop-types";
 
 const types = {
   ascii: "asciimath",
   tex: "tex"
 };
 
-import MathJaxContext, {
-  type MathJaxObject,
-  type MathJaxContextValue
-} from "./context";
+import MathJaxContext, { type MathJaxContextValue } from "./context";
 
 import Provider from "./provider";
 

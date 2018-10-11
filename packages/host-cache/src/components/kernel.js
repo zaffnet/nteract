@@ -74,7 +74,7 @@ class KernelAllocator extends React.Component<
     this.allocate();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     // Determine if we need to re-allocate a kernel
     if (
       prevProps.kernelName !== this.props.kernelName ||

@@ -5,10 +5,8 @@
 
 import * as React from "react";
 import { DropdownMenu, DropdownContent, DropdownTrigger } from "../src";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import toJSON from "enzyme-to-json";
-
-import renderer from "react-test-renderer";
 
 describe("DropdownMenu", () => {
   test("clicking dropdown content triggers the items callback and closes the menu", () => {

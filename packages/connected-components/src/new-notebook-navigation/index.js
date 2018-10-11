@@ -204,8 +204,8 @@ export const PureNewNotebookNavigation = (props: {
 
 const mapStateToProps = (state: AppState) => {
   const availableKernels = state.core.entities.kernelspecs.byRef
-    .flatMap((kss, ksRef) => {
-      return kss.byName.map((ks, name) => {
+    .flatMap(kss => {
+      return kss.byName.map(ks => {
         return { kernelspec: ks };
       });
     })
@@ -229,7 +229,7 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = () => ({});
 
 // $FlowFixMe: react-redux
 export const NewNotebookNavigation = connect(

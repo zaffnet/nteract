@@ -1,18 +1,14 @@
 // @flow
 
-import * as Immutable from "immutable";
 import * as notebook from "./notebook";
 import { createSelector } from "reselect";
-import { makeEmptyModel } from "../state/entities/contents";
 
 import type {
   AppState,
   JupyterHostRecord,
   ContentRef,
-  ContentModel,
   KernelRef,
-  KernelspecsByRefRecord,
-  ContentRecord
+  KernelspecsByRefRecord
 } from "../state";
 
 // Export sub-selectors (those that operate on contents models for instance)

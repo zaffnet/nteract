@@ -1,7 +1,5 @@
 // @flow
 
-type PrimitiveImmutable = string | number | boolean | null;
-
 export type ExecutionCount = number | null;
 
 export type MimeBundle = JSONObject;

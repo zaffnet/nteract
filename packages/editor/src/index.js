@@ -8,8 +8,6 @@ import { fromEvent } from "rxjs/observable/fromEvent";
 import type { Subscription } from "rxjs/Subscription";
 import { switchMap } from "rxjs/operators";
 
-import { Map as ImmutableMap } from "immutable";
-
 import { RichestMime } from "@nteract/display-area";
 
 import excludedIntelliSenseTriggerKeys from "./excludedIntelliSenseKeys";
@@ -17,9 +15,9 @@ import excludedIntelliSenseTriggerKeys from "./excludedIntelliSenseKeys";
 import { codeComplete, pick } from "./jupyter/complete";
 import { tool } from "./jupyter/tooltip";
 
-import { debounce, merge } from "lodash";
+import { debounce } from "lodash";
 
-import type { Options, EditorChange, ScrollInfo, CMI, CMDoc } from "./types";
+import type { Options, EditorChange, CMI, CMDoc } from "./types";
 export type { EditorChange, Options };
 
 import styles from "./styles";
