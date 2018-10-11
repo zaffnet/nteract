@@ -29,6 +29,10 @@ module.exports = {
     {
       name: "Maths",
       content: "packages/mathjax/examples.md"
+    },
+    {
+      name: "Transforms",
+      components: "packages/transforms/src/*.js"
     }
   ],
   // For overriding the components styleguidist uses
