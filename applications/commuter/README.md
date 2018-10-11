@@ -28,8 +28,12 @@ Try **commuter** today and take your notebooks wherever you need them.
 
 ## Installation
 
+You may use whichever package manager (`npm` or `yarn`) best suits your workflow. The `nteract` team internally uses `yarn`.
+
 ```
-yarn install @nteract/commuter -g
+npm install @nteract/commuter -g
+# OR
+yarn global add @nteract/commuter
 ```
 
 ## Usage
