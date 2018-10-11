@@ -9238,10 +9238,10 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
   integrity sha1-izqsWIuKZuSXXjzepn97sylgH6w=
 
-mathjax-electron@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/mathjax-electron/-/mathjax-electron-2.0.1.tgz#da044a0bf9fff470e01c0fb31974bc7986e7323d"
-  integrity sha1-2gRKC/n/9HDgHA+zGXS8eYbnMj0=
+mathjax-electron@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mathjax-electron/-/mathjax-electron-3.0.0.tgz#875b136397e6ca5338d8aab2204080820d567824"
+  integrity sha512-pMm2u+8XM72ieo3Z3y4JrEO7VrpbZUnRQBFfL14l48gkZhBUPivo3nlLzYjoKPDBL1Z9qVcBDu1aD8ZhHYW3iA==
 
 maximatch@^0.1.0:
   version "0.1.0"
