@@ -110,7 +110,7 @@
     "@nteract/examples": "3.0.0",
     "ijavascript": "lgeiger/ijavascript",
     "jmp": "^2.0.0",
-    "mathjax-electron": "^2.0.1",
+    "mathjax-electron": "^3.0.0",
     "nteract-assets": "^4.0.0"
   },
   "devDependencies": {
