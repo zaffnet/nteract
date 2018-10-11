@@ -1,4 +1,3 @@
-const path = require("path");
 const configurator = require("@nteract/webpack-configurator");
 
 const webpack = require("webpack");

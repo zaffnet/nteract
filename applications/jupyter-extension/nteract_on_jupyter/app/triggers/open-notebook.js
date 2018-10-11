@@ -3,11 +3,10 @@
 import type {
   KernelspecRecord,
   KernelspecProps,
-  AppState,
   JupyterHostRecord
 } from "@nteract/core";
 
-import { selectors, actions } from "@nteract/core";
+import { selectors } from "@nteract/core";
 
 // TODO: Make a proper epic
 import { contents, sessions } from "rx-jupyter";
@@ -69,7 +68,7 @@ export function openNotebook(
       // We only expect one response, it's ajax and we want this subscription
       // to finish so we don't have to unsubscribe
       first(),
-      mergeMap(({ response, status }) => {
+      mergeMap(({ response }) => {
         const filepath = response.path;
 
         const sessionPayload = {
@@ -93,8 +92,9 @@ export function openNotebook(
         );
       }),
       first(),
+      // eslint-disable-next-line no-unused-vars
       map(([session, content]) => {
-        const { response, status } = content;
+        const { response } = content;
 
         const url = urljoin(
           // User path

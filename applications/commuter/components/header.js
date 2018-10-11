@@ -1,11 +1,10 @@
 // @flow
 import * as React from "react";
-import Head from "next/head";
 import Link from "next/link";
 import NProgress from "nprogress";
 import Router from "next/router";
 
-Router.onRouteChangeStart = url => {
+Router.onRouteChangeStart = () => {
   NProgress.start();
 };
 Router.onRouteChangeComplete = () => NProgress.done();

@@ -1,7 +1,6 @@
 // @flow
-const express = require("express"),
-  path = require("path"),
-  bodyParser = require("body-parser");
+const express = require("express");
+const bodyParser = require("body-parser");
 
 import type { Middleware, $Request, $Response } from "express";
 

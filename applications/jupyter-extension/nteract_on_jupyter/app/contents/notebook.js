@@ -78,7 +78,7 @@ export default class Notebook extends React.Component<Props, State> {
   }
 
   registerTransform(transform: { MIMETYPE: string }) {
-    this.setState((prevState, props) => {
+    this.setState(prevState => {
       return {
         transforms: { ...prevState.transforms, [transform.MIMETYPE]: transform }
       };
@@ -113,7 +113,7 @@ export default class Notebook extends React.Component<Props, State> {
 
     import(/* webpackChunkName: "vega-transform" */ "@nteract/transform-vega").then(
       module => {
-        this.setState((prevState, props) => {
+        this.setState(prevState => {
           return {
             transforms: {
               ...prevState.transforms,

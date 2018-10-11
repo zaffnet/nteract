@@ -4,8 +4,6 @@ import { createEpicMiddleware, combineEpics } from "redux-observable";
 
 import type { AppState } from "@nteract/core";
 
-import { List as ImmutableList, Map as ImmutableMap } from "immutable";
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 import { reducers, epics as coreEpics } from "@nteract/core";

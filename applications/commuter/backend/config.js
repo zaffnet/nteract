@@ -6,6 +6,7 @@ function deprecate(env: Object, oldVar: string, newVar: string) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function populateLocalStorageOptions(env): Object {
   let baseDirectory = process.env.COMMUTER_LOCAL_STORAGE_BASEDIRECTORY;
 

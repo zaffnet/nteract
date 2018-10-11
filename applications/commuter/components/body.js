@@ -1,8 +1,6 @@
 // @flow
 import * as React from "react";
 
-import type { ChildrenArray } from "react";
-
 type BodyProps = {
   children?: React.Node
 };

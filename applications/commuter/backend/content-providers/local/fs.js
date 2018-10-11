@@ -41,7 +41,8 @@ function createContentResponse(
     path.join(parsedFilePath.dir, parsedFilePath.base)
   );
   // $FlowFixMe: fs-extra
-  const writable = Boolean(fs.constants.W_OK & stat.mode);
+  // TODO: is `writable` meant to be used?
+  // const writable = Boolean(fs.constants.W_OK & stat.mode);
   const created: Date = stat.birthtime;
   const last_modified = stat.mtime;
 

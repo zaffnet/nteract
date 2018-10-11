@@ -1,10 +1,7 @@
 // @flow
 import * as React from "react";
-import Link from "next/link";
 
 import { getJSON } from "../shims/ajax";
-
-import { join as pathJoin } from "path";
 
 import Header from "../components/header";
 import BrowseHeader from "../components/browse-header";
@@ -73,6 +70,8 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
     } else {
       const configScriptElement = document.getElementById("serverConfig");
       if (configScriptElement !== null) {
+        // TODO: is this realy meant to not be used?
+        // eslint-disable-next-line no-unused-vars
         const config = JSON.parse(configScriptElement.textContent);
       }
       this.state = { config };

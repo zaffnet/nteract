@@ -6,13 +6,12 @@ const front = require("../frontend");
 
 const { parse } = require("url");
 
-const express = require("express"),
-  http = require("http"),
-  path = require("path"),
-  morgan = require("morgan"),
-  config = require("./config"),
-  Log = require("log"),
-  log = new Log("info");
+const express = require("express");
+const http = require("http");
+const morgan = require("morgan");
+const config = require("./config");
+const Log = require("log");
+const log = new Log("info");
 
 function createServer() {
   const frontend = front.createNextApp();
@@ -54,7 +53,7 @@ function createServer() {
         renderAccepts.has(accepts[0]) ||
         renderAccepts.has(accepts[1])
       ) {
-        const { pathname, query } = parse(req.url, true);
+        const { query } = parse(req.url, true);
         const viewPath = req.params["0"] || "/";
         const q = Object.assign({}, { viewPath }, query);
         return frontend.app.render(req, res, "/view", q);

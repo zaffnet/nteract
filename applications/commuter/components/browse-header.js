@@ -1,7 +1,5 @@
 // @flow
 import * as React from "react";
-import Head from "next/head";
-import NProgress from "nprogress";
 import Router from "next/router";
 
 import NextLink from "next/link";
@@ -36,20 +34,17 @@ class BrowseHeader extends React.Component<*> {
   };
 
   render() {
-    const activeItem = "browse";
     const { path, basepath } = this.props;
     let paths = trim(path, "/").split("/");
     // Empty path to start off
     if (paths.length === 1 && paths[0] === "") {
       paths = [];
     }
-    let breadCrumbs = [];
 
     // TODO: Ensure this works under an app subpath (which is not implemented yet)
     const filePath = basepath.replace(/view\/?/, "files/") + path;
 
-    const serverSide = typeof document === "undefined";
-
+    // const serverSide = typeof document === "undefined";
     const viewingNotebook = filePath.endsWith(".ipynb");
 
     return (

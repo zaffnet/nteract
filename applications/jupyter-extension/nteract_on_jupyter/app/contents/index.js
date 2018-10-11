@@ -9,25 +9,14 @@ import * as React from "react";
 
 import { selectors } from "@nteract/core";
 
-import type {
-  KernelspecRecord,
-  KernelspecProps,
-  AppState,
-  JupyterHostRecord,
-  ContentRef
-} from "@nteract/core";
-
-import css from "styled-jsx/css";
+import type { AppState, ContentRef } from "@nteract/core";
 
 const urljoin = require("url-join");
 
 import { default as Directory } from "./directory";
 import { default as File } from "./file";
-import { default as Notebook } from "./notebook";
 
 import { ThemedLogo } from "../components/themed-logo";
-
-import { WideLogo } from "@nteract/logos";
 
 import { Nav, NavSection } from "../components/nav";
 
