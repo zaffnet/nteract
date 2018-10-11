@@ -7,6 +7,10 @@ in `@nteract/transforms-full`.
 
 ## Installation
 
-```
-yarn install @nteract/transform-model-debug
+You may use whichever package manager (`npm` or `yarn`) best suits your workflow. The `nteract` team internally uses `yarn`.
+
+```bash
+npm install @nteract/transform-model-debug
+# OR
+yarn add @nteract/transform-model-debug
 ```

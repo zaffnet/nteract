@@ -19,8 +19,12 @@ Credits to [Tom MacWright](http://www.macwright.org/2015/05/18/practical-undo.ht
 
 ## Installation
 
-```
-yarn install --save @nteract/commutable
+You may use whichever package manager (`npm` or `yarn`) best suits your workflow. The `nteract` team internally uses `yarn`.
+
+```bash
+npm install --save @nteract/commutable
+# OR
+yarn add @nteract/commutable
 ```
 
 ## Docs

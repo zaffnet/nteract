@@ -46,7 +46,13 @@ That's it. Functions for four channels; *simplicity in action*.
 
 Prerequisite: [Node.js and npm](https://docs.npmjs.com/getting-started/installing-node)
 
-`yarn install enchannel-zmq-backend`
+You may use whichever package manager (`npm` or `yarn`) best suits your workflow. The `nteract` team internally uses `yarn`.
+
+```bash
+npm install enchannel-zmq-backend
+# OR
+yarn add enchannel-zmq-backend
+```
 
 ## Usage
 
