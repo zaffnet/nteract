@@ -1,12 +1,5 @@
 import * as React from "react";
 import { SVGWrapper } from "@nteract/octicons";
-import {
-  XYFrame,
-  OrdinalFrame,
-  ResponsiveOrdinalFrame,
-  ResponsiveXYFrame,
-  ResponsiveNetworkFrame
-} from "semiotic";
 
 export const BoxplotIcon = (props: any) => (
   <SVGWrapper width={16} height={16} viewBox="0 0 16 16" outerProps={props}>

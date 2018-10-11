@@ -108,7 +108,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
   };
 
   render(): ?React$Element<any> {
-    const { options, data, schema } = this.props;
+    const { options, data } = this.props;
 
     const { primaryKey, metrics, chart, colors } = options;
     const { dim1 } = chart;

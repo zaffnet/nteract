@@ -19,7 +19,6 @@ export const semioticLineChart = (
     selectedMetrics,
     lineType,
     metrics,
-    dimensions,
     primaryKey,
     colors
   } = options;

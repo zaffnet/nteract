@@ -12,14 +12,8 @@ export const semioticBarChart = (
   schema: Object,
   options: Object
 ) => {
-  const {
-    selectedMetrics,
-    selectedDimensions,
-    chart,
-    colors,
-    setColor
-  } = options;
-  const { dim1, dim2, metric1, metric3 } = chart;
+  const { selectedDimensions, chart, colors, setColor } = options;
+  const { dim1, metric1, metric3 } = chart;
 
   const oAccessor =
     selectedDimensions.length === 0

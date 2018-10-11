@@ -20,4 +20,6 @@ test("VDOM Transform is cool", () => {
       }}
     />
   );
+
+  expect(component.toJSON()).toMatchSnapshot();
 });
