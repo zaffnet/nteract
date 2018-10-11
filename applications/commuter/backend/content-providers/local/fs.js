@@ -41,8 +41,7 @@ function createContentResponse(
     path.join(parsedFilePath.dir, parsedFilePath.base)
   );
   // $FlowFixMe: fs-extra
-  // TODO: is `writable` meant to be used?
-  // const writable = Boolean(fs.constants.W_OK & stat.mode);
+  const writable = Boolean(fs.constants.W_OK & stat.mode);
   const created: Date = stat.birthtime;
   const last_modified = stat.mtime;
 
@@ -52,7 +51,7 @@ function createContentResponse(
       mimetype: null,
       format: "json",
       content: null,
-      writable: true,
+      writable,
       name: name === "." ? "" : name,
       path: filePath === "." ? "" : filePath,
       created,
@@ -66,7 +65,7 @@ function createContentResponse(
         mimetype: null,
         format: "json",
         content: null,
-        writable: true,
+        writable,
         name,
         path: filePath,
         created,
@@ -80,7 +79,7 @@ function createContentResponse(
       mimetype: null,
       format: "text",
       content: null,
-      writable: true,
+      writable,
       name,
       path: filePath,
       created,
