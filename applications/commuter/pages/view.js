@@ -70,9 +70,7 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
     } else {
       const configScriptElement = document.getElementById("serverConfig");
       if (configScriptElement !== null) {
-        // TODO: is this realy meant to not be used?
-        // eslint-disable-next-line no-unused-vars
-        const config = JSON.parse(configScriptElement.textContent);
+        config = JSON.parse(configScriptElement.textContent);
       }
       this.state = { config };
     }
