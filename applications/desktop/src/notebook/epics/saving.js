@@ -10,7 +10,7 @@ import { actionTypes, selectors, actions } from "@nteract/core";
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 
 import { of } from "rxjs/observable/of";
-import { tap, mergeMap, catchError, map } from "rxjs/operators";
+import { mergeMap, catchError, map } from "rxjs/operators";
 
 import type { Store } from "redux";
 

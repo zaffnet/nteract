@@ -5,15 +5,13 @@ import { selectors, actions, actionTypes } from "@nteract/core";
 
 const path = require("path");
 
-import type { Observer } from "rxjs/Observer";
 import type { ActionsObservable } from "redux-observable";
 
-import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 
 import { empty } from "rxjs/observable/empty";
 
-import { mergeMap, map, catchError } from "rxjs/operators";
+import { mergeMap, catchError } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -178,7 +176,7 @@ export const publishEpic = (action$: ActionsObservable<*>, store: *) => {
         catchError(err => {
           // Turn the response headers into an object
           var arr = err.xhr.getAllResponseHeaders().split("\r\n");
-          var headers = arr.reduce(function(acc, current, i) {
+          var headers = arr.reduce(function(acc, current) {
             var parts = current.split(": ");
             acc[parts[0]] = parts[1];
             return acc;

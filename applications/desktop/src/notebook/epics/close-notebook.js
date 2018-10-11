@@ -7,9 +7,7 @@ import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 
 import {
-  makeDesktopNotebookRecord,
   DESKTOP_NOTEBOOK_CLOSING_NOT_STARTED,
-  DESKTOP_NOTEBOOK_CLOSING_STARTED,
   DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
 } from "../state.js";
 
@@ -30,8 +28,6 @@ import {
   concatMap,
   exhaustMap,
   filter,
-  map,
-  switchMap,
   take,
   tap,
   timeout
@@ -39,7 +35,7 @@ import {
 
 import { ActionsObservable, ofType } from "redux-observable";
 
-import { remote, ipcRenderer as ipc } from "electron";
+import { ipcRenderer as ipc } from "electron";
 
 export const closeNotebookEpic = (action$: ActionsObservable<*>, store: *) =>
   action$.pipe(
@@ -110,7 +106,7 @@ export const closeNotebookEpic = (action$: ActionsObservable<*>, store: *) =>
             console.log(JSON.stringify(r)); // To see these in terminal, set ELECTRON_ENABLE_LOGGING=1. Could also start more explicitly routing them to main process stdout.
           }
         }),
-        concatMap(_ =>
+        concatMap(() =>
           // We don't need the results. Further, allowing the Array<Action> to flow through error middleware crashed
           // node.js for me, with "Error: async hook stack has become corrupted (actual: 1528, expected: 0)".
           // Seemed related to the error middleware not expecting an Array (returning result[0] avoids the crash as

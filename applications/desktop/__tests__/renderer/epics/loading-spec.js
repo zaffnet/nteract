@@ -2,13 +2,10 @@ import { ActionsObservable } from "redux-observable";
 
 import { monocellNotebook, toJS } from "@nteract/commutable";
 
-import { dummyCommutable, dummy } from "@nteract/core/dummy";
+import { dummyCommutable } from "@nteract/core/dummy";
 
 import {
-  load,
-  newNotebook,
   extractNewKernel,
-  convertRawNotebook,
   fetchContentEpic,
   newNotebookEpic
 } from "../../../src/notebook/epics/loading";

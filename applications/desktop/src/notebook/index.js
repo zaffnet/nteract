@@ -4,7 +4,6 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
 import { Provider } from "react-redux";
-import type { Store } from "redux";
 
 // Load the nteract fonts
 require("./fonts");
@@ -29,7 +28,7 @@ import {
   makeEntitiesRecord
 } from "@nteract/core";
 
-import type { AppState, ContentRef, ContentRecord } from "@nteract/core";
+import type { ContentRef, ContentRecord } from "@nteract/core";
 
 import NotebookApp from "@nteract/notebook-app-component";
 

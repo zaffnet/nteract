@@ -1,18 +1,13 @@
 jest.mock("fs");
 import { ActionsObservable } from "redux-observable";
 
-import {
-  actions,
-  createContentRef,
-  makeNotebookContentRecord
-} from "@nteract/core";
+import { actions, makeNotebookContentRecord } from "@nteract/core";
 
 import * as Immutable from "immutable";
 
 import { saveEpic, saveAsEpic } from "../../../src/notebook/epics/saving";
 
-import { of } from "rxjs/observable/of";
-import { catchError, toArray } from "rxjs/operators";
+import { toArray } from "rxjs/operators";
 
 describe("saveEpic", () => {
   test("saves the file using the notebook in the state tree", async function() {

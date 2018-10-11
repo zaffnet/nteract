@@ -8,10 +8,6 @@ import epics from "./epics/index.js";
 
 const rootEpic = combineEpics(...epics);
 
-type Action = {
-  type: string
-};
-
 const middlewares = [
   createEpicMiddleware(rootEpic),
   coreMiddlewares.errorMiddleware

@@ -1,32 +1,24 @@
 /* @flow strict */
-import { unlinkObservable } from "fs-observable";
 
 import type { ChildProcess } from "child_process";
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
-import { from } from "rxjs/observable/from";
 import { empty } from "rxjs/observable/empty";
-import { fromEvent } from "rxjs/observable/fromEvent";
 import { merge } from "rxjs/observable/merge";
 
 import { sample } from "lodash";
 
-import * as fs from "fs";
-
 import {
   filter,
   map,
-  mapTo,
   tap,
   mergeMap,
   catchError,
-  pluck,
   switchMap,
   concatMap,
   timeout,
-  first,
-  concat
+  first
 } from "rxjs/operators";
 
 import { launchSpec } from "spawnteract";
@@ -44,16 +36,10 @@ import type {
   KernelspecInfo,
   KernelRef,
   ContentRef,
-  LocalKernelProps,
-  LocalKernelRecord
+  LocalKernelProps
 } from "@nteract/core";
 
-import {
-  createMessage,
-  childOf,
-  ofMessageType,
-  shutdownRequest
-} from "@nteract/messaging";
+import { childOf, ofMessageType, shutdownRequest } from "@nteract/messaging";
 
 /**
  * Instantiate a connection to a new kernel.
@@ -411,7 +397,7 @@ export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
     })
   );
 
-export function watchSpawn(action$: *, store: *) {
+export function watchSpawn(action$: *) {
   return action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) => {

@@ -9,6 +9,7 @@ import { writeFileObservable, createSymlinkObservable } from "fs-observable";
 
 // Overwrite the type for `process` to match Electron's process
 // https://electronjs.org/docs/api/process
+// eslint-disable-next-line no-unused-vars
 declare var ElectronProcess: typeof process & {
   resourcesPath: string
 };

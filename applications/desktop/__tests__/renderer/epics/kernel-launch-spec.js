@@ -3,15 +3,12 @@ import { ActionsObservable } from "redux-observable";
 import { actions, actionTypes, makeStateRecord } from "@nteract/core";
 
 import {
-  acquireKernelInfo,
-  watchExecutionStateEpic,
   launchKernelObservable,
   launchKernelEpic,
   launchKernelByNameEpic
 } from "../../../src/notebook/epics/zeromq-kernels";
 
-import { of } from "rxjs/observable/of";
-import { toArray, catchError } from "rxjs/operators";
+import { toArray } from "rxjs/operators";
 
 describe("launchKernelObservable", () => {
   test("returns an observable", () => {
@@ -22,7 +19,6 @@ describe("launchKernelObservable", () => {
 
 describe("launchKernelEpic", () => {
   test("throws an error if given a bad action", async function() {
-    const actionBuffer = [];
     const action$ = ActionsObservable.of(
       {
         type: actionTypes.LAUNCH_KERNEL,
@@ -60,7 +56,6 @@ describe("launchKernelEpic", () => {
   });
 
   test("calls launchKernelObservable if given the correct action", async function() {
-    const actionBuffer = [];
     const action$ = ActionsObservable.of(
       actions.launchKernel({
         kernelSpec: { spec: "hokey", name: "woohoo" },

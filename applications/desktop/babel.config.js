@@ -1,5 +1,5 @@
 module.exports = function(api) {
-  const env = api.env();
+  const env = api.env(); // eslint-disable-line no-unused-vars
 
   const config = {
     presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-flow"],
