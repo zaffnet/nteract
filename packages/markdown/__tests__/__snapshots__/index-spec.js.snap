@@ -54,7 +54,7 @@ height between texels.
     sourcePos={false}
     transformLinkUri={[Function]}
   >
-    <div
+    <Root
       key="root-1-1"
     >
       <Heading
@@ -62,27 +62,65 @@ height between texels.
         level={1}
       >
         <h1>
-          Watching Paint Dry
+          <TextRenderer
+            key="text-2-3"
+            nodeKey="text-2-3"
+            value="Watching Paint Dry"
+          >
+            Watching Paint Dry
+          </TextRenderer>
         </h1>
       </Heading>
       <p
         key="paragraph-4-1"
       >
-        The composited 
+        <TextRenderer
+          key="text-4-1"
+          nodeKey="text-4-1"
+          value="The composited "
+        >
+          The composited 
+        </TextRenderer>
         <em
           key="emphasis-4-16"
         >
-          color
+          <TextRenderer
+            key="text-4-17"
+            nodeKey="text-4-17"
+            value="color"
+          >
+            color
+          </TextRenderer>
         </em>
-         of the 
+        <TextRenderer
+          key="text-4-23"
+          nodeKey="text-4-23"
+          value=" of the "
+        >
+           of the 
+        </TextRenderer>
         <strong
           key="strong-4-31"
         >
-          paint
+          <TextRenderer
+            key="text-4-33"
+            nodeKey="text-4-33"
+            value="paint"
+          >
+            paint
+          </TextRenderer>
         </strong>
-         must not change during drying. The
+        <TextRenderer
+          key="text-4-40"
+          nodeKey="text-4-40"
+          value=" must not change during drying. The
+optical blending function is used with this constraint to compensate for the new
+dry layer "
+        >
+           must not change during drying. The
 optical blending function is used with this constraint to compensate for the new
 dry layer 
+        </TextRenderer>
         <inlineMath
           data={
             Object {
@@ -123,7 +161,13 @@ dry layer
             </Provider>
           </MathJaxNode>
         </inlineMath>
-        , when some volume 
+        <TextRenderer
+          key="text-6-26"
+          nodeKey="text-6-26"
+          value=", when some volume "
+        >
+          , when some volume 
+        </TextRenderer>
         <inlineMath
           data={
             Object {
@@ -164,8 +208,15 @@ dry layer
             </Provider>
           </MathJaxNode>
         </inlineMath>
-         is removed from
+        <TextRenderer
+          key="text-6-60"
+          nodeKey="text-6-60"
+          value=" is removed from
+the wet layer."
+        >
+           is removed from
 the wet layer.
+        </TextRenderer>
       </p>
       <math
         data={
@@ -210,11 +261,19 @@ the wet layer.
       <p
         key="paragraph-13-1"
       >
-        The dry layer of the canvas uses a relative height field to allow for unlimited
+        <TextRenderer
+          key="text-13-1"
+          nodeKey="text-13-1"
+          value="The dry layer of the canvas uses a relative height field to allow for unlimited
+volume of paint to be added, with a constraint only on the relative change in
+height between texels."
+        >
+          The dry layer of the canvas uses a relative height field to allow for unlimited
 volume of paint to be added, with a constraint only on the relative change in
 height between texels.
+        </TextRenderer>
       </p>
-    </div>
+    </Root>
   </ReactMarkdown>
 </MarkdownRender>
 `;
