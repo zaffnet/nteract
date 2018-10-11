@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 require("./fonts");
 
 import MathJax from "@nteract/mathjax";
+import { mathJaxPath } from "mathjax-electron";
 
 import NotificationSystem from "react-notification-system";
 
@@ -69,15 +70,6 @@ const store = configureStore({
 
 // Register for debugging
 window.store = store;
-
-const mathJaxPath = path.join(
-  "..",
-  "node_modules",
-  "mathjax-electron",
-  "resources",
-  "MathJax",
-  "MathJax.js?config=electron"
-);
 
 initNativeHandlers(contentRef, store);
 initMenuHandlers(contentRef, store);
