@@ -11,7 +11,7 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      authors: ["Elijah Meeks", "Kyle Kelley"],
+      authors: [{ name: "Elijah Meeks" }, { name: "Kyle Kelley" }],
       description: "A cool notebook for kids and animals!",
       title: "Notebook with Header",
       tags: ["amazing", "kids", "animals"]
@@ -41,7 +41,7 @@ class Editor extends React.Component {
 <HeaderEditor
   editable={false}
   headerData={{
-    authors: ["Elijah Meeks", "Kyle Kelley"],
+    authors: [{ name: "Elijah Meeks" }, { name: "Kyle Kelley" }],
     description: "A cool notebook for kids and animals!",
     title: "Notebook with Header",
     tags: ["amazing", "kids", "animals"]
