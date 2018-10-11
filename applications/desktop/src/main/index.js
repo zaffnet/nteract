@@ -99,6 +99,14 @@ ipc.on("open-notebook", (event, filename) => {
   launch(resolve(filename));
 });
 
+ipc.on("reload", (event) => { // Based on https://github.com/electron/electron/blob/b50f86ef43b17f90c295349d8ca93751ad9045a6/lib/browser/rpc-server.js#L411-L418
+  const window = event.sender.getOwnerBrowserWindow();
+  if (window) {
+    window.reload();
+  }
+  event.returnValue = null
+});
+
 ipc.on("show-message-box", (event, arg) => {
   const response = dialog.showMessageBox(arg);
   event.sender.send("show-message-box-response", response);

@@ -129,8 +129,14 @@ export const closeNotebookEpic = (action$: ActionsObservable<*>, store: *) =>
       );
 
       const initiateClose = Observable.create(observer => {
-        console.log("Kernel shutdown complete; closing notebook window...");
-        window.close();
+        if (action.payload.reloading) {
+          console.log("Kernel shutdown complete; reloading notebook window...");
+          ipc.send("reload");
+        } else {
+          console.log("Kernel shutdown complete; closing notebook window...");
+          window.close();
+        }
+
         observer.complete();
       });
 
