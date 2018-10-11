@@ -66,7 +66,9 @@ const HokeyTable = props => (
       <tbody>
         {props.rows.map((row, idx) => (
           <tr key={idx}>
-            {row.map((item, colIdx) => <td key={colIdx}>{item}</td>)}
+            {row.map((item, colIdx) => (
+              <td key={colIdx}>{item}</td>
+            ))}
           </tr>
         ))}
       </tbody>
@@ -122,13 +124,17 @@ const DSVTable = (props: { data: Array<Object> }) => {
       <table>
         <thead>
           <tr>
-            {columnNames.map((column, idx) => <th key={idx}>{column}</th>)}
+            {columnNames.map((column, idx) => (
+              <th key={idx}>{column}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {rows.map((row, idx) => (
             <tr key={idx}>
-              {columnNames.map((k, colIdx) => <td key={colIdx}>{row[k]}</td>)}
+              {columnNames.map((k, colIdx) => (
+                <td key={colIdx}>{row[k]}</td>
+              ))}
             </tr>
           ))}
         </tbody>
@@ -142,7 +148,11 @@ const UnsupportedResult = props => (
     <h1>UNSUPPORTED ZEPPELIN RESULT</h1>
     <p>
       Post an issue to{" "}
-      <a href="https://github.com/nteract/commuter/issues/new" target="_blank">
+      <a
+        href="https://github.com/nteract/commuter/issues/new"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
         commuter
       </a>{" "}
       to let us know about it
@@ -284,7 +294,9 @@ const ZeppelinView = (props: ZeppelinViewProps) => {
   return (
     <div style={{ paddingLeft: "10px" }}>
       <h1>{props.notebook.name}</h1>
-      {props.notebook.paragraphs.map(p => <Paragraph key={p.id} {...p} />)}
+      {props.notebook.paragraphs.map(p => (
+        <Paragraph key={p.id} {...p} />
+      ))}
     </div>
   );
 };
