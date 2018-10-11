@@ -9,7 +9,8 @@ export type MathJaxObject = {
       StartupHook: (str: string, cb: () => void) => void,
       MessageHook: (string, cb: (msg: string) => void) => void
     },
-    Reprocess: (HTMLElement, cb: *) => *,
+    Reprocess: (HTMLElement, cb: ?() => void) => *,
+    Typeset: (HTMLElement, cb: ?() => void) => *,
     Queue: (*) => void,
     processSectionDelay: number
   }

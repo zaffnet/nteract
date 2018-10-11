@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const LaTeXDisplay = (props: Props) => {
-  return <MathJax.Node>{props.data}</MathJax.Node>;
+  return <MathJax.Text>{props.data}</MathJax.Text>;
 };
 
 LaTeXDisplay.MIMETYPE = "text/latex";
