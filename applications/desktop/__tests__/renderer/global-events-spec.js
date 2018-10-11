@@ -1,5 +1,7 @@
 /* @flow */
 
+import { ipcRenderer as ipc } from "../../__mocks__/electron";
+
 import * as globalEvents from "../../src/notebook/global-events";
 import * as Immutable from "immutable";
 
@@ -44,7 +46,7 @@ const createStore = (
   })
 });
 
-describe("beforeUnload", () => {
+describe("onBeforeUnloadOrReload", () => {
   test("if we are not yet closing the notebook, should initiate closeNotebook and cancel close event", done => {
     const contentRef = createContentRef();
     const store = createStore(
@@ -59,13 +61,13 @@ describe("beforeUnload", () => {
     );
 
     store.dispatch = action => {
-      expect(action).toEqual(actions.closeNotebook({ contentRef: contentRef }));
+      expect(action).toEqual(actions.closeNotebook({ contentRef: contentRef, reloading: false }));
       done();
     };
 
     const event = {};
 
-    const result = globalEvents.beforeUnload(contentRef, store, event);
+    const result = globalEvents.onBeforeUnloadOrReload(contentRef, store, false, event);
     expect(result).toBe(false);
   });
 
@@ -82,7 +84,7 @@ describe("beforeUnload", () => {
       DESKTOP_NOTEBOOK_CLOSING_STARTED
     );
     const event = {};
-    const result = globalEvents.beforeUnload(contentRef, store, event);
+    const result = globalEvents.onBeforeUnloadOrReload(contentRef, store, event, false);
     expect(result).toBe(false);
   });
 
@@ -99,7 +101,7 @@ describe("beforeUnload", () => {
       DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
     );
     const event = {};
-    const result = globalEvents.beforeUnload(contentRef, store, event);
+    const result = globalEvents.onBeforeUnloadOrReload(contentRef, store, event, false);
     expect(result).toBeUndefined();
   });
 });
@@ -110,7 +112,18 @@ describe("initGlobalHandlers", () => {
     const store = createStore(contentRef);
 
     globalEvents.initGlobalHandlers(contentRef, store);
-    expect(global.window.onunload).toBeDefined();
+
     expect(global.window.onbeforeunload).toBeDefined();
+  });
+
+  test("wires a listener for a reload msg from main process", (done) => {
+    const contentRef = createContentRef();
+    const store = createStore(contentRef);
+
+    ipc.on = (event, callback) => {
+      if (event == "reload") done();
+    };
+
+    globalEvents.initGlobalHandlers(contentRef, store);
   });
 });

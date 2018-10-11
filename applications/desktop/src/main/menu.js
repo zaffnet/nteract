@@ -1,5 +1,5 @@
 /* @flow strict */
-import { dialog, app, shell, Menu, BrowserWindow } from "electron";
+import { dialog, app, shell, Menu, BrowserWindow, ipcRenderer as ipc } from "electron";
 import * as path from "path";
 import { sortBy } from "lodash";
 import { launch, launchNewNotebook } from "./launch";
@@ -461,11 +461,7 @@ export function loadFullMenu(store: * = global.store) {
         label: "Reload",
         enabled: BrowserWindow.getAllWindows().length > 0,
         accelerator: "CmdOrCtrl+R",
-        click: (item, focusedWindow) => {
-          if (focusedWindow) {
-            focusedWindow.reload();
-          }
-        }
+        click: createSender("reload")
       },
       {
         label: "Toggle Full Screen",

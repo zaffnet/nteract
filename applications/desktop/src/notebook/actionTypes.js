@@ -8,7 +8,8 @@ export const CLOSE_NOTEBOOK = "DESKTOP/CLOSE_NOTEBOOK";
 export type CloseNotebook = {
   type: "DESKTOP/CLOSE_NOTEBOOK",
   payload: {
-    contentRef: ContentRef
+    contentRef: ContentRef,
+    reloading: boolean
   }
 };
 
