@@ -131,11 +131,17 @@ to do this.
 
 In some cases you'll want to modify an individual base package (i.e. commutable
 or transforms) and not rebuild all of the other packages. To target a build of a
-specific package, use this command, replacing `packageName` with the package you
+specific package, use this command, replacing `packageName` with the fully qualified name of the package you
 want to hack on:
 
 ```
-$(yarn bin)/lerna run build --scope packageName
+yarn build:only packageName
+```
+
+For example, to hack on the `transforms` package, use
+
+```
+yarn build:only @nteract/transforms
 ```
 
 ### Hacking on the Desktop application
