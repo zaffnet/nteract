@@ -2,7 +2,6 @@
 const PREFIX = "PLAY";
 const FULFILLED = "FULFILLED";
 const FAILED = "FAILED";
-const CANCELED = "CANCELED";
 
 // UI-Related Action Types.
 export const SET_CURRENT_KERNEL_NAME = `${PREFIX}/SET_CURRENT_KERNEL_NAME`;

@@ -1,6 +1,6 @@
 // @flow
 import { applyMiddleware, createStore } from "redux";
-import { combineReducers, compose } from "redux";
+import { compose } from "redux";
 import { createEpicMiddleware } from "redux-observable";
 import { middlewares as coreMiddlewares } from "@nteract/core";
 
