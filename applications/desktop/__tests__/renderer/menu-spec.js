@@ -1,7 +1,7 @@
 import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
 import * as menu from "../../src/notebook/menu";
-import { selectors, actions, actionTypes } from "@nteract/core";
+import { actions, actionTypes } from "@nteract/core";
 
 import * as Immutable from "immutable";
 
@@ -719,7 +719,6 @@ describe("exportPDF", () => {
 
 describe("storeToPDF", () => {
   test("triggers notification when not saved", () => {
-    const config = { noFilename: true };
     const props = {
       contentRef: "123"
     };

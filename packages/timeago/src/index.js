@@ -72,7 +72,7 @@ export const YEAR = DAY * 365;
 
 export default class TimeAgo extends React.Component<Props, void> {
   static displayName = "TimeAgo";
-  static defaultProps = {
+  static defaultProps: DefaultProps = {
     live: true,
     component: "time",
     minPeriod: 0,

@@ -6,27 +6,14 @@ import * as fs from "fs";
 import { of } from "rxjs/observable/of";
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { empty } from "rxjs/observable/empty";
-import {
-  map,
-  tap,
-  mergeMap,
-  switchMap,
-  catchError,
-  timeout
-} from "rxjs/operators";
+import { map, tap, switchMap, catchError, timeout } from "rxjs/operators";
 
 import { ActionsObservable, ofType } from "redux-observable";
 
 import { readFileObservable, statObservable } from "fs-observable";
 
-import * as Immutable from "immutable";
-import {
-  monocellNotebook,
-  fromJS,
-  parseNotebook,
-  toJS
-} from "@nteract/commutable";
-import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
+import { monocellNotebook, toJS } from "@nteract/commutable";
+import type { ImmutableNotebook } from "@nteract/commutable";
 
 import { actionTypes, actions, selectors } from "@nteract/core";
 
@@ -61,7 +48,8 @@ function createContentsResponse(
   const parsedFilePath = path.parse(filePath);
 
   const name = parsedFilePath.base;
-  const writable = Boolean(fs.constants.W_OK & stat.mode);
+  // TODO: Check if this is unnecessary or should be used
+  // const writable = Boolean(fs.constants.W_OK & stat.mode);
   const created = stat.birthtime;
   const last_modified = stat.mtime;
 
@@ -205,8 +193,7 @@ export const newNotebookEpic = (action$: ActionsObservable<*>) =>
     map((action: actionTypes.NewNotebook) => {
       const {
         payload: {
-          kernelSpec: { name, spec },
-          kernelRef
+          kernelSpec: { name, spec }
         }
       } = action;
 

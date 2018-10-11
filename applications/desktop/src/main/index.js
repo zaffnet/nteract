@@ -229,7 +229,7 @@ windowAllClosed.pipe(skipUntil(appAndKernelSpecsReady)).subscribe(() => {
   }
 });
 
-ipc.on("close-notebook-canceled", (event, k) => {
+ipc.on("close-notebook-canceled", () => {
   // User canceled, so interpret that as cancelling any in-flight app-wide quit
   store.dispatch(setQuittingState(QUITTING_STATE_NOT_STARTED));
 });

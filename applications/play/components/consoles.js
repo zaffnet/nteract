@@ -5,7 +5,12 @@ class BinderLogo extends React.Component<*, *> {
   render() {
     return (
       <React.Fragment>
-        <a className="anchor" href="https://mybinder.org" target="_blank">
+        <a
+          className="anchor"
+          href="https://mybinder.org"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           <img
             src="https://mybinder.org/static/logo.svg?v=f9f0d927b67cc9dc99d788c822ca21c0"
             alt="binder logo"

@@ -3,8 +3,6 @@
 // Since this has to be loaded at the stage of use by webpack and won't be
 // transpiled, all flow in this file uses the "comment style".
 
-const path = require("path");
-
 /*::
 opaque type Aliases = {[string]: string }
 */

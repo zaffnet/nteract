@@ -1,6 +1,5 @@
 /* @flow */
 import { remote } from "electron";
-import { is } from "immutable";
 
 import path from "path";
 
@@ -18,7 +17,6 @@ import {
   distinctUntilChanged,
   debounceTime,
   switchMap,
-  filter,
   mergeMap,
   share
 } from "rxjs/operators";
@@ -91,7 +89,7 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
     mergeMap(content => {
       if (content && content.type === "notebook") {
         // FIXME COME BACK TO HERE, we need to strip off the kernelRef
-        const kernelRef = content.model.kernelRef;
+        // const kernelRef = content.model.kernelRef;
         return of(content.model.kernelRef);
       } else {
         return empty();

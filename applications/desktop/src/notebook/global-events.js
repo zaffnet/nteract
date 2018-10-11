@@ -2,12 +2,9 @@
 
 import type { Store } from "redux";
 
-import { is } from "immutable";
 import { selectors } from "@nteract/core";
 
-import type { AppState, KernelRef, ContentRef } from "@nteract/core";
-
-import { ipcMain as ipc } from "electron";
+import type { ContentRef } from "@nteract/core";
 
 import * as actions from "./actions";
 
@@ -17,12 +14,9 @@ import {
   DESKTOP_NOTEBOOK_CLOSING_READY_TO_CLOSE
 } from "./state.js";
 
-const urljoin = require("url-join");
-
 export function beforeUnload(
   contentRef: ContentRef,
-  store: Store<DesktopNotebookAppState, Action>,
-  e: *
+  store: Store<DesktopNotebookAppState, Action>
 ) {
   const state = store.getState();
   const model = selectors.model(state, { contentRef });

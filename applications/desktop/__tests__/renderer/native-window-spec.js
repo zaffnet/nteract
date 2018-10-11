@@ -1,7 +1,6 @@
 import Immutable from "immutable";
 import { remote } from "electron";
 
-import { from } from "rxjs/observable/from";
 import { of } from "rxjs/observable/of";
 
 import * as nativeWindow from "../../src/notebook/native-window";
@@ -52,10 +51,6 @@ describe("createTitleFeed", () => {
     const kernelRef = stateModule.createKernelRef();
     const contentRef = stateModule.createContentRef();
 
-    const notebook = new Immutable.Map().setIn(
-      ["metadata", "kernelspec", "display_name"],
-      "python3000"
-    );
     const state = {
       core: stateModule.makeStateRecord({
         kernelRef,

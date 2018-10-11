@@ -1,7 +1,12 @@
 {
-  "extends": ["prettier", "prettier/flowtype", "plugin:jsx-a11y/recommended"],
+  "extends": [
+    "prettier",
+    "prettier/flowtype",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
   "parser": "babel-eslint",
-  "plugins": ["prettier", "flowtype", "jsx-a11y"],
+  "plugins": ["prettier", "flowtype", "react", "jsx-a11y"],
   "env": {
     "browser": true,
     "node": true,
@@ -10,6 +15,17 @@
   "rules": {
     "jsx-a11y/no-onchange": 0,
     "jsx-a11y/anchor-has-content": 0,
-    "jsx-a11y/heading-has-content": 0
+    "jsx-a11y/heading-has-content": 0,
+    "react/prop-types": 0,
+    "react/display-name": 0,
+    "react/no-unescaped-entities": 0,
+    "react/no-deprecated": 1,
+    "no-unused-vars": 1
+  },
+  "settings": {
+    "react": {
+      "version": "16.3.2",
+      "flowVersion": "0.81"
+    }
   }
 }

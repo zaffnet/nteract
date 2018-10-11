@@ -110,24 +110,26 @@ export const semioticScatterplot = (
         >
           ID, {metric1}, {metric2}
         </h3>
-        {d.binItems.map(d => (
-          <p
-            style={{
-              fontSize: "12px",
-              textTransform: "uppercase",
-              margin: "5px"
-            }}
-          >
-            {dimensions
-              .map(
-                dim =>
-                  (d[dim.name].toString && d[dim.name].toString()) ||
-                  d[dim.name]
-              )
-              .join(",")}
-            , {d[metric1]}, {d[metric2]}
-          </p>
-        ))}
+        {d.binItems.map(d => {
+          const id = dimensions
+            .map(
+              dim =>
+                (d[dim.name].toString && d[dim.name].toString()) || d[dim.name]
+            )
+            .join(",");
+          return (
+            <p
+              key={id}
+              style={{
+                fontSize: "12px",
+                textTransform: "uppercase",
+                margin: "5px"
+              }}
+            >
+              {id}, {d[metric1]}, {d[metric2]}
+            </p>
+          );
+        })}
       </TooltipContent>
     );
   };

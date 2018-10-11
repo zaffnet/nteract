@@ -1,7 +1,7 @@
 /* @flow strict */
 import * as path from "path";
 
-import { Menu, shell, BrowserWindow, dialog } from "electron";
+import { Menu, shell, BrowserWindow } from "electron";
 
 import { loadFullMenu } from "./menu";
 

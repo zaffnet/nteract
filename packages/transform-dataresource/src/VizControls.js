@@ -234,6 +234,7 @@ export default ({
               {availableAreaTypes.map(d => (
                 <button
                   className={`button-text ${areaType === d.type && "selected"}`}
+                  key={d.type}
                   onClick={() => setAreaType(d.type)}
                 >
                   {d.label}
