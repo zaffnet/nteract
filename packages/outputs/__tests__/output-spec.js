@@ -1,7 +1,13 @@
 import * as React from "react";
 import { shallow } from "enzyme";
 
-import { Output, StreamText, KernelOutputError, DisplayData } from "../src";
+import {
+  Output,
+  StreamText,
+  KernelOutputError,
+  DisplayData,
+  ExecuteResult
+} from "../src";
 
 describe("Output", () => {
   it("handles stream data", () => {
@@ -64,5 +70,28 @@ describe("Output", () => {
     );
 
     expect(component.type()).toEqual(DisplayData);
+  });
+  it("handles an execute result message", () => {
+    const output = {
+      outputType: "pyout",
+      data: {
+        "text/plain": "42 is the answer to life, the universe, and everything."
+      }
+    };
+
+    const Plain = props => <pre>{props.data}</pre>;
+    Plain.defaultProps = {
+      mediaType: "text/plain"
+    };
+
+    const component = shallow(
+      <Output output={output}>
+        <ExecuteResult>
+          <Plain />
+        </ExecuteResult>
+      </Output>
+    );
+
+    expect(component.type()).toEqual(ExecuteResult);
   });
 });
