@@ -117,6 +117,7 @@ export class HeaderEditor extends React.Component<
               <Tag style={{ ...authorStyle, color: "black" }}>
                 <EditableText
                   maxLength={40}
+                  className="author-entry"
                   placeholder="Enter Author Name..."
                   selectAllOnFocus={true}
                   onConfirm={e => {
@@ -138,6 +139,7 @@ export class HeaderEditor extends React.Component<
               >
                 <Button
                   icon="add"
+                  className="author-button"
                   onClick={() => this.setState({ editMode: "author" })}
                   minimal={true}
                   disabled={!editable}
