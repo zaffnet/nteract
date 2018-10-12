@@ -268,6 +268,33 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
         );
         break;
 
+        case "raw":
+          element = (
+              <Source>
+                <Editor
+                  id={id}
+                  value={this.props.source}
+                  theme={this.props.theme}
+                  focusAbove={focusAboveCell}
+                  focusBelow={focusBelowCell}
+                  cellFocused={cellFocused}
+                  editorFocused={editorFocused}
+                  contentRef={contentRef}
+                  options={{
+                    // Markdown should always be line wrapped
+                    lineWrapping: true,
+                    // Rely _directly_ on the codemirror mode
+                    mode: {
+                      name: "text/plain",
+                      tokenTypeOverrides: {
+                        emoji: "emoji"
+                      }
+                    }
+                  }}
+                />
+              </Source>
+          );
+          break;
       default:
         element = <pre>{this.props.source}</pre>;
         break;
