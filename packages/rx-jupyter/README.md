@@ -35,12 +35,12 @@ To install `rx-jupyter` for development, do the following:
 ```
 git clone https://github.com/nteract/nteract.git
 cd nteract
-npm i
+yarn
 # Note that rx-jupyter is in packages/rx-jupyter
 ```
 ## Testing
 
-Use `npm test` to run the test suite.
+Use `yarn test` to run the test suite.
 
 
 [Jupyter Server API]: http://jupyter-api.surge.sh/

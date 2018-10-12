@@ -28,8 +28,12 @@ Try **commuter** today and take your notebooks wherever you need them.
 
 ## Installation
 
+You may use whichever package manager (`npm` or `yarn`) best suits your workflow. The `nteract` team internally uses `yarn`.
+
 ```
 npm install @nteract/commuter -g
+# OR
+yarn global add @nteract/commuter
 ```
 
 ## Usage
@@ -86,9 +90,9 @@ COMMUTER_BUCKET=sweet-notebooks commuter
 
 ## Tests
 
-1. `npm t`
+1. `yarn test`
 
 ## Deployment
 
-1. Install commuter cli `npm install @nteract/commuter`
+1. Install commuter cli `yarn install @nteract/commuter`
 1. `exec commuter` - the service is typically wrapped inside [daemontools](https://cr.yp.to/daemontools.html)

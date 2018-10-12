@@ -52,7 +52,7 @@ in the nteract world? Here's a quick rundown!
    feature that you want to add.
 6. Confirm that unit tests and linting still pass successfully with:
    
-       npm run test
+       yarn test
    
    If tests fail, don't hesitate to ask for help.
 

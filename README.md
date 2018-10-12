@@ -94,7 +94,7 @@ To get started developing, [set up the nteract monorepo](#set-the-monorepo-up-in
 
 #### Set the monorepo up in dev mode
 
-Requires [Node.js and npm 3+](https://docs.npmjs.com/getting-started/installing-node#installing-npm-from-the-nodejs-site).
+Requires [Node.js](https://docs.npmjs.com/getting-started/installing-node) and [yarn](https://yarnpkg.com/lang/en/docs/install/).
 
 1. Fork this repo
 2. Clone your fork or this repo `git clone https://github.com/nteract/nteract`
@@ -131,11 +131,17 @@ to do this.
 
 In some cases you'll want to modify an individual base package (i.e. commutable
 or transforms) and not rebuild all of the other packages. To target a build of a
-specific package, use this command, replacing `packageName` with the package you
+specific package, use this command, replacing `packageName` with the fully qualified name of the package you
 want to hack on:
 
 ```
-$(npm bin)/lerna run build --scope packageName
+yarn build:only packageName
+```
+
+For example, to hack on the `transforms` package, use
+
+```
+yarn build:only @nteract/transforms
 ```
 
 ### Hacking on the Desktop application
@@ -147,7 +153,7 @@ yarn app:desktop
 ```
 
 As you make changes, you will have to close the entire app (CMD-q on macOS or
-CNTL-c at the terminal) and then run `npm run app:desktop` again to see the
+CNTL-c at the terminal) and then run `yarn app:desktop` again to see the
 changes.
 
 #### Progressive Webpack build (automatic)
@@ -200,7 +206,7 @@ rebuild those using [the instructions for building specific packages](#building-
 > I want to debug redux actions and state changes.
 
 * Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by
-  spawning the application with `npm run spawn:debug`.
+  spawning the application with `yarn spawn:debug`.
 
 > I keep getting a pop-up asking: *Do you want the application "nteract Helper.app" to accept
   incoming network connections?* while developing or using a custom build of
