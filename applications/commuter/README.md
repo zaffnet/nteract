@@ -94,5 +94,5 @@ COMMUTER_BUCKET=sweet-notebooks commuter
 
 ## Deployment
 
-1. Install commuter cli `yarn install @nteract/commuter`
+1. Install commuter cli `yarn add @nteract/commuter`
 1. `exec commuter` - the service is typically wrapped inside [daemontools](https://cr.yp.to/daemontools.html)
