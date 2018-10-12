@@ -1,6 +1,6 @@
 // @flow
-import { Subject, Subscriber, fromEvent } from "rxjs";
-import { map, merge, publish, refCount } from "rxjs/operators";
+import { Subject, Subscriber, fromEvent, merge } from "rxjs";
+import { map, publish, refCount } from "rxjs/operators";
 
 import * as moduleJMP from "jmp";
 
