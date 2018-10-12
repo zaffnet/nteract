@@ -1,5 +1,5 @@
 import { from, of } from "rxjs";
-import { tap, count, toArray } from "rxjs/operators";
+import { map, tap, count, toArray } from "rxjs/operators";
 import { ofMessageType, childOf } from "../src/index";
 
 import {

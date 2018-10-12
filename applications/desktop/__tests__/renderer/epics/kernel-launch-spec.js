@@ -73,13 +73,7 @@ describe("launchKernelEpic", () => {
       }
     };
 
-    const store = {
-      getState: () => {
-        return state;
-      }
-    };
-
-    const responses = await launchKernelEpic(action$, store)
+    const responses = await launchKernelEpic(action$, { value: state })
       .pipe(toArray())
       .toPromise();
 

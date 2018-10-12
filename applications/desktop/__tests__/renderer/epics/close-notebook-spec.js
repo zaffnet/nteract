@@ -23,42 +23,37 @@ import { ActionsObservable } from "redux-observable";
 
 import { ipcRenderer as ipc } from "../../../__mocks__/electron";
 
-import { TestScheduler } from "rxjs/testing/TestScheduler";
+import { TestScheduler } from "rxjs/testing";
 
 const buildScheduler = () =>
   new TestScheduler((actual, expected) => expect(actual).toEqual(expected));
 
-const buildStore = (dirty: boolean = false) => {
-  return {
-    dispatch: jest.fn(),
-    getState: () => ({
-      core: {
-        entities: {
-          contents: {
-            byRef: Immutable.Map({
-              contentRef1: makeNotebookContentRecord({
-                model: makeDocumentRecord({
-                  notebook: "content",
-                  savedNotebook: dirty ? "content-MODIFIED" : "content"
-                })
-              })
+const buildState = (dirty: boolean = false) => ({
+  core: {
+    entities: {
+      contents: {
+        byRef: Immutable.Map({
+          contentRef1: makeNotebookContentRecord({
+            model: makeDocumentRecord({
+              notebook: "content",
+              savedNotebook: dirty ? "content-MODIFIED" : "content"
             })
-          },
-          kernels: {
-            byRef: Immutable.Map({
-              kernelRef1: stateModule.makeRemoteKernelRecord({
-                type: "zeromq"
-              }),
-              kernelRef2: stateModule.makeRemoteKernelRecord({
-                type: "not-zeromq"
-              })
-            })
-          }
-        }
+          })
+        })
+      },
+      kernels: {
+        byRef: Immutable.Map({
+          kernelRef1: stateModule.makeRemoteKernelRecord({
+            type: "zeromq"
+          }),
+          kernelRef2: stateModule.makeRemoteKernelRecord({
+            type: "not-zeromq"
+          })
+        })
       }
-    })
-  };
-};
+    }
+  }
+});
 
 describe("closeNotebookEpic", () => {
   describe("when notebook is dirty, prompts user to abort", () => {
@@ -77,12 +72,12 @@ describe("closeNotebookEpic", () => {
         registeredCallback("dummy-event", 0);
       };
 
-      const store = buildStore(true);
+      const state = buildState(true);
       const responses = await closeNotebookEpic(
         ActionsObservable.of(
           actions.closeNotebook({ contentRef: "contentRef1" })
         ),
-        store
+        { value: state }
       )
         .pipe(toArray())
         .toPromise();
@@ -115,12 +110,12 @@ describe("closeNotebookEpic", () => {
         registeredCallback("dummy-event", 1);
       };
 
-      const store = buildStore(true);
+      const state = buildState(true);
       const responses = await closeNotebookEpic(
         ActionsObservable.of(
           actions.closeNotebook({ contentRef: "contentRef1" })
         ),
-        store
+        { value: state }
       )
         .pipe(toArray())
         .toPromise();
@@ -136,7 +131,7 @@ describe("closeNotebookEpic", () => {
 
   describe("kill kernels", () => {
     test("promptly continue when KILL_KERNEL is successful", async () => {
-      const store = buildStore(false);
+      const state = buildState(false);
 
       const testScheduler = buildScheduler();
 
@@ -161,7 +156,7 @@ describe("closeNotebookEpic", () => {
       const inputAction$ = new ActionsObservable(
         testScheduler.createHotObservable(inputMarbles, inputActions)
       );
-      const outputAction$ = closeNotebookEpic(inputAction$, store);
+      const outputAction$ = closeNotebookEpic(inputAction$, { value: state });
 
       testScheduler
         .expectObservable(outputAction$)
@@ -170,7 +165,7 @@ describe("closeNotebookEpic", () => {
     });
 
     test("promptly continue when KILL_KERNEL fails", async () => {
-      const store = buildStore(false);
+      const state = buildState(false);
 
       const testScheduler = buildScheduler();
 
@@ -198,7 +193,7 @@ describe("closeNotebookEpic", () => {
       const inputAction$ = new ActionsObservable(
         testScheduler.createHotObservable(inputMarbles, inputActions)
       );
-      const outputAction$ = closeNotebookEpic(inputAction$, store);
+      const outputAction$ = closeNotebookEpic(inputAction$, { value: state });
 
       testScheduler
         .expectObservable(outputAction$)
@@ -207,7 +202,7 @@ describe("closeNotebookEpic", () => {
     });
 
     test("continue after a timeout period when no KILL_KERNEL result is received", async () => {
-      const store = buildStore(false);
+      const state = buildState(false);
 
       const testScheduler = buildScheduler();
 
@@ -240,7 +235,7 @@ describe("closeNotebookEpic", () => {
       );
       const outputAction$ = closeNotebookEpic(
         inputAction$,
-        store,
+        { value: state },
         testScheduler
       );
 
@@ -254,12 +249,12 @@ describe("closeNotebookEpic", () => {
   test("update close progress state and trigger window.close", async () => {
     window.close = jest.fn();
 
-    const store = buildStore(false);
+    const state = buildState(false);
     const responses = await closeNotebookEpic(
       ActionsObservable.of(
         actions.closeNotebook({ contentRef: "contentRef1" })
       ),
-      store
+      { value: state }
     )
       .pipe(toArray())
       .toPromise();

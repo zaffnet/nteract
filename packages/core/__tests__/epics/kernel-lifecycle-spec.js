@@ -180,27 +180,22 @@ describe("restartKernelEpic", () => {
     const contentRef = "contentRef";
     const newKernelRef = "newKernelRef";
 
-    const store = {
-      getState() {
-        return this.state;
-      },
-      state: {
-        core: stateModule.makeStateRecord({
-          kernelRef: "oldKernelRef",
-          entities: stateModule.makeEntitiesRecord({
-            kernels: stateModule.makeKernelsRecord({
-              byRef: Immutable.Map({
-                oldKernelRef: stateModule.makeRemoteKernelRecord({
-                  status: "not connected"
-                })
+    const state = {
+      core: stateModule.makeStateRecord({
+        kernelRef: "oldKernelRef",
+        entities: stateModule.makeEntitiesRecord({
+          kernels: stateModule.makeKernelsRecord({
+            byRef: Immutable.Map({
+              oldKernelRef: stateModule.makeRemoteKernelRecord({
+                status: "not connected"
               })
             })
           })
-        }),
-        app: stateModule.makeAppRecord({
-          notificationSystem: { addNotification: () => {} }
         })
-      }
+      }),
+      app: stateModule.makeAppRecord({
+        notificationSystem: { addNotification: () => {} }
+      })
     };
 
     const testScheduler = new TestScheduler((actual, expected) =>
@@ -247,7 +242,7 @@ describe("restartKernelEpic", () => {
     );
     const outputAction$ = restartKernelEpic(
       inputAction$,
-      store,
+      { value: state },
       () => newKernelRef
     );
 
@@ -260,27 +255,22 @@ describe("restartKernelEpic", () => {
     const contentRef = "contentRef";
     const newKernelRef = "newKernelRef";
 
-    const store = {
-      getState() {
-        return this.state;
-      },
-      state: {
-        core: stateModule.makeStateRecord({
-          kernelRef: "oldKernelRef",
-          entities: stateModule.makeEntitiesRecord({
-            kernels: stateModule.makeKernelsRecord({
-              byRef: Immutable.Map({
-                oldKernelRef: stateModule.makeRemoteKernelRecord({
-                  status: "not connected"
-                })
+    const state = {
+      core: stateModule.makeStateRecord({
+        kernelRef: "oldKernelRef",
+        entities: stateModule.makeEntitiesRecord({
+          kernels: stateModule.makeKernelsRecord({
+            byRef: Immutable.Map({
+              oldKernelRef: stateModule.makeRemoteKernelRecord({
+                status: "not connected"
               })
             })
           })
-        }),
-        app: stateModule.makeAppRecord({
-          notificationSystem: { addNotification: () => {} }
         })
-      }
+      }),
+      app: stateModule.makeAppRecord({
+        notificationSystem: { addNotification: () => {} }
+      })
     };
 
     const testScheduler = new TestScheduler((actual, expected) =>
@@ -330,7 +320,7 @@ describe("restartKernelEpic", () => {
     );
     const outputAction$ = restartKernelEpic(
       inputAction$,
-      store,
+      { value: state },
       () => newKernelRef
     );
 
