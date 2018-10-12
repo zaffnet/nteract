@@ -27,7 +27,7 @@
     "reselect": "^3.0.1",
     "rx-binder": "^2.1.4",
     "rx-jupyter": "^3.2.3",
-    "rxjs": "^6.0.0",
+    "rxjs": "^6.3.3",
     "uuid": "^3.1.0"
   },
   "peerDependencies": {
