@@ -29,17 +29,19 @@ type State = {
 
 export default function(givenInitialState: Object = {}) {
   const initialState = merge(getInitialState(), givenInitialState);
-  const epicMiddleware = createEpicMiddleware(epics);
+  const epicMiddleware = createEpicMiddleware();
   const composeEnhancers =
     (typeof window !== "undefined" &&
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
     compose;
 
-  return createStore(
+  const store = createStore(
     reducer,
     initialState,
     composeEnhancers(
       applyMiddleware(epicMiddleware, coreMiddlewares.errorMiddleware)
     )
   );
+  epicMiddleware.run(epics);
+  return store;
 }
