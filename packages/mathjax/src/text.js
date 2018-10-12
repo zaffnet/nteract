@@ -45,7 +45,7 @@ class MathJaxText_ extends React.Component<Props & MathJaxContextValue, null> {
   }
 }
 
-class MathJaxText extends React.PureComponent<Props, null> {
+class MathJaxText extends React.Component<Props, null> {
   static defaultProps = {
     onRender: null
   };

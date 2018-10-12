@@ -24,8 +24,6 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
     super(props);
 
     this.nodeRef = React.createRef();
-
-    (this: any).typeset = this.typeset;
   }
 
   /**
@@ -133,7 +131,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
   }
 }
 
-class MathJaxNode extends React.PureComponent<Props, null> {
+class MathJaxNode extends React.Component<Props, null> {
   static defaultProps = {
     inline: false,
     onRender: null
