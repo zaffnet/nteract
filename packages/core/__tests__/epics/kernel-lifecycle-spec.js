@@ -17,7 +17,7 @@ import {
 } from "../../src/epics/kernel-lifecycle";
 
 import { of } from "rxjs/observable/of";
-import { toArray, share } from "rxjs/operators";
+import { toArray } from "rxjs/operators";
 
 describe("acquireKernelInfo", () => {
   test("sends a kernel_info_request and processes kernel_info_reply", async function(done) {
@@ -180,7 +180,6 @@ describe("watchExecutionStateEpic", () => {
 describe("restartKernelEpic", () => {
   test("work for outputHandling None", () => {
     const contentRef = "contentRef";
-    const kernelName = "kernelName";
     const newKernelRef = "newKernelRef";
 
     const store = {
@@ -261,7 +260,6 @@ describe("restartKernelEpic", () => {
   });
   test("work for outputHandling Restart and Run All", () => {
     const contentRef = "contentRef";
-    const kernelName = "kernelName";
     const newKernelRef = "newKernelRef";
 
     const store = {

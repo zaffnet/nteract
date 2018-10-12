@@ -4,8 +4,8 @@ const ReactDOMServer = require(`react-dom/server`);
 const NotebookRender = require(`@nteract/notebook-render`).default;
 
 module.exports = async function onCreateNode(
-  { node, getNode, loadNodeContent, boundActionCreators },
-  pluginOptions
+  { node, loadNodeContent, boundActionCreators },
+  pluginOptions // eslint-disable-line no-unused-vars
 ) {
   const { createNode, createParentChildLink } = boundActionCreators;
 

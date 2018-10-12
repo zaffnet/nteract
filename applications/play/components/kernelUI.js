@@ -19,7 +19,7 @@ class KernelSelector extends React.Component<*, *> {
           onChange={onChange}
           title="Active Kernel"
         >
-          {Object.keys(kernelspecs).map((kernelName, index) => {
+          {Object.keys(kernelspecs).map(kernelName => {
             return <KernelOption kernelName={kernelName} key={kernelName} />;
           })}
         </select>
@@ -39,7 +39,7 @@ class KernelSelector extends React.Component<*, *> {
 
 export class KernelUI extends React.Component<*, *> {
   render() {
-    const { status, ...otherprops } = this.props;
+    const { status, ...otherprops } = this.props; // eslint-disable-line no-unused-vars
     return (
       <div className="kernel-data">
         <div className="kernelSelector">

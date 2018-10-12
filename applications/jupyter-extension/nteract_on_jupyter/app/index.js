@@ -1,5 +1,6 @@
 /* @flow strict */
 // NOTE: We _must_ load hot _before_ React, even though we don't use it in this file
+// eslint-disable-next-line no-unused-vars
 import { hot } from "react-hot-loader";
 
 import * as React from "react";
@@ -67,6 +68,7 @@ function main(rootEl: Element, dataEl: Node | null) {
   }
 
   // Allow chunks from webpack to load from their built location
+  // eslint-disable-next-line no-unused-vars
   declare var __webpack_public_path__: string;
   __webpack_public_path__ = urljoin(config.assetUrl, "nteract/static/dist/");
 

@@ -42,7 +42,7 @@ function createRouter(config: Object): express.Router {
 
   router.delete("/*", (req: $Request, res: $Response) => {
     const path = req.params["0"];
-    const cb = (err, data) => {
+    const cb = err => {
       if (err) res.status(500).json(errObject(err, path));
       else res.status(204).send(); //as per jupyter contents api
     };
@@ -52,7 +52,7 @@ function createRouter(config: Object): express.Router {
 
   router.post("/*", (req: $Request, res: $Response) => {
     const path = req.params["0"];
-    const cb = (err, data) => {
+    const cb = err => {
       if (err) res.status(500).json(errObject(err, path));
       else res.status(201).send();
     };

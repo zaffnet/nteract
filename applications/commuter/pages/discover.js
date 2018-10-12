@@ -9,8 +9,6 @@ import Body from "../components/body";
 
 import { getJSON } from "../shims/ajax";
 
-import { theme } from "../theme";
-
 const Authors = props => (
   <span className="authors">
     {props.authors.map(author => author.name).join(", ")}
@@ -81,7 +79,9 @@ const DiscoveryItem = (props: DiscoveryItemProps) => (
         <p>{props.metadata.nteract.description}</p>
       </div>
       <div className="post-tags">
-        {props.metadata.nteract.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}
+        {props.metadata.nteract.tags.map(tag => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
       </div>
     </div>
     <style jsx>{`

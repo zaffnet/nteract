@@ -16,10 +16,6 @@ import {
 import {
   executeInput,
   displayData,
-  updateDisplayData,
-  executeResult,
-  error,
-  stream,
   status,
   executeReply,
   message

@@ -48,8 +48,7 @@ function createContentsResponse(
   const parsedFilePath = path.parse(filePath);
 
   const name = parsedFilePath.base;
-  // TODO: Check if this is unnecessary or should be used
-  // const writable = Boolean(fs.constants.W_OK & stat.mode);
+  const writable = Boolean(fs.constants.W_OK & stat.mode);
   const created = stat.birthtime;
   const last_modified = stat.mtime;
 
@@ -59,7 +58,7 @@ function createContentsResponse(
       mimetype: null,
       format: "json",
       content,
-      writable: true,
+      writable,
       name: name === "." ? "" : name,
       path: filePath === "." ? "" : filePath,
       created,
@@ -72,7 +71,7 @@ function createContentsResponse(
         mimetype: null,
         format: "json",
         content: content ? JSON.parse(content) : null,
-        writable: true,
+        writable,
         name,
         path: filePath,
         created,
@@ -86,7 +85,7 @@ function createContentsResponse(
       mimetype: null,
       format: "text",
       content,
-      writable: true,
+      writable,
       name,
       path: filePath,
       created,

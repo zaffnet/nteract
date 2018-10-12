@@ -1,10 +1,9 @@
 /* @flow strict */
 
 import * as React from "react";
-import * as Immutable from "immutable";
 const urljoin = require("url-join");
 
-import { selectors, actions } from "@nteract/core";
+import { selectors } from "@nteract/core";
 
 import { ThemedLogo } from "../components/themed-logo.js";
 
@@ -26,7 +25,6 @@ import type {
   KernelspecProps,
   JupyterHostRecord,
   ContentRef,
-  ContentRecord,
   DirectoryContentRecord
 } from "@nteract/core";
 

@@ -3,7 +3,6 @@
 import { Map as ImmutableMap } from "immutable";
 
 import type { ConfigState } from "../state";
-
 import type { SetConfigAction, MergeConfigAction } from "../actionTypes";
 
 type ConfigAction = SetConfigAction<*> | MergeConfigAction;

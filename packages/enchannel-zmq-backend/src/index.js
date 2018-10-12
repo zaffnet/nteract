@@ -1,7 +1,6 @@
 // @flow
 import { Subject } from "rxjs/Subject";
 import { Subscriber } from "rxjs/Subscriber";
-import { Observable } from "rxjs/Observable";
 
 import { merge } from "rxjs/observable/merge";
 
@@ -85,7 +84,7 @@ export function verifiedConnect(
   socket: moduleJMP.Socket,
   url: string
 ): Promise<moduleJMP.Socket> {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     socket.on("connect", () => {
       // We are not ready until this happens for all the sockets
       socket.unmonitor();

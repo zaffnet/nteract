@@ -19,7 +19,6 @@ import {
 } from "@nteract/dropdown-menu";
 
 import {
-  PinOcticon,
   TrashOcticon,
   ChevronDownOcticon,
   TriangleRightOcticon
@@ -221,6 +220,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 type ConnectedProps = {
   id: string,
   type: "markdown" | "code" | "raw",

@@ -1,8 +1,7 @@
 // Declare CMI as the CodeMirror instance, even if we don't have it fully typed yet
 export type CMI = any;
 
-import type { Subject } from "rxjs/Subject";
-
+// eslint-disable-next-line no-unused-vars
 declare class TextMarker {
   changed(): void;
   clear(): void;
@@ -18,6 +17,7 @@ export type TextMarkerOptions = {
 
 export type LineHandle = any;
 
+// eslint-disable-next-line no-unused-vars
 declare class CMDoc {
   size: number; // undocumented (number of lines)
   clearHistory(): void;

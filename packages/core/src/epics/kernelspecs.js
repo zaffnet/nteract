@@ -3,7 +3,6 @@ import * as actionTypes from "../actionTypes";
 import * as actions from "../actions";
 import { catchError, map, mergeMap } from "rxjs/operators";
 import { kernelspecs } from "rx-jupyter";
-import { of } from "rxjs/observable/of";
 import { ofType } from "redux-observable";
 import type { ActionsObservable } from "redux-observable";
 import type { FetchKernelspecs } from "../actionTypes";

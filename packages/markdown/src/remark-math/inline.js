@@ -8,6 +8,7 @@ const ESCAPED_INLINE_MATH = /^\\\$/;
 const INLINE_MATH = /^\$((?:\\\$|[^$])+)\$/;
 const INLINE_MATH_DOUBLE = /^\$\$((?:\\\$|[^$])+)\$\$/;
 
+// eslint-disable-next-line no-unused-vars
 export function inlinePlugin(opts: Object) {
   function inlineTokenizer(eat, value, silent) {
     let isDouble = true;

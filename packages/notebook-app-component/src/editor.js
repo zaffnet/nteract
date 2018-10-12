@@ -1,9 +1,8 @@
 // @flow
-import * as React from "react";
 import { connect } from "react-redux";
 
 import { actions, selectors } from "@nteract/core";
-import type { ContentRef, AppState, KernelRef } from "@nteract/core";
+import type { ContentRef, AppState } from "@nteract/core";
 
 import { omit } from "lodash";
 

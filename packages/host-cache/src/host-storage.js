@@ -1,7 +1,7 @@
 // @flow
 
-import { formBinderURL, binder } from "rx-binder";
-import { kernels, apiVersion } from "rx-jupyter";
+import { binder } from "rx-binder";
+import { kernels } from "rx-jupyter";
 
 import { tap, map, catchError, filter } from "rxjs/operators";
 import { of } from "rxjs/observable/of";

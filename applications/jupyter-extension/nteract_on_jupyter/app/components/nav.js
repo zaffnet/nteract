@@ -1,8 +1,6 @@
 /* @flow strict */
 import * as React from "react";
 
-import { areComponentsEqual } from "react-hot-loader";
-
 type NavSectionProps = {
   children: React.Node
 };

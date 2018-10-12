@@ -1,18 +1,9 @@
 // @flow
 import * as Immutable from "immutable";
 import type { CommunicationRecordProps } from "./communication";
-import type {
-  EntitiesRecordProps,
-  LocalKernelProps,
-  RemoteKernelProps
-} from "./entities";
-import type { ContentRef, KernelRef, KernelspecsRef } from "./refs";
-import type {
-  HostRecord,
-  LocalHostRecordProps,
-  JupyterHostRecordProps
-} from "./entities/hosts";
-import type { Subject } from "rxjs/Subject";
+import type { EntitiesRecordProps } from "./entities";
+import type { KernelRef, KernelspecsRef } from "./refs";
+import type { HostRecord } from "./entities/hosts";
 
 import { makeCommunicationRecord } from "./communication";
 import { makeEntitiesRecord, makeEmptyHostRecord } from "./entities";

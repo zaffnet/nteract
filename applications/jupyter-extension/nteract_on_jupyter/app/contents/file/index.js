@@ -1,14 +1,11 @@
 /* @flow strict */
 
 import * as React from "react";
-import * as Immutable from "immutable";
 
-import { selectors, actions } from "@nteract/core";
-import type { ContentRef, FileContentRecord, AppState } from "@nteract/core";
+import { selectors } from "@nteract/core";
+import type { ContentRef, AppState } from "@nteract/core";
 
 import { LoadingIcon, SavingingIcon, ErrorIcon } from "@nteract/iron-icons";
-
-import moment from "moment";
 
 import { ThemedLogo } from "../../components/themed-logo";
 import { Nav, NavSection } from "../../components/nav";

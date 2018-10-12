@@ -8,14 +8,7 @@ import { of } from "rxjs/observable/of";
 import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 
-import {
-  filter,
-  catchError,
-  ignoreElements,
-  map,
-  mergeMap,
-  switchMap
-} from "rxjs/operators";
+import { filter, catchError, mergeMap, switchMap } from "rxjs/operators";
 import { binder } from "rx-binder";
 import { kernels, shutdown, kernelspecs } from "rx-jupyter";
 import uuid from "uuid/v4";
@@ -75,9 +68,7 @@ const killServerEpic = (action$, store) =>
         );
       const { config } = oldServer.server;
       return shutdown(config).pipe(
-        mergeMap(data => {
-          return of(actions.killServerFulfilled({ serverId }));
-        }),
+        mergeMap(() => of(actions.killServerFulfilled({ serverId }))),
         catchError(error => of(actions.killServerFailed({ serverId, error })))
       );
     })
@@ -129,7 +120,7 @@ const setActiveKernelEpic = (action$, store) =>
     })
   );
 
-const extractCodeMirrorModeEpic = (action$, store) =>
+const extractCodeMirrorModeEpic = action$ =>
   action$.pipe(
     ofType(actionTypes.SET_ACTIVE_KERNEL_LANGUAGE_INFO),
     switchMap(({ payload }) => {
@@ -142,7 +133,7 @@ const extractCodeMirrorModeEpic = (action$, store) =>
     })
   );
 
-const initializeKernelMessaging = (action$, store) =>
+const initializeKernelMessaging = action$ =>
   action$.pipe(
     ofType(actionTypes.ACTIVATE_KERNEL_FULFILLED),
     // When new kernels come in we should drop our old message handling

@@ -1,17 +1,11 @@
 // @flow
-import {
-  makeAppRecord,
-  makeLocalKernelRecord,
-  makeRemoteKernelRecord
-} from "../state";
+import { makeAppRecord } from "../state";
 
 import type { AppRecord } from "../state";
 
 import * as actionTypes from "../actionTypes";
 
 import type {
-  NewKernelAction,
-  SetExecutionStateAction,
   SetNotificationSystemAction,
   SetGithubTokenAction,
   Save,

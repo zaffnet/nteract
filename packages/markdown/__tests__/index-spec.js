@@ -2,11 +2,9 @@
 
 import * as React from "react";
 import Markdown from "../src";
-import renderer from "react-test-renderer";
 
+import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
-
-import Enzyme, { shallow, render, mount } from "enzyme";
 
 const cases = [
   {

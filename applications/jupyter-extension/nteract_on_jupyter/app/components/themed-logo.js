@@ -1,9 +1,6 @@
 /* @flow strict */
 import * as React from "react";
 
-import { selectors } from "@nteract/core";
-import type { AppState } from "@nteract/core";
-
 import { WideLogo } from "@nteract/logos";
 
 type ThemedLogoProps = {
@@ -19,13 +16,5 @@ ThemedLogo.defaultProps = {
   height: 20,
   theme: "light"
 };
-
-const mapStateToProps = (
-  state: AppState,
-  ownProps: { height: ?number }
-): * => ({
-  height: ownProps.height,
-  theme: selectors.currentTheme(state)
-});
 
 export { ThemedLogo };

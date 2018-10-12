@@ -3,7 +3,7 @@ import { Subject } from "rxjs/Subject";
 
 const EventEmitter = require("events");
 
-import { toArray, take, map } from "rxjs/operators";
+import { toArray, take } from "rxjs/operators";
 
 import {
   createSocket,
@@ -56,7 +56,7 @@ describe("verifiedConnect", () => {
     // Test that we unmonitor after connected
     socket.emit("connect");
 
-    const connected = await p;
+    await p;
     expect(socket.unmonitor).toHaveBeenCalledTimes(1);
 
     done();
@@ -76,7 +76,7 @@ describe("verifiedConnect", () => {
       })
     };
 
-    const p = verifiedConnect(socket, "tcp://127.0.0.1:8945");
+    verifiedConnect(socket, "tcp://127.0.0.1:8945");
     expect(socket.monitor).toHaveBeenCalledTimes(1);
     expect(socket.connect).toHaveBeenCalledTimes(1);
     expect(socket.unmonitor).toHaveBeenCalledTimes(1);

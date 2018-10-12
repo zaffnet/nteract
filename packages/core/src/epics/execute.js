@@ -1,10 +1,8 @@
 // @flow
 import {
-  createMessage,
   createExecuteRequest,
   ofMessageType,
   childOf,
-  updatedOutputs,
   outputs,
   payloads,
   kernelStatuses,
@@ -13,7 +11,6 @@ import {
 
 import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
-import { from } from "rxjs/observable/from";
 import { merge } from "rxjs/observable/merge";
 import { empty } from "rxjs/observable/empty";
 import { _throw } from "rxjs/observable/throw";
@@ -23,12 +20,10 @@ import type { ContentRef } from "../state/refs";
 import {
   groupBy,
   filter,
-  scan,
   map,
   mapTo,
   switchMap,
   mergeMap,
-  startWith,
   mergeAll,
   takeUntil,
   catchError,
@@ -184,7 +179,6 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
     concatMap((action: ExecuteAllCells | ExecuteAllCellsBelow) => {
-      const state = store.getState();
       const contentRef = action.payload.contentRef;
 
       const model = selectors.model(store.getState(), { contentRef });

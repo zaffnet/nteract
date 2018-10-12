@@ -1,7 +1,7 @@
 // @flow
 import * as React from "react";
 
-import { JSONTransform, HTMLTransform } from "@nteract/transforms";
+import { HTMLTransform } from "@nteract/transforms";
 
 import { Source } from "@nteract/presentational-components";
 
@@ -143,24 +143,6 @@ const DSVTable = (props: { data: Array<Object> }) => {
   );
 };
 
-const UnsupportedResult = props => (
-  <React.Fragment>
-    <h1>UNSUPPORTED ZEPPELIN RESULT</h1>
-    <p>
-      Post an issue to{" "}
-      <a
-        href="https://github.com/nteract/commuter/issues/new"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        commuter
-      </a>{" "}
-      to let us know about it
-    </p>
-    <JSONTransform data={props.result} />
-  </React.Fragment>
-);
-
 // Old style Zeppelin
 const Message = props => {
   switch (props.type) {
@@ -186,7 +168,6 @@ const Result = props => {
     case "TABLE":
       if (!props.result.columnNames || !props.result.rows) {
         const data = d3.tsvParse(props.result.msg);
-        const columnNames = Object.keys(data[0]);
 
         return <DSVTable data={data} />;
       }

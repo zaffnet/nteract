@@ -100,7 +100,6 @@ class PureNotebookMenu extends React.Component<Props, State> {
       copyCell,
       createCellAfter,
       cutCell,
-      executeCell,
       executeAllCells,
       executeAllCellsBelow,
       clearAllOutputs,
@@ -114,9 +113,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       restartKernelAndRunAllOutputs,
       killKernel,
       interruptKernel,
-      currentContentRef,
-      currentKernelspecsRef,
-      currentKernelspecs
+      currentContentRef
     } = this.props;
     const [action, ...args] = parseActionKey(key);
     switch (action) {

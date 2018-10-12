@@ -1,10 +1,7 @@
 // @flow
 import * as React from "react";
-import Link from "next/link";
 
 import { getJSON } from "../shims/ajax";
-
-import { join as pathJoin } from "path";
 
 import Header from "../components/header";
 import BrowseHeader from "../components/browse-header";
@@ -73,7 +70,7 @@ class ViewPage extends React.Component<ViewPageProps, ViewPageState> {
     } else {
       const configScriptElement = document.getElementById("serverConfig");
       if (configScriptElement !== null) {
-        const config = JSON.parse(configScriptElement.textContent);
+        config = JSON.parse(configScriptElement.textContent);
       }
       this.state = { config };
     }

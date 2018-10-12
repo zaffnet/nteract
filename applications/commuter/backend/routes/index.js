@@ -1,9 +1,6 @@
 // @flow
 
-import type { $Request, $Response } from "express";
-
-const express = require("express"),
-  path = require("path");
+const express = require("express");
 
 const createAPIRouter = require("./api");
 

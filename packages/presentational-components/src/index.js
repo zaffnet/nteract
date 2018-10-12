@@ -1,7 +1,5 @@
 // @flow
-import * as React from "react";
 
-import Highlighter from "./syntax-highlighter";
 import { Input } from "./components/input.js";
 import { Outputs } from "./components/outputs.js";
 import { Pagers } from "./components/pagers.js";

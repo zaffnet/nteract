@@ -4,12 +4,11 @@ import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { empty } from "rxjs/observable/empty";
 import { merge } from "rxjs/observable/merge";
-import { from } from "rxjs/observable/from";
 import { createKernelRef } from "../state/refs";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
-import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
+import type { ImmutableNotebook } from "@nteract/commutable";
 import type { ContentRef, KernelRef } from "../state/refs";
 
 const path = require("path");
@@ -17,12 +16,10 @@ const path = require("path");
 import {
   filter,
   map,
-  tap,
   mergeMap,
   concatMap,
   catchError,
   first,
-  pluck,
   switchMap,
   take,
   timeout
@@ -263,7 +260,7 @@ export const restartKernelEpic = (
         ),
         take(1),
         timeout(60000), // If kernel doesn't come up within this interval we will abort follow-on actions.
-        concatMap(_ => {
+        concatMap(() => {
           const restartSuccess = actions.restartKernelSuccessful({
             kernelRef: newKernelRef,
             contentRef: initiatingContentRef

@@ -134,7 +134,7 @@ export const semioticScatterplot = (
     );
   };
 
-  let sizeScale = e => 5;
+  let sizeScale = e => 5; // eslint-disable-line no-unused-vars
   const colorHash = { Other: "grey" };
   const additionalSettings = {};
 

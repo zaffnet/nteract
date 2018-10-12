@@ -3,7 +3,6 @@
 // to divide up the desktop app and this core package
 
 import * as selectors from "./selectors";
-import { cloneDeep } from "lodash";
 
 type Action = {
   type: string,

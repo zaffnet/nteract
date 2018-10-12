@@ -4,8 +4,6 @@ import ReactMarkdown from "react-markdown";
 import MathJax from "@nteract/mathjax";
 import RemarkMathPlugin from "./remark-math";
 
-import PropTypes from "prop-types";
-
 const math = (props: { value: string }) => (
   <MathJax.Node>{props.value}</MathJax.Node>
 );

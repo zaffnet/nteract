@@ -2,10 +2,6 @@
 
 import * as actionTypes from "../../../../actionTypes";
 
-import * as Immutable from "immutable";
-
-import { has } from "lodash";
-
 import type { FileModelRecord } from "../../../../state/entities/contents";
 
 function updateFileText(

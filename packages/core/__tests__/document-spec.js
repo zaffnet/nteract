@@ -3,7 +3,6 @@
 
 import uuid from "uuid/v4";
 
-import * as actionTypes from "../src/actionTypes";
 import * as actions from "../src/actions";
 import {
   notebook as reducers,
@@ -14,14 +13,13 @@ import {
 import {
   emptyCodeCell,
   emptyMarkdownCell,
-  fromJS,
   appendCellToNotebook,
   emptyNotebook
 } from "@nteract/commutable";
 
 import { makeDocumentRecord } from "../src/state";
 
-import { dummyJSON, dummyCommutable } from "../src/dummy";
+import { dummyCommutable } from "../src/dummy";
 
 import * as Immutable from "immutable";
 

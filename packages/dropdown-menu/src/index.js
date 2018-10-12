@@ -33,7 +33,7 @@ export class DropdownMenu extends React.Component<
         {React.Children.map(this.props.children, child => {
           if (areComponentsEqual(child.type, DropdownTrigger)) {
             return React.cloneElement(child, {
-              onClick: ev => {
+              onClick: () => {
                 this.setState({ menuHidden: !this.state.menuHidden });
               }
             });
@@ -44,7 +44,7 @@ export class DropdownMenu extends React.Component<
               // DropdownContent child will pass down an onItemClick so that
               // the menu will collapse
               return React.cloneElement(child, {
-                onItemClick: ev => {
+                onItemClick: () => {
                   this.setState({ menuHidden: true });
                 }
               });

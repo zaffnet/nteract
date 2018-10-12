@@ -1,12 +1,11 @@
 // @flow
-import { of } from "rxjs/observable/of";
 import { merge } from "rxjs/observable/merge";
 import { map, retry, switchMap } from "rxjs/operators";
 import { ofType } from "redux-observable";
 
 import { commOpenAction, commMessageAction } from "../actions";
 
-import { createMessage, ofMessageType, childOf } from "@nteract/messaging";
+import { createMessage, ofMessageType } from "@nteract/messaging";
 
 import type { ActionsObservable } from "redux-observable";
 

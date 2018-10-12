@@ -16,7 +16,7 @@ const Immutable = require("immutable");
 
 import { Subject } from "rxjs/Subject";
 import { from } from "rxjs/observable/from";
-import { toArray, share, catchError, bufferCount } from "rxjs/operators";
+import { toArray, share, catchError } from "rxjs/operators";
 
 describe("executeCell", () => {
   test("returns an executeCell action", () => {
@@ -42,7 +42,6 @@ describe("createExecuteCellStream", () => {
     const frontendToShell = new Subject();
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
-    const mockIOPub = new Subject();
     const channels = mockShell;
     const store = {
       getState() {
@@ -84,7 +83,6 @@ describe("createExecuteCellStream", () => {
     const frontendToShell = new Subject();
     const shellToFrontend = new Subject();
     const mockShell = Subject.create(frontendToShell, shellToFrontend);
-    const mockIOPub = new Subject();
 
     const channels = mockShell;
     const store = {

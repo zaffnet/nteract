@@ -18,7 +18,7 @@ const UNRECOGNIZED = "unrecognized";
 
 export function unrecognized(raw: any) {
   return Object.freeze({
-    outputType: "unrecognized",
+    outputType: UNRECOGNIZED,
     raw
   });
 }

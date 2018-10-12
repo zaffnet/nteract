@@ -1,8 +1,6 @@
 // @flow
 import * as actionTypes from "./actionTypes";
 
-import type { Notebook, ImmutableNotebook } from "@nteract/commutable";
-
 import type {
   ContentRef,
   HostRef,
@@ -25,9 +23,6 @@ import type {
 } from "@nteract/commutable/src/types";
 
 import type { Output } from "@nteract/commutable/src/v4";
-
-import { createExecuteRequest } from "@nteract/messaging";
-import type { HostRecordProps } from "./state/entities/hosts";
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,

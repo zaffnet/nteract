@@ -9,6 +9,7 @@ var C_DOLLAR = "$";
 var MIN_FENCE_COUNT = 2;
 var CODE_INDENT_COUNT = 4;
 
+// eslint-disable-next-line no-unused-vars
 export function blockPlugin(opts: Object) {
   function blockTokenizer(eat, value, silent) {
     var length = value.length + 1;

@@ -1,6 +1,5 @@
 /* @flow */
 import * as React from "react";
-import * as Immutable from "immutable";
 
 import { Display } from "@nteract/display-area";
 import {
@@ -20,7 +19,6 @@ import {
   Cell,
   Input,
   Prompt,
-  PromptBuffer,
   Source,
   Outputs,
   Cells
