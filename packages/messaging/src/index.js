@@ -1,7 +1,7 @@
 // @flow
 /* eslint camelcase: 0 */ // <-- Per Jupyter message spec
 
-import { Observable } from "rxjs";
+import { Observable, from } from "rxjs";
 import { pluck, filter, map, mergeMap } from "rxjs/operators";
 
 import { message, executeRequest } from "./messages";
