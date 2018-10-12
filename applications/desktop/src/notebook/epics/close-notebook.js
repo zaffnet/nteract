@@ -17,11 +17,7 @@ import {
   selectors
 } from "@nteract/core";
 
-import { Observable } from "rxjs/Observable";
-import { empty } from "rxjs/observable/empty";
-import { of } from "rxjs/observable/of";
-import { zip } from "rxjs/observable/zip";
-import { concat } from "rxjs/observable/concat";
+import { Observable, empty, of, zip, concat } from "rxjs";
 
 import {
   catchError,
