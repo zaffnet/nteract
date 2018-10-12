@@ -1,5 +1,4 @@
 /* @flow strict */
-import * as path from "path";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { ipcRenderer as ipc, remote } from "electron";
