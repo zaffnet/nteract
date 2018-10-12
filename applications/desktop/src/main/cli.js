@@ -4,7 +4,7 @@ import { merge } from "rxjs";
 
 import { join } from "path";
 import { dialog } from "electron";
-import { spawn } from "spawn-rx";
+import { spawn } from "spawn-rx-dev";
 import { writeFileObservable, createSymlinkObservable } from "fs-observable";
 
 // Overwrite the type for `process` to match Electron's process
