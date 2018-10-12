@@ -5,7 +5,6 @@ import blueprintCSS from "../vendor/blueprint.css.js";
 
 import {
   H1,
-  Intent,
   Tag,
   EditableText,
   Button,

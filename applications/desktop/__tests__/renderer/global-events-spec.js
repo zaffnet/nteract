@@ -120,7 +120,7 @@ describe("initGlobalHandlers", () => {
     const contentRef = createContentRef();
     const store = createStore(contentRef);
 
-    ipc.on = (event, callback) => {
+    ipc.on = (event) => {
       if (event == "reload") done();
     };
 
