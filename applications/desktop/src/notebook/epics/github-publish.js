@@ -56,11 +56,11 @@ function publishGist(
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$: ActionsObservable<*>, store: *) => {
+export const publishEpic = (action$: ActionsObservable<*>, state$: *) => {
   return action$.pipe(
     ofType(actionTypes.PUBLISH_GIST),
     mergeMap((action: actionTypes.PublishGist) => {
-      const state = store.getState();
+      const state = state$.value;
 
       const contentRef = action.payload.contentRef;
       if (!contentRef) {
@@ -135,8 +135,7 @@ export const publishEpic = (action$: ActionsObservable<*>, store: *) => {
         gistId
       ).pipe(
         mergeMap(xhr => {
-          const state = store.getState();
-          const notificationSystem = selectors.notificationSystem(state);
+          const notificationSystem = selectors.notificationSystem(state$.value);
 
           const { id, login } = xhr.response;
 

@@ -12,18 +12,16 @@ import { toJS, stringifyNotebook } from "@nteract/commutable";
 import { of } from "rxjs";
 import { mergeMap, catchError, map } from "rxjs/operators";
 
-import type { Store } from "redux";
-
 /**
  * Cleans up the notebook document and saves the file.
  *
  * @param  {ActionObservable}  action$ The SAVE action with the filename and notebook
  */
-export function saveEpic(action$: ActionsObservable<*>, store: Store<*, *>) {
+export function saveEpic(action$: ActionsObservable<*>, state$: *) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
     mergeMap((action: actionTypes.Save) => {
-      const state = store.getState();
+      const state = state$.value;
       const contentRef = action.payload.contentRef;
 
       const content = selectors.content(state, { contentRef });
@@ -57,8 +55,9 @@ export function saveEpic(action$: ActionsObservable<*>, store: Store<*, *>) {
       return writeFileObservable(filepath, notebook).pipe(
         map(() => {
           if (process.platform !== "darwin") {
-            const state = store.getState();
-            const notificationSystem = selectors.notificationSystem(state);
+            const notificationSystem = selectors.notificationSystem(
+              state$.value
+            );
             notificationSystem.addNotification({
               title: "Save successful!",
               autoDismiss: 2,

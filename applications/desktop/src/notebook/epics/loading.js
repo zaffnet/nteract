@@ -144,16 +144,14 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
 
 export const launchKernelWhenNotebookSetEpic = (
   action$: ActionsObservable<*>,
-  store: *
+  state$: *
 ) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
     map((action: actionTypes.FetchContentFulfilled) => {
-      const state: AppState = store.getState();
-
       const contentRef = action.payload.contentRef;
 
-      const content = selectors.content(state, { contentRef });
+      const content = selectors.content(state$.value, { contentRef });
 
       if (
         !content ||

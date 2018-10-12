@@ -189,7 +189,7 @@ export const launchKernelByNameEpic = (
  */
 export const launchKernelEpic = (
   action$: ActionsObservable<*>,
-  store: *
+  state$: *
 ): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL),
@@ -213,7 +213,7 @@ export const launchKernelEpic = (
       // TODO: Do the async version of `ipc.send`, potentially coordinate with main process
       ipc.send("nteract:ping:kernel", action.payload.kernelSpec);
 
-      const oldKernelRef = selectors.currentKernelRef(store.getState());
+      const oldKernelRef = selectors.currentKernelRef(state$.value);
 
       // Kill the old kernel by emitting the action to kill it if it exists
       let cleanupOldKernel$ = empty();
@@ -251,15 +251,18 @@ export const launchKernelEpic = (
     })
   );
 
-export const interruptKernelEpic = (action$: *, store: *): Observable<Action> =>
+export const interruptKernelEpic = (
+  action$: *,
+  state$: *
+): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.INTERRUPT_KERNEL),
     // This epic can only interrupt direct zeromq connected kernels
-    filter(() => selectors.isCurrentKernelZeroMQ(store.getState())),
+    filter(() => selectors.isCurrentKernelZeroMQ(state$.value)),
     // If the user fires off _more_ interrupts, we shouldn't interrupt the in-flight
     // interrupt, instead doing it after the last one happens
     concatMap((action: actionTypes.InterruptKernel) => {
-      const kernel = selectors.currentKernel(store.getState());
+      const kernel = selectors.currentKernel(state$.value);
       if (!kernel) {
         return of(
           actions.interruptKernelFailed({
@@ -316,13 +319,12 @@ function killSpawn(spawn: *): void {
 // This might be better named shutdownKernel because it first attempts a graceful
 // shutdown by sending a shutdown msg to the kernel, and only if the kernel
 // doesn't respond promptly does it SIGKILL the kernel.
-export const killKernelEpic = (action$: *, store: *): Observable<Action> =>
+export const killKernelEpic = (action$: *, state$: *): Observable<Action> =>
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),
     concatMap((action: actionTypes.KillKernelAction) => {
-      const state = store.getState();
       const kernelRef = action.payload.kernelRef;
-      const kernel = selectors.kernel(state, { kernelRef });
+      const kernel = selectors.kernel(state$.value, { kernelRef });
 
       if (!kernel) {
         console.warn("tried to kill a kernel that doesn't exist");
