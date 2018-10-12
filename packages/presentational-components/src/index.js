@@ -9,6 +9,7 @@ import { Prompt, PromptBuffer } from "./components/prompt.js";
 import { Source } from "./components/source.js";
 import { Cell } from "./components/cell.js";
 import { Cells } from "./components/cells.js";
+import { HeaderEditor } from "./components/header-editor.js";
 
 export * from "./styles";
 
@@ -22,5 +23,6 @@ export {
   PromptBuffer,
   Source,
   Cell,
-  Cells
+  Cells,
+  HeaderEditor
 };
