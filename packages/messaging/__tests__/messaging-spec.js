@@ -1,5 +1,5 @@
 import { from, of } from "rxjs";
-import { pluck, tap, count, toArray } from "rxjs/operators";
+import { tap, count, toArray } from "rxjs/operators";
 import { ofMessageType, childOf } from "../src/index";
 
 import {
@@ -98,7 +98,7 @@ describe("ofMessageType", () => {
         tap(val => {
           expect(val.header.msg_type === "a" || val.header.msg_type === "d");
         }),
-        pluck("header", "msg_type"),
+        map(entry => entry.header.msg_type),
         count()
       )
       .toPromise()
@@ -136,7 +136,7 @@ describe("ofMessageType", () => {
         tap(val => {
           expect(val.header.msg_type === "a" || val.header.msg_type === "d");
         }),
-        pluck("header", "msg_type"),
+        map(entry => entry.header.msg_type),
         count()
       )
       .toPromise()
@@ -157,7 +157,7 @@ describe("ofMessageType", () => {
         tap(val => {
           expect(val.header.msg_type === "a" || val.header.msg_type === "d");
         }),
-        pluck("header", "msg_type"),
+        map(entry => entry.header.msg_type),
         count()
       )
       .toPromise()

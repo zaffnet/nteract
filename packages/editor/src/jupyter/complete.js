@@ -1,6 +1,6 @@
 // @flow
 import { Observable } from "rxjs";
-import { pluck, first, map, timeout } from "rxjs/operators";
+import { first, map, timeout } from "rxjs/operators";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -108,7 +108,7 @@ export function codeCompleteObservable(
   const completion$ = channels.pipe(
     childOf(message),
     ofMessageType("complete_reply"),
-    pluck("content"),
+    map(entry => entry.content),
     first(),
     map(expand_completions(editor)),
     timeout(15000) // Large timeout for slower languages; this is just here to make sure we eventually clean up resources

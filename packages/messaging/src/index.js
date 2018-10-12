@@ -2,7 +2,7 @@
 /* eslint camelcase: 0 */ // <-- Per Jupyter message spec
 
 import { Observable, from } from "rxjs";
-import { pluck, filter, map, mergeMap } from "rxjs/operators";
+import { filter, map, mergeMap } from "rxjs/operators";
 
 import { message, executeRequest } from "./messages";
 
@@ -143,7 +143,7 @@ export const payloads = () => (
 ): rxjs$Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("execute_reply"),
-    pluck("content", "payload"),
+    map(entry => entry.content.payload),
     filter(Boolean),
     mergeMap(p => from(p))
   );
@@ -156,7 +156,7 @@ export const executionCounts = () => (
 ): rxjs$Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("execute_input"),
-    pluck("content", "execution_count")
+    map(entry => entry.content.execution_count)
   );
 
 export const kernelStatuses = () => (
@@ -164,7 +164,7 @@ export const kernelStatuses = () => (
 ): rxjs$Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("status"),
-    pluck("content", "execution_state")
+    map(entry => entry.content.execution_state)
   );
 
 export * from "./messages";
