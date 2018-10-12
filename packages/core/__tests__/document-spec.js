@@ -353,7 +353,7 @@ describe("moveCell", () => {
   test("should move a cell above another when asked", () => {
     const originalState = reducers(
       initialDocument.set("notebook", dummyCommutable),
-      actions.createCellAfter({
+      actions.createCellBelow({
         id: dummyCommutable.get("cellOrder").first(),
         cellType: "markdown",
         source: "# Woo\n*Yay*"
@@ -437,13 +437,13 @@ describe("clearOutputs", () => {
   });
 });
 
-describe("createCellAfter", () => {
+describe("createCellBelow", () => {
   test("creates a brand new cell after the given id", () => {
     const originalState = monocellDocument;
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const state = reducers(
       originalState,
-      actions.createCellAfter({ cellType: "markdown", id })
+      actions.createCellBelow({ cellType: "markdown", id })
     );
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(4);
     const cellID = state.getIn(["notebook", "cellOrder"]).last();
@@ -452,13 +452,13 @@ describe("createCellAfter", () => {
   });
 });
 
-describe("createCellBefore", () => {
+describe("createCellAbove", () => {
   test("creates a new cell before the given id", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
     const id = originalState.getIn(["notebook", "cellOrder"]).last();
     const state = reducers(
       originalState,
-      actions.createCellBefore({ cellType: "markdown", id })
+      actions.createCellAbove({ cellType: "markdown", id })
     );
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
     expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(id);

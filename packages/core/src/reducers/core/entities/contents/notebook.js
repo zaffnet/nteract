@@ -416,9 +416,9 @@ function removeCellFromState(
   );
 }
 
-function createCellAfter(
+function createCellBelow(
   state: NotebookModel,
-  action: actionTypes.CreateCellAfter
+  action: actionTypes.createCellBelow
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
@@ -434,9 +434,9 @@ function createCellAfter(
   });
 }
 
-function createCellBefore(
+function createCellAbove(
   state: NotebookModel,
-  action: actionTypes.CreateCellBefore
+  action: actionTypes.createCellAbove
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
@@ -494,8 +494,8 @@ function acceptPayloadMessage(
       // FIXME: This is a weird pattern. We're basically faking a dispatch here
       // inside a reducer and then appending to the result. I think that both of
       // these reducers should just handle the original action.
-      return createCellAfter(state, {
-        type: actionTypes.CREATE_CELL_AFTER,
+      return createCellBelow(state, {
+        type: actionTypes.CREATE_CELL_BELOW,
         // $FlowFixMe: Switch this over to creating a cell after without having to take an action
         payload: {
           cellType: "code",
@@ -750,8 +750,8 @@ type DocumentAction =
   | actionTypes.UpdateDisplay
   | actionTypes.MoveCell
   | actionTypes.RemoveCell
-  | actionTypes.CreateCellAfter
-  | actionTypes.CreateCellBefore
+  | actionTypes.createCellBelow
+  | actionTypes.createCellAbove
   | actionTypes.CreateCellAppend
   | actionTypes.ToggleCellOutputVisibility
   | actionTypes.ToggleCellInputVisibility
@@ -814,10 +814,10 @@ export function notebook(
       return moveCell(state, action);
     case actionTypes.REMOVE_CELL:
       return removeCellFromState(state, action);
-    case actionTypes.CREATE_CELL_AFTER:
-      return createCellAfter(state, action);
-    case actionTypes.CREATE_CELL_BEFORE:
-      return createCellBefore(state, action);
+    case actionTypes.CREATE_CELL_BELOW:
+      return createCellBelow(state, action);
+    case actionTypes.CREATE_CELL_ABOVE:
+      return createCellAbove(state, action);
     case actionTypes.CREATE_CELL_APPEND:
       return createCellAppend(state, action);
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:

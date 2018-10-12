@@ -167,9 +167,9 @@ export type RemoveCell = {
   }
 };
 
-export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
-export type CreateCellAfter = {
-  type: "CREATE_CELL_AFTER",
+export const CREATE_CELL_BELOW = "CREATE_CELL_BELOW";
+export type createCellBelow = {
+  type: "CREATE_CELL_BELOW",
   payload: {
     id?: CellID,
     cellType: CellType,
@@ -178,9 +178,9 @@ export type CreateCellAfter = {
   }
 };
 
-export const CREATE_CELL_BEFORE = "CREATE_CELL_BEFORE";
-export type CreateCellBefore = {
-  type: "CREATE_CELL_BEFORE",
+export const CREATE_CELL_ABOVE = "CREATE_CELL_ABOVE";
+export type createCellAbove = {
+  type: "CREATE_CELL_ABOVE",
   payload: {
     cellType: CellType,
     id?: CellID,

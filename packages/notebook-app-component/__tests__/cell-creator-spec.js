@@ -72,7 +72,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("markdown");
-        expect(action.type).toBe(actionTypes.CREATE_CELL_AFTER);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_BELOW);
         resolve();
       };
       store.dispatch = dispatch;
@@ -97,7 +97,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("code");
-        expect(action.type).toBe(actionTypes.CREATE_CELL_AFTER);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_BELOW);
         resolve();
       };
       store.dispatch = dispatch;
@@ -122,7 +122,7 @@ describe("CellCreatorProvider", () => {
       const dispatch = action => {
         expect(action.payload.id).toBe("test");
         expect(action.payload.cellType).toBe("code");
-        expect(action.type).toBe(actionTypes.CREATE_CELL_BEFORE);
+        expect(action.type).toBe(actionTypes.CREATE_CELL_ABOVE);
         resolve();
       };
       store.dispatch = dispatch;

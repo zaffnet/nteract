@@ -420,7 +420,7 @@ export function dispatchCreateCellAbove(
   store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
-    actions.createCellBefore({
+    actions.createCellAbove({
       cellType: "code",
       contentRef: ownProps.contentRef
     })
@@ -432,7 +432,7 @@ export function dispatchCreateCellBelow(
   store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
-    actions.createCellAfter({
+    actions.createCellBelow({
       cellType: "code",
       source: "",
       contentRef: ownProps.contentRef
@@ -445,7 +445,7 @@ export function dispatchCreateTextCellBelow(
   store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
-    actions.createCellAfter({
+    actions.createCellBelow({
       cellType: "markdown",
       source: "",
       contentRef: ownProps.contentRef

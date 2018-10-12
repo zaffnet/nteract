@@ -249,25 +249,25 @@ export function removeCell(payload: {
   };
 }
 
-export function createCellAfter(payload: {
+export function createCellBelow(payload: {
   id?: CellID,
   cellType: CellType,
   source: string,
   contentRef: ContentRef
-}): actionTypes.CreateCellAfter {
+}): actionTypes.createCellBelow {
   return {
-    type: actionTypes.CREATE_CELL_AFTER,
+    type: actionTypes.CREATE_CELL_BELOW,
     payload
   };
 }
 
-export function createCellBefore(payload: {
+export function createCellAbove(payload: {
   cellType: CellType,
   id?: string,
   contentRef: ContentRef
-}): actionTypes.CreateCellBefore {
+}): actionTypes.createCellAbove {
   return {
-    type: actionTypes.CREATE_CELL_BEFORE,
+    type: actionTypes.CREATE_CELL_ABOVE,
     payload
   };
 }

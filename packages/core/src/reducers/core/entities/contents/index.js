@@ -177,8 +177,8 @@ const byRef = (state = Immutable.Map(), action) => {
     case actionTypes.SET_IN_CELL:
     case actionTypes.MOVE_CELL:
     case actionTypes.REMOVE_CELL:
-    case actionTypes.CREATE_CELL_AFTER:
-    case actionTypes.CREATE_CELL_BEFORE:
+    case actionTypes.CREATE_CELL_BELOW:
+    case actionTypes.CREATE_CELL_ABOVE:
     case actionTypes.CREATE_CELL_APPEND:
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:
     case actionTypes.TOGGLE_CELL_INPUT_VISIBILITY:

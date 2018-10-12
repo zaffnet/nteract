@@ -13,8 +13,8 @@ type Props = {
 type ConnectedProps = {
   above: boolean,
   createCellAppend: (payload: *) => void,
-  createCellBefore: (payload: *) => void,
-  createCellAfter: (payload: *) => void,
+  createCellAbove: (payload: *) => void,
+  createCellBelow: (payload: *) => void,
   id?: string,
   contentRef: ContentRef
 };
@@ -122,9 +122,9 @@ class CellCreator extends React.Component<ConnectedProps> {
   createCell = (type: "code" | "markdown"): void => {
     const {
       above,
-      createCellAfter,
+      createCellBelow,
       createCellAppend,
-      createCellBefore,
+      createCellAbove,
       id,
       contentRef
     } = this.props;
@@ -135,8 +135,8 @@ class CellCreator extends React.Component<ConnectedProps> {
     }
 
     above
-      ? createCellBefore({ cellType: type, id, contentRef })
-      : createCellAfter({ cellType: type, id, source: "", contentRef });
+      ? createCellAbove({ cellType: type, id, contentRef })
+      : createCellBelow({ cellType: type, id, source: "", contentRef });
   };
 
   render() {
@@ -148,8 +148,8 @@ class CellCreator extends React.Component<ConnectedProps> {
 
 const mapDispatchToProps = dispatch => ({
   createCellAppend: (payload: *) => dispatch(actions.createCellAppend(payload)),
-  createCellBefore: (payload: *) => dispatch(actions.createCellBefore(payload)),
-  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload))
+  createCellAbove: (payload: *) => dispatch(actions.createCellAbove(payload)),
+  createCellBelow: (payload: *) => dispatch(actions.createCellBelow(payload))
 });
 
 // $FlowFixMe: react-redux typings
