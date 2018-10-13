@@ -17,7 +17,6 @@ import { Provider } from "react-redux";
  * @param {string} options.storeKey This key will be used to preserve store in global namespace for safe HMR
  */
 const makeStore = () => {
-  // eslint-disable-line no-unused-vars
   return createStore();
 };
 
