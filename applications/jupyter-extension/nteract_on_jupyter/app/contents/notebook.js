@@ -12,6 +12,7 @@ import {
 } from "@nteract/transforms";
 
 const displayOrder = [
+  "application/vnd.jupyter.widget-view+json",
   "application/vnd.vega.v3+json",
   "application/vnd.vega.v2+json",
   "application/vnd.vegalite.v2+json",
@@ -104,6 +105,12 @@ export default class Notebook extends React.Component<Props, State> {
     import(/* webpackChunkName: "tabular-dataresource" */ "@nteract/transform-dataresource").then(
       module => {
         this.registerTransform(module.default);
+      }
+    );
+
+    import(/* webpackChunkName: "jupyter-widgets" */ "@nteract/transform-widgets").then(
+      module => {
+        this.registerTransform(module.WidgetDisplay);
       }
     );
 
