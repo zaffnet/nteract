@@ -254,7 +254,7 @@ export function createCellBelow(payload: {
   cellType: CellType,
   source: string,
   contentRef: ContentRef
-}): actionTypes.createCellBelow {
+}): actionTypes.CreateCellBelow {
   return {
     type: actionTypes.CREATE_CELL_BELOW,
     payload
@@ -265,9 +265,34 @@ export function createCellAbove(payload: {
   cellType: CellType,
   id?: string,
   contentRef: ContentRef
-}): actionTypes.createCellAbove {
+}): actionTypes.CreateCellAbove {
   return {
     type: actionTypes.CREATE_CELL_ABOVE,
+    payload
+  };
+}
+
+// Deprecation Warning: createCellAfter() is being deprecated. Please use createCellBelow() instead
+export function createCellAfter(payload: {
+  id?: CellID,
+  cellType: CellType,
+  source: string,
+  contentRef: ContentRef
+}): actionTypes.CreateCellAfter {
+  return {
+    type: actionTypes.CREATE_CELL_AFTER,
+    payload
+  };
+}
+
+// Deprecation Warning: createCellBefore is deprecated. Please use createCellAbove() instead
+export function createCellBefore(payload: {
+  cellType: CellType,
+  id?: string,
+  contentRef: ContentRef
+}): actionTypes.CreateCellBefore {
+  return {
+    type: actionTypes.CREATE_CELL_BEFORE,
     payload
   };
 }

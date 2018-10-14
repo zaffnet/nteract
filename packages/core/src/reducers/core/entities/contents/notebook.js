@@ -418,7 +418,7 @@ function removeCellFromState(
 
 function createCellBelow(
   state: NotebookModel,
-  action: actionTypes.createCellBelow
+  action: actionTypes.CreateCellBelow
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
@@ -436,8 +436,50 @@ function createCellBelow(
 
 function createCellAbove(
   state: NotebookModel,
-  action: actionTypes.createCellAbove
+  action: actionTypes.CreateCellAbove
 ) {
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType } = action.payload;
+  const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
+  const cellID = uuid();
+  return state.update("notebook", (notebook: ImmutableNotebook) => {
+    const cellOrder: ImmutableCellOrder = notebook.get(
+      "cellOrder",
+      Immutable.List()
+    );
+    const index = cellOrder.indexOf(id);
+    return insertCellAt(notebook, cell, cellID, index);
+  });
+}
+
+function createCellAfter(
+  state: NotebookModel,
+  action: actionTypes.CreateCellAfter
+) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellBelow() instead");
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType, source } = action.payload;
+  const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
+  const cellID = uuid();
+  return state.update("notebook", (notebook: ImmutableNotebook) => {
+    const index = notebook.get("cellOrder", Immutable.List()).indexOf(id) + 1;
+    return insertCellAt(notebook, cell.set("source", source), cellID, index);
+  });
+}
+
+function createCellBefore(
+  state: NotebookModel,
+  action: actionTypes.CreateCellBefore
+) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellAbove() instead");
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -737,6 +779,7 @@ function toggleOutputExpansion(
   );
 }
 
+// DEPRECATION WARNING: Below, the following action types are being deprecated: createCellAfter and createCellBefore
 type DocumentAction =
   | actionTypes.ToggleTagInCell
   | actionTypes.FocusPreviousCellEditor
@@ -750,8 +793,10 @@ type DocumentAction =
   | actionTypes.UpdateDisplay
   | actionTypes.MoveCell
   | actionTypes.RemoveCell
-  | actionTypes.createCellBelow
-  | actionTypes.createCellAbove
+  | actionTypes.CreateCellBelow
+  | actionTypes.CreateCellAbove
+  | actionTypes.CreateCellAfter
+  | actionTypes.CreateCellBefore
   | actionTypes.CreateCellAppend
   | actionTypes.ToggleCellOutputVisibility
   | actionTypes.ToggleCellInputVisibility
@@ -818,6 +863,12 @@ export function notebook(
       return createCellBelow(state, action);
     case actionTypes.CREATE_CELL_ABOVE:
       return createCellAbove(state, action);
+    case actionTypes.CREATE_CELL_AFTER:
+      console.log('DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_BELOW instead');
+      return createCellAfter(state, action);
+    case actionTypes.CREATE_CELL_BEFORE:
+      console.log('DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_ABOVE instead');
+      return createCellBefore(state, action);
     case actionTypes.CREATE_CELL_APPEND:
       return createCellAppend(state, action);
     case actionTypes.TOGGLE_CELL_OUTPUT_VISIBILITY:

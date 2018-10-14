@@ -333,6 +333,32 @@ describe("createCellAbove", () => {
   });
 });
 
+describe("createCellAfter", () => {
+  test("WARNING:DEPRECATED. Use createCellBelow() instead. creates a CREATE_CELL_AFTER action with provided source string", () => {
+    const cellType = "code";
+    const id = "1234";
+    const source = 'print("woo")';
+    expect(actions.createCellAfter({ cellType, id, source })).toEqual({
+      type: actionTypes.CREATE_CELL_AFTER,
+      payload: { source, cellType, id }
+    });
+  });
+});
+
+describe("createCellBefore", () => {
+  test("WARNING:DEPRECATED. USE createCellAbove() instead. creates a CREATE_CELL_BEFORE action", () => {
+    expect(
+      actions.createCellBefore({ cellType: "markdown", id: "1234" })
+    ).toEqual({
+      type: actionTypes.CREATE_CELL_BEFORE,
+      payload: {
+        cellType: "markdown",
+        id: "1234"
+      }
+    });
+  });
+});
+
 describe("createCellAppend", () => {
   test("creates a CREATE_CELL_APPEND action", () => {
     expect(actions.createCellAppend({ cellType: "markdown" })).toEqual({

@@ -168,7 +168,7 @@ export type RemoveCell = {
 };
 
 export const CREATE_CELL_BELOW = "CREATE_CELL_BELOW";
-export type createCellBelow = {
+export type CreateCellBelow = {
   type: "CREATE_CELL_BELOW",
   payload: {
     id?: CellID,
@@ -179,8 +179,31 @@ export type createCellBelow = {
 };
 
 export const CREATE_CELL_ABOVE = "CREATE_CELL_ABOVE";
-export type createCellAbove = {
+export type CreateCellAbove = {
   type: "CREATE_CELL_ABOVE",
+  payload: {
+    cellType: CellType,
+    id?: CellID,
+    contentRef: ContentRef
+  }
+};
+
+// DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_BELOW instead
+export const CREATE_CELL_AFTER = "CREATE_CELL_AFTER";
+export type CreateCellAfter = {
+  type: "CREATE_CELL_AFTER",
+  payload: {
+    id?: CellID,
+    cellType: CellType,
+    source: string,
+    contentRef: ContentRef
+  }
+};
+
+// DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_ABOVE instead
+export const CREATE_CELL_BEFORE = "CREATE_CELL_BEFORE";
+export type CreateCellBefore = {
+  type: "CREATE_CELL_BEFORE",
   payload: {
     cellType: CellType,
     id?: CellID,

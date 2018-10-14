@@ -465,6 +465,34 @@ describe("createCellAbove", () => {
   });
 });
 
+describe("createCellAfter", () => {
+  test("WARNING:DEPRECATED. Use createCellBelow() instead. Creates a brand new cell after the given id", () => {
+    const originalState = monocellDocument;
+    const id = originalState.getIn(["notebook", "cellOrder"]).last();
+    const state = reducers(
+      originalState,
+      actions.createCellAfter({ cellType: "markdown", id })
+    );
+    expect(state.getIn(["notebook", "cellOrder"]).size).toBe(4);
+    const cellID = state.getIn(["notebook", "cellOrder"]).last();
+    const cell = state.getIn(["notebook", "cellMap", cellID]);
+    expect(cell.get("cell_type")).toBe("markdown");
+  });
+});
+
+describe("createCellBefore", () => {
+  test("WARNING:DEPRECATED. sue createCellAbove() instead. Creates a new cell before the given id", () => {
+    const originalState = initialDocument.set("notebook", dummyCommutable);
+    const id = originalState.getIn(["notebook", "cellOrder"]).last();
+    const state = reducers(
+      originalState,
+      actions.createCellBefore({ cellType: "markdown", id })
+    );
+    expect(state.getIn(["notebook", "cellOrder"]).size).toBe(3);
+    expect(state.getIn(["notebook", "cellOrder"]).last()).toBe(id);
+  });
+});
+
 describe("newCellAppend", () => {
   test("appends a new code cell at the end", () => {
     const originalState = initialDocument.set("notebook", dummyCommutable);
