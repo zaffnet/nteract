@@ -1,5 +1,995 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<JSON />; renders JSON data 1`] = `
+<ul
+  style={
+    Object {
+      "MozUserSelect": "none",
+      "WebkitUserSelect": "none",
+      "backgroundColor": "transparent",
+      "border": 0,
+      "listStyle": "none",
+      "marginBottom": "0.5em",
+      "marginLeft": "0.125em",
+      "marginRight": 0,
+      "marginTop": "0.5em",
+      "padding": 0,
+    }
+  }
+>
+  <li
+    style={
+      Object {
+        "margin": 0,
+        "padding": 0,
+      }
+    }
+  >
+    <ul
+      style={
+        Object {
+          "listStyle": "none",
+          "margin": 0,
+          "padding": 0,
+        }
+      }
+    >
+      <li
+        style={
+          Object {
+            "marginLeft": 0,
+            "paddingLeft": 0,
+            "paddingTop": "0.25em",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+              "display": "inline-block",
+              "paddingLeft": 0,
+              "paddingRight": "0.5em",
+            }
+          }
+        >
+          <div
+            style={
+              Object {
+                "MozTransform": "rotateZ(90deg)",
+                "MozTransformOrigin": "45% 50%",
+                "MozTransition": "150ms",
+                "WebkitTransform": "rotateZ(90deg)",
+                "WebkitTransformOrigin": "45% 50%",
+                "WebkitTransition": "150ms",
+                "color": "#268bd2",
+                "fontSize": "0.75em",
+                "lineHeight": "1.1em",
+                "marginLeft": 0,
+                "position": "relative",
+                "transform": "rotateZ(90deg)",
+                "transformOrigin": "45% 50%",
+                "transition": "150ms",
+              }
+            }
+          >
+            ▶
+          </div>
+        </div>
+        <label
+          onClick={[Function]}
+          style={
+            Object {
+              "MozUserSelect": "inherit",
+              "WebkitUserSelect": "inherit",
+              "color": "#268bd2",
+              "cursor": "pointer",
+              "display": "inline-block",
+              "margin": 0,
+              "padding": 0,
+            }
+          }
+        >
+          <span>
+            total_population
+            :
+          </span>
+        </label>
+        <span
+          onClick={[Function]}
+          style={
+            Object {
+              "color": "#657b83",
+              "cursor": "default",
+              "paddingLeft": "0.5em",
+            }
+          }
+        >
+          <span>
+            <span
+              style={
+                Object {
+                  "marginLeft": "0.3em",
+                  "marginRight": "0.3em",
+                }
+              }
+            >
+              []
+            </span>
+             
+            2 items
+          </span>
+        </span>
+        <ul
+          style={
+            Object {
+              "display": "block",
+              "listStyle": "none",
+              "margin": 0,
+              "padding": 0,
+            }
+          }
+        >
+          <li
+            style={
+              Object {
+                "marginLeft": "0.875em",
+                "paddingLeft": 0,
+                "paddingTop": "0.25em",
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              onClick={[Function]}
+              style={
+                Object {
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "paddingLeft": 0,
+                  "paddingRight": "0.5em",
+                }
+              }
+            >
+              <div
+                style={
+                  Object {
+                    "MozTransform": "rotateZ(90deg)",
+                    "MozTransformOrigin": "45% 50%",
+                    "MozTransition": "150ms",
+                    "WebkitTransform": "rotateZ(90deg)",
+                    "WebkitTransformOrigin": "45% 50%",
+                    "WebkitTransition": "150ms",
+                    "color": "#268bd2",
+                    "fontSize": "0.75em",
+                    "lineHeight": "1.1em",
+                    "marginLeft": 0,
+                    "position": "relative",
+                    "transform": "rotateZ(90deg)",
+                    "transformOrigin": "45% 50%",
+                    "transition": "150ms",
+                  }
+                }
+              >
+                ▶
+              </div>
+            </div>
+            <label
+              onClick={[Function]}
+              style={
+                Object {
+                  "MozUserSelect": "inherit",
+                  "WebkitUserSelect": "inherit",
+                  "color": "#268bd2",
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <span>
+                0
+                :
+              </span>
+            </label>
+            <span
+              onClick={[Function]}
+              style={
+                Object {
+                  "color": "#657b83",
+                  "cursor": "default",
+                  "paddingLeft": "0.5em",
+                }
+              }
+            >
+              <span>
+                <span
+                  style={
+                    Object {
+                      "marginLeft": "0.3em",
+                      "marginRight": "0.3em",
+                    }
+                  }
+                >
+                  {}
+                </span>
+                 
+                2 keys
+              </span>
+            </span>
+            <ul
+              style={
+                Object {
+                  "display": "block",
+                  "listStyle": "none",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    date
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#66BB6A",
+                    }
+                  }
+                >
+                  "2018-10-13"
+                </span>
+              </li>
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    population
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#cb4b16",
+                    }
+                  }
+                >
+                  329499086
+                </span>
+              </li>
+            </ul>
+          </li>
+          <li
+            style={
+              Object {
+                "marginLeft": "0.875em",
+                "paddingLeft": 0,
+                "paddingTop": "0.25em",
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              onClick={[Function]}
+              style={
+                Object {
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "paddingLeft": 0,
+                  "paddingRight": "0.5em",
+                }
+              }
+            >
+              <div
+                style={
+                  Object {
+                    "MozTransform": "rotateZ(90deg)",
+                    "MozTransformOrigin": "45% 50%",
+                    "MozTransition": "150ms",
+                    "WebkitTransform": "rotateZ(90deg)",
+                    "WebkitTransformOrigin": "45% 50%",
+                    "WebkitTransition": "150ms",
+                    "color": "#268bd2",
+                    "fontSize": "0.75em",
+                    "lineHeight": "1.1em",
+                    "marginLeft": 0,
+                    "position": "relative",
+                    "transform": "rotateZ(90deg)",
+                    "transformOrigin": "45% 50%",
+                    "transition": "150ms",
+                  }
+                }
+              >
+                ▶
+              </div>
+            </div>
+            <label
+              onClick={[Function]}
+              style={
+                Object {
+                  "MozUserSelect": "inherit",
+                  "WebkitUserSelect": "inherit",
+                  "color": "#268bd2",
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <span>
+                1
+                :
+              </span>
+            </label>
+            <span
+              onClick={[Function]}
+              style={
+                Object {
+                  "color": "#657b83",
+                  "cursor": "default",
+                  "paddingLeft": "0.5em",
+                }
+              }
+            >
+              <span>
+                <span
+                  style={
+                    Object {
+                      "marginLeft": "0.3em",
+                      "marginRight": "0.3em",
+                    }
+                  }
+                >
+                  {}
+                </span>
+                 
+                2 keys
+              </span>
+            </span>
+            <ul
+              style={
+                Object {
+                  "display": "block",
+                  "listStyle": "none",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    date
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#66BB6A",
+                    }
+                  }
+                >
+                  "2018-10-14"
+                </span>
+              </li>
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    population
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#cb4b16",
+                    }
+                  }
+                >
+                  329505562
+                </span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+`;
+
+exports[`<JSON />; updates the theme if it changes 1`] = `
+<ul
+  style={
+    Object {
+      "MozUserSelect": "none",
+      "WebkitUserSelect": "none",
+      "backgroundColor": "transparent",
+      "border": 0,
+      "listStyle": "none",
+      "marginBottom": "0.5em",
+      "marginLeft": "0.125em",
+      "marginRight": 0,
+      "marginTop": "0.5em",
+      "padding": 0,
+    }
+  }
+>
+  <li
+    style={
+      Object {
+        "margin": 0,
+        "padding": 0,
+      }
+    }
+  >
+    <ul
+      style={
+        Object {
+          "listStyle": "none",
+          "margin": 0,
+          "padding": 0,
+        }
+      }
+    >
+      <li
+        style={
+          Object {
+            "marginLeft": 0,
+            "paddingLeft": 0,
+            "paddingTop": "0.25em",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+              "display": "inline-block",
+              "paddingLeft": 0,
+              "paddingRight": "0.5em",
+            }
+          }
+        >
+          <div
+            style={
+              Object {
+                "MozTransform": "rotateZ(90deg)",
+                "MozTransformOrigin": "45% 50%",
+                "MozTransition": "150ms",
+                "WebkitTransform": "rotateZ(90deg)",
+                "WebkitTransformOrigin": "45% 50%",
+                "WebkitTransition": "150ms",
+                "color": "#268bd2",
+                "fontSize": "0.75em",
+                "lineHeight": "1.1em",
+                "marginLeft": 0,
+                "position": "relative",
+                "transform": "rotateZ(90deg)",
+                "transformOrigin": "45% 50%",
+                "transition": "150ms",
+              }
+            }
+          >
+            ▶
+          </div>
+        </div>
+        <label
+          onClick={[Function]}
+          style={
+            Object {
+              "MozUserSelect": "inherit",
+              "WebkitUserSelect": "inherit",
+              "color": "#268bd2",
+              "cursor": "pointer",
+              "display": "inline-block",
+              "margin": 0,
+              "padding": 0,
+            }
+          }
+        >
+          <span>
+            total_population
+            :
+          </span>
+        </label>
+        <span
+          onClick={[Function]}
+          style={
+            Object {
+              "color": "#657b83",
+              "cursor": "default",
+              "paddingLeft": "0.5em",
+            }
+          }
+        >
+          <span>
+            <span
+              style={
+                Object {
+                  "marginLeft": "0.3em",
+                  "marginRight": "0.3em",
+                }
+              }
+            >
+              []
+            </span>
+             
+            2 items
+          </span>
+        </span>
+        <ul
+          style={
+            Object {
+              "display": "block",
+              "listStyle": "none",
+              "margin": 0,
+              "padding": 0,
+            }
+          }
+        >
+          <li
+            style={
+              Object {
+                "marginLeft": "0.875em",
+                "paddingLeft": 0,
+                "paddingTop": "0.25em",
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              onClick={[Function]}
+              style={
+                Object {
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "paddingLeft": 0,
+                  "paddingRight": "0.5em",
+                }
+              }
+            >
+              <div
+                style={
+                  Object {
+                    "MozTransform": "rotateZ(90deg)",
+                    "MozTransformOrigin": "45% 50%",
+                    "MozTransition": "150ms",
+                    "WebkitTransform": "rotateZ(90deg)",
+                    "WebkitTransformOrigin": "45% 50%",
+                    "WebkitTransition": "150ms",
+                    "color": "#268bd2",
+                    "fontSize": "0.75em",
+                    "lineHeight": "1.1em",
+                    "marginLeft": 0,
+                    "position": "relative",
+                    "transform": "rotateZ(90deg)",
+                    "transformOrigin": "45% 50%",
+                    "transition": "150ms",
+                  }
+                }
+              >
+                ▶
+              </div>
+            </div>
+            <label
+              onClick={[Function]}
+              style={
+                Object {
+                  "MozUserSelect": "inherit",
+                  "WebkitUserSelect": "inherit",
+                  "color": "#268bd2",
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <span>
+                0
+                :
+              </span>
+            </label>
+            <span
+              onClick={[Function]}
+              style={
+                Object {
+                  "color": "#657b83",
+                  "cursor": "default",
+                  "paddingLeft": "0.5em",
+                }
+              }
+            >
+              <span>
+                <span
+                  style={
+                    Object {
+                      "marginLeft": "0.3em",
+                      "marginRight": "0.3em",
+                    }
+                  }
+                >
+                  {}
+                </span>
+                 
+                2 keys
+              </span>
+            </span>
+            <ul
+              style={
+                Object {
+                  "display": "block",
+                  "listStyle": "none",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    date
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#EDF3F7",
+                    }
+                  }
+                >
+                  "2018-10-13"
+                </span>
+              </li>
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    population
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#cb4b16",
+                    }
+                  }
+                >
+                  329499086
+                </span>
+              </li>
+            </ul>
+          </li>
+          <li
+            style={
+              Object {
+                "marginLeft": "0.875em",
+                "paddingLeft": 0,
+                "paddingTop": "0.25em",
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              onClick={[Function]}
+              style={
+                Object {
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "paddingLeft": 0,
+                  "paddingRight": "0.5em",
+                }
+              }
+            >
+              <div
+                style={
+                  Object {
+                    "MozTransform": "rotateZ(90deg)",
+                    "MozTransformOrigin": "45% 50%",
+                    "MozTransition": "150ms",
+                    "WebkitTransform": "rotateZ(90deg)",
+                    "WebkitTransformOrigin": "45% 50%",
+                    "WebkitTransition": "150ms",
+                    "color": "#268bd2",
+                    "fontSize": "0.75em",
+                    "lineHeight": "1.1em",
+                    "marginLeft": 0,
+                    "position": "relative",
+                    "transform": "rotateZ(90deg)",
+                    "transformOrigin": "45% 50%",
+                    "transition": "150ms",
+                  }
+                }
+              >
+                ▶
+              </div>
+            </div>
+            <label
+              onClick={[Function]}
+              style={
+                Object {
+                  "MozUserSelect": "inherit",
+                  "WebkitUserSelect": "inherit",
+                  "color": "#268bd2",
+                  "cursor": "pointer",
+                  "display": "inline-block",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <span>
+                1
+                :
+              </span>
+            </label>
+            <span
+              onClick={[Function]}
+              style={
+                Object {
+                  "color": "#657b83",
+                  "cursor": "default",
+                  "paddingLeft": "0.5em",
+                }
+              }
+            >
+              <span>
+                <span
+                  style={
+                    Object {
+                      "marginLeft": "0.3em",
+                      "marginRight": "0.3em",
+                    }
+                  }
+                >
+                  {}
+                </span>
+                 
+                2 keys
+              </span>
+            </span>
+            <ul
+              style={
+                Object {
+                  "display": "block",
+                  "listStyle": "none",
+                  "margin": 0,
+                  "padding": 0,
+                }
+              }
+            >
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    date
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#EDF3F7",
+                    }
+                  }
+                >
+                  "2018-10-14"
+                </span>
+              </li>
+              <li
+                style={
+                  Object {
+                    "MozUserSelect": "text",
+                    "WebkitUserSelect": "text",
+                    "marginLeft": "0.875em",
+                    "paddingLeft": "2.125em",
+                    "paddingRight": 0,
+                    "paddingTop": "0.25em",
+                    "textIndent": "-0.5em",
+                    "wordBreak": "break-all",
+                    "wordWrap": "break-word",
+                  }
+                }
+              >
+                <label
+                  style={
+                    Object {
+                      "color": "#268bd2",
+                      "display": "inline-block",
+                      "margin": "0 0.5em 0 0",
+                    }
+                  }
+                >
+                  <span>
+                    population
+                    :
+                  </span>
+                </label>
+                <span
+                  style={
+                    Object {
+                      "color": "#cb4b16",
+                    }
+                  }
+                >
+                  329505562
+                </span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+`;
+
 exports[`HTML renders direct HTML 1`] = `
 <HTML
   data="<b>cats are best</b>"
