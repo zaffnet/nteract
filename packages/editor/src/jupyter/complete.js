@@ -112,8 +112,8 @@ export function codeCompleteObservable(
     pluck("content"),
     first(),
     map(expand_completions(editor)),
-    timeout(2000)
-  ); // 2s
+    timeout(15000) // Large timeout for slower languages; this is just here to make sure we eventually clean up resources
+  );
 
   // On subscription, send the message
   return Observable.create(observer => {

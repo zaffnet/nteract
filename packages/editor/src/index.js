@@ -3,10 +3,22 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
 
+import { empty } from "rxjs/observable/empty";
 import { of } from "rxjs/observable/of";
 import { fromEvent } from "rxjs/observable/fromEvent";
+import { merge } from "rxjs/observable/merge";
 import type { Subscription } from "rxjs/Subscription";
-import { switchMap } from "rxjs/operators";
+import { Subject } from "rxjs/Subject";
+import {
+  catchError,
+  debounceTime,
+  map,
+  partition,
+  repeat,
+  switchMap,
+  takeUntil
+} from "rxjs/operators";
+
 
 import { RichestMime } from "@nteract/display-area";
 
@@ -54,6 +66,8 @@ type CodeMirrorEditorState = {
   tipElement: ?any
 };
 
+type CodeCompletionEvent = { editor: Object, callback: Function, debounce: boolean };
+
 class CodeMirrorEditor extends React.Component<
   CodeMirrorEditorProps,
   CodeMirrorEditorState
@@ -62,6 +76,9 @@ class CodeMirrorEditor extends React.Component<
   cm: CMI;
   defaultOptions: Object;
   keyupEventsSubscriber: Subscription;
+  completionSubject: Subject<CodeCompletionEvent>;
+  completionEventsSubscriber: Subscription;
+  debounceNextCompletionRequest: boolean;
 
   static defaultProps = {
     theme: "light",
@@ -82,6 +99,7 @@ class CodeMirrorEditor extends React.Component<
     (this: any).deleteTip = this.deleteTip.bind(this);
     // $FlowFixMe: weirdness in the codemirror API
     this.hint.async = true;
+    this.debounceNextCompletionRequest = true;
     this.state = { isFocused: true, tipElement: null };
 
     this.defaultOptions = Object.assign(
@@ -100,7 +118,10 @@ class CodeMirrorEditor extends React.Component<
           }
         },
         extraKeys: {
-          "Ctrl-Space": "autocomplete",
+          "Ctrl-Space": editor => {
+             this.debounceNextCompletionRequest = false;
+             return editor.execCommand("autocomplete");
+          },
           Tab: this.executeTab,
           "Shift-Tab": editor => editor.execCommand("indentLess"),
           Up: this.goLineUpOrEmit,
@@ -125,7 +146,7 @@ class CodeMirrorEditor extends React.Component<
   }
 
   componentDidMount(): void {
-    const { editorFocused, kernelStatus, focusAbove, focusBelow } = this.props;
+    const { completion, editorFocused, focusAbove, focusBelow } = this.props;
 
     require("codemirror/addon/hint/show-hint");
     require("codemirror/addon/hint/anyword-hint");
@@ -173,27 +194,65 @@ class CodeMirrorEditor extends React.Component<
       ev
     }));
 
+    // Initiate code completion in response to some keystrokes *other than* "Ctrl-Space" (which is bound in extraKeys, above)
     this.keyupEventsSubscriber = keyupEvents
       .pipe(switchMap(i => of(i)))
       .subscribe(({ editor, ev }) => {
-        const cursor = editor.getDoc().getCursor();
-        const token = editor.getTokenAt(cursor);
-
         if (
+          completion &&
           !editor.state.completionActive &&
           !excludedIntelliSenseTriggerKeys[
             (ev.keyCode || ev.which).toString()
-          ] &&
-          (token.type === "tag" ||
+          ]
+        ) {
+          const cursor = editor.getDoc().getCursor();
+          const token = editor.getTokenAt(cursor);
+          if (
+            token.type === "tag" ||
             token.type === "variable" ||
             token.string === " " ||
             token.string === "<" ||
-            token.string === "/") &&
-          kernelStatus === "idle"
-        ) {
-          editor.execCommand("autocomplete", { completeSingle: false });
+            token.string === "/" ||
+            token.string === "."
+          ) {
+            editor.execCommand("autocomplete");
+          }
         }
       });
+
+    this.completionSubject = new Subject();
+
+    const [debounce, immediate] = this.completionSubject.pipe(
+      partition(ev => ev.debounce === true)
+    );
+
+    const mergedCompletionEvents = merge(
+      immediate,
+      debounce.pipe(
+        debounceTime(150),
+        takeUntil(immediate), // Upon receipt of an immediate event, cancel anything queued up from debounce.
+                              // This handles "type chars quickly, then quickly hit Ctrl+Space", ensuring that it
+                              // generates just one event rather than two.
+        repeat()              // Resubscribe to wait for next debounced event.
+      )
+    );
+
+    const completionResults = mergedCompletionEvents.pipe(
+      switchMap((ev: CodeCompletionEvent) => {
+        const { channels } = this.props;
+        if (!channels) throw new Error("Unexpectedly received a completion event when channels were unset");
+        return codeComplete(channels, ev.editor).pipe(
+          map(completionResult => () => ev.callback(completionResult)),
+          takeUntil(this.completionSubject), // Complete immediately upon next event, even if it's a debounced one - https://blog.strongbrew.io/building-a-safe-autocomplete-operator-with-rxjs/
+          catchError((error: Error) => {
+            console.log("Code completion error: " + error.message);
+            return empty();
+          })
+        );
+      })
+    );
+
+    this.completionEventsSubscriber = completionResults.subscribe(callback => callback());
   }
 
   componentDidUpdate(prevProps: CodeMirrorEditorProps): void {
@@ -258,6 +317,7 @@ class CodeMirrorEditor extends React.Component<
       this.cm.toTextArea();
     }
     this.keyupEventsSubscriber.unsubscribe();
+    this.completionEventsSubscriber.unsubscribe();
   }
 
   focusChanged(focused: boolean) {
@@ -269,8 +329,11 @@ class CodeMirrorEditor extends React.Component<
 
   completions(editor: Object, callback: Function): void {
     const { completion, channels } = this.props;
+    const debounceThisCompletionRequest = this.debounceNextCompletionRequest;
+    this.debounceNextCompletionRequest = true;
     if (completion && channels) {
-      codeComplete(channels, editor).subscribe(callback);
+      const el = { editor: editor, callback: callback, debounce: debounceThisCompletionRequest };
+      this.completionSubject.next(el);
     }
   }
 
