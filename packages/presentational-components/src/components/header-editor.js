@@ -1,8 +1,6 @@
 // @flow
 import * as React from "react";
 
-import blueprintCSS from "../vendor/blueprint.css.js";
-
 import {
   H1,
   Tag,
@@ -11,6 +9,8 @@ import {
   Position,
   Tooltip
 } from "@blueprintjs/core";
+
+import { blueprintCSS } from "@nteract/styled-blueprintjsx";
 
 // https://github.com/jupyter/nbformat/blob/master/nbformat/v4/nbformat.v4.schema.json#L67
 
