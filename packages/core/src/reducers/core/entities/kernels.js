@@ -1,5 +1,6 @@
 // @flow
 import {
+  makeKernelNotStartedRecord,
   makeLocalKernelRecord,
   makeRemoteKernelRecord,
   makeKernelsRecord
@@ -45,8 +46,23 @@ const byRef = (
     case actionTypes.RESTART_KERNEL:
       return state.setIn([action.payload.kernelRef, "status"], "restarting");
     case actionTypes.LAUNCH_KERNEL:
+      const launchAction = (action: actionTypes.LaunchKernelAction);
+      return state.set(
+        launchAction.payload.kernelRef,
+        makeKernelNotStartedRecord({
+          status: "launching",
+          kernelSpecName: launchAction.payload.kernelSpec.name
+        })
+      );
     case actionTypes.LAUNCH_KERNEL_BY_NAME:
-      return state.setIn([action.payload.kernelRef, "status"], "launching");
+      const launchByNameAction = (action: actionTypes.LaunchKernelByNameAction);
+      return state.set(
+        launchByNameAction.payload.kernelRef,
+        makeKernelNotStartedRecord({
+          status: "launching",
+          kernelSpecName: launchByNameAction.payload.kernelSpecName
+        })
+      );
     case actionTypes.CHANGE_KERNEL_BY_NAME:
       return state.setIn([action.payload.oldKernelRef, "status"], "changing");
     case actionTypes.SET_KERNEL_INFO:
