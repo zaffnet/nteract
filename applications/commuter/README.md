@@ -1,4 +1,4 @@
-[![▲ Now Deployed](https://img.shields.io/badge/%E2%96%B2%20now-deployed-777777.svg)](https://commuter-now-otvkncbefl.now.sh/view/)
+[![Glitch Deployed](https://img.shields.io/badge/glitch-deployed-3652d3.svg)](https://hydrosquall-nteract-commuter-glitch-demo.glitch.me/view/)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 # com·mut·er
@@ -25,6 +25,9 @@ and convenience.
 ![commuter](https://cloud.githubusercontent.com/assets/836375/23089382/e330effa-f53c-11e6-85d0-7561ccdbe163.gif)
 
 Try **commuter** today and take your notebooks wherever you need them.
+
+- [Demo](https://hydrosquall-nteract-commuter-glitch-demo.glitch.me/view/)
+- [Remix Demo](https://glitch.com/edit/#!/remix/hydrosquall-nteract-commuter-glitch-demo)
 
 ## Installation
 
