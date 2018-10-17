@@ -17,7 +17,7 @@ export const CONFIG_FILE_PATH = path.join(HOME, ".jupyter", "nteract.json");
 /**
  * An epic that loads the configuration.
  */
-export const loadConfigEpic = (action$: ActionsObservable<*>) =>
+export const loadConfigEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LOAD_CONFIG),
     switchMap(() =>
@@ -30,7 +30,7 @@ export const loadConfigEpic = (action$: ActionsObservable<*>) =>
 /**
  * An epic that saves the configuration if it has been changed.
  */
-export const saveConfigOnChangeEpic = (action$: ActionsObservable<*>) =>
+export const saveConfigOnChangeEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.SET_CONFIG_AT_KEY),
     mapTo({ type: actionTypes.SAVE_CONFIG })
@@ -39,7 +39,7 @@ export const saveConfigOnChangeEpic = (action$: ActionsObservable<*>) =>
 /**
  * An epic that saves the configuration.
  */
-export const saveConfigEpic = (action$: ActionsObservable<*>, state$: *) =>
+export const saveConfigEpic = (action$: ActionsObservable<redux$Action>, state$: *) =>
   action$.pipe(
     ofType(actionTypes.SAVE_CONFIG),
     mergeMap(() =>

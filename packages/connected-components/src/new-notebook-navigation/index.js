@@ -231,7 +231,6 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = () => ({});
 
-// $FlowFixMe: react-redux
 export const NewNotebookNavigation = connect(
   mapStateToProps,
   mapDispatchToProps

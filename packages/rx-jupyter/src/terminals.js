@@ -1,7 +1,7 @@
 // @flow
 
 import { ajax } from "rxjs/ajax";
-import Observable from "rxjs";
+import { Observable } from "rxjs";
 
 import { createAJAXSettings, normalizeBaseURL } from "./base";
 

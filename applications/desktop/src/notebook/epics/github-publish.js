@@ -56,7 +56,7 @@ function publishGist(
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$: ActionsObservable<*>, state$: *) => {
+export const publishEpic = (action$: ActionsObservable<redux$Action>, state$: *) => {
   return action$.pipe(
     ofType(actionTypes.PUBLISH_GIST),
     mergeMap((action: actionTypes.PublishGist) => {

@@ -155,8 +155,8 @@ export const kernelSpecsObservable = Observable.create(observer => {
 });
 
 export const launchKernelByNameEpic = (
-  action$: ActionsObservable<*>
-): Observable<Action> =>
+  action$: ActionsObservable<redux$Action>
+): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_BY_NAME),
     tap((action: actionTypes.LaunchKernelByNameAction) => {
@@ -188,9 +188,9 @@ export const launchKernelByNameEpic = (
  * @param  {ActionObservable} action$  ActionObservable for LAUNCH_KERNEL action
  */
 export const launchKernelEpic = (
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state$: *
-): Observable<Action> =>
+): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL),
     // We must kill the previous kernel now
@@ -254,7 +254,7 @@ export const launchKernelEpic = (
 export const interruptKernelEpic = (
   action$: *,
   state$: *
-): Observable<Action> =>
+): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.INTERRUPT_KERNEL),
     // This epic can only interrupt direct zeromq connected kernels
@@ -319,7 +319,10 @@ function killSpawn(spawn: *): void {
 // This might be better named shutdownKernel because it first attempts a graceful
 // shutdown by sending a shutdown msg to the kernel, and only if the kernel
 // doesn't respond promptly does it SIGKILL the kernel.
-export const killKernelEpic = (action$: *, state$: *): Observable<Action> =>
+export const killKernelEpic = (
+  action$: *,
+  state$: *
+): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),
     concatMap((action: actionTypes.KillKernelAction) => {

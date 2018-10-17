@@ -18,7 +18,7 @@ import {
 
 export function onBeforeUnloadOrReload(
   contentRef: ContentRef,
-  store: Store<DesktopNotebookAppState, Action>,
+  store: Store<DesktopNotebookAppState, redux$Action>,
   reloading: boolean
 ) {
   const state = store.getState();
@@ -34,7 +34,10 @@ export function onBeforeUnloadOrReload(
     // Dispatch asynchronously since returning ASAP is imperative for canceling close/unload.
     // See https://github.com/electron/electron/issues/12668
     setTimeout(
-      () => store.dispatch(actions.closeNotebook({ contentRef: contentRef, reloading })),
+      () =>
+        store.dispatch(
+          actions.closeNotebook({ contentRef: contentRef, reloading })
+        ),
       0
     );
   }
@@ -46,12 +49,17 @@ export function onBeforeUnloadOrReload(
 
 export function initGlobalHandlers(
   contentRef: ContentRef,
-  store: Store<DesktopNotebookAppState, Action>
+  store: Store<DesktopNotebookAppState, redux$Action>
 ) {
   // This wiring of onBeforeUnloadOrReload is meant to handle:
   // - User closing window by hand
   // - Programmatic close from main process such as during a quit
-  window.onbeforeunload = onBeforeUnloadOrReload.bind(null, contentRef, store, false);
+  window.onbeforeunload = onBeforeUnloadOrReload.bind(
+    null,
+    contentRef,
+    store,
+    false
+  );
 
   // This is our manually orchestrated reload. Tried using onclose vs. onbeforeunload
   // to distinguish between the close and reload cases, but onclose doesn't fire

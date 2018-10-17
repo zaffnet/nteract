@@ -171,7 +171,6 @@ export function createMainChannelFromSockets(
 ) {
   // The mega subject that encapsulates all the sockets as one multiplexed stream
   const subject = Subject.create(
-    // $FlowFixMe: figure out if this is a shortcoming in the flow def or our declaration
     Subscriber.create(
       message => {
         // There's always a chance that a bad message is sent, we'll ignore it

@@ -33,7 +33,7 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import { ipcRenderer as ipc } from "electron";
 
-export const closeNotebookEpic = (action$: ActionsObservable<*>, state$: *) =>
+export const closeNotebookEpic = (action$: ActionsObservable<redux$Action>, state$: *) =>
   action$.pipe(
     ofType(actionTypes.CLOSE_NOTEBOOK),
     exhaustMap((action: actionTypes.CloseNotebook) => {

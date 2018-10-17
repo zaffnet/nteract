@@ -118,7 +118,7 @@ export function executeCellStream(
 }
 
 export function createExecuteCellStream(
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state: any,
   message: ExecuteRequest,
   id: string,
@@ -171,7 +171,10 @@ export function createExecuteCellStream(
   );
 }
 
-export function executeAllCellsEpic(action$: ActionsObservable<*>, state$: *) {
+export function executeAllCellsEpic(
+  action$: ActionsObservable<redux$Action>,
+  state$: *
+) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
     concatMap((action: ExecuteAllCells | ExecuteAllCellsBelow) => {
@@ -204,7 +207,10 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, state$: *) {
  * the execute cell epic processes execute requests for all cells, creating
  * inner observable streams of the running execution responses
  */
-export function executeCellEpic(action$: ActionsObservable<*>, state$: any) {
+export function executeCellEpic(
+  action$: ActionsObservable<redux$Action>,
+  state$: any
+) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_CELL, actionTypes.EXECUTE_FOCUSED_CELL),
     mergeMap((action: ExecuteCell | ExecuteFocusedCell) => {
@@ -300,7 +306,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, state$: any) {
   );
 }
 
-export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
+export const updateDisplayEpic = (action$: ActionsObservable<redux$Action>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),

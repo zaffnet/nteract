@@ -42,7 +42,7 @@ export type LocalKernelProps = {
   info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
-  channels: rxjs$Subject<*>,
+  channels: Subject<*>,
   cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
@@ -77,7 +77,7 @@ export type RemoteKernelProps = {
   info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
-  channels: rxjs$Subject<*>,
+  channels: Subject<*>,
   cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status

@@ -1,6 +1,5 @@
 // @flow
-import { applyMiddleware, createStore } from "redux";
-import { compose } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { createEpicMiddleware } from "redux-observable";
 import { middlewares as coreMiddlewares } from "@nteract/core";
 
@@ -29,7 +28,7 @@ type State = {
 
 export default function(givenInitialState: Object = {}) {
   const initialState = merge(getInitialState(), givenInitialState);
-  const epicMiddleware = createEpicMiddleware();
+  const epicMiddleware = createEpicMiddleware<redux$Action, *, *, *>();
   const composeEnhancers =
     (typeof window !== "undefined" &&
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
@@ -39,7 +38,10 @@ export default function(givenInitialState: Object = {}) {
     reducer,
     initialState,
     composeEnhancers(
-      applyMiddleware(epicMiddleware, coreMiddlewares.errorMiddleware)
+      applyMiddleware<any, redux$Action, *>(
+        epicMiddleware,
+        coreMiddlewares.errorMiddleware
+      )
     )
   );
   epicMiddleware.run(epics);

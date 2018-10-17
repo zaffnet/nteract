@@ -121,7 +121,7 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
   );
 }
 
-export function initNativeHandlers(contentRef: ContentRef, store: *) {
+export function initNativeHandlers(contentRef: ContentRef, store: any) {
   const state$ = from(store).pipe(share());
 
   return createTitleFeed(contentRef, state$).subscribe(

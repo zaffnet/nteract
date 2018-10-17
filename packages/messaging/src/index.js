@@ -26,7 +26,7 @@ export function createExecuteRequest(code: string = ""): ExecuteRequest {
  * parentMessage's header
  */
 export const childOf = (parentMessage: JupyterMessage<*, *>) => (
-  source: rxjs$Observable<JupyterMessage<*, *>>
+  source: Observable<JupyterMessage<*, *>>
 ) => {
   const parentMessageID = parentMessage.header.msg_id;
   return Observable.create(subscriber =>
@@ -68,8 +68,8 @@ export const ofMessageType = (
   }
 
   return (
-    source: rxjs$Observable<JupyterMessage<*, *>>
-  ): rxjs$Observable<JupyterMessage<*, *>> =>
+    source: Observable<JupyterMessage<*, *>>
+  ): Observable<JupyterMessage<*, *>> =>
     Observable.create(subscriber =>
       source.subscribe(
         msg => {
@@ -115,16 +115,16 @@ export function convertOutputMessageToNotebookFormat(
  *   )
  */
 export const outputs = () => (
-  source: rxjs$Observable<JupyterMessage<*, *>>
-): rxjs$Observable<JupyterMessage<*, *>> =>
+  source: Observable<JupyterMessage<*, *>>
+): Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("execute_result", "display_data", "stream", "error"),
     map(convertOutputMessageToNotebookFormat)
   );
 
 export const updatedOutputs = () => (
-  source: rxjs$Observable<*>
-): rxjs$Observable<*> =>
+  source: Observable<*>
+): Observable<*> =>
   source.pipe(
     ofMessageType("update_display_data"),
     map(msg => Object.assign({}, msg.content, { output_type: "display_data" }))
@@ -139,8 +139,8 @@ export const updatedOutputs = () => (
  *   )
  */
 export const payloads = () => (
-  source: rxjs$Observable<JupyterMessage<*, *>>
-): rxjs$Observable<JupyterMessage<*, *>> =>
+  source: Observable<JupyterMessage<*, *>>
+): Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("execute_reply"),
     map(entry => entry.content.payload),
@@ -152,16 +152,16 @@ export const payloads = () => (
  * Get all the execution counts from an observable of jupyter messages
  */
 export const executionCounts = () => (
-  source: rxjs$Observable<JupyterMessage<*, *>>
-): rxjs$Observable<JupyterMessage<*, *>> =>
+  source: Observable<JupyterMessage<*, *>>
+): Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("execute_input"),
     map(entry => entry.content.execution_count)
   );
 
 export const kernelStatuses = () => (
-  source: rxjs$Observable<JupyterMessage<*, *>>
-): rxjs$Observable<JupyterMessage<*, *>> =>
+  source: Observable<JupyterMessage<*, *>>
+): Observable<JupyterMessage<*, *>> =>
   source.pipe(
     ofMessageType("status"),
     map(entry => entry.content.execution_state)

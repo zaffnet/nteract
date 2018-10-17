@@ -1,4 +1,4 @@
-/* @flow strict */
+/* @flow */
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { createEpicMiddleware, combineEpics } from "redux-observable";
 
@@ -22,7 +22,7 @@ export default function configureStore(initialState: AppState) {
   const store = createStore(
     rootReducer,
     initialState,
-    composeEnhancers(applyMiddleware(middlewares))
+    composeEnhancers(applyMiddleware<any, redux$Action, *>(middlewares))
   );
 
   middlewares.run(rootEpic);

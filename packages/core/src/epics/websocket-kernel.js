@@ -1,6 +1,7 @@
 // @flow
 
 import { ofType } from "redux-observable";
+import type { ActionsObservable, StateObservable } from "redux-observable";
 
 import {
   catchError,
@@ -21,11 +22,15 @@ import * as actionTypes from "../actionTypes";
 import { castToSessionId } from "../state/ids";
 import { createKernelRef } from "../state/refs";
 
+import type { AppState } from "../state";
 import type { RemoteKernelProps } from "../state/entities/kernels";
 
 import { kernelInfoRequest } from "@nteract/messaging";
 
-export const launchWebSocketKernelEpic = (action$: *, state$: any) =>
+export const launchWebSocketKernelEpic = (
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_BY_NAME),
     // Only accept jupyter servers for the host with this epic
@@ -98,7 +103,10 @@ export const launchWebSocketKernelEpic = (action$: *, state$: any) =>
     })
   );
 
-export const changeWebSocketKernelEpic = (action$: *, state$: any) =>
+export const changeWebSocketKernelEpic = (
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) =>
   action$.pipe(
     ofType(actionTypes.CHANGE_KERNEL_BY_NAME),
     // Only accept jupyter servers for the host with this epic
@@ -192,7 +200,10 @@ export const changeWebSocketKernelEpic = (action$: *, state$: any) =>
     })
   );
 
-export const interruptKernelEpic = (action$: *, state$: any) =>
+export const interruptKernelEpic = (
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) =>
   action$.pipe(
     ofType(actionTypes.INTERRUPT_KERNEL),
     // This epic can only interrupt kernels on jupyter websockets
@@ -249,7 +260,10 @@ export const interruptKernelEpic = (action$: *, state$: any) =>
   );
 
 // NB: This epic kills the *current* kernel. ZMQ killKernelEpic kills a *specified* kernel.
-export const killKernelEpic = (action$: *, state$: *) =>
+export const killKernelEpic = (
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) =>
   // TODO: Use the sessions API for this
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),

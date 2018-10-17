@@ -30,13 +30,17 @@ import {
 
 import { closeNotebookEpic } from "./close-notebook";
 
-export function retryAndEmitError(err: Error, source: ActionsObservable<*>) {
+export function retryAndEmitError(
+  err: Error,
+  source: ActionsObservable<redux$Action>
+) {
   console.error(err);
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<*, *, *, *>) => (...args: *) =>
-  epic(...args).pipe(catchError(retryAndEmitError));
+export const wrapEpic = (epic: Epic<redux$Action, redux$Action, *, *>) => (
+  ...args: *
+) => epic(...args).pipe(catchError(retryAndEmitError));
 
 const epics: Array<Epic<*, *, *, *>> = [
   coreEpics.restartKernelEpic,

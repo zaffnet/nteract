@@ -11,7 +11,7 @@ import type { FetchKernelspecs } from "../actionTypes";
 import * as selectors from "../selectors";
 
 export const fetchKernelspecsEpic = (
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state$: any
 ) =>
   action$.pipe(

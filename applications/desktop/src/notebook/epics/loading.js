@@ -15,8 +15,6 @@ import type { ImmutableNotebook } from "@nteract/commutable";
 
 import { actionTypes, actions, selectors } from "@nteract/core";
 
-import type { AppState } from "@nteract/core";
-
 /**
  * Determines the right kernel to launch based on a notebook
  */
@@ -99,7 +97,7 @@ function createContentsResponse(
  *
  * @param  {ActionObservable}  A LOAD action with the notebook filename
  */
-export const fetchContentEpic = (action$: ActionsObservable<*>) =>
+export const fetchContentEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT),
     tap((action: actionTypes.FetchContent) => {
@@ -116,7 +114,8 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
         readFileObservable(filepath),
         statObservable(filepath),
         // Project onto the Contents API response
-        (content, stat) => createContentsResponse(filepath, stat, content)
+        (content, stat): JupyterApi$Content =>
+          createContentsResponse(filepath, stat, content)
       ).pipe(
         // Timeout after one minute
         timeout(60 * 1000),
@@ -143,7 +142,7 @@ export const fetchContentEpic = (action$: ActionsObservable<*>) =>
   );
 
 export const launchKernelWhenNotebookSetEpic = (
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state$: *
 ) =>
   action$.pipe(
@@ -182,7 +181,7 @@ export const launchKernelWhenNotebookSetEpic = (
  *
  * @param  {ActionObservable}  ActionObservable for NEW_NOTEBOOK action
  */
-export const newNotebookEpic = (action$: ActionsObservable<*>) =>
+export const newNotebookEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.NEW_NOTEBOOK),
     map((action: actionTypes.NewNotebook) => {

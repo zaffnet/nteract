@@ -17,7 +17,7 @@ import { mergeMap, catchError, map } from "rxjs/operators";
  *
  * @param  {ActionObservable}  action$ The SAVE action with the filename and notebook
  */
-export function saveEpic(action$: ActionsObservable<*>, state$: *) {
+export function saveEpic(action$: ActionsObservable<redux$Action>, state$: *) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
     mergeMap((action: actionTypes.Save) => {
@@ -89,7 +89,7 @@ export function saveEpic(action$: ActionsObservable<*>, state$: *) {
  *
  * @param  {ActionObservable}  action$ The SAVE_AS action with the filename and notebook
  */
-export function saveAsEpic(action$: ActionsObservable<*>) {
+export function saveAsEpic(action$: ActionsObservable<redux$Action>) {
   return action$.pipe(
     ofType(actionTypes.SAVE_AS),
     mergeMap((action: actionTypes.SaveAs) => {

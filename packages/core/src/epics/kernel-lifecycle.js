@@ -34,7 +34,7 @@ import type { AppState, KernelInfo } from "../state";
  *
  * @oaram  {ActionObservable}  action$ ActionObservable for LAUNCH_KERNEL_SUCCESSFUL action
  */
-export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
+export const watchExecutionStateEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) =>
@@ -114,7 +114,7 @@ export function acquireKernelInfo(
  *
  * @param  {ActionObservable}  The action type
  */
-export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
+export const acquireKernelInfoEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) => {
@@ -154,7 +154,7 @@ export const extractNewKernel = (
  *       We could always inject those dependencies separately...
  */
 export const launchKernelWhenNotebookSetEpic = (
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state$: any
 ) =>
   action$.pipe(
@@ -193,7 +193,7 @@ export const launchKernelWhenNotebookSetEpic = (
   );
 
 export const restartKernelEpic = (
-  action$: ActionsObservable<*>,
+  action$: ActionsObservable<redux$Action>,
   state$: any,
   kernelRefGenerator: () => KernelRef = createKernelRef
 ) =>
