@@ -249,6 +249,30 @@ export function removeCell(payload: {
   };
 }
 
+export function createCellBelow(payload: {
+  id?: CellID,
+  cellType: CellType,
+  source: string,
+  contentRef: ContentRef
+}): actionTypes.CreateCellBelow {
+  return {
+    type: actionTypes.CREATE_CELL_BELOW,
+    payload
+  };
+}
+
+export function createCellAbove(payload: {
+  cellType: CellType,
+  id?: string,
+  contentRef: ContentRef
+}): actionTypes.CreateCellAbove {
+  return {
+    type: actionTypes.CREATE_CELL_ABOVE,
+    payload
+  };
+}
+
+// Deprecation Warning: createCellAfter() is being deprecated. Please use createCellBelow() instead
 export function createCellAfter(payload: {
   id?: CellID,
   cellType: CellType,
@@ -261,6 +285,7 @@ export function createCellAfter(payload: {
   };
 }
 
+// Deprecation Warning: createCellBefore is deprecated. Please use createCellAbove() instead
 export function createCellBefore(payload: {
   cellType: CellType,
   id?: string,

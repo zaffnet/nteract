@@ -307,8 +307,34 @@ describe("focusNextCellEditor", () => {
   });
 });
 
+describe("createCellBelow", () => {
+  test("creates a CREATE_CELL_BELOW action with provided source string", () => {
+    const cellType = "code";
+    const id = "1234";
+    const source = 'print("woo")';
+    expect(actions.createCellBelow({ cellType, id, source })).toEqual({
+      type: actionTypes.CREATE_CELL_BELOW,
+      payload: { source, cellType, id }
+    });
+  });
+});
+
+describe("createCellAbove", () => {
+  test("creates a CREATE_CELL_ABOVE action", () => {
+    expect(
+      actions.createCellAbove({ cellType: "markdown", id: "1234" })
+    ).toEqual({
+      type: actionTypes.CREATE_CELL_ABOVE,
+      payload: {
+        cellType: "markdown",
+        id: "1234"
+      }
+    });
+  });
+});
+
 describe("createCellAfter", () => {
-  test("creates a CREATE_CELL_AFTER action with provided source string", () => {
+  test("WARNING:DEPRECATED. Use createCellBelow() instead. creates a CREATE_CELL_AFTER action with provided source string", () => {
     const cellType = "code";
     const id = "1234";
     const source = 'print("woo")';
@@ -320,7 +346,7 @@ describe("createCellAfter", () => {
 });
 
 describe("createCellBefore", () => {
-  test("creates a CREATE_CELL_BEFORE action", () => {
+  test("WARNING:DEPRECATED. USE createCellAbove() instead. creates a CREATE_CELL_BEFORE action", () => {
     expect(
       actions.createCellBefore({ cellType: "markdown", id: "1234" })
     ).toEqual({

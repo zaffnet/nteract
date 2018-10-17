@@ -6,7 +6,7 @@ import { actions, actionTypes } from "@nteract/core";
 import * as Immutable from "immutable";
 
 describe("dispatchCreateCellAbove", () => {
-  test("dispatches a CREATE_CELL_BEFORE with code action", () => {
+  test("dispatches a CREATE_CELL_ABOVE with code action", () => {
     const store = {
       dispatch: jest.fn()
     };
@@ -16,7 +16,7 @@ describe("dispatchCreateCellAbove", () => {
 
     menu.dispatchCreateCellAbove(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
-      actions.createCellBefore({
+      actions.createCellAbove({
         cellType: "code",
         contentRef: props.contentRef
       })
@@ -25,7 +25,7 @@ describe("dispatchCreateCellAbove", () => {
 });
 
 describe("dispatchCreateCellBelow", () => {
-  test("dispatches a CREATE_CELL_AFTER with code action", () => {
+  test("dispatches a CREATE_CELL_BELOW with code action", () => {
     const store = {
       dispatch: jest.fn()
     };
@@ -34,6 +34,65 @@ describe("dispatchCreateCellBelow", () => {
     };
 
     menu.dispatchCreateCellBelow(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.createCellBelow({
+        cellType: "code",
+        source: "",
+        contentRef: props.contentRef
+      })
+    );
+  });
+});
+
+describe("dispatchCreateTextCellBelow", () => {
+  test("dispatches a CREATE_CELL_BELOW with markdown action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchCreateTextCellBelow(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.createCellBelow({
+        cellType: "markdown",
+        source: "",
+        contentRef: "123"
+      })
+    );
+  });
+});
+
+describe("dispatchCreateCellBefore", () => {
+  test("WARNING: DEPRECATED. Use createCellAbove() instead. dispatches a CREATE_CELL_BEFORE with code action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchCreateCellBefore(props, store);
+    expect(store.dispatch).toHaveBeenCalledWith(
+      actions.createCellBefore({
+        cellType: "code",
+        contentRef: props.contentRef
+      })
+    );
+  });
+});
+
+describe("dispatchCreateCellAfter", () => {
+  test("WARNING: DEPRECATED. Use createCellBelow() instead. dispatches a CREATE_CELL_AFTER with code action", () => {
+    const store = {
+      dispatch: jest.fn()
+    };
+    const props = {
+      contentRef: "123"
+    };
+
+    menu.dispatchCreateCellAfter(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
       actions.createCellAfter({
         cellType: "code",
@@ -44,8 +103,8 @@ describe("dispatchCreateCellBelow", () => {
   });
 });
 
-describe("dispatchCreateTextCellBelow", () => {
-  test("dispatches a CREATE_CELL_AFTER with markdown action", () => {
+describe("dispatchCreateTextCellAfter", () => {
+  test("WARNING:DEPRECATED. dispatches a CREATE_CELL_AFTER with markdown action", () => {
     const store = {
       dispatch: jest.fn()
     };
@@ -53,7 +112,7 @@ describe("dispatchCreateTextCellBelow", () => {
       contentRef: "123"
     };
 
-    menu.dispatchCreateTextCellBelow(props, store);
+    menu.dispatchCreateTextCellAfter(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
       actions.createCellAfter({
         cellType: "markdown",

@@ -40,7 +40,7 @@ type Props = {
   copyCell: ?(payload: *) => void,
   notebook: Immutable.Map<string, *>,
   pasteCell: ?(payload: *) => void,
-  createCellAfter: ?(payload: *) => void,
+  createCellBelow: ?(payload: *) => void,
   changeCellType: ?(payload: *) => void,
   setTheme: ?(theme: ?string) => void,
   openAboutModal: ?() => void,
@@ -77,7 +77,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
     cutCell: null,
     copyCell: null,
     pasteCell: null,
-    createCellAfter: null,
+    createCellBelow: null,
     setCellTypeCode: null,
     setCellTypeMarkdown: null,
     setTheme: null,
@@ -98,7 +98,7 @@ class PureNotebookMenu extends React.Component<Props, State> {
       changeKernelByName,
       currentKernelRef,
       copyCell,
-      createCellAfter,
+      createCellBelow,
       cutCell,
       executeAllCells,
       executeAllCellsBelow,
@@ -143,8 +143,8 @@ class PureNotebookMenu extends React.Component<Props, State> {
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_CODE_CELL:
-        if (createCellAfter) {
-          createCellAfter({
+        if (createCellBelow) {
+          createCellBelow({
             cellType: "code",
             source: "",
             contentRef: currentContentRef
@@ -152,8 +152,8 @@ class PureNotebookMenu extends React.Component<Props, State> {
         }
         break;
       case MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL:
-        if (createCellAfter) {
-          createCellAfter({
+        if (createCellBelow) {
+          createCellBelow({
             cellType: "markdown",
             source: "",
             contentRef: currentContentRef
@@ -485,7 +485,7 @@ const mapDispatchToProps = dispatch => ({
   cutCell: (payload: *) => dispatch(actions.cutCell(payload)),
   copyCell: (payload: *) => dispatch(actions.copyCell(payload)),
   pasteCell: (payload: *) => dispatch(actions.pasteCell(payload)),
-  createCellAfter: (payload: *) => dispatch(actions.createCellAfter(payload)),
+  createCellBelow: (payload: *) => dispatch(actions.createCellBelow(payload)),
   changeCellType: (payload: *) => dispatch(actions.changeCellType(payload)),
   setTheme: theme => dispatch(actions.setTheme(theme)),
   openAboutModal: () =>

@@ -39,7 +39,7 @@ describe("PureNotebookMenu ", () => {
         cutCell: jest.fn(),
         copyCell: jest.fn(),
         pasteCell: jest.fn(),
-        createCellAfter: jest.fn(),
+        createCellBelow: jest.fn(),
         changeCellType: jest.fn(),
         setTheme: jest.fn(),
         saveNotebook: jest.fn(),
@@ -146,23 +146,23 @@ describe("PureNotebookMenu ", () => {
       const createMarkdownCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_MARKDOWN_CELL })
         .first();
-      expect(props.createCellAfter).not.toHaveBeenCalled();
+      expect(props.createCellBelow).not.toHaveBeenCalled();
       createMarkdownCellItem.simulate("click");
-      expect(props.createCellAfter).toHaveBeenCalledTimes(1);
-      expect(props.createCellAfter).toHaveBeenCalledWith({
+      expect(props.createCellBelow).toHaveBeenCalledTimes(1);
+      expect(props.createCellBelow).toHaveBeenCalledWith({
         cellType: "markdown",
         contentRef: props.currentContentRef,
         source: ""
       });
 
-      props.createCellAfter.mockClear();
+      props.createCellBelow.mockClear();
       const createCodeCellItem = wrapper
         .find({ eventKey: MENU_ITEM_ACTIONS.CREATE_CODE_CELL })
         .first();
-      expect(props.createCellAfter).not.toHaveBeenCalled();
+      expect(props.createCellBelow).not.toHaveBeenCalled();
       createCodeCellItem.simulate("click");
-      expect(props.createCellAfter).toHaveBeenCalledTimes(1);
-      expect(props.createCellAfter).toHaveBeenCalledWith({
+      expect(props.createCellBelow).toHaveBeenCalledTimes(1);
+      expect(props.createCellBelow).toHaveBeenCalledWith({
         cellType: "code",
         contentRef: props.currentContentRef,
         source: ""

@@ -420,7 +420,7 @@ export function dispatchCreateCellAbove(
   store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
-    actions.createCellBefore({
+    actions.createCellAbove({
       cellType: "code",
       contentRef: ownProps.contentRef
     })
@@ -432,7 +432,7 @@ export function dispatchCreateCellBelow(
   store: Store<DesktopNotebookAppState, *>
 ) {
   store.dispatch(
-    actions.createCellAfter({
+    actions.createCellBelow({
       cellType: "code",
       source: "",
       contentRef: ownProps.contentRef
@@ -444,6 +444,47 @@ export function dispatchCreateTextCellBelow(
   ownProps: { contentRef: ContentRef },
   store: Store<DesktopNotebookAppState, *>
 ) {
+  store.dispatch(
+    actions.createCellBelow({
+      cellType: "markdown",
+      source: "",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchCreateCellBefore(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellAbove() instead");
+  store.dispatch(
+    actions.createCellBefore({
+      cellType: "code",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchCreateCellAfter(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellBelow() instead");
+  store.dispatch(
+    actions.createCellAfter({
+      cellType: "code",
+      source: "",
+      contentRef: ownProps.contentRef
+    })
+  );
+}
+
+export function dispatchCreateTextCellAfter(
+  ownProps: { contentRef: ContentRef },
+  store: Store<DesktopNotebookAppState, *>
+) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createTextCellBelow() instead");
   store.dispatch(
     actions.createCellAfter({
       cellType: "markdown",

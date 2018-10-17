@@ -416,10 +416,51 @@ function removeCellFromState(
   );
 }
 
+function createCellBelow(
+  state: NotebookModel,
+  action: actionTypes.CreateCellBelow
+) {
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType, source } = action.payload;
+  const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
+  const cellID = uuid();
+  return state.update("notebook", (notebook: ImmutableNotebook) => {
+    const index = notebook.get("cellOrder", Immutable.List()).indexOf(id) + 1;
+    return insertCellAt(notebook, cell.set("source", source), cellID, index);
+  });
+}
+
+function createCellAbove(
+  state: NotebookModel,
+  action: actionTypes.CreateCellAbove
+) {
+  const id = action.payload.id ? action.payload.id : state.cellFocused;
+  if (!id) {
+    return state;
+  }
+
+  const { cellType } = action.payload;
+  const cell = cellType === "markdown" ? emptyMarkdownCell : emptyCodeCell;
+  const cellID = uuid();
+  return state.update("notebook", (notebook: ImmutableNotebook) => {
+    const cellOrder: ImmutableCellOrder = notebook.get(
+      "cellOrder",
+      Immutable.List()
+    );
+    const index = cellOrder.indexOf(id);
+    return insertCellAt(notebook, cell, cellID, index);
+  });
+}
+
 function createCellAfter(
   state: NotebookModel,
   action: actionTypes.CreateCellAfter
 ) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellBelow() instead");
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -438,6 +479,7 @@ function createCellBefore(
   state: NotebookModel,
   action: actionTypes.CreateCellBefore
 ) {
+  console.log("DEPRECATION WARNING: This function is being deprecated. Please use createCellAbove() instead");
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
     return state;
@@ -494,8 +536,8 @@ function acceptPayloadMessage(
       // FIXME: This is a weird pattern. We're basically faking a dispatch here
       // inside a reducer and then appending to the result. I think that both of
       // these reducers should just handle the original action.
-      return createCellAfter(state, {
-        type: actionTypes.CREATE_CELL_AFTER,
+      return createCellBelow(state, {
+        type: actionTypes.CREATE_CELL_BELOW,
         // $FlowFixMe: Switch this over to creating a cell after without having to take an action
         payload: {
           cellType: "code",
@@ -737,6 +779,7 @@ function toggleOutputExpansion(
   );
 }
 
+// DEPRECATION WARNING: Below, the following action types are being deprecated: createCellAfter and createCellBefore
 type DocumentAction =
   | actionTypes.ToggleTagInCell
   | actionTypes.FocusPreviousCellEditor
@@ -750,6 +793,8 @@ type DocumentAction =
   | actionTypes.UpdateDisplay
   | actionTypes.MoveCell
   | actionTypes.RemoveCell
+  | actionTypes.CreateCellBelow
+  | actionTypes.CreateCellAbove
   | actionTypes.CreateCellAfter
   | actionTypes.CreateCellBefore
   | actionTypes.CreateCellAppend
@@ -814,9 +859,15 @@ export function notebook(
       return moveCell(state, action);
     case actionTypes.REMOVE_CELL:
       return removeCellFromState(state, action);
+    case actionTypes.CREATE_CELL_BELOW:
+      return createCellBelow(state, action);
+    case actionTypes.CREATE_CELL_ABOVE:
+      return createCellAbove(state, action);
     case actionTypes.CREATE_CELL_AFTER:
+      console.log('DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_BELOW instead');
       return createCellAfter(state, action);
     case actionTypes.CREATE_CELL_BEFORE:
+      console.log('DEPRECATION WARNING: This action type is being deprecated. Please use CREATE_CELL_ABOVE instead');
       return createCellBefore(state, action);
     case actionTypes.CREATE_CELL_APPEND:
       return createCellAppend(state, action);
