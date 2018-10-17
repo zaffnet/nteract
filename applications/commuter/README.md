@@ -1,4 +1,4 @@
-[![Glitch Deployed](https://img.shields.io/badge/glitch-deployed-3652d3.svg)](https://hydrosquall-nteract-commuter-glitch-demo.glitch.me/view/)
+[![Glitch Deployed](https://img.shields.io/badge/glitch-deployed-3652d3.svg)](https://nteract-commuter-glitch-demo.glitch.me/view/)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 # com·mut·er
@@ -26,8 +26,9 @@ and convenience.
 
 Try **commuter** today and take your notebooks wherever you need them.
 
-- [Demo](https://hydrosquall-nteract-commuter-glitch-demo.glitch.me/view/)
-- [Remix Demo](https://glitch.com/edit/#!/remix/hydrosquall-nteract-commuter-glitch-demo)
+- [Demo](https://nteract-commuter-glitch-demo.glitch.me/view/)
+- [Remix Demo](https://glitch.com/edit/#!/remix/nteract-commuter-glitch-demo)
+- [Demo Source](https://github.com/nteract/commuter-on-glitch)
 
 ## Installation
 
