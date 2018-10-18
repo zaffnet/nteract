@@ -38,6 +38,7 @@ type AnyCellProps = {
   id: string,
   tags: Immutable.Set<string>,
   contentRef: ContentRef,
+  channels: rxjs$Subject<any>,
   cellType: "markdown" | "code" | "raw",
   theme: string,
   source: string,
@@ -93,8 +94,18 @@ const mapStateToCellProps = (state, { id, contentRef }) => {
 
   const pager = model.getIn(["cellPagers", id], Immutable.List());
 
+  const kernelRef = selectors.currentKernelRef(state);
+  let channels: rxjs$Subject<any>;
+  if (kernelRef) {
+    const kernel = selectors.kernel(state, { kernelRef });
+    if (kernel) {
+      channels = kernel.channels;
+    }
+  }
+
   return {
     contentRef,
+    channels,
     cellType,
     tags,
     source: cell.get("source", ""),
@@ -223,6 +234,7 @@ class AnyCell extends React.PureComponent<AnyCellProps, *> {
                   transforms={this.props.transforms}
                   theme={this.props.theme}
                   models={this.props.models}
+                  channels={this.props.channels}
                 />
               ))}
             </Outputs>

@@ -211,6 +211,11 @@ module.exports = {
       private: false
     },
     {
+      name: "@nteract/transform-widgets",
+      version: "0.0.1",
+      private: false
+    },
+    {
       name: "@nteract/transforms-full",
       version: "5.5.0",
       private: false
