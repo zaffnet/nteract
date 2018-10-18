@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow strict */
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { createEpicMiddleware, combineEpics } from "redux-observable";
 
