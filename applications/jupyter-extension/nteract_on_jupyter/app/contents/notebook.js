@@ -39,6 +39,7 @@ const NullTransform = () => null;
 // As the transforms are loaded, these get overridden with the better variants
 const transforms = {
   ...defaultTransforms,
+  "application/vnd.jupyter.widget-view+json": NullTransform,
   "application/vnd.vega.v3+json": NullTransform,
   "application/vnd.vega.v2+json": NullTransform,
   "application/vnd.vegalite.v2+json": NullTransform,
@@ -108,7 +109,7 @@ export default class Notebook extends React.Component<Props, State> {
       }
     );
 
-    import(/* webpackChunkName: "jupyter-widgets" */ "@nteract/transform-widgets").then(
+    import(/* webpackChunkName: "jupyter-widgets" */ "@nteract/jupyter-widgets").then(
       module => {
         this.registerTransform(module.WidgetDisplay);
       }

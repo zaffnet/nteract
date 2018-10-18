@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 
 type Props = {
   data: { model_id: string },
-  currentKernel: LocalKernelProps | RemoteKernelProps
+  channels: rxjs$Subject<any>,
 };
 
 /**
@@ -29,7 +29,7 @@ type Props = {
  * Even though it may appear to be pure, since it doesn't have react state, this
  * component's iframe maintains it's own state in communication with the kernel.
  */
-export class PureWidgetDisplay extends React.Component<Props, null> {
+export class WidgetDisplay extends React.Component<Props, null> {
   static MIMETYPE = "application/vnd.jupyter.widget-view+json";
 
   // TODO: Uncomment this and related code in a follow-up PR.
@@ -65,15 +65,9 @@ export class PureWidgetDisplay extends React.Component<Props, null> {
       return true;
     }
 
-    // If this is a local kernel, the kernel id will not be defined and we do
-    // not have to worry about it changing.
-    if (!(nextProps.currentKernel.id && this.props.currentKernel.id)) {
-      return false;
-    }
-
-    // If the kernel id has changed, we need to make sure that we connect the
-    // shim to the new kernel.
-    if (nextProps.currentKernel.id !== this.props.currentKernel.id) {
+    // If the channels have changed, we need to make sure that we connect the
+    // shim to the new channels.
+    if (nextProps.channels !== this.props.channels) {
       return true;
     }
 
@@ -97,16 +91,7 @@ export class PureWidgetDisplay extends React.Component<Props, null> {
     //   this.shim = new OuterShim();
     // }
 
-    // this.shim.setCommMsgsSubject(this.props.currentKernel.channels);
+    // this.shim.setCommMsgsSubject(this.props.channels);
     // this.shim.setModelId(this.props.data.model_id);
   }
 }
-
-// Connect the PureWidgetDisplay component to the current kernel. The resultant
-// component only require display data to render (the widget model id).
-const mapStateToProps = (
-    state: AppState, { contentRef }: { contentRef: ContentRef }) => 
-        ({currentKernel: selectors.currentKernel(state)});
-const mapDispatchersToProps = () => ({});
-export const WidgetDisplay = 
-    connect(mapStateToProps, mapDispatchersToProps)(PureWidgetDisplay);

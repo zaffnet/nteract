@@ -1,5 +1,5 @@
 {
-  "name": "@nteract/transform-widgets",
+  "name": "@nteract/jupyter-widgets",
   "version": "0.0.1",
   "description": "Transform for rendering Jupyter-JS-Widgets in output areas.",
   "main": "lib/index.js",
@@ -20,7 +20,7 @@
     "transforms",
     "notebook"
   ],
-  "author": "Jonathan Frederic <jon.freder@gmail.com>",
+  "author": "Jonathan Frederic <jfrederic@google.com>",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"

@@ -28,6 +28,5 @@ import { PureWidgetDisplay } from "@nteract/transform-widgets";
     currentKernel={remoteKernelPropsInstance}}/>
 ```
 
-See `RemoteKernelProps` of 
-`/home/jon/github.com/nteract/nteract/packages/core/src/state/entities/kernels.js` 
+See `RemoteKernelProps` of `nteract/packages/core/src/state/entities/kernels.js` 
 for a description of `remoteKernelPropsInstance`.
