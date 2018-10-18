@@ -149,7 +149,17 @@ export function insertCellAfter(
   );
 }
 
+// Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead
 export function removeCell(notebook: ImmutableNotebook, cellID: string) {
+  console.log("Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead");
+  return notebook
+    .removeIn(["cellMap", cellID])
+    .update("cellOrder", (cellOrder: ImmutableCellOrder) =>
+      cellOrder.filterNot(id => id === cellID)
+    );
+}
+
+export function deleteCell(notebook: ImmutableNotebook, cellID: string) {
   return notebook
     .removeIn(["cellMap", cellID])
     .update("cellOrder", (cellOrder: ImmutableCellOrder) =>

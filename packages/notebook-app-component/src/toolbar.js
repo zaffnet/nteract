@@ -27,7 +27,7 @@ import {
 export type PureToolbarProps = {|
   type: "markdown" | "code" | "raw",
   executeCell: ?() => void,
-  removeCell: ?() => void,
+  deleteCell: ?() => void,
   clearOutputs: ?() => void,
   toggleParameterCell: ?() => void,
   toggleCellInputVisibility: ?() => void,
@@ -44,7 +44,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
   };
 
   render(): React$Element<any> {
-    const { type, executeCell, removeCell, sourceHidden } = this.props;
+    const { type, executeCell, deleteCell, sourceHidden } = this.props;
 
     return (
       <div className="cell-toolbar-mask">
@@ -141,7 +141,7 @@ export class PureToolbar extends React.Component<PureToolbarProps> {
           </DropdownMenu>
           <span className="spacer" />
           <button
-            onClick={removeCell}
+            onClick={deleteCell}
             title="delete cell"
             className="deleteButton"
           >
@@ -225,7 +225,7 @@ type ConnectedProps = {
   id: string,
   type: "markdown" | "code" | "raw",
   executeCell: () => void,
-  removeCell: () => void,
+  deleteCell: () => void,
   clearOutputs: () => void,
   toggleCellOutputVisibility: () => void,
   toggleCellInputVisibility: () => void,
@@ -236,7 +236,7 @@ type ConnectedProps = {
 const mapDispatchToProps = (dispatch, { id, type, contentRef }) => ({
   toggleParameterCell: () =>
     dispatch(actions.toggleParameterCell({ id, contentRef })),
-  removeCell: () => dispatch(actions.removeCell({ id, contentRef })),
+  deleteCell: () => dispatch(actions.deleteCell({ id, contentRef })),
   executeCell: () => dispatch(actions.executeCell({ id, contentRef })),
   clearOutputs: () => dispatch(actions.clearOutputs({ id, contentRef })),
   toggleCellOutputVisibility: () =>

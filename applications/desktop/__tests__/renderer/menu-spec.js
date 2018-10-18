@@ -124,7 +124,7 @@ describe("dispatchCreateTextCellAfter", () => {
 });
 
 describe("dispatchDeleteCell", () => {
-  test("dispatches a REMOVE_CELL on currently active cell", () => {
+  test("dispatches a DELETE_CELL on currently active cell", () => {
     const store = {
       dispatch: jest.fn()
     };
@@ -134,7 +134,7 @@ describe("dispatchDeleteCell", () => {
 
     menu.dispatchDeleteCell(props, store);
     expect(store.dispatch).toHaveBeenCalledWith(
-      actions.removeCell({
+      actions.deleteCell({
         contentRef: props.contentRef
       })
     );

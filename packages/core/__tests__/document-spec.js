@@ -393,10 +393,19 @@ describe("moveCell", () => {
 });
 
 describe("removeCell", () => {
-  test("should remove a cell given an ID", () => {
+  test("DEPRECATION WARNING: removeCell() will be deprecated soon, please use deleteCell() instead. should remove a cell given an ID", () => {
     const originalState = monocellDocument;
     const id = originalState.getIn(["notebook", "cellOrder"]).first();
     const state = reducers(originalState, actions.removeCell({ id }));
+    expect(state.getIn(["notebook", "cellOrder"]).size).toBe(2);
+  });
+});
+
+describe("deleteCell", () => {
+  test("should delete a cell given an ID", () => {
+    const originalState = monocellDocument;
+    const id = originalState.getIn(["notebook", "cellOrder"]).first();
+    const state = reducers(originalState, actions.deleteCell({ id }));
     expect(state.getIn(["notebook", "cellOrder"]).size).toBe(2);
   });
 });

@@ -10,7 +10,7 @@ import { dummyStore } from "@nteract/core/dummy";
 import { actionTypes } from "@nteract/core";
 
 const {
-  REMOVE_CELL,
+  DELETE_CELL,
   SEND_EXECUTE_REQUEST,
   CLEAR_OUTPUTS,
   TOGGLE_CELL_INPUT_VISIBILITY,
@@ -92,10 +92,10 @@ describe.skip("toolbar provider", () => {
       </Provider>
     );
 
-  test("Remove Cell works", done => {
+  test("Delete Cell works", done => {
     const dispatch = action => {
       expect(action.id).toBe("cell");
-      expect(action.type).toBe(REMOVE_CELL);
+      expect(action.type).toBe(DELETE_CELL);
       done();
     };
     store.dispatch = dispatch;
@@ -104,7 +104,7 @@ describe.skip("toolbar provider", () => {
       .find("ToolbarView")
       .childAt(0)
       .getElement()
-      .removeCell();
+      .deleteCell();
   });
 
   test("execute cell works", done => {
@@ -213,10 +213,10 @@ describe.skip("toolbar provider", () => {
       </Provider>
     );
 
-  test("Remove Cell works", done => {
+  test("Delete Cell works", done => {
     const dispatch = action => {
       expect(action.id).toBe("cell");
-      expect(action.type).toBe(REMOVE_CELL);
+      expect(action.type).toBe(DELETE_CELL);
       done();
     };
     store.dispatch = dispatch;
@@ -225,7 +225,7 @@ describe.skip("toolbar provider", () => {
       .find("ToolbarView")
       .childAt(0)
       .getElement()
-      .removeCell();
+      .deleteCell();
   });
 
   test("execute cell works", done => {
