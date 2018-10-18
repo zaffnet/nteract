@@ -4,7 +4,7 @@ import toJson from "enzyme-to-json";
 
 import renderer from "react-test-renderer";
 
-import * as Media from "../src/components/media";
+import { Media } from "../src";
 
 describe("HTML", () => {
   it("renders direct HTML", () => {
@@ -96,6 +96,22 @@ describe("<SVG />", () => {
         </g>
       </svg>`;
     const component = mount(<Media.SVG data={data} />);
+    expect(toJson(component)).toMatchSnapshot();
+  });
+});
+
+describe("Markdown", () => {
+  it("Should render markdown", () => {
+    const data = "# Header";
+    const component = mount(<Media.Markdown data={data} />);
+    expect(toJson(component)).toMatchSnapshot();
+  });
+});
+
+describe("Plain", () => {
+  it("Should render markdown", () => {
+    const data = "The text in Spain is mainly plain";
+    const component = mount(<Media.Plain data={data} />);
     expect(toJson(component)).toMatchSnapshot();
   });
 });
