@@ -9,7 +9,7 @@ import {
   toArray
 } from "rxjs/operators";
 
-import { spawn } from "spawn-rx-dev";
+import { spawn } from "spawn-rx";
 
 const path = require("path");
 
