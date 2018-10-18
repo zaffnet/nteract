@@ -29,7 +29,7 @@ export default function configureStore(initialState: DesktopNotebookAppState) {
   const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware<any, redux$Action, *>(...middlewares)
+    applyMiddleware(...middlewares)
   );
   epicMiddleware.run(rootEpic);
   return store;

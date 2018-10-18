@@ -22,7 +22,7 @@ export default function configureStore(initialState: AppState) {
   const store = createStore(
     rootReducer,
     initialState,
-    composeEnhancers(applyMiddleware<any, redux$Action, *>(middlewares))
+    composeEnhancers(applyMiddleware(middlewares))
   );
 
   middlewares.run(rootEpic);

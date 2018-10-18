@@ -1,11 +1,11 @@
 /* @flow strict */
 import { ofType } from "redux-observable";
-
-import type { ActionsObservable } from "redux-observable";
+import type { ActionsObservable, StateObservable } from "redux-observable";
 
 import { writeFileObservable } from "fs-observable";
 
 import { actionTypes, selectors, actions } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 
@@ -17,7 +17,10 @@ import { mergeMap, catchError, map } from "rxjs/operators";
  *
  * @param  {ActionObservable}  action$ The SAVE action with the filename and notebook
  */
-export function saveEpic(action$: ActionsObservable<redux$Action>, state$: *) {
+export function saveEpic(
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) {
   return action$.pipe(
     ofType(actionTypes.SAVE),
     mergeMap((action: actionTypes.Save) => {

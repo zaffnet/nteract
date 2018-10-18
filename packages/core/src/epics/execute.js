@@ -12,6 +12,7 @@ import {
 import { Observable, of, merge, empty, throwError } from "rxjs";
 
 import type { ContentRef } from "../state/refs";
+import type { AppState } from "../state";
 
 import {
   groupBy,
@@ -34,7 +35,7 @@ import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
 
-import type { ActionsObservable } from "redux-observable";
+import type { ActionsObservable, StateObservable } from "redux-observable";
 
 import type {
   NewKernelAction,
@@ -173,7 +174,7 @@ export function createExecuteCellStream(
 
 export function executeAllCellsEpic(
   action$: ActionsObservable<redux$Action>,
-  state$: *
+  state$: StateObservable<AppState>
 ) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),

@@ -38,11 +38,10 @@ export function retryAndEmitError(
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<redux$Action, redux$Action, *, *>) => (
-  ...args: *
-) => epic(...args).pipe(catchError(retryAndEmitError));
+export const wrapEpic = (epic: Epic<*, *, *>) => (...args: *) =>
+  epic(...args).pipe(catchError(retryAndEmitError));
 
-const epics: Array<Epic<*, *, *, *>> = [
+const epics: Array<Epic<*, *, *>> = [
   coreEpics.restartKernelEpic,
   coreEpics.acquireKernelInfoEpic,
   coreEpics.watchExecutionStateEpic,
@@ -66,6 +65,7 @@ const epics: Array<Epic<*, *, *, *>> = [
   saveConfigEpic,
   saveConfigOnChangeEpic,
   closeNotebookEpic
+  // $FlowFixMe
 ].map(wrapEpic);
 
 export default epics;

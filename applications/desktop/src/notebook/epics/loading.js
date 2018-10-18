@@ -7,6 +7,7 @@ import { of, forkJoin, empty } from "rxjs";
 import { map, tap, switchMap, catchError, timeout } from "rxjs/operators";
 
 import { ActionsObservable, ofType } from "redux-observable";
+import type { StateObservable } from "redux-observable";
 
 import { readFileObservable, statObservable } from "fs-observable";
 
@@ -14,6 +15,7 @@ import { monocellNotebook, toJS } from "@nteract/commutable";
 import type { ImmutableNotebook } from "@nteract/commutable";
 
 import { actionTypes, actions, selectors } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 /**
  * Determines the right kernel to launch based on a notebook
@@ -143,7 +145,7 @@ export const fetchContentEpic = (action$: ActionsObservable<redux$Action>) =>
 
 export const launchKernelWhenNotebookSetEpic = (
   action$: ActionsObservable<redux$Action>,
-  state$: *
+  state$: StateObservable<AppState>
 ) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),

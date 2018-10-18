@@ -5,14 +5,14 @@ import { selectors, actions, actionTypes } from "@nteract/core";
 
 const path = require("path");
 
-import type { ActionsObservable } from "redux-observable";
-
 import { of, empty } from "rxjs";
-
+import { ajax } from "rxjs/ajax";
 import { mergeMap, catchError } from "rxjs/operators";
+
 import { ofType } from "redux-observable";
 
-import { ajax } from "rxjs/ajax";
+import type { ActionsObservable, StateObservable } from "redux-observable";
+import type { AppState } from "@nteract/core";
 
 type GithubFiles = {
   [string]: {
@@ -56,7 +56,10 @@ function publishGist(
  * Epic to capture the end to end action of publishing and receiving the
  * response from the Github API.
  */
-export const publishEpic = (action$: ActionsObservable<redux$Action>, state$: *) => {
+export const publishEpic = (
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) => {
   return action$.pipe(
     ofType(actionTypes.PUBLISH_GIST),
     mergeMap((action: actionTypes.PublishGist) => {

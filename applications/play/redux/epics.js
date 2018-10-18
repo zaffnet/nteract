@@ -251,6 +251,7 @@ const runSourceEpic = (action$, state$) =>
     })
   );
 
+// $FlowFixMe
 const epics = combineEpics(
   activateServerEpic,
   killServerEpic,

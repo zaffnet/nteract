@@ -28,7 +28,7 @@ type State = {
 
 export default function(givenInitialState: Object = {}) {
   const initialState = merge(getInitialState(), givenInitialState);
-  const epicMiddleware = createEpicMiddleware<redux$Action, *, *, *>();
+  const epicMiddleware = createEpicMiddleware();
   const composeEnhancers =
     (typeof window !== "undefined" &&
       window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
@@ -38,10 +38,7 @@ export default function(givenInitialState: Object = {}) {
     reducer,
     initialState,
     composeEnhancers(
-      applyMiddleware<any, redux$Action, *>(
-        epicMiddleware,
-        coreMiddlewares.errorMiddleware
-      )
+      applyMiddleware(epicMiddleware, coreMiddlewares.errorMiddleware)
     )
   );
   epicMiddleware.run(epics);

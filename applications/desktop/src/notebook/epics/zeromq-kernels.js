@@ -21,6 +21,7 @@ import {
 import { launchSpec } from "spawnteract";
 
 import { ActionsObservable, ofType } from "redux-observable";
+import type { StateObservable } from "redux-observable";
 
 import { ipcRenderer as ipc } from "electron";
 
@@ -28,6 +29,7 @@ import { createMainChannel } from "enchannel-zmq-backend";
 import * as jmp from "jmp";
 
 import { selectors, actions, actionTypes } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 import type {
   KernelspecInfo,
@@ -189,7 +191,7 @@ export const launchKernelByNameEpic = (
  */
 export const launchKernelEpic = (
   action$: ActionsObservable<redux$Action>,
-  state$: *
+  state$: StateObservable<AppState>
 ): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL),
@@ -253,7 +255,7 @@ export const launchKernelEpic = (
 
 export const interruptKernelEpic = (
   action$: *,
-  state$: *
+  state$: StateObservable<AppState>
 ): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.INTERRUPT_KERNEL),
@@ -321,7 +323,7 @@ function killSpawn(spawn: *): void {
 // doesn't respond promptly does it SIGKILL the kernel.
 export const killKernelEpic = (
   action$: *,
-  state$: *
+  state$: StateObservable<AppState>
 ): Observable<redux$Action> =>
   action$.pipe(
     ofType(actionTypes.KILL_KERNEL),

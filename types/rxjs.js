@@ -48,6 +48,24 @@ declare type rxjs$InteropObservable<T> = {
   [string | mixed]: () => rxjs$Subscribable<T>
 };
 /** OBSERVER INTERFACES */
+declare interface rxjs$NextObserver<T> {
+  closed?: boolean;
+  +next: (value: T) => void;
+  +error?: (err: any) => void;
+  +complete?: () => void;
+}
+declare interface rxjs$ErrorObserver<T> {
+  closed?: boolean;
+  +next?: (value: T) => void;
+  +error: (err: any) => void;
+  +complete?: () => void;
+}
+declare interface rxjs$CompletionObserver<T> {
+  closed?: boolean;
+  +next?: (value: T) => void;
+  +error?: (err: any) => void;
+  +complete: () => void;
+}
 declare interface rxjs$PartialObserver<T> {
   closed?: boolean;
   +next?: (value: T) => void;
@@ -89,7 +107,9 @@ declare class rxjs$Observable<T> implements rxjs$Subscribable<T> {
   constructor(
     subscribe?: (subscriber: rxjs$Subscriber<T>) => rxjs$TeardownLogic
   ): void;
-  static create(subscribe?: (subscriber: rxjs$Subscriber<T>) => rxjs$TeardownLogic): rxjs$Observable<T>;
+  static create(
+    subscribe?: (subscriber: rxjs$Subscriber<T>) => rxjs$TeardownLogic
+  ): rxjs$Observable<T>;
   lift<R>(operator: rxjs$Operator<T, R>): rxjs$Observable<R>;
   subscribe(observer?: rxjs$PartialObserver<T>): rxjs$Subscription;
   subscribe(
@@ -554,7 +574,9 @@ declare module "rxjs" {
       ) => rxjs$Observable<any>) &
       (<T>(...sources: rxjs$ObservableInput<T>[]) => rxjs$Observable<T[]>),
     from<T>(
-      input: rxjs$ObservableInput<T> | rxjs$ObservableInput<rxjs$ObservableInput<T>>,
+      input:
+        | rxjs$ObservableInput<T>
+        | rxjs$ObservableInput<rxjs$ObservableInput<T>>,
       scheduler?: rxjs$SchedulerLike
     ): rxjs$Observable<T>,
     ArgumentOutOfRangeError: ArgumentOutOfRangeError,
@@ -1092,7 +1114,12 @@ declare module "rxjs" {
           ) => any
         ) => any,
         scheduler?: rxjs$SchedulerLike
-      ) => (arg1: A1, arg2: A2, arg3: A3, arg4: A4) => rxjs$Observable<mixed[]>) &
+      ) => (
+        arg1: A1,
+        arg2: A2,
+        arg3: A3,
+        arg4: A4
+      ) => rxjs$Observable<mixed[]>) &
       (<A1, A2, A3, A4, R1, R2, R3>(
         callbackFunc: (
           arg1: A1,
@@ -1896,10 +1923,7 @@ declare module "rxjs/operators" {
   // declare export function catchError<T>(selector: (err: any, caught: rxjs$Observable<T>) => empty): rxjs$MonoTypeOperatorFunction<T>;
 
   declare export function catchError<T, R>(
-    selector: (
-      err: any,
-      caught: rxjs$Observable<T>
-    ) => rxjs$ObservableInput<R>
+    selector: (err: any, caught: rxjs$Observable<T>) => rxjs$ObservableInput<R>
   ): rxjs$OperatorFunction<T, T | R>;
 
   declare export function combineAll<T>(): rxjs$OperatorFunction<
@@ -2154,9 +2178,9 @@ declare module "rxjs/operators" {
     key: string
   ): rxjs$MonoTypeOperatorFunction<T>;
 
-  declare export function distinctUntilKeyChanged<T>(
+  declare export function distinctUntilKeyChanged<T, K: $Keys<T>>(
     key: string,
-    compare: (x: mixed, y: mixed) => boolean
+    compare: (x: K, y: K) => boolean
   ): rxjs$MonoTypeOperatorFunction<T>;
 
   declare export function elementAt<T>(
@@ -2686,7 +2710,9 @@ declare module "rxjs/operators" {
 
   // @deprecated Deprecated in favor of static race.
   declare export function race<T, R>(
-    ...observables: Array<rxjs$Observable<mixed> | Array<rxjs$Observable<mixed>>>
+    ...observables: Array<
+      rxjs$Observable<mixed> | Array<rxjs$Observable<mixed>>
+    >
   ): rxjs$OperatorFunction<T, R>;
 
   declare export function reduce<T>(
@@ -3219,7 +3245,11 @@ declare module "rxjs/ajax" {
     response: any;
     responseText: string;
     responseType: string;
-    constructor(originalEvent: Event, xhr: XMLHttpRequest, request: AjaxRequest): void;
+    constructor(
+      originalEvent: Event,
+      xhr: XMLHttpRequest,
+      request: AjaxRequest
+    ): void;
   }
 
   declare export interface AjaxError extends Error {
@@ -3235,25 +3265,30 @@ declare module "rxjs/ajax" {
   declare interface AjaxCreationMethod {
     (urlOrRequest: string | AjaxRequest): rxjs$Observable<AjaxResponse>;
     get(url: string, headers?: Object): rxjs$Observable<AjaxResponse>;
-    post(url: string, body?: any, headers?: Object): rxjs$Observable<AjaxResponse>;
-    put(url: string, body?: any, headers?: Object): rxjs$Observable<AjaxResponse>;
-    patch(url: string, body?: any, headers?: Object): rxjs$Observable<AjaxResponse>;
+    post(
+      url: string,
+      body?: any,
+      headers?: Object
+    ): rxjs$Observable<AjaxResponse>;
+    put(
+      url: string,
+      body?: any,
+      headers?: Object
+    ): rxjs$Observable<AjaxResponse>;
+    patch(
+      url: string,
+      body?: any,
+      headers?: Object
+    ): rxjs$Observable<AjaxResponse>;
     delete(url: string, headers?: Object): rxjs$Observable<AjaxResponse>;
     getJSON<T>(url: string, headers?: Object): rxjs$Observable<T>;
   }
 
-  declare export var ajax: AjaxCreationMethod
+  declare export var ajax: AjaxCreationMethod;
 }
 
 declare module "rxjs/webSocket" {
   declare type WebSocketMessage = string | ArrayBuffer | Blob;
-
-  declare interface NextObserver<T> {
-    closed?: boolean;
-    next: (value: T) => void;
-    error?: (err: any) => void;
-    complete?: () => void;
-  }
 
   declare export interface WebSocketSubjectConfig<T> {
     url: string;
@@ -3262,17 +3297,20 @@ declare module "rxjs/webSocket" {
     resultSelector?: (e: MessageEvent) => T;
     serializer?: (value: T) => WebSocketMessage;
     deserializer?: (e: MessageEvent) => T;
-    openObserver?: NextObserver<Event>;
-    closeObserver?: NextObserver<CloseEvent>;
-    closingObserver?: NextObserver<void>;
+    openObserver?: rxjs$NextObserver<Event>;
+    closeObserver?: rxjs$NextObserver<CloseEvent>;
+    closingObserver?: rxjs$NextObserver<void>;
     WebSocketCtor?: {
-        new (url: string, protocols?: string | string[]): WebSocket;
+      new(url: string, protocols?: string | string[]): WebSocket
     };
-    binaryType?: 'blob' | 'arraybuffer';
+    binaryType?: "blob" | "arraybuffer";
   }
 
   declare class AnonymousSubject<T> extends rxjs$Subject<T> {
-    constructor(destination?: rxjs$Observer<T>, source?: rxjs$Observable<T>): void;
+    constructor(
+      destination?: rxjs$Observer<T>,
+      source?: rxjs$Observable<T>
+    ): void;
     next(value: ?T): void;
     error(err: any): void;
     complete(): void;
@@ -3283,13 +3321,25 @@ declare module "rxjs/webSocket" {
   declare export class WebSocketSubject<T> extends AnonymousSubject<T> {
     // @deprecated This is an internal implementation detail, do not use.
     _output: rxjs$Subject<T>;
-    constructor(urlConfigOrSource: string | WebSocketSubjectConfig<T> | rxjs$Observable<T>, destination?: rxjs$Observer<T>): void;
+    constructor(
+      urlConfigOrSource:
+        | string
+        | WebSocketSubjectConfig<T>
+        | rxjs$Observable<T>,
+      destination?: rxjs$Observer<T>
+    ): void;
     lift<R>(operator: rxjs$Operator<T, R>): WebSocketSubject<R>;
-    multiplex(subMsg: () => any, unsubMsg: () => any, messageFilter: (value: T) => boolean): rxjs$Observable<mixed>;
+    multiplex(
+      subMsg: () => any,
+      unsubMsg: () => any,
+      messageFilter: (value: T) => boolean
+    ): rxjs$Observable<mixed>;
     // @deprecated This is an internal implementation detail, do not use.
     _subscribe(subscriber: rxjs$Subscriber<T>): rxjs$Subscription;
     unsubscribe(): void;
   }
 
-  declare export function webSocket<T>(urlConfigOrSource: string | WebSocketSubjectConfig<T>): WebSocketSubject<T>
+  declare export function webSocket<T>(
+    urlConfigOrSource: string | WebSocketSubjectConfig<T>
+  ): WebSocketSubject<T>;
 }
