@@ -5,7 +5,7 @@
 import * as selectors from "./selectors";
 
 type ErrorAction = {
-  +type: string,
+  type: string,
   error: ?boolean,
   payload: ?any
 };

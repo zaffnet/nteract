@@ -24,6 +24,7 @@ const env$ = from(shellEnv()).pipe(
   publishReplay(1)
 );
 
+// $FlowFixMe
 env$.connect();
 
 export default env$;

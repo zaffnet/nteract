@@ -76,6 +76,7 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
     distinctUntilChanged()
   );
 
+  // $FlowFixMe: Somehow .pipe is broken in the typings
   const modified$ = content$.pipe(
     map(content => selectors.notebook.isDirty(content.model)),
     distinctUntilChanged()

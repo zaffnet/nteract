@@ -212,6 +212,7 @@ export function createMainChannelFromSockets(
       ...Object.keys(sockets).map(name => {
         const socket = sockets[name];
 
+        // $FlowFixMe: Somehow .pipe is broken in the typings
         return fromEvent(socket, "message").pipe(
           map(body => {
             // Route the message for the frontend by setting the channel
@@ -225,6 +226,7 @@ export function createMainChannelFromSockets(
           refCount()
         );
       })
+      // $FlowFixMe: Somehow .pipe is broken in the typings
     ).pipe(
       publish(),
       refCount()

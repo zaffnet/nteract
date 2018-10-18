@@ -8,7 +8,7 @@ import {
   launchKernelWhenNotebookSetEpic
 } from "./loading";
 
-import type { ActionsObservable, Epic } from "redux-observable";
+import type { Epic } from "redux-observable";
 
 import {
   launchKernelEpic,
@@ -33,17 +33,17 @@ import { closeNotebookEpic } from "./close-notebook";
 
 export function retryAndEmitError(
   err: Error,
-  source: ActionsObservable<redux$Action>
+  source: rxjs$Observable<redux$AnyAction>
 ) {
   console.error(err);
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<AppState, redux$Action, *>) => (
+export const wrapEpic = (epic: Epic<AppState, redux$AnyAction, *>) => (
   ...args: *
 ) => epic(...args).pipe(catchError(retryAndEmitError));
 
-const epics: Array<Epic<AppState, redux$Action, *>> = [
+const epics: Array<Epic<AppState, redux$AnyAction, *>> = [
   coreEpics.restartKernelEpic,
   coreEpics.acquireKernelInfoEpic,
   coreEpics.watchExecutionStateEpic,
@@ -67,6 +67,7 @@ const epics: Array<Epic<AppState, redux$Action, *>> = [
   saveConfigEpic,
   saveConfigOnChangeEpic,
   closeNotebookEpic
+  // $FlowFixMe: There's probably something wrong with our types here
 ].map(wrapEpic);
 
 export default epics;

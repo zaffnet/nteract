@@ -8,6 +8,7 @@
 //
 
 declare type redux$Action = { type: $Subtype<string> }
+declare type redux$AnyAction = { type: $Subtype<string>, [string]: any }
 declare type redux$Dispatch<A: redux$Action> = (action: A) => A;
 
 declare module "redux-observable" {

@@ -3,7 +3,7 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
 
-import { of, fromEvent, merge, Subject } from "rxjs";
+import { empty, of, fromEvent, merge, Subject } from "rxjs";
 import type { Subscription } from "rxjs";
 import {
   catchError,
@@ -219,6 +219,7 @@ class CodeMirrorEditor extends React.Component<
 
     this.completionSubject = new Subject();
 
+    // $FlowFixMe: Somehow .pipe is broken in the typings
     const [debounce, immediate] = this.completionSubject.pipe(
       partition(ev => ev.debounce === true)
     );

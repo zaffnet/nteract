@@ -22,6 +22,7 @@ export const loadConfigEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LOAD_CONFIG),
     switchMap(() =>
+      // $FlowFixMe: Somehow .pipe is broken in the typings
       readFileObservable(CONFIG_FILE_PATH).pipe(
         map(data => actions.configLoaded(JSON.parse(data)))
       )

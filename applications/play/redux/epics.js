@@ -2,9 +2,9 @@
 import * as actionTypes from "./actionTypes";
 import * as actions from "./actions";
 
-import { combineEpics, ofType } from "redux-observable";
+import { ActionsObservable, combineEpics, ofType } from "redux-observable";
 
-import { from, of, merge } from "rxjs";
+import { from, merge } from "rxjs";
 
 import { filter, catchError, mergeMap, switchMap } from "rxjs/operators";
 import { binder } from "rx-binder";
@@ -12,6 +12,8 @@ import { kernels, shutdown, kernelspecs } from "rx-jupyter";
 import uuid from "uuid/v4";
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 import objectPath from "object-path";
+
+const of = ActionsObservable.of;
 
 declare var EventSource: (url: string) => *;
 
@@ -43,6 +45,7 @@ const activateServerEpic = action$ =>
               actionsArray.push(actions.killServer({ serverId: oldServerId }));
             }
           }
+          // $FlowFixMe
           return of(...actionsArray);
         }),
         catchError(error =>
@@ -114,6 +117,7 @@ const setActiveKernelEpic = (action$, state$) =>
       if (!channel) {
         actionsArray.push(actions.activateKernel({ serverId, kernelName }));
       }
+      // $FlowFixMe
       return of(...actionsArray);
     })
   );

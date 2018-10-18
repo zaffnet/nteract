@@ -1,8 +1,8 @@
 /* @flow */
-import { empty, of, from, interval } from "rxjs";
+import { empty, from, interval } from "rxjs";
 
 import { tap, map, mergeMap, switchMap, catchError } from "rxjs/operators";
-import { ofType } from "redux-observable";
+import { ofType, ActionsObservable } from "redux-observable";
 
 import { sample } from "lodash";
 
@@ -13,12 +13,16 @@ import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
 import type { ContentRef, AppState } from "../state";
 
-import type { ActionsObservable, StateObservable } from "redux-observable";
+import type { StateObservable } from "redux-observable";
 
 import { contents } from "rx-jupyter";
 
 import { toJS, stringifyNotebook } from "@nteract/commutable";
 import type { Notebook } from "@nteract/commutable";
+
+// Flow complains otherwise since of would return an rxjs$Observable rather than an ActionsObservable
+// Ask Jay Phelps about this ;)
+const of = ActionsObservable.of;
 
 export function fetchContentEpic(
   action$: ActionsObservable<redux$Action>,
@@ -204,6 +208,7 @@ export function saveContentEpic(
         const host = selectors.currentHost(state);
         if (host.type !== "jupyter") {
           // Dismiss any usage that isn't targeting a jupyter server
+          // $FlowFixMe
           return empty();
         }
         const contentRef = action.payload.contentRef;
@@ -226,6 +231,7 @@ export function saveContentEpic(
 
         if (content.type === "directory") {
           // Don't save directories
+          // $FlowFixMe
           return empty();
         }
 
@@ -259,6 +265,7 @@ export function saveContentEpic(
           };
         } else {
           // We shouldn't save directories
+          // $FlowFixMe
           return empty();
         }
 
@@ -285,6 +292,7 @@ export function saveContentEpic(
               );
             } else {
               // This shouldn't happen, is here for safety
+              // $FlowFixMe
               return empty();
             }
             return of(
@@ -299,6 +307,7 @@ export function saveContentEpic(
             // Check to see if the file was modified since the last time we saved
             // TODO: Determine how we handle what to do
             // Don't bother doing this if the file is new(?)
+            // $FlowFixMe
             return contents.get(serverConfig, filepath, { content: 0 }).pipe(
               // Make sure that the modified time is within some delta
               mergeMap(xhr => {
@@ -345,6 +354,7 @@ export function saveContentEpic(
           default:
             // NOTE: Flow types and our ofType should prevent reaching here, this
             // is here merely as safety
+            // $FlowFixMe
             return empty();
         }
       }
