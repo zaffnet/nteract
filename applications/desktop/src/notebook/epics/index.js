@@ -19,6 +19,7 @@ import {
 } from "./zeromq-kernels";
 
 import { epics as coreEpics } from "@nteract/core";
+import type { AppState } from "@nteract/core";
 
 import { publishEpic } from "./github-publish";
 
@@ -38,10 +39,11 @@ export function retryAndEmitError(
   return source.pipe(startWith({ type: "ERROR", payload: err, error: true }));
 }
 
-export const wrapEpic = (epic: Epic<*, *, *>) => (...args: *) =>
-  epic(...args).pipe(catchError(retryAndEmitError));
+export const wrapEpic = (epic: Epic<AppState, redux$Action, *>) => (
+  ...args: *
+) => epic(...args).pipe(catchError(retryAndEmitError));
 
-const epics: Array<Epic<*, *, *>> = [
+const epics: Array<Epic<AppState, redux$Action, *>> = [
   coreEpics.restartKernelEpic,
   coreEpics.acquireKernelInfoEpic,
   coreEpics.watchExecutionStateEpic,
@@ -65,7 +67,6 @@ const epics: Array<Epic<*, *, *>> = [
   saveConfigEpic,
   saveConfigOnChangeEpic,
   closeNotebookEpic
-  // $FlowFixMe
 ].map(wrapEpic);
 
 export default epics;
