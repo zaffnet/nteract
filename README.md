@@ -4,7 +4,7 @@
 [![](https://img.shields.io/badge/version-stable-blue.svg)](https://github.com/nteract/nteract/releases)
 [![codecov.io](https://codecov.io/github/nteract/nteract/coverage.svg?branch=master)](https://codecov.io/github/nteract/nteract?branch=master)
 [![slack in](https://slack.nteract.io/badge.svg)](https://slack.nteract.io)
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) 
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![Azure Pipelines CI status](https://dev.azure.com/nteract/nteract/_apis/build/status/nteract.nteract?branch=master)](https://dev.azure.com/nteract/nteract/_build/latest?definitionId=1&branch=master)
 [![Circle CI Status Shield](https://circleci.com/gh/nteract/nteract/tree/master.svg?style=shield)](https://circleci.com/gh/nteract/nteract/tree/master)
 
@@ -18,8 +18,8 @@ data.
 
 **Edit code, write prose, and visualize.**
 
-* Share documents understood across the Jupyter ecosystem, [all in the comfort of a desktop app.](https://medium.com/nteract/nteract-revolutionizing-the-notebook-experience-d106ca5d2c38)
-* [Explore new ways of working with compute and playing with data](https://play.nteract.io).
+- Share documents understood across the Jupyter ecosystem, [all in the comfort of a desktop app.](https://medium.com/nteract/nteract-revolutionizing-the-notebook-experience-d106ca5d2c38)
+- [Explore new ways of working with compute and playing with data](https://play.nteract.io).
 
 We support [Jupyter kernels](https://github.com/jupyter/jupyter/wiki/Jupyter-kernels)
 locally on your system and on remote JupyterHubs via Binder.
@@ -81,7 +81,7 @@ applications/ -- all the user facing applications (i.e. desktop, play)
 The `packages` directory has the components needed to build new applications,
 and the `applications` has the desktop app, the play app, and a few more.
 
-*Why have a monorepo?* The monorepo contains many components and packages that
+_Why have a monorepo?_ The monorepo contains many components and packages that
 can be mixed and remixed to create new applications. The monorepo keeps these
 elements together so they are easy to discover and use. Another benefit
 is that the monorepo makes it easy to iterate on applications that share
@@ -112,22 +112,6 @@ When changes are made to the root nteract/nteract, they can then be pulled from 
 6. `git pull upstream master`
 7. `yarn clean`
 8. `yarn install`
-
-#### Windows Caveats
-
-When building nteract on a Windows machine, you'll need to have vcbuild
-installed for node-gyp to be able to build the ZMQ bindings required by the
-Jupyter spec. If you do not have it installed, you may do so by running the
-following from a Windows PowerShell launched as an Adminstrator:
-
-```
-npm install -g --production windows-build-tools
-```
-
-Additionally, you'll need to install GTK 2 for node-canvas. Follow [step 2 of
-this instruction
-set](https://github.com/Automattic/node-canvas/wiki/Installation%3A-Windows#2-installing-gtk-2)
-to do this.
 
 #### Building a specific package
 
@@ -207,14 +191,14 @@ rebuild those using [the instructions for building specific packages](#building-
 
 > I want to debug redux actions and state changes.
 
-* Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by
+- Enable [redux-logger](https://github.com/evgenyrodionov/redux-logger) by
   spawning the application with `yarn spawn:debug`.
 
-> I keep getting a pop-up asking: *Do you want the application "nteract Helper.app" to accept
-  incoming network connections?* while developing or using a custom build of
-  nteract on macOS.
+> I keep getting a pop-up asking: _Do you want the application "nteract Helper.app" to accept
+> incoming network connections?_ while developing or using a custom build of
+> nteract on macOS.
 
-* This is how the the macOS firewall behaves for unsigned apps. On a signed app,
+- This is how the the macOS firewall behaves for unsigned apps. On a signed app,
   the dialog won't show up again after approving it the first time. If you're
   using a custom build of nteract, run:
 
