@@ -289,7 +289,7 @@ export const semioticScatterplot = (
       strokeWidth: type === "contour" ? 0.5 : 1,
       strokeOpacity: 0.9
     }),
-    hoverAnnotation: !renderInCanvas,
+    hoverAnnotation: true,
     responsiveWidth: false,
     size: [height + 200, height + 50],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },

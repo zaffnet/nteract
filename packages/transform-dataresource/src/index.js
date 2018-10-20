@@ -267,6 +267,7 @@ class DataResourceTransform extends React.Component<Props, State> {
         />
         <VizControls
           {...{
+            data: stateData,
             view,
             chart,
             metrics,
