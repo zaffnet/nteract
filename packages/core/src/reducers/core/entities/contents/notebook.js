@@ -400,9 +400,11 @@ function moveCell(state: NotebookModel, action: actionTypes.MoveCell) {
   );
 }
 
+
+// DEPRECATION WARNING: The action type RemoveCell is being deprecated. Please use DeleteCell instead
 function deleteCellFromState(
   state: NotebookModel,
-  action: actionTypes.DeleteCell
+  action: actionTypes.DeleteCell | actionTypes.RemoveCell
 ) {
   const id = action.payload.id ? action.payload.id : state.cellFocused;
   if (!id) {
