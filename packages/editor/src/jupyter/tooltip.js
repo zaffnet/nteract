@@ -1,6 +1,6 @@
 // @flow
-import { Observable } from "rxjs/Observable";
-import { pluck, first, map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { first, map } from "rxjs/operators";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -16,7 +16,7 @@ export function tooltipObservable(
   const tip$ = channels.pipe(
     childOf(message),
     ofMessageType("inspect_reply"),
-    pluck("content"),
+    map(entry => entry.content),
     first(),
     map(results => ({
       dict: results.data

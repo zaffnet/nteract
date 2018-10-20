@@ -1,3 +1,7 @@
+import { Subject } from "rxjs";
+
+import { createMessage } from "@nteract/messaging";
+
 const complete = require("../src/jupyter/complete");
 
 describe("completionRequest", () => {
@@ -20,5 +24,47 @@ describe("pick", () => {
 
     complete.pick(null, handle);
     expect(handle.pick).toBeCalled();
+  });
+});
+
+describe("codeCompleteObservable", () => {
+  it("handles code completion", done => {
+    const sent = new Subject();
+    const received = new Subject();
+    const mockSocket = Subject.create(sent, received);
+    const channels = mockSocket;
+
+    const cm = {
+      getCursor: () => ({ line: 2 }),
+      getValue: () => "\n\nimport thi",
+      indexFromPos: () => 12,
+      posFromIndex: x => ({ ch: x, line: 3 })
+    };
+
+    const message = createMessage("complete_request");
+    const observable = complete.codeCompleteObservable(channels, cm, message);
+
+    // Craft the response to their message
+    const response = createMessage("complete_reply");
+    response.content = {
+      matches: ["import this"],
+      cursor_start: 9,
+      cursor_end: 10
+    }; // Likely hokey values
+    response.parent_header = Object.assign({}, message.header);
+
+    // Listen on the Observable
+    observable.subscribe(
+      msg => {
+        expect(msg.from).toEqual({ line: 3, ch: 9 });
+        expect(msg.list[0].text).toEqual("import this");
+        expect(msg.to).toEqual({ ch: 10, line: 3 });
+      },
+      err => {
+        throw err;
+      },
+      done
+    );
+    received.next(response);
   });
 });

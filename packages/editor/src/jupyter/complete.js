@@ -1,6 +1,6 @@
 // @flow
-import { Observable } from "rxjs/Observable";
-import { pluck, first, map, timeout } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { first, map, timeout } from "rxjs/operators";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
 
@@ -105,15 +105,14 @@ export function codeCompleteObservable(
   editor: CMI,
   message: Object
 ) {
-  // $FlowFixMe: revisite after rxjs@6
   const completion$ = channels.pipe(
     childOf(message),
     ofMessageType("complete_reply"),
-    pluck("content"),
+    map(entry => entry.content),
     first(),
     map(expand_completions(editor)),
-    timeout(2000)
-  ); // 2s
+    timeout(15000) // Large timeout for slower languages; this is just here to make sure we eventually clean up resources
+  );
 
   // On subscription, send the message
   return Observable.create(observer => {

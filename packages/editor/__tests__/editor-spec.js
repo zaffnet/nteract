@@ -1,5 +1,5 @@
 import React from "react";
-import { Subject } from "rxjs/Subject";
+import { empty, Subject } from "rxjs";
 
 import { mount } from "enzyme";
 
@@ -9,14 +9,11 @@ import Editor from "../src/";
 const complete = require("../src/jupyter/complete");
 const tooltip = require("../src/jupyter/tooltip");
 
-describe("Editor", () => {
-  it.skip("reaches out for code completion", done => {
-    const sent = new Subject();
-    const received = new Subject();
+jest.useFakeTimers();
 
-    const mockSocket = Subject.create(sent, received);
-
-    const channels = mockSocket;
+describe("editor.completions CodeMirror callback", () => {
+  it("eventually calls complete.codeComplete", () => {
+    const channels = {};
 
     const editorWrapper = mount(<Editor completion channels={channels} />);
 
@@ -29,16 +26,98 @@ describe("Editor", () => {
       indexFromPos: () => 90001
     };
 
-    complete.codeComplete = jest.fn().mockImplementation(chan => chan.shell);
+    complete.codeComplete = jest.fn().mockImplementation(() => empty());
 
-    sent.subscribe(msg => {
-      expect(msg.content.code).toBe("MY VALUE");
-      expect(complete.codeComplete).lastCalledWith(channels, cm);
-      done();
-    });
     editor.completions(cm, () => {});
+
+    jest.runAllTimers();
+
+    expect(complete.codeComplete).toBeCalledWith(channels, cm);
   });
-  it("doesn't try for code completion when not set", () => {
+  it("collapses multiple calls into one via debouncing", () => {
+    const channels = {};
+
+    const editorWrapper = mount(<Editor completion channels={channels} />);
+
+    expect(editorWrapper).not.toBeNull();
+
+    const editor = editorWrapper.instance();
+    const cm = {
+      getCursor: () => ({ line: 12 }),
+      getValue: () => "MY VALUE",
+      indexFromPos: () => 90001
+    };
+
+    complete.codeComplete = jest.fn().mockImplementation(() => empty());
+
+    for (var i = 0; i < 3; i++) {
+      editor.completions(cm, () => {});
+    }
+
+    jest.runAllTimers();
+
+    expect(complete.codeComplete.mock.calls.length).toBe(1);
+    expect(complete.codeComplete).toBeCalledWith(channels, cm);
+  });
+  it("can opt out of debouncing my mutating debounceNextCompletionRequest", () => {
+    const channels = {};
+
+    const editorWrapper = mount(<Editor completion channels={channels} />);
+
+    expect(editorWrapper).not.toBeNull();
+
+    const editor = editorWrapper.instance();
+    const cm = {
+      getCursor: () => ({ line: 12 }),
+      getValue: () => "MY VALUE",
+      indexFromPos: () => 90001
+    };
+
+    complete.codeComplete = jest.fn().mockImplementation(() => empty());
+
+    for (var i = 0; i < 3; i++) {
+      editor.debounceNextCompletionRequest = false;
+      editor.completions(cm, () => {});
+      expect(editor.debounceNextCompletionRequest).toBe(true);
+    }
+
+    jest.runAllTimers();
+
+    expect(complete.codeComplete.mock.calls.length).toBe(3);
+    expect(complete.codeComplete).toBeCalledWith(channels, cm);
+  });
+  it("debounceNextCompletionRequest discards queued debounced events", () => {
+    const channels = {};
+
+    const editorWrapper = mount(<Editor completion channels={channels} />);
+
+    expect(editorWrapper).not.toBeNull();
+
+    const editor = editorWrapper.instance();
+    const cm = {
+      getCursor: () => ({ line: 12 }),
+      getValue: () => "MY VALUE",
+      indexFromPos: () => 90001
+    };
+
+    complete.codeComplete = jest.fn().mockImplementation(() => empty());
+
+    // By themselves, these would be debounced. If we aren't careful they will emerge after our
+    // non-debounced call, creating duplicate requests.
+    editor.completions(cm, () => {});
+    editor.completions(cm, () => {});
+    editor.completions(cm, () => {});
+
+    editor.debounceNextCompletionRequest = false;
+    editor.completions(cm, () => {});
+    expect(editor.debounceNextCompletionRequest).toBe(true);
+
+    jest.runAllTimers();
+
+    expect(complete.codeComplete.mock.calls.length).toBe(1);
+    expect(complete.codeComplete).toBeCalledWith(channels, cm);
+  });
+  it("doesn't call complete.codeComplete when completion property is unset", () => {
     const sent = new Subject();
     const received = new Subject();
 
@@ -59,6 +138,9 @@ describe("Editor", () => {
     editor.completions(cm, callback);
     expect(callback).not.toHaveBeenCalled();
   });
+});
+
+describe("Editor", () => {
   it("handles cursor blinkery changes", () => {
     const editorWrapper = mount(<Editor options={{ cursorBlinkRate: 530 }} />);
     const instance = editorWrapper.instance();
@@ -66,48 +148,6 @@ describe("Editor", () => {
     expect(cm.options.cursorBlinkRate).toBe(530);
     editorWrapper.setProps({ options: { cursorBlinkRate: 0 } });
     expect(cm.options.cursorBlinkRate).toBe(0);
-  });
-});
-
-describe("complete", () => {
-  it("handles code completion", done => {
-    const sent = new Subject();
-    const received = new Subject();
-    const mockSocket = Subject.create(sent, received);
-    const channels = mockSocket;
-
-    const cm = {
-      getCursor: () => ({ line: 2 }),
-      getValue: () => "\n\nimport thi",
-      indexFromPos: () => 12,
-      posFromIndex: x => ({ ch: x, line: 3 })
-    };
-
-    const message = createMessage("complete_request");
-    const observable = complete.codeCompleteObservable(channels, cm, message);
-
-    // Craft the response to their message
-    const response = createMessage("complete_reply");
-    response.content = {
-      matches: ["import this"],
-      cursor_start: 9,
-      cursor_end: 10
-    }; // Likely hokey values
-    response.parent_header = Object.assign({}, message.header);
-
-    // Listen on the Observable
-    observable.subscribe(
-      msg => {
-        expect(msg.from).toEqual({ line: 3, ch: 9 });
-        expect(msg.list[0].text).toEqual("import this");
-        expect(msg.to).toEqual({ ch: 10, line: 3 });
-      },
-      err => {
-        throw err;
-      },
-      done
-    );
-    received.next(response);
   });
 });
 

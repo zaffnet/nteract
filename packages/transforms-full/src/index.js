@@ -12,6 +12,7 @@ import ModelDebug from "@nteract/transform-model-debug";
 import DataResourceTransform from "@nteract/transform-dataresource";
 
 import { VegaLite1, VegaLite2, Vega2, Vega3 } from "@nteract/transform-vega";
+import { WidgetDisplay } from "@nteract/jupyter-widgets";
 
 import {
   standardTransforms,
@@ -21,6 +22,7 @@ import {
 } from "@nteract/transforms";
 
 const additionalTransforms = [
+  WidgetDisplay,
   DataResourceTransform,
   ModelDebug,
   PlotlyNullTransform,

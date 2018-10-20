@@ -211,6 +211,11 @@ module.exports = {
       private: false
     },
     {
+      name: "@nteract/transform-widgets",
+      version: "0.0.1",
+      private: false
+    },
+    {
       name: "@nteract/transforms-full",
       version: "5.5.0",
       private: false
@@ -218,11 +223,6 @@ module.exports = {
     {
       name: "@nteract/transforms",
       version: "4.4.0",
-      private: false
-    },
-    {
-      name: "@nteract/vega-embed2",
-      version: "2.1.0",
       private: false
     },
     {

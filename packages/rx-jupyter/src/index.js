@@ -1,6 +1,7 @@
 // @flow
 
-import { ajax } from "rxjs/observable/dom/ajax";
+import { ajax } from "rxjs/ajax";
+import type { Observable } from "rxjs";
 
 import * as kernels from "./kernels";
 import * as kernelspecs from "./kernelspecs";

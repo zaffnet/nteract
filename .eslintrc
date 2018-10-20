@@ -3,10 +3,11 @@
     "prettier",
     "prettier/flowtype",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:react-perf/recommended"
   ],
   "parser": "babel-eslint",
-  "plugins": ["prettier", "flowtype", "react", "jsx-a11y"],
+  "plugins": ["prettier", "flowtype", "react", "jsx-a11y", "react-perf"],
   "env": {
     "browser": true,
     "node": true,
@@ -20,7 +21,9 @@
     "react/display-name": 0,
     "react/no-unescaped-entities": 0,
     "react/no-deprecated": 1,
-    "no-unused-vars": 2
+    "no-unused-vars": 2,
+    "react-perf/jsx-no-new-object-as-prop": "warn",
+    "react-perf/jsx-no-new-array-as-prop": "warn"
   },
   "settings": {
     "react": {

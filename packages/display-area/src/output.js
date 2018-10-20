@@ -13,7 +13,8 @@ type Props = {
   output: any,
   transforms: Object,
   theme: string,
-  models: Object
+  models: Object,
+  channels?: rxjs$Subject<any>,
 };
 
 const classPrefix = "nteract-display-area-";
@@ -34,7 +35,8 @@ export default class Output extends React.Component<Props, null> {
       nextProps.displayOrder !== this.props.displayOrder ||
       nextProps.transforms !== this.props.transforms ||
       nextProps.theme !== this.props.theme ||
-      nextProps.models !== this.props.models
+      nextProps.models !== this.props.models ||
+      nextProps.channels !== this.props.channels
     );
   }
 
@@ -71,6 +73,7 @@ export default class Output extends React.Component<Props, null> {
             transforms={this.props.transforms}
             theme={this.props.theme}
             models={models}
+            channels={this.props.channels}
           />
         );
       }

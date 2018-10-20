@@ -2,11 +2,9 @@
 import * as actionTypes from "./actionTypes";
 import * as actions from "./actions";
 
-import { combineEpics, ofType } from "redux-observable";
+import { ActionsObservable, combineEpics, ofType } from "redux-observable";
 
-import { of } from "rxjs/observable/of";
-import { from } from "rxjs/observable/from";
-import { merge } from "rxjs/observable/merge";
+import { from, merge } from "rxjs";
 
 import { filter, catchError, mergeMap, switchMap } from "rxjs/operators";
 import { binder } from "rx-binder";
@@ -14,6 +12,8 @@ import { kernels, shutdown, kernelspecs } from "rx-jupyter";
 import uuid from "uuid/v4";
 import { executeRequest, kernelInfoRequest } from "@nteract/messaging";
 import objectPath from "object-path";
+
+const of = ActionsObservable.of;
 
 declare var EventSource: (url: string) => *;
 
@@ -45,6 +45,7 @@ const activateServerEpic = action$ =>
               actionsArray.push(actions.killServer({ serverId: oldServerId }));
             }
           }
+          // $FlowFixMe
           return of(...actionsArray);
         }),
         catchError(error =>
@@ -54,11 +55,11 @@ const activateServerEpic = action$ =>
     })
   );
 
-const killServerEpic = (action$, store) =>
+const killServerEpic = (action$, state$) =>
   action$.pipe(
     ofType(actionTypes.KILL_SERVER),
     mergeMap(({ payload: { serverId } }) => {
-      const oldServer = store.getState().entities.serversById[serverId];
+      const oldServer = state$.value.entities.serversById[serverId];
       if (!oldServer)
         return of(
           actions.killServerFailed({
@@ -74,11 +75,11 @@ const killServerEpic = (action$, store) =>
     })
   );
 
-const fetchKernelSpecsEpic = (action$, store) =>
+const fetchKernelSpecsEpic = (action$, state$) =>
   action$.pipe(
     ofType(actionTypes.FETCH_KERNEL_SPECS),
     mergeMap(({ payload: { serverId } }) => {
-      const { config } = store.getState().entities.serversById[serverId].server;
+      const { config } = state$.value.entities.serversById[serverId].server;
       return kernelspecs.list(config).pipe(
         mergeMap(data => {
           const kernelName = data.response.default;
@@ -97,7 +98,7 @@ const fetchKernelSpecsEpic = (action$, store) =>
     })
   );
 
-const setActiveKernelEpic = (action$, store) =>
+const setActiveKernelEpic = (action$, state$) =>
   action$.pipe(
     ofType(actionTypes.SET_ACTIVE_KERNEL),
     mergeMap(({ payload: { serverId, kernelName } }) => {
@@ -111,11 +112,12 @@ const setActiveKernelEpic = (action$, store) =>
         "kernel",
         "channel"
       ];
-      const channel = objectPath.get(store.getState(), channelPath);
+      const channel = objectPath.get(state$.value, channelPath);
       const actionsArray = [actions.setCurrentKernelName(kernelName)];
       if (!channel) {
         actionsArray.push(actions.activateKernel({ serverId, kernelName }));
       }
+      // $FlowFixMe
       return of(...actionsArray);
     })
   );
@@ -189,7 +191,7 @@ const initializeKernelMessaging = action$ =>
     })
   );
 
-const activateKernelEpic = (action$, store) =>
+const activateKernelEpic = (action$, state$) =>
   action$.pipe(
     ofType(actionTypes.ACTIVATE_KERNEL),
     mergeMap(({ payload: { serverId, kernelName } }) => {
@@ -200,7 +202,7 @@ const activateKernelEpic = (action$, store) =>
         "server",
         "config"
       ];
-      const config = objectPath.get(store.getState(), configPath);
+      const config = objectPath.get(state$.value, configPath);
       return kernels.start(config, kernelName, "").pipe(
         mergeMap(data => {
           const session = uuid();
@@ -228,7 +230,7 @@ const activateKernelEpic = (action$, store) =>
     })
   );
 
-const runSourceEpic = (action$, store) =>
+const runSourceEpic = (action$, state$) =>
   action$.pipe(
     ofType(actionTypes.RUN_SOURCE),
     mergeMap(({ payload: { serverId, kernelName, source } }) => {
@@ -242,7 +244,7 @@ const runSourceEpic = (action$, store) =>
         "kernel",
         "channel"
       ];
-      const channel = objectPath.get(store.getState(), channelPath);
+      const channel = objectPath.get(state$.value, channelPath);
       if (channel) {
         channel.next(executeRequest(source));
       }
@@ -253,6 +255,7 @@ const runSourceEpic = (action$, store) =>
     })
   );
 
+// $FlowFixMe
 const epics = combineEpics(
   activateServerEpic,
   killServerEpic,
