@@ -1,17 +1,9 @@
 /* @flow */
 
-import type { Notebook as v4Notebook } from "./v4";
-import type { Notebook as v3Notebook } from "./v3";
-
 import * as Immutable from "immutable";
 
-export type ExecutionCount = number | null;
-
-export type MimeBundle = JSONObject;
-
-export type CellType = "markdown" | "code";
-export type CellID = string;
-
+import type { Notebook as v4Notebook } from "./v4";
+import type { Notebook as v3Notebook } from "./v3";
 import type {
   ImmutableNotebook,
   ImmutableCodeCell,
@@ -42,7 +34,6 @@ export type {
 
 const v4 = require("./v4");
 const v3 = require("./v3");
-
 // Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead
 const {
   emptyNotebook,
@@ -52,13 +43,16 @@ const {
   monocellNotebook,
   createCodeCell,
   appendCellToNotebook,
-
   insertCellAt,
   insertCellAfter,
   removeCell,
   deleteCell
 } = require("./structures");
 
+export type ExecutionCount = number | null;
+export type MimeBundle = JSONObject;
+export type CellType = "markdown" | "code";
+export type CellID = string;
 export type Notebook = v4Notebook | v3Notebook;
 
 function freezeReviver(k: string, v: JSONType): JSONType {

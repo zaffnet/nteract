@@ -1,13 +1,12 @@
 // @flow
 import * as React from "react";
-
 import { mount } from "enzyme";
-import Toolbar, { PureToolbar } from "../src/toolbar";
 import toJSON from "enzyme-to-json";
 import { Provider } from "react-redux";
 import { dummyStore } from "@nteract/core/dummy";
-
 import { actionTypes } from "@nteract/core";
+
+import Toolbar, { PureToolbar } from "../src/toolbar";
 
 const {
   DELETE_CELL,

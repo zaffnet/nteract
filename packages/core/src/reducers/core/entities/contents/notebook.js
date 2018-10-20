@@ -1,12 +1,7 @@
 // @flow
 
-import { makeDocumentRecord } from "../../../../state/entities/contents";
 import uuid from "uuid/v4";
-
-import * as actionTypes from "../../../../actionTypes";
-
 import * as Immutable from "immutable";
-
 import type {
   ImmutableCell,
   ImmutableCellMap,
@@ -16,7 +11,6 @@ import type {
   ImmutableOutput,
   ImmutableOutputs
 } from "@nteract/commutable";
-
 import {
   emptyCodeCell,
   emptyMarkdownCell,
@@ -27,12 +21,12 @@ import {
   createImmutableOutput,
   createImmutableMimeBundle
 } from "@nteract/commutable";
-
 import { has } from "lodash";
-
 import type { Output, StreamOutput } from "@nteract/commutable/src/v4";
 import { escapeCarriageReturnSafe } from "escape-carriage";
 
+import * as actionTypes from "../../../../actionTypes";
+import { makeDocumentRecord } from "../../../../state/entities/contents";
 import type { NotebookModel } from "../../../../state/entities/contents";
 
 type KeyPath = Immutable.List<string | number>;

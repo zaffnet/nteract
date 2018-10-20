@@ -4,16 +4,7 @@ export * from "./outputs";
 export * from "./cells";
 export * from "./common";
 import * as outputs from "./outputs";
-
 import type { Notebook as v4Notebook } from "./structures";
-
-export type ExecutionCount = number | null;
-
-export type MimeBundle = JSONObject;
-
-export type CellType = "markdown" | "code";
-export type CellID = string;
-
 import type {
   ImmutableNotebook,
   ImmutableCodeCell,
@@ -26,6 +17,11 @@ import type {
   ImmutableCellOrder,
   ImmutableCellMap
 } from "./types";
+
+export type ExecutionCount = number | null;
+export type MimeBundle = JSONObject;
+export type CellType = "markdown" | "code";
+export type CellID = string;
 
 export type {
   ImmutableCellOrder,

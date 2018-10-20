@@ -8,12 +8,7 @@ import {
   kernelStatuses,
   executionCounts
 } from "@nteract/messaging";
-
 import { Observable, of, merge, empty, throwError } from "rxjs";
-
-import type { ContentRef } from "../state/refs";
-import type { AppState } from "../state";
-
 import {
   groupBy,
   filter,
@@ -28,15 +23,14 @@ import {
   tap,
   share
 } from "rxjs/operators";
-
 import { ofType } from "redux-observable";
+import type { ActionsObservable, StateObservable } from "redux-observable";
 
+import type { ContentRef } from "../state/refs";
+import type { AppState } from "../state";
 import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
-
-import type { ActionsObservable, StateObservable } from "redux-observable";
-
 import type {
   NewKernelAction,
   ExecuteCell,

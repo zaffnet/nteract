@@ -1,5 +1,7 @@
 /* @flow */
 
+import uuid from "uuid/v4";
+
 import type {
   ImmutableOutput,
   ImmutableCell,
@@ -12,7 +14,6 @@ import type {
   ExecutionCount
 } from "./types";
 
-import uuid from "uuid/v4";
 const Immutable = require("immutable");
 
 // We're hardset to nbformat v4.4 for what we use in-memory

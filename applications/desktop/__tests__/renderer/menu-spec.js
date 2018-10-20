@@ -1,9 +1,9 @@
-import { webFrame, ipcRenderer as ipc } from "electron";
 jest.mock("fs");
-import * as menu from "../../src/notebook/menu";
+import { webFrame, ipcRenderer as ipc } from "electron";
 import { actions, actionTypes } from "@nteract/core";
-
 import * as Immutable from "immutable";
+
+import * as menu from "../../src/notebook/menu";
 
 describe("dispatchCreateCellAbove", () => {
   test("dispatches a CREATE_CELL_ABOVE with code action", () => {
