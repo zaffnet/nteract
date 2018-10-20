@@ -1,23 +1,16 @@
 // @flow
 import React from "react";
-import renderer from "react-test-renderer";
 import { shallow, mount } from "enzyme";
+import toJson from "enzyme-to-json";
 import { PureNotebookMenu } from "../src/notebook-menu";
 
 import { MENU_ITEM_ACTIONS, MENUS } from "../src/notebook-menu/constants";
 
 describe("PureNotebookMenu ", () => {
-  describe("snapshots", () => {
-    test("renders the default", () => {
-      const component = renderer.create(<PureNotebookMenu />);
-      let tree = component.toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-  });
-  describe("shallow", () => {
+  describe("shallow snapshot", () => {
     test("renders the default", () => {
       const wrapper = shallow(<PureNotebookMenu />);
-      expect(wrapper).not.toBeNull();
+      expect(toJson(wrapper)).toMatchSnapshot();
     });
   });
   describe("mount", () => {

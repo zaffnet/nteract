@@ -1,145 +1,228 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PureNotebookMenu  snapshots renders the default 1`] = `
-<ul
-  aria-activedescendant=""
-  className="rc-menu  rc-menu-root rc-menu-horizontal"
-  onKeyDown={[Function]}
-  role="menu"
-  style={Object {}}
-  tabIndex="0"
->
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+exports[`PureNotebookMenu  shallow snapshot renders the default 1`] = `
+<Wrapper>
+  <Menu
+    builtinPlacements={Object {}}
+    className=""
+    defaultOpenKeys={Array []}
+    defaultSelectedKeys={Array []}
+    mode="horizontal"
+    onClick={[Function]}
+    onDeselect={[Function]}
+    onOpenChange={[Function]}
+    onSelect={[Function]}
+    overflowedIndicator={
+      <span>
+        ···
+      </span>
+    }
+    prefixCls="rc-menu"
+    selectable={false}
+    style={Object {}}
+    subMenuCloseDelay={0.1}
+    subMenuOpenDelay={0.1}
+    triggerSubMenuAction="hover"
   >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="file$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+    <Connect(SubMenu)
+      key="file"
       title="File"
     >
-      File
-      <i
-        className="rc-menu-submenu-arrow"
-      />
-    </div>
-  </li>
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="edit$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+      <Connect(MenuItem)>
+        <a
+          className="jsx-138734177"
+          href="/nteract/edit"
+          style={
+            Object {
+              "color": "currentColor",
+              "textDecoration": "none",
+            }
+          }
+          target="_blank"
+        >
+          Open...
+        </a>
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="save-notebook"
+      >
+        Save
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="download-notebook"
+      >
+        Download (.ipynb)
+      </Connect(MenuItem)>
+    </Connect(SubMenu)>
+    <Connect(SubMenu)
+      key="edit"
       title="Edit"
     >
-      Edit
-      <i
-        className="rc-menu-submenu-arrow"
+      <Connect(MenuItem)
+        key="cut-cell"
+      >
+        Cut Cell
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="copy-cell"
+      >
+        Copy Cell
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="paste-cell"
+      >
+        Paste Cell Below
+      </Connect(MenuItem)>
+      <Divider
+        className=""
+        disabled={true}
+        style={Object {}}
       />
-    </div>
-  </li>
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="view$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+      <Connect(SubMenu)
+        key="cell-set-cell-type"
+        title="Cell Type"
+      >
+        <Connect(MenuItem)
+          key="set-cell-type-code"
+        >
+          Code
+        </Connect(MenuItem)>
+        <Connect(MenuItem)
+          key="set-cell-type-markdown"
+        >
+          Markdown
+        </Connect(MenuItem)>
+      </Connect(SubMenu)>
+    </Connect(SubMenu)>
+    <Connect(SubMenu)
+      key="view"
       title="View"
     >
-      View
-      <i
-        className="rc-menu-submenu-arrow"
-      />
-    </div>
-  </li>
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="cell$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+      <Connect(SubMenu)
+        key="view-themes"
+        title="themes"
+      >
+        <Connect(MenuItem)
+          key="set-theme-light"
+        >
+          light
+        </Connect(MenuItem)>
+        <Connect(MenuItem)
+          key="set-theme-dark"
+        >
+          dark
+        </Connect(MenuItem)>
+      </Connect(SubMenu)>
+    </Connect(SubMenu)>
+    <Connect(SubMenu)
+      key="cell"
       title="Cell"
     >
-      Cell
-      <i
-        className="rc-menu-submenu-arrow"
+      <Connect(MenuItem)
+        key="execute-all-cells"
+      >
+        Run All Cells
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="execute-all-cells-below"
+      >
+        Run All Cells Below
+      </Connect(MenuItem)>
+      <Divider
+        className=""
+        disabled={true}
+        style={Object {}}
       />
-    </div>
-  </li>
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="runtime$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+      <Connect(SubMenu)
+        key="cell-create-cell"
+        title="New Cell"
+      >
+        <Connect(MenuItem)
+          key="create-code-cell"
+        >
+          Code
+        </Connect(MenuItem)>
+        <Connect(MenuItem)
+          key="create-markdown-cell"
+        >
+          Markdown
+        </Connect(MenuItem)>
+      </Connect(SubMenu)>
+      <Divider
+        className=""
+        disabled={true}
+        style={Object {}}
+      />
+      <Connect(MenuItem)
+        key="clear-all-outputs"
+      >
+        Clear All Outputs
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="unhide-all"
+      >
+        Unhide All Input and Output
+      </Connect(MenuItem)>
+    </Connect(SubMenu)>
+    <Connect(SubMenu)
+      key="runtime"
       title="Runtime"
     >
-      Runtime
-      <i
-        className="rc-menu-submenu-arrow"
+      <Connect(MenuItem)
+        key="interrupt-kernel"
+      >
+        Interrupt
+      </Connect(MenuItem)>
+      <Divider
+        className=""
+        disabled={true}
+        style={Object {}}
       />
-    </div>
-  </li>
-  <li
-    className="rc-menu-submenu rc-menu-submenu-horizontal"
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <div
-      aria-expanded={false}
-      aria-haspopup="true"
-      aria-owns="help$Menu"
-      className="rc-menu-submenu-title"
-      onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={Object {}}
+      <Connect(MenuItem)
+        key="kill-kernel"
+      >
+        Halt
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="restart-kernel"
+      >
+        Restart
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="restart-kernel-and-clear-outputs"
+      >
+        Restart and Clear All Cells
+      </Connect(MenuItem)>
+      <Connect(MenuItem)
+        key="restart-kernel-and-run-all-outputs"
+      >
+        Restart and Run All Cells
+      </Connect(MenuItem)>
+      <Divider
+        className=""
+        disabled={true}
+        style={Object {}}
+      />
+      <Connect(SubMenu)
+        disabled={true}
+        key="runtime-change-kernel"
+        title="Change Kernel"
+      />
+    </Connect(SubMenu)>
+    <Connect(SubMenu)
+      key="help"
       title="Help"
     >
-      Help
-      <i
-        className="rc-menu-submenu-arrow"
-      />
-    </div>
-  </li>
-</ul>
+      <Connect(MenuItem)
+        key="open-about"
+      >
+        About
+      </Connect(MenuItem)>
+    </Connect(SubMenu)>
+  </Menu>
+  <JSXStyle
+    css=".jsx-138734177{position:-webkit-sticky;position:sticky;top:0;z-index:10000;}"
+    styleId="138734177"
+  />
+</Wrapper>
 `;
