@@ -12,6 +12,7 @@ const isProd = nodeEnv === "production";
 const ASSET_PATH = process.env.ASSET_PATH || "/nteract/static/dist";
 
 module.exports = {
+  externals: ["canvas"],
   mode: isProd ? "production" : "development",
   devtool: isProd ? "hidden-source-map" : "cheap-eval-source-map",
   entry: {

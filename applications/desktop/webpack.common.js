@@ -5,6 +5,7 @@ const configurator = require("@nteract/webpack-configurator");
 
 const nodeModules = {
   jmp: "commonjs jmp",
+  canvas: "commonjs canvas",
   "nteract-assets": "commonjs nteract-assets",
   "mathjax-electron": "commonjs mathjax-electron"
 };

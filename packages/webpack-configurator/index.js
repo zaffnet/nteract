@@ -45,6 +45,7 @@ type NextWebPackOptions = {
 
 // Semi-hokey webpack type just to have some localized semi-sanity
 type WebpackConfig = {
+  externals: Array<string>,
   resolve?: {
     mainFields?: Array<string>,
     extensions?: Array<string>,
@@ -65,6 +66,7 @@ function nextWebpack(
   config /*: WebpackConfig */,
   options /*: ?NextWebPackOptions */
 ) /*: WebpackConfig */ {
+  config.externals = ["canvas", ...config.externals];
   config.module.rules = config.module.rules.map(rule => {
     if (
       rule.test.source.includes("js") &&
