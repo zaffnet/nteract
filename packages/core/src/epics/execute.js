@@ -9,13 +9,10 @@ import {
   executionCounts
 } from "@nteract/messaging";
 
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
-import { merge } from "rxjs/observable/merge";
-import { empty } from "rxjs/observable/empty";
-import { _throw } from "rxjs/observable/throw";
+import { Observable, of, merge, empty, throwError } from "rxjs";
 
 import type { ContentRef } from "../state/refs";
+import type { AppState } from "../state";
 
 import {
   groupBy,
@@ -38,7 +35,7 @@ import * as actions from "../actions";
 import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
 
-import type { ActionsObservable } from "redux-observable";
+import type { ActionsObservable, StateObservable } from "redux-observable";
 
 import type {
   NewKernelAction,
@@ -69,7 +66,7 @@ export function executeCellStream(
   contentRef: ContentRef
 ) {
   if (!channels || !channels.pipe) {
-    return _throw(new Error("kernel not connected"));
+    return throwError(new Error("kernel not connected"));
   }
 
   const executeRequest = message;
@@ -89,18 +86,21 @@ export function executeCellStream(
     ),
 
     // All actions for updating cell status
+    // $FlowFixMe: Somehow .pipe is broken in the typings
     cellMessages.pipe(
       kernelStatuses(),
       map(status => actions.updateCellStatus({ id, status, contentRef }))
     ),
 
     // Update the input numbering: `[ ]`
+    // $FlowFixMe: Somehow .pipe is broken in the typings
     cellMessages.pipe(
       executionCounts(),
       map(ct => actions.updateCellExecutionCount({ id, value: ct, contentRef }))
     ),
 
     // All actions for new outputs
+    // $FlowFixMe: Somehow .pipe is broken in the typings
     cellMessages.pipe(
       outputs(),
       map(output => actions.appendOutput({ id, output, contentRef }))
@@ -122,13 +122,13 @@ export function executeCellStream(
 }
 
 export function createExecuteCellStream(
-  action$: ActionsObservable<*>,
-  store: any,
+  action$: ActionsObservable<redux$Action>,
+  state: any,
   message: ExecuteRequest,
   id: string,
   contentRef: ContentRef
 ) {
-  const kernel = selectors.currentKernel(store.getState());
+  const kernel = selectors.currentKernel(state);
 
   const channels = kernel ? kernel.channels : null;
 
@@ -175,13 +175,17 @@ export function createExecuteCellStream(
   );
 }
 
-export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
+export function executeAllCellsEpic(
+  action$: ActionsObservable<redux$Action>,
+  state$: StateObservable<AppState>
+) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_ALL_CELLS, actionTypes.EXECUTE_ALL_CELLS_BELOW),
     concatMap((action: ExecuteAllCells | ExecuteAllCellsBelow) => {
+      const state = state$.value;
       const contentRef = action.payload.contentRef;
 
-      const model = selectors.model(store.getState(), { contentRef });
+      const model = selectors.model(state, { contentRef });
       // If it's not a notebook, we shouldn't be here
       if (!model || model.type !== "notebook") {
         return empty();
@@ -207,14 +211,17 @@ export function executeAllCellsEpic(action$: ActionsObservable<*>, store: *) {
  * the execute cell epic processes execute requests for all cells, creating
  * inner observable streams of the running execution responses
  */
-export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
+export function executeCellEpic(
+  action$: ActionsObservable<redux$Action>,
+  state$: any
+) {
   return action$.pipe(
     ofType(actionTypes.EXECUTE_CELL, actionTypes.EXECUTE_FOCUSED_CELL),
     mergeMap((action: ExecuteCell | ExecuteFocusedCell) => {
       if (action.type === actionTypes.EXECUTE_FOCUSED_CELL) {
         const contentRef = action.payload.contentRef;
-
-        const model = selectors.model(store.getState(), { contentRef });
+        const state = state$.value;
+        const model = selectors.model(state, { contentRef });
         // If it's not a notebook, we shouldn't be here
         if (!model || model.type !== "notebook") {
           return empty();
@@ -246,7 +253,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
         switchMap((action: ExecuteCell) => {
           const { id } = action.payload;
 
-          const state = store.getState();
+          const state = state$.value;
 
           const contentRef = action.payload.contentRef;
           const model = selectors.model(state, { contentRef });
@@ -272,7 +279,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
 
           return createExecuteCellStream(
             action$,
-            store,
+            state,
             message,
             id,
             action.payload.contentRef
@@ -303,7 +310,7 @@ export function executeCellEpic(action$: ActionsObservable<*>, store: any) {
   );
 }
 
-export const updateDisplayEpic = (action$: ActionsObservable<*>) =>
+export const updateDisplayEpic = (action$: ActionsObservable<redux$Action>) =>
   // Global message watcher so we need to set up a feed for each new kernel
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),

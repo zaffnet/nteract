@@ -1,5 +1,5 @@
 /* @flow strict */
-import { empty } from "rxjs/observable/empty";
+import { empty } from "rxjs";
 import {
   mapTo,
   filter,

@@ -6,11 +6,7 @@ import path from "path";
 import { selectors } from "@nteract/core";
 import type { ContentRef, KernelRef, AppState } from "@nteract/core";
 
-import { empty } from "rxjs/observable/empty";
-import { of } from "rxjs/observable/of";
-// $FlowFixMe: This exists, we're missing a flow definition
-import { combineLatest } from "rxjs/observable/combineLatest";
-import { from } from "rxjs/observable/from";
+import { empty, of, from, combineLatest } from "rxjs";
 
 import {
   map,
@@ -80,6 +76,7 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
     distinctUntilChanged()
   );
 
+  // $FlowFixMe: Somehow .pipe is broken in the typings
   const modified$ = content$.pipe(
     map(content => selectors.notebook.isDirty(content.model)),
     distinctUntilChanged()
@@ -125,7 +122,7 @@ export function createTitleFeed(contentRef: ContentRef, state$: *) {
   );
 }
 
-export function initNativeHandlers(contentRef: ContentRef, store: *) {
+export function initNativeHandlers(contentRef: ContentRef, store: any) {
   const state$ = from(store).pipe(share());
 
   return createTitleFeed(contentRef, state$).subscribe(

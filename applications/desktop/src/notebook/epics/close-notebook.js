@@ -17,11 +17,7 @@ import {
   selectors
 } from "@nteract/core";
 
-import { Observable } from "rxjs/Observable";
-import { empty } from "rxjs/observable/empty";
-import { of } from "rxjs/observable/of";
-import { zip } from "rxjs/observable/zip";
-import { concat } from "rxjs/observable/concat";
+import { Observable, empty, of, zip, concat } from "rxjs";
 
 import {
   catchError,
@@ -37,12 +33,12 @@ import { ActionsObservable, ofType } from "redux-observable";
 
 import { ipcRenderer as ipc } from "electron";
 
-export const closeNotebookEpic = (action$: ActionsObservable<*>, store: *) =>
+export const closeNotebookEpic = (action$: ActionsObservable<redux$Action>, state$: *) =>
   action$.pipe(
     ofType(actionTypes.CLOSE_NOTEBOOK),
     exhaustMap((action: actionTypes.CloseNotebook) => {
       const contentRef = action.payload.contentRef;
-      const state = store.getState();
+      const state = state$.value;
       const model = selectors.model(state, { contentRef });
 
       var dirtyPromptObservable: Observable<boolean>;

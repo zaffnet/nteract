@@ -1,10 +1,5 @@
 // @flow
-import { Subject } from "rxjs/Subject";
-import { Subscriber } from "rxjs/Subscriber";
-
-import { merge } from "rxjs/observable/merge";
-
-import { fromEvent } from "rxjs/observable/fromEvent";
+import { Subject, Subscriber, fromEvent, merge } from "rxjs";
 import { map, publish, refCount } from "rxjs/operators";
 
 import * as moduleJMP from "jmp";
@@ -176,7 +171,6 @@ export function createMainChannelFromSockets(
 ) {
   // The mega subject that encapsulates all the sockets as one multiplexed stream
   const subject = Subject.create(
-    // $FlowFixMe: figure out if this is a shortcoming in the flow def or our declaration
     Subscriber.create(
       message => {
         // There's always a chance that a bad message is sent, we'll ignore it
@@ -218,6 +212,7 @@ export function createMainChannelFromSockets(
       ...Object.keys(sockets).map(name => {
         const socket = sockets[name];
 
+        // $FlowFixMe: Somehow .pipe is broken in the typings
         return fromEvent(socket, "message").pipe(
           map(body => {
             // Route the message for the frontend by setting the channel
@@ -231,6 +226,7 @@ export function createMainChannelFromSockets(
           refCount()
         );
       })
+      // $FlowFixMe: Somehow .pipe is broken in the typings
     ).pipe(
       publish(),
       refCount()

@@ -1,9 +1,6 @@
 /* @flow */
 
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
-import { empty } from "rxjs/observable/empty";
-import { merge } from "rxjs/observable/merge";
+import { Observable, of, empty, merge } from "rxjs";
 import { createKernelRef } from "../state/refs";
 
 import { createMessage, childOf, ofMessageType } from "@nteract/messaging";
@@ -37,7 +34,7 @@ import type { AppState, KernelInfo } from "../state";
  *
  * @oaram  {ActionObservable}  action$ ActionObservable for LAUNCH_KERNEL_SUCCESSFUL action
  */
-export const watchExecutionStateEpic = (action$: ActionsObservable<*>) =>
+export const watchExecutionStateEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) =>
@@ -117,7 +114,7 @@ export function acquireKernelInfo(
  *
  * @param  {ActionObservable}  The action type
  */
-export const acquireKernelInfoEpic = (action$: ActionsObservable<*>) =>
+export const acquireKernelInfoEpic = (action$: ActionsObservable<redux$Action>) =>
   action$.pipe(
     ofType(actionTypes.LAUNCH_KERNEL_SUCCESSFUL),
     switchMap((action: actionTypes.NewKernelAction) => {
@@ -157,13 +154,13 @@ export const extractNewKernel = (
  *       We could always inject those dependencies separately...
  */
 export const launchKernelWhenNotebookSetEpic = (
-  action$: ActionsObservable<*>,
-  store: *
+  action$: ActionsObservable<redux$Action>,
+  state$: any
 ) =>
   action$.pipe(
     ofType(actionTypes.FETCH_CONTENT_FULFILLED),
     mergeMap((action: actionTypes.FetchContentFulfilled) => {
-      const state: AppState = store.getState();
+      const state: AppState = state$.value;
 
       const contentRef = action.payload.contentRef;
 
@@ -196,14 +193,14 @@ export const launchKernelWhenNotebookSetEpic = (
   );
 
 export const restartKernelEpic = (
-  action$: ActionsObservable<*>,
-  store: *,
+  action$: ActionsObservable<redux$Action>,
+  state$: any,
   kernelRefGenerator: () => KernelRef = createKernelRef
 ) =>
   action$.pipe(
     ofType(actionTypes.RESTART_KERNEL),
     concatMap((action: actionTypes.RestartKernel) => {
-      const state = store.getState();
+      const state = state$.value;
 
       const oldKernelRef = action.payload.kernelRef;
       const oldKernel = selectors.kernel(state, { kernelRef: oldKernelRef });

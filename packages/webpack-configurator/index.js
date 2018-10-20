@@ -87,7 +87,7 @@ function nextWebpack(
   }
 
   config.resolve = Object.assign({}, config.resolve, {
-    mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
+    mainFields: ["nteractDesktop", "jsnext:main", "module", "main"],
     alias: mergeDefaultAliases(
       config.resolve ? config.resolve.alias : undefined
     )

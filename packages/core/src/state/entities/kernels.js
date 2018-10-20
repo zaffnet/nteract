@@ -3,7 +3,7 @@ import * as Immutable from "immutable";
 import type { ChildProcess } from "child_process";
 import type { HostRef, KernelRef } from "../refs";
 import type { KernelId, SessionId } from "../ids";
-import { Subject } from "rxjs/Subject";
+import { Subject } from "rxjs";
 
 import type { KernelInfo } from "./kernel-info";
 export type { KernelInfo };
@@ -42,7 +42,7 @@ export type LocalKernelProps = {
   info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
-  channels: rxjs$Subject<*>,
+  channels: Subject<*>,
   cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
@@ -77,7 +77,7 @@ export type RemoteKernelProps = {
   info: ?KernelInfo,
   hostRef: ?HostRef,
   lastActivity: ?Date,
-  channels: rxjs$Subject<*>,
+  channels: Subject<*>,
   cwd: string,
   // Canonically: idle, busy, starting
   // Xref: http://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-status
