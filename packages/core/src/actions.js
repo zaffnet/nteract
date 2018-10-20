@@ -239,12 +239,12 @@ export function moveCell(payload: {
   };
 }
 
-export function removeCell(payload: {
+export function deleteCell(payload: {
   id?: string,
   contentRef: ContentRef
-}): actionTypes.RemoveCell {
+}): actionTypes.DeleteCell {
   return {
-    type: actionTypes.REMOVE_CELL,
+    type: actionTypes.DELETE_CELL,
     payload
   };
 }
@@ -268,6 +268,17 @@ export function createCellAbove(payload: {
 }): actionTypes.CreateCellAbove {
   return {
     type: actionTypes.CREATE_CELL_ABOVE,
+    payload
+  };
+}
+
+// Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead
+export function removeCell(payload: {
+  id?: string,
+  contentRef: ContentRef
+}): actionTypes.RemoveCell {
+  return {
+    type: actionTypes.REMOVE_CELL,
     payload
   };
 }

@@ -412,7 +412,7 @@ export function dispatchDeleteCell(
   ownProps: { contentRef: ContentRef },
   store: Store<DesktopNotebookAppState, *>
 ) {
-  store.dispatch(actions.removeCell({ contentRef: ownProps.contentRef }));
+  store.dispatch(actions.deleteCell({ contentRef: ownProps.contentRef }));
 }
 
 export function dispatchCreateCellAbove(

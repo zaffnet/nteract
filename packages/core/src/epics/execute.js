@@ -44,7 +44,7 @@ import type {
   ExecuteAllCells,
   ExecuteAllCellsBelow,
   ExecuteCanceled,
-  RemoveCell
+  DeleteCell
 } from "../actionTypes";
 
 const Immutable = require("immutable");
@@ -150,9 +150,9 @@ export function createExecuteCellStream(
     takeUntil(
       merge(
         action$.pipe(
-          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.REMOVE_CELL),
+          ofType(actionTypes.EXECUTE_CANCELED, actionTypes.DELETE_CELL),
           filter(
-            (action: ExecuteCanceled | RemoveCell) => action.payload.id === id
+            (action: ExecuteCanceled | DeleteCell) => action.payload.id === id
           )
         ),
         action$.pipe(

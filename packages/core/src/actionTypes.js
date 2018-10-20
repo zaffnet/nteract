@@ -158,9 +158,9 @@ export type MoveCell = {
   }
 };
 
-export const REMOVE_CELL = "REMOVE_CELL";
-export type RemoveCell = {
-  type: "REMOVE_CELL",
+export const DELETE_CELL = "DELETE_CELL";
+export type DeleteCell = {
+  type: "DELETE_CELL",
   payload: {
     id?: CellID,
     contentRef: ContentRef
@@ -183,6 +183,16 @@ export type CreateCellAbove = {
   type: "CREATE_CELL_ABOVE",
   payload: {
     cellType: CellType,
+    id?: CellID,
+    contentRef: ContentRef
+  }
+};
+
+// Deprecation Warning: This action type is being deprecated. Please use DELETE_CELL instead
+export const REMOVE_CELL = "REMOVE_CELL";
+export type RemoveCell = {
+  type: "REMOVE_CELL",
+  payload: {
     id?: CellID,
     contentRef: ContentRef
   }

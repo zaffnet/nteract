@@ -43,6 +43,7 @@ export type {
 const v4 = require("./v4");
 const v3 = require("./v3");
 
+// Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead
 const {
   emptyNotebook,
   emptyCodeCell,
@@ -54,7 +55,8 @@ const {
 
   insertCellAt,
   insertCellAfter,
-  removeCell
+  removeCell,
+  deleteCell
 } = require("./structures");
 
 export type Notebook = v4Notebook | v3Notebook;
@@ -128,6 +130,7 @@ function stringifyNotebook(notebook: v4Notebook): string {
 const createImmutableOutput = v4.createImmutableOutput;
 const createImmutableMimeBundle = v4.createImmutableMimeBundle;
 
+// Deprecation Warning: removeCell() is being deprecated. Please use deleteCell() instead
 export {
   emptyCodeCell,
   emptyMarkdownCell,
@@ -141,6 +144,7 @@ export {
   insertCellAt,
   insertCellAfter,
   removeCell,
+  deleteCell,
   appendCell,
   appendCellToNotebook,
   createImmutableOutput,
