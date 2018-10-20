@@ -3,6 +3,39 @@ import * as React from "react";
 import { controlHelpText } from "./docs/chart-docs";
 import chartUIStyle from "./css/viz-controls";
 import buttonGroupStyle from "./css/button-group";
+import { Select } from "@blueprintjs/select";
+import { Button, MenuItem } from "@blueprintjs/core";
+import blueprintCSS from "../../../presentational-components/src/vendor/blueprint.css.js";
+import blueprintSelectCSS from "../../../presentational-components/src/vendor/blueprint-select.css.js";
+
+/*
+const FilmSelect = Select.ofType<{
+  title: string;
+  year: number;
+  rank: number;
+}>();
+*/
+
+const renderMenuItem = (item, { handleClick, modifiers, query }) => {
+  if (!modifiers.matchesPredicate) {
+    return null;
+  }
+  const text = `${item.label}`;
+  return (
+    <MenuItem
+      active={modifiers.active}
+      disabled={modifiers.disabled}
+      label={text}
+      key={text}
+      onClick={handleClick}
+      text={d => d}
+    />
+  );
+};
+
+const filterItem = (query, item) => {
+  return `${item.label.toLowerCase()}`.indexOf(query.toLowerCase()) >= 0;
+};
 
 const metricDimSelector = (
   values,
@@ -16,16 +49,16 @@ const metricDimSelector = (
   let displayMetrics;
   if (metricsList.length > 1)
     displayMetrics = (
-      <select
+      <Select
+        items={metricsList.map(d => ({ value: d, label: d }))}
         value={selectedValue}
-        onChange={e => selectionFunction(e.target.value)}
+        noResults={<MenuItem disabled={true} text="No results." />}
+        onItemSelect={e => selectionFunction(e.target.value)}
+        itemRenderer={renderMenuItem}
+        itemPredicate={filterItem}
       >
-        {metricsList.map(d => (
-          <option key={`selector-option-${d}`} value={d} label={d}>
-            {d}
-          </option>
-        ))}
-      </select>
+        <Button text={metricsList[0]} rightIcon="double-caret-vertical" />
+      </Select>
     );
   else displayMetrics = <p style={{ margin: 0 }}>{metricsList[0]}</p>;
 
@@ -295,6 +328,8 @@ export default ({
       </div>
       <style jsx>{chartUIStyle}</style>
       <style jsx>{buttonGroupStyle}</style>
+      <style jsx>{blueprintCSS}</style>
+      <style jsx>{blueprintSelectCSS}</style>
     </React.Fragment>
   );
 };
