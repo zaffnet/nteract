@@ -86,6 +86,9 @@ const Wrapper = (props: Props) => (
         .rc-menu-submenu-popup {
           position: absolute;
         }
+        .rc-menu-submenu-popup .submenu-title-wrapper {
+          padding-right: 20px;
+        }
         .rc-menu-submenu > .rc-menu {
           background-color: var(--theme-menu-bg);
         }
@@ -112,6 +115,8 @@ const Wrapper = (props: Props) => (
           border-bottom: 1px solid var(--theme-app-border);
           box-shadow: none;
           padding: 0 var(--nt-spacing-xs);
+          white-space: nowrap;
+          overflow: hidden;
         }
         .rc-menu-horizontal > .rc-menu-item,
         .rc-menu-horizontal > .rc-menu-submenu > .rc-menu-submenu-title {
@@ -119,7 +124,8 @@ const Wrapper = (props: Props) => (
         }
         .rc-menu-horizontal > .rc-menu-submenu,
         .rc-menu-horizontal > .rc-menu-item {
-          float: left;
+          display: inline-block;
+          vertical-align: bottom;
         }
         .rc-menu-horizontal > .rc-menu-submenu-active,
         .rc-menu-horizontal > .rc-menu-item-active {
