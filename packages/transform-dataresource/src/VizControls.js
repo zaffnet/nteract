@@ -88,8 +88,10 @@ export default ({
   updateDimensions,
   lineType,
   areaType,
-  setAreaType
+  setAreaType,
+  data
 }) => {
+  console.log("data", data);
   return (
     <React.Fragment>
       <div className="wrapper">
@@ -116,7 +118,7 @@ export default ({
             chart.metric2,
             controlHelpText.metric2[view] || controlHelpText.metric2.default
           )}
-        {(view === "scatter" || view === "bar") &&
+        {((view === "scatter" && data.length < 1000) || view === "bar") &&
           metricDimSelector(
             metrics.map(d => d.name),
             d => updateChart({ chart: { ...chart, metric3: d } }),
