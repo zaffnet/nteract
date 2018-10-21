@@ -14,9 +14,6 @@ import * as actionTypes from "../actionTypes";
 import * as selectors from "../selectors";
 import type { ContentRef, AppState } from "../state";
 
-
-
-
 // Flow complains otherwise since of would return an rxjs$Observable rather than an ActionsObservable
 // Ask Jay Phelps about this ;)
 const of = ActionsObservable.of;
@@ -220,7 +217,7 @@ export function saveContentEpic(
             error: new Error("Content was not set."),
             contentRef: action.payload.contentRef
           };
-          if (action.type === actionTypes.DownloadContent) {
+          if (action.type === actionTypes.DOWNLOAD_CONTENT) {
             return of(actions.downloadContentFailed(errorPayload));
           }
           return of(actions.saveFailed(errorPayload));
