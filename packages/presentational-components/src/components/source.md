@@ -82,7 +82,6 @@ class Editor extends React.Component {
         <textarea
           onChange={evt => {
             this.setState({ value: evt.target.value });
-            console.log(evt.target.value);
           }}
           style={{
             fontFamily: `"Dank Mono", "Source Code Pro", Consolas, "Courier New", Courier,  monospace`,
