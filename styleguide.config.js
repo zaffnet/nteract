@@ -1,6 +1,8 @@
 // @format
 const path = require("path");
 
+const babelFlowConfig = require("./babel.flow.config");
+const babelTypescriptConfig = require("./babel.typescript.config");
 var {
   exclude,
   mergeDefaultAliases
@@ -62,6 +64,7 @@ module.exports = {
     },
     resolve: {
       mainFields: ["nteractDesktop", "es2015", "jsnext:main", "module", "main"],
+      extensions: [".js", ".jsx", ".ts", ".tsx"],
       alias: mergeDefaultAliases()
     },
     module: {
@@ -69,8 +72,15 @@ module.exports = {
         {
           test: /\.jsx?$/,
           exclude,
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+          options: babelFlowConfig(),
+        },
+        {
+          test: /\.tsx?$/,
+          exclude,
+          loader: "babel-loader",
+          options: babelTypescriptConfig(),
+      },
       ]
     }
   }
