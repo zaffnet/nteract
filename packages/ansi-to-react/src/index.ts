@@ -2,18 +2,12 @@ import * as React from "react";
 import { ansiToJson, AnserJsonEntry } from "anser";
 import { escapeCarriageReturn } from "escape-carriage";
 
-declare type AnsiStyleType = {
-  backgroundColor?: string,
-  color?: string,
-}
-declare type ParsedAnsiBundleType = {
-  style: AnsiStyleType;
-  content: React.ReactNode | string;
-}
+const LINK_REGEX =
+    /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
+
+
 /**
- * ansiToJson
- * Convert ANSI strings into JSON output.
- *
+ * Converts ANSI strings into JSON output.
  * @name ansiToJSON
  * @function
  * @param {String} input The input string.
@@ -27,79 +21,64 @@ function ansiToJSON(input: string): AnserJsonEntry[] {
   });
 }
 
-function ansiJSONtoStyleBundle(ansiBundle: AnserJsonEntry): { content: string, style: AnsiStyleType } {
-  const style: AnsiStyleType = {};
-  if (ansiBundle.bg) {
-    style.backgroundColor = `rgb(${ansiBundle.bg})`;
+/**
+ * Converts an Anser bundle into a React Node.
+ * @param linkify whether links should be converting into clickable anchor tags.
+ * @param bundle Anser output.
+ */
+function convertBundleIntoReact(
+    linkify: boolean, bundle: AnserJsonEntry, key: number): React.ReactNode {
+  const style: any = {};
+  if (bundle.bg) {
+    style.backgroundColor = `rgb(${bundle.bg})`;
   }
-  if (ansiBundle.fg) {
-    style.color = `rgb(${ansiBundle.fg})`;
+  if (bundle.fg) {
+    style.color = `rgb(${bundle.fg})`;
   }
-  return {
-    content: ansiBundle.content,
-    style
-  };
-}
 
-export function ansiToInlineStyle(text: string) {
-  return ansiToJSON(text).map(ansiJSONtoStyleBundle);
-}
+  if (!linkify) {
+    return React.createElement(
+      "span", {style, key}, bundle.content
+    );
+  }
 
-function linkifyBundle(bundle: {content: string, style: AnsiStyleType }): ParsedAnsiBundleType {
-  return {
-    ...bundle,
-    content: bundle.content.split(" ").reduce(
-      (result: Array<React.ReactNode | string>, word: string, index: number): Array<React.ReactNode | string> => [
-        ...result,
-        // Unless word is the first, prepend a space
-        index === 0 ? "" : " ",
-        // If word is a URL, return an <a> element
-        /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/.test(
-          word
-        )
-          ? React.createElement(
-              "a",
-              {
-                key: index,
-                href: word,
-                target: "_blank"
-              },
-              `${word}`
-            )
-          : word
-      ],
-      []
-    )
-  };
-}
+  const words = bundle.content.split(" ")
+      .reduce((words: React.ReactNode[], word: string, index: number) => {
+        // If this isn't the first word, re-add the space removed from split.
+        if (index !== 0) {
+          words.push(" ");
+        }
 
-function inlineBundleToReact(bundle: ParsedAnsiBundleType, key: number): React.ReactNode {
+        // If  this isn't a link, just return the word as-is.
+        if (!LINK_REGEX.test(word)) {
+          words.push(word);
+          return words;
+        }
+
+        words.push(React.createElement(
+            "a",
+            {
+              key: index,
+              href: word,
+              target: "_blank"
+            },
+            `${word}`));
+        return words;
+      }, [] as React.ReactNode[]);
   return React.createElement(
-    "span",
-    {
-      style: bundle.style,
-      key
-    },
-    bundle.content
+    "span", {style, key}, words
   );
 }
 
-type Props = {
-  children: string,
-  className?: string,
-  linkify?: boolean
+declare type Props = {
+  children: string;
+  className?: string;
+  linkify?: boolean;
 };
 
-function Ansi(props: Props) {
+export default function Ansi(props: Props): React.ReactNode {
   return React.createElement(
-    "code",
-    { className: props.className },
-    props.linkify
-      ? ansiToInlineStyle(props.children)
-          .map(linkifyBundle)
-          .map(inlineBundleToReact)
-      : ansiToInlineStyle(props.children).map(inlineBundleToReact)
-  );
+    "code", { className: props.className },
+    ansiToJSON(props.children)
+        .map(convertBundleIntoReact.bind(this, props.linkify)));
 }
-
-export default Ansi;

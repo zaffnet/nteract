@@ -1,6 +1,7 @@
 // @flow
 
 const configurator = require("@nteract/webpack-configurator");
+
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const webpack = require("webpack");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
@@ -34,17 +35,22 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: configurator.exclude,
-        loader: "babel-loader"
+        loader: "babel-loader",
       },
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
-      }
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: configurator.exclude,
+        loader: "babel-loader",
+      },
     ]
   },
   resolve: {
     mainFields: ["nteractDesktop", "module", "main"],
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: configurator.mergeDefaultAliases()
   },
   plugins: [
