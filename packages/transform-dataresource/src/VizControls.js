@@ -4,13 +4,7 @@ import { controlHelpText } from "./docs/chart-docs";
 import chartUIStyle from "./css/viz-controls";
 import buttonGroupStyle from "./css/button-group";
 import { Select } from "@blueprintjs/select";
-import {
-  Button,
-  ButtonGroup,
-  MenuItem,
-  Code,
-  AnchorButton
-} from "@blueprintjs/core";
+import { Button, ButtonGroup, MenuItem, Code } from "@blueprintjs/core";
 import {
   blueprintCSS,
   blueprintSelectCSS
@@ -90,7 +84,7 @@ const iconHash = {
   Color: colorIcon
 };
 
-const renderMenuItem = (item, { handleClick, modifiers, query }) => {
+const renderMenuItem = (item, { handleClick, modifiers }) => {
   if (!modifiers.matchesPredicate) {
     return null;
   }
