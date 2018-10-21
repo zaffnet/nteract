@@ -22,6 +22,8 @@ type Props = {
   options: Object
 };
 
+const axisSize = [40, 380];
+
 const connectorFunction = d => d.Country;
 
 function parallelizeData(data, metrics, schemaFields, primaryKey) {
@@ -269,7 +271,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
               <g transform="translate(-20,-395)">
                 <Axis
                   scale={this.state.dataScales[d]}
-                  size={[40, 380]}
+                  size={axisSize}
                   orient="left"
                   ticks={5}
                   tickFormat={d => (

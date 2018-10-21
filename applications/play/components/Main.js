@@ -17,6 +17,8 @@ import { BinderConsole } from "./consoles";
 const NTERACT_LOGO_URL =
   "https://media.githubusercontent.com/media/nteract/logos/master/nteract_logo_cube_book/exports/images/svg/nteract_logo_wide_purple_inverted.svg";
 
+const emptyList = [];
+
 class Main extends React.Component<*, *> {
   constructor(props) {
     super(props);
@@ -175,7 +177,7 @@ class Main extends React.Component<*, *> {
             logs={
               currentServer && currentServer.messages
                 ? currentServer.messages
-                : []
+                : emptyList
             }
             repo={repoValue}
             gitref={gitrefValue}
@@ -231,7 +233,7 @@ class Main extends React.Component<*, *> {
               outputs={
                 currentKernel && currentKernel.outputs
                   ? currentKernel.outputs
-                  : []
+                  : emptyList
               }
               expanded
             />
