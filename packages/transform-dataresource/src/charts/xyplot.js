@@ -291,7 +291,7 @@ export const semioticScatterplot = (
     }),
     hoverAnnotation: true,
     responsiveWidth: false,
-    size: [height + 200, height + 50],
+    size: [height + 225, height + 80],
     margin: { left: 75, bottom: 50, right: 150, top: 30 },
     annotations: (type === "scatterplot" && annotations) || undefined,
     annotationSettings: {
