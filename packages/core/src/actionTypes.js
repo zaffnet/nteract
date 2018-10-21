@@ -1,5 +1,14 @@
 /* @flow */
 import type {
+  CellID,
+  CellType,
+  ImmutableJSONType,
+  MimeBundle
+} from "@nteract/commutable";
+import type { ExecuteRequest } from "@nteract/messaging";
+import type { Output } from "@nteract/commutable/src/v4";
+
+import type {
   ContentRef,
   HostRef,
   KernelRef,
@@ -8,14 +17,6 @@ import type {
 import type { HostRecord } from "./state/entities/hosts";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
 import type { KernelInfo } from "./state/entities/kernel-info";
-
-import type {
-  CellID,
-  CellType,
-  ImmutableJSONType,
-  MimeBundle
-} from "@nteract/commutable";
-
 import type {
   KernelspecInfo,
   LanguageInfoMetadata,
@@ -23,9 +24,7 @@ import type {
   RemoteKernelProps
 } from "./state";
 
-import type { ExecuteRequest } from "@nteract/messaging";
 
-import type { Output } from "@nteract/commutable/src/v4";
 
 export type ErrorAction<T: string> = {
   type: T,

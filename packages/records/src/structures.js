@@ -1,11 +1,10 @@
 /* @flow */
 
 import produce from "immer";
+import uuid from "uuid/v4";
 
 import type { NbformatCell } from "./cells";
-
 import type { NbformatOutput } from "./outputs";
-
 import type {
   ImmutableNotebook,
   ImmutableCellOrder,
@@ -13,7 +12,6 @@ import type {
   ExecutionCount
 } from "./types";
 
-import uuid from "uuid/v4";
 
 // We're hardset to nbformat v4.4 for what we use in-memory
 export type Notebook = {|

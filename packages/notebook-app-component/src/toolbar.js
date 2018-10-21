@@ -8,16 +8,13 @@
 
 import * as React from "react";
 import { connect } from "react-redux";
-
 import { actions } from "@nteract/core";
 import type { ContentRef } from "@nteract/core";
-
 import {
   DropdownMenu,
   DropdownTrigger,
   DropdownContent
 } from "@nteract/dropdown-menu";
-
 import {
   TrashOcticon,
   ChevronDownOcticon,

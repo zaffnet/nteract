@@ -1,6 +1,12 @@
 // @flow
-import * as actionTypes from "./actionTypes";
+import type {
+  CellID,
+  CellType,
+  MimeBundle
+} from "@nteract/commutable/src/types";
+import type { Output } from "@nteract/commutable/src/v4";
 
+import * as actionTypes from "./actionTypes";
 import type {
   ContentRef,
   HostRef,
@@ -8,7 +14,6 @@ import type {
   KernelspecsRef
 } from "./state/refs";
 import type { KernelspecProps } from "./state/entities/kernelspecs";
-
 import type {
   LanguageInfoMetadata,
   LocalKernelProps,
@@ -16,13 +21,7 @@ import type {
   KernelInfo
 } from "./state";
 
-import type {
-  CellID,
-  CellType,
-  MimeBundle
-} from "@nteract/commutable/src/types";
 
-import type { Output } from "@nteract/commutable/src/v4";
 
 export const openModal = (payload: { modalType: string }) => ({
   type: actionTypes.OPEN_MODAL,

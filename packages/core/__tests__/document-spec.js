@@ -2,6 +2,13 @@
 /* eslint-disable max-len */
 
 import uuid from "uuid/v4";
+import {
+  emptyCodeCell,
+  emptyMarkdownCell,
+  appendCellToNotebook,
+  emptyNotebook
+} from "@nteract/commutable";
+import * as Immutable from "immutable";
 
 import * as actions from "../src/actions";
 import {
@@ -9,19 +16,9 @@ import {
   reduceOutputs,
   cleanCellTransient
 } from "../src/reducers/core/entities/contents/notebook";
-
-import {
-  emptyCodeCell,
-  emptyMarkdownCell,
-  appendCellToNotebook,
-  emptyNotebook
-} from "@nteract/commutable";
-
 import { makeDocumentRecord } from "../src/state";
-
 import { dummyCommutable } from "../src/dummy";
 
-import * as Immutable from "immutable";
 
 const initialDocument = new Immutable.Map();
 const monocellDocument = initialDocument
