@@ -243,11 +243,13 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           oPadding={40}
           pixelColumnWidth={80}
           interaction={
-            filterMode && {
-              columnsBrush: true,
-              during: this.brushing,
-              extent: Object.keys(this.state.columnExtent)
-            }
+            filterMode
+              ? {
+                  columnsBrush: true,
+                  during: this.brushing,
+                  extent: Object.keys(this.state.columnExtent)
+                }
+              : null
           }
           pieceHoverAnnotation={!filterMode}
           tooltipContent={d => (

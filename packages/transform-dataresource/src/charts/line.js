@@ -1,6 +1,6 @@
 /* @flow */
 import * as React from "react";
-import { curveMonotone } from "d3-shape";
+import { curveMonotoneX } from "d3-shape";
 import { scaleLinear, scaleTime } from "d3-scale";
 
 import TooltipContent from "../tooltip-content";
@@ -61,7 +61,7 @@ export const semioticLineChart = (
     );
 
   return {
-    lineType: { type: lineType, interpolator: curveMonotone },
+    lineType: { type: lineType, interpolator: curveMonotoneX },
     lines: lineData,
     xScaleType: xScale,
     renderKey: (d: Object, i: number) => {
