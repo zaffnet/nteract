@@ -401,7 +401,6 @@ class DataResourceTransform extends React.Component<Props, State> {
               flexFlow: "column nowrap",
               zIndex: 1,
               padding: "5px",
-              background: "white"
             }}
           >
             <IconButton
