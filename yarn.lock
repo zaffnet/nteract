@@ -1535,10 +1535,10 @@
   resolved "https://registry.yarnpkg.com/@nteract/plotly/-/plotly-1.0.0.tgz#1ce454ab1baa67dc26e72ff5a917c2065eed9146"
   integrity sha1-HORUqxuqZ9wm5y/1qRfCBl7tkUY=
 
-"@nteract/vega-embed-v2@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@nteract/vega-embed-v2/-/vega-embed-v2-1.0.0.tgz#dbde8cbfaf9d570c06ba40f9ccbb300749d73764"
-  integrity sha512-iWS0v6Q8epMzMbzpwIJT5rVB1+igTjtpXSKleTFt8ENdLzJmeyb2YbPobchQfAAdEG4x6WhnboUWz6Ud6MR/qg==
+"@nteract/vega-embed-v2@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@nteract/vega-embed-v2/-/vega-embed-v2-1.1.0.tgz#10940438d40d0251df06e629371766e0a1ab34ad"
+  integrity sha512-5sCymGk2qzb1BC8P8MTkD0L9rG/8gPb8jyQ2Fz5aqftblgZ+DooHNcR4oi4T49mhRv0zLjqstBwDxx5JmzNdtw==
   dependencies:
     d3 "3.5.17"
     d3-cloud "^1.2.5"
