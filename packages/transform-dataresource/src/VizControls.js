@@ -1,14 +1,15 @@
 import * as React from "react";
-
-import { controlHelpText } from "./docs/chart-docs";
-import chartUIStyle from "./css/viz-controls";
-import buttonGroupStyle from "./css/button-group";
 import { Select } from "@blueprintjs/select";
 import { Button, ButtonGroup, MenuItem, Code } from "@blueprintjs/core";
+
 import {
   blueprintCSS,
   blueprintSelectCSS
 } from "../../styled-blueprintjsx/src/index";
+
+import buttonGroupStyle from "./css/button-group";
+import chartUIStyle from "./css/viz-controls";
+import { controlHelpText } from "./docs/chart-docs";
 
 /*
 const FilmSelect = Select.ofType<{
@@ -17,6 +18,8 @@ const FilmSelect = Select.ofType<{
   rank: number;
 }>();
 */
+
+const NoResultsItem = <MenuItem disabled={true} text="No results." />
 
 const arrowHeadMarker = (
   <marker
@@ -120,7 +123,7 @@ const metricDimSelector = (
       <Select
         items={metricsList.map(d => ({ value: d, label: d }))}
         value={selectedValue}
-        noResults={<MenuItem disabled={true} text="No results." />}
+        noResults={NoResultsItem}
         onItemSelect={e => {
           selectionFunction(e.value);
         }}
