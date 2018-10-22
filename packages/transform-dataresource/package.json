@@ -44,8 +44,9 @@
     "react-hot-loader": "^4.1.2",
     "react-table": "^6.8.6",
     "react-table-hoc-fixed-columns": "1.0.2",
-    "semiotic": "^1.14.4",
     "styled-jsx": "^3.1.0",
+    "@nteract/styled-blueprintjsx": "^1.0.0",
+    "semiotic": "^1.15.5",
     "tv4": "^1.3.0"
   }
 }
