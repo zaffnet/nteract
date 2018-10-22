@@ -5,7 +5,7 @@ import { Button, ButtonGroup, MenuItem, Code } from "@blueprintjs/core";
 import {
   blueprintCSS,
   blueprintSelectCSS
-} from "../../styled-blueprintjsx/src/index";
+} from "@nteract/styled-blueprintjsx";
 
 import buttonGroupStyle from "./css/button-group";
 import chartUIStyle from "./css/viz-controls";
