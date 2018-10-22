@@ -81,6 +81,7 @@ class Editor extends React.Component {
       <Source>
         <textarea
           onChange={evt => {
+            console.log(evt.target.value);
             this.setState({ value: evt.target.value });
           }}
           style={{
