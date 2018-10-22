@@ -275,7 +275,7 @@ export const semioticScatterplot = (
       fill: type === "contour" ? "none" : thresholds(d.percent),
       stroke:
         type !== "contour"
-          ? "black"
+          ? undefined
           : dim3 === "none"
             ? "#BBB"
             : d.parentArea.color,
