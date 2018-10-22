@@ -40,7 +40,7 @@ const HTMLLegend = ({
                 background: colorHash[v]
               }}
             />
-            {v}
+            <span className="html-legend-item">{v}</span>
             {(valueHash[v] && valueHash[v] > 1 && `(${valueHash[v]})`) || ""}
           </span>
         )

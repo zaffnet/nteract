@@ -1,6 +1,10 @@
 import css from "styled-jsx/css";
 
 export default css`
+  :global(.html-legend-item) {
+    color: var(--theme-app-fg);
+  }
+
   :global(.tick > path) {
     stroke: lightgray;
   }
