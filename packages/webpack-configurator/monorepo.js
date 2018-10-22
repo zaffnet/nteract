@@ -226,11 +226,6 @@ module.exports = {
       private: false
     },
     {
-      name: "@nteract/vega-embed2",
-      version: "2.1.0",
-      private: false
-    },
-    {
       name: "@nteract/webpack-configurator",
       version: "1.2.0",
       private: false
