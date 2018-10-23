@@ -1,6 +1,6 @@
 {
   "name": "@nteract/styled-blueprintjsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CSS underpinnings of blueprint.js, packaged as styled-jsx",
   "keywords": [
     "ui",
@@ -43,7 +43,7 @@
     "styled-jsx": "^3.1.0"
   },
   "devDependencies": {
-    "@blueprintjs/select": "^3.2.0",
-    "@blueprintjs/core": "^3.7.0"
+    "@blueprintjs/core": "^3.7.0",
+    "@blueprintjs/select": "^3.2.0"
   }
 }
