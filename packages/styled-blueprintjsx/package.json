@@ -37,6 +37,9 @@
   "bugs": {
     "url": "https://github.com/nteract/nteract/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
     "babel-runtime": "^6.26.0",
