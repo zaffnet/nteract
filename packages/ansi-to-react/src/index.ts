@@ -29,9 +29,6 @@ function convertBundleIntoReact(
   bundle: AnserJsonEntry,
   key: number
 ): React.ReactNode {
-
-
-
   const style: { backgroundColor?: string; color?: string } = {};
   if (bundle.bg) {
     style.backgroundColor = `rgb(${bundle.bg})`;
