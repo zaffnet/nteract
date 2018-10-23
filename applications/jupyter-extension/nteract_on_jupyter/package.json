@@ -1,6 +1,6 @@
 {
   "name": "nteract-on-jupyter",
-  "version": "1.9.10",
+  "version": "1.9.11",
   "description": "nteract on jupyter, as an extension",
   "main": "app/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/commutable": "^5.0.0",
-    "@nteract/connected-components": "^3.0.0",
+    "@nteract/connected-components": "^4.0.0",
     "@nteract/core": "^8.0.0",
     "@nteract/directory-listing": "^0.3.5",
     "@nteract/editor": "^7.3.6",
@@ -28,12 +28,12 @@
     "@nteract/jupyter-widgets": "^0.0.2",
     "@nteract/logos": "^0.1.4",
     "@nteract/monaco-editor": "^1.2.6",
-    "@nteract/notebook-app-component": "^2.0.0",
-    "@nteract/notebook-preview": "^9.0.0",
+    "@nteract/notebook-app-component": "^3.0.0",
+    "@nteract/notebook-preview": "^10.0.0",
     "@nteract/octicons": "^0.5.0",
-    "@nteract/presentational-components": "^0.5.0",
+    "@nteract/presentational-components": "^1.0.0",
     "@nteract/timeago": "^3.6.4",
-    "@nteract/transform-dataresource": "^4.4.0",
+    "@nteract/transform-dataresource": "^4.5.0",
     "@nteract/transform-geojson": "^3.2.4",
     "@nteract/transform-model-debug": "^3.2.4",
     "@nteract/transform-plotly": "^3.2.4",

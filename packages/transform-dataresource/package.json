@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transform-dataresource",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "description": "Transform for data resource JSON",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -32,7 +32,7 @@
     "@babel/runtime": "^7.0.0",
     "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/octicons": "^0.5.0",
-    "@nteract/styled-blueprintjsx": "^1.0.1",
+    "@nteract/styled-blueprintjsx": "^1.1.0",
     "@nteract/transform-plotly": "^3.2.4",
     "d3-collection": "^1.0.7",
     "d3-scale": "^2.1.2",
