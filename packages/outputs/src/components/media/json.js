@@ -33,8 +33,8 @@ type Props = {
 export class JSON extends React.Component<Props> {
   static defaultProps = {
     mediaType: "application/json",
-    data: "",
-    theme: "classic",
+    data: {},
+    theme: "light",
     metadata: { expanded: true }
   };
 
