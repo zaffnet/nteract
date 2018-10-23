@@ -20,7 +20,9 @@ module.exports = {
     },
     {
       name: "Media Outputs",
-      components: "packages/outputs/src/components/media/*.js"
+      components: "packages/outputs/src/components/media/*.js",
+      content: "packages/outputs/src/components/media/index.md",
+      ignore: "packages/outputs/src/components/media/index.js"
     },
     {
       name: "Binder Hosts and Kernels",

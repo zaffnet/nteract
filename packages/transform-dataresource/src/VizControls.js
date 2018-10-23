@@ -1,10 +1,7 @@
 import * as React from "react";
 import { Select } from "@blueprintjs/select";
 import { Button, ButtonGroup, MenuItem, Code } from "@blueprintjs/core";
-import {
-  blueprintCSS,
-  blueprintSelectCSS
-} from "@nteract/styled-blueprintjsx";
+import { blueprintCSS, blueprintSelectCSS } from "@nteract/styled-blueprintjsx";
 
 import buttonGroupStyle from "./css/button-group";
 import chartUIStyle from "./css/viz-controls";
@@ -18,7 +15,7 @@ const FilmSelect = Select.ofType<{
 }>();
 */
 
-const NoResultsItem = <MenuItem disabled={true} text="No results." />
+const NoResultsItem = <MenuItem disabled={true} text="No results." />;
 
 const arrowHeadMarker = (
   <marker
