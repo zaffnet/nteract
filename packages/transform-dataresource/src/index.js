@@ -513,8 +513,12 @@ export class IconButton extends React.Component<IconButtonProps> {
     let style: Object = {
       width: "32px",
       height: "32px",
-      cursor: "pointer"
+      cursor: "pointer",
+      color: "var(--theme-app-fg)",
+      border: "1px solid var(--theme-app-fg)",
+      backgroundColor: "var(--theme-app-bg)"
     };
+
     if (selected) {
       style.border = "1px outset #666";
       style.backgroundColor = "#aaa";

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Select } from "@blueprintjs/select";
 import { Button, ButtonGroup, MenuItem, Code } from "@blueprintjs/core";
-
 import {
   blueprintCSS,
   blueprintSelectCSS
