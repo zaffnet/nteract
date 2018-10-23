@@ -7,7 +7,6 @@ Copyright 2015-present Palantir Technologies, Inc. All rights reserved.
 Licensed under the terms of the LICENSE file distributed with this project.
 
 */
-/*
 html{
   -webkit-box-sizing:border-box;
           box-sizing:border-box; }
@@ -18,6 +17,7 @@ html{
   -webkit-box-sizing:inherit;
           box-sizing:inherit; }
 
+/*
 body{
   text-transform:none;
   line-height:1.28581;
