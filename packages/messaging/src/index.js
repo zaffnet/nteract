@@ -67,9 +67,7 @@ export const ofMessageType = (
     return ofMessageType(...messageTypes[0]);
   }
 
-  return (
-    source: Observable<JupyterMessage<*, *>>
-  ): Observable<JupyterMessage<*, *>> =>
+  return (source: Observable<JupyterMessage<*, *>>) =>
     Observable.create(subscriber =>
       source.subscribe(
         msg => {
@@ -114,15 +112,13 @@ export function convertOutputMessageToNotebookFormat(
  *     outputs()
  *   )
  */
-export const outputs = () => (
-  source: Observable<JupyterMessage<*, *>>
-): Observable<JupyterMessage<*, *>> =>
+export const outputs = () => (source: Observable<JupyterMessage<*, *>>) =>
   source.pipe(
     ofMessageType("execute_result", "display_data", "stream", "error"),
     map(convertOutputMessageToNotebookFormat)
   );
 
-export const updatedOutputs = () => (source: Observable<*>): Observable<*> =>
+export const updatedOutputs = () => (source: Observable<*>) =>
   source.pipe(
     ofMessageType("update_display_data"),
     map(msg => Object.assign({}, msg.content, { output_type: "display_data" }))
@@ -136,9 +132,7 @@ export const updatedOutputs = () => (source: Observable<*>): Observable<*> =>
  *     payloads()
  *   )
  */
-export const payloads = () => (
-  source: Observable<JupyterMessage<*, *>>
-): Observable<JupyterMessage<*, *>> =>
+export const payloads = () => (source: Observable<JupyterMessage<*, *>>) =>
   source.pipe(
     ofMessageType("execute_reply"),
     map(entry => entry.content.payload),
@@ -151,7 +145,7 @@ export const payloads = () => (
  */
 export const executionCounts = () => (
   source: Observable<JupyterMessage<*, *>>
-): Observable<JupyterMessage<*, *>> =>
+) =>
   source.pipe(
     ofMessageType("execute_input"),
     map(entry => entry.content.execution_count)
@@ -159,7 +153,7 @@ export const executionCounts = () => (
 
 export const kernelStatuses = () => (
   source: Observable<JupyterMessage<*, *>>
-): Observable<JupyterMessage<*, *>> =>
+) =>
   source.pipe(
     ofMessageType("status"),
     map(entry => entry.content.execution_state)
