@@ -1,3 +1,3 @@
 declare module "escape-carriage" {
-    function escapeCarriageReturn(text: string): string;
+  function escapeCarriageReturn(text: string): string;
 }
