@@ -1,4 +1,4 @@
-import css from 'styled-jsx/css';
+import css from "styled-jsx/css";
 
 export default css.global`@charset "UTF-8";
 /*!
@@ -7,6 +7,7 @@ Copyright 2015-present Palantir Technologies, Inc. All rights reserved.
 Licensed under the terms of the LICENSE file distributed with this project.
 
 */
+/*
 html{
   -webkit-box-sizing:border-box;
           box-sizing:border-box; }
@@ -41,11 +42,15 @@ strong{
 
 ::selection{
   background:rgba(125, 188, 255, 0.6); }
+
+  */
+
 .bp3-heading{
   color:#182026;
   font-weight:600;
   margin:0 0 10px;
   padding:0; }
+
   .bp3-dark .bp3-heading{
     color:#f5f8fa; }
 
@@ -7301,4 +7306,4 @@ span.bp3-popover-target{
 
 .bp3-dark .bp3-tree-node.bp3-tree-node-selected > .bp3-tree-node-content{
   background-color:#137cbd; }
-/*# sourceMappingURL=blueprint.css.map */`
+/*# sourceMappingURL=blueprint.css.map */`;
