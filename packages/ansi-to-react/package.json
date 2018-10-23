@@ -9,7 +9,6 @@
     "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm run build:flow",
     "build": "npm run build:clean && npm run build:lib",
-    "build:flow": "flow-copy-source -v -i '**/tests/**' src lib",
     "build:clean": "rimraf lib",
     "build:lib": "tsc",
     "build:lib:watch": "npm run build:lib -- --watch",
