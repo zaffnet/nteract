@@ -3,7 +3,13 @@ import * as React from "react";
 import MarkdownComponent from "@nteract/markdown";
 
 type Props = {
+  /**
+   * Markdown string.
+   */
   data: string,
+  /**
+   * Mime type. Defaults to `text/markdown`.
+   */
   mediaType: string
 };
 
