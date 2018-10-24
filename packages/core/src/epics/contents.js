@@ -152,7 +152,7 @@ export function autoSaveCurrentContentEpic(
 
       // document.hidden appears well supported
       if (typeof document.hidden !== "undefined") {
-        // // Opera 12.10 and Firefox 18 and later support
+        // Opera 12.10 and Firefox 18 and later support
         isVisible = !document.hidden;
         // $FlowAllowFeatureDetection
       } else if (typeof document.msHidden !== "undefined") {
