@@ -43,7 +43,7 @@ type FileProps = {
   error: ?{}
 };
 
-export class File extends React.PureComponent<FileProps, *> {
+export class File extends React.PureComponent<FileProps, null> {
   render() {
     // Determine the file handler
     let choice = null;
@@ -102,37 +102,44 @@ export class File extends React.PureComponent<FileProps, *> {
   }
 }
 
-const mapStateToProps = (
-  state: AppState,
-  ownProps: { contentRef: ContentRef, appBase: string }
-): FileProps => {
-  const content = selectors.content(state, ownProps);
+function makeMapStateToProps(
+  initialState: AppState,
+  initialOwnProps: { contentRef: ContentRef, appBase: string }
+): * {
+  const { contentRef, appBase } = initialOwnProps;
+  console.log(contentRef);
+  console.log(initialState);
+  console.log(appBase);
 
-  if (!content || content.type === "directory") {
-    throw new Error(
-      "The file component should only be used with files and notebooks"
-    );
-  }
+  return function mapStateToProps(state: AppState): FileProps {
+    const content = selectors.content(initialState, initialOwnProps);
 
-  const comms = selectors.communication(state, ownProps);
-  if (!comms) {
-    throw new Error("CommunicationByRef information not found");
-  }
+    if (!content || content.type === "directory") {
+      throw new Error(
+        "The file component should only be used with files and notebooks"
+      );
+    }
 
-  return {
-    type: content.type,
-    mimetype: content.mimetype,
-    contentRef: ownProps.contentRef,
-    lastSavedStatement: "recently",
-    appBase: ownProps.appBase,
-    baseDir: dirname(content.filepath),
-    displayName: content.filepath.split("/").pop(),
-    saving: comms.saving,
-    loading: comms.loading,
-    error: comms.error
+    const comms = selectors.communication(initialState, initialOwnProps);
+    if (!comms) {
+      throw new Error("CommunicationByRef information not found");
+    }
+
+    return {
+      type: content.type,
+      mimetype: content.mimetype,
+      contentRef,
+      lastSavedStatement: "recently",
+      appBase,
+      baseDir: dirname(content.filepath),
+      displayName: content.filepath.split("/").pop(),
+      saving: comms.saving,
+      loading: comms.loading,
+      error: comms.error
+    };
   };
-};
+}
 
-export const ConnectedFile = connect(mapStateToProps)(File);
+export const ConnectedFile = connect(makeMapStateToProps)(File);
 
 export default ConnectedFile;
