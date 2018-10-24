@@ -20,8 +20,17 @@ import {
 } from "./icons";
 import { chartHelpText } from "./docs/chart-docs";
 
+type dataProps = {
+  schema: {
+    fields: Array<{ name: string, type: string }>,
+    pandas_version: string,
+    primaryKey: Array<string>
+  },
+  data: Array<Object>
+};
+
 type Props = {
-  data: Object,
+  data: dataProps,
   metadata: Object,
   theme?: string,
   expanded?: boolean,
@@ -128,7 +137,6 @@ class DataResourceTransform extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    //DEFAULT FROM PROPS
 
     const { fields = [], primaryKey = [] } = props.data.schema;
 
@@ -220,7 +228,7 @@ class DataResourceTransform extends React.Component<Props, State> {
       data: stateData
     } = { ...this.state, ...updatedState };
 
-    const { data, height = 500 } = this.props;
+    const { data, height } = this.props;
 
     const { Frame, chartGenerator } = semioticSettings[view];
 
@@ -256,7 +264,7 @@ class DataResourceTransform extends React.Component<Props, State> {
     });
 
     const display = (
-      <div style={{ marginLeft: "50px", width: "calc(100vw - 200px)" }}>
+      <div style={{ width: "calc(100vw - 200px)" }}>
         <Frame
           responsiveWidth={true}
           size={[500, height - 200]}
@@ -384,8 +392,7 @@ class DataResourceTransform extends React.Component<Props, State> {
           style={{
             display: "flex",
             flexFlow: "row nowrap",
-            width: "100%",
-            height: this.props.height
+            width: "100%"
           }}
         >
           <div
@@ -400,7 +407,7 @@ class DataResourceTransform extends React.Component<Props, State> {
               display: "flex",
               flexFlow: "column nowrap",
               zIndex: 1,
-              padding: "5px",
+              padding: "5px"
             }}
           >
             <IconButton

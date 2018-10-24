@@ -12350,10 +12350,10 @@ semiotic-mark@0.3.0:
     prop-types "^15.6.0"
     roughjs-es5 "0.1.0"
 
-semiotic@^1.15.5:
-  version "1.15.5"
-  resolved "https://registry.yarnpkg.com/semiotic/-/semiotic-1.15.5.tgz#88715ae647ecf725eacc6544599a46abcc626657"
-  integrity sha512-s1di+nVpgRxEu9clIq8Dl4tph1dtUcoclcQauuJNyhmL9AHKWCEUN+iR657cV02piBmpDSPb4b7l8X7+BFm3+w==
+semiotic@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/semiotic/-/semiotic-1.15.6.tgz#32f7b67c694dd4dea660b8c19077cc59e46e6d36"
+  integrity sha512-Tm32TkqLgD2UxRz9MpleAWmla2/rrcsPwrBCJhvQTqpnO73z0BGf7bNb7kpsFnfK0WOGb0AmlL3MrXwnCWklaw==
   dependencies:
     "@mapbox/polylabel" "1"
     d3-array "^1.2.0"

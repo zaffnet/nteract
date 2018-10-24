@@ -252,19 +252,21 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
               : null
           }
           pieceHoverAnnotation={!filterMode}
-          tooltipContent={d => (
-            <TooltipContent>
-              <h3>{primaryKey.map(key => d[key]).join(", ")}</h3>
-              {d[dim1] && (
-                <h3 style={{ color: colorHash[d[dim1]] }}>
-                  {dim1}: {d[dim1]}
-                </h3>
-              )}
-              <p>
-                {d.metric}: {d.rawvalue}
-              </p>
-            </TooltipContent>
-          )}
+          tooltipContent={d => {
+            return (
+              <TooltipContent x={d.x} y={d.y}>
+                <h3>{primaryKey.map(key => d[key]).join(", ")}</h3>
+                {d[dim1] && (
+                  <h3 style={{ color: colorHash[d[dim1]] }}>
+                    {dim1}: {d[dim1]}
+                  </h3>
+                )}
+                <p>
+                  {d.metric}: {d.rawvalue}
+                </p>
+              </TooltipContent>
+            );
+          }}
           canvasPieces={true}
           canvasConnectors={true}
           oLabel={d => (

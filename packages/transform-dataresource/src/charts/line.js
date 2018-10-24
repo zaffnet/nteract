@@ -119,7 +119,7 @@ export const semioticLineChart = (
     },
     tooltipContent: (d: Object) => {
       return (
-        <TooltipContent>
+        <TooltipContent x={d.x} y={d.y}>
           <p>{d.parentLine && d.parentLine.label}</p>
           <p>{(d.value && d.value.toLocaleString()) || d.value}</p>
           <p>
