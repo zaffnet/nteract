@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-preview",
-  "version": "10.0.1",
+  "version": "10.0.2",
   "description": "View a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -21,11 +21,11 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/commutable": "^5.0.1",
-    "@nteract/display-area": "^4.4.7",
-    "@nteract/markdown": "^3.0.0",
-    "@nteract/mathjax": "^3.0.0",
+    "@nteract/display-area": "^4.4.8",
+    "@nteract/markdown": "^3.0.1",
+    "@nteract/mathjax": "^3.0.1",
     "@nteract/presentational-components": "^1.0.1",
-    "@nteract/transforms": "^4.4.6",
+    "@nteract/transforms": "^4.4.7",
     "babel-runtime": "^6.26.0"
   },
   "peerDependencies": {
