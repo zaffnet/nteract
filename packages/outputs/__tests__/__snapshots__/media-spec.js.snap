@@ -1044,7 +1044,6 @@ exports[`<SVG /> renders SVG data 1`] = `
           </text>
         </g>
       </svg>"
-  date=""
   mediaType="image/svg+xml"
 >
   <div />
