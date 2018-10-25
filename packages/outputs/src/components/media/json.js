@@ -31,7 +31,7 @@ type Props = {
 };
 
 /** @component */
-export class JSON extends React.Component<Props> {
+export class Json extends React.Component<Props> {
   static defaultProps = {
     mediaType: "application/json",
     data: {},
