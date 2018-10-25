@@ -26,11 +26,34 @@ type Props = {
 export const KernelOutputError = (props: Props) => {
   const { ename, evalue, traceback } = props;
 
-  if (!Array.isArray(traceback) || !traceback.length) {
-    return <Ansi>{`${ename}: ${evalue}`}</Ansi>;
+  const joinedTraceback = Array.isArray(traceback)
+    ? traceback.join("\n")
+    : traceback;
+
+  let kernelOutputError = [];
+
+  if (joinedTraceback) {
+    kernelOutputError.push(joinedTraceback);
+  } else {
+    if (ename && evalue) {
+      kernelOutputError.push(`${ename}: ${evalue}`);
+    }
   }
 
-  return <Ansi>{traceback.join("\n")}</Ansi>;
+  return (
+    <React.Fragment>
+      <div className="kernel-output-error">
+        <Ansi>{kernelOutputError.join("\n")}</Ansi>
+        <style jsx>{`
+          .kernel-output-error :global(code) {
+            font-family: "Source Code Pro";
+            white-space: pre-wrap;
+            font-size: 14px;
+          }
+        `}</style>
+      </div>
+    </React.Fragment>
+  );
 };
 
 KernelOutputError.defaultProps = {
