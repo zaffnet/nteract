@@ -204,7 +204,7 @@ export const semioticScatterplot = (
     );
   }
 
-  let areas: Array<Object> | Object = {};
+  let areas;
 
   if (
     type === "heatmap" ||
@@ -299,14 +299,17 @@ export const semioticScatterplot = (
         ticks: 6,
         label: metric2,
         tickFormat: numeralFormatting,
-        footer: type === "heatmap"
+        baseline: type === "scatterplot",
+        tickSize: type === "heatmap" ? 0 : undefined
       },
       {
         orient: "bottom",
         ticks: 6,
         label: metric1,
         tickFormat: numeralFormatting,
-        footer: type === "heatmap"
+        footer: type === "heatmap",
+        baseline: type === "scatterplot",
+        tickSize: type === "heatmap" ? 0 : undefined
       }
     ],
     points: (type === "scatterplot" || type === "contour") && data,
