@@ -56,7 +56,7 @@
     "verifyBeforePublish": "lerna run prepublishOnly && lerna run prepare",
     "prepublishOnly": "npm run verifyBeforePublish",
     "publish": "lerna run publish",
-    "prettify": "prettier --write '**/*.{js,json}' '!**/{dist,lib,.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
+    "prettify": "prettier --write '**/*.{ts,js,json}' '!**/{dist,lib.git,.next,package.json,build,flow-typed,mathjax-electron}/**'",
     "pack": "lerna run pack --scope nteract --stream",
     "dist": "lerna run dist --scope nteract --stream",
     "dist:all": "lerna run dist:all --scope nteract --stream",
@@ -80,10 +80,23 @@
     "coveragePathIgnorePatterns": [
       "<rootDir>/scripts",
       "/node_modules/"
-    ]
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.[tj]s?(x)",
+      "**/?(*.)+(spec|test).[tj]s?(x)"
+    ],
+    "transform": {
+      ".*": "babel-jest"
+    }
   },
   "lint-staged": {
-    "*.js,!*js.snap": [
+    "*.ts,*.js,!*js.snap": [
       "prettier --write",
       "git add"
     ],
@@ -101,11 +114,14 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/plugin-transform-typescript": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
     "@babel/runtime": "^7.0.0",
     "@babel/runtime-corejs2": "^7.0.0",
+    "@types/react": "^16.4.18",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.0",
     "babel-jest": "^23.6.0",
@@ -166,6 +182,7 @@
     "spawnteract": "^5.0.0",
     "style-loader": "^0.23.0",
     "styled-jsx": "^3.1.0",
+    "typescript": "^3.1.3",
     "unified": "^7.0.0",
     "unist-builder": "^1.0.2",
     "webfontloader": "^1.6.28",
