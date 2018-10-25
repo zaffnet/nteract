@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Json />; renders JSON data 1`] = `
+exports[`<Json /> renders JSON data 1`] = `
 <ul
   style={
     Object {
@@ -495,7 +495,7 @@ exports[`<Json />; renders JSON data 1`] = `
 </ul>
 `;
 
-exports[`<Json />; updates the theme if it changes 1`] = `
+exports[`<Json /> updates the theme if it changes 1`] = `
 <ul
   style={
     Object {
