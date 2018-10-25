@@ -1,6 +1,6 @@
 {
   "name": "@nteract/notebook-render",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Render a notebook using a React Component",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
@@ -22,7 +22,7 @@
     "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/commutable": "^5.0.1",
     "@nteract/display-area": "^4.4.8",
-    "@nteract/presentational-components": "^1.0.1",
+    "@nteract/presentational-components": "^1.1.0",
     "@nteract/transforms": "^4.4.7",
     "babel-runtime": "^6.26.0",
     "katex": "^0.10.0-alpha",

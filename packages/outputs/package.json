@@ -1,6 +1,6 @@
 {
   "name": "@nteract/outputs",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "components for rendering outputs",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",

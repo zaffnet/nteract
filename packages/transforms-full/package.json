@@ -1,6 +1,6 @@
 {
   "name": "@nteract/transforms-full",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Transforms from nteract",
   "main": "lib/",
   "nteractDesktop": "src/index.js",
@@ -35,7 +35,7 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
     "@nteract/jupyter-widgets": "^0.0.4",
-    "@nteract/transform-dataresource": "^4.5.1",
+    "@nteract/transform-dataresource": "^4.5.2",
     "@nteract/transform-geojson": "^3.2.5",
     "@nteract/transform-model-debug": "^3.2.5",
     "@nteract/transform-plotly": "^3.2.5",

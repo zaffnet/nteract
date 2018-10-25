@@ -1,6 +1,6 @@
 {
   "name": "@nteract/editor",
-  "version": "7.3.8",
+  "version": "7.3.9",
   "description": "The editor that lives inside cells in nteract",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
