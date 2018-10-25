@@ -17,7 +17,7 @@ describe("HTML", () => {
   });
 });
 
-describe("<JSON />;", () => {
+describe("<Json />", () => {
   const population = {
     total_population: [
       { date: "2018-10-13", population: 329499086 },
@@ -27,14 +27,14 @@ describe("<JSON />;", () => {
 
   it("renders JSON data", () => {
     const component = renderer
-      .create(<Media.JSON data={population} />)
+      .create(<Media.Json data={population} />)
       .toJSON();
     expect(component).toMatchSnapshot();
   });
 
   it("updates the theme if it changes", () => {
     const component = renderer
-      .create(<Media.JSON data={population} theme={"dark"} />)
+      .create(<Media.Json data={population} theme={"dark"} />)
       .toJSON();
     expect(component).toMatchSnapshot();
   });
