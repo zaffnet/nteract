@@ -46,9 +46,7 @@ export const KernelOutputError = (props: Props) => {
         <Ansi>{kernelOutputError.join("\n")}</Ansi>
         <style jsx>{`
           .kernel-output-error :global(code) {
-            font-family: "Source Code Pro";
             white-space: pre-wrap;
-            font-size: 14px;
           }
         `}</style>
       </div>
