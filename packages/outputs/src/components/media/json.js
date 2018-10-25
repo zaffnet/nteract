@@ -30,6 +30,7 @@ type Props = {
   metadata: { expanded: boolean }
 };
 
+/** @component */
 export class JSON extends React.Component<Props> {
   static defaultProps = {
     mediaType: "application/json",
