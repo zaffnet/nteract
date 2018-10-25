@@ -1,16 +1,6 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
-    "module": "esnext",
-    "target": "es2015",
-    "jsx": "react",
-    "baseUrl": "./packages",
-    "lib": ["es2017", "dom"],
-    "moduleResolution": "node",
-    "composite": true,
-    "declaration": true,
-    "paths": {
-      "@nteract/*": ["./*/src"]
-    }
+    "strict": true,
+    "declaration": true
   }
 }
