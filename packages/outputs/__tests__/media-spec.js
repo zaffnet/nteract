@@ -17,7 +17,7 @@ describe("HTML", () => {
   });
 });
 
-describe("<Json />;", () => {
+describe("<Json />", () => {
   const population = {
     total_population: [
       { date: "2018-10-13", population: 329499086 },
