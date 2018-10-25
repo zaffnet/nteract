@@ -4,11 +4,12 @@ import MarkdownComponent from "@nteract/markdown";
 
 type Props = {
   /**
-   * Markdown string.
+   * Markdown text.
    */
   data: string,
   /**
-   * Mime type. Defaults to `text/markdown`.
+   * Media type. Defaults to `text/markdown`.
+   * For more on media types, see: https://www.w3.org/TR/CSS21/media.html%23media-types.
    */
   mediaType: string
 };
