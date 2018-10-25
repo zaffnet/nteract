@@ -265,11 +265,7 @@ class DataResourceTransform extends React.Component<Props, State> {
 
     const display = (
       <div style={{ width: "calc(100vw - 200px)" }}>
-        <Frame
-          responsiveWidth={true}
-          size={[500, height - 200]}
-          {...frameSettings}
-        />
+        <Frame responsiveWidth={true} size={[500, 300]} {...frameSettings} />
         <VizControls
           {...{
             data: stateData,

@@ -2,7 +2,11 @@
 
 import * as React from "react";
 
-const TooltipContent = (props: { children: React.Node }) => {
+const TooltipContent = (props: {
+  children: React.Node,
+  x: number,
+  y: number
+}) => {
   const { x, y } = props;
 
   const translateX = x < 100 ? "0px" : "calc(-50% + 7px)";

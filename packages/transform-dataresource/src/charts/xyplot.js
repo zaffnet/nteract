@@ -204,7 +204,7 @@ export const semioticScatterplot = (
     );
   }
 
-  let areas;
+  let areas: Array<Object> | Object = {};
 
   if (
     type === "heatmap" ||
@@ -214,7 +214,7 @@ export const semioticScatterplot = (
     areas = [{ coordinates: filteredData }];
 
     if (type !== "contour") {
-      areas = binHash[type]({
+      const calculatedAreas = binHash[type]({
         areaType: { type, bins: 10 },
         data: {
           coordinates: filteredData.map(d => ({
@@ -225,8 +225,10 @@ export const semioticScatterplot = (
         },
         size: [height, height]
       });
+      areas = calculatedAreas;
+
       const thresholdSteps = [0.2, 0.4, 0.6, 0.8, 1]
-        .map(d => Math.floor(areas.binMax * d))
+        .map(d => Math.floor(calculatedAreas.binMax * d))
         .reduce((p, c) => (c === 0 || p.indexOf(c) !== -1 ? p : [...p, c]), []);
 
       const withZeroThresholdSteps = [0, ...thresholdSteps];
