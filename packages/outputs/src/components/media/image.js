@@ -7,7 +7,7 @@ type Props = {
   metadata: any
 };
 
-export default function Image(props: Props): ?React$Element<any> {
+export function Image(props: Props): ?React$Element<any> {
   let size = {};
 
   if (props.metadata) {
