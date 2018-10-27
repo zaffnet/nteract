@@ -107,6 +107,18 @@ describe("Markdown", () => {
   });
 });
 
+describe("LaTeX", () => {
+  it("Should render LaTeX", () => {
+    const data = String.raw`The well known Pythagorean theorem \(x^2 + y^2 = z^2\) was
+    proved to be invalid for other exponents.
+    Meaning the next equation has no integer solutions:
+
+    \[ x^n + y^n = z^n \]`;
+    const component = mount(<Media.LaTeX data={data} />);
+    expect(toJson(component)).toMatchSnapshot();
+  });
+});
+
 describe("Plain", () => {
   it("Should render markdown", () => {
     const data = "The text in Spain is mainly plain";
