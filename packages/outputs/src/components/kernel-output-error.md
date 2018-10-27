@@ -1,7 +1,4 @@
-The `<KernelOutputError />` component will render a Jupyter error, with primacy towards
-`traceback` and falling back on `ename` + `evalue` (old error style that is still sent by kernels). Tracebacks usually include the `ename` and `evalue` at the bottom.
-
-Per the Jupyter Messaging Protocol, the kernel will return the following payload if it encountered an error during the execution of a code cell.
+The `<KernelOutputError />` component will render a Jupyter error, commonly done as a traceback. An old error style that is still sent by kernels is the `ename` and `evalue`. Per the Jupyter Messaging Protocol, the kernel will return the following payload if it encountered an error during the execution of a code cell.
 
 ```json
 {
@@ -12,9 +9,11 @@ Per the Jupyter Messaging Protocol, the kernel will return the following payload
 }
 ```
 
-The `ename` property contains the name of the error (`OutOfMemory` or `NameError`). The `evalue` property contains the value of the error. This is usually the first line you see before the complete tracebook. The `traceback` property contains the stacktrace of the error as a list of strings, which each string consisting of a line within the stacktrace.
+The `ename` property contains the name of the error (`OutOfMemory` or `NameError`). The `evalue` property contains the value of the error. This is usually the first line you see before the complete traceback. The `traceback` property contains the stacktrace of the error as a list of strings, with each string consisting of a line within the stacktrace.
 
-We provide a special `KernelOutputError` component that will allow you to render the error payloads received from the kernel. You can pass the `ename,` `evalue`, and `tracebook` property values to render the error and tracebook in a clean format.
+We provide a special `KernelOutputError` component that will allow you to render the error payloads received from the kernel. You can pass the `ename,` `evalue`, and `traceback` property values to render the error and traceback in a clean format.
+
+Tracebacks usually include the `ename` and `evalue` at the bottom in python tracebacks. Hence we currently only render the traceback.
 
 ```jsx
 const errorMessage = {
