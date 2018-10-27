@@ -1,4 +1,8 @@
 {
   "files": [],
-  "references": [{ "path": "ansi-to-react" }, { "path": "display-area" }]
+  "references": [
+    { "path": "ansi-to-react" },
+    { "path": "display-area" },
+    { "path": "octicons" }
+  ]
 }

@@ -3,16 +3,16 @@
   "version": "0.5.1",
   "description": "octicon react components, styled for use within nteract packages",
   "main": "lib/index.js",
-  "nteractDesktop": "src/index.js",
+  "types": "lib/index.d.ts",
+  "nteractDesktop": "src/index.ts",
   "scripts": {
     "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm run build:flow",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
-    "build:lib": "babel -d lib src --ignore '**/__tests__/**' --config-file ../../babel.config.js",
+    "build:lib": "tsc",
     "build:lib:watch": "npm run build:lib -- --watch",
-    "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
+    "build:watch": "npm run build:clean && npm run build:lib:watch"
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
