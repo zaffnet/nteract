@@ -12,7 +12,7 @@
     "build:clean": "rimraf lib",
     "build:lib": "tsc",
     "build:lib:watch": "npm run build:lib -- --watch",
-    "build:watch": "npm run build:clean && npm run build:lib:watch && npm run build:flow"
+    "build:watch": "npm run build:clean && npm run build:lib:watch"
   },
   "repository": "https://github.com/nteract/nteract/tree/master/packages/monaco-editor",
   "keywords": [
