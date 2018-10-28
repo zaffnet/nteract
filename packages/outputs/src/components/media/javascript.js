@@ -3,8 +3,8 @@ import React from "react";
 
 type Props = {
   /**
-   * The media type associated with our component. This should be one of
-   * application/javascript, application/json, or text/*.
+   * The media type associated with our component. This should be set to
+   * application/javascript.
    */
   mediaType: string,
   /**
