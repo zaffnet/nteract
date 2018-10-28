@@ -1,13 +1,20 @@
-// @flow
+import { Map as ImmutableMap, List as ImmutableList } from "immutable";
 
-import type { Map as ImmutableMap, List as ImmutableList } from "immutable";
+// Mutable JSON types
+export type PrimitiveImmutable = string | number | boolean | null;
+export type JSONType = PrimitiveImmutable | JSONObject | JSONArray;
+export interface JSONObject {
+  [key: string]: JSONType;
+}
+export interface JSONArray extends Array<JSONType> {}
 
-type PrimitiveImmutable = string | number | boolean | null;
-
+// Immutable.js Wrapped JSON types
 export type ImmutableJSONType =
   | PrimitiveImmutable
-  | ImmutableMap<string, ImmutableJSONType>
-  | ImmutableList<ImmutableJSONType>;
+  | ImmutableJSONMap
+  | ImmutableJSONList;
+interface ImmutableJSONMap extends ImmutableMap<string, ImmutableJSONType> {}
+interface ImmutableJSONList extends ImmutableList<ImmutableJSONType> {}
 
 export type ExecutionCount = number | null;
 
@@ -29,3 +36,7 @@ export type ImmutableMimeBundle = ImmutableMap<string, any>;
 
 export type ImmutableCellOrder = ImmutableList<CellID>;
 export type ImmutableCellMap = ImmutableMap<CellID, ImmutableCell>;
+
+// On disk multi-line strings are used to accomodate line-by-line diffs in tools
+// like git and GitHub. They get converted to strings for the in-memory format.
+export type MultiLineString = string | string[];
