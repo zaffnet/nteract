@@ -22,7 +22,7 @@ export function runCodeHere(el: ?HTMLElement, code: string): any {
     return eval(code); // eslint-disable-line no-eval
   } catch (err) {
     const pre = document.createElement("pre");
-    pre.style = "white-space: pre-wrap";
+    pre.style.whiteSpace = "pre-wrap";
     if (err.stack) {
       pre.textContent = err.stack;
     } else {
