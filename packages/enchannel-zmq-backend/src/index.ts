@@ -1,9 +1,8 @@
-// @flow
 import { Subject, Subscriber, fromEvent, merge } from "rxjs";
 import { map, publish, refCount } from "rxjs/operators";
 import * as moduleJMP from "jmp";
 import uuid from "uuid/v4";
-import type { Channels } from "@nteract/messaging";
+import { Channels, JupyterMessage } from "@nteract/messaging";
 
 export const ZMQType = {
   frontend: {
@@ -14,53 +13,60 @@ export const ZMQType = {
   }
 };
 
-export type CHANNEL_NAME = "iopub" | "stdin" | "shell" | "control";
+type ChannelName = "iopub" | "stdin" | "shell" | "control";
 
-export type JUPYTER_CONNECTION_INFO = {
-  iopub_port: number,
-  shell_port: number,
-  stdin_port: number,
-  control_port: number,
-  signature_scheme: "hmac-sha256" | string, // Allows practically any string, they're really constrained though
-  hb_port: number,
-  ip: string,
-  key: string,
-  transport: "tcp" | "ipc" | string // Only known transports at the moment, we'll allow string in general though
-};
+export interface JupyterConnectionInfo {
+  iopub_port: number;
+  shell_port: number;
+  stdin_port: number;
+  control_port: number;
+  // Allows practically any string, they're really constrained though
+  signature_scheme: "hmac-sha256" | string;
+  hb_port: number;
+  ip: string;
+  key: string;
+  // Only known transports at the moment, we'll allow string in general though
+  transport: "tcp" | "ipc" | string;
+}
+
+interface HeaderFiller {
+  session: string;
+  username: string;
+}
 
 /**
  * Takes a Jupyter spec connection info object and channel and returns the
  * string for a channel. Abstracts away tcp and ipc(?) connection string
  * formatting
- * @param {Object} config  Jupyter connection information
- * @param {string} channel Jupyter channel ("iopub", "shell", "control", "stdin")
- * @return {string} The connection string
+ * @param config  Jupyter connection information
+ * @param channel Jupyter channel ("iopub", "shell", "control", "stdin")
+ * @return The connection string
  */
-export function formConnectionString(
-  config: JUPYTER_CONNECTION_INFO,
-  channel: CHANNEL_NAME
-) {
+export const formConnectionString = (
+  config: JupyterConnectionInfo,
+  channel: ChannelName
+) => {
   const portDelimiter = config.transport === "tcp" ? ":" : "-";
-  const port = config[channel + "_port"];
+  const port = config[(channel + "_port") as keyof JupyterConnectionInfo];
   if (!port) {
     throw new Error(`Port not found for channel "${channel}"`);
   }
   return `${config.transport}://${config.ip}${portDelimiter}${port}`;
-}
+};
 
 /**
  * Creates a socket for the given channel with ZMQ channel type given a config
- * @param {string} channel Jupyter channel ("iopub", "shell", "control", "stdin")
- * @param {string} identity UUID
- * @param {Object} config  Jupyter connection information
- * @return {jmp.Socket} The new Jupyter ZMQ socket
+ * @param channel Jupyter channel ("iopub", "shell", "control", "stdin")
+ * @param identity UUID
+ * @param config  Jupyter connection information
+ * @return The new Jupyter ZMQ socket
  */
-export function createSocket(
-  channel: CHANNEL_NAME,
+export const createSocket = (
+  channel: ChannelName,
   identity: string,
-  config: JUPYTER_CONNECTION_INFO,
+  config: JupyterConnectionInfo,
   jmp = moduleJMP
-): Promise<moduleJMP.Socket> {
+): Promise<moduleJMP.Socket> => {
   const zmqType = ZMQType.frontend[channel];
   const scheme = config.signature_scheme.slice("hmac-".length);
 
@@ -69,16 +75,16 @@ export function createSocket(
 
   const url = formConnectionString(config, channel);
   return verifiedConnect(socket, url);
-}
+};
 
 /**
  * ensures the socket is ready after connecting
  */
-export function verifiedConnect(
+export const verifiedConnect = (
   socket: moduleJMP.Socket,
   url: string
-): Promise<moduleJMP.Socket> {
-  return new Promise(resolve => {
+): Promise<moduleJMP.Socket> =>
+  new Promise(resolve => {
     socket.on("connect", () => {
       // We are not ready until this happens for all the sockets
       socket.unmonitor();
@@ -87,59 +93,49 @@ export function verifiedConnect(
     socket.monitor();
     socket.connect(url);
   });
-}
 
-type HEADER_FILLER = {
-  session: string,
-  username: string
-};
-
-export function getUsername(): string {
-  return (
-    process.env.LOGNAME ||
-    process.env.USER ||
-    process.env.LNAME ||
-    process.env.USERNAME ||
-    "username" // This is the fallback that the classic notebook uses
-  );
-}
+export const getUsername = () =>
+  process.env.LOGNAME ||
+  process.env.USER ||
+  process.env.LNAME ||
+  process.env.USERNAME ||
+  "username"; // This is the fallback that the classic notebook uses
 
 /**
  * createMainChannel creates a multiplexed set of channels
- * @param  {string} identity                UUID
- * @param  {Object} config                  Jupyter connection information
- * @param  {string} config.ip               IP address of the kernel
- * @param  {string} config.transport        Transport, e.g. TCP
- * @param  {string} config.signature_scheme Hashing scheme, e.g. hmac-sha256
- * @param  {number} config.iopub_port       Port for iopub channel
- * @param  {string} subscription            subscribed topic; defaults to all
- * @return {Subject} Subject containing multiplexed channels
+ * @param  config                  Jupyter connection information
+ * @param  config.ip               IP address of the kernel
+ * @param  config.transport        Transport, e.g. TCP
+ * @param  config.signature_scheme Hashing scheme, e.g. hmac-sha256
+ * @param  config.iopub_port       Port for iopub channel
+ * @param  subscription            subscribed topic; defaults to all
+ * @param  identity                UUID
+ * @return Subject containing multiplexed channels
  */
-export async function createMainChannel(
-  config: JUPYTER_CONNECTION_INFO,
+export const createMainChannel = async (
+  config: JupyterConnectionInfo,
   subscription: string = "",
   identity: string = uuid(),
-  header: HEADER_FILLER = {
+  header: HeaderFiller = {
     session: uuid(),
     username: getUsername()
   },
   jmp = moduleJMP
-): Promise<Channels> {
+): Promise<Channels> => {
   const sockets = await createSockets(config, subscription, identity, jmp);
   const main = createMainChannelFromSockets(sockets, header, jmp);
   return main;
-}
+};
 
 /**
  * createSockets sets up the sockets for each of the jupyter channels
- * @return {[type]}              [description]
  */
-export async function createSockets(
-  config: JUPYTER_CONNECTION_INFO,
+export const createSockets = async (
+  config: JupyterConnectionInfo,
   subscription: string = "",
-  identity: string = uuid(),
+  identity = uuid(),
   jmp = moduleJMP
-) {
+) => {
   const [shell, control, stdin, iopub] = await Promise.all([
     createSocket("shell", identity, config, jmp),
     createSocket("control", identity, config, jmp),
@@ -156,22 +152,23 @@ export async function createSockets(
     stdin,
     iopub
   };
-}
+};
 
-export function createMainChannelFromSockets(
+export const createMainChannelFromSockets = (
   sockets: {
-    [string]: moduleJMP.Socket
+    [name: string]: moduleJMP.Socket;
   },
-  header: HEADER_FILLER = {
+  header: HeaderFiller = {
     session: uuid(),
     username: getUsername()
   },
   jmp = moduleJMP
-) {
-  // The mega subject that encapsulates all the sockets as one multiplexed stream
+): Channels => {
+  // The mega subject that encapsulates all the sockets as one multiplexed
+  // stream
   const subject = Subject.create(
     Subscriber.create(
-      message => {
+      (message?: JupyterMessage) => {
         // There's always a chance that a bad message is sent, we'll ignore it
         // instead of consuming it
         if (!message || !message.channel) {
@@ -210,12 +207,11 @@ export function createMainChannelFromSockets(
       // Form an Observable with each socket
       ...Object.keys(sockets).map(name => {
         const socket = sockets[name];
-
-        // $FlowFixMe: Somehow .pipe is broken in the typings
-        return fromEvent(socket, "message").pipe(
+        // fromEvent typings are broken. socket will work as an event target.
+        return fromEvent(socket as any, "message").pipe(
           map(body => {
             // Route the message for the frontend by setting the channel
-            const msg = { ...body, channel: name };
+            const msg = { ...body, channel: name } as any;
             // Conform to same message format as notebook websockets
             // See https://github.com/n-riesco/jmp/issues/10
             delete msg.idents;
@@ -225,7 +221,6 @@ export function createMainChannelFromSockets(
           refCount()
         );
       })
-      // $FlowFixMe: Somehow .pipe is broken in the typings
     ).pipe(
       publish(),
       refCount()
@@ -233,4 +228,4 @@ export function createMainChannelFromSockets(
   );
 
   return subject;
-}
+};
