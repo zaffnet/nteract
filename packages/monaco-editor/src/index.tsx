@@ -12,11 +12,7 @@ export interface MonacoEditorProps {
 
 class MonacoEditor extends React.Component<MonacoEditorProps> {
   monaco?: editor.IStandaloneCodeEditor;
-  monacoContainer?: HTMLElement | null;
-
-  setMonacoContainer = (container: HTMLElement | null) => {
-    this.monacoContainer = container;
-  };
+  monacoContainerRef = React.createRef<HTMLDivElement>();
 
   static defaultProps = {
     onChange: () => {},
@@ -38,7 +34,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
   }
 
   componentDidMount() {
-    this.monaco = editor.create(this.monacoContainer!, {
+    this.monaco = editor.create(this.monacoContainerRef.current!, {
       value: this.props.value,
       language: this.props.mode,
       theme: this.props.theme,
@@ -92,7 +88,7 @@ class MonacoEditor extends React.Component<MonacoEditorProps> {
 
   render() {
     return (
-      <div className="monaco cm-s-composition" ref={this.setMonacoContainer} />
+      <div className="monaco cm-s-composition" ref={this.monacoContainerRef} />
     );
   }
 }
