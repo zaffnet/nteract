@@ -33,7 +33,7 @@ export function runCodeHere(el: ?HTMLElement, code: string): any {
   }
 }
 
-export default class JavaScript extends React.Component<Props> {
+export class JavaScript extends React.Component<Props> {
   el: ?HTMLElement;
   static defaultProps = {
     mediaType: "application/javascript",
