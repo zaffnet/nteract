@@ -1,7 +1,5 @@
-// @flow
 import { toArray } from "rxjs/operators";
-
-const { binder, formBinderURL } = require("../src");
+import { binder, formBinderURL } from "../src";
 
 test("formBinderURL has default values with empty options", () => {
   expect(formBinderURL()).toEqual(
@@ -30,13 +28,13 @@ test("formBinderURL correctly creates a full binder URL", () => {
   ).toEqual("https://binder.nteract.io/build/gh/nteract/vdom/0.5");
 });
 
-test("binder", () => {
+test("binder", async () => {
   const sources = {};
 
   class PretendEventSource {
+    close = jest.fn();
     constructor(url) {
       sources[url] = this;
-      this.close = jest.fn();
     }
   }
 

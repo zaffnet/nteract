@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
+    { "path": "rx-binder" },
     { "path": "ansi-to-react" },
     { "path": "display-area" },
     { "path": "octicons" },
