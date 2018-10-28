@@ -7,10 +7,16 @@ import {
   ZMQType,
   getUsername,
   createMainChannelFromSockets,
-  verifiedConnect
+  verifiedConnect,
+  JupyterConnectionInfo
 } from "../src";
 
-const EventEmitter = require("events");
+import { EventEmitter } from "events";
+import { Socket } from "jmp";
+
+interface Sockets {
+  [id: string]: Socket;
+}
 
 describe("createSocket", () => {
   test("creates a JMP socket on the channel with identity", async function(done) {
@@ -20,7 +26,7 @@ describe("createSocket", () => {
       ip: "127.0.0.1",
       transport: "tcp",
       iopub_port: 9009
-    };
+    } as JupyterConnectionInfo;
     const identity = uuid();
 
     const socket = await createSocket("iopub", identity, config);
@@ -37,14 +43,14 @@ describe("verifiedConnect", () => {
   test("verifiedConnect monitors the socket", async function(done) {
     const emitter = new EventEmitter();
 
-    const socket = {
+    const socket = ({
       monitor: jest.fn(),
       unmonitor: jest.fn(),
       close: jest.fn(),
       on: jest.fn(emitter.on.bind(emitter)),
       emit: jest.fn(emitter.emit.bind(emitter)),
       connect: jest.fn(() => {})
-    };
+    } as any) as Socket;
 
     const p = verifiedConnect(socket, "tcp://127.0.0.1:8945");
     expect(socket.monitor).toHaveBeenCalledTimes(1);
@@ -64,7 +70,7 @@ describe("verifiedConnect", () => {
   test("verifiedConnect monitors the socket properly even on fast connect", async function(done) {
     const emitter = new EventEmitter();
 
-    const socket = {
+    const socket = ({
       monitor: jest.fn(),
       unmonitor: jest.fn(),
       close: jest.fn(),
@@ -73,7 +79,7 @@ describe("verifiedConnect", () => {
       connect: jest.fn(() => {
         emitter.emit("connect");
       })
-    };
+    } as any) as Socket;
 
     verifiedConnect(socket, "tcp://127.0.0.1:8945");
     expect(socket.monitor).toHaveBeenCalledTimes(1);
@@ -120,9 +126,9 @@ describe("getUsername", () => {
 
 describe("createMainChannelFromSockets", () => {
   test("basic creation", () => {
-    const sockets = {
+    const sockets = ({
       hokey: {}
-    };
+    } as any) as Sockets;
     // TODO: This shouldn't work silently if the socket doesn't actually behave
     // like an actual socket
     // NOTE: RxJS doesn't error with the fromEvent until there is at least one
@@ -135,9 +141,9 @@ describe("createMainChannelFromSockets", () => {
 
   test("simple one channel message passing from 'socket' to channels", () => {
     const hokeySocket = new EventEmitter();
-    const sockets = {
+    const sockets = ({
       shell: hokeySocket
-    };
+    } as any) as Sockets;
 
     const channels = createMainChannelFromSockets(sockets);
     expect(channels).toBeInstanceOf(Subject);
@@ -155,9 +161,9 @@ describe("createMainChannelFromSockets", () => {
       hokeySocket.emit("message", message);
     }
 
-    return p.then(modifiedMessages => {
+    return p.then((modifiedMessages: any) => {
       expect(modifiedMessages).toEqual(
-        messages.map(msg => Object.assign({}, msg, { channel: "shell" }))
+        messages.map(msg => ({ ...msg, channel: "shell" }))
       );
     });
   });
@@ -165,10 +171,10 @@ describe("createMainChannelFromSockets", () => {
   test("handles multiple socket routing underneath", () => {
     const shellSocket = new EventEmitter();
     const iopubSocket = new EventEmitter();
-    const sockets = {
+    const sockets = ({
       shell: shellSocket,
       iopub: iopubSocket
-    };
+    } as any) as Sockets;
 
     const channels = createMainChannelFromSockets(sockets);
 
@@ -182,7 +188,7 @@ describe("createMainChannelFromSockets", () => {
     shellSocket.emit("message", { yolo: false });
     iopubSocket.emit("message", { yolo: true });
 
-    return p.then(modifiedMessages => {
+    return p.then((modifiedMessages: any) => {
       expect(modifiedMessages).toEqual([
         { channel: "shell", yolo: false },
         { channel: "iopub", yolo: true }
@@ -202,10 +208,10 @@ describe("createMainChannelFromSockets", () => {
 
     const shellSocket = new HokeySocket();
     const iopubSocket = new HokeySocket();
-    const sockets = {
+    const sockets = ({
       shell: shellSocket,
       iopub: iopubSocket
-    };
+    } as any) as Sockets;
 
     const channels = createMainChannelFromSockets(sockets, {
       session: "spinning",
@@ -265,7 +271,7 @@ describe("createMainChannelFromSockets", () => {
     shellSocket.emit("message", { yolo: false });
     iopubSocket.emit("message", { yolo: true });
 
-    return p.then(modifiedMessages => {
+    return p.then((modifiedMessages: any) => {
       expect(modifiedMessages).toEqual([
         { channel: "shell", yolo: false },
         { channel: "iopub", yolo: true }

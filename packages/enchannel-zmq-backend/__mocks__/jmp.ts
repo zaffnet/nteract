@@ -1,12 +1,11 @@
-const EventEmitter = require("events");
+import { EventEmitter } from "events";
 
 class Socket extends EventEmitter {
-  constructor(zmqType, scheme, key) {
+  constructor(public type: any, public scheme: any, public key: any) {
     super();
-    this.type = zmqType;
-    this.scheme = scheme;
-    this.key = key;
   }
+
+  throttle = false;
 
   monitor() {}
   unmonitor() {}
@@ -20,7 +19,7 @@ class Socket extends EventEmitter {
   close() {}
 }
 
-const Message = msg => ({
+const Message = (msg: any) => ({
   header: { ...msg.header },
   parent_header: { ...msg.parent_header },
   content: { ...msg.content },

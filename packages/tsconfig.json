@@ -5,6 +5,8 @@
     { "path": "display-area" },
     { "path": "octicons" },
     { "path": "monaco-editor" },
-    { "path": "commutable" }
+    { "path": "commutable" },
+    { "path": "messaging" },
+    { "path": "enchannel-zmq-backend" }
   ]
 }
