@@ -1,16 +1,14 @@
-// @flow
-import React from "react";
-import type { ChildrenArray } from "react";
+import * as React from "react";
 
-type WrapperProps<T> = {
-  children: ChildrenArray<T>,
-  outerProps: any,
-  width: number,
-  height: number,
-  viewBox: string
-};
+interface WrapperProps {
+  children: React.ReactNode;
+  outerProps: any;
+  width: number;
+  height: number;
+  viewBox: string;
+}
 
-export const SVGWrapper = (props: WrapperProps<*>) => {
+export const SVGWrapper = (props: WrapperProps) => {
   return (
     <span>
       <svg
@@ -19,14 +17,12 @@ export const SVGWrapper = (props: WrapperProps<*>) => {
         height={props.height}
         viewBox={props.viewBox}
         {...props.outerProps}
-        style={Object.assign(
-          {
-            fill: "currentColor",
-            display: "inline-block",
-            verticalAlign: "text-bottom"
-          },
-          props.outerProps.style
-        )}
+        style={{
+          fill: "currentColor",
+          display: "inline-block",
+          verticalAlign: "text-bottom",
+          ...props.outerProps.style
+        }}
       >
         {props.children}
       </svg>
