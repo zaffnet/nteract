@@ -10,7 +10,7 @@ type Props = {
    * The media type associated with the HTML
    * string. This defaults to text/html.
    */
-  mediaType: string
+  mediaType: 'text/html'
 };
 
 // Note: createRange and Range must be polyfilled on older browsers with
