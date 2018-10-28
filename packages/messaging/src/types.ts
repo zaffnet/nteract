@@ -31,7 +31,7 @@ export interface JupyterMessageHeader<MT extends MessageType = MessageType> {
   msg_id: string;
   username: string;
   date: string; // ISO 8601 timestamp
-  msg_type: MT; // this could be an enum
+  msg_type: MT;
   version: string; // this could be an enum
   session: string;
 }

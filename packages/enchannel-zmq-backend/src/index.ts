@@ -20,13 +20,11 @@ export interface JupyterConnectionInfo {
   shell_port: number;
   stdin_port: number;
   control_port: number;
-  // Allows practically any string, they're really constrained though
-  signature_scheme: "hmac-sha256" | string;
+  signature_scheme: "hmac-sha256";
   hb_port: number;
   ip: string;
   key: string;
-  // Only known transports at the moment, we'll allow string in general though
-  transport: "tcp" | "ipc" | string;
+  transport: "tcp" | "ipc";
 }
 
 interface HeaderFiller {
