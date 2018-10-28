@@ -7,6 +7,6 @@
     { "path": "monaco-editor" },
     { "path": "commutable" },
     { "path": "messaging" },
-    { "path": "enchannel-zqm-backend" }
+    { "path": "enchannel-zmq-backend" }
   ]
 }
