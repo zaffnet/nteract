@@ -2,7 +2,14 @@
 import * as React from "react";
 
 type Props = {
+  /**
+   * The HTML string that will be rendered.
+   */
   data: string,
+  /**
+   * The media type associated with the HTML
+   * string. This defaults to text/html.
+   */
   mediaType: string
 };
 
