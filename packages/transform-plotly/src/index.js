@@ -25,6 +25,9 @@ const MIMETYPE = "application/vnd.plotly.v1+json";
  */
 const PlotlyNullTransform = () => null;
 PlotlyNullTransform.MIMETYPE = NULL_MIMETYPE;
+PlotlyNullTransform.defaultProps = {
+  mediaType: NULL_MIMETYPE
+};
 
 export class PlotlyTransform extends React.Component<Props> {
   plotDiv: ?PlotlyHTMLElement;
