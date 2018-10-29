@@ -20,6 +20,8 @@ import {
 } from "./icons";
 import { chartHelpText } from "./docs/chart-docs";
 
+const mediaType = "application/vnd.dataresource+json";
+
 type dataProps = {
   schema: {
     fields: Array<{ name: string, type: string }>,
@@ -34,7 +36,8 @@ type Props = {
   metadata: Object,
   theme?: string,
   expanded?: boolean,
-  height?: number
+  height?: number,
+  mediaType: "application/vnd.dataresource+json"
 };
 
 type LineType = "line" | "stackedarea" | "bumparea" | "stackedpercent";
@@ -128,11 +131,12 @@ const MetadataWarning = ({ metadata }) => {
 ///////////////////////////////
 
 class DataResourceTransform extends React.Component<Props, State> {
-  static MIMETYPE = "application/vnd.dataresource+json";
+  static MIMETYPE = mediaType;
 
   static defaultProps = {
     metadata: {},
-    height: 500
+    height: 500,
+    mediaType
   };
 
   constructor(props: Props) {
