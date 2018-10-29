@@ -28,7 +28,6 @@ const output = Object.freeze({
 <Output output={output}>
   <KernelOutputError />
 </Output>;
-
 ```
 
 ```jsx
@@ -69,8 +68,8 @@ const outputs = [
 ];
 
 <div>
-  {outputs.map(output => (
-    <Output output={output}>
+  {outputs.map((output, index) => (
+    <Output output={output} key={index}>
       <StreamText />
       <DisplayData>
         <Plain />
