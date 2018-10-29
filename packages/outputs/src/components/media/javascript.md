@@ -1,7 +1,15 @@
 The Media.JavaScript component allows you to execute JavaScript in the context of the current document.
 
-```
-<JavaScript data={"console.log('Pssst. Take a look at your web browser console.')"} />
+```jsx
+<JavaScript
+  data={`
+console.log('%cWelcome to the nteract.io component docs!', "color: #3d3d3d; font-size: 24px;");
+console.log("%cThe developer console is a lovely place, isn't it?", "color: #3d3d3d; font-size: 16px;");
+console.log('Join us! https://github.com/nteract/nteract.');
+window.el = element;
+
+`}
+/>
 ```
 
 Because of this, you can declare variables in the scope of the current window context. For example, view the source code for the component below.
