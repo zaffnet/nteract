@@ -1,4 +1,5 @@
 import * as jupyter from "../src";
+import { AjaxObservable } from "./types";
 
 describe("rx-jupyter", () => {
   // Mostly a dummy "have we exported all the things" test
@@ -12,7 +13,7 @@ describe("rx-jupyter", () => {
       const apiVersion$ = jupyter.apiVersion({
         endpoint: "https://somewhere.com",
         crossDomain: true
-      });
+      }) as AjaxObservable;
       const request = apiVersion$.request;
       expect(request.url).toBe("https://somewhere.com/api");
       expect(request.method).toBe("GET");
@@ -23,7 +24,7 @@ describe("rx-jupyter", () => {
       const shutdown$ = jupyter.shutdown({
         endpoint: "https://somewhere.com",
         crossDomain: true
-      });
+      }) as AjaxObservable;
       const request = shutdown$.request;
       expect(request.url).toBe("https://somewhere.com/api/shutdown");
       expect(request.method).toBe("POST");

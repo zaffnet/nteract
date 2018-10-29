@@ -94,6 +94,10 @@
       "**/__tests__/**/*.[tj]s?(x)",
       "**/?(*.)+(spec|test).[tj]s?(x)"
     ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/.*types\\.tsx?"
+    ],
     "transform": {
       ".*": "babel-jest"
     }

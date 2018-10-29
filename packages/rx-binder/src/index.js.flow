@@ -4,7 +4,7 @@
 import type { Observable } from "rxjs";
 
 type BinderOptions = {
-  repo?: string,
+  repo: string,
   ref?: string,
   binderURL?: string
 };
@@ -13,5 +13,5 @@ declare export function formBinderURL(opts?: BinderOptions): string;
 
 declare export function binder(
   opts: BinderOptions,
-  EventSourceDI?: any
+  EvenSourceDI?: Object
 ): Observable<*>;

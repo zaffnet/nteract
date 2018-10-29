@@ -1,4 +1,5 @@
 import * as kernels from "../src/kernels";
+import { AjaxObservable } from "./types";
 
 const serverConfig = {
   endpoint: "http://localhost:8888",
@@ -10,7 +11,7 @@ describe("kernels", () => {
   describe("get", () => {
     test("creates an AjaxObservable configured for getting a kernel by id", () => {
       const id = "0000-1111-2222-3333";
-      const kernel$ = kernels.get(serverConfig, id);
+      const kernel$ = kernels.get(serverConfig, id) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe(`http://localhost:8888/api/kernels/${id}`);
       expect(request.method).toBe("GET");
@@ -19,7 +20,7 @@ describe("kernels", () => {
 
   describe("list", () => {
     test("creates an AjaxObservable configured for listing kernels", () => {
-      const kernel$ = kernels.list(serverConfig);
+      const kernel$ = kernels.list(serverConfig) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe("http://localhost:8888/api/kernels");
       expect(request.method).toBe("GET");
@@ -29,7 +30,11 @@ describe("kernels", () => {
 
   describe("start", () => {
     test("creates an AjaxObservable configured for starting a kernel", () => {
-      const kernel$ = kernels.start(serverConfig, "python3000", "/tmp");
+      const kernel$ = kernels.start(
+        serverConfig,
+        "python3000",
+        "/tmp"
+      ) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe("http://localhost:8888/api/kernels");
       expect(request.headers).toEqual({
@@ -45,7 +50,7 @@ describe("kernels", () => {
   describe("kill", () => {
     test("creates an AjaxObservable configured for killing a kernel", () => {
       const id = "0000-1111-2222-3333";
-      const kernel$ = kernels.kill(serverConfig, id);
+      const kernel$ = kernels.kill(serverConfig, id) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe(`http://localhost:8888/api/kernels/${id}`);
       expect(request.method).toBe("DELETE");
@@ -55,7 +60,7 @@ describe("kernels", () => {
   describe("interrupt", () => {
     test("creates an AjaxObservable configured for interrupting a kernel", () => {
       const id = "0000-1111-2222-3333";
-      const kernel$ = kernels.interrupt(serverConfig, id);
+      const kernel$ = kernels.interrupt(serverConfig, id) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe(
         `http://localhost:8888/api/kernels/${id}/interrupt`
@@ -67,7 +72,7 @@ describe("kernels", () => {
   describe("restart", () => {
     test("creates an AjaxObservable configured for restarting a kernel", () => {
       const id = "0000-1111-2222-3333";
-      const kernel$ = kernels.restart(serverConfig, id);
+      const kernel$ = kernels.restart(serverConfig, id) as AjaxObservable;
       const request = kernel$.request;
       expect(request.url).toBe(
         `http://localhost:8888/api/kernels/${id}/restart`

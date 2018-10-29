@@ -12,7 +12,7 @@ import type { Observable, Subject } from "rxjs";
 declare export function apiVersion(config: Object): Observable<AjaxResponse>;
 declare export function shutdown(config: Object): Observable<AjaxResponse>;
 
-export var kernels: {
+declare export var kernels: {
   list: (config: Object) => Observable<AjaxResponse>,
   get: (config: Object, id: string) => Observable<AjaxResponse>,
   start: (
@@ -31,7 +31,7 @@ export var kernels: {
   connect: (config: Object, kid: string, sid: ?string) => Subject<*>
 };
 
-export var contents: {
+declare export var contents: {
   remove: (config: Object, path: string) => Observable<AjaxResponse>,
   get: (
     config: Object,
@@ -67,12 +67,12 @@ export var contents: {
   ) => Observable<AjaxResponse>
 };
 
-export var kernelspecs: {
+declare export var kernelspecs: {
   list: (config: Object) => Observable<AjaxResponse>,
   get: (config: Object, name: string) => Observable<AjaxResponse>
 };
 
-export var sessions: {
+declare export var sessions: {
   list: (config: Object) => Observable<AjaxResponse>,
   get: (config: Object, sessionID: string) => Observable<AjaxResponse>,
   destroy: (config: Object, sessionID: string) => Observable<AjaxResponse>,
@@ -84,7 +84,7 @@ export var sessions: {
   create: (config: Object, body: Object) => Observable<AjaxResponse>
 };
 
-export var terminals: {
+declare export var terminals: {
   list: (config: Object) => Observable<AjaxResponse>,
   create: (config: Object) => Observable<AjaxResponse>,
   get: (config: Object, id: string) => Observable<AjaxResponse>,
