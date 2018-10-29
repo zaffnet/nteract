@@ -3,10 +3,9 @@ import React from "react";
 
 type Props = {
   /**
-   * The media type associated with our component. This should be one of
-   * application/javascript, application/json, or text/*.
+   * The media type associated with our component.
    */
-  mediaType: string,
+  mediaType: "text/javascript",
   /**
    * The JavaScript code that we would like to execute.
    */
@@ -39,14 +38,6 @@ export class JavaScript extends React.Component<Props> {
     mediaType: "application/javascript",
     data: ""
   };
-
-  static handles(mimetype: string) {
-    return (
-      mimetype.startsWith("text/") ||
-      mimetype.startsWith("application/javascript") ||
-      mimetype.startsWith("application/json")
-    );
-  }
 
   componentDidMount(): void {
     runCodeHere(this.el, this.props.data);

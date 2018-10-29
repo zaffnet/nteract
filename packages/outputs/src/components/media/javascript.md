@@ -24,3 +24,5 @@ The `Media.JavaScript` component can also help you when things go wrong by print
 ```
 <JavaScript data={"there_is_no_way_this_function_exists_right_now(and_takes_this_parameter)"}/>
 ```
+
+Under the hood, this component executes the JavaScript string passed to `data` using `eval`. As such, be sure that whatever `data` you are passing to the component is coming from a trusted source.
