@@ -1,4 +1,5 @@
 import * as contents from "../src/contents";
+import { AjaxObservable } from "./types";
 
 const serverConfig = {
   endpoint: "http://localhost:8888",
@@ -8,7 +9,10 @@ const serverConfig = {
 describe("contents", () => {
   describe("remove", () => {
     test("creates the AjaxObservable for removing contents", () => {
-      const remove$ = contents.remove(serverConfig, "/path.ipynb");
+      const remove$ = contents.remove(
+        serverConfig,
+        "/path.ipynb"
+      ) as AjaxObservable;
       const request = remove$.request;
       expect(request.url).toBe("http://localhost:8888/api/contents/path.ipynb");
       expect(request.method).toBe("DELETE");
@@ -19,7 +23,7 @@ describe("contents", () => {
       const content$ = contents.get(
         serverConfig,
         "/walla/walla/bingbang.ipynb"
-      );
+      ) as AjaxObservable;
       const request = content$.request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/walla/walla/bingbang.ipynb"
@@ -31,7 +35,7 @@ describe("contents", () => {
     test("creates the AjaxObservable for getting content with query parameters", () => {
       const content$ = contents.get(serverConfig, "/walla/walla", {
         type: "directory"
-      });
+      }) as AjaxObservable;
       const request = content$.request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/walla/walla?type=directory"
@@ -46,7 +50,7 @@ describe("contents", () => {
     test("creates the AjaxObservable for renaming a file", () => {
       const model = { path: "renamed/path" };
       const content$ = contents.update(serverConfig, "/path/to/rename", model);
-      const request = content$.request;
+      const request = (content$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/rename"
       );
@@ -67,7 +71,7 @@ describe("contents", () => {
         format: "json"
       };
       const create$ = contents.create(serverConfig, "/a/b/c.ipynb", model);
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/a/b/c.ipynb"
       );
@@ -86,7 +90,7 @@ describe("contents", () => {
         path: "save/to/this/path"
       };
       const create$ = contents.save(serverConfig, "/path/to/content", model);
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/content"
       );
@@ -102,7 +106,7 @@ describe("contents", () => {
         serverConfig,
         "/path/to/content"
       );
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/content/checkpoints"
       );
@@ -117,7 +121,7 @@ describe("contents", () => {
         serverConfig,
         "/path/to/content"
       );
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/content/checkpoints"
       );
@@ -133,7 +137,7 @@ describe("contents", () => {
         "/path/to/content",
         "id"
       );
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/content/checkpoints/id"
       );
@@ -149,7 +153,7 @@ describe("contents", () => {
         "/path/to/content",
         "id"
       );
-      const request = create$.request;
+      const request = (create$ as AjaxObservable).request;
       expect(request.url).toBe(
         "http://localhost:8888/api/contents/path/to/content/checkpoints/id"
       );

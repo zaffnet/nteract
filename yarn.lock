@@ -1592,6 +1592,11 @@
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.8.tgz#56b07c0c3d7c8a6c47abb4f785cab648c6eafd01"
   integrity sha512-OKDxB/7woaQfUKkj+7+Zo3PmAxAYAy+SNwOwFhnYAc8JTaPhGOv8SC6QQg5D9+Giprhx/DzoKbJIpV9799VV0g==
 
+"@types/js-cookie@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/js-cookie/-/js-cookie-2.2.0.tgz#ae2eabaa4bc892ba553c664cca21e6ee5224e5b5"
+  integrity sha512-k0umv2jvUvl1/OdOgFwEIPF6qKllf2jEsrd5ka9aVQo2ilxaBb2vsh1AmAAZ3eqt54vNrdbGW5QPOKJBmCNS7g==
+
 "@types/json-stable-stringify@^1.0.32":
   version "1.0.32"
   resolved "https://registry.yarnpkg.com/@types/json-stable-stringify/-/json-stable-stringify-1.0.32.tgz#121f6917c4389db3923640b2e68de5fa64dda88e"
@@ -1624,6 +1629,16 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
+
+"@types/url-join@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@types/url-join/-/url-join-0.8.2.tgz#1181ecbe1d97b7034e0ea1e35e62e86cc26b422d"
+  integrity sha1-EYHsvh2XtwNODqHjXmLobMJrQi0=
+
+"@types/url-search-params@^0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@types/url-search-params/-/url-search-params-0.10.2.tgz#bf7587e67953906ea67a8ff0ddbcb6f4482ebaa3"
+  integrity sha512-AaM3cTaHIbIJecuqf15ystbsUL3rtiJHZHhv6hTu1hBeKbvGwUNdHXfqNiY2LMWIT8ip6SqA+M9wYWIsQiMH2g==
 
 "@types/uuid@^3.4.4":
   version "3.4.4"

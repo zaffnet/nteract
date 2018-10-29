@@ -1,4 +1,5 @@
 import * as sessions from "../src/sessions";
+import { AjaxObservable } from "./types";
 
 const serverConfig = {
   endpoint: "http://localhost:8888",
@@ -9,7 +10,7 @@ const serverConfig = {
 describe("sessions", () => {
   describe("list", () => {
     test("creates an AjaxObservable for listing the sessions", () => {
-      const session$ = sessions.list(serverConfig);
+      const session$ = sessions.list(serverConfig) as AjaxObservable;
       const request = session$.request;
       expect(request.url).toBe("http://localhost:8888/api/sessions");
       expect(request.method).toBe("GET");
@@ -20,7 +21,7 @@ describe("sessions", () => {
 
   describe("get", () => {
     test("creates an AjaxObservable for getting particular session info", () => {
-      const session$ = sessions.get(serverConfig, "uuid");
+      const session$ = sessions.get(serverConfig, "uuid") as AjaxObservable;
       const request = session$.request;
       expect(request.url).toBe("http://localhost:8888/api/sessions/uuid");
       expect(request.method).toBe("GET");
@@ -31,7 +32,7 @@ describe("sessions", () => {
 
   describe("destroy", () => {
     test("creates an AjaxObservable for destroying a session", () => {
-      const session$ = sessions.destroy(serverConfig, "uuid");
+      const session$ = sessions.destroy(serverConfig, "uuid") as AjaxObservable;
       const request = session$.request;
       expect(request.url).toBe("http://localhost:8888/api/sessions/uuid");
       expect(request.method).toBe("DELETE");
@@ -47,7 +48,7 @@ describe("sessions", () => {
         name: "session-name",
         path: "~",
         type: "notebook"
-      });
+      }) as AjaxObservable;
       const request = session$.request;
       expect(request.url).toBe("http://localhost:8888/api/sessions/uuid");
       expect(request.method).toBe("PATCH");
@@ -71,7 +72,7 @@ describe("sessions", () => {
         name: "session-name",
         path: "~",
         type: "notebook"
-      });
+      }) as AjaxObservable;
       const request = session$.request;
       expect(request.url).toBe("http://localhost:8888/api/sessions");
       expect(request.method).toBe("POST");
