@@ -4,7 +4,8 @@ import React from "react";
 import { cloneDeep } from "lodash";
 
 type Props = {
-  data: string | Object
+  data: string | Object,
+  mediaType: "application/vnd.plotly.v1+json"
 };
 
 declare class PlotlyHTMLElement extends HTMLElement {
@@ -30,6 +31,10 @@ export class PlotlyTransform extends React.Component<Props> {
   Plotly: Object;
 
   static MIMETYPE = MIMETYPE;
+
+  static defaultProps = {
+    mediaType: MIMETYPE
+  };
 
   componentDidMount(): void {
     // Handle case of either string to be `JSON.parse`d or pure object
