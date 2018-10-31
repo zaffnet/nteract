@@ -21,7 +21,7 @@ const HTMLLegend = ({
   <div style={{ marginTop: "20px" }}>
     {(values.length > 18
       ? //limit the displayed values to the top 18 and bin everything else into Other
-        [...values.filter((d, i) => i < 18), "Other"]
+        [...values.filter((d, index) => index < 18), "Other"]
       : values
     ).map(
       (value, valuePosition) =>

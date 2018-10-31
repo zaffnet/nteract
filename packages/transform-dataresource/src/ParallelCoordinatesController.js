@@ -172,8 +172,8 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
         { uniqueValues: [], valueHash: {} }
       );
 
-      uniqueValues.forEach((value: string, valuePosition: number) => {
-        colorHash[value] = colors[valuePosition % colors.length];
+      uniqueValues.forEach((value: string, index: number) => {
+        colorHash[value] = colors[index % colors.length];
       });
 
       additionalSettings.afterElements =
