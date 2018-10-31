@@ -156,11 +156,8 @@ export const connect = (
   // and ensuring it's serialized
   return Subject.create(
     Subscriber.create(
-      (message: string | any) => {
-        if (typeof message === "string") {
-          // Assume serialized
-          wsSubject.next(message);
-        } else if (typeof message === "object") {
+      (message: any) => {
+        if (typeof message === "object") {
           const sessionizedMessage = {
             ...message,
             header: {
@@ -169,12 +166,9 @@ export const connect = (
             }
           };
 
-          wsSubject.next(JSON.stringify(sessionizedMessage));
+          wsSubject.next(sessionizedMessage);
         } else {
-          console.error(
-            "Message must be a string or object, app sent",
-            message
-          );
+          console.error("Message must be an object, the app sent", message);
         }
       },
       e => wsSubject.error(e),
