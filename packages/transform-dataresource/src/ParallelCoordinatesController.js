@@ -93,7 +93,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
       filterMode: true,
       data: parallelizeResults.dataPieces,
       dataScales: parallelizeResults.scales,
-      columnExtent: options.metrics.reduce((metric, metricHash) => {
+      columnExtent: options.metrics.reduce((metricHash, metric) => {
         metricHash[metric.name] = undefined;
         return metricHash;
       }, {})
