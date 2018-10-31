@@ -95,7 +95,7 @@ const renderMenuItem = (item, { handleClick, modifiers }) => {
       label={text}
       key={text}
       onClick={handleClick}
-      text={d => d}
+      text={menuText => menuText}
     />
   );
 };
@@ -117,7 +117,10 @@ const metricDimSelector = (
   if (metricsList.length > 1)
     displayMetrics = (
       <Select
-        items={metricsList.map(d => ({ value: d, label: d }))}
+        items={metricsList.map(metricName => ({
+          value: metricName,
+          label: metricName
+        }))}
         value={selectedValue}
         noResults={NoResultsItem}
         onItemSelect={e => {
@@ -199,6 +202,14 @@ export default ({
   setAreaType,
   data
 }) => {
+  const metricNames = metrics.map(metric => metric.name);
+  const dimensionNames = dimensions.map(dim => dim.name);
+
+  const updateChartGenerator = chartProperty => {
+    return metricOrDim =>
+      updateChart({ chart: { ...chart, [chartProperty]: metricOrDim } });
+  };
+
   return (
     <React.Fragment>
       <div className="wrapper">
@@ -209,8 +220,8 @@ export default ({
           view === "network" ||
           view === "hierarchy") &&
           metricDimSelector(
-            metrics.map(d => d.name),
-            d => updateChart({ chart: { ...chart, metric1: d } }),
+            metricNames,
+            updateChartGenerator("metric1"),
             view === "scatter" || view === "hexbin" ? "X" : "Metric",
             true,
             chart.metric1,
@@ -218,8 +229,8 @@ export default ({
           )}
         {(view === "scatter" || view === "hexbin") &&
           metricDimSelector(
-            metrics.map(d => d.name),
-            d => updateChart({ chart: { ...chart, metric2: d } }),
+            metricNames,
+            updateChartGenerator("metric2"),
             "Y",
             true,
             chart.metric2,
@@ -227,8 +238,8 @@ export default ({
           )}
         {((view === "scatter" && data.length < 1000) || view === "bar") &&
           metricDimSelector(
-            metrics.map(d => d.name),
-            d => updateChart({ chart: { ...chart, metric3: d } }),
+            metricNames,
+            updateChartGenerator("metric3"),
             view === "bar" ? "Width" : "Size",
             false,
             chart.metric3,
@@ -240,8 +251,8 @@ export default ({
           view === "bar" ||
           view === "parallel") &&
           metricDimSelector(
-            dimensions.map(d => d.name),
-            d => updateChart({ chart: { ...chart, dim1: d } }),
+            dimensionNames,
+            updateChartGenerator("dim1"),
             view === "summary" ? "Category" : "Color",
             true,
             chart.dim1,
@@ -249,8 +260,8 @@ export default ({
           )}
         {view === "scatter" &&
           metricDimSelector(
-            dimensions.map(d => d.name),
-            d => updateChart({ chart: { ...chart, dim2: d } }),
+            dimensionNames,
+            updateChartGenerator("dim2"),
             "Labels",
             false,
             chart.dim2,
@@ -259,7 +270,7 @@ export default ({
         {areaType === "contour" &&
           metricDimSelector(
             ["by color"],
-            d => updateChart({ chart: { ...chart, dim3: d } }),
+            updateChartGenerator("dim3"),
             "Multiclass",
             false,
             chart.dim3,
@@ -267,8 +278,8 @@ export default ({
           )}
         {view === "network" &&
           metricDimSelector(
-            dimensions.map(d => d.name),
-            d => updateChart({ chart: { ...chart, dim1: d } }),
+            dimensionNames,
+            updateChartGenerator("dim1"),
             "SOURCE",
             true,
             chart.dim1,
@@ -276,8 +287,8 @@ export default ({
           )}
         {view === "network" &&
           metricDimSelector(
-            dimensions.map(d => d.name),
-            d => updateChart({ chart: { ...chart, dim2: d } }),
+            dimensionNames,
+            updateChartGenerator("dim2"),
             "TARGET",
             true,
             chart.dim2,
@@ -286,7 +297,8 @@ export default ({
         {view === "network" &&
           metricDimSelector(
             ["force", "sankey"],
-            d => updateChart({ networkType: d }),
+            selectedNetworkType =>
+              updateChart({ networkType: selectedNetworkType }),
             "Type",
             true,
             networkType,
@@ -295,7 +307,8 @@ export default ({
         {view === "hierarchy" &&
           metricDimSelector(
             ["dendrogram", "treemap", "partition"],
-            d => updateChart({ hierarchyType: d }),
+            selectedHierarchyType =>
+              updateChart({ hierarchyType: selectedHierarchyType }),
             "Type",
             true,
             hierarchyType,
@@ -304,7 +317,8 @@ export default ({
         {view === "summary" &&
           metricDimSelector(
             ["violin", "boxplot", "joy", "heatmap", "histogram"],
-            d => updateChart({ summaryType: d }),
+            selectedSummaryType =>
+              updateChart({ summaryType: selectedSummaryType }),
             "Type",
             true,
             summaryType,
@@ -312,8 +326,8 @@ export default ({
           )}
         {view === "line" &&
           metricDimSelector(
-            ["array-order", ...metrics.map(d => d.name)],
-            d => updateChart({ chart: { ...chart, timeseriesSort: d } }),
+            ["array-order", ...metricNames],
+            updateChartGenerator("timeseriesSort"),
             "Sort by",
             true,
             chart.timeseriesSort,
@@ -328,14 +342,15 @@ export default ({
               <Code>Chart Type</Code>
             </div>
             <ButtonGroup vertical={true}>
-              {availableLineTypes.map(d => (
+              {availableLineTypes.map(lineTypeOption => (
                 <Button
-                  key={d.lineType}
-                  className={`button-text ${lineType === d.type && "selected"}`}
-                  active={lineType === d.type}
-                  onClick={() => setLineType(d.type)}
+                  key={lineTypeOption.type}
+                  className={`button-text ${lineType === lineTypeOption.type &&
+                    "selected"}`}
+                  active={lineType === lineTypeOption.type}
+                  onClick={() => setLineType(lineTypeOption.type)}
                 >
-                  {d.label}
+                  {lineTypeOption.label}
                 </Button>
               ))}
             </ButtonGroup>
@@ -347,15 +362,15 @@ export default ({
               <Code>Chart Type</Code>
             </div>
             <ButtonGroup vertical={true}>
-              {availableAreaTypes.map(d => (
+              {availableAreaTypes.map(areaTypeOption => (
                 <Button
-                  className={`button-text ${areaType === d.type && "selected"}`}
-                  key={d.type}
-                  onClick={() => setAreaType(d.type)}
-                  //                  active={areaType === d.type}
-                  active={true}
+                  className={`button-text ${areaType === areaTypeOption.type &&
+                    "selected"}`}
+                  key={areaTypeOption.type}
+                  onClick={() => setAreaType(areaTypeOption.type)}
+                  active={areaType === areaTypeOption.type}
                 >
-                  {d.label}
+                  {areaTypeOption.label}
                 </Button>
               ))}
             </ButtonGroup>
@@ -383,16 +398,16 @@ export default ({
               <Code>Categories</Code>
             </div>
             <ButtonGroup vertical={true}>
-              {dimensions.map(d => (
+              {dimensions.map(dim => (
                 <Button
-                  key={`dimensions-select-${d.name}`}
+                  key={`dimensions-select-${dim.name}`}
                   className={`button-text ${selectedDimensions.indexOf(
-                    d.name
+                    dim.name
                   ) !== -1 && "selected"}`}
-                  onClick={() => updateDimensions(d.name)}
-                  active={selectedDimensions.indexOf(d.name) !== -1}
+                  onClick={() => updateDimensions(dim.name)}
+                  active={selectedDimensions.indexOf(dim.name) !== -1}
                 >
-                  {d.name}
+                  {dim.name}
                 </Button>
               ))}
             </ButtonGroup>
@@ -407,15 +422,16 @@ export default ({
               <Code>Metrics</Code>
             </div>
             <ButtonGroup vertical={true}>
-              {metrics.map(d => (
+              {metrics.map(metric => (
                 <Button
-                  key={`metrics-select-${d.name}`}
-                  className={`button-text ${selectedMetrics.indexOf(d.name) !==
-                    -1 && "selected"}`}
-                  onClick={() => updateMetrics(d.name)}
-                  active={selectedMetrics.indexOf(d.name) !== -1}
+                  key={`metrics-select-${metric.name}`}
+                  className={`button-text ${selectedMetrics.indexOf(
+                    metric.name
+                  ) !== -1 && "selected"}`}
+                  onClick={() => updateMetrics(metric.name)}
+                  active={selectedMetrics.indexOf(metric.name) !== -1}
                 >
-                  {d.name}
+                  {metric.name}
                 </Button>
               ))}
             </ButtonGroup>
