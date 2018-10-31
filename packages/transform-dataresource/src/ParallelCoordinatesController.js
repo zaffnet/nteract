@@ -95,7 +95,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
       dataScales: parallelizeResults.scales,
       columnExtent: options.metrics.reduce((metric, metricHash) => {
         metricHash[metric.name] = undefined;
-        return metrichHash;
+        return metricHash;
       }, {})
     };
   }
