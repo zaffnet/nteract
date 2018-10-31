@@ -169,7 +169,7 @@ export const connect = (
             }
           };
 
-          wsSubject.next(JSON.stringify(sessionizedMessage));
+          wsSubject.next(sessionizedMessage);
         } else {
           console.error(
             "Message must be a string or object, app sent",
