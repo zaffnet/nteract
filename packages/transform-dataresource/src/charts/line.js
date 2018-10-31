@@ -141,7 +141,7 @@ export const semioticLineChart = (
             {timeseriesSort}: {formatting(hoveredDatapoint.x)}
           </p>
           {primaryKey.map((pkey, index) => (
-            <p pkey={`key-${index}`}>
+            <p key={`key-${index}`}>
               {pkey}:{" "}
               {(hoveredDatapoint.originalData[pkey].toString &&
                 hoveredDatapoint.originalData[pkey].toString()) ||
