@@ -24,8 +24,6 @@ type Props = {
 
 const axisSize = [40, 380];
 
-const connectorFunction = columnDatapoint => columnDatapoint.Country;
-
 function parallelizeData(data, metrics, schemaFields, primaryKey) {
   const minmax = {};
   const screenScales = {};
@@ -120,6 +118,9 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
 
     const hiddenHash = new Map();
 
+    const connectorFunction = columnDatapoint =>
+      primaryKey.map(key => columnDatapoint[key]).join(",");
+
     Object.keys(columnExtent).forEach(key => {
       if (columnExtent[key]) {
         const extent = columnExtent[key].sort((a, b) => a - b);
@@ -172,12 +173,20 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
         { uniqueValues: [], valueHash: {} }
       );
 
-      uniqueValues.forEach((value: string, index: number) => {
+      const uniqueDimsForColors = data.reduce(
+        (colorArray, datapoint) =>
+          colorArray.indexOf(datapoint[dim1]) === -1
+            ? [...colorArray, datapoint[dim1]]
+            : colorArray,
+        []
+      );
+
+      uniqueDimsForColors.forEach((value: string, index: number) => {
         colorHash[value] = colors[index % colors.length];
       });
 
       additionalSettings.afterElements =
-        uniqueValues.length < 10 ? (
+        uniqueValues.length <= 18 ? (
           <HTMLLegend
             values={uniqueValues}
             colorHash={colorHash}
@@ -227,7 +236,10 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           data={this.state.data}
           oAccessor="metric"
           rAccessor="pctvalue"
-          type={{ type: "point", r: 3 }}
+          type={{
+            type: "point",
+            r: 2
+          }}
           connectorType={connectorFunction}
           style={datapoint => ({
             fill: hiddenHash.get(
@@ -238,7 +250,7 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
             opacity: hiddenHash.get(
               primaryKey.map(key => datapoint[key]).join(",")
             )
-              ? 0.5
+              ? 0.15
               : 0.99
           })}
           connectorStyle={datapoint => ({
@@ -252,7 +264,11 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
             )
               ? 1
               : 1.5,
-            strokeOpacity: hiddenHash.get(datapoint.source.Country) ? 0.1 : 1
+            strokeOpacity: hiddenHash.get(
+              primaryKey.map(key => datapoint.source[key]).join(",")
+            )
+              ? 0.1
+              : 1
           })}
           responsiveWidth={true}
           margin={{ top: 20, left: 20, right: 20, bottom: 100 }}
@@ -269,13 +285,18 @@ class ParallelCoordinatesController extends React.Component<Props, State> {
           }
           pieceHoverAnnotation={!filterMode}
           tooltipContent={hoveredDatapoint => {
+            const textColor = hiddenHash.get(
+              primaryKey.map(key => hoveredDatapoint[key]).join(",")
+            )
+              ? "grey"
+              : colorHash[hoveredDatapoint[dim1]];
             return (
               <TooltipContent x={hoveredDatapoint.x} y={hoveredDatapoint.y}>
                 <h3>
                   {primaryKey.map(key => hoveredDatapoint[key]).join(", ")}
                 </h3>
                 {hoveredDatapoint[dim1] && (
-                  <h3 style={{ color: colorHash[hoveredDatapoint[dim1]] }}>
+                  <h3 style={{ color: textColor }}>
                     {dim1}: {hoveredDatapoint[dim1]}
                   </h3>
                 )}
