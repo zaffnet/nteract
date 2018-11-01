@@ -24,11 +24,11 @@ const HTMLLegend = ({
         [...values.filter((d, index) => index < 18), "Other"]
       : values
     ).map(
-      (value, valuePosition) =>
+      (value, index) =>
         colorHash[value] && (
           <span
             style={{ display: "inline-block", minWidth: "80px", margin: "5px" }}
-            key={`legend-item-${valuePosition}`}
+            key={`legend-item-${index}`}
           >
             <span
               style={{
