@@ -37,7 +37,7 @@ module.exports = {
         test: /\.js$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelFlowConfig(),
+        options: babelFlowConfig()
       },
       {
         test: /\.css$/,
@@ -47,8 +47,8 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelTypescriptConfig(),
-      },
+        options: babelTypescriptConfig()
+      }
     ]
   },
   resolve: {

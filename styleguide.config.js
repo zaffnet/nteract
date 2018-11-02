@@ -73,14 +73,14 @@ module.exports = {
           test: /\.jsx?$/,
           exclude,
           loader: "babel-loader",
-          options: babelFlowConfig(),
+          options: babelFlowConfig()
         },
         {
           test: /\.tsx?$/,
           exclude,
           loader: "babel-loader",
-          options: babelTypescriptConfig(),
-      },
+          options: babelTypescriptConfig()
+        }
       ]
     }
   }

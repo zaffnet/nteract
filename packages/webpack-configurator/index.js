@@ -66,9 +66,7 @@ type WebpackConfig = {
 };
 */
 
-function nextWebpack(
-  config /*: WebpackConfig */,
-) /*: WebpackConfig */ {
+function nextWebpack(config /*: WebpackConfig */) /*: WebpackConfig */ {
   config.externals = ["canvas", ...config.externals];
   config.module.rules = config.module.rules.map(rule => {
     if (
@@ -86,21 +84,22 @@ function nextWebpack(
       test: /\.js$/,
       exclude: exclude,
       loader: "babel-loader",
-      options: babelFlowConfig(),
+      options: babelFlowConfig()
     },
     {
       test: /\.tsx?$/,
       exclude: exclude,
       loader: "babel-loader",
-      options: babelTypescriptConfig(),
-    });
+      options: babelTypescriptConfig()
+    }
+  );
 
   config.resolve = Object.assign({}, config.resolve, {
     mainFields: ["nteractDesktop", "jsnext:main", "module", "main"],
     alias: mergeDefaultAliases(
       config.resolve ? config.resolve.alias : undefined
     ),
-    extensions: [".js", ".jsx", ".ts", ".tsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"]
   });
   return config;
 }

@@ -6,8 +6,6 @@ const configurator = require("@nteract/webpack-configurator");
 const babelFlowConfig = require("../../babel.flow.config");
 const babelTypescriptConfig = require("../../babel.typescript.config");
 
-
-
 const nodeModules = {
   jmp: "commonjs jmp",
   canvas: "commonjs canvas",
@@ -37,14 +35,14 @@ const mainConfig = {
         test: /\.js$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelFlowConfig(),
+        options: babelFlowConfig()
       },
       {
         test: /\.tsx?$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelTypescriptConfig(),
-      },
+        options: babelTypescriptConfig()
+      }
     ]
   },
   resolve: {
@@ -86,14 +84,14 @@ const rendererConfig = {
         test: /\.js$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelFlowConfig(),
+        options: babelFlowConfig()
       },
       {
         test: /\.tsx?$/,
         exclude: configurator.exclude,
         loader: "babel-loader",
-        options: babelTypescriptConfig(),
-      },
+        options: babelTypescriptConfig()
+      }
     ]
   },
   resolve: {
