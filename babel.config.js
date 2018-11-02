@@ -15,18 +15,18 @@ module.exports = function(api) {
         {
           corejs: 2
         }
-      ],
+      ]
     ],
     overrides: [
       {
-        test: ['**/*.js', '**/*.jsx'],
+        test: ["**/*.js", "**/*.jsx"],
         presets: ["@babel/preset-flow"],
         plugins: ["@babel/plugin-transform-flow-strip-types"]
       },
       {
-        test: ['**/*.ts', '**/*.tsx'],
-        presets: ["@babel/preset-typescript"],
-      },
+        test: ["**/*.ts", "**/*.tsx"],
+        presets: ["@babel/preset-typescript"]
+      }
     ]
   };
 

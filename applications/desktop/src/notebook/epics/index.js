@@ -37,7 +37,6 @@ export const wrapEpic = (epic: Epic<AppState, redux$AnyAction, *>) => (
   ...args: *
 ) => epic(...args).pipe(catchError(retryAndEmitError));
 
-
 const epics = [
   coreEpics.restartKernelEpic,
   coreEpics.acquireKernelInfoEpic,
@@ -66,4 +65,6 @@ const epics = [
 
 // Type arguments are needed currently because of Flow export limitations
 // https://github.com/facebook/flow/issues/6828#issuecomment-418495625
-export default epics.map<Epic<AppState, redux$AnyAction, *>>(epic => wrapEpic(epic));;
+export default epics.map<Epic<AppState, redux$AnyAction, *>>(epic =>
+  wrapEpic(epic)
+);
