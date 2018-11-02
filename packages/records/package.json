@@ -1,6 +1,6 @@
 {
   "name": "@nteract/records",
-  "version": "0.3.2",
+  "version": "1.0.0-alpha.0",
   "description": "experimental new records",
   "main": "lib/index.js",
   "nteractDesktop": "src/index.js",
