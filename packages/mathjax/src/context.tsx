@@ -1,30 +1,31 @@
-/* @flow strict */
 import * as React from "react";
 
-export type MathJaxObject = {
+export interface MathJaxObject {
   Hub: {
-    getJaxFor: HTMLElement => void,
-    Config: (options: *) => void,
+    getJaxFor(node: HTMLElement): any
+    Config(options: object): void;
     Register: {
-      StartupHook: (str: string, cb: () => void) => void,
-      MessageHook: (string, cb: (msg: string) => void) => void
+      StartupHook(str: string, cb: () => void):  void;
+      MessageHook(str: string, cb: (msg: string) => void): void;
     },
-    Queue(...*): void,
-    processSectionDelay: number
+    Queue(elements: Array<any>, onRender?: Function): void;
+    processSectionDelay: number;
   }
 };
 
-export type MathJaxContextValue = {
-  MathJax: ?MathJaxObject,
-  input: "tex" | "ascii",
+export interface MathJaxContextValue {
+  MathJax?: MathJaxObject;
+  input: "tex" | "ascii";
   // Allow detecting if there's a <Provider> above a <Consumer>
-  hasProviderAbove: ?boolean
+  hasProviderAbove?: boolean;
 };
 
-const MathJaxContext: React.Context<MathJaxContextValue> = React.createContext({
-  MathJax: null,
+const contextValue: MathJaxContextValue = {
+  MathJax: undefined,
   input: "tex",
-  hasProviderAbove: null
-});
+  hasProviderAbove: undefined
+}
+
+const MathJaxContext: React.Context<MathJaxContextValue> = React.createContext(contextValue);
 
 export default MathJaxContext;

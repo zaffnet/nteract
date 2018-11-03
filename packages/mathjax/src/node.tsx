@@ -1,4 +1,3 @@
-// @flow
 import * as React from "react";
 
 const types = {
@@ -6,18 +5,18 @@ const types = {
   tex: "tex"
 };
 
-import MathJaxContext, { type MathJaxContextValue } from "./context";
+import MathJaxContext, { MathJaxContextValue } from "./context";
 import Provider from "./provider";
 
-type Props = {
-  inline: boolean,
-  children: string,
-  onRender: ?Function
+interface Props {
+  inline: boolean;
+  children: string;
+  onRender?: Function;
 };
 
-class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
-  script: ?HTMLScriptElement;
-  nodeRef: React.ElementRef<*>;
+class MathJaxNode_ extends React.Component<Props & MathJaxContextValue> {
+  script?: HTMLScriptElement;
+  nodeRef: React.RefObject<HTMLSpanElement>;
 
   constructor(props: Props & MathJaxContextValue) {
     super(props);
@@ -108,14 +107,14 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
    * Create a script
    * @param { String } text
    */
-  setScriptText(text: *) {
+  setScriptText(text: string) {
     const inline = this.props.inline;
     const type = types[this.props.input];
     if (!this.script) {
       this.script = document.createElement("script");
       this.script.type = `math/${type}; ${inline ? "" : "mode=display"}`;
 
-      this.nodeRef.current.appendChild(this.script);
+      this.nodeRef.current!.appendChild(this.script);
     }
 
     // It _should_ be defined at this point, we'll just return at this point now
@@ -123,12 +122,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
       return;
     }
 
-    if ("text" in this.script) {
-      // IE8, etc
-      this.script.text = text;
-    } else {
-      this.script.textContent = text;
-    }
+    this.script.text  = text;
   }
 
   render() {
@@ -136,7 +130,7 @@ class MathJaxNode_ extends React.Component<Props & MathJaxContextValue, null> {
   }
 }
 
-class MathJaxNode extends React.PureComponent<Props, null> {
+class MathJaxNode extends React.PureComponent<Props> {
   static defaultProps = {
     inline: false,
     onRender: null

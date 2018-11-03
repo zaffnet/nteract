@@ -34,7 +34,8 @@ describe("MathJax", () => {
   });
 
   test("Text node renders LaTeX text", () => {
-    const wrapper = mount(<Text>This is a LaTeX equation $x^2 + y = 3$</Text>);
+    const latex = "This is a LaTeX equation $x^2 + y = 3$";
+    const wrapper = mount(<Text>{latex}</Text>);
     expect(loadScript).toHaveBeenLastCalledWith(
       mathJaxUrl,
       expect.any(Function)

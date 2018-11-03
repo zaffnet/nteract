@@ -1,16 +1,14 @@
-// @flow
-
 // Extracted from https://github.com/eldargab/load-script
 
-type Options = {
-  type: string,
-  charset: string,
-  async: any,
-  text: ?string,
-  attrs: ?Object
+interface Options {
+  type: string;
+  charset: string;
+  async: any;
+  text?: string;
+  attrs?: { [key: string]: any };
 };
 
-type Callback = (error: ?Error, script: HTMLScriptElement) => void;
+type Callback = (script: HTMLScriptElement, error?: Error) => void;
 
 const defaultOptions = {
   type: "text/javascript",
@@ -20,7 +18,7 @@ const defaultOptions = {
   attrs: undefined
 };
 
-export function load(src: string, opts: ?Options | ?Callback, cb: ?Callback) {
+export function load(src: string, opts?: Options | Callback, cb?: Callback) {
   var head = document.head || document.getElementsByTagName("head")[0];
   var script = document.createElement("script");
 
@@ -58,30 +56,30 @@ export function load(src: string, opts: ?Options | ?Callback, cb: ?Callback) {
   head.appendChild(script);
 }
 
-function setAttributes(script, attrs) {
+function setAttributes(script: HTMLScriptElement, attrs: { [key: string]: any }) {
   for (var attr in attrs) {
     script.setAttribute(attr, attrs[attr]);
   }
 }
 
-function stdOnEnd(script, cb: Callback) {
+function stdOnEnd(script: any, cb: Callback) {
   script.onload = function() {
     this.onerror = this.onload = null;
-    cb(null, script);
+    cb(script);
   };
   script.onerror = function() {
     // this.onload = null here is necessary
     // because even IE9 works not like others
     this.onerror = this.onload = null;
-    cb(new Error("Failed to load " + this.src), script);
+    cb(script, new Error("Failed to load " + this.src));
   };
 }
 
-function ieOnEnd(script, cb: Callback) {
+function ieOnEnd(script: any, cb: Callback) {
   script.onreadystatechange = function() {
     if (this.readyState != "complete" && this.readyState != "loaded") return;
     this.onreadystatechange = null;
-    cb(null, script); // there is no way to catch loading errors in IE8
+    cb(script); // there is no way to catch loading errors in IE8
   };
 }
 
