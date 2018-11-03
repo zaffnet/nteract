@@ -31,4 +31,10 @@ The configuration details for the Binder instance that you can connect to are pe
 
 You can also see this information stored under the "@BinderKey@${props}` key in your browser's LocalStorage.
 
-![A screenshot of a browser's LocalStorage with Binder configuration data persisted](https://cldup.com/4KGoRjl7ZK.png)
+```jsx noeditor
+<img
+  alt="A screenshot of a browser's LocalStorage with Binder configuration data persisted"
+  src="https://cldup.com/4KGoRjl7ZK.png"
+  style={{ width: "100%" }}
+/>
+```

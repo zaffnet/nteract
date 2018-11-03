@@ -48,15 +48,6 @@ module.exports = {
       "logo.js"
     )
   },
-  styles: {
-    Markdown: {
-      ParaRenderer: {
-        img: {
-          width: "100%"
-        }
-      }
-    }
-  },
   compilerConfig: {
     // Allow us to use {...props}
     objectAssign: "Object.assign",
