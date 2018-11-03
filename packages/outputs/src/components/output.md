@@ -1,6 +1,6 @@
 The `Output` element takes a single `output` prop and several child components and renders the appropriate components to render each output type.
 
-For example, we can create a `stream` output and use the `Output` and `StreamText` components to render it appropriately.
+For example, we can create a `stream` output and use the `Output` and `StreamText` components needed for each output type.
 
 ```jsx
 // Until we create <Stream />
@@ -16,7 +16,7 @@ const output = Object.freeze({
   <StreamText />
 </Output>;
 ```
-We can also render errors that are returned from the Jupyter kernel we're connected to. 
+Errors returned from the connected Jupyter kernel can be rendered.
 
 ```jsx
 const { KernelOutputError } = require("./kernel-output-error");
@@ -91,4 +91,55 @@ const outputs = [
   ))}
 </div>;
 ```
-This structure also allows you to create your own output and media components and use them to render custom outputs.
+This structure also allows you to create your own components to override how a given output type is rendered. Below is an example that overrides the component to support `display_data` output types with a component that always renders the same thing.
+
+```jsx
+const { StreamText } = require("./stream-text");
+
+// Our own DisplayData component
+const MyDisplayData = props => <p><b>MyDisplayData.</b></p>;
+MyDisplayData.defaultProps = {
+  outputType: "display_data"
+};
+
+// Some "rich" handlers for Media. These aren't going to be
+// used becuase our custom MyDisplayData component doesn't do anything
+// with its child components.
+const Plain = props => <marquee>{props.data}</marquee>;
+Plain.defaultProps = {
+  mediaType: "text/plain"
+};
+
+const HTML = props => <div dangerouslySetInnerHTML={{ __html: props.data }} />;
+HTML.defaultProps = {
+  mediaType: "text/html"
+};
+
+const outputs = [
+  {
+    outputType: "display_data",
+    data: {
+      "text/plain": "O____O"
+    },
+    metadata: {}
+  },
+    {
+    outputType: "display_data",
+    data: {
+      "text/html": "<p>This is some HTML.</p>"
+    },
+    metadata: {}
+  },
+];
+
+<div>
+  {outputs.map((output, index) => (
+    <Output output={output} key={index}>
+      <MyDisplayData>
+        <Plain />
+        <HTML />
+      </MyDisplayData>
+    </Output>
+  ))}
+</div>;
+```
