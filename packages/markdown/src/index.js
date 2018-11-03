@@ -1,7 +1,7 @@
 // @flow
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import MathJax from "@nteract/mathjax";
+import * as MathJax from "@nteract/mathjax";
 
 import RemarkMathPlugin from "./remark-math";
 

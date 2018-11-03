@@ -1,6 +1,6 @@
 /* @flow strict */
 import * as React from "react";
-import MathJax from "@nteract/mathjax";
+import * as MathJax from "@nteract/mathjax";
 
 type Props = {
   mediaType: string,

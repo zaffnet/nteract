@@ -1,9 +1,4 @@
-// @flow strict
-
-import Node from "./node";
-import Text from "./text";
-import Context from "./context";
-import Provider from "./provider";
-
-export { Node, Text, Provider, Context };
-export default { Node, Text, Provider, Context };
+export { default as Node } from "./node";
+export { default as Text } from "./text";
+export { default as Context } from "./context";
+export { default as Provider } from "./provider";
