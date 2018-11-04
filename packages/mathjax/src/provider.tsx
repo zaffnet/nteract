@@ -1,27 +1,25 @@
-// @flow strict
-
 import * as React from "react";
 
 import loadScript from "./load-script";
 import MathJaxContext, {
-  type MathJaxObject, // eslint-disable-line no-unused-vars
-  type MathJaxContextValue
-} from "./context.js";
+  MathJaxObject, // eslint-disable-line no-unused-vars
+  MathJaxContextValue
+} from "./context";
 
 // MathJax expected to be a global and may be undefined
-declare var MathJax: ?MathJaxObject;
+declare var MathJax: MathJaxObject | undefined;
 
-type Props = {
-  src: ?string,
-  children: React.Node,
-  didFinishTypeset: ?() => void,
-  onLoad: ?() => void,
-  input: "ascii" | "tex",
-  delay: number,
-  options: ?*,
-  loading: React.Node,
-  noGate: boolean,
-  onError: (err: Error) => void
+interface Props {
+  src?: string;
+  children: React.ReactNode;
+  didFinishTypeset?():void;
+  onLoad?(): void;
+  input: "ascii" | "tex";
+  delay: number;
+  options: object;
+  loading: React.ReactNode;
+  noGate: boolean;
+  onError(err: Error): void;
 };
 
 type State = MathJaxContextValue;
@@ -101,7 +99,7 @@ class Provider extends React.Component<Props, State> {
       }
     });
 
-    MathJax.Hub.Register.MessageHook("Math Processing Error", message => {
+    MathJax.Hub.Register.MessageHook("Math Processing Error", (message: string) => {
       if (this.props.onError) {
         this.props.onError(new Error(message));
       }

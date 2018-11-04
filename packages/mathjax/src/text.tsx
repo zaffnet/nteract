@@ -1,16 +1,15 @@
-// @flow
 import * as React from "react";
 
-import MathJaxContext, { type MathJaxContextValue } from "./context";
+import MathJaxContext, { MathJaxContextValue } from "./context";
 import Provider from "./provider";
 
-type Props = {
-  children: string,
-  onRender: ?Function
+interface Props {
+  children: string;
+  onRender?: Function;
 };
 
-class MathJaxText_ extends React.Component<Props & MathJaxContextValue, null> {
-  nodeRef: React.ElementRef<*>;
+class MathJaxText_ extends React.Component<Props & MathJaxContextValue> {
+  nodeRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: Props & MathJaxContextValue) {
     super(props);
@@ -47,7 +46,7 @@ class MathJaxText_ extends React.Component<Props & MathJaxContextValue, null> {
   }
 }
 
-class MathJaxText extends React.PureComponent<Props, null> {
+class MathJaxText extends React.PureComponent<Props> {
   static defaultProps = {
     onRender: null
   };

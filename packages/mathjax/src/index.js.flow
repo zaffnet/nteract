@@ -1,5 +1,5 @@
-/* @flow strict */
-import * as React from "react";
+// @flow
+/* eslint-disable */
 
 export type MathJaxObject = {
   Hub: {
@@ -21,10 +21,7 @@ export type MathJaxContextValue = {
   hasProviderAbove: ?boolean
 };
 
-const MathJaxContext: React.Context<MathJaxContextValue> = React.createContext({
-  MathJax: null,
-  input: "tex",
-  hasProviderAbove: null
-});
-
-export default MathJaxContext;
+declare export var Text: (props: any) => any;
+declare export var Node: (props: any) => any;
+declare export var Context: (props: any) => any;
+declare export var Provider: (props: any) => any;
