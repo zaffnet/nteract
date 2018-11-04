@@ -1,10 +1,11 @@
-/* @flow */
-import React from "react";
+import * as React from "react";
+import {Subject} from "rxjs";
+
 // import { OuterShim } from "./outer-shim";
 
 type Props = {
   data: { model_id: string },
-  channels: rxjs$Subject<any>
+  channels: Subject<any>
 };
 
 /**
@@ -25,10 +26,10 @@ export class WidgetDisplay extends React.Component<Props, null> {
   // The outer shim is responsable for managing the rendered cross domain
   // iframe, communicating with it, and relaying information to and from the
   // kernel.
-  // shim: OuterShim;
+  // private shim: OuterShim;
 
   // A reference to the div which we can inject the cross domain widget iframe.
-  container: { current: null | HTMLDivElement } = React.createRef();
+  private container = React.createRef<HTMLDivElement>();
 
   /** @override */
   componentDidMount() {
@@ -64,7 +65,7 @@ export class WidgetDisplay extends React.Component<Props, null> {
   }
 
   /** @override */
-  render(): ?React$Element<any> {
+  render() {
     this.createOrUpdateShim();
 
     return (
@@ -78,7 +79,7 @@ export class WidgetDisplay extends React.Component<Props, null> {
   /**
    * Creates or updates the existing shim to the current model id and kernel.
    */
-  createOrUpdateShim() {
+  private createOrUpdateShim() {
     // if (!this.shim) {
     //   this.shim = new OuterShim();
     // }
