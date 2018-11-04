@@ -6,7 +6,7 @@ interface Options {
   async: any;
   text?: string;
   attrs?: { [key: string]: any };
-};
+}
 
 type Callback = (script: HTMLScriptElement, error?: Error) => void;
 
@@ -19,8 +19,8 @@ const defaultOptions = {
 };
 
 export function load(src: string, opts?: Options | Callback, cb?: Callback) {
-  var head = document.head || document.getElementsByTagName("head")[0];
-  var script = document.createElement("script");
+  const head = document.head || document.getElementsByTagName("head")[0];
+  const script = document.createElement("script");
 
   if (typeof opts === "function") {
     cb = opts;
@@ -43,7 +43,7 @@ export function load(src: string, opts?: Options | Callback, cb?: Callback) {
     script.text = "" + opts.text;
   }
 
-  var onend = "onload" in script ? stdOnEnd : ieOnEnd;
+  const onend = "onload" in script ? stdOnEnd : ieOnEnd;
   onend(script, cb);
 
   // some good legacy browsers (firefox) fail the 'in' detection above
@@ -56,8 +56,11 @@ export function load(src: string, opts?: Options | Callback, cb?: Callback) {
   head.appendChild(script);
 }
 
-function setAttributes(script: HTMLScriptElement, attrs: { [key: string]: any }) {
-  for (var attr in attrs) {
+function setAttributes(
+  script: HTMLScriptElement,
+  attrs: { [key: string]: any }
+) {
+  for (let attr in attrs) {
     script.setAttribute(attr, attrs[attr]);
   }
 }

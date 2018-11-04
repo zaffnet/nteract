@@ -1,30 +1,21 @@
 // @flow
 import trim from "trim-trailing-lines";
 
-var C_NEWLINE = "\n";
-var C_TAB = "\t";
-var C_SPACE = " ";
-var C_DOLLAR = "$";
+const C_NEWLINE = "\n";
+const C_TAB = "\t";
+const C_SPACE = " ";
+const C_DOLLAR = "$";
 
-var MIN_FENCE_COUNT = 2;
-var CODE_INDENT_COUNT = 4;
+const MIN_FENCE_COUNT = 2;
+const CODE_INDENT_COUNT = 4;
 
 // eslint-disable-next-line no-unused-vars
 export function blockPlugin(opts: Object) {
   function blockTokenizer(eat, value, silent) {
-    var length = value.length + 1;
-    var index = 0;
-    var subvalue = "";
-    var fenceCount;
-    var marker;
-    var character;
-    var queue;
-    var content;
-    var exdentedContent;
-    var closing;
-    var exdentedClosing;
-    var indent;
-    var now;
+    const length = value.length + 1;
+    let index = 0;
+    let subvalue = "";
+    let character;
 
     /* Eat initial spacing. */
     while (index < length) {
@@ -38,7 +29,7 @@ export function blockPlugin(opts: Object) {
       index++;
     }
 
-    indent = index;
+    const indent = index;
 
     /* Eat the fence. */
     character = value.charAt(index);
@@ -48,8 +39,8 @@ export function blockPlugin(opts: Object) {
     }
 
     index++;
-    marker = character;
-    fenceCount = 1;
+    let marker = character;
+    let fenceCount = 1;
     subvalue += character;
 
     while (index < length) {
@@ -89,11 +80,14 @@ export function blockPlugin(opts: Object) {
       return true;
     }
 
-    now = eat.now();
+    const now = eat.now();
     now.column += subvalue.length;
     now.offset += subvalue.length;
 
-    queue = closing = exdentedClosing = content = exdentedContent = "";
+    let closing = "";
+    let exdentedClosing = "";
+    let content = "";
+    let exdentedContent = "";
 
     /* Eat content. */
     while (index < length) {
@@ -119,7 +113,7 @@ export function blockPlugin(opts: Object) {
         subvalue += character;
       }
 
-      queue = "";
+      let queue = "";
       index++;
 
       while (index < length) {
