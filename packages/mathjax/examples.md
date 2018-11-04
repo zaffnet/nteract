@@ -1,7 +1,7 @@
 The MathJax component provides a way to both load MathJax on the page and render MathJax Nodes. Many people love ❤️ beautifully typeset mathematics, and these components are the way to provide it.
 
 ```jsx
-var {Provider, Node} = require("@nteract/mathjax");
+const { Provider, Node } = require("@nteract/mathjax");
 
 const tex = String.raw`f(x) = \int_{-\infty}^\infty
     \hat f(\xi)\,e^{2 \pi i \xi x}
@@ -21,7 +21,7 @@ The components are written in a React 16+ way to both load mathjax through a `<P
 This semi-contrived example shows
 
 ```jsx
-var {Provider, Node} = require("@nteract/mathjax");
+const { Provider, Node } = require("@nteract/mathjax");
 
 const verbs = ["do", "can", "should", "will"];
 
@@ -72,8 +72,8 @@ class CleanUpdates extends React.Component {
             {this.state.verb}
           </span>{" "}
           update
-          <Node inline>{"n^" + this.state.exponent}</Node> pieces
-          of a paragraph without triggering a MathJax re-render.
+          <Node inline>{"n^" + this.state.exponent}</Node> pieces of a paragraph
+          without triggering a MathJax re-render.
         </p>
       </Provider>
     );
@@ -86,7 +86,7 @@ class CleanUpdates extends React.Component {
 If you use `<Node />` with no provider, a `<Provider />` is created for you automatically.
 
 ```jsx
-var {Node} = require("@nteract/mathjax");
+const { Node } = require("@nteract/mathjax");
 
 <Node>a = b</Node>;
 ```
